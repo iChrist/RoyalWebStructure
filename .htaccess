@@ -1,0 +1,21 @@
+Options -Indexes
+Options +FollowSymLinks
+RewriteEngine on
+
+RewriteRule ^(apl/)(([a-zA-Z0-9]{3}/)?)([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-\·]*/?)((v1)/([a-zA-Z0-9\-\s\.]*)/?)?((v2)/([a-zA-Z0-9\-\s\.]*)/?)?((v3)/([a-zA-Z0-9\-\s\.]*)/?)?((v4)/([a-zA-Z0-9\-\s\.]*)/?)?((v5)/([a-zA-Z0-9\-\s\.]*)/?)?((v6)/([a-zA-Z0-9\-\s\.]*)/?)?((v7)/([a-zA-Z0-9\-\s\.]*)/?)?((v8)/([a-zA-Z0-9\-\s\.]*)/?)?$ /des/pla/pla-apl.php?tCodModulo=$3&tCodPadre=$4&tCodSeccion=$5&v1=$9&v2=$12&v3=$15&v4=$18&v5=$21&v6=$24&v7=$27&v8=$30
+
+RewriteRule ^(xhr/)(([a-zA-Z0-9]{3}/)?)([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-·]*/?)((v1)/([a-zA-Z0-9\-\s\.]*)/?)?((v2)/([a-zA-Z0-9\-\s\.]*)/?)?((v3)/([a-zA-Z0-9\-\s\.]*)/?)?((v4)/([a-zA-Z0-9\-\s\.]*)/?)?((v5)/([a-zA-Z0-9\-\s\.]*)/?)?((v6)/([a-zA-Z0-9\-\s\.]*)/?)?((v7)/([a-zA-Z0-9\-\s\.]*)/?)?((v8)/([a-zA-Z0-9\-\s\.]*)/?)?$ /des/pla/pla-xhr.php?tCodModulo=$3&tCodPadre=$4&tCodSeccion=$5&v1=$9&v2=$12&v3=$15&v4=$18&v5=$21&v6=$24&v7=$27&v8=$30
+
+RewriteRule ^(que/)([a-zA-Z0-9]{3})/([a-zA-Z0-9]+)/((v1)/([a-zA-Z0-9\-\s\.]*)/?)?((v2)/([a-zA-Z0-9\-\s\.]*)/?)?((v3)/([a-zA-Z0-9\-\s\.]*)/?)?((v4)/([a-zA-Z0-9\-\s\.]*)/?)?((v5)/([a-zA-Z0-9\-\s\.]*)/?)?((v6)/([a-zA-Z0-9\-\s\.]*)/?)?((v7)/([a-zA-Z0-9\-\s\.]*)/?)?((v8)/([a-zA-Z0-9\-\s\.]*)/?)?$ /des/que/$2-$3.php?v1=$6&v2=$9&v3=$12&v4=$15&v5=$18&v6=$21&v7=$24&v8=$27
+
+RewriteRule ^(vem/)(([a-zA-Z0-9]{3}/)?)([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-·]*/?)((v1)/([a-zA-Z0-9\-\s\.]*)/?)?((v2)/([a-zA-Z0-9\-\s\.]*)/?)?((v3)/([a-zA-Z0-9\-\s\.]*)/?)?((v4)/([a-zA-Z0-9\-\s\.]*)/?)?((v5)/([a-zA-Z0-9\-\s\.]*)/?)?((v6)/([a-zA-Z0-9\-\s\.]*)/?)?((v7)/([a-zA-Z0-9\-\s\.]*)/?)?((v8)/([a-zA-Z0-9\-\s\.]*)/?)?$ /des/pla/pla-vem.php?tCodModulo=$3&tCodPadre=$4&tCodSeccion=$5&v1=$9&v2=$12&v3=$15&v4=$18&v5=$21&v6=$24&v7=$27&v8=$30
+
+RewriteRule ^(imp/)(([a-zA-Z0-9]{3}/)?)([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-·]*/?)((v1)/([a-zA-Z0-9\-\s\.]*)/?)?((v2)/([a-zA-Z0-9\-\s\.]*)/?)?((v3)/([a-zA-Z0-9\-\s\.]*)/?)?((v4)/([a-zA-Z0-9\-\s\.]*)/?)?((v5)/([a-zA-Z0-9\-\s\.]*)/?)?((v6)/([a-zA-Z0-9\-\s\.]*)/?)?((v7)/([a-zA-Z0-9\-\s\.]*)/?)?((v8)/([a-zA-Z0-9\-\s\.]*)/?)?$ /des/pla/pla-imp.php?tCodModulo=$3&tCodPadre=$4&tCodSeccion=$5&v1=$9&v2=$12&v3=$15&v4=$18&v5=$21&v6=$24&v7=$27&v8=$30
+
+RewriteRule ^(xls/)(([a-zA-Z0-9]{3}/)?)([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-·]*/?)((v1)/([a-zA-Z0-9\-\s\.]*)/?)?((v2)/([a-zA-Z0-9\-\s\.]*)/?)?((v3)/([a-zA-Z0-9\-\s\.]*)/?)?((v4)/([a-zA-Z0-9\-\s\.]*)/?)?((v5)/([a-zA-Z0-9\-\s\.]*)/?)?((v6)/([a-zA-Z0-9\-\s\.]*)/?)?((v7)/([a-zA-Z0-9\-\s\.]*)/?)?((v8)/([a-zA-Z0-9\-\s\.]*)/?)?$ /des/pla/pla-xls.php?tCodModulo=$3&tCodPadre=$4&tCodSeccion=$5&v1=$9&v2=$12&v3=$15&v4=$18&v5=$21&v6=$24&v7=$27&v8=$30
+
+RewriteRule ^(swf/)(([a-zA-Z0-9]*)\-[a-zA-Z0-9]*)/$ /com/swf/$2.swf
+
+RewriteRule ^(wsv|wsdl)/([a-zA-Z]+)/$ /des/pla/pla-wsv.php?tTipo=$1&tModulo=$2
+
+AddCharset utf-8 .txt .html .htm .php .wsdl
