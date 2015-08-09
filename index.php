@@ -1,3 +1,3 @@
-<?
-echo "Hola Mundo";
+<?php
+	echo "Index";
 ?>

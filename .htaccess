@@ -1,6 +1,21 @@
 Options -Indexes
 Options +FollowSymLinks
 RewriteEngine on
+RewriteCond %{QUERY_STRING} !lp-variation-id
+
+
+#	RoyalWen Routes	#
+#RewriteRule ^sys/(?:([a-zA-Z<0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(.*)$ core/platform/index.php?module=$1&controller=$2&param1=$3&%{QUERY_STRING} [R]
+
+#RewriteRule ^sys2/(.*)$ core/platform/index.php?module=$1&%{QUERY_STRING} [L,NC]
+
+
+
+
+RewriteRule ^sys/(?:([a-zA-Z<0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)$ core/platform/index.php?module=$1&controller=$2&param1=$3&param2=$4&param3=$5&param4=$6&param5=$7&param6=$8&param7=$9 [L,NC]
+
+
+
 
 RewriteRule ^(apl/)(([a-zA-Z0-9]{3}/)?)([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-\·]*/?)((v1)/([a-zA-Z0-9\-\s\.]*)/?)?((v2)/([a-zA-Z0-9\-\s\.]*)/?)?((v3)/([a-zA-Z0-9\-\s\.]*)/?)?((v4)/([a-zA-Z0-9\-\s\.]*)/?)?((v5)/([a-zA-Z0-9\-\s\.]*)/?)?((v6)/([a-zA-Z0-9\-\s\.]*)/?)?((v7)/([a-zA-Z0-9\-\s\.]*)/?)?((v8)/([a-zA-Z0-9\-\s\.]*)/?)?$ /des/pla/pla-apl.php?tCodModulo=$3&tCodPadre=$4&tCodSeccion=$5&v1=$9&v2=$12&v3=$15&v4=$18&v5=$21&v6=$24&v7=$27&v8=$30
 
