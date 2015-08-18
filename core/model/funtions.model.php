@@ -1,3 +1,3 @@
 <?php
-	echo "funtions.model.php<br>";
+	// FUNCIONES DEL CORE
 ?>

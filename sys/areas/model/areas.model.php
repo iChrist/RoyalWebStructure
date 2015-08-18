@@ -1,5 +1,4 @@
 <?php
-	echo "areas.model.php<br>";
 	class Areas_Model extends Core_Model {
 		
 		// PROTECTED VARIABLES //
