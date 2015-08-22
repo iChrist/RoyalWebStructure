@@ -4,8 +4,8 @@ RewriteEngine on
 
 #	RoyalWen Routes	#
 
-RewriteRule ^sys/(?:([a-zA-Z<0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)$ core/platform/index.php?pmodule=$1&pcontroller=$2&pname=$3&p1=$4&p2=$5&p3=$6&p4=$7&p5=$8&p6=$9 [L,NC,QSA]
+RewriteRule ^([a-zA-Z0-9\-_.]+)/(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)$ core/stage/index.php?sysProject=$1&sysModule=$2&sysController=$3&sysName=$4&p1=$5&p2=$6&p3=$7&p4=$8&p5=$9 [L,NC,QSA]
 
-RewriteRule ^(wsv|wsdl)/([a-zA-Z]+)/$ core/platform/index.php?type=$1&module=$2
+RewriteRule ^(wsv|wsdl)/([a-zA-Z]+)/$ core/stage/index.php?sysType=$1&sysModule=$2
 
 AddCharset utf-8 .txt .html .htm .php .wsdl
