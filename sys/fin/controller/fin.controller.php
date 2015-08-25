@@ -3,7 +3,7 @@
 	class Fin_Controller extends Fin_Model {
 
 		// PRIVATE VARIABLES //
-			private $_data = array();
+			private $data = array();
 
 		public function __construct(){
 			parent::__construct();
@@ -11,13 +11,13 @@
 
 		public function __destruct(){
 			if($this->is_view_required()){
-				$this->load_view($_GET["sysFunction"], $this->_data);
+				$this->load_view($_GET["sysFunction"], $this->data);
 			}
 		}
 
 		public function index(){
 			$this->require_view();
-			$this->_data["datos"] = parent::index();
+			$this->data["datos"] = parent::index();
 			$this->load_model("areas","areas/model/");
 			Areas_Model::index();
 			$this->load_model("otro");
@@ -25,7 +25,7 @@
 		}
 
 		public function fin_ban_con(){
-			$this->_data["datos"] = parent::index();
+			$this->data["datos"] = parent::index();
 			
 		}
 
