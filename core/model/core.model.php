@@ -68,7 +68,7 @@
 		protected function load_controller($sysModule = NULL , $sysController = "index"){
 			if($sysModule == NULL){
 					require_once(CORE_PATH."stage/header.php");
-					require_once(CORE_PATH."index.php");
+					require_once(CORE_PATH."stage/index.php");
 					require_once(CORE_PATH."stage/footer.php");
 			}else{
 				// VERIFICA SI EXISTE EL DIRECTORIO DEL MÓDULO.

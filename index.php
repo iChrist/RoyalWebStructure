@@ -1,3 +1,1 @@
-<?php
-	echo "Index";
-?>
+<? header('Location: core/stage/index.php'); ?>
