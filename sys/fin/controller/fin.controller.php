@@ -17,13 +17,38 @@
 
 		public function index(){
 			$this->require_view();
-			$this->data["datos"] = parent::index();
+			$this->data["datos"] = parent::getModulos();
 		}
 
 		public function fin_ban_con(){
-			$this->data["datos"] = parent::index();
+			if($_POST){
+				switch ($_POST["axn"]) {
+					case 'value':
+						# code...
+						break;
+					
+					default:
+						# code...
+						break;
+				}
+				var_dump($_POST);
+				$this->require_view(FALSE);
+			}else{
+				//$this->data["datos"] = parent::getModulos();
+				//$this->data["comboEntidades"] = parent::getModulos();
+					$this->data["infoEdicion"] = parent::editorEntidad();
+					$this->load_model("otro");
+				$_GET['v1'] = 34;
+				if($_GET['v1']){
+					//$this->data["infoEdicion"] = parent::editorEntidad();
+				}
+			}
 			
+			/*$this->load_model("otro");
+			Otro_Model::index();
+			$this->data["entidades"] = parent::getEntidades();*/
 		}
+
 
 		public function otro_metodo(){
 			header('Content-Type: application/json');

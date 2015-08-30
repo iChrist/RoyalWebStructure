@@ -1,4 +1,4 @@
-<?php
+<?php echo 4983743;
 	abstract class Otro_Model extends Core_Model {
 	
 		// PRIVATE VARIABLES //
@@ -14,7 +14,7 @@
 
 		public function index(){
 			echo "<br>--Otro modelo (misma carpeta)--<br>";
-		}
+		
 
 	}
 ?>
