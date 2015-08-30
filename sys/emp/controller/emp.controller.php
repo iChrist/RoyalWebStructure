@@ -16,9 +16,9 @@
 		}
 
 		public function emp_soco_con(){
-				$this->require_view();
+				/*$this->require_view();
 				$this->_data['modulos']= $this->GetConsMod(); 
-				$this->_data['empresas']=$this->GetConsEmp(); 
+				$this->_data['empresas']=$this->GetConsEmp(); */
 				//$this->load_view('index',array(),TRUE);
 			//	$this->_data= parent::GetConsEmp(); 
 			//	$this->_data= Emp_Model::GetConsEmp(); 

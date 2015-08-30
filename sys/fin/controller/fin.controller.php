@@ -18,10 +18,6 @@
 		public function index(){
 			$this->require_view();
 			$this->data["datos"] = parent::index();
-			$this->load_model("areas","areas/model/");
-			Areas_Model::index();
-			$this->load_model("otro");
-			Otro_Model::index();
 		}
 
 		public function fin_ban_con(){
