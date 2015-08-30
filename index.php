@@ -1,1 +1,3 @@
-<? header('Location: core/stage/index.php'); ?>
+<?php 
+	header('Location: sys'); 
+?>
