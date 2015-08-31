@@ -87,7 +87,7 @@
 						$sysModule_controller = $sysModule."_Controller";
 						$sysModule_model = new $sysModule_controller();
 						if(method_exists($sysModule_model,$sysController)){
-							$sql = "SELECT * FROM _modules WHERE sPkModule = '".$_GET["sysFunction"]."'";
+							$sql = "SELECT * FROM _modules WHERE skModule = '".$_GET["sysFunction"]."'";
 							$result = $this->db->query($sql);
 							if($result){
 							 	if($result->num_rows > 0){
