@@ -11,7 +11,7 @@
 
 		public function __destruct(){
 			if($this->is_view_required()){
-				$this->load_view($_GET["sysFunction"], $this->data);
+				$this->load_view($_GET["sysController"], $this->data);
 			}
 		}
 
@@ -43,7 +43,6 @@
 					//$this->data["infoEdicion"] = parent::editorEntidad();
 				}
 			}
-			
 			/*$this->load_model("otro");
 			Otro_Model::index();
 			$this->data["entidades"] = parent::getEntidades();*/

@@ -26,7 +26,7 @@
 
 		public function index(){
 			//echo "<hr><pre>".print_r($_GET,1)."</pre><hr>";
-			$this->load_controller($_GET["sysModule"] , $_GET["sysController"]);
+                        $this->load_controller($_GET["sysModule"] , $_GET["sysFunction"]);
 		}
 
 		private function _get_params(){
@@ -34,8 +34,8 @@
 			$_GET["sysModule"] = !empty($_GET["sysModule"]) ? str_replace("-","_",$_GET["sysModule"]) : NULL;
 
 			$_GET["sysController"] = !empty($_GET["sysController"]) ? str_replace("/","",$_GET["sysController"]) : 'index';
-			$_GET["sysFunction"] = !empty($_GET["sysController"]) ? str_replace("_","-",$_GET["sysController"]) : 'index';
-			$_GET["sysController"] = !empty($_GET["sysController"]) ? str_replace("-","_",$_GET["sysController"]) : 'index';
+			$_GET["sysController"] = !empty($_GET["sysController"]) ? str_replace("_","-",$_GET["sysController"]) : 'index';
+			$_GET["sysFunction"] = !empty($_GET["sysController"]) ? str_replace("-","_",$_GET["sysController"]) : 'index';
 			
 			$this->sysName = !empty($_GET["sysName"]) ? str_replace("/","",$_GET["sysName"]) : NULL;
 			$_GET["p1"] = !empty($_GET["p1"]) ? str_replace("/","",$_GET["p1"]) : NULL;
@@ -65,57 +65,57 @@
 			}
 		}
 
-		protected function load_controller($sysModule = NULL , $sysController = "index"){
-			if($sysModule == NULL){
-					if(isset($_SESSION['allow'])){
-						if($_SESSION['allow'] == 1){
-							require_once(CORE_PATH."stage/header.php");
-							require_once(CORE_PATH."stage/index.php");
-							require_once(CORE_PATH."stage/footer.php");
-						}else{
-							require_once(CORE_PATH."login.php");
-						}
-					}else{
-						require_once(CORE_PATH."login.php");
-					}
-			}else{
-				// VERIFICA SI EXISTE EL DIRECTORIO DEL MÓDULO.
-				if(is_dir(SYS_PATH.$sysModule."/")){
-					// VERIFICA SI EXISTE EL CONTROLADOR DEL MÓDULO.
-					if(file_exists(SYS_PATH.$sysModule."/controller/".$sysModule.".controller.php")){
-						require_once(SYS_PATH.$sysModule."/controller/".$sysModule.".controller.php");
-						$sysModule_controller = $sysModule."_Controller";
-						$sysModule_model = new $sysModule_controller();
-						if(method_exists($sysModule_model,$sysController)){
-							$sql = "SELECT * FROM _modules WHERE skModule = '".$_GET["sysFunction"]."'";
-							$result = $this->db->query($sql);
-							if($result){
-							 	if($result->num_rows > 0){
-							 		// VERIFICA LOS PERMISOS DEL USUARIO AUTENTICADO.
-							 		$this->require_view(TRUE);
-									$sysModule_model->$sysController();
-								}else{
-									// VERIFICA LOS PERMISOS DEL USUARIO AUTENTICADO.
-									$this->require_view(FALSE);
-									$sysModule_model->$sysController();
-								}
-							}else{
-								$text = "Object query not set.";
-								$this->_error($text);
-							}
-						}else{
-							$text = "Call to undefined method '".$sysController."' in '".$sysModule."' controller.";
-							$this->_error($text);
-						}
-					}else{
-						$text = "'".$sysModule."' controller not found.";
-						$this->_error($text,"ERROR 404");
-					}
-				}else{
-					$text = "'".$sysModule."' is not a valid directory.";
-					$this->_error($text);
-				}
-			}
+		protected function load_controller($sysModule = NULL , $sysFunction = "index"){
+                    if($sysModule == NULL){
+                        if((isset($_SESSION['allow'])) && ($_SESSION['allow'] == 1)){
+                            require_once(CORE_PATH."stage/header.php");
+                            require_once(CORE_PATH."stage/index.php");
+                            require_once(CORE_PATH."stage/footer.php");
+                        }else{
+                            require_once(CORE_PATH."login.php");
+                        }
+                    }else{
+                        if((isset($_SESSION['allow'])) && ($_SESSION['allow'] == 1)){
+                            // VERIFICA SI EXISTE EL DIRECTORIO DEL MÓDULO.
+                            if(is_dir(SYS_PATH.$sysModule."/")){
+                                // VERIFICA SI EXISTE EL CONTROLADOR DEL MÓDULO.
+                                if(file_exists(SYS_PATH.$sysModule."/controller/".$sysModule.".controller.php")){
+                                    require_once(SYS_PATH.$sysModule."/controller/".$sysModule.".controller.php");
+                                    $sysModule_controller = $sysModule."_Controller";
+                                    $sysModule_model = new $sysModule_controller();
+                                    if(method_exists($sysModule_model,$sysFunction)){
+                                        $sql = "SELECT * FROM _modules WHERE skModule = '".$_GET["sysController"]."'";
+                                        $result = $this->db->query($sql);
+                                        if($result){
+                                            if($result->num_rows > 0){
+                                                // VERIFICA LOS PERMISOS DEL USUARIO AUTENTICADO.
+                                                $this->require_view(TRUE);
+                                                $sysModule_model->$sysFunction();
+                                            }else{
+                                                // VERIFICA LOS PERMISOS DEL USUARIO AUTENTICADO.
+                                                $this->require_view(FALSE);
+                                                $sysModule_model->$sysFunction();
+                                            }
+                                        }else{
+                                            $text = "Object query not set.";
+                                            $this->_error($text);
+                                        }
+                                    }else{
+                                        $text = "Call to undefined method '".$sysFunction."' in '".$sysModule."' controller.";
+                                        $this->_error($text);
+                                    }
+                                }else{
+                                    $text = "'".$sysModule."' controller not found.";
+                                    $this->_error($text,"ERROR 404");
+                                }
+                            }else{
+                                $text = "'".$sysModule."' is not a valid directory.";
+                                $this->_error($text);
+                            }
+                        }else{
+                            require_once(CORE_PATH."login.php");
+                        }
+                    }
 		}
 
 		protected function load_view($view = "index", $data = array() , $templates = TRUE, $path = NULL){
