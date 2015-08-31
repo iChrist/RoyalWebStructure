@@ -1,3 +1,5 @@
 <?php
-	echo "logout.php<br>";
+	$_SESSION['allow'] = 0;
+	session_destroy();
+    header('Location: sys');
 ?>

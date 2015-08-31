@@ -1,3 +1,11 @@
+      </div>
+   </div>
+   <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->    
+
+
+
 <!-- BEGIN FOOTER -->
 <div class="footer">
 	<div class="footer-inner">

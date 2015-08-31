@@ -1,6 +1,6 @@
 <?php
-	abstract class Fin_Model extends Core_Model {
-	
+	class Fin_Model extends Core_Model {
+
 		// PRIVATE VARIABLES //
 			private $data = array();
 

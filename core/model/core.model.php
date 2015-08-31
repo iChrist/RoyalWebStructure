@@ -67,9 +67,17 @@
 
 		protected function load_controller($sysModule = NULL , $sysController = "index"){
 			if($sysModule == NULL){
-					require_once(CORE_PATH."stage/header.php");
-					require_once(CORE_PATH."stage/index.php");
-					require_once(CORE_PATH."stage/footer.php");
+					if(isset($_SESSION['allow'])){
+						if($_SESSION['allow'] == 1){
+							require_once(CORE_PATH."stage/header.php");
+							require_once(CORE_PATH."stage/index.php");
+							require_once(CORE_PATH."stage/footer.php");
+						}else{
+							require_once(CORE_PATH."login.php");
+						}
+					}else{
+						require_once(CORE_PATH."login.php");
+					}
 			}else{
 				// VERIFICA SI EXISTE EL DIRECTORIO DEL MÓDULO.
 				if(is_dir(SYS_PATH.$sysModule."/")){
