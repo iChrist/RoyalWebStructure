@@ -68,9 +68,9 @@
 		protected function load_controller($sysModule = NULL , $sysFunction = "index"){
                     if($sysModule == NULL){
                         if((isset($_SESSION['allow'])) && ($_SESSION['allow'] == 1)){
-                            require_once(CORE_PATH."stage/header.php");
-                            require_once(CORE_PATH."stage/index.php");
-                            require_once(CORE_PATH."stage/footer.php");
+                            require_once(CORE_PATH.'stage/header.php');
+                            require_once(CORE_PATH.'stage/dashboard.php');
+                            require_once(CORE_PATH.'stage/footer.php');
                         }else{
                             require_once(CORE_PATH."login.php");
                         }
