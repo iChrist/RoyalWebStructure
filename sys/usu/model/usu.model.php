@@ -1,5 +1,5 @@
 <?php
-	abstract class Usu_Model extends Core_Model {
+	Abstract Class Usu_Model Extends Core_Model {
 
 		// PRIVATE VARIABLES //
 			private $data = array();
@@ -19,7 +19,7 @@
 		}
                 
                 public function verifyUser($sUserName,$sPassword){
-			$sql = "SELECT * FROM _users WHERE (sEmail = '".$sUserName."' OR sUserName = '".$sUserName."') AND (sPassword = '".$sPassword."')";
+			$sql = "SELECT * FROM _users WHERE (sEmail = '".$sUserName."' OR sUserName = '".$sUserName."') AND (sPassword = '".$sPassword."') AND (skStatus = 'AC')";
 			$result = $this->db->query($sql);
                         return $result;
 		}

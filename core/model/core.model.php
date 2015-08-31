@@ -1,5 +1,5 @@
 <?php
-	class Core_Model {
+	Class Core_Model {
 		
 		// PROTECTED VARIABLES //
 			protected $db;

@@ -1,6 +1,6 @@
 <?php
 	require_once(SYS_PATH."usu/model/usu.model.php");
-	class Usu_Controller extends Usu_Model {
+	Class Usu_Controller Extends Usu_Model {
 
 		// PRIVATE VARIABLES //
 			private $data = array();

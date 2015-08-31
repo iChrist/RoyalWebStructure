@@ -6,12 +6,12 @@
         $usu = new Usu_Controller();
         $result = $usu->verifyUser($_POST['sUserName'], $_POST['sPassword']);
         if($result->num_rows > 0){
-            foreach($result->fetch_assoc() AS $row){
+            while($row = $result->fetch_assoc()){
                 $_SESSION['allow'] = 1;
-                $_SESSION['id'] = $row['skUsers'];	
-                $_SESSION['name'] = $row['sName'];
-                $_SESSION['name'] = $row['sUserName'];
-                $_SESSION['email'] = $row['sEmail'];
+                $_SESSION['skUsers'] = $row['skUsers'];	
+                $_SESSION['sName'] = $row['sName'];
+                $_SESSION['sUserName'] = $row['sUserName'];
+                $_SESSION['sEmail'] = $row['sEmail'];
             }
             header('Location: '.$_SERVER['REQUEST_URI']);
         }else{
@@ -71,7 +71,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <body class="login">
 <!-- BEGIN LOGO -->
 <div class="logo">
-	<a href="index.html">
+	<a href="<?php echo SYS_URL; ?>">
 	<img src="<?php echo SYS_URL; ?>core/assets/img/RoyalWeb-White.png" alt="RoyalWeb" width="130px" height="50px" />
 	</a>
 </div>
@@ -109,7 +109,7 @@ License: You must have a valid license purchased only from themeforest(the above
 			Iniciar sesi&oacute;n </button>
 		</div>
 		<div class="forget-password">
-			<h4>Olvidaste tu contrase&ntilde;a ?</h4>
+			<h4>&#191;Olvidaste tu contrase&ntilde;a&#63;</h4>
 			<p>
 				No te preocupes, da click <a href="javascript:;" id="forget-password">aqu&iacute;</a>
 				para recuperar tu contrase&ntilde;a.
@@ -124,7 +124,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	<!-- END LOGIN FORM -->
 	<!-- BEGIN FORGOT PASSWORD FORM -->
 	<form class="forget-form" action="index.html" method="post">
-		<h3>Olvidaste tu contrase&ntilde;a ?</h3>
+		<h3>&#191;Olvidaste tu contrase&ntilde;a&#63;</h3>
 		<p>
 			Ingresa tu correo electr&oacute;nico para recuperar tu contrase&ntilde;a.
 		</p>
