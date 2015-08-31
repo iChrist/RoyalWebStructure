@@ -9,7 +9,7 @@
 <!-- BEGIN FOOTER -->
 <div class="footer">
 	<div class="footer-inner">
-		 <?php echo date('Y')?> &copy; RoyalWeb Structure
+		 <a href="http://royalweb.com.mx" target="_blank" class="footer-inner"><?php echo date('Y')?> &copy; RoyalWeb</a>
 	</div>
 	<div class="footer-tools">
 		<span class="go-top">
