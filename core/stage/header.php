@@ -203,7 +203,7 @@
 					<li class="divider">
 					</li>
 					<li>
-						<a href="login.html"><i class="fa fa-key"></i>Cerrar sesion </a>
+						<a href="<?php echo SYS_URL; ?>logout/"><i class="fa fa-key"></i>Cerrar sesion </a>
 					</li>
 				</ul>
 			</li>

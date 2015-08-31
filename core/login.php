@@ -1,21 +1,24 @@
 <?php
-	$error_login;
-	$error_message;
-	if($_POST){
-		if(1==2){
-			foreach($user->fetch_all() AS $row){
-				$_SESSION['allow'] = 1;
-				$_SESSION['id'] = $row['id'];
-				$_SESSION['email'] = $row['email'];	
-				$_SESSION['name'] = $row['name'];
-			}
-			echo '<script type="text/javascript">location.assign("'.$site_url.'panel/");</script>';
-			header('Location: sys');
-		}else{
-			$error_login = 1;
-			$error_message = '<center>El correo o la contrase&nacute;a son incorrectos, verificalos por favor.</center>';
-		}
-	}
+    $error_login;
+    $error_message;
+    if($_POST){
+        require_once(SYS_PATH."usu/controller/usu.controller.php");
+        $usu = new Usu_Controller();
+        $result = $usu->verifyUser($_POST['sUserName'], $_POST['sPassword']);
+        if($result->num_rows > 0){
+            foreach($result->fetch_assoc() AS $row){
+                $_SESSION['allow'] = 1;
+                $_SESSION['id'] = $row['skUsers'];	
+                $_SESSION['name'] = $row['sName'];
+                $_SESSION['name'] = $row['sUserName'];
+                $_SESSION['email'] = $row['sEmail'];
+            }
+            header('Location: '.$_SERVER['REQUEST_URI']);
+        }else{
+                $error_login = 1;
+                $error_message = '<center>El correo o la contrase&nacute;a son incorrectos, verificalos por favor.</center>';
+        }
+    }
 ?>
 <!DOCTYPE html>
 <!-- 
@@ -62,7 +65,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <link href="<?php echo SYS_URL; ?>core/assets/css/pages/login.css" rel="stylesheet" type="text/css"/>
 <link href="<?php echo SYS_URL; ?>core/assets/css/custom.css" rel="stylesheet" type="text/css"/>
 <!-- END THEME STYLES -->
-<link rel="shortcut icon" href="<?php echo SYS_URL; ?>core/assets/img/favicon.ico"/>
+<link rel="shortcut icon" href="<?php echo SYS_URL; ?>core/assets/img/favicon.png"/>
 </head>
 <!-- BEGIN BODY -->
 <body class="login">
@@ -89,14 +92,14 @@ License: You must have a valid license purchased only from themeforest(the above
 			<label class="control-label visible-ie8 visible-ie9">Usuario</label>
 			<div class="input-icon">
 				<i class="fa fa-user"></i>
-				<input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Usuario" name="username"/>
+				<input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Usuario" name="sUserName"/>
 			</div>
 		</div>
 		<div class="form-group">
 			<label class="control-label visible-ie8 visible-ie9">Contrase&ntilde;a</label>
 			<div class="input-icon">
 				<i class="fa fa-lock"></i>
-				<input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="Contrase&ntilde;a" name="password"/>
+				<input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="Contrase&ntilde;a" name="sPassword"/>
 			</div>
 		</div>
 		<div class="form-actions">
@@ -128,7 +131,7 @@ License: You must have a valid license purchased only from themeforest(the above
 		<div class="form-group">
 			<div class="input-icon">
 				<i class="fa fa-envelope"></i>
-				<input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Correo electr&oacute;nico" name="email"/>
+				<input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Correo electr&oacute;nico" name="sEmail"/>
 			</div>
 		</div>
 		<div class="form-actions">
@@ -143,7 +146,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <!-- END LOGIN -->
 <!-- BEGIN COPYRIGHT -->
 <div class="copyright">
-	 <?php echo date('Y')?> &copy; RoyalWeb
+    <a href="http://royalweb.com.mx" target="_blank" class="copyright"><?php echo date('Y')?> &copy; RoyalWeb</a>
 </div>
 <!-- END COPYRIGHT -->
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
