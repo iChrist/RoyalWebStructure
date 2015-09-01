@@ -144,6 +144,29 @@
 		public function _error(&$text, $error = "ERROR"){
 			echo "<table border='1' style='width:100%;'><tr><td style='padding-top:20px;'><center><h3><span style='color:red;'>".$error." : </span>".$text."</h3></center></td></tr></table>";
 		}
+		
+		
+		public function breadcrumb(){
+				//$_GET["sysModule"]
+				$select = "CALL stpConsultarBreadcrumb('".($_GET["sysController"] !='index' ? $_GET["sysController"] : 'sys')."',0); ";
+				echo $select;
+					$result = $this->db->query($select);	
+					$html="";
+					while($row= $result->fetch_assoc()){
+					
+							$html.='<li>
+						<i class="fa fa-home"></i>
+						<a href="'.SYS_URL.$row['sParentModule'].'/'.$row['skModule'].'/'.$row['sName'].'/">'.$row['sTitle'].'</a>
+						<i class="fa fa-angle-right"></i>
+					</li>';
+							//$html.= $row['sPkModule']."<br>";
+		
+		
+					}
+					echo  $html;
+					//return $result;
+			
+		}
 
 	}
 ?>

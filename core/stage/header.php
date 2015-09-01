@@ -337,22 +337,5 @@
 	<div class="page-content-wrapper">
 		<div class="page-content">
 			 
-			 
-			<!-- BEGIN PAGE HEADER-->
-			<h3 class="page-title">
-			Inicio <small>Inicio del Sistema</small>
-			</h3>
-			<div class="page-bar">
-				<ul class="page-breadcrumb">
-					<li>
-						<i class="fa fa-home"></i>
-						<a href="index.html">Inicio</a>
-						<i class="fa fa-angle-right"></i>
-					</li>
-					<li>
-						<a href="#">Pagina Principal</a>
-					</li>
-				</ul>
-				 
-			</div>
+			<? require_once(CORE_PATH."stage/breadcrumb.php");?>
 			<!-- END PAGE HEADER-->
