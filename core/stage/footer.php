@@ -18,6 +18,9 @@
 	</div>
 </div>
 <!-- END FOOTER -->
+<!-- BEGIN CORE DYNAMICALLY HTML USING JAVASCRIPT -->
+<div style="display:none;" id="_delete"></div>
+<!-- END CORE DYNAMICALLY HTML USING JAVASCRIPT -->
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 <!-- BEGIN CORE PLUGINS -->
 <script src="<?php echo SYS_URL; ?>core/assets/plugins/jquery-1.11.0.min.js" type="text/javascript"></script>
@@ -56,6 +59,9 @@
 <script src="<?php echo SYS_URL; ?>core/assets/lib/index.js" type="text/javascript"></script>
 <script src="<?php echo SYS_URL; ?>core/assets/lib/tasks.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
+<!-- BEGIN RoyalWeb CORE SCRIPTS -->
+<script src="<?php echo SYS_URL; ?>core/assets/lib/core.functions.js" type="text/javascript"></script>
+<!-- END RoyalWeb CORE SCRIPTS -->
 <script>
 jQuery(document).ready(function() {    
    App.init(); // initlayout and core plugins
