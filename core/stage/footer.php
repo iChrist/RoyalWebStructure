@@ -60,7 +60,7 @@
 <script src="<?php echo SYS_URL; ?>core/assets/lib/tasks.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 <!-- BEGIN RoyalWeb CORE SCRIPTS -->
-<script src="<?php echo SYS_URL; ?>core/assets/lib/core.functions.js" type="text/javascript"></script>
+<script src="<?php echo SYS_URL; ?>core/assets/lib/core.js" type="text/javascript"></script>
 <!-- END RoyalWeb CORE SCRIPTS -->
 <script>
 jQuery(document).ready(function() {    

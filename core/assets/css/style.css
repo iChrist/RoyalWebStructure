@@ -3405,7 +3405,7 @@ Responsive Flip Scroll Tables
     overflow-x: auto; 
     white-space: nowrap;     
   }
-  .flip-scroll thead tr { display: block; border: !important;  }
+  .flip-scroll thead tr { display: block; border: 0px !important;  }
   .flip-scroll th { display: block; text-align: right; }
   .flip-scroll tbody tr { display: inline-block; vertical-align: top; margin-left: -5px; }
   .flip-scroll td { display: block; min-height: 1.25em; text-align: left; border-top: 0 !important; border-left: 0 !important; border-right: 0 !important}

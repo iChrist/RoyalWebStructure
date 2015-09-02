@@ -34,6 +34,9 @@
 <link href="<?php echo SYS_URL; ?>core/assets/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color"/>
 <link href="<?php echo SYS_URL; ?>core/assets/css/custom.css" rel="stylesheet" type="text/css"/>
 <!-- END THEME STYLES -->
+<!-- BEGIN RoyalWeb CORE CSS -->
+<link href="<?php echo SYS_URL; ?>core/assets/css/core.css" rel="stylesheet" type="text/css"/>
+<!-- END RoyalWeb CORE CSS -->
 <link rel="shortcut icon" href="favicon.ico"/>
     <!-- END THEME STYLES -->
     <link rel="shortcut icon" href="favicon.ico"/>

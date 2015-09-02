@@ -124,6 +124,10 @@
 			if(file_exists(SYS_PATH.$_GET["sysModule"]."/".$view.".php")){
 				if($templates){
 					require_once(CORE_PATH."stage/header.php");
+                                        
+                                        $_secutiry['_users_profiles'] = $this->getProfiles();
+                                        $_secutiry['_modules_profiles_permissions'] = $this->getModulesProfilesPermissions();
+                                        require_once(CORE_PATH."stage/buttons.php");
 					include(SYS_PATH.$_GET["sysModule"]."/".$view.".php");
 					require_once(CORE_PATH."stage/footer.php");
 				}else{
@@ -142,17 +146,53 @@
 		protected function is_view_required(){
 			return $_SESSION["sysRequireView"];
 		}
-
+                
+                public function getProfiles(){
+                    $sql = "SELECT
+	mpp.skModule, mpp.skProfiles, mpp.skPermissions, pe.sName AS sNamePermission, pr.sName AS sNameProfile
+FROM _modules_profiles_permissions AS mpp
+	INNER JOIN _users_profiles AS up ON up.skProfiles = mpp.skProfiles
+	INNER JOIN _permissions AS pe ON pe.skPermissions = mpp.skPermissions
+	INNER JOIN _profiles AS pr ON pr.skProfiles = mpp.skProfiles
+WHERE
+	mpp.skModule = '".$_GET['sysController']."'
+	AND up.skUsers = '".$_SESSION['skUsers']."'";
+                    $result = $this->db->query($sql);
+                    $data = array();
+                    while($row = $result->fetch_assoc()){
+                        $data[$row['skModule']][$row['skProfiles']] = $row['sNameProfile'];
+                    }
+                    return $data;
+                }
+                
+                public function getModulesProfilesPermissions(){
+                    //$sql = "CALL stpGetModulesProfilesPermissions('".$_GET['sysController']."','".$_SESSION['skUsers']."');";
+                    $sql = "SELECT
+	mpp.skModule, mpp.skProfiles, mpp.skPermissions, pe.sName AS sNamePermission, pr.sName AS sNameProfile
+FROM _modules_profiles_permissions AS mpp
+	INNER JOIN _users_profiles AS up ON up.skProfiles = mpp.skProfiles
+	INNER JOIN _permissions AS pe ON pe.skPermissions = mpp.skPermissions
+	INNER JOIN _profiles AS pr ON pr.skProfiles = mpp.skProfiles
+WHERE
+	mpp.skModule = '".$_GET['sysController']."'
+	AND up.skUsers = '".$_SESSION['skUsers']."'";
+                    $result = $this->db->query($sql);
+                    $data = array();
+                    while($row = $result->fetch_assoc()){
+                        $data[$row['skModule']][$row['skProfiles']][$row['skPermissions']] = $row['sNamePermission'];
+                    }
+                    return $data;
+                }
+                
 		public function _error(&$text, $error = "ERROR"){
 			echo "<table border='1' style='width:100%;'><tr><td style='padding-top:20px;'><center><h3><span style='color:red;'>".$error." : </span>".$text."</h3></center></td></tr></table>";
 		}
 		
 		
 		public function breadcrumb(){
-				//$_GET["sysModule"]
-				$select = "CALL stpConsultarBreadcrumb('".($_GET["sysController"] !='index' ? $_GET["sysController"] : 'sys')."',0); ";
-				echo $select;
-					$result = $this->db->query($select);	
+				$sql = "CALL stpConsultarBreadcrumb('".($_GET["sysController"] !='index' ? $_GET["sysController"] : 'sys')."',0); ";
+				
+					$result = $this->db->query($sql);	
 					$html="";
 					while($row= $result->fetch_assoc()){
 					
