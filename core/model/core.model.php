@@ -20,6 +20,7 @@
 
 		public function __destruct(){
 			if(!mysqli_connect_errno()){
+                                mysqli_next_result($this->db);
 				$this->db->close();
 			}
 		}
@@ -127,6 +128,7 @@
                                         
                                         $_secutiry['_users_profiles'] = $this->getProfiles();
                                         $_secutiry['_modules_profiles_permissions'] = $this->getModulesProfilesPermissions();
+                                        $_buttons = $this->getModulesButtons();
                                         require_once(CORE_PATH."stage/buttons.php");
 					include(SYS_PATH.$_GET["sysModule"]."/".$view.".php");
 					require_once(CORE_PATH."stage/footer.php");
@@ -147,40 +149,49 @@
 			return $_SESSION["sysRequireView"];
 		}
                 
+                private function getModulesButtons(){
+                    //$sql = "CALL stpGetModulesProfilesPermissions('".$_GET['sysController']."','".$_SESSION['skUsers']."', NULL);";
+                    $sql = "SELECT _modules_buttons.*, btn.skPermissions FROM _modules_buttons INNER JOIN _buttons AS btn ON btn.skButtons = _modules_buttons.skButtons WHERE skModule = '".$_GET['sysController']."'";
+                    $result = $this->db->query($sql);
+                    $data = array();
+                    while($row = $result->fetch_assoc()){
+                        array_push($data, array(
+                            'skModule' => $row['skModule'],
+                            'sParentModule' => $row['sParentModule'],
+                            'skButtons' => $row['skButtons'],
+                            'skPermissions' => $row['skPermissions'],
+                            'sFunction' => $row['sFunction'],
+                            'iPosition' => $row['iPosition']
+                        ));
+                    }
+                    mysqli_free_result($result);
+                    mysqli_next_result($this->db);
+                    return $data;
+                }
+                
                 public function getProfiles(){
-                    $sql = "SELECT
-	mpp.skModule, mpp.skProfiles, mpp.skPermissions, pe.sName AS sNamePermission, pr.sName AS sNameProfile
-FROM _modules_profiles_permissions AS mpp
-	INNER JOIN _users_profiles AS up ON up.skProfiles = mpp.skProfiles
-	INNER JOIN _permissions AS pe ON pe.skPermissions = mpp.skPermissions
-	INNER JOIN _profiles AS pr ON pr.skProfiles = mpp.skProfiles
-WHERE
-	mpp.skModule = '".$_GET['sysController']."'
-	AND up.skUsers = '".$_SESSION['skUsers']."'";
+                    //$sql = "CALL stpGetModulesProfilesPermissions('".$_GET['sysController']."','".$_SESSION['skUsers']."', NULL);";
+                    $sql = "CALL stpGetModulesProfilesPermissions('".$_GET['sysController']."','".$_SESSION['skUsers']."','".$_SESSION['skProfile']."');";
                     $result = $this->db->query($sql);
                     $data = array();
                     while($row = $result->fetch_assoc()){
                         $data[$row['skModule']][$row['skProfiles']] = $row['sNameProfile'];
                     }
+                    mysqli_free_result($result);
+                    mysqli_next_result($this->db);
                     return $data;
                 }
                 
                 public function getModulesProfilesPermissions(){
-                    //$sql = "CALL stpGetModulesProfilesPermissions('".$_GET['sysController']."','".$_SESSION['skUsers']."');";
-                    $sql = "SELECT
-	mpp.skModule, mpp.skProfiles, mpp.skPermissions, pe.sName AS sNamePermission, pr.sName AS sNameProfile
-FROM _modules_profiles_permissions AS mpp
-	INNER JOIN _users_profiles AS up ON up.skProfiles = mpp.skProfiles
-	INNER JOIN _permissions AS pe ON pe.skPermissions = mpp.skPermissions
-	INNER JOIN _profiles AS pr ON pr.skProfiles = mpp.skProfiles
-WHERE
-	mpp.skModule = '".$_GET['sysController']."'
-	AND up.skUsers = '".$_SESSION['skUsers']."'";
+                    //$sql = "CALL stpGetModulesProfilesPermissions('".$_GET['sysController']."','".$_SESSION['skUsers']."', NULL);";
+                    $sql = "CALL stpGetModulesProfilesPermissions('".$_GET['sysController']."','".$_SESSION['skUsers']."','".$_SESSION['skProfile']."');";
                     $result = $this->db->query($sql);
                     $data = array();
                     while($row = $result->fetch_assoc()){
                         $data[$row['skModule']][$row['skProfiles']][$row['skPermissions']] = $row['sNamePermission'];
                     }
+                    mysqli_free_result($result);
+                    mysqli_next_result($this->db);
                     return $data;
                 }
                 

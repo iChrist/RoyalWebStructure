@@ -8,6 +8,7 @@
         if($result->num_rows > 0){
             while($row = $result->fetch_assoc()){
                 $_SESSION['allow'] = 1;
+                $_SESSION['skProfile'] = 'profile3';
                 $_SESSION['skUsers'] = $row['skUsers'];	
                 $_SESSION['sName'] = $row['sName'];
                 $_SESSION['sUserName'] = $row['sUserName'];
