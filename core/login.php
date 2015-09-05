@@ -7,10 +7,9 @@
         $result = $usu->verifyUser($_POST['sUserName'], $_POST['sPassword']);
         if($result->num_rows > 0){
             while($row = $result->fetch_assoc()){
-                $_SESSION['session']['allow'] = 1;
                 $_SESSION['session']['skUsers'] = $row['skUsers'];	
                 $_SESSION['session']['sName'] = $row['sName'];
-                $_SESSION['sUserName'] = $row['sUserName'];
+                $_SESSION['session']['sUserName'] = $row['sUserName'];
                 $_SESSION['session']['sEmail'] = $row['sEmail'];
             }
             header('Location: '.$_SERVER['REQUEST_URI']);

@@ -70,7 +70,7 @@
 
 		protected function load_controller($sysModule = NULL , $sysFunction = "index"){
                     if($sysModule == NULL){
-                        if((isset($_SESSION['allow'])) && ($_SESSION['allow'] == 1)){
+                        if((isset($_SESSION['session']['skUsers'])) && (!empty($_SESSION['session']['skUsers']))){
                             require_once(CORE_PATH.'stage/header.php');
                             require_once(CORE_PATH.'stage/dashboard.php');
                             require_once(CORE_PATH.'stage/footer.php');
@@ -78,7 +78,7 @@
                             require_once(CORE_PATH."login.php");
                         }
                     }else{
-                        if((isset($_SESSION['allow'])) && ($_SESSION['allow'] == 1)){
+                        if((isset($_SESSION['session']['skUsers'])) && (!empty($_SESSION['session']['skUsers']))){
                             // VERIFICA SI EXISTE EL DIRECTORIO DEL MÓDULO.
                             if(is_dir(SYS_PATH.$sysModule."/")){
                                 // VERIFICA SI EXISTE EL CONTROLADOR DEL MÓDULO.
