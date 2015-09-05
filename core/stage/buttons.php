@@ -2,9 +2,6 @@
     <button type="button" class="btn btn-sm actions-buttons">
         <b>Acciones</b>
     </button>
-    <?php
-        if(!empty($data['_modules_profiles_permissions'][$_GET['sysController']]['profile2']['A'])){
-    ?>
     <button type="button" class="btn btn-sm btn-default" onclick="_read();">
         <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
         Consultar
@@ -21,9 +18,27 @@
         <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
         Eliminar
     </button>
-    <?php
-        }
-    ?>
 </div>
 <hr>
 <?php echo "<pre>".print_r($_secutiry,1)."</pre>"; ?>
+<?php
+    $_SESSION['skProfile'] = 'profile2';
+    foreach($_secutiry['_users_profiles'][$_GET['sysController']] AS $key => $value){
+        if(array_key_exists("A",$_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$key])){
+            echo "A<br>";
+            break;
+        }
+        if(array_key_exists("D",$_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$key])){
+            echo "D<br>";
+        }
+        if(array_key_exists("R",$_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$key])){
+            echo "R<br>";
+        }
+        if(array_key_exists("W",$_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$key])){
+            echo "W<br>";
+        }
+    }
+?>
+<?php
+    echo "<hr><pre>".print_r($_buttons,1)."</pre>";
+?>
