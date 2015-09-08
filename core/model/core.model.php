@@ -151,7 +151,8 @@
                 
                 private function getModulesButtons(){
                     //$sql = "CALL stpGetModulesProfilesPermissions('".$_GET['sysController']."','".$_SESSION['skUsers']."', NULL);";
-                    $sql = "SELECT _modules_buttons.*, btn.skPermissions, REPLACE(btn.sHtml, '{{sTitle}}', btn.sTitle) AS sHtml FROM _modules_buttons INNER JOIN _buttons AS btn ON btn.skButtons = _modules_buttons.skButtons WHERE skModule = '".$_GET['sysController']."' ORDER BY _modules_buttons.iPosition ASC";
+                    //$sql = "SELECT _modules_buttons.*, btn.skPermissions, REPLACE(btn.sHtml, '{{sTitle}}', btn.sTitle) AS sHtml FROM _modules_buttons INNER JOIN _buttons AS btn ON btn.skButtons = _modules_buttons.skButtons WHERE skModule = '".$_GET['sysController']."' ORDER BY _modules_buttons.iPosition ASC";
+                    $sql = "CALL test('".$_GET['sysController']."');";
                     $result = $this->db->query($sql);
                     $data = array();
                     while($row = $result->fetch_assoc()){
@@ -165,15 +166,27 @@
                             'iPosition' => $row['iPosition']
                         );
                     }
+                    //var_dump($data);
                     mysqli_free_result($result);
                     mysqli_next_result($this->db);
+                    foreach($data AS $key){
+                        var_dump($key['skModule']);
+                        $sql = "CALL stpConsultarBreadcrumb('".$key['skModule']."',0);";
+                        $records = $this->db->query($sql);
+                        while($record = $records->fetch_assoc()){
+                            var_dump($record);
+                        }
+                        echo '<hr>';
+                        mysqli_free_result($records);
+                        mysqli_next_result($this->db);
+                    }
                     return $data;
                 }
                 
                 public function getUsersProfiles(){
                     $sql = "SELECT up.skProfiles, p.sName FROM _users_profiles AS up
                         INNER JOIN _profiles AS p ON p.skProfiles = up.skProfiles
-                        WHERE up.skUsers = '".$_SESSION['skUsers']."'";
+                        WHERE up.skUsers = '".$_SESSION['session']['skUsers']."'";
                     $result = $this->db->query($sql);
                     $data = array();
                     while($row = $result->fetch_assoc()){
@@ -188,7 +201,7 @@
                 }
                 
                 public function getModulesProfilesPermissions(){
-                    $sql = "CALL stpGetModulesProfilesPermissions('".$_GET['sysController']."','".$_SESSION['skUsers']."', NULL);";
+                    $sql = "CALL stpGetModulesProfilesPermissions('".$_GET['sysController']."','".$_SESSION['session']['skUsers']."', '".$_SESSION['session']['skProfile']."');";
                     //$sql = "CALL stpGetModulesProfilesPermissions('".$_GET['sysController']."','".$_SESSION['skUsers']."','".$_SESSION['skProfile']."');";
                     $result = $this->db->query($sql);
                     $data = array();

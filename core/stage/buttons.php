@@ -19,19 +19,15 @@
         Eliminar
     </button>!-->
 <?php
-    $_SESSION['skProfile'] = 'profile2';
-    if($_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$_SESSION['skProfile']]){
-        foreach($_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$_SESSION['skProfile']] AS $key => $value){
-            for($i=1;$i<=count($_buttons);$i++){
-                if($_buttons[$i]['skPermissions'] == $key){
-                    echo $_buttons[$i]['sHtml'];
-                }
-            }
+    for($i=1;$i<=count($_buttons);$i++){
+        if(array_key_exists($_buttons[$i]['skPermissions'] , $_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$_SESSION['skProfile']])){
+            echo $_buttons[$i]['sHtml']; 
         }
     }
 ?>
 </div>
 <hr>
 <?php
-    echo "<pre>".print_r($_buttons,1)."</pre>";
+echo "<pre>".print_r($_secutiry,1)."</pre>";    
+echo "<pre>".print_r($_buttons,1)."</pre>";
 ?>

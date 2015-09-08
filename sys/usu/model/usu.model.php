@@ -13,14 +13,15 @@
 		}
 
 		public function getUsers(){
-			$sql = "SELECT * FROM _modules";
+			$sql = "SELECT * FROM _users";
 			$result = $this->db->query($sql);
 
 		}
                 
                 public function verifyUser($sUserName,$sPassword){
 			$sql = "SELECT * FROM _users WHERE (sEmail = '".$sUserName."' OR sUserName = '".$sUserName."') AND (sPassword = '".$sPassword."') AND (skStatus = 'AC')";
-			$result = $this->db->query($sql);
+			
+                        $result = $this->db->query($sql);
                         return $result;
 		}
 	}
