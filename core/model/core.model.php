@@ -24,7 +24,13 @@
 				$this->db->close();
 			}
 		}
-
+                
+                protected function reconnect(){
+                    mysqli_next_result($this->db);
+                    $this->db->close();
+                    $this->db = mysqli_connect(HOST_DB, USER_DB, PASSWORD_DB, DATABASE_DB);
+                }
+                
 		public function index(){
 			//echo "<hr><pre>".print_r($_GET,1)."</pre><hr>";
                         $this->load_controller($_GET["sysModule"] , $_GET["sysFunction"]);
@@ -150,8 +156,6 @@
 		}
                 
                 private function getModulesButtons(){
-                    //$sql = "CALL stpGetModulesProfilesPermissions('".$_GET['sysController']."','".$_SESSION['skUsers']."', NULL);";
-                    //$sql = "SELECT _modules_buttons.*, btn.skPermissions, REPLACE(btn.sHtml, '{{sTitle}}', btn.sTitle) AS sHtml FROM _modules_buttons INNER JOIN _buttons AS btn ON btn.skButtons = _modules_buttons.skButtons WHERE skModule = '".$_GET['sysController']."' ORDER BY _modules_buttons.iPosition ASC";
                     $sql = "CALL test('".$_GET['sysController']."');";
                     $result = $this->db->query($sql);
                     $data = array();
@@ -160,25 +164,23 @@
                             'skModule' => $row['skModule'],
                             'sParentModule' => $row['sParentModule'],
                             'skButtons' => $row['skButtons'],
-                            'sHtml' => $row['sHtml'],
+                            'sHtml' => htmlentities($row['sHtml'],ENT_QUOTES),
                             'skPermissions' => $row['skPermissions'],
                             'sFunction' => $row['sFunction'],
                             'iPosition' => $row['iPosition']
                         );
                     }
-                    //var_dump($data);
                     mysqli_free_result($result);
                     mysqli_next_result($this->db);
-                    foreach($data AS $key){
-                        var_dump($key['skModule']);
-                        $sql = "CALL stpConsultarBreadcrumb('".$key['skModule']."',0);";
+                    for($i=1;$i<=count($data);$i++){
+                        $sql = "CALL stpConsultarBreadcrumb('".$data[$i]['sParentModule']."',0);";
                         $records = $this->db->query($sql);
+                        $url = '';
                         while($record = $records->fetch_assoc()){
-                            var_dump($record);
+                            $url = SYS_URL.$_GET['sysProject'].'/'.$record['sParentModule'].'/'.$record['skModule'].'/'.$record['sName'].'/';
                         }
-                        echo '<hr>';
-                        mysqli_free_result($records);
-                        mysqli_next_result($this->db);
+                        $data[$i]['sHtml'] = str_replace('{{url}}', $url, $data[$i]['sHtml']);
+                        $this->reconnect();
                     }
                     return $data;
                 }

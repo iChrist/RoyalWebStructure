@@ -22,3 +22,14 @@ function _delete(){
     document.getElementById('_delete').appendChild(form);
     form.submit();
 }
+
+/* CHECKS IF VALUE IS INTEGER 
+ * RETURN BOOLEAN
+ */
+String.prototype.isInteger = function () {
+    if(Number.isInteger(this)){
+        return true;
+    }else{
+        return false;
+    }
+}
