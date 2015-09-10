@@ -38,8 +38,6 @@
 <link href="<?php echo SYS_URL; ?>core/assets/css/core.css" rel="stylesheet" type="text/css"/>
 <!-- END RoyalWeb CORE CSS -->
 <link rel="shortcut icon" href="favicon.ico"/>
-    <!-- END THEME STYLES -->
-    <link rel="shortcut icon" href="favicon.ico"/>
     </head>
     <!-- END HEAD -->
 <!-- BEGIN BODY -->
@@ -340,5 +338,5 @@
 	<div class="page-content-wrapper">
 		<div class="page-content">
 			 
-			<? require_once(CORE_PATH."stage/breadcrumb.php");?>
+			<?php require_once(CORE_PATH."stage/breadcrumb.php");?>
 			<!-- END PAGE HEADER-->

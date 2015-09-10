@@ -130,11 +130,10 @@
 		protected function load_view($view = "index", $data = array() , $templates = TRUE, $path = NULL){
 			if(file_exists(SYS_PATH.$_GET["sysModule"]."/".$view.".php")){
 				if($templates){
-					require_once(CORE_PATH."stage/header.php");
-                                        
                                         $_secutiry['_users_profiles'] = $this->getUsersProfiles();
                                         $_secutiry['_modules_profiles_permissions'] = $this->getModulesProfilesPermissions();
                                         $_buttons = $this->getModulesButtons();
+					require_once(CORE_PATH."stage/header.php");
                                         require_once(CORE_PATH."stage/buttons.php");
 					include(SYS_PATH.$_GET["sysModule"]."/".$view.".php");
 					require_once(CORE_PATH."stage/footer.php");

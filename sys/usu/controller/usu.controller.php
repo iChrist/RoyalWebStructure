@@ -11,7 +11,7 @@
 
 		public function __destruct(){
 			if($this->is_view_required()){
-				$this->load_view($_GET["sysFunction"], $this->data);
+				$this->load_view($_GET["sysController"], $this->data);
 			}
 		}
 
@@ -19,5 +19,9 @@
 			$this->require_view(FALSE);
 			$this->data["datos"] = parent::verifyUser();
 		}
+                
+                public function usu_con(){
+                    $this->require_view();
+                }
 	}
 ?>

@@ -13,9 +13,17 @@
 	}*/
 ?> 
 			<!-- BEGIN PAGE HEADER-->
-			<h3 class="page-title">
-			Inicio <small>Inicio del Sistema</small>
+                        <div class="col-md-6 col-sm-12">
+                            <h3 class="page-title">
+                            Inicio
+                            <small>
+                                Inicio del sistema
+                            </small>
 			</h3>
+                        </div>
+                        <?php
+                            require_once (CORE_PATH.'stage/buttons.php');
+                        ?>
 			<div class="page-bar">
 				<ul class="page-breadcrumb">
 					<?= $core->breadcrumb();?>
