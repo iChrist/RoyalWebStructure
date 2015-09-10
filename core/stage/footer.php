@@ -23,7 +23,7 @@
 <!-- END CORE DYNAMICALLY HTML USING JAVASCRIPT -->
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 <!-- BEGIN CORE PLUGINS -->
-<script src="<?php echo SYS_URL; ?>core/assets/plugins/jquery-1.11.0.min.js" type="text/javascript"></script>
+<!--<script src="<?php echo SYS_URL; ?>core/assets/plugins/jquery-1.11.0.min.js" type="text/javascript"></script>!-->
 <script src="<?php echo SYS_URL; ?>core/assets/plugins/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
 <!-- IMPORTANT! Load jquery-ui-1.10.3.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
 <script src="<?php echo SYS_URL; ?>core/assets/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
@@ -59,10 +59,21 @@
 <script src="<?php echo SYS_URL; ?>core/assets/lib/index.js" type="text/javascript"></script>
 <script src="<?php echo SYS_URL; ?>core/assets/lib/tasks.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
+
+<!-- BEGIN AJAX TABLE SCRIPTS & PLUGINS -->
+<script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/select2/select2.min.js"></script>
+<script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
+<script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/lib/datatable.js"></script>
+<script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/lib/table-ajax.js"></script>
+<!-- END AJAX TABLE SCRIPTS & PLUGINS -->
+
 <!-- BEGIN RoyalWeb CORE SCRIPTS -->
 <script src="<?php echo SYS_URL; ?>core/assets/lib/core.js" type="text/javascript"></script>
 <!-- END RoyalWeb CORE SCRIPTS -->
-<script>
+
+<script type="text/javascript">
 jQuery(document).ready(function() {    
    App.init(); // initlayout and core plugins
    Index.init();

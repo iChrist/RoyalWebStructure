@@ -37,9 +37,10 @@
 <!-- BEGIN RoyalWeb CORE CSS -->
 <link href="<?php echo SYS_URL; ?>core/assets/css/core.css" rel="stylesheet" type="text/css"/>
 <!-- END RoyalWeb CORE CSS -->
+<script src="<?php echo SYS_URL; ?>core/assets/plugins/jquery-1.11.0.min.js" type="text/javascript"></script>
 <link rel="shortcut icon" href="favicon.ico"/>
-    </head>
-    <!-- END HEAD -->
+</head>
+<!-- END HEAD -->
 <!-- BEGIN BODY -->
 <body class="page-header-fixed">
 <!-- BEGIN HEADER -->
@@ -338,5 +339,7 @@
 	<div class="page-content-wrapper">
 		<div class="page-content">
 			 
-			<?php require_once(CORE_PATH."stage/breadcrumb.php");?>
+			<?php 
+                            require_once(CORE_PATH.'stage/breadcrumb.php');
+                        ?>
 			<!-- END PAGE HEADER-->

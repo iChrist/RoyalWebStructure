@@ -1,7 +1,10 @@
+<?php
+    if(count($_buttons) > 0){
+?>
 <div class="col-md-6 col-sm-12">
     <div class="btn-group btn-group-xs" role="group" aria-label="Acciones">
         <button type="button" class="btn btn-sm actions-buttons">
-            <b>Acciones</b>
+            <b> <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></b>
         </button>
         <?php
             for($i=1;$i<=count($_buttons);$i++){
@@ -12,4 +15,7 @@
         ?>
     </div>
 </div>
+<?php
+    } // ENDIF
+?>
 <div class="clearfix"></div>

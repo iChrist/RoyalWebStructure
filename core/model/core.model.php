@@ -122,7 +122,7 @@
                                 $this->_error($text);
                             }
                         }else{
-                            require_once(CORE_PATH."login.php");
+                            require_once(CORE_PATH.'login.php');
                         }
                     }
 		}
