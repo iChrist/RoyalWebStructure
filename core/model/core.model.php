@@ -1,5 +1,7 @@
+<?php require_once("../../core/con/config.php");?>
 <?php
 	Class Core_Model {
+		 
 		
 		// PROTECTED VARIABLES //
 			protected $db;
@@ -14,7 +16,8 @@
 				$this->_error($text);
 				die();
 			}
-			$this->_get_params();
+			$this->iniciarClase($datos);
+			//$this->_get_params();
 			$this->require_view(TRUE);
 		}
 
@@ -24,11 +27,49 @@
 				$this->db->close();
 			}
 		}
+		
+		/*
+		
+Options -Indexes
+Options +FollowSymLinks
+RewriteEngine on
 
-		public function index(){
+#	RoyalWen Routes	#
+RewriteRule ^logout/$ core/logout.php [L,NC]
+RewriteRule ^([a-zA-Z0-9\-_.]+)/(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)$ core/stage/index.php?sysProject=$1&sysModule=$2&sysController=$3&sysName=$4&p1=$5&p2=$6&p3=$7&p4=$8&p5=$9 [L,NC,QSA]
+
+RewriteRule ^(wsv|wsdl)/([a-zA-Z]+)/$ core/stage/index.php?sysType=$1&sysModule=$2
+
+AddCharset utf-8 .txt .html .htm .php .wsdl
+		*/
+			
+		private function iniciarClase($datos)
+		{
+		$datos['module'] = ($datos['module'] ? $datos['module'] : "sys");
+		$select = " SELECT DISTINCT".
+				  " ss.skModule AS skModule,ss.sModule, ss.sParentModule, ss.iPosition, ss.sTitle,".
+				  " sh.skModule AS tCodPrimerHijo, sh.sTitle AS tTituloPrimerHijo".
+				  " FROM _modules ss". 
+				  " LEFT JOIN _modules sh ON sh.sParentModule = ss.skModule".
+				  " WHERE ss.skModule='".$datos['module']."' AND ss.skStatus='AC'".
+				  " ORDER BY ss.iPosition ASC, sh.iPosition LIMIT 1";	
+				//echo $select;  
+				  $result = $this->db->query($select);
+				  $rSeccion = $result->fetch_assoc();
+				   mysqli_free_result($result);
+                   mysqli_next_result($this->db);
+ 		$this->skModule =$rSeccion{'skModule'};
+		$this->tCodPrimerHijo =$rSeccion{'tCodPrimerHijo'};
+		$this->sParentModule = $rSeccion{'sParentModule'};
+		$this->sModule =$Seccion{'sModule'};	
+		$this->sTitle = $rSeccion{'sTitle'};
+		
+		}	
+
+		/*public function index(){
 			//echo "<hr><pre>".print_r($_GET,1)."</pre><hr>";
                         $this->load_controller($_GET["sysModule"] , $_GET["sysFunction"]);
-		}
+		}*/
 
 		private function _get_params(){
 			$_GET["sysModule"] = !empty($_GET["sysModule"]) ? str_replace("/","",$_GET["sysModule"]) : NULL;
@@ -71,9 +112,9 @@
 		protected function load_controller($sysModule = NULL , $sysFunction = "index"){
                     if($sysModule == NULL){
                         if((isset($_SESSION['session']['skUsers'])) && (!empty($_SESSION['session']['skUsers']))){
-                            require_once(CORE_PATH.'stage/header.php');
-                            require_once(CORE_PATH.'stage/dashboard.php');
-                            require_once(CORE_PATH.'stage/footer.php');
+                            require_once('../stage/header.php');
+                            require_once('../stage/dashboard.php');
+                            require_once('../stage/footer.php');
                         }else{
                             require_once(CORE_PATH."login.php");
                         }
@@ -220,14 +261,15 @@
 		
 		public function breadcrumb(){
 				$sql = "CALL stpConsultarBreadcrumb('".($_GET["sysController"] !='index' ? $_GET["sysController"] : 'sys')."',0); ";
-				
+				//echo $sql;
 					$result = $this->db->query($sql);	
 					$html="";
 					while($row= $result->fetch_assoc()){
 					
 							$html.='<li>
+							
 						<i class="fa fa-home"></i>
-						<a href="'.SYS_URL.$row['sParentModule'].'/'.$row['skModule'].'/'.$row['sName'].'/">'.$row['sTitle'].'</a>
+						<a href="/sys/'.$row['skModule'].'/'.$row['sName'].'/">'.$row['sTitle'].'</a>
 						<i class="fa fa-angle-right"></i>
 					</li>';
 							//$html.= $row['sPkModule']."<br>";
@@ -238,6 +280,39 @@
 					//return $result;
 			
 		}
+		
+		public function GetMenu($sMenu){
+		
+		/*$select = " SELECT DISTINCT ss.sKModule, ss.tCodVinculo, ss.tParametros, ss.ePosicion, ss.tCodPadre, ss.bFiltros,".
+						  " ss.tTitulo, ss.tSubtitulo, ss.bOcultarTitulo, ss.bPublico".
+						  " FROM sissecciones ss".
+						  " INNER JOIN sisusuarios su ON su.eCodUsuario=".(int)$_SESSION['sesionServicios']['eCodUsuario'].
+						  (isset($_SESSION['sesionServicios']) ? " AND ss.bPublico=0" : " OR ss.bPublico=1").
+						  " LEFT JOIN sisseccionesperfiles ssp ON ssp.tCodPerfil = su.tCodPerfil AND ssp.tCodSeccion=ss.tCodSeccion ".
+						  " WHERE  ss.eCodMenu = ".$eCodMenu." AND ss.tCodEstatus='AC' AND ss.bOcultarNavegacion IS NULL".
+						  (isset($_SESSION['sesionServicios']) ? " AND ss.bPublico=0 AND (su.tCodGrupo='A' OR ssp.tCodSeccion IS NOT NULL)" : " AND ss.bPublico=1").
+						  ($this->bMovil ? " AND ss.bMovil=1" : "").
+						  " ORDER BY ss.ePosicion ASC";	*/
+						  
+						  
+						  $select = " SELECT DISTINCT ss.sKModule,
+						 	ss.iPosition,
+							ss.sParentModule,
+						 	ss.sTitle".
+						  " FROM _modules ss".
+						  " INNER JOIN _users su ON su.skUsers='".$_SESSION['session']['skUsers']."' ".
+						//  (isset($_SESSION['sesionServicios']) ? " AND ss.bPublico=0" : " OR ss.bPublico=1").
+						  " LEFT JOIN _modules_profiles_permissions ssp ON ssp.skProfiles = '".$_SESSION['session']['skProfile']."' AND ssp.sKmodule=ss.sKmodule ".
+						  " WHERE ". 
+						  //"ss.eCodMenu = '".$sMenu."' "
+						  " ss.skStatus='AC' ".
+						 // (isset($_SESSION['session']) ? " AND ss.bPublico=0 AND (su.tCodGrupo='A' OR ssp.tCodSeccion IS NOT NULL)" : " AND ss.bPublico=1").
+						 // ($this->bMovil ? " AND ss.bMovil=1" : "").
+						  " ORDER BY ss.iPosition ASC";	
+						  
+						  //echo $select;
+	}
+
 
 	}
 ?>

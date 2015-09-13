@@ -1,11 +1,10 @@
 Options -Indexes
 Options +FollowSymLinks
-RewriteEngine on
 
-#	RoyalWen Routes	#
-RewriteRule ^logout/$ core/logout.php [L,NC]
-RewriteRule ^([a-zA-Z0-9\-_.]+)/(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)$ core/stage/index.php?sysProject=$1&sysModule=$2&sysController=$3&sysName=$4&p1=$5&p2=$6&p3=$7&p4=$8&p5=$9 [L,NC,QSA]
+RewriteRule ^sys/(?:([a-zA-Z0-9]{3}/)?)([a-zA-Z0-9\-]+)/(?:[a-zA-Z0-9\-\·]*/?)(?:(?:p1)/([a-zA-Z0-9\-\s\.]*)/?)?(?:(?:p2)/([a-zA-Z0-9\-\s\.]*)/?)?(?:(?:p3)/([a-zA-Z0-9\-\s\.]*)/?)?(?:(?:p4)/([a-zA-Z0-9\-\s\.]*)/?)?(?:(?:p5)/([a-zA-Z0-9\-\s\.]*)/?)?(?:(?:p6)/([a-zA-Z0-9\-\s\.]*)/?)?(?:(?:p7)/([a-zA-Z0-9\-\s\.]*)/?)?(?:(?:p8)/([a-zA-Z0-9\-\s\.]*)/?)?$ /sys/stage/pla-pri.php?sysProject=$1&sysModule=$2&sysController=$3&sysName=$4&p1=$5&p2=$6&p3=$7&p4=$8&p5=$9
 
-RewriteRule ^(wsv|wsdl)/([a-zA-Z]+)/$ core/stage/index.php?sysType=$1&sysModule=$2
 
+
+ 
 AddCharset utf-8 .txt .html .htm .php .wsdl
+

@@ -1,3 +1,3 @@
 <?php 
-	header('Location: sys'); 
+	header('Location: stage/sys/sistema/'); 
 ?>

@@ -1,16 +1,7 @@
 
 <?php
- $core = new Core_Model(); 
+  global $core;
 
- 
- //print_r($core->breadcrumb());
-  
-
-/*while($row= $data['empresas']->fetch_assoc()){
-		echo $row['sPkModule']."<br>";
-		
-		
-	}*/
 ?> 
 			<!-- BEGIN PAGE HEADER-->
 			<h3 class="page-title">
@@ -19,7 +10,7 @@
 			<div class="page-bar">
 				<ul class="page-breadcrumb">
 					<?= $core->breadcrumb();?>
-					<!--<li>
+ 					<!--<li>
 						<i class="fa fa-home"></i>
 						<a href="index.html">Inicio</a>
 						<i class="fa fa-angle-right"></i>
