@@ -1,24 +1,14 @@
 
 <?php
- $core = new Core_Model(); 
-
- 
- //print_r($core->breadcrumb());
-  
-
-/*while($row= $data['empresas']->fetch_assoc()){
-		echo $row['sPkModule']."<br>";
-		
-		
-	}*/
+global $core;
 ?> 
 			<!-- BEGIN PAGE HEADER-->
                         <div class="col-md-6 col-sm-12">
                             <h3 class="page-title">
-                            Inicio
-                            <small>
+                            <?php echo $core->sTitle; ?>
+                            <!--<small>
                                 Inicio del sistema
-                            </small>
+                            </small>!-->
 			</h3>
                         </div>
                         <?php

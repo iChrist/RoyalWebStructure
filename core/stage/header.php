@@ -1,4 +1,7 @@
-<? require_once(CORE_PATH."model/core.model.php");?>
+<?php 
+    require_once(CORE_PATH."model/core.model.php");
+    global $core;
+?>  
     <!DOCTYPE html>
     <!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
     <!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
@@ -6,7 +9,7 @@
         <!-- BEGIN HEAD -->
     <head>
     <meta charset="utf-8"/>
-    <title>RoyalWeb Structure</title>
+    <title><?php echo $core->sTitle; ?></title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta content="" name="description"/>

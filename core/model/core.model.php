@@ -1,7 +1,14 @@
 <?php
 	Class Core_Model {
 		
-		// PROTECTED VARIABLES //
+		// PUBLIC VARIABLES //
+                public $skModule;
+                public $tCodPrimerHijo;
+                public $sParentModule;
+                public $sModule;    
+                public $sTitle;
+                
+                // PROTECTED VARIABLES //
 			protected $db;
 
 		// PRIVATE VARIABLES //
@@ -32,16 +39,17 @@
                 }
                 
 		public function index(){
-			//echo "<hr><pre>".print_r($_GET,1)."</pre><hr>";
-                        $this->load_controller($_GET["sysModule"] , $_GET["sysFunction"]);
+                    //echo "<hr><pre>".print_r($_GET,1)."</pre><hr>";
+                    $this->load_controller($_GET["sysModule"] , $_GET["sysFunction"]);
 		}
+                
 
 		private function _get_params(){
 			$_GET["sysModule"] = !empty($_GET["sysModule"]) ? str_replace("/","",$_GET["sysModule"]) : NULL;
 			$_GET["sysModule"] = !empty($_GET["sysModule"]) ? str_replace("-","_",$_GET["sysModule"]) : NULL;
 
-			$_GET["sysController"] = !empty($_GET["sysController"]) ? str_replace("/","",$_GET["sysController"]) : 'index';
-			$_GET["sysController"] = !empty($_GET["sysController"]) ? str_replace("_","-",$_GET["sysController"]) : 'index';
+			$_GET["sysController"] = !empty($_GET["sysController"]) ? str_replace("/","",$_GET["sysController"]) : 'sys';
+			$_GET["sysController"] = !empty($_GET["sysController"]) ? str_replace("_","-",$_GET["sysController"]) : 'sys';
 			
                         $_GET["sysFunction"] = !empty($_GET["sysController"]) ? str_replace("-","_",$_GET["sysController"]) : 'index';
 			
@@ -52,6 +60,22 @@
 			$_GET["p3"] = !empty($_GET["p3"]) ? str_replace("/","",$_GET["p3"]) : NULL;
 			$_GET["p4"] = !empty($_GET["p4"]) ? str_replace("/","",$_GET["p4"]) : NULL;
 			$_GET["p5"] = !empty($_GET["p5"]) ? str_replace("/","",$_GET["p5"]) : NULL;
+                       $select = " SELECT DISTINCT".
+                              " ss.skModule AS skModule,ss.sModule, ss.sParentModule, ss.iPosition, ss.sTitle,".
+                              " sh.skModule AS tCodPrimerHijo, sh.sTitle AS tTituloPrimerHijo".
+                              " FROM _modules ss".
+                              " LEFT JOIN _modules sh ON sh.sParentModule = ss.skModule".
+                              " WHERE ss.skModule='".$_GET["sysController"]."' AND ss.skStatus='AC'".
+                              " ORDER BY ss.iPosition ASC, sh.iPosition LIMIT 1"; 
+                       $result = $this->db->query($select);
+                    $rSeccion = $result->fetch_assoc();
+                    mysqli_free_result($result);
+                    mysqli_next_result($this->db);
+                    $this->skModule =$rSeccion{'skModule'};
+                    $this->tCodPrimerHijo =$rSeccion{'tCodPrimerHijo'};
+                    $this->sParentModule = $rSeccion{'sParentModule'};
+                    $this->sModule =$rSeccion['sModule'];    
+                    $this->sTitle = $rSeccion['sTitle'];
 		}
 
 		protected function load_model($model = NULL, $path = NULL){

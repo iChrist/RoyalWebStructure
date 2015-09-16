@@ -66,6 +66,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <link href="<?php echo SYS_URL; ?>core/assets/css/custom.css" rel="stylesheet" type="text/css"/>
 <!-- END THEME STYLES -->
 <link rel="shortcut icon" href="<?php echo SYS_URL; ?>core/assets/img/favicon.png"/>
+
 </head>
 <!-- BEGIN BODY -->
 <body class="login">
@@ -73,7 +74,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <div class="logo">
 	<a href="<?php echo SYS_URL; ?>">
 	<img src="<?php echo SYS_URL; ?>core/assets/img/RoyalWeb-White.png" alt="RoyalWeb" width="130px" height="50px" />
-	</a>
+        </a>
 </div>
 <!-- END LOGO -->
 <!-- BEGIN LOGIN -->
