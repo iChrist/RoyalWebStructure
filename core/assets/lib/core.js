@@ -7,6 +7,7 @@ function _new(url){
 }
 
 function _save(){
+    console.log(23424234);
     document.getElementById('_save').submit();
 }
 

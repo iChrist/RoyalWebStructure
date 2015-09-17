@@ -25,12 +25,23 @@
 		}
 
 		public function conf_perf_form(){
-			 //$this->require_view();
-			 if($_POST){
-			 	echo 34564564;
-			 }else{ 
-				$this->data["perfiles"] = parent::create();
-			}
+                    //$this->require_view();
+                    $this->data["msg"] = '';
+                    $this->data["datos"] = '';
+                    if($_POST){
+                        $this->sName = $_POST['sName'];
+                        $this->skStatus = $_POST['skStatus'];
+                        $id = parent::create();
+                        if($id){
+                            $this->data["msg"] = 'GUADADO CON EXITO';
+                        }else{
+                            $this->data["msg"] = 'ERROR AL GUARDAR';
+                        }
+                    }
+                    if(!empty($_GET['p1'])){
+                        $this->skProfiles = $_GET['p1'];
+                        $this->data['datos'] = parent::read();
+                    }
 		}
 
 	}

@@ -30,10 +30,12 @@
                         return $result;
 		}*/
 		public function create(){
-			$sql= "INSERT INTO _profiles (skProfiles,sName,skStatus) VALUES (REPLACE('-','',uuid()),'$this->sName','$this->skStatus')";
+                        $sql="SELECT REPLACE(uuid(),'-','') AS uuid"; 
+                        $this->skProfiles = $this->db->query($sql)->fetch_assoc();
+                        $sql= "INSERT INTO _profiles (skProfiles,sName,skStatus) VALUES ('".$this->skProfiles['uuid']."','$this->sName','$this->skStatus')";
 			$result = $this->db->query($sql);
 			if ($result) {
-				return $this->db->last_id();
+				return $this->skProfiles;
 			}else{
 				return false;
 			}
@@ -41,8 +43,11 @@
 
 		public function read(){
 			$sql= "SELECT * FROM _profiles";
+                        if($this->skProfiles){
+                            $sql .=" WHERE skProfiles = '$this->skProfiles'";
+                        }
 			$result = $this->db->query($sql);
-            return $result;
+                        return $result;
 		}
 
 		public function update(){
