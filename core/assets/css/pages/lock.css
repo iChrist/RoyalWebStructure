@@ -2,7 +2,8 @@
 Lock Page
 ***/
 body {
-	background-color: #999;
+	//background-color: #999;
+        background-color: #515255 !important;
 	padding: 0;
 	margin: 0;
 }
@@ -42,6 +43,20 @@ body {
    text-align: left !important;
    font-size: 13px;
    color: #ddd;
+}
+
+.copyright {
+   margin-top: 10px;
+   text-align: left !important;
+   font-size: 13px;
+   color: #999;
+}
+
+.copyright:hover {
+   margin-top: 10px;
+   text-align: left !important;
+   font-size: 13px;
+   color: #999;
 }
 
 .page-lock img.page-lock-img {
