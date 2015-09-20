@@ -12,6 +12,7 @@
                 $_SESSION['session']['sName'] = $row['sName'];
                 $_SESSION['session']['sUserName'] = $row['sUserName'];
                 $_SESSION['session']['sEmail'] = $row['sEmail'];
+                $_SESSION['session']['sGroup'] = $row['sGroup'];
             }
             header('Location: '.$_SERVER['REQUEST_URI']);
         }else{
