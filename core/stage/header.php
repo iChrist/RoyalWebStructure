@@ -245,7 +245,53 @@
 						</div>
 					</form>
 				</li>
-				<li class="start active ">
+					
+				<?
+			 			/*	Array ( [0] => Array ( [skModule] => [iPosition] => 1 [sParentModule] => [sModule] => [sTitle] => Inicio [sIcons] => ) 
+						[1] => Array ( [skModule] => [iPosition] => 1 [sParentModule] => sys-func [sModule] => [sTitle] => Operaciones [sIcons] => icon-settings ) 
+						[2] => Array ( [skModule] => [iPosition] => 3 [sParentModule] => sys-func [sModule] => [sTitle] => Catalogos [sIcons] => fa fa-archive ) ) */
+ 				$sMenu="LAT";
+ 				//print_r($core->GetMenu($sMenu));
+				$array = $core->GetMenu($sMenu);
+ 				 for($i=0;$i<count($array);$i++) {
+	 				  $datos = $core->GetSubMenuModuls($array[$i]['skModule']);
+	 				//  echo print_r($datos);
+	 				echo '<li class="start">
+					<a href="'.(count($datos)!=0 ? "javascript:;" : SYS_URL."sys/").'">
+					<i class="'.($array[$i]['sIcons'] ? $array[$i]['sIcons'] : '').'"></i>
+					<span class="title">'.$array[$i]['sTitle'].'</span>';
+					 if(count($datos)==0){ echo '<span class="selected"></span></a>';}else{
+						 echo '<span class="arrow "></span></a>';
+						echo ' <ul class="sub-menu">';
+						 for($j=0;$j<count($datos);$j++) {
+			 				  $datModul = $core->GetSubMenuModuls($datos[$j]['skModule']);
+			 				 echo '<li>
+									<a href="javascript:;">
+									<i class="'.$datos[$j]['sIcons'].'"></i>
+									'.$datos[$j]['sTitle'].' 
+									'.(count($datModul)!=0 ? "<span class=\"arrow \"></span>" : "").'
+									';
+									 
+									echo '</a>';
+									 echo'<ul class="sub-menu">';
+									 for($k=0;$k<count($datModul);$k++) {
+ 									echo '	<li>
+											<a href="'.SYS_URL."sys/".$datModul[$k]['sModule']."/".$datModul[$k]['skModule']."/".$datModul[$k]['sName']."/".'"> '.$datModul[$k]['sTitle'].'</a>
+										</li>
+										 ';
+										
+									
+
+									 }
+									echo '</ul>	</li>';
+			 				 }
+ 					echo '</ul>';
+ 					 }
+ 					echo '</li>';
+ 					}				 
+				 				
+				?>
+				<!--<li class="start active ">
 					<a href="index.html">
 					<i class="icon-home"></i>
 					<span class="title">Inicio</span>
@@ -327,13 +373,8 @@
 						</li>
 						
 					</ul>
-				</li>
-				<li>
-					<a href="javascript:;">
-					<i class="icon-pie-chart"></i>
-					<span class="title">Estadisticas</span>
-					<span class="arrow "></span>
- 					</a>
+				</li>-->
+			</ul>
 								<!-- END SIDEBAR MENU -->
 		</div>
 	</div>

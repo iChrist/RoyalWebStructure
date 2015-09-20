@@ -22,7 +22,9 @@
 				die();
 			}
 			$this->_get_params();
+			
 			$this->require_view(TRUE);
+			
 		}
 
 		public function __destruct(){
@@ -101,6 +103,7 @@
 		protected function load_controller($sysModule = NULL , $sysFunction = "index"){
                     if($sysModule == NULL){
                         if((isset($_SESSION['session']['skUsers'])) && (!empty($_SESSION['session']['skUsers']))){
+                        	
                             require_once(CORE_PATH.'stage/header.php');
                             require_once(CORE_PATH.'stage/dashboard.php');
                             require_once(CORE_PATH.'stage/footer.php');
@@ -157,6 +160,7 @@
                                         $_secutiry['_users_profiles'] = $this->getUsersProfiles();
                                         $_secutiry['_modules_profiles_permissions'] = $this->getModulesProfilesPermissions();
                                         $_buttons = $this->getModulesButtons();
+                                        
 					require_once(CORE_PATH."stage/header.php");
                                         require_once(CORE_PATH."stage/buttons.php");
 					include(SYS_PATH.$_GET["sysModule"]."/".$view.".php");
@@ -195,6 +199,7 @@
                     }
                     mysqli_free_result($result);
                     mysqli_next_result($this->db);
+                    
                     for($i=1;$i<=count($data);$i++){
                         $sql = "CALL stpConsultarBreadcrumb('".$data[$i]['sParentModule']."',0);";
                         $records = $this->db->query($sql);
@@ -263,6 +268,93 @@
 					//return $result;
 			
 		}
+		public function GetMenu($sMenu){
+		
+ 						  $sql = " SELECT DISTINCT ss.skModule AS skModule,
+						 	ss.iPosition AS iPosition,
+							ss.sParentModule AS sParentModule,
+							ss.sModule AS sModule,
+							mi.sIcons  AS sIcons,
+						 	ss.sTitle AS sTitle".
+						  " FROM _modules ss".
+						  " INNER JOIN _users su ON su.skUsers='".$_SESSION['session']['skUsers']."' ".
+						  " INNER JOIN _modules_menu mm ON mm.skModule = ss.sKmodule  ".
+						  "	LEFT JOIN _modules_icons mi ON mi.skModule = ss.sKmodule  ".
+						//  (isset($_SESSION['sesionServicios']) ? " AND ss.bPublico=0" : " OR ss.bPublico=1").
+						  " LEFT JOIN _modules_profiles_permissions ssp ON ssp.skProfiles = '".$_SESSION['session']['skProfile']."' AND ssp.sKmodule=ss.sKmodule ".
+ 						  " WHERE ". 
+ 						  " ss.skStatus='AC' ".
+						  " AND mm.skMenu = '".$sMenu."'  ".
+ 						   (isset($_SESSION['session']) ? " AND (su.sGroup='A' OR ssp.skModule IS NOT NULL)" : "").
+						 // (isset($_SESSION['session']) ? " AND ss.bPublico=0 AND (su.tCodGrupo='A' OR ssp.tCodSeccion IS NOT NULL)" : " AND ss.bPublico=1").
+ 						  " ORDER BY ss.iPosition ASC";	
+						  //echo $sql;
+						   $result = $this->db->query($sql);
+						   	$data = array();
+						  	  while($row = $result->fetch_assoc()){
+		                          array_push($data, array(
+		                            'skModule'    			=>  $row['skModule'],
+		                            'iPosition'       		=>  $row['iPosition'],
+		                            'sParentModule'         =>  $row['sParentModule'],
+		                            'sModule'         		=>  $row['sModule'],
+		                            'sTitle'         		=>  $row['sTitle'],
+		                            'sIcons'         		=>  $row['sIcons'],
+		                        ));
+		                    }
+		                    mysqli_free_result($result);
+		                    mysqli_next_result($this->db);
+		                    return $data;
+ 						 
+                      }
+            public function GetSubMenuModuls($sSeccionParent){
+		
+ 						  $sql = " SELECT DISTINCT ss.skModule AS skModule,
+						 	ss.iPosition AS iPosition,
+							ss.sParentModule AS sParentModule,
+							ss.sModule AS sModule,
+							mi.sIcons  AS sIcons,
+							ss.sName AS sName,
+						 	ss.sTitle AS sTitle,
+						 	mm.skCaracteristic ".
+ 						  " FROM _modules ss".
+						  " INNER JOIN _users su ON su.skUsers='".$_SESSION['session']['skUsers']."' ".
+ 						  "	LEFT JOIN _modules_icons mi ON mi.skModule = ss.sKmodule  ".
+ 						  " LEFT JOIN _modules_caracteristic mm ON mm.skModule = ss.sKmodule  ".
+						//  (isset($_SESSION['sesionServicios']) ? " AND ss.bPublico=0" : " OR ss.bPublico=1").
+						  " LEFT JOIN _modules_profiles_permissions ssp ON ssp.skProfiles = '".$_SESSION['session']['skProfile']."' AND ssp.sKmodule=ss.sKmodule ".
+ 						  " WHERE  ss.sParentModule = '".$sSeccionParent."' AND". 
+ 						  " ss.skStatus='AC'  AND mm.skCaracteristic IS NULL ".
+  						   (isset($_SESSION['session']) ? " AND (su.sGroup='A' OR ssp.skModule IS NOT NULL)" : "").
+						 // (isset($_SESSION['session']) ? " AND ss.bPublico=0 AND (su.tCodGrupo='A' OR ssp.tCodSeccion IS NOT NULL)" : " AND ss.bPublico=1").
+ 						  " ORDER BY ss.iPosition ASC";	
+						  //echo $sql;
+						   $result = $this->db->query($sql);
+ 						   $row_cnt = $result->num_rows;
+						   $data = array();
+						   	if($row_cnt){
+						   	
+						   	
+						  	  while($row = $result->fetch_assoc()){
+		                          array_push($data, array(
+		                            'skModule'    			=>  $row['skModule'],
+		                            'iPosition'       		=>  $row['iPosition'],
+		                            'sParentModule'         =>  $row['sParentModule'],
+		                            'sModule'         		=>  $row['sModule'],
+		                            'sTitle'         		=>  $row['sTitle'],
+		                            'sName'         		=>  $row['sName'],
+		                            'sIcons'         		=>  $row['sIcons'],
+		                        ));
+		                    }
+		                    mysqli_free_result($result);
+		                    mysqli_next_result($this->db);
+		                    
+		                          return $data;
+		                    }else{
+			                    //return 0;
+		                    }
+		              
+ 						 
+                      }
 
 	}
 ?>

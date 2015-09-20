@@ -17,14 +17,8 @@ global $core;
 			<div class="page-bar">
 				<ul class="page-breadcrumb">
 					<?= $core->breadcrumb();?>
-					<!--<li>
-						<i class="fa fa-home"></i>
-						<a href="index.html">Inicio</a>
-						<i class="fa fa-angle-right"></i>
-					</li>
-					<li>
-						<a href="#">Pagina Principal</a>
-					</li>-->
+ 					
+					 
 				</ul>
 				 
 			</div>
