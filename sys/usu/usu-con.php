@@ -154,6 +154,9 @@
 <script type="text/javascript">
 jQuery(document).ready(function() {       
    // init ajax table 
-   TableAjax.init();
+   //TableAjax.init();
+   var obj = new TableAjax('<?php echo $_SERVER["REQUEST_URI"]; ?>?axn=fetch_all');
+   obj.init();
+   //console.log(obj.url);
 });
 </script>
