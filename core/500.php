@@ -1,12 +1,3 @@
-<?php
-    /*require_once(SYS_PATH."usu/controller/usu.controller.php");
-    $usu = new Usu_Controller();
-    $result = $usu->verifyUser($_POST['sUserName'], $_POST['sPassword']);*/
-    if($_POST){
-        $_SESSION['session']['skProfile'] = $_POST['skProfile'];
-        header('Location: '.$_SERVER['REQUEST_URI']);
-    }
-?>
 <!DOCTYPE html>
 <!-- 
 Template Name: Conquer - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.2.0
@@ -27,7 +18,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <!-- BEGIN HEAD -->
 <head>
 <meta charset="utf-8"/>
-<title>Perf&iacute;l</title>
+<title>ERROR 500</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta content="" name="description"/>
@@ -48,50 +39,34 @@ License: You must have a valid license purchased only from themeforest(the above
 <link href="<?php echo SYS_URL; ?>core/assets/css/style.css" rel="stylesheet" type="text/css"/>
 <link href="<?php echo SYS_URL; ?>core/assets/css/style-responsive.css" rel="stylesheet" type="text/css"/>
 <link href="<?php echo SYS_URL; ?>core/assets/css/plugins.css" rel="stylesheet" type="text/css"/>
-<!--<link href="<?php echo SYS_URL; ?>core/assets/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color"/>-->
-<link href="<?php echo SYS_URL; ?>core/assets/css/pages/lock.css" rel="stylesheet" type="text/css"/>
+<link href="<?php echo SYS_URL; ?>core/assets/css/pages/error.css" rel="stylesheet" type="text/css"/>
 <link href="<?php echo SYS_URL; ?>core/assets/css/custom.css" rel="stylesheet" type="text/css"/>
 <!-- END THEME STYLES -->
 <link rel="shortcut icon" href="<?php echo SYS_URL; ?>core/assets/img/favicon.png"/>
 
 </head>
 <!-- BEGIN BODY -->
-<body>
-<div class="page-lock">
-	<div class="page-logo">
-            <a href="<?php echo SYS_URL; ?>">
-                <img src="<?php echo SYS_URL; ?>core/assets/img/RoyalWeb-White.png" alt="RoyalWeb" width="130px" height="50px" />
-            </a>
-	</div>
-	<div class="page-body">
-		<img class="page-lock-img" src="<?php echo SYS_URL; ?>core/assets/img/avatar.png" alt="">
-		<div class="page-lock-info">
-			<h1><?php echo $_SESSION['session']['sName']; ?></h1>
-			<span class="email">
-			<?php echo $_SESSION['session']['sEmail']; ?></span>
-			<span class="locked label label-warning">
-			Seleccionar perf&iacute;l </span>
-                        <form class="form-inline" action="" method="post">
-                                <div class="input-group input-medium">
-                                    <select class="form-control" name="skProfile">
-                                        <option value="0">- Perf&iacute;l -</option>
-                                        <option value="profile1">profile 1</option>
-                                        <option value="profile2">profile 2</option>
-                                    </select>
-                                    <span class="input-group-btn">
-                                        <button type="submit" class="btn btn-info">Seleccionar</button>
-                                    </span>
-                                </div>
-
-				<!-- /input-group -->
-				<div class="relogin">
-                                    <a href="<?php echo SYS_URL; ?>logout/">&iquest; No eres <?php echo $_SESSION['session']['sName']; ?> ?</a>
-				</div>
-			</form>
+<body class="page-500-full-page">
+<div class="row">
+	<div class="col-md-12 page-500">
+		<div class=" number">
+			 500
 		</div>
-	</div>
-	<div class="page-footer">
-            <a href="http://royalweb.com.mx" target="_blank" class="copyright"><?php echo date('Y')?> &copy; RoyalWeb</a>
+		<div class=" details">
+			<h3>&iexcl;EROR!</h3>
+			<p>
+                            <?php echo isset($text) ? $text : 'Internal Server Error.'; ?><br/>
+                            <a href="<?php echo SYS_URL; ?>">Ir a inicio.</a>
+			</p>
+			<!--<form action="#">
+                            <div class="input-group input-medium">
+                                    <input type="text" class="form-control" placeholder="keyword...">
+                                    <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-info"><i class="fa fa-search"></i></button>
+                                    </span>
+                            </div>
+			</form>!-->
+		</div>
 	</div>
 </div>
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->

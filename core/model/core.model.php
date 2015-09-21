@@ -18,7 +18,7 @@
 			$this->db = mysqli_connect(HOST_DB, USER_DB, PASSWORD_DB, DATABASE_DB);
 			if (mysqli_connect_errno()){
 				$text = "Failed to connect to database: ".mysqli_connect_error();
-				$this->_error($text);
+				$this->_error($text,500);
 				die();
 			}
 			$this->_get_params();
@@ -41,35 +41,36 @@
                 }
                 
 		public function index(){
-                    //echo "<hr><pre>".print_r($_GET,1)."</pre><hr>";
+                    echo "<hr><pre>".print_r($_GET,1)."</pre><hr>";
                     $this->load_controller($_GET["sysModule"] , $_GET["sysFunction"]);
 		}
                 
 
 		private function _get_params(){
-			$_GET["sysModule"] = !empty($_GET["sysModule"]) ? str_replace("/","",$_GET["sysModule"]) : NULL;
-			$_GET["sysModule"] = !empty($_GET["sysModule"]) ? str_replace("-","_",$_GET["sysModule"]) : NULL;
+                    $_GET["sysModule"] = !empty($_GET["sysModule"]) ? str_replace("/","",$_GET["sysModule"]) : NULL;
+                    $_GET["sysModule"] = !empty($_GET["sysModule"]) ? str_replace("-","_",$_GET["sysModule"]) : NULL;
 
-			$_GET["sysController"] = !empty($_GET["sysController"]) ? str_replace("/","",$_GET["sysController"]) : 'sys';
-			$_GET["sysController"] = !empty($_GET["sysController"]) ? str_replace("_","-",$_GET["sysController"]) : 'sys';
-			
-                        $_GET["sysFunction"] = !empty($_GET["sysController"]) ? str_replace("-","_",$_GET["sysController"]) : 'index';
-			
-			$_GET["sysName"] = !empty($_GET["sysName"]) ? str_replace("/","",$_GET["sysName"]) : NULL;
-                        
-			$_GET["p1"] = !empty($_GET["p1"]) ? str_replace("/","",$_GET["p1"]) : NULL;
-			$_GET["p2"] = !empty($_GET["p2"]) ? str_replace("/","",$_GET["p2"]) : NULL;
-			$_GET["p3"] = !empty($_GET["p3"]) ? str_replace("/","",$_GET["p3"]) : NULL;
-			$_GET["p4"] = !empty($_GET["p4"]) ? str_replace("/","",$_GET["p4"]) : NULL;
-			$_GET["p5"] = !empty($_GET["p5"]) ? str_replace("/","",$_GET["p5"]) : NULL;
-                       $select = " SELECT DISTINCT".
-                              " ss.skModule AS skModule,ss.sModule, ss.sParentModule, ss.iPosition, ss.sTitle,".
-                              " sh.skModule AS tCodPrimerHijo, sh.sTitle AS tTituloPrimerHijo".
-                              " FROM _modules ss".
-                              " LEFT JOIN _modules sh ON sh.sParentModule = ss.skModule".
-                              " WHERE ss.skModule='".$_GET["sysController"]."' AND ss.skStatus='AC'".
-                              " ORDER BY ss.iPosition ASC, sh.iPosition LIMIT 1"; 
-                       $result = $this->db->query($select);
+                    $_GET["sysController"] = !empty($_GET["sysController"]) ? str_replace("/","",$_GET["sysController"]) : 'index';
+                    $_GET["sysController"] = !empty($_GET["sysController"]) ? str_replace("_","-",$_GET["sysController"]) : 'index';
+
+                    $_GET["sysFunction"] = !empty($_GET["sysController"]) ? str_replace("-","_",$_GET["sysController"]) : 'index';
+
+                    $_GET["sysName"] = !empty($_GET["sysName"]) ? str_replace("/","",$_GET["sysName"]) : NULL;
+
+                    $_GET["p1"] = !empty($_GET["p1"]) ? str_replace("/","",$_GET["p1"]) : NULL;
+                    $_GET["p2"] = !empty($_GET["p2"]) ? str_replace("/","",$_GET["p2"]) : NULL;
+                    $_GET["p3"] = !empty($_GET["p3"]) ? str_replace("/","",$_GET["p3"]) : NULL;
+                    $_GET["p4"] = !empty($_GET["p4"]) ? str_replace("/","",$_GET["p4"]) : NULL;
+                    $_GET["p5"] = !empty($_GET["p5"]) ? str_replace("/","",$_GET["p5"]) : NULL;
+                    
+                    $select = " SELECT DISTINCT".
+                           " ss.skModule AS skModule,ss.sModule, ss.sParentModule, ss.iPosition, ss.sTitle,".
+                           " sh.skModule AS tCodPrimerHijo, sh.sTitle AS tTituloPrimerHijo".
+                           " FROM _modules ss".
+                           " LEFT JOIN _modules sh ON sh.sParentModule = ss.skModule".
+                           " WHERE ss.skModule='".$_GET["sysController"]."' AND ss.skStatus='AC'".
+                           " ORDER BY ss.iPosition ASC, sh.iPosition LIMIT 1"; 
+                    $result = $this->db->query($select);
                     $rSeccion = $result->fetch_assoc();
                     mysqli_free_result($result);
                     mysqli_next_result($this->db);
@@ -86,7 +87,7 @@
 					require_once(SYS_PATH.$path.$model.".model.php");
 				}else{
 					$text = "'".$model."' model not found.";
-					$this->_error($text,"ERROR 404");
+					$this->_error($text,404);
 					die();
 				}
 			}else{
@@ -94,7 +95,7 @@
 					require_once(SYS_PATH.$_GET["sysModule"]."/model/".$model.".model.php");
 				}else{
 					$text = "'".$model."' model not found.";
-					$this->_error($text,"ERROR 404");
+					$this->_error($text,404);
 					die();
 				}
 			}
@@ -103,11 +104,6 @@
 		protected function load_controller($sysModule = NULL , $sysFunction = "index"){
                     if($sysModule == NULL){
                         if((isset($_SESSION['session']['skUsers'])) && (!empty($_SESSION['session']['skUsers']))){
-
-                        	
-                            require_once(CORE_PATH.'stage/header.php');
-                            require_once(CORE_PATH.'stage/dashboard.php');
-                            require_once(CORE_PATH.'stage/footer.php');
                             if((isset($_SESSION['session']['skProfile'])) && (!empty($_SESSION['session']['skProfile']))){
                                 require_once(CORE_PATH.'stage/header.php');
                                 require_once(CORE_PATH.'stage/dashboard.php');
@@ -144,19 +140,23 @@
                                                 }
                                             }else{
                                                 $text = "Object query not set.";
-                                                $this->_error($text);
+                                                $this->_error($text,500);
+                                                die();
                                             }
                                         }else{
                                             $text = "Call to undefined method '".$sysFunction."' in '".$sysModule."' controller.";
-                                            $this->_error($text);
+                                            $this->_error($text,500);
+                                            die();
                                         }
                                     }else{
                                         $text = "'".$sysModule."' controller not found.";
-                                        $this->_error($text,"ERROR 404");
+                                        $this->_error($text,404);
+                                        die();
                                     }
                                 }else{
                                     $text = "'".$sysModule."' is not a valid directory.";
-                                    $this->_error($text);
+                                    $this->_error($text,500);
+                                    die();
                                 }
                             }else{
                                require_once(CORE_PATH.'profile.php'); 
@@ -183,7 +183,8 @@
 				}
 			}else{
 				 $text = "'".$view."' view not found.";
-				 $this->_error($text,"ERROR 404");
+				 $this->_error($text,404);
+                                 die();
 			}
 		}
 
@@ -256,8 +257,10 @@
                     return $data;
                 }
                 
-		public function _error(&$text, $error = "ERROR"){
-			echo "<table border='1' style='width:100%;'><tr><td style='padding-top:20px;'><center><h3><span style='color:red;'>".$error." : </span>".$text."</h3></center></td></tr></table>";
+		public function _error(&$text, $error = 404){
+                    require_once(CORE_PATH.$error.'.php');
+                    exit;
+                    //echo "<table border='1' style='width:100%;'><tr><td style='padding-top:20px;'><center><h3><span style='color:red;'>".$error." : </span>".$text."</h3></center></td></tr></table>";
 		}
 		
 		

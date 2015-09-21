@@ -1,6 +1,8 @@
 Options -Indexes
 Options +FollowSymLinks
 RewriteEngine on
+ErrorDocument 404 /core/404.php
+ErrorDocument 500 /core/500.php
 
 #	RoyalWen Routes	#
 RewriteRule ^logout/$ core/logout.php [L,NC]

@@ -1,5 +1,5 @@
 <?php
-    if(count($_buttons) > 0){
+    if(isset($_buttons) && count($_buttons) > 0){
 ?>
 <div class="col-md-6 col-sm-12">
     <div class="btn-group btn-group-xs" role="group" aria-label="Acciones">
