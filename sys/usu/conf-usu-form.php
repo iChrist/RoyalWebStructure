@@ -58,6 +58,6 @@
 <div class="col-md-12">
     <b>NOTA:</b>
     <span class="label label-md label-info">
-        Se enviar&aacute; correo electr&oacute;nico al usuario con una contrase&ntilde;a autogenerada para el acceso al sistema y posteriormente pordr&aacute; cambiarla.
+        Se enviar&aacute; correo electr&oacute;nico al usuario con una contrase&ntilde;a autogenerada para el acceso al sistema y posteriormente podr&aacute; cambiarla.
     </span>
 </div>
