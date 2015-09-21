@@ -41,7 +41,7 @@
                 }
                 
 		public function index(){
-                    echo "<hr><pre>".print_r($_GET,1)."</pre><hr>";
+                    //echo "<hr><pre>".print_r($_GET,1)."</pre><hr>";
                     $this->load_controller($_GET["sysModule"] , $_GET["sysFunction"]);
 		}
                 
