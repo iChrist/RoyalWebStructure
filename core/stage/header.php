@@ -59,7 +59,7 @@
         <form class="search-form search-form-header" role="form" action="index.html">
             <div class="input-icon right">
                 <i class="icon-magnifier"></i>
-                <input type="text" class="form-control input-sm" name="query" placeholder="Search...">
+                <input type="text" class="form-control input-sm" name="query" placeholder="Buscar...">
             </div>
         </form>
 		<!-- END LOGO -->
@@ -197,7 +197,7 @@
 			<li class="dropdown user">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
 				<img alt="" src="assets/img/avatar3_small.jpg"/>
-				<span class="username username-hide-on-mobile">Luis Valdez </span>
+				<span class="username username-hide-on-mobile"><?=$_SESSION['session']['sName'];?> </span>
 				<i class="fa fa-angle-down"></i>
 				</a>
 				<ul class="dropdown-menu">
