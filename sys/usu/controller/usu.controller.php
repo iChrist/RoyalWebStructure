@@ -72,5 +72,20 @@
                     }
                     $this->require_view();
                 }
+                
+                public function conf_usu_form(){
+                    $this->require_view();
+                    $this->data['message'] = '';
+                    $this->data['success'] = false;
+                    $this->data['error'] = false;
+                    $this->data['datos'] = false;
+                    if($_GET['p1']){
+                        $this->skUsers = $_GET['p1'];
+                        $this->data['datos'] = parent::read();
+                    }
+                    if($_POST){
+                        
+                    }
+                }
 	}
 ?>

@@ -131,6 +131,17 @@
                                             if($result){
                                                 if($result->num_rows > 0){
                                                     // VERIFICA LOS PERMISOS DEL USUARIO AUTENTICADO.
+                                                    $_secutiry['_modules_profiles_permissions'] = $this->getModulesProfilesPermissions();
+                                                    /*if(!empty($_secutiry['_modules_profiles_permissions'])){
+                                                        if(array_key_exists('R' , $_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$_SESSION['session']['skProfile']])){
+                                                            $this->require_view(TRUE);
+                                                            $sysModule_model->$sysFunction();
+                                                        }else{
+                                                            $this->require_view(FALSE);
+                                                        }
+                                                    }else{
+                                                        $this->require_view(FALSE);
+                                                    }*/
                                                     $this->require_view(TRUE);
                                                     $sysModule_model->$sysFunction();
                                                 }else{
@@ -246,7 +257,6 @@
                 
                 public function getModulesProfilesPermissions(){
                     $sql = "CALL stpGetModulesProfilesPermissions('".$_GET['sysController']."','".$_SESSION['session']['skUsers']."', '".$_SESSION['session']['skProfile']."');";
-                    //$sql = "CALL stpGetModulesProfilesPermissions('".$_GET['sysController']."','".$_SESSION['skUsers']."','".$_SESSION['skProfile']."');";
                     $result = $this->db->query($sql);
                     $data = array();
                     while($row = $result->fetch_assoc()){

@@ -1,20 +1,16 @@
-var TableAjax = function (url) {
+var TableAjax = function () {
     
-    this.url = url;
-    
-    this.initPickers = function () {
-    //var initPickers = function () {
+    var initPickers = function () {
         //init date pickers
         $('.date-picker').datepicker({
             autoclose: true
         });
     }
 
-    this.handleRecords = function () {
-    //var handleRecords = function () {
-        console.log(this.url);
-        var grid = new Datatable();
+    var handleRecords = function (url) {
         
+        var grid = new Datatable();
+
         grid.init({
             src: $("#datatable_ajax"),
             onSuccess: function (grid) {
@@ -32,7 +28,7 @@ var TableAjax = function (url) {
                 "pageLength": 10, // default record count per page
                 "ajax": {
                     //"url": "demo/table_ajax.php", // ajax source
-                    "url": this.url, // ajax source
+                    "url": url, // ajax source
                 },
                 "order": [
                     [1, "asc"]
@@ -69,29 +65,15 @@ var TableAjax = function (url) {
             }
         });
     }
-    
-    /*var init = function(){
-        initPickers();
-        handleRecords();
-    }*/
-    
-    this.init = function(){
-        this.initPickers();
-        this.handleRecords();
-    }
-    
-    this.test = function() {
-        console.log(this.url);
-    }
-    /*return {
 
+    return {
+        
         //main function to initiate the module
-        init: function () {
-
+        init: function (url) {
             initPickers();
-            handleRecords();
+            handleRecords(url);
         }
 
-    };*/
+    };
 
-}//();
+}();

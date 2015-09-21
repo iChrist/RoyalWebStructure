@@ -27,7 +27,7 @@
 		public function conf_perf_form(){
                     //$this->require_view();
                     $this->data["msg"] = '';
-                    $this->data["datos"] = '';
+                    $this->data["datos"] = false;
                     if($_POST){
                         $this->sName = $_POST['sName'];
                         $this->skStatus = $_POST['skStatus'];

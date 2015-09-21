@@ -31,7 +31,10 @@
                 }
             }
             public function read(){
-                $sql = "SELECT * FROM _users";
+                $sql = "SELECT * FROM _users WHERE 1=1 ";
+                if(!empty($this->skUsers)){
+                    $sql .= " AND skUsers = '$this->skUsers' ";
+                }
                 $result = $this->db->query($sql);
                 if($result->num_rows > 0){
                     return $result;
