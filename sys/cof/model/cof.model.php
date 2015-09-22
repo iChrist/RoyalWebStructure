@@ -31,12 +31,11 @@
             }
             
             public function create(){
-                $sql="SELECT REPLACE(uuid(),'-','') AS uuid"; 
-                $this->skUsers = $this->db->query($sql)->fetch_assoc();
-                $sql = "INSERT INTO _users (skUsers,sName,sEmail,sUserName,sPassword,skStatus) VALUES ('".$this->skUsers['uuid']."','$this->sName','$this->sEmail','$this->sUserName','$this->sPassword','$this->skStatus')";
+                $this->skUsers = substr(md5(microtime()), 0, 32);
+                $sql = "INSERT INTO _users (skUsers,sName,sEmail,sUserName,sPassword,skStatus) VALUES ('$this->skUsers','$this->sName','$this->sEmail','$this->sUserName','$this->sPassword','$this->skStatus')";
                 $result = $this->db->query($sql);
                 if($result){
-                    return $this->skUsers['uuid'];
+                    return $this->skUsers;
                 }else{
                     return false;
                 }
