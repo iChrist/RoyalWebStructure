@@ -2,8 +2,8 @@
     $error_login;
     $error_message;
     if($_POST){
-        require_once(SYS_PATH."usu/controller/usu.controller.php");
-        $usu = new Usu_Controller();
+        require_once(SYS_PATH."cof/controller/cof.controller.php");
+        $usu = new Cof_Controller();
         $result = $usu->verifyUser($_POST['sUserName'], $_POST['sPassword']);
         if($result->num_rows > 0){
             while($row = $result->fetch_assoc()){
