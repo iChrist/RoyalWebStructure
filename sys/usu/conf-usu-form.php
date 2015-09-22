@@ -20,6 +20,7 @@
     } // ENDIF
 ?>
 <form id="_save" method="post" class="form-horizontal form-bordered form-row-stripped" role="form">
+    <input type="hidden" name="skUsers" value="<?php echo (isset($result['skUsers'])) ? $result['skUsers'] : '' ; ?>"> 
     <div class="form-body">
         <div class="form-group">
             <label class="col-md-2 control-label">Nombre *</label>
@@ -30,13 +31,13 @@
         <div class="form-group">
             <label class="col-md-2 control-label">Correo electr&oacute;nico *</label>
             <div class="col-md-4">
-                <input type="email" name="sEmail" class="form-control" placeholder="Email" value="<?php echo (isset($result['sEmail'])) ? $result['sEmail'] : '' ; ?>" required>                                            
+                <input type="email" name="sEmail" class="form-control" placeholder="Correo electr&oacute;nico" value="<?php echo (isset($result['sEmail'])) ? $result['sEmail'] : '' ; ?>" required>                                            
             </div>
         </div> 
         <div class="form-group">
             <label class="col-md-2 control-label">Nombre de usuario *</label>
             <div class="col-md-4">
-                <input type="text" name="sUserName" class="form-control" placeholder="Email" value="<?php echo (isset($result['sUserName'])) ? $result['sUserName'] : '' ; ?>" required>                                            
+                    <input type="text" name="sUserName" class="form-control" placeholder="Nombre de usuario" value="<?php echo (isset($result['sUserName'])) ? $result['sUserName'] : '' ; ?>" required>                                            
             </div>
         </div> 
         <div class="form-group">

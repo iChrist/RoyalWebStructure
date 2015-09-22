@@ -22,10 +22,12 @@
             }
             
             public function create(){
-                $sql = "INSERT INTO (skUsers,sName,sEmail,sUserName,sPassword,skStatus) VALUES ('$this->skUsers','$this->sName','$this->sEmail','$this->sUserName','$this->sPassword','$this->skStatus')";
+                $sql="SELECT REPLACE(uuid(),'-','') AS uuid"; 
+                $this->skUsers = $this->db->query($sql)->fetch_assoc();
+                $sql = "INSERT INTO _users (skUsers,sName,sEmail,sUserName,sPassword,skStatus) VALUES ('".$this->skUsers['uuid']."','$this->sName','$this->sEmail','$this->sUserName','$this->sPassword','$this->skStatus')";
                 $result = $this->db->query($sql);
                 if($result){
-                    return $this->db->last_query();
+                    return $this->skUsers['uuid'];
                 }else{
                     return false;
                 }

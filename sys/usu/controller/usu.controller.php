@@ -79,12 +79,40 @@
                     $this->data['success'] = false;
                     $this->data['error'] = false;
                     $this->data['datos'] = false;
+                    if($_POST){
+                        if($_GET['p1'] || $_POST['skUsers']){
+                            $this->skUsers = isset($_GET['p1']) ? $_GET['p1'] : $_POST['skUsers'];
+                            $this->sName = $_POST['sName'];
+                            $this->sEmail = $_POST['sEmail'];
+                            $this->sUserName = $_POST['sUserName'];
+                            $this->skStatus = $_POST['skStatus'];
+                            if(parent::update()){
+                                $this->data['success'] = true;
+                                $this->data['message'] = 'Registro actualizado con &eacute;xito.';
+                            }else{
+                                $this->data['error'] = true;
+                                $this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
+                            }
+                        }else{
+                            $this->sName = $_POST['sName'];
+                            $this->sEmail = $_POST['sEmail'];
+                            $this->sUserName = $_POST['sUserName'];
+                            $this->skStatus = $_POST['skStatus'];
+                            $this->skUsers = parent::create();
+                            if($this->skUsers){
+                                $this->data['success'] = true;
+                                $this->data['message'] = 'Registro insertado con &eacute;xito.';
+                                $this->skUsers = $this->skUsers;
+                                $this->data['datos'] = parent::read();
+                            }else{
+                                $this->data['error'] = true;
+                                $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
+                            }
+                        }
+                    }
                     if($_GET['p1']){
                         $this->skUsers = $_GET['p1'];
                         $this->data['datos'] = parent::read();
-                    }
-                    if($_POST){
-                        
                     }
                 }
 	}
