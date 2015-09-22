@@ -1,7 +1,16 @@
 <?php
-	Abstract Class Usu_Model Extends Core_Model {
+	Abstract Class Cof_Model Extends Core_Model {
                 
             // PUBLIC VARIABLES //
+                public $users = array(
+                    'skUsers'       =>  ''
+                    ,'sName'        =>  ''
+                    ,'sEmail'       =>  ''
+                    ,'sUserName'    =>  ''
+                    ,'sPassword'    =>  ''
+                    ,'skStatus'     =>  ''
+                    ,'dCreated'     =>  ''
+                );
                 public $skUsers;
                 public $sName;
                 public $sEmail;

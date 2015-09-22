@@ -1,6 +1,6 @@
 <?php
-	require_once(SYS_PATH."usu/model/usu.model.php");
-	Class Usu_Controller Extends Usu_Model {
+	require_once(SYS_PATH."cof/model/cof.model.php");
+	Class Cof_Controller Extends Cof_Model {
 
 		// PRIVATE VARIABLES //
 			private $data = array();
@@ -73,7 +73,7 @@
                     $this->require_view();
                 }
                 
-                public function conf_usu_form(){
+                public function cof_usua_form(){
                     $this->require_view();
                     $this->data['message'] = '';
                     $this->data['success'] = false;
