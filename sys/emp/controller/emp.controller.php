@@ -15,7 +15,7 @@
 			}
 		}
 
-		public function emp_soco_con(){
+		public function con_empr_con(){
 				/*$this->require_view();
 				$this->_data['modulos']= $this->GetConsMod(); 
 				$this->_data['empresas']=$this->GetConsEmp(); */
