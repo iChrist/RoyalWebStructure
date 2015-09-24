@@ -1,13 +1,42 @@
 <?php 
-echo $data['msg']; 
+/*echo $data['msg']; 
 if($data['datos']){
     $result = $data['datos']->fetch_assoc();
-}
+}*/
 ?>
  
 <form id="_save" method="post" class="form-horizontal form-bordered form-row-stripped" role="form">
 
-<?php 		$select = "CALL stpMapSite('sys',0,'".$_GET['v1']."',NULL);";
+
+    <div class="form-body">
+        <div class="form-group">
+            <label class="col-md-2 control-label">Nombre</label>
+            <div class="col-md-4">
+                <input type="text" name="sName" class="form-control" placeholder="Nombre Perfil" value="<?php echo (isset($result['sName'])) ? $result['sName'] : '' ; ?>">                                            
+            </div>
+        </div> 
+        <div class="form-group">
+            <label class="col-md-2 control-label">Estatus</label>
+            <div class="col-md-4">
+                <div class="radio-list">
+                    <label>
+                        <input type="radio" name="skStatus" id="optionsRadios22" value="AC" checked> Activo
+                    </label>
+                    <label>
+                        <input type="radio" name="skStatus" id="optionsRadios23" value="IN" checked> Inactivo
+                    </label>
+                </div>
+                
+            </div>
+        </div>
+        <div class="form-group">
+        	<label class="col-md-2 control-label">Configuraci&oacute;n</label>
+         		 <div  id="divRegistros" class="col-md-10" style=" height: 550px; overflow:auto; padding-left:10px; padding-top:10px;border: 1px solid #ddd;">
+          	 
+          	 
+          	 <?php 		
+
+		$select = "CALL stpMapSite('sys-func',0,'".$_GET['v1']."',NULL);";
 			//echo $select;
  			$result = $this->db->query($select);
                     
@@ -55,7 +84,7 @@ if($data['datos']){
 				(trim($rSeccion{'sTitle'})!="-" ? ($rSeccion{'eNivel'}==1 ? "<p>" : "<p>").($rSeccion{'eNivel'}==0 ? " " : '').
 				//(trim($rSeccion{'sTitle'})!="-" ? "<label>".
  				"<input type=\"hidden\" name=\"eSeccion".$i."\" id=\"eSeccion".$i."\" value=\"".$rSeccion{'sCodSeccion'}."\" ><input type=\"checkbox\"  name=\"sCodSeccion".$i."\" id=\"sCodSeccion".$i."\" onclick=\"marcarHijos(this);\"".
-				(!$rSeccion{'peR'}&&!$rSeccion{'peW'}&&!$rSeccion{'peD'} ? "" : "checked=\"checked\"")." value=\"".$contadorSeccion."\" /><label class='text-muted' for=\"sCodSeccion".$i."\"  id=\"sCodSeccion".$i."\" >" : "").
+				(!$rSeccion{'peR'}&&!$rSeccion{'peW'}&&!$rSeccion{'peD'}&&!$rSeccion{'peA'}  ? "" : "checked=\"checked\"")." value=\"".$contadorSeccion."\" /><label class='text-muted' for=\"sCodSeccion".$i."\"  id=\"sCodSeccion".$i."\" >" : "").
 				($rSeccion{'eNivel'}==0 ? "<strong>" : "").
 				"&nbsp;&nbsp;".($tTitulo)."".
 				($rSeccion{'eNivel'}==0 ? "</strong>" : "").
@@ -71,6 +100,10 @@ if($data['datos']){
 				"<div class='col-sm-1 col-xs-1 '><p>".(trim($rSeccion{'sTitle'})!="-" ? "
 				<input type=\"checkbox\"  name=\"D_".$i."\" id=\"D_".$i."\" ".($rSeccion{'seD'} ? "" : "  disabled=\"disabled\"")." ".
 				(!$rSeccion{'peD'} ? "" : "checked=\"checked\"")." value=\"D\" onclick=\"marcarPadre(this);\" /><label for=\"D_".$i."\"> &nbsp;D</label>" : "")."</p></div>".
+				"<div class='col-sm-1 col-xs-1 '><p>".(trim($rSeccion{'sTitle'})!="-" ? "
+				<input type=\"checkbox\"  name=\"A_".$i."\" id=\"A_".$i."\" ".($rSeccion{'seA'} ? "" : "  disabled=\"disabled\"")." ".
+				(!$rSeccion{'peA'} ? "" : "checked=\"checked\"")." value=\"A\" onclick=\"marcarPadre(this);\" /><label for=\"A_".$i."\"> &nbsp;A</label>" : "")."</p></div>".
+
  								  
 				"</div>";
 			$datos[$i]['html'] = $tr;
@@ -78,70 +111,42 @@ if($data['datos']){
 			$i++;			
   			 }
   			 
-  			/* if (is_array($datos) || is_object($datos))
-					{
-					    foreach ($datos as $tFila)
-					    {
-					       $html1.=$tFila['html'];
-					    }
-			}*/
+  			
 			 		foreach($datos as $tFila){
-						$html1.=$tFila['html'];
+					$html1.=$tFila['html'];
 					}
+					
+					echo $html1;
 
 ?>
-    <div class="form-body">
-        <div class="form-group">
-            <label class="col-md-1 control-label">Nombre</label>
-            <div class="col-md-4">
-                <input type="text" name="sName" class="form-control" placeholder="Nombre Perfil" value="<?php echo (isset($result['sName'])) ? $result['sName'] : '' ; ?>">                                            
-            </div>
-        </div> 
-        <div class="form-group">
-            <label class="col-md-1 control-label">Estatus</label>
-            <div class="col-md-4">
-                <div class="radio-list">
-                    <label>
-                        <input type="radio" name="skStatus" id="optionsRadios22" value="AC" checked> Activo
-                    </label>
-                    <label>
-                        <input type="radio" name="skStatus" id="optionsRadios23" value="IN" checked> Inactivo
-                    </label>
-                </div>
-                
-            </div>
-        </div>
-        <div class="form-group">
-        	<label class="col-md-1 control-label">aaa</label>
-         		 <div  id="divRegistros" class="col-md-10" style=" height: 550px; overflow:auto; padding-left:10px; padding-top:10px;border: 1px solid #ddd;">
-          		<?php echo $html1; ?>
+          	 
+          	 
+          	 
         		</div>
         
         </div>
     </div>
 </form>
  <script type="text/javascript">
-
-	 function marcarPadre(hijo)
+ 	 function marcarPadre(hijo)
 	{		
-  			var bSeleccionado=false;
+   			var bSeleccionado=false;
 			id = hijo.id.replace(hijo.value+"_","");
-  			padre = ("tCodSeccion"+id);
-  			if(($("input[id=\"R_"+id+"\"]").is(':checked')) || ($("input[id=\"W_"+id+"\"]").is(':checked')) || ($("input[id=\"D_"+id+"\"]").is(':checked')) ){
+  			padre = ("sCodSeccion"+id);
+  			if(($("input[id=\"R_"+id+"\"]").is(':checked')) || ($("input[id=\"W_"+id+"\"]").is(':checked')) || ($("input[id=\"D_"+id+"\"]").is(':checked')) || ($("input[id=\"A_"+id+"\"]").is(':checked')) ){
  				 bSeleccionado=true;
  			}
- 			 document.getElementById(padre).checked = bSeleccionado; 			
+  			 document.getElementById(padre).checked = bSeleccionado; 			
  	}
 	
  function marcarHijos(padre)
 	{ 
-	
- 	var bSeleccionado=false;
+  	var bSeleccionado=false;
  	 	marcarPermisos(padre);
- 		id = padre.id.replace("tCodSeccion","");
+ 		id = padre.id.replace("sCodSeccion","");
 
- 	valor = document.getElementsByName("tCodSeccion"+id)[0].value;
-  			 var arr = document.forms['Datos'].elements;
+ 	valor = document.getElementsByName("sCodSeccion"+id)[0].value;
+  			 var arr = document.forms['_save'].elements;
 							for (var i = 0; i < arr.length; i++) {
 								var el = arr[i];
 								if(el.type=='checkbox'){
@@ -160,7 +165,7 @@ if($data['datos']){
  	}
       function marcarPermisos(padre)
 	{
- 		id = padre.id.replace("tCodSeccion","");
+ 		id = padre.id.replace("sCodSeccion","");
 			if(id!=''){
 				if(($("input[id=\"R_"+id+"\"]").is(':disabled')==false)  ){
 						 document.getElementById("R_"+id).checked = padre.checked;
@@ -170,6 +175,9 @@ if($data['datos']){
 				}
 				if(($("input[id=\"D_"+id+"\"]").is(':disabled')==false)  ){
 						 document.getElementById("D_"+id).checked = padre.checked;
+				}
+				if(($("input[id=\"A_"+id+"\"]").is(':disabled')==false)  ){
+						 document.getElementById("A_"+id).checked = padre.checked;
 				}
 			}
     	//		 document.getElementById(padre).checked = true;
@@ -187,7 +195,7 @@ if($data['datos']){
 				
 				}
 				nodop='';
-			 var arr = document.forms['Datos'].elements;
+			 var arr = document.forms['_save'].elements;
 								for (var i = 0; i < arr.length; i++) {
 												var el = arr[i];
  									if(el.type=='checkbox'){
@@ -197,7 +205,7 @@ if($data['datos']){
 									}
 								}
 			valor = nodop.value;
-			var arr = document.forms['Datos'].elements;
+			var arr = document.forms['_save'].elements;
 								for (var i = 0; i < arr.length; i++) {
 									var el = arr[i];
 										if(el.type=='checkbox'&&valor){
@@ -217,8 +225,8 @@ if($data['datos']){
 			}
 	}
  
-		   $(document).ready(function(){
-			   
+		  /* $(document).ready(function(){
+			 
 			   $('a#guardarPerfil').click( function() {
  			$("a#guardarPerfil").hide();
 			$("a#guardarPerfilConfirmar").show();
@@ -265,5 +273,5 @@ if($data['datos']){
 													});
 										}
 										}); 	
-			});
+			});*/
 </script>
