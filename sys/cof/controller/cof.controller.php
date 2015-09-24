@@ -137,7 +137,7 @@
                     }
                     if(!empty($_GET['p1'])){
                         $this->skProfiles = $_GET['p1'];
-                        $this->data['datos'] = parent::read();
+                        $this->data['datos'] = parent::read_profile();
                     }
 		}
 	}

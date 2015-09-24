@@ -106,12 +106,18 @@
 		}
 
 		public function read_profile(){
-			$sql= "SELECT * FROM _profiles";
+			$sql= "SELECT pr.*, st.sName AS Estatus FROM _profiles pr
+				INNER JOIN _status st ON st.skStatus = pr.skStatus";
                         if($this->skProfiles){
-                            $sql .=" WHERE skProfiles = '$this->skProfiles'";
+                            $sql .=" WHERE pr.skProfiles = '$this->skProfiles'";
                         }
-			$result = $this->db->query($sql);
-                        return $result;
+                        $result = $this->db->query($sql);
+                if($result->num_rows > 0){
+                    return $result;
+                }else{
+                    return false;
+                }
+			
 		}
 
 		public function update_profile(){
