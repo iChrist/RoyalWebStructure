@@ -115,5 +115,30 @@
                         $this->data['datos'] = parent::read();
                     }
                 }
+                
+	        public function cof_perf_con(){
+				//$this->require_view(); 
+				$this->data["perfiles"] = parent::read_profile();
+			}
+
+		public function cof_perf_form(){
+                    //$this->require_view();
+                    $this->data["msg"] = '';
+                    $this->data["datos"] = false;
+                    if($_POST){
+                        $this->sName = $_POST['sName'];
+                        $this->skStatus = $_POST['skStatus'];
+                        $id = parent::create_profile();
+                        if($id){
+                            $this->data["msg"] = 'GUADADO CON EXITO';
+                        }else{
+                            $this->data["msg"] = 'ERROR AL GUARDAR';
+                        }
+                    }
+                    if(!empty($_GET['p1'])){
+                        $this->skProfiles = $_GET['p1'];
+                        $this->data['datos'] = parent::read();
+                    }
+		}
 	}
 ?>

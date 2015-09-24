@@ -18,6 +18,7 @@
                 public $sPassword;
                 public $skStatus;
                 public $dCreated;
+                public $skProfiles;
                     
             // PRIVATE VARIABLES //
                     private $data = array();
@@ -89,5 +90,48 @@
                     $result = $this->db->query($sql);
                     return $result;
             }
+            
+            
+            
+           public function create_profile(){
+                        $sql="SELECT REPLACE(uuid(),'-','') AS uuid"; 
+                        $this->skProfiles = $this->db->query($sql)->fetch_assoc();
+                        $sql= "INSERT INTO _profiles (skProfiles,sName,skStatus) VALUES ('".$this->skProfiles['uuid']."','$this->sName','$this->skStatus')";
+			$result = $this->db->query($sql);
+			if ($result) {
+				return $this->skProfiles;
+			}else{
+				return false;
+			}
+		}
+
+		public function read_profile(){
+			$sql= "SELECT * FROM _profiles";
+                        if($this->skProfiles){
+                            $sql .=" WHERE skProfiles = '$this->skProfiles'";
+                        }
+			$result = $this->db->query($sql);
+                        return $result;
+		}
+
+		public function update_profile(){
+			$sql="UPDATE _profiles SET sName='$this->sName', skStatus='$this->skStatus' WHERE skProfiles='$this->skProfiles'";
+			$result = $this->db->query($sql);
+			if ($result) {
+				return true;
+			}else{
+				return false;
+			}
+		}
+
+		public function delete_profile(){
+			$sql="UPDATE _profiles SET skStatus='$this->skStatus' WHERE skProfiles='$this->skProfiles'";
+			$result = $this->db->query($sql);
+			if ($result) {
+				return true;
+			}else{
+				return false;
+			}
+		}
 	}
 ?>
