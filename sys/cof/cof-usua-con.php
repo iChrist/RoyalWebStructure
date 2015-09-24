@@ -59,74 +59,39 @@
                         <table class="table table-striped table-bordered table-hover" id="datatable_ajax">
                         <thead>
                         <tr role="row" class="heading">
-                            <th width="2%">
+                            <th width="5%">
                                 <input type="checkbox" class="group-checkable">
                             </th>
-                            <th width="5%">
-                                Record&nbsp;#
+                            <th width="19%">
+                                Nombre
                             </th>
-                            <th width="15%">
-                                Date
+                            <th width="19%">
+                                Correo electr&oacute;nico
                             </th>
-                            <th width="15%">
-                                Customer
+                            <th width="19%">
+                                Nombre de usuario
                             </th>
-                            <th width="10%">
-                                Ship&nbsp;To
+                            <th width="19%">
+                                Estatus
                             </th>
-                            <th width="10%">
-                                Price
-                            </th>
-                            <th width="10%">
-                                Amount
-                            </th>
-                            <th width="10%">
-                                Status
-                            </th>
-                            <th width="10%">
-                                Actions
+                            <th width="19%">
+                                Acciones
                             </th>
                         </tr>
                         <tr role="row" class="filter">
                             <td>
                             </td>
                             <td>
-                                <input type="text" class="form-control form-filter input-sm" name="order_id">
+                                <input type="text" class="form-control form-filter input-sm" name="sName">
                             </td>
                             <td>
-                                <div class="input-group input-group-sm date date-picker margin-bottom-5" data-date-format="dd/mm/yyyy">
-                                    <input type="text" class="form-control form-filter" readonly name="order_date_from" placeholder="From">
-                                    <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
-                                    </span>
-                                </div>
-                                <div class="input-group input-group-sm date date-picker" data-date-format="dd/mm/yyyy">
-                                    <input type="text" class="form-control form-filter" readonly name="order_date_to" placeholder="To">
-                                    <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
-                                    </span>
-                                </div>
+                                <input type="text" class="form-control form-filter input-sm" name="sEmail">
                             </td>
                             <td>
-                                <input type="text" class="form-control form-filter input-sm" name="order_customer_name">
+                                <input type="text" class="form-control form-filter input-sm" name="sUserName">
                             </td>
                             <td>
-                                <input type="text" class="form-control form-filter input-sm" name="order_ship_to">
-                            </td>
-                            <td>
-                                <div class="margin-bottom-5">
-                                    <input type="text" class="form-control form-filter input-sm" name="order_price_from" placeholder="From"/>
-                                </div>
-                                <input type="text" class="form-control form-filter input-sm" name="order_price_to" placeholder="To"/>
-                            </td>
-                            <td>
-                                <div class="margin-bottom-5">
-                                    <input type="text" class="form-control form-filter input-sm margin-bottom-5 clearfix" name="order_quantity_from" placeholder="From"/>
-                                </div>
-                                <input type="text" class="form-control form-filter input-sm" name="order_quantity_to" placeholder="To"/>
-                            </td>
-                            <td>
-                                <select name="order_status" class="form-control form-filter input-sm">
+                                <select name="skStatus" class="form-control form-filter input-sm">
                                     <option value="">Select...</option>
                                     <option value="pending">Pending</option>
                                     <option value="closed">Closed</option>

@@ -19,11 +19,19 @@
 			$this->require_view(FALSE);
 			$this->data["datos"] = parent::verifyUser();
 		}
-                
-                public function usu_con(){
+                /* COMIENZA MODULO USUARIOS */
+                public function cof_usua_con(){
                     if(isset($_GET['axn']) && $_GET['axn'] == 'fetch_all'){
                         $this->require_view(FALSE);
-                        $iTotalRecords = 178;
+                        $this->data['users'] = parent::read_user();
+                        
+                        if(!$this->data['users']){
+                            return false;
+                        }
+                        if($this->data['users']->num_rows == 0){
+                        
+                        }
+                        $iTotalRecords = $this->data['users']->num_rows;
                         $iDisplayLength = intval($_REQUEST['length']);
                         $iDisplayLength = $iDisplayLength < 0 ? $iTotalRecords : $iDisplayLength; 
                         $iDisplayStart = intval($_REQUEST['start']);
@@ -41,22 +49,32 @@
                           array("danger" => "On Hold"),
                           array("warning" => "Fraud")
                         );
-
-                        for($i = $iDisplayStart; $i < $end; $i++) {
+                        $i=1;
+                        while($row = $this->data['users']->fetch_assoc()){
+                            $status = $status_list[rand(0, 2)];
+                            $id = ($i + 1);
+                            $records["data"][] = array(
+                                '<input type="checkbox" name="id[]" value="'.$id.'">'
+                                ,htmlentities($row['sName'], ENT_QUOTES)
+                                ,$row['sEmail']
+                                ,htmlentities($row['sUserName'], ENT_QUOTES)
+                                ,'<span class="label label-sm label-'.(key($status)).'">'.(current($status)).'</span>'
+                                ,'<a href="javascript:;" class="btn btn-xs btn-default"><i class="fa fa-search"></i> View</a>'
+                            );
+                        }
+                        exit(var_dump($records));
+                        /*for($i = $iDisplayStart; $i < $end; $i++) {
                           $status = $status_list[rand(0, 2)];
                           $id = ($i + 1);
                           $records["data"][] = array(
                             '<input type="checkbox" name="id[]" value="'.$id.'">',
-                            $id,
-                            '12/09/2013',
                             'Jhon Doe',
                             'Jhon Doe',
-                            '450.60$',
-                            rand(1, 10),
+                            'Jhon Doe',
                             '<span class="label label-sm label-'.(key($status)).'">'.(current($status)).'</span>',
                             '<a href="javascript:;" class="btn btn-xs btn-default"><i class="fa fa-search"></i> View</a>',
                          );
-                        }
+                        }*/
 
                         if (isset($_REQUEST["customActionType"]) && $_REQUEST["customActionType"] == "group_action") {
                           $records["customActionStatus"] = "OK"; // pass custom message(useful for getting status of group actions)
@@ -68,9 +86,10 @@
                         $records["recordsFiltered"] = $iTotalRecords;
 
                         echo json_encode($records);
-                        exit;
+                        return true;
                     }
                     $this->require_view();
+                    return true;
                 }
                 
                 public function cof_usua_form(){
@@ -115,6 +134,7 @@
                         $this->data['datos'] = parent::read();
                     }
                 }
+                /* TERMINA MODULO USUARIOS */
                 
 	        public function cof_perf_con(){
 				//$this->require_view(); 

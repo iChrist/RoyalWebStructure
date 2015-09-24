@@ -19,11 +19,11 @@ var TableAjax = function () {
             onError: function (grid) {
                 // execute some code on network or other general error  
             },
-            loadingMessage: 'Loading...',
+            loadingMessage: 'Cargando...',
             dataTable: { // here you can define a typical datatable settings from http://datatables.net/usage/options 
                 "lengthMenu": [
                     [10, 20, 50, 100, 150, -1],
-                    [10, 20, 50, 100, 150, "All"] // change per page values here
+                    [10, 20, 50, 100, 150, "Todos"] // change per page values here
                 ],
                 "pageLength": 10, // default record count per page
                 "ajax": {
@@ -50,7 +50,7 @@ var TableAjax = function () {
                 App.alert({
                     type: 'danger',
                     icon: 'warning',
-                    message: 'Please select an action',
+                    message: 'Seleccione una accion.',
                     container: grid.getTableWrapper(),
                     place: 'prepend'
                 });
@@ -58,7 +58,7 @@ var TableAjax = function () {
                 App.alert({
                     type: 'danger',
                     icon: 'warning',
-                    message: 'No record selected',
+                    message: 'No hay registro seleccionado.',
                     container: grid.getTableWrapper(),
                     place: 'prepend'
                 });

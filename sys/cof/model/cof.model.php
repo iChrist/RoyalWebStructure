@@ -41,7 +41,7 @@
                     return false;
                 }
             }
-            public function read(){
+            public function read_user(){
                 $sql = "SELECT * FROM _users WHERE 1=1 ";
                 if(!empty($this->skUsers)){
                     $sql .= " AND skUsers = '$this->skUsers' ";
