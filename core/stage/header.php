@@ -246,7 +246,7 @@
 					</form>
 				</li>
 					
-				<?
+				<?php
 			 			/*	Array ( [0] => Array ( [skModule] => [iPosition] => 1 [sParentModule] => [sModule] => [sTitle] => Inicio [sIcons] => ) 
 						[1] => Array ( [skModule] => [iPosition] => 1 [sParentModule] => sys-func [sModule] => [sTitle] => Operaciones [sIcons] => icon-settings ) 
 						[2] => Array ( [skModule] => [iPosition] => 3 [sParentModule] => sys-func [sModule] => [sTitle] => Catalogos [sIcons] => fa fa-archive ) ) */

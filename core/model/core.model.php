@@ -29,7 +29,7 @@
 
 		public function __destruct(){
 			if(!mysqli_connect_errno()){
-                                mysqli_next_result($this->db);
+                //mysqli_next_result($this->db);
 				$this->db->close();
 			}
 		}
@@ -73,7 +73,7 @@
                     $result = $this->db->query($select);
                     $rSeccion = $result->fetch_assoc();
                     mysqli_free_result($result);
-                    mysqli_next_result($this->db);
+                    //mysqli_next_result($this->db);
                     $this->skModule =$rSeccion{'skModule'};
                     $this->tCodPrimerHijo =$rSeccion{'tCodPrimerHijo'};
                     $this->sParentModule = $rSeccion{'sParentModule'};
@@ -328,7 +328,7 @@
 		                        ));
 		                    }
 		                    mysqli_free_result($result);
-		                    mysqli_next_result($this->db);
+		                    //mysqli_next_result($this->db);
 		                    return $data;
  						 
                       }
@@ -372,7 +372,7 @@
 		                        ));
 		                    }
 		                    mysqli_free_result($result);
-		                    mysqli_next_result($this->db);
+		                    //mysqli_next_result($this->db);
 		                    
 		                          return $data;
 		                    }else{
