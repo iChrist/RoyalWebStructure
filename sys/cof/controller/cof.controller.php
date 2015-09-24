@@ -29,9 +29,9 @@
                             return false;
                         }
                         if($this->data['users']->num_rows == 0){
-                        
+                            return false;
                         }
-                        $iTotalRecords = $this->data['users']->num_rows;
+                        $iTotalRecords = parent::count_user()->fetch_assoc()['total'];
                         $iDisplayLength = intval($_REQUEST['length']);
                         $iDisplayLength = $iDisplayLength < 0 ? $iTotalRecords : $iDisplayLength; 
                         $iDisplayStart = intval($_REQUEST['start']);
@@ -52,17 +52,16 @@
                         $i=1;
                         while($row = $this->data['users']->fetch_assoc()){
                             $status = $status_list[rand(0, 2)];
-                            $id = ($i + 1);
                             $records["data"][] = array(
-                                '<input type="checkbox" name="id[]" value="'.$id.'">'
-                                ,htmlentities($row['sName'], ENT_QUOTES)
-                                ,$row['sEmail']
-                                ,htmlentities($row['sUserName'], ENT_QUOTES)
+                                '<input type="checkbox" name="id[]" value="'.$row['skUsers'].'">'
+                                ,htmlentities(utf8_encode($row['sName']), ENT_QUOTES)
+                                ,htmlentities(utf8_encode($row['sEmail']), ENT_QUOTES)
+                                ,htmlentities(utf8_encode($row['sUserName']), ENT_QUOTES)
                                 ,'<span class="label label-sm label-'.(key($status)).'">'.(current($status)).'</span>'
                                 ,'<a href="javascript:;" class="btn btn-xs btn-default"><i class="fa fa-search"></i> View</a>'
                             );
                         }
-                        exit(var_dump($records));
+                        //exit(var_dump($records));
                         /*for($i = $iDisplayStart; $i < $end; $i++) {
                           $status = $status_list[rand(0, 2)];
                           $id = ($i + 1);

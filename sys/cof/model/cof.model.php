@@ -47,10 +47,12 @@
                     $sql .= " AND skUsers = '$this->skUsers' ";
                 }
                 $result = $this->db->query($sql);
-                if($result->num_rows > 0){
-                    return $result;
-                }else{
-                    return false;
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
                 }
             }
             
@@ -76,7 +78,17 @@
                 }
             }
             
-            
+            public function count_user(){
+                $sql = "SELECT COUNT(*) AS total FROM _users WHERE 1=1 ";
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
 
             
             public function getUsers(){
