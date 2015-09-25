@@ -31,7 +31,8 @@
                         if($this->data['users']->num_rows == 0){
                             return false;
                         }
-                        $iTotalRecords = parent::count_user()->fetch_assoc()['total'];
+                        $getTotal = parent::count_user()->fetch_assoc();
+                        $iTotalRecords = $getTotal['total'];
                         $iDisplayLength = intval($_REQUEST['length']);
                         $iDisplayLength = $iDisplayLength < 0 ? $iTotalRecords : $iDisplayLength; 
                         $iDisplayStart = intval($_REQUEST['start']);
