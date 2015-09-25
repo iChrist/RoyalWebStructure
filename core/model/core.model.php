@@ -213,28 +213,17 @@
                     $data = array();
                     while($row = $result->fetch_assoc()){
                         $data[$row['iPosition']] = array(
-                            'skModule' => $row['skModule'],
-                            'sParentModule' => $row['sParentModule'],
-                            'skButtons' => $row['skButtons'],
-                            'sHtml' => htmlentities($row['sHtml'],ENT_QUOTES),
-                            'skPermissions' => $row['skPermissions'],
-                            'sFunction' => $row['sFunction'],
-                            'iPosition' => $row['iPosition']
+                            'skModule' => $row['skModule']
+                            ,'sParentModule' => $row['sParentModule']
+                            ,'skButtons' => $row['skButtons']
+                            ,'sHtml' => str_replace('{{url}}', SYS_URL.SYS_PROJECT.$row['sUrl'], htmlentities($row['sHtml'],ENT_QUOTES))
+                            ,'skPermissions' => $row['skPermissions']
+                            ,'sFunction' => $row['sFunction']
+                            ,'iPosition' => $row['iPosition']
                         );
                     }
                     mysqli_free_result($result);
                     mysqli_next_result($this->db);
-                    
-                    for($i=1;$i<=count($data);$i++){
-                        $sql = "CALL stpConsultarBreadcrumb('".$data[$i]['sParentModule']."',0);";
-                        $records = $this->db->query($sql);
-                        $url = '';
-                        while($record = $records->fetch_assoc()){
-                            $url = SYS_URL.$_GET['sysProject'].'/'.$record['sParentModule'].'/'.$record['skModule'].'/'.$record['sName'].'/';
-                        }
-                        $data[$i]['sHtml'] = str_replace('{{url}}', $url, $data[$i]['sHtml']);
-                        $this->reconnect();
-                    }
                     return $data;
                 }
                 
