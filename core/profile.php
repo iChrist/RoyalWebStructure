@@ -52,7 +52,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <link href="<?php echo SYS_URL; ?>core/assets/css/pages/lock.css" rel="stylesheet" type="text/css"/>
 <link href="<?php echo SYS_URL; ?>core/assets/css/custom.css" rel="stylesheet" type="text/css"/>
 <!-- END THEME STYLES -->
-<link rel="shortcut icon" href="<?php echo SYS_URL; ?>core/assets/img/favicon.png"/>
+<link rel="shortcut icon" href="<?php echo SYS_URL; ?>core/assets/img/favicon.ico"/>
 
 </head>
 <!-- BEGIN BODY -->
@@ -60,11 +60,11 @@ License: You must have a valid license purchased only from themeforest(the above
 <div class="page-lock">
 	<div class="page-logo">
             <a href="<?php echo SYS_URL; ?>">
-                <img src="<?php echo SYS_URL; ?>core/assets/img/RoyalWeb-White.png" alt="RoyalWeb" width="130px" height="50px" />
+                <img src="<?php echo SYS_URL; ?>core/assets/img/logo.png" alt="RoyalWeb" style="width:130px;height:100px;margin-left:60px;" />
             </a>
 	</div>
 	<div class="page-body">
-		<img class="page-lock-img" src="<?php echo SYS_URL; ?>core/assets/img/avatar.png" alt="">
+		<img class="page-lock-img thumbnail" src="<?php echo SYS_URL; ?>core/assets/img/cjs.png" alt="">
 		<div class="page-lock-info">
 			<h1><?php echo $_SESSION['session']['sName']; ?></h1>
 			<span class="email">

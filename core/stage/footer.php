@@ -65,6 +65,10 @@
 <script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
 <script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+
+<!-- VALIDATION PLUGINS -->
+<script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/jquery-validation/js/jquery.validate.min.JS"></script>
+
 <script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/lib/datatable.js"></script>
 <script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/lib/table-ajax.js"></script>
 <!-- END AJAX TABLE SCRIPTS & PLUGINS -->

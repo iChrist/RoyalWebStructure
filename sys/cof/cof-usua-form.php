@@ -19,7 +19,7 @@
 <?php
     } // ENDIF
 ?>
-<form id="_save" method="post" class="form-horizontal form-bordered form-row-stripped" role="form">
+<!--<form id="_save" method="post" class="form-horizontal form-bordered form-row-stripped" role="form">-->
     <input type="hidden" name="skUsers" value="<?php echo (isset($result['skUsers'])) ? $result['skUsers'] : '' ; ?>"> 
     <div class="form-body">
         <div class="form-group">
@@ -62,3 +62,13 @@
         Se enviar&aacute; correo electr&oacute;nico al usuario con una contrase&ntilde;a autogenerada para el acceso al sistema y posteriormente podr&aacute; cambiarla.
     </span>
 </div>
+<script type="text/javascript">
+    $(document).ready(function(){
+       $("#_save").validate(); 
+    });
+    // FUNCION PARA VALIDAR EL FORMULARIO //
+    function _validate(){
+        $("#_save").validate();
+        return false;
+    }
+</script>

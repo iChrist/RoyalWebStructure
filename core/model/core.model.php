@@ -220,7 +220,7 @@
                             ,'sHtml' => str_replace('{{url}}', SYS_URL.SYS_PROJECT.$row['sUrl'], htmlentities($row['sHtml'],ENT_QUOTES))
                             ,'skPermissions' => $row['skPermissions']
                             ,'sFunction' => $row['sFunction']
-                            ,'sScript' => htmlentities($row['sScript'],ENT_QUOTES)
+                            ,'sScript' => isset($row['sScript']) ? htmlentities($row['sScript'],ENT_QUOTES) : ''
                             ,'iPosition' => $row['iPosition']
                         );
                     }

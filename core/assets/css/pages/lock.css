@@ -2,8 +2,8 @@
 Lock Page
 ***/
 body {
-	//background-color: #999;
-        background-color: #515255 !important;
+	background-color: #999;
+        /*background-color: #515255 !important;*/
 	padding: 0;
 	margin: 0;
 }
@@ -62,7 +62,7 @@ body {
 .page-lock img.page-lock-img {
 	float: left;
 	width: 200px;
-	height: auto;
+	height: 200px;
 }
 
 .page-lock .page-lock-info {

@@ -41,7 +41,7 @@
 <link href="<?php echo SYS_URL; ?>core/assets/css/core.css" rel="stylesheet" type="text/css"/>
 <!-- END RoyalWeb CORE CSS -->
 <script src="<?php echo SYS_URL; ?>core/assets/plugins/jquery-1.11.0.min.js" type="text/javascript"></script>
-<link rel="shortcut icon" href="favicon.ico"/>
+<link rel="shortcut icon" href="<?php echo SYS_URL; ?>core/assets/img/favicon.ico"/>
 </head>
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
@@ -53,7 +53,7 @@
 		<!-- BEGIN LOGO -->
 		<div class="page-logo">
             <a href="index.html">
-                <img src="assets/img/logo.png" alt="Estructura"/>
+                <img src="<?php echo SYS_URL; ?>core/assets/img/logo.png" alt="logo" style="width:70px;height:40px;margin:5px;"/>
             </a>
         </div>
         <form class="search-form search-form-header" role="form" action="index.html">
