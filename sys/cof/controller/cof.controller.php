@@ -86,10 +86,9 @@
                         $records["recordsFiltered"] = $iTotalRecords;
 
                         echo json_encode($records);
-                        return true;
+                        exit;
                     }
                     $this->require_view();
-                    return true;
                 }
                 
                 public function cof_usua_form(){

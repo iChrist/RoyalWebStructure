@@ -187,10 +187,11 @@
                                         
 					require_once(CORE_PATH."stage/header.php");
                                         require_once(CORE_PATH."stage/buttons.php");
-					include(SYS_PATH.$_GET["sysModule"]."/".$view.".php");
+					require_once(SYS_PATH.$_GET["sysModule"]."/".$view.".php");
 					require_once(CORE_PATH."stage/footer.php");
+                                        require_once(CORE_PATH."model/core.js.functions.php");
 				}else{
-					include(SYS_PATH.$_GET["sysModule"]."/".$view.".php");
+					require_once(SYS_PATH.$_GET["sysModule"]."/".$view.".php");
 				}
 			}else{
 				 $text = "'".$view."' view not found.";
@@ -219,6 +220,7 @@
                             ,'sHtml' => str_replace('{{url}}', SYS_URL.SYS_PROJECT.$row['sUrl'], htmlentities($row['sHtml'],ENT_QUOTES))
                             ,'skPermissions' => $row['skPermissions']
                             ,'sFunction' => $row['sFunction']
+                            ,'sScript' => htmlentities($row['sScript'],ENT_QUOTES)
                             ,'iPosition' => $row['iPosition']
                         );
                     }
