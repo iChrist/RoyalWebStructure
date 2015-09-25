@@ -53,7 +53,7 @@
 		<!-- BEGIN LOGO -->
 		<div class="page-logo">
             <a href="index.html">
-                <img src="<?php echo SYS_URL; ?>core/assets/img/logo.png" alt="logo" style="width:70px;height:40px;margin:5px;"/>
+                <img src="<?php echo SYS_URL; ?>core/assets/img/RoyalWeb-White.png" alt="logo" style="width:110px;height:40px;margin:5px;"/>
             </a>
         </div>
         <form class="search-form search-form-header" role="form" action="index.html">
