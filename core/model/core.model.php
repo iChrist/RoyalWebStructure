@@ -242,7 +242,6 @@
                         ));
                     }
                     mysqli_free_result($result);
-                    mysqli_next_result($this->db);
                     return $data;
                 }
                 

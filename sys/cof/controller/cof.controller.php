@@ -13,10 +13,6 @@
 		
 		}
 
-		public function index(){
-			$this->require_view(FALSE);
-			$this->data["datos"] = parent::verifyUser();
-		}
                 /* COMIENZA MODULO USUARIOS */
                 public function cof_usua_con(){
                     if(isset($_GET['axn']) && $_GET['axn'] == 'fetch_all'){
@@ -60,20 +56,7 @@
                                 ,'<a href="javascript:;" class="btn btn-xs btn-default"><i class="fa fa-search"></i> View</a>'
                             );
                         }
-                        //exit(var_dump($records));
-                        /*for($i = $iDisplayStart; $i < $end; $i++) {
-                          $status = $status_list[rand(0, 2)];
-                          $id = ($i + 1);
-                          $records["data"][] = array(
-                            '<input type="checkbox" name="id[]" value="'.$id.'">',
-                            'Jhon Doe',
-                            'Jhon Doe',
-                            'Jhon Doe',
-                            '<span class="label label-sm label-'.(key($status)).'">'.(current($status)).'</span>',
-                            '<a href="javascript:;" class="btn btn-xs btn-default"><i class="fa fa-search"></i> View</a>',
-                         );
-                        }*/
-
+                        
                         if (isset($_REQUEST["customActionType"]) && $_REQUEST["customActionType"] == "group_action") {
                           $records["customActionStatus"] = "OK"; // pass custom message(useful for getting status of group actions)
                           $records["customActionMessage"] = "Group action successfully has been completed. Well done!"; // pass custom message(useful for getting status of group actions)
@@ -84,13 +67,12 @@
                         $records["recordsFiltered"] = $iTotalRecords;
 
                         echo json_encode($records);
-                        exit;
+                        return false;
                     }
-                    $this->require_view();
+                    $this->load_view('cof-usua-con', $this->data);
                 }
                 
                 public function cof_usua_form(){
-                    $this->require_view();
                     $this->data['message'] = '';
                     $this->data['success'] = false;
                     $this->data['error'] = false;
@@ -156,12 +138,14 @@
                         $this->skUsers = $_GET['p1'];
                         $this->data['datos'] = parent::read_user();
                     }
+                    $this->load_view('cof-usua-form', $this->data);
                 }
                 /* TERMINA MODULO USUARIOS */
                 
 	        public function cof_perf_con(){
 				//$this->require_view(); 
 				$this->data["perfiles"] = parent::read_profile();
+                                $this->load_view('cof-perf-con', $this->data);
 			}
 
 		public function cof_perf_form(){
@@ -182,6 +166,7 @@
                         $this->skProfiles = $_GET['p1'];
                         $this->data['datos'] = parent::read_profile();
                     }
+                    $this->load_view('cof-perf-form', $this->data);
 		}
 		
 		  
