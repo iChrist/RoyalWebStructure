@@ -10,9 +10,7 @@
 		}
 
 		public function __destruct(){
-			if($this->is_view_required()){
-				$this->load_view($_GET["sysController"], $this->data);
-			}
+		
 		}
 
 		public function index(){
@@ -185,5 +183,7 @@
                         $this->data['datos'] = parent::read_profile();
                     }
 		}
+		
+		  
 	}
 ?>

@@ -151,6 +151,24 @@
 				return false;
 			}
 		}
+<<<<<<< HEAD
+		public function consulta_Profile(){
+			 $sql = "	SELECT pr.*
+				FROM _users us
+				INNER JOIN _users_profiles usp ON usp.skUsers = us.skUsers
+				INNER JOIN _profiles pr ON pr.skProfiles = usp.skProfiles
+				WHERE  pr.skStatus = 'AC'
+				AND us.skUsers = '".($_SESSION['session']['skUsers'])."'".
+				"order by pr.sName ASC" ;				
+			
+			$result = $this->db->query($sql);
+			if ($result) {
+				return $result;
+			}else{
+				return false;
+			}
+		}
+=======
                 
                 
                 
@@ -164,5 +182,6 @@
                         return false;
                     }
                 }
+>>>>>>> 08d58d5dee4f72031b0f167eb3b517878c7970a4
 	}
 ?>
