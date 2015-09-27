@@ -35,7 +35,7 @@
         <div class="form-group">
             <label class="col-md-2 control-label">Correo Electr&oacute;nico</label>
             <div class="col-md-4">
-                <input type="email" name="sEmail" class="form-control" placeholder="" value="<?php echo (isset($result['sEmail'])) ? $result['sEmail'] : '' ; ?>" required>                                            
+                <input type="email" name="sEmail" class="form-control" placeholder="" id="email" value="<?php echo (isset($result['sEmail'])) ? $result['sEmail'] : '' ; ?>" required>                                            
             </div>
         </div> 
         <div class="form-group">
@@ -104,7 +104,10 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function(){
-       $("#_save").validate(); 
+       $("#_save").validate();
+       $("#email").click(function(){
+          alert(1); 
+       });
     });
     // FUNCION PARA VALIDAR EL FORMULARIO //
     function _validate(){
