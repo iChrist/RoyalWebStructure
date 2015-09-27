@@ -29,19 +29,19 @@
         <div class="form-group">
             <label class="col-md-2 control-label">Nombre Completo</label>
             <div class="col-md-4">
-                <input type="text" name="sName" class="form-control" placeholder="" value="<?php echo (isset($result['sName'])) ? $result['sName'] : '' ; ?>" required>                                            
+                <input type="text" name="sName" id="sName" class="form-control" placeholder="" value="<?php echo (isset($result['sName'])) ? $result['sName'] : '' ; ?>" >                                            
             </div>
         </div> 
         <div class="form-group">
             <label class="col-md-2 control-label">Correo Electr&oacute;nico</label>
             <div class="col-md-4">
-                <input type="email" name="sEmail" class="form-control" placeholder="" id="email" value="<?php echo (isset($result['sEmail'])) ? $result['sEmail'] : '' ; ?>" required>                                            
+                <input type="email" name="sEmail" id="sEmail" class="form-control" placeholder="" id="email" value="<?php echo (isset($result['sEmail'])) ? $result['sEmail'] : '' ; ?>" required>                                            
             </div>
         </div> 
         <div class="form-group">
             <label class="col-md-2 control-label">Nombre de usuario</label>
             <div class="col-md-4">
-                    <input type="text" name="sUserName" class="form-control" placeholder="" value="<?php echo (isset($result['sUserName'])) ? $result['sUserName'] : '' ; ?>" required>                                            
+                <input type="text" name="sUserName" id="sUserName" class="form-control" placeholder="" value="<?php echo (isset($result['sUserName'])) ? $result['sUserName'] : '' ; ?>" required>                                            
             </div>
         </div> 
         <div class="form-group">
@@ -104,14 +104,59 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function(){
-       $("#_save").validate();
-       $("#email").click(function(){
-          alert(1); 
-       });
+       $("#_save").validate({
+            rules:{
+                sName:{
+                    required: true,
+                    lettersonly: true
+                },
+                sEmail:{
+                    required: false,
+                    email: true,
+                    // remote: "validar_Email.php"
+                },
+                sUserName:{
+                    required: true,
+                    lettersonly: true
+                },
+            },
+            messages:{
+                email:{
+                  // remote: "Email ya está en uso."
+                }
+            },
+            submitHandler:function(){
+                alert("formulario enviado");
+            }        
+        });
     });
     // FUNCION PARA VALIDAR EL FORMULARIO //
     function _validate(){
-        $("#_save").validate();
+        $("#_save").validate({
+            rules:{
+                sName:{
+                    required: true,
+                    lettersonly: true
+                },
+                sEmail:{
+                    required: false,
+                    email: true,
+                    // remote: "validar_Email.php"
+                },
+                sUserName:{
+                    required: true,
+                    lettersonly: true
+                },
+            },
+            messages:{
+                email:{
+                  // remote: "Email ya está en uso."
+                }
+            },
+            submitHandler:function(){
+                alert("formulario enviado");
+            }        
+        });
         return false;
     }
 </script>
