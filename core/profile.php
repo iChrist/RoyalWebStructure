@@ -2,10 +2,15 @@
     /*require_once(SYS_PATH."usu/controller/usu.controller.php");
     $usu = new Usu_Controller();
     $result = $usu->verifyUser($_POST['sUserName'], $_POST['sPassword']);*/
+     require_once(SYS_PATH."cof/controller/cof.controller.php");
+     $usu = new Cof_Controller();   
+     $rsPerfiles = $usu->consulta_Profile();
+	 //print_r($rsPerfiles) ;
+	 //die();
     if($_POST){
         $_SESSION['session']['skProfile'] = $_POST['skProfile'];
         header('Location: '.$_SERVER['REQUEST_URI']);
-    }
+    }			
 ?>
 <!DOCTYPE html>
 <!-- 
@@ -75,8 +80,10 @@ License: You must have a valid license purchased only from themeforest(the above
                                 <div class="input-group input-medium">
                                     <select class="form-control" name="skProfile">
                                         <option value="0">- Perf&iacute;l -</option>
-                                        <option value="profile1">profile 1</option>
-                                        <option value="profile2">profile 2</option>
+                                        <? while($rPerfil = $rsPerfiles->fetch_assoc()){?>
+										<option value="<?=$rPerfil{'skProfiles'}?>"><?=$rPerfil{'sName'}?></option>
+									
+										<? } ?>
                                     </select>
                                     <span class="input-group-btn">
                                         <button type="submit" class="btn btn-info">Seleccionar</button>
