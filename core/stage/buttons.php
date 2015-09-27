@@ -5,7 +5,7 @@
             <b> <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></b>
         </button>
         <?php
-            $sScript = '';
+            $sScript = ''; 
             if(!empty($_buttons) && count($_buttons) > 0){
                 if($_SESSION['session']['sGroup'] == 'A'){
                     for($i=1;$i<=count($_buttons);$i++){
