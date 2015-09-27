@@ -151,7 +151,7 @@
 				return false;
 			}
 		}
-<<<<<<< HEAD
+
 		public function consulta_Profile(){
 			 $sql = "	SELECT pr.*
 				FROM _users us
@@ -168,7 +168,6 @@
 				return false;
 			}
 		}
-=======
                 
                 
                 
@@ -182,6 +181,5 @@
                         return false;
                     }
                 }
->>>>>>> 08d58d5dee4f72031b0f167eb3b517878c7970a4
 	}
 ?>
