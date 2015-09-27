@@ -12,11 +12,21 @@
         die();
     }
 // DATABASE CONFIGURATION //
+    /*
     $_db = array(
         'sys' => array(
             'HOST_DB' => 'royalweb.com.mx',
             'USER_DB' => 'royalweb_rw',
             'PASSWORD_DB' => 'RoyalWeb',
+            'DATABASE_DB' => 'royalweb_structure',
+        )
+    );
+    */
+    $_db = array(
+        'sys' => array(
+            'HOST_DB' => 'localhost:3306',
+            'USER_DB' => 'root',
+            'PASSWORD_DB' => '',
             'DATABASE_DB' => 'royalweb_structure',
         )
     );

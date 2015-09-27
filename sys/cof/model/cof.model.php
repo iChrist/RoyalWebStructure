@@ -118,17 +118,17 @@
 		}
 
 		public function read_profile(){
-			$sql= "SELECT pr.*, st.sName AS Estatus FROM _profiles pr
-				INNER JOIN _status st ON st.skStatus = pr.skStatus";
-                        if($this->skProfiles){
-                            $sql .=" WHERE pr.skProfiles = '$this->skProfiles'";
-                        }
-                        $result = $this->db->query($sql);
-                if($result->num_rows > 0){
-                    return $result;
-                }else{
-                    return false;
-                }
+                    $sql= "SELECT pr.*, st.sName AS Estatus FROM _profiles pr
+                            INNER JOIN _status st ON st.skStatus = pr.skStatus";
+                    if($this->skProfiles){
+                        $sql .=" WHERE pr.skProfiles = '$this->skProfiles'";
+                    }
+                    $result = $this->db->query($sql);
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
 			
 		}
 
@@ -151,5 +151,18 @@
 				return false;
 			}
 		}
+                
+                
+                
+                public function createDetail($valores)
+                {
+                    $sql = "INSERT INTO _users_profiles (skUsers, skProfiles ) VALUES ".$valores."";
+                    $result = $this->db->query($sql);
+                    if($result){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                }
 	}
 ?>
