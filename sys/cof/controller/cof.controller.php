@@ -79,6 +79,41 @@
                     $this->data['datos'] = false;
                     $this->data['profiles'] = parent::read_profile(); // Mandamos a llamar todos los perfiles para cargarlos en la vista
                     
+                    if(isset($_POST['axn']))
+                    {
+                        switch ($_POST['axn'])
+                        {
+                            case "validarEmail":
+                                // echo 'false'; -> Email no encontrado 
+                                // echo 'true';  -> Email encontrado
+                                $this->users['sEmail'] = $_POST['sEmail'];
+                                if(parent::read_user())
+                                {
+                                    echo 'false';
+                                }
+                                else
+                                {
+                                    echo 'true';
+                                }
+                                exit;
+                            break;
+                            
+                            case "validarUserName":
+                                // echo 'false'; -> Email no encontrado 
+                                // echo 'true';  -> Email encontrado
+                                $this->users['sUserName'] = $_POST['sUserName'];
+                                if(parent::read_user())
+                                {
+                                    echo 'false';
+                                }
+                                else
+                                {
+                                    echo 'true';
+                                }
+                                exit;
+                            break;
+                        }
+                    }
                     
                     if($_POST){
                         
@@ -105,7 +140,7 @@
                             $this->skUsers = parent::create();
                             
                             if($this->skUsers){
-                                if($_POST['skProfiles']) // En esta parte guardaremos todos los perfiles seleccionados para el nuevo usuario.
+                                if(isset($_POST['skProfiles'])) // En esta parte guardaremos todos los perfiles seleccionados para el nuevo usuario.
                                 {
                                     $count = count($_POST['skProfiles']);
                                     $bandera = 1;

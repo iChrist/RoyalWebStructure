@@ -46,6 +46,12 @@
                 if(!empty($this->skUsers)){
                     $sql .= " AND skUsers = '$this->skUsers' ";
                 }
+                if(!empty($this->users['sEmail'])){
+                    $sql .= " AND sEmail = '".$this->users['sEmail']."'";
+                }
+                if(!empty($this->users['sUserName'])){
+                    $sql .= " AND sUserName = '".$this->users['sUserName']."'";
+                }
                 $result = $this->db->query($sql);
                 if($result){
                     if($result->num_rows > 0){
@@ -153,7 +159,7 @@
 		}
 
 		public function consulta_Profile(){
-			 $sql = "	SELECT pr.*
+			 $sql = "SELECT pr.*
 				FROM _users us
 				INNER JOIN _users_profiles usp ON usp.skUsers = us.skUsers
 				INNER JOIN _profiles pr ON pr.skProfiles = usp.skProfiles
