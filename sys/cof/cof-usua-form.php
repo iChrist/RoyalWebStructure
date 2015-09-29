@@ -53,7 +53,7 @@
                 <div class="col-md-4">
                     <div class="input-icon right">
                         <i class="fa"></i>
-                        <input type="email" name="sEmail" id="sEmail" class="form-control" placeholder="" id="email" value="<?php echo (isset($result['sEmail'])) ? $result['sEmail'] : '' ; ?>" >
+                        <input type="email" name="sEmail" id="sEmail" class="form-control" placeholder="" value="<?php echo (isset($result['sEmail'])) ? $result['sEmail'] : '' ; ?>" >
                     </div>
                 </div>
             </div>
@@ -213,6 +213,23 @@
                 var icon = $(element).parent('.input-icon').children('i');
                 icon.removeClass('fa-check').addClass("fa-warning");  
                 icon.attr("data-original-title", error.text()).tooltip({'container': 'body'});
+                
+                if (element.parent(".input-group").size() > 0) {
+                    error.insertAfter(element.parent(".input-group"));
+                } else if (element.attr("data-error-container")) { 
+                    error.appendTo(element.attr("data-error-container"));
+                } else if (element.parents('.radio-list').size() > 0) { 
+                    error.appendTo(element.parents('.radio-list').attr("data-error-container"));
+                } else if (element.parents('.radio-inline').size() > 0) { 
+                    error.appendTo(element.parents('.radio-inline').attr("data-error-container"));
+                } else if (element.parents('.checkbox-list').size() > 0) {
+                    error.appendTo(element.parents('.checkbox-list').attr("data-error-container"));
+                } else if (element.parents('.checkbox-inline').size() > 0) { 
+                    error.appendTo(element.parents('.checkbox-inline').attr("data-error-container"));
+                } else {
+                    error.insertAfter(element); // Para otros insumos, sólo realizar comportamiento predeterminado (llamar messages)
+                }
+                
             },
             
             highlight: function (element) { // entradas de error Hightlight
@@ -226,35 +243,33 @@
                 var icon = $(element).parent('.input-icon').children('i');
                 $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // conjunto de clases de éxito con el grupo control
                 icon.removeClass("fa-warning").addClass("fa-check");
+                
+                
             },
             
-            
-            
-           /*
             messages:{
                 sName:{
-                    required: "Campo 'Nombre completo' obligatorio.",
+                    required: "Campo obligatorio.",
                     // lettersonly: "Solo se aceptan letras en el campo 'Nombre Completo'."
                 },
                 sEmail:{
-                    required: "Campo 'Correo electrónico' obligatorio.",
+                    required: "Campo obligatorio.",
                     email: "Por favor, ingrese una dirección de 'Correo electrónico' valida.",
                     remote: "El correo electrónico ingresado ya está en uso, intente con otro correo electrónico."
                 },
                 sUserName:{
-                    required: "Campo 'Nombre de usuario' obligatorio.",
+                    required: "Campo obligatorio.",
                     remote: "El nombre de usuario ingresado ya está en uso, intente con otro nombre de usuario."
                 },
                 sPassword:{
-                    required: "Campo 'Contraseña' obligatorio.",
-                },
-                'skProfiles[]':{
+                    required: "Campo obligatorio.",
+                }
+                /*'skProfiles[]':{
                     required: "Debe seleccionar al menos 1 perfil.",
                     minlength: "Debe seleccionar al menos 1 perfil.",
                     // maxlength: "No debe seleccionar mas de {0} perfiles."
-                }
+                }*/
             }
-            */
     
         });
     }); 
