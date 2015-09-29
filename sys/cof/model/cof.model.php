@@ -48,6 +48,9 @@
                 if(!empty($this->skUsers)){
                     $sql .= " AND skUsers = '$this->skUsers' ";
                 }
+                if(!empty($this->users['sName'])){
+                    $sql .= " AND sName = '".$this->users['sName']."'";
+                }
                 if(!empty($this->users['sEmail'])){
                     $sql .= " AND sEmail = '".$this->users['sEmail']."'";
                 }

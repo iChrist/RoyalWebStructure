@@ -28,12 +28,15 @@
                         // PAGINA //
                         $sEcho = intval($_REQUEST['draw']);
                         
-                        /*echo '$iTotalRecords -> '.$iTotalRecords.'   ';
-                        echo 'intval($_REQUEST["length"]) -> '.intval($_REQUEST['length']).'   ';
-                        echo '$iDisplayLength -> '.$iDisplayLength.' ';
-                        echo '$iDisplayStart -> '.$iDisplayStart.'   ';
-                        echo '$sEcho -> '.$sEcho;*/
-                        
+                        if(isset($_POST['sName'])){
+                            $this->users['sName'] = $_POST['sName'];
+                        }
+                        if(isset($_POST['sEmail'])){
+                            $this->users['sEmail'] = $_POST['sEmail'];
+                        }
+                        if(isset($_POST['sUserName'])){
+                            $this->users['sUserName'] = $_POST['sUserName'];
+                        }
                         $this->users['limit'] = $iDisplayLength;
                         $this->users['offset'] = $iDisplayStart;
                         $this->data['users'] = parent::read_user();

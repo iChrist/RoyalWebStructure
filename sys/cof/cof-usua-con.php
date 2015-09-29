@@ -58,6 +58,31 @@
                                 Acciones
                             </th>
                         </tr>
+                        <tr role="row" class="filter">
+                            <td>
+                                <input type="text" class="form-control form-filter input-sm" name="sName" placeholder="Nombre">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control form-filter input-sm" name="sEmail" placeholder="Correo electr&oacute;nico">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control form-filter input-sm" name="sUserName" placeholder="Nombre de usuario">
+                            </td>
+                            <td></td>
+                            <td>
+                                <select name="skStatus" class="form-control form-filter input-sm">
+                                    <option value="">- Estatus -</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="closed">Closed</option>
+                                </select>
+                            </td>
+                            <td>
+                                <!--<div aria-label="Acciones" role="group" class="btn-group btn-group-xs">-->
+                                    <button class="btn btn-xs btn-warning filter-submit margin-bottom"><i class="fa fa-search"></i> Buscar</button>
+                                    <!--<button class="btn btn-xs btn-danger filter-cancel"><i class="fa fa-times"></i> Limpiar</button>-->
+                                <!--</div>-->
+                            </td>
+                        </tr>
                         </thead>
                         <tbody>
                         </tbody>
