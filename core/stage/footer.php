@@ -67,7 +67,8 @@
 <script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
 
 <!-- VALIDATION PLUGINS -->
-<script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/jquery-validation/js/jquery.validate.min.JS"></script>
+<script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/jquery-validation/js/jquery.validate.min.js"></script>
+<script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/jquery-validation/js/additional-methods.min.js"></script>
 
 <script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/lib/datatable.js"></script>
 <script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/lib/table-ajax.js"></script>
