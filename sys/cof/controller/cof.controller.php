@@ -99,8 +99,8 @@
                             break;
                             
                             case "validarUserName":
-                                // echo 'false'; -> Email no encontrado 
-                                // echo 'true';  -> Email encontrado
+                                // echo 'false'; -> UserName no encontrado 
+                                // echo 'true';  -> UserName encontrado
                                 $this->users['sUserName'] = $_POST['sUserName'];
                                 if(parent::read_user())
                                 {
@@ -135,7 +135,8 @@
                             $this->sName = $_POST['sName'];
                             $this->sEmail = $_POST['sEmail'];
                             $this->sUserName = $_POST['sUserName'];
-                            $this->sPassword = substr(md5(microtime()), 1, 16); //Generación de Password aleatorio con longitud de 16 caracteres.
+                            // $this->sPassword = substr(md5(microtime()), 1, 16); //Generación de Password aleatorio con longitud de 16 caracteres.
+                            $this->sPassword = $_POST['sPassword'];
                             $this->skStatus = $_POST['skStatus'];
                             $this->skUsers = parent::create();
                             
