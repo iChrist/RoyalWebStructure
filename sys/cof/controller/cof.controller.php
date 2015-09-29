@@ -16,50 +16,47 @@
                 /* COMIENZA MODULO USUARIOS */
                 public function cof_usua_con(){
                     if(isset($_GET['axn']) && $_GET['axn'] == 'fetch_all'){
-                        $this->require_view(FALSE);
+                        
+                        // TOTAL DE REGISTROS EN LA TABLA //
+                        $getTotal = parent::count_user()->fetch_assoc();
+                        $iTotalRecords = $getTotal['total'];
+                        // "LIMIT" TOTAL DE REGISTROS PARA MOSTRAR //
+                        $iDisplayLength = intval($_REQUEST['length']);
+                        $iDisplayLength = ($iDisplayLength < 0) ? $iTotalRecords : $iDisplayLength; 
+                        // "OFFSET" //
+                        $iDisplayStart = intval($_REQUEST['start']);
+                        // PAGINA //
+                        $sEcho = intval($_REQUEST['draw']);
+                        
+                        /*echo '$iTotalRecords -> '.$iTotalRecords.'   ';
+                        echo 'intval($_REQUEST["length"]) -> '.intval($_REQUEST['length']).'   ';
+                        echo '$iDisplayLength -> '.$iDisplayLength.' ';
+                        echo '$iDisplayStart -> '.$iDisplayStart.'   ';
+                        echo '$sEcho -> '.$sEcho;*/
+                        
+                        $this->users['limit'] = $iDisplayLength;
+                        $this->users['offset'] = $iDisplayStart;
                         $this->data['users'] = parent::read_user();
                         
                         if(!$this->data['users']){
                             return false;
                         }
-                        if($this->data['users']->num_rows == 0){
-                            return false;
-                        }
-                        $getTotal = parent::count_user()->fetch_assoc();
-                        $iTotalRecords = $getTotal['total'];
-                        $iDisplayLength = intval($_REQUEST['length']);
-                        $iDisplayLength = $iDisplayLength < 0 ? $iTotalRecords : $iDisplayLength; 
-                        $iDisplayStart = intval($_REQUEST['start']);
-                        $sEcho = intval($_REQUEST['draw']);
-
+                        
                         $records = array();
                         $records["data"] = array(); 
 
                         $end = $iDisplayStart + $iDisplayLength;
                         $end = $end > $iTotalRecords ? $iTotalRecords : $end;
 
-                        $status_list = array(
-                          array("success" => "Pending"),
-                          array("info" => "Closed"),
-                          array("danger" => "On Hold"),
-                          array("warning" => "Fraud")
-                        );
-                        $i=1;
                         while($row = $this->data['users']->fetch_assoc()){
-                            $status = $status_list[rand(0, 2)];
                             $records["data"][] = array(
-                                '<input type="checkbox" name="id[]" value="'.$row['skUsers'].'">'
-                                ,htmlentities(utf8_encode($row['sName']), ENT_QUOTES)
+                                htmlentities(utf8_encode($row['sName']), ENT_QUOTES)
                                 ,htmlentities(utf8_encode($row['sEmail']), ENT_QUOTES)
                                 ,htmlentities(utf8_encode($row['sUserName']), ENT_QUOTES)
-                                ,'<span class="label label-sm label-'.(key($status)).'">'.(current($status)).'</span>'
+                                ,htmlentities(utf8_encode($row['sPassword']), ENT_QUOTES)
+                                ,utf8_encode($row['sHtml'])
                                 ,'<a href="javascript:;" class="btn btn-xs btn-default"><i class="fa fa-search"></i> View</a>'
                             );
-                        }
-                        
-                        if (isset($_REQUEST["customActionType"]) && $_REQUEST["customActionType"] == "group_action") {
-                          $records["customActionStatus"] = "OK"; // pass custom message(useful for getting status of group actions)
-                          $records["customActionMessage"] = "Group action successfully has been completed. Well done!"; // pass custom message(useful for getting status of group actions)
                         }
 
                         $records["draw"] = $sEcho;
