@@ -12,7 +12,7 @@ if($data['datos']){
         <div class="form-group">
             <label class="col-md-2 control-label">Nombre</label>
             <div class="col-md-4">
-                <input type="text" name="sName" class="form-control" placeholder="Nombre Perfil" value="<?php echo (isset($result['sName'])) ? $result['sName'] : '' ; ?>">                                            
+                <input type="text" name="sName" class="form-control" placeholder="Nombre Perfil" value="">                                            
             </div>
         </div> 
         <div class="form-group">
@@ -23,7 +23,7 @@ if($data['datos']){
                         <input type="radio" name="skStatus" id="optionsRadios22" value="AC" checked> Activo
                     </label>
                     <label>
-                        <input type="radio" name="skStatus" id="optionsRadios23" value="IN" checked> Inactivo
+                        <input type="radio" name="skStatus" id="optionsRadios23" value="IN" > Inactivo
                     </label>
                 </div>
                 
@@ -36,7 +36,7 @@ if($data['datos']){
           	 
           	 <?php 		
 
-		$select = "CALL stpMapSite('sys-func',0,'".$_GET['v1']."',NULL);";
+		$select = "CALL stpMapSite('sys-func',0,'',NULL);";
 			//echo $select;
  			$result = $this->db->query($select);
                     
@@ -49,7 +49,10 @@ if($data['datos']){
 			if($rSeccion{'eNivel'}){
 		 
 				for($j=0; $j<(int)$rSeccion{'eNivel'};$j++){
-					$ind.="style='padding-left:45px;'";
+					$ind.="<div class='col-sm-1'></div>";
+					
+					//$ind.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+					//$ind.="style='padding-left:45px;'";
 				
  				}
 				if($rSeccion{'eNivel'}==1){
@@ -69,6 +72,7 @@ if($data['datos']){
  				}
 				if($rSeccion{'eNivel'}==3){
 					$contadorNivel4++;
+					
 					$contadorSeccion=sprintf("%02d",$contadorNivel0).".".sprintf("%02d",$contadorNivel1).".".sprintf("%02d",$contadorNivel2).".".sprintf("%02d",$contadorNivel3).".".sprintf("%02d",$contadorNivel4);
  				}
  			}else{
@@ -78,22 +82,25 @@ if($data['datos']){
  			}
 			$tTitulo = (trim($rSeccion{'sTitle'})=="-" ? "<div class='page-subheader' style='margin: 0px 0 15px;padding:0;'></div>" : trim(($rSeccion{'sTitle'})));
 			//echo $tTitulo;
-			$tr="<div class='radio-list form-group'>".
-				"<div class='col-sm-7 col-xs-7 ' ".$ind.">".
- 				"".($rSeccion{'eNivel'}==0 ? "" : "").
+			$tr="<div class='form-group'>".
+				"<div class='checkbox-list col-sm-7 col-xs-7'>".$ind."".($rSeccion{'eNivel'}==0 ? "" : "").
+				
 				(trim($rSeccion{'sTitle'})!="-" ? ($rSeccion{'eNivel'}==1 ? "<p>" : "<p>").($rSeccion{'eNivel'}==0 ? " " : '').
 				//(trim($rSeccion{'sTitle'})!="-" ? "<label>".
- 				"<input type=\"hidden\" name=\"eSeccion".$i."\" id=\"eSeccion".$i."\" value=\"".$rSeccion{'sCodSeccion'}."\" ><input type=\"checkbox\"  name=\"sCodSeccion".$i."\" id=\"sCodSeccion".$i."\" onclick=\"marcarHijos(this);\"".
-				(!$rSeccion{'peR'}&&!$rSeccion{'peW'}&&!$rSeccion{'peD'}&&!$rSeccion{'peA'}  ? "" : "checked=\"checked\"")." value=\"".$contadorSeccion."\" /><label class='text-muted' for=\"sCodSeccion".$i."\"  id=\"sCodSeccion".$i."\" >" : "").
+ 				"<input type=\"hidden\" name=\"eSeccion".$i."\" id=\"eSeccion".$i."\" value=\"".$rSeccion{'sCodSeccion'}."\" >
+ 				<input type=\"checkbox\"  name=\"skModule".$i."\" id=\"skModule".$i."\" onclick=\"marcarHijos(this);\"".
+ 				
+				(!$rSeccion{'peR'}&&!$rSeccion{'peW'}&&!$rSeccion{'peD'}&&!$rSeccion{'peA'}  ? "" : "checked=\"checked\"")." value=\"".$contadorSeccion."\" /><label class='text-muted' for=\"skModule".$i."\"  id=\"skModule".$i."\" >" : "").
+				
 				($rSeccion{'eNivel'}==0 ? "<strong>" : "").
 				"&nbsp;&nbsp;".($tTitulo)."".
 				($rSeccion{'eNivel'}==0 ? "</strong>" : "").
 				(trim($rSeccion{'sTitle'})!="-" ? "</label>" : "").
  				(trim($rSeccion{'sTitle'})!="-" ? ($rSeccion{'eNivel'}==1 ? "</label></p>" : "</label></p>") : "").
 				"</div>".
- 				"<div class='col-sm-1 col-xs-1 '><p>".
-				"".(trim($rSeccion{'sTitle'})!="-" ? "<input type=\"checkbox\" name=\"R_".$i."\" id=\"R_".$i."\" ".($rSeccion{'seR'} ? "" : "disabled=\"disabled\"")." ".
-				(!$rSeccion{'peR'} ? "" : "checked=\"checked\"")." value=\"R\" onclick=\"marcarPadre(this);\" /><label for=\"R_".$i."\">&nbsp; R</label>" : "")."</p></div>".
+ 				"<div class='col-sm-1 col-xs-1 '><p>"."".(trim($rSeccion{'sTitle'})!="-" ? "<input type=\"checkbox\" name=\"R_".$i."\" id=\"R_".$i."\" ".($rSeccion{'seR'} ? "" : "disabled=\"disabled\"")." ". 
+ 				(!$rSeccion{'peR'} ? "" : "checked=\"checked\"")." value=\"R\" onclick=\"marcarPadre(this);\" /><label for=\"R_".$i."\">&nbsp; R</label>" : "")."</p></div>".
+ 				
  				"<div class='col-sm-1 col-xs-1 '><p>".(trim($rSeccion{'sTitle'})!="-" ? "<input type=\"checkbox\" name=\"W_".$i."\" id=\"W_".$i."\" ".($rSeccion{'seW'} ? " " : "   disabled=\"disabled\"")." ".
 				(!$rSeccion{'peW'} ? "" : "checked=\"checked\"")." value=\"W\" onclick=\"marcarPadre(this);\" /><label for=\"W_".$i."\"> &nbsp;W</label>" : "")."</p></div>".
 				
@@ -128,24 +135,30 @@ if($data['datos']){
     </div>
 </form>
  <script type="text/javascript">
- 	 function marcarPadre(hijo)
-	{		
-   			var bSeleccionado=false;
+  	 function marcarPadre(hijo)
+	{
+    		var bSeleccionado=false;
 			id = hijo.id.replace(hijo.value+"_","");
-  			padre = ("sCodSeccion"+id);
-  			if(($("input[id=\"R_"+id+"\"]").is(':checked')) || ($("input[id=\"W_"+id+"\"]").is(':checked')) || ($("input[id=\"D_"+id+"\"]").is(':checked')) || ($("input[id=\"A_"+id+"\"]").is(':checked')) ){
- 				 bSeleccionado=true;
- 			}
-  			 document.getElementById(padre).checked = bSeleccionado; 			
+  			padre = ("skModule"+id);
+  			
+  		if(($("input[id=\"R_"+id+"\"]").is(':checked')) || ($("input[id=\"W_"+id+"\"]").is(':checked')) || ($("input[id=\"D_"+id+"\"]").is(':checked')) || ($("input[id=\"A_"+id+"\"]").is(':checked')) ){
+  			
+  			
+  				 bSeleccionado=true;
+   			}
+      			 document.getElementById(padre).checked = bSeleccionado; 
+     			 			
  	}
+ 	
+ 	
 	
- function marcarHijos(padre)
-	{ 
+	 /*	function marcarHijos(padre)
+		{ 
   	var bSeleccionado=false;
  	 	marcarPermisos(padre);
- 		id = padre.id.replace("sCodSeccion","");
+ 		id = padre.id.replace("skModule","");
 
- 	valor = document.getElementsByName("sCodSeccion"+id)[0].value;
+ 	valor = document.getElementsByName("skModule"+id)[0].value;
   			 var arr = document.forms['_save'].elements;
 							for (var i = 0; i < arr.length; i++) {
 								var el = arr[i];
@@ -158,17 +171,16 @@ if($data['datos']){
 														}
 													}
 								}
-							 // do something with it.
-						//	 console.log(el.value) // or similar
- 							}
+  							}
 	marcarHermanos(valor);
  	}
       function marcarPermisos(padre)
-	{
- 		id = padre.id.replace("sCodSeccion","");
+      {
+      
+ 		id = padre.id.replace("skModule","");
 			if(id!=''){
 				if(($("input[id=\"R_"+id+"\"]").is(':disabled')==false)  ){
-						 document.getElementById("R_"+id).checked = padre.checked;
+ 						 document.getElementById("R_"+id).checked = padre.checked;
 				}
 				if(($("input[id=\"W_"+id+"\"]").is(':disabled')==false)  ){
 						 document.getElementById("W_"+id).checked = padre.checked;
@@ -183,7 +195,7 @@ if($data['datos']){
     	//		 document.getElementById(padre).checked = true;
 	}
 	 function marcarHermanos(valor)
-	{
+	 {
 	var bSeleccionado=false;
 	var nid="";
 	s = valor.split(".");
@@ -224,10 +236,10 @@ if($data['datos']){
  			marcarHermanos(nid);
 			}
 	}
- 
-		  /* $(document).ready(function(){
-			 
-			   $('a#guardarPerfil').click( function() {
+ */
+		   $(document).ready(function(){
+		   
+ 			   /*$('a#guardarPerfil').click( function() {
  			$("a#guardarPerfil").hide();
 			$("a#guardarPerfilConfirmar").show();
   		 });
@@ -272,6 +284,6 @@ if($data['datos']){
 																 }
 													});
 										}
-										}); 	
-			});*/
+										}); */	
+			});
 </script>
