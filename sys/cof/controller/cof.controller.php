@@ -17,6 +17,20 @@
                 public function cof_usua_con(){
                     if(isset($_GET['axn']) && $_GET['axn'] == 'fetch_all'){
                         
+                        // PARAMETROS PARA FILTRADO //
+                        if(isset($_POST['sName'])){
+                            $this->users['sName'] = $_POST['sName'];
+                        }
+                        if(isset($_POST['sEmail'])){
+                            $this->users['sEmail'] = $_POST['sEmail'];
+                        }
+                        if(isset($_POST['sUserName'])){
+                            $this->users['sUserName'] = $_POST['sUserName'];
+                        }
+                        if(isset($_POST['skStatus'])){
+                            $this->users['skStatus'] = $_POST['skStatus'];
+                        }
+                        
                         // TOTAL DE REGISTROS EN LA TABLA //
                         $getTotal = parent::count_user()->fetch_assoc();
                         $iTotalRecords = $getTotal['total'];
@@ -28,38 +42,27 @@
                         // PAGINA //
                         $sEcho = intval($_REQUEST['draw']);
                         
-                        if(isset($_POST['sName'])){
-                            $this->users['sName'] = $_POST['sName'];
-                        }
-                        if(isset($_POST['sEmail'])){
-                            $this->users['sEmail'] = $_POST['sEmail'];
-                        }
-                        if(isset($_POST['sUserName'])){
-                            $this->users['sUserName'] = $_POST['sUserName'];
-                        }
                         $this->users['limit'] = $iDisplayLength;
                         $this->users['offset'] = $iDisplayStart;
-                        $this->data['users'] = parent::read_user();
-                        
-                        if(!$this->data['users']){
-                            return false;
-                        }
+                        $this->data['users'] = parent::read_filter_user();
                         
                         $records = array();
                         $records["data"] = array(); 
 
                         $end = $iDisplayStart + $iDisplayLength;
                         $end = $end > $iTotalRecords ? $iTotalRecords : $end;
-
-                        while($row = $this->data['users']->fetch_assoc()){
-                            $records["data"][] = array(
-                                htmlentities(utf8_encode($row['sName']), ENT_QUOTES)
-                                ,htmlentities(utf8_encode($row['sEmail']), ENT_QUOTES)
-                                ,htmlentities(utf8_encode($row['sUserName']), ENT_QUOTES)
-                                ,htmlentities(utf8_encode($row['sPassword']), ENT_QUOTES)
-                                ,utf8_encode($row['sHtml'])
-                                ,'<a href="javascript:;" class="btn btn-xs btn-default"><i class="fa fa-search"></i> View</a>'
-                            );
+                        
+                        if($this->data['users']){
+                            while($row = $this->data['users']->fetch_assoc()){
+                                $records["data"][] = array(
+                                    htmlentities(utf8_encode($row['sName']), ENT_QUOTES)
+                                    ,htmlentities(utf8_encode($row['sEmail']), ENT_QUOTES)
+                                    ,htmlentities(utf8_encode($row['sUserName']), ENT_QUOTES)
+                                    ,htmlentities(utf8_encode($row['sPassword']), ENT_QUOTES)
+                                    ,utf8_encode($row['sHtml'])
+                                    ,'<a href="javascript:;" class="btn btn-xs btn-default"><i class="fa fa-search"></i> View</a>'
+                                );
+                            }
                         }
 
                         $records["draw"] = $sEcho;
@@ -69,6 +72,7 @@
                         echo json_encode($records);
                         return false;
                     }
+                    $this->data['status'] = parent::read_status();
                     $this->load_view('cof-usua-con', $this->data);
                 }
                 

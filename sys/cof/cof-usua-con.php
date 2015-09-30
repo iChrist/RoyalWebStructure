@@ -6,10 +6,10 @@
                         <span></span>
                         <div class="table-group-actions pull-right">
                             <span></span>
-                            <button type="button" class="btn btn-sm btn-default" id="enable_filter"><i class="fa fa-search"></i> Buscar</button>
+                            <!--<button type="button" class="btn btn-sm btn-default" id="enable_filter"><i class="fa fa-search"></i> Buscar</button>-->
                         </div>
                     </div>
-                    <table class="table table-striped table-hover table-filter" width="100%" style="width:100%;display: none;">
+                    <!--<table class="table table-striped table-hover table-filter" width="100%" style="width:100%;display: none;">
                         <tr role="row" class="filter">
                             <td><b>Filtros: </b></td>
                             <td>
@@ -24,8 +24,8 @@
                             <td>
                                 <select name="skStatus" class="form-control form-filter input-sm">
                                     <option value="">- Estatus -</option>
-                                    <option value="pending">Pending</option>
-                                    <option value="closed">Closed</option>
+                                    <option value="AC">Activo</option>
+                                    <option value="IN">Inactivo</option>
                                 </select>
                             </td>
                             <td>
@@ -34,7 +34,7 @@
                                     <button class="btn btn-xs btn-danger filter-cancel"><i class="fa fa-times"></i> Reiniciar</button>
                                 </div>
                             </td>
-                        </tr>
+                        </tr>-->
                         </table>
                         <table class="table table-striped table-bordered table-hover" id="datatable_ajax">
                         <thead>
@@ -72,15 +72,24 @@
                             <td>
                                 <select name="skStatus" class="form-control form-filter input-sm">
                                     <option value="">- Estatus -</option>
-                                    <option value="pending">Pending</option>
-                                    <option value="closed">Closed</option>
+                                <?php
+                                    if($data['status']){
+                                        while($row = $data['status']->fetch_assoc()){
+                                ?>
+                                            <option value="<?php echo $row['skStatus']; ?>">
+                                                <?php echo $row['sName']; ?>
+                                            </option>
+                                <?php
+                                        }//ENDIF
+                                    }//ENDWHILE
+                                ?>
                                 </select>
                             </td>
                             <td>
-                                <!--<div aria-label="Acciones" role="group" class="btn-group btn-group-xs">-->
-                                    <button class="btn btn-xs btn-warning filter-submit margin-bottom"><i class="fa fa-search"></i> Buscar</button>
-                                    <!--<button class="btn btn-xs btn-danger filter-cancel"><i class="fa fa-times"></i> Limpiar</button>-->
-                                <!--</div>-->
+                                <div aria-label="Acciones" role="group" class="btn-group btn-group-xs">
+                                    <button class="btn btn-xs btn-default filter-submit margin-bottom"><i class="fa fa-search"></i> Buscar</button>
+                                    <button class="btn btn-xs btn-warning filter-cancel"><i class="fa fa-refresh"></i></button>
+                                </div>
                             </td>
                         </tr>
                         </thead>

@@ -33,6 +33,19 @@
 
             }
             
+            /**/
+            public function read_status(){
+                $sql = "SELECT * FROM _status";
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+            /**/
             public function create(){
                 $this->skUsers = substr(md5(microtime()), 0, 32);
                 $sql = "INSERT INTO _users (skUsers,sName,sEmail,sUserName,sPassword,skStatus) VALUES ('$this->skUsers','$this->sName','$this->sEmail','$this->sUserName','$this->sPassword','$this->skStatus')";
@@ -56,6 +69,40 @@
                 }
                 if(!empty($this->users['sUserName'])){
                     $sql .= " AND sUserName = '".$this->users['sUserName']."'";
+                }
+                if(is_int($this->users['limit'])){
+                    if(is_int($this->users['offset'])){
+                        $sql .= " LIMIT ".$this->users['offset']." , ".$this->users['limit'];
+                    }else{
+                        $sql .= " LIMIT ".$this->users['limit'];
+                    }
+                }
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+            
+            public function read_filter_user(){
+                $sql = "SELECT _users.*, _status.sName AS status, _status.sHtml  FROM _users INNER JOIN _status ON _status.skStatus = _users.skStatus WHERE 1=1 ";
+                if(!empty($this->skUsers)){
+                    $sql .= " AND skUsers = '$this->skUsers' ";
+                }
+                if(!empty($this->users['sName'])){
+                    $sql .= " AND _users.sName like '%".$this->users['sName']."%'";
+                }
+                if(!empty($this->users['sEmail'])){
+                    $sql .= " AND sEmail like '%".$this->users['sEmail']."%'";
+                }
+                if(!empty($this->users['sUserName'])){
+                    $sql .= " AND sUserName like '%".$this->users['sUserName']."%'";
+                }
+                if(!empty($this->users['skStatus'])){
+                    $sql .= " AND _users.skStatus like '%".$this->users['skStatus']."%'";
                 }
                 if(is_int($this->users['limit'])){
                     if(is_int($this->users['offset'])){
@@ -98,6 +145,21 @@
             
             public function count_user(){
                 $sql = "SELECT COUNT(*) AS total FROM _users WHERE 1=1 ";
+                if(!empty($this->skUsers)){
+                    $sql .= " AND skUsers = '$this->skUsers' ";
+                }
+                if(!empty($this->users['sName'])){
+                    $sql .= " AND _users.sName like '%".$this->users['sName']."%'";
+                }
+                if(!empty($this->users['sEmail'])){
+                    $sql .= " AND sEmail like '%".$this->users['sEmail']."%'";
+                }
+                if(!empty($this->users['sUserName'])){
+                    $sql .= " AND sUserName like '%".$this->users['sUserName']."%'";
+                }
+                if(!empty($this->users['skStatus'])){
+                    $sql .= " AND _users.skStatus like '%".$this->users['skStatus']."%'";
+                }
                 $result = $this->db->query($sql);
                 if($result){
                     if($result->num_rows > 0){
