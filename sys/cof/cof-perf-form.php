@@ -152,7 +152,7 @@ if($data['datos']){
  	
  	
 	
-	 /*	function marcarHijos(padre)
+	 	function marcarHijos(padre)
 		{ 
   	var bSeleccionado=false;
  	 	marcarPermisos(padre);
@@ -236,7 +236,7 @@ if($data['datos']){
  			marcarHermanos(nid);
 			}
 	}
- */
+
 		   $(document).ready(function(){
 		   
  			   /*$('a#guardarPerfil').click( function() {
