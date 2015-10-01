@@ -60,7 +60,10 @@
                                     ,htmlentities(utf8_encode($row['sUserName']), ENT_QUOTES)
                                     ,htmlentities(utf8_encode($row['sPassword']), ENT_QUOTES)
                                     ,utf8_encode($row['sHtml'])
-                                    ,'<a href="javascript:;" class="btn btn-xs btn-default"><i class="fa fa-search"></i> View</a>'
+                                    ,'<div aria-label="Acciones" role="group" class="btn-group btn-group-xs">'
+                                    . '<a href="javascript:;" class="btn btn-xs btn-default" title="Detalle"><i class="fa fa-eye"></i></a>'
+                                    . '<a href="javascript:;" class="btn btn-xs btn-default" title="Editar"><i class="fa fa-edit"></i></a>'
+                                    . '</div>'
                                 );
                             }
                         }
