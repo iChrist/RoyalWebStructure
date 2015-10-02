@@ -1,10 +1,6 @@
 <form id="_save" method="post" class="form-horizontal" role="form"> 
-<!--<form id="_save" method="post" class="form-horizontal form-bordered form-row-stripped" role="form"> !-->
 <div class="col-md-6 col-sm-12">
     <div class="btn-group btn-group-xs" role="group" aria-label="Acciones">
-        <button type="button" class="btn btn-xs actions-buttons">
-            <b> <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></b>
-        </button>
         <?php
             $sScript = ''; 
             if(!empty($_buttons) && count($_buttons) > 0){
