@@ -13,7 +13,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta content="" name="description"/>
-    <meta content="" name="author"/>
+    <meta content="RoyalWeb" name="author"/>
     <meta name="MobileOptimized" content="320">
 
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
@@ -71,7 +71,7 @@
 		<!-- BEGIN TOP NAVIGATION MENU -->
 		<ul class="nav navbar-nav pull-right">
 			<!-- BEGIN NOTIFICATION DROPDOWN -->
-			<li class="dropdown" id="header_notification_bar">
+			<!--<li class="dropdown" id="header_notification_bar">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
 				<i class="icon-bell"></i>
 				<span class="badge badge-success">
@@ -109,10 +109,10 @@
 						<a href="#">Ver todas las Notificaciones <i class="fa fa-angle-right"></i></a>
 					</li>
 				</ul>
-			</li>
+			</li>-->
 			<!-- END NOTIFICATION DROPDOWN -->
 			<!-- BEGIN INBOX DROPDOWN -->
-			<li class="dropdown" id="header_inbox_bar">
+			<!--<li class="dropdown" id="header_inbox_bar">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
 				<i class="icon-envelope-open"></i>
 				<span class="badge badge-info">
@@ -147,11 +147,11 @@
 					<li class="external">
 						<a href="inbox.html">Ver todos los Correos <i class="fa fa-angle-right"></i></a>
 					</li>
-				</ul>
+				</ul>-->
 			</li>
 			<!-- END INBOX DROPDOWN -->
 			<!-- BEGIN TODO DROPDOWN -->
-			<li class="dropdown" id="header_task_bar">
+			<!--<li class="dropdown" id="header_task_bar">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
 				<i class="icon-calendar"></i>
 				<span class="badge badge-warning">
@@ -188,7 +188,7 @@
 						<a href="#">Ver tareas pendientes <i class="fa fa-angle-right"></i></a>
 					</li>
 				</ul>
-			</li>
+			</li>-->
 			<!-- END TODO DROPDOWN -->
 			<li class="devider">
 				 &nbsp;
