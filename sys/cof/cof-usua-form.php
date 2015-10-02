@@ -1,7 +1,15 @@
 <?php
+	/*echo "<pre>";
+	print_r($arrayPerfilesUsuarios);
+	echo "</pre>";*/
+
     if($data['datos'])
     {
         $result = $data['datos']->fetch_assoc();
+    }
+	if($data['perfilesusuarios'])
+    {
+        $arrayPerfilesUsuarios = $data['perfilesusuarios'];
     }
     if($data['error'])
     {
@@ -37,12 +45,34 @@
             
             
             <div class="form-group">
-                <label class="control-label col-md-2">Nombre Completo<span aria-required="true" class="required"> * </span>
+                <label class="control-label col-md-2">Nombres <span aria-required="true" class="required"> * </span>
                 </label>
                 <div class="col-md-4">
                     <div class="input-icon right">
                         <i class="fa"></i>
-                        <input type="text" name="sName" id="sName" class="form-control" placeholder="" value="<?php echo (isset($result['sName'])) ? $result['sName'] : '' ; ?>" >
+                        <input type="text" name="sName" id="sName" class="form-control" placeholder="" value="<?php echo (isset($result['sName'])) ? utf8_encode($result['sName']) : '' ; ?>" >
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label col-md-2">Apellido Paterno<span aria-required="true" class="required"> * </span>
+                </label>
+                <div class="col-md-4">
+                    <div class="input-icon right">
+                        <i class="fa"></i>
+                        <input type="text" name="sLastNamePaternal" id="sLastNamePaternal" class="form-control" placeholder="" value="<?php echo (isset($result['sLastNamePaternal'])) ? utf8_encode($result['sLastNamePaternal']) : '' ; ?>" >
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label col-md-2">Apellido Materno<span aria-required="true" class="required"> * </span>
+                </label>
+                <div class="col-md-4">
+                    <div class="input-icon right">
+                        <i class="fa"></i>
+                        <input type="text" name="sLastNameMaternal" id="sLastNameMaternal" class="form-control" placeholder="" value="<?php echo (isset($result['sLastNameMaternal'])) ? utf8_encode($result['sLastNameMaternal']) : '' ; ?>" >
                     </div>
                 </div>
             </div>
@@ -120,7 +150,7 @@
                                     {
                                     ?>
                                         <div class="col-md-4">
-                                                <input type="checkbox" name="skProfiles[]" value="<?php echo $profile['skProfiles']; ?>" />
+                                                <input type="checkbox" name="skProfiles[]" value="<?php echo $profile['skProfiles']; ?>" <?php echo (in_array($profile['skProfiles'], $arrayPerfilesUsuarios) ? 'checked' : '')?>   />
                                                 <?php echo $profile['sName']; ?>
                                                 <br/>&nbsp;
                                         </div>
@@ -163,6 +193,12 @@
 
             rules:{
                 sName:{
+                    required: true,
+                },
+				sLastNamePaternal:{
+                    required: true,
+                },
+				sLastNameMaternal:{
                     required: true,
                 },
                 sEmail:{
@@ -249,6 +285,14 @@
             
             messages:{
                 sName:{
+                    required: "Campo obligatorio.",
+                    // lettersonly: "Solo se aceptan letras en el campo 'Nombre Completo'."
+                },
+				sLastNamePaternal:{
+                    required: "Campo obligatorio.",
+                    // lettersonly: "Solo se aceptan letras en el campo 'Nombre Completo'."
+                },
+				sLastNameMaternal:{
                     required: "Campo obligatorio.",
                     // lettersonly: "Solo se aceptan letras en el campo 'Nombre Completo'."
                 },

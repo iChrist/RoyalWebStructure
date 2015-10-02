@@ -94,6 +94,7 @@
                                 // echo 'false'; -> Email no encontrado 
                                 // echo 'true';  -> Email encontrado
                                 $this->users['sEmail'] = $_POST['sEmail'];
+                                $this->users['skUsersDistinto'] = $_POST['skUsers'];
                                 if(parent::read_user())
                                 {
                                     echo 'false';
@@ -109,7 +110,8 @@
                                 // echo 'false'; -> UserName no encontrado 
                                 // echo 'true';  -> UserName encontrado
                                 $this->users['sUserName'] = $_POST['sUserName'];
-                                if(parent::read_user())
+                                $this->users['skUsersDistinto'] = $_POST['skUsers'];
+							    if(parent::read_user())
                                 {
                                     echo 'false';
                                 }
@@ -127,6 +129,8 @@
                         if($_GET['p1'] || $_POST['skUsers']){
                             $this->skUsers = isset($_GET['p1']) ? $_GET['p1'] : $_POST['skUsers'];
                             $this->sName = $_POST['sName'];
+                            $this->sLastNamePaternal = $_POST['sLastNamePaternal'];
+                            $this->sLastNameMaternal = $_POST['sLastNameMaternal'];
                             $this->sEmail = $_POST['sEmail'];
                             $this->sUserName = $_POST['sUserName'];
                             $this->skStatus = $_POST['skStatus'];
@@ -140,6 +144,8 @@
                         }else{
                             $this->skUsers = substr(md5(microtime()), 1, 32); //Generación UUID.
                             $this->sName = $_POST['sName'];
+                            $this->sLastNamePaternal = $_POST['sLastNamePaternal'];
+                            $this->sLastNameMaternal = $_POST['sLastNameMaternal'];
                             $this->sEmail = $_POST['sEmail'];
                             $this->sUserName = $_POST['sUserName'];
                             // $this->sPassword = substr(md5(microtime()), 1, 16); //Generación de Password aleatorio con longitud de 16 caracteres.
@@ -177,9 +183,11 @@
                             }
                         }
                     }
+					
                     if($_GET['p1']){
                         $this->skUsers = $_GET['p1'];
                         $this->data['datos'] = parent::read_user();
+                        $this->data['perfilesusuarios'] = parent::read_user_profile();
                     }
                     $this->load_view('cof-usua-form', $this->data);
                 }
