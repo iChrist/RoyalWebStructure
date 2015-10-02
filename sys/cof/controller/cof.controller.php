@@ -186,9 +186,64 @@
                 /* TERMINA MODULO USUARIOS */
                 
 	        public function cof_perf_con(){
+	        	 if(isset($_GET['axn']) && $_GET['axn'] == 'fetch_all'){
+                        
+                        // PARAMETROS PARA FILTRADO //
+                        if(isset($_POST['sName'])){
+                            $this->profiles['sName'] = $_POST['sName'];
+                        }
+                      
+                        if(isset($_POST['skStatus'])){
+                            $this->profiles['skStatus'] = $_POST['skStatus'];
+                        }
+                        
+                        // TOTAL DE REGISTROS EN LA TABLA //
+                        $getTotal = parent::count_profile()->fetch_assoc();
+                        $iTotalRecords = $getTotal['total'];
+                        // "LIMIT" TOTAL DE REGISTROS PARA MOSTRAR //
+                        $iDisplayLength = intval($_REQUEST['length']);
+                        $iDisplayLength = ($iDisplayLength < 0) ? $iTotalRecords : $iDisplayLength; 
+                        // "OFFSET" //
+                        $iDisplayStart = intval($_REQUEST['start']);
+                        // PAGINA //
+                        $sEcho = intval($_REQUEST['draw']);
+                        
+                        $this->profiles['limit'] = $iDisplayLength;
+                        $this->profiles['offset'] = $iDisplayStart;
+                        $this->data['profiles'] = parent::read_filter_profile();
+                        
+                        $records = array();
+                        $records["data"] = array(); 
+
+                        $end = $iDisplayStart + $iDisplayLength;
+                        $end = $end > $iTotalRecords ? $iTotalRecords : $end;
+                        
+                        if($this->data['profiles']){
+                            while($row = $this->data['profiles']->fetch_assoc()){
+                                $records["data"][] = array(
+                                    htmlentities(utf8_encode($row['sName']), ENT_QUOTES)
+                                      ,utf8_encode($row['sHtml'])
+                                    ,'<div aria-label="Acciones" role="group" class="btn-group btn-group-xs">'
+                                    . '<a href="javascript:;" class="btn btn-xs btn-default" title="Detalle"><i class="fa fa-eye"></i></a>'
+                                    . '<a href="javascript:;" class="btn btn-xs btn-default" title="Editar"><i class="fa fa-edit"></i></a>'
+                                    . '</div>'
+                                );
+                            }
+                        }
+
+                        $records["draw"] = $sEcho;
+                        $records["recordsTotal"] = $iTotalRecords;
+                        $records["recordsFiltered"] = $iTotalRecords;
+
+                        echo json_encode($records);
+                        return false;
+                    }
+                    $this->data['status'] = parent::read_status();
+                    $this->load_view('cof-perf-con', $this->data);
+	        
 				//$this->require_view(); 
-				$this->data["perfiles"] = parent::read_profile();
-                                $this->load_view('cof-perf-con', $this->data);
+				/*$this->data["perfiles"] = parent::read_profile();
+                                $this->load_view('cof-perf-con', $this->data);*/
 			}
 
 		public function cof_perf_form(){
