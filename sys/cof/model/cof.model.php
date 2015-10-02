@@ -57,8 +57,14 @@
                 }
             }
             public function read_user(){
-                $sql = "SELECT _users.*, _status.sName AS status, _status.sHtml  FROM _users INNER JOIN _status ON _status.skStatus = _users.skStatus WHERE 1=1 ";
-                if(!empty($this->skUsers)){
+                $sql = "SELECT _users.*, _status.sName AS status, _status.sHtml  
+						FROM _users 
+						INNER JOIN _status ON _status.skStatus = _users.skStatus 
+						WHERE 1=1 ";
+                if(!empty($this->skUsersDistinto)){
+                    $sql .= " AND skUsers <> '$this->skUsersDistinto' ";
+                }
+				if(!empty($this->skUsers)){
                     $sql .= " AND skUsers = '$this->skUsers' ";
                 }
                 if(!empty($this->users['sName'])){
@@ -81,6 +87,22 @@
                 if($result){
                     if($result->num_rows > 0){
                         return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+            public function read_user_profile(){
+                $sql = "SELECT * FROM _users_profiles  WHERE 1=1 AND skUsers = '$this->skUsers' ";
+             
+			    $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+						$arrayPerfilesUsuarios = array();
+						 while($row = $result->fetch_assoc()){
+						 	$arrayPerfilesUsuarios[] = $row{'skProfiles'};
+						 }
+                        return $arrayPerfilesUsuarios;
                     }else{
                         return false;
                     }
@@ -123,7 +145,15 @@
             
             public function update(){
                 
-                $sql = "UPDATE _users SET sName='$this->sName', sEmail='$this->sEmail', sUserName='$this->sUserName', sPassword='$this->sPassword', skStatus='$this->skStatus' WHERE skUsers = '$this->skUsers' ";
+                $sql = "	UPDATE _users 
+						SET sName='$this->sName', 
+						SET sLastNamePaternal='$this->sLastNamePaternal', 
+						SET sLastNameMaternal='$this->sLastNameMaternal', 
+						sEmail='$this->sEmail', 
+						sUserName='$this->sUserName', 
+						sPassword='$this->sPassword', 
+						skStatus='$this->skStatus' 
+						WHERE skUsers = '$this->skUsers' ";
                 $result = $this->db->query($sql);
                 if($result){
                     return true;
