@@ -208,7 +208,7 @@
 			return $_SESSION["sysRequireView"];
 		}
                 
-                private function getModulesButtons(){
+                protected function getModulesButtons(){
                     $sql = "CALL test('".$_GET['sysController']."');";
                     $result = $this->db->query($sql);
                     $data = array();
@@ -229,7 +229,7 @@
                     return $data;
                 }
                 
-                public function getUsersProfiles(){
+                protected function getUsersProfiles(){
                     $sql = "SELECT up.skProfiles, p.sName FROM _users_profiles AS up
                         INNER JOIN _profiles AS p ON p.skProfiles = up.skProfiles
                         WHERE up.skUsers = '".$_SESSION['session']['skUsers']."'";
@@ -245,7 +245,7 @@
                     return $data;
                 }
                 
-                public function getModulesProfilesPermissions(){
+                protected function getModulesProfilesPermissions(){
                     $sql = "CALL stpGetModulesProfilesPermissions('".$_GET['sysController']."','".$_SESSION['session']['skUsers']."', '".$_SESSION['session']['skProfile']."');";
                     $result = $this->db->query($sql);
                     $data = array();
