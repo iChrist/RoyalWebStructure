@@ -13,6 +13,14 @@
                     ,'limit'        =>  ''
                     ,'offset'       =>  ''
                 );
+                public $profiles = array(
+                    'skProfiles'       =>  ''
+                    ,'sName'        =>  ''
+                     ,'skStatus'     =>  ''
+                    ,'dCreated'     =>  ''
+                    ,'limit'        =>  ''
+                    ,'offset'       =>  ''
+                );
                 public $skUsers;
                 public $sName;
                 public $sEmail;
@@ -226,21 +234,82 @@
 				return false;
 			}
 		}
-
-		public function read_profile(){
-                    $sql= "SELECT pr.*, st.sName AS Estatus FROM _profiles pr
-                            INNER JOIN _status st ON st.skStatus = pr.skStatus";
-                    if($this->skProfiles){
-                        $sql .=" WHERE pr.skProfiles = '$this->skProfiles'";
-                    }
-                    $result = $this->db->query($sql);
+		
+		
+		public function count_profile(){
+                $sql = "SELECT COUNT(*) AS total FROM _profiles WHERE 1=1 ";
+                if(!empty($this->skProfiles)){
+                    $sql .= " AND skProfiles = '".$this->skProfiles."' ";
+                }
+                if(!empty($this->profiles['sName'])){
+                    $sql .= " AND _profiles.sName like '%".$this->profiles['sName']."%'";
+                }
+                if(!empty($this->profiles['skStatus'])){
+                    $sql .= " AND _profiles.skStatus like '%".$this->profiles['skStatus']."%'";
+                }
+                $result = $this->db->query($sql);
+                if($result){
                     if($result->num_rows > 0){
                         return $result;
                     }else{
                         return false;
                     }
-			
-		}
+                }
+            }
+		 public function read_filter_profile(){
+                $sql = "SELECT _profiles.*, _status.sName AS status, _status.sHtml  FROM _profiles INNER JOIN _status ON _status.skStatus = _profiles.skStatus WHERE 1=1 ";
+                if(!empty($this->skProfiles)){
+                    $sql .= " AND skUsers = '$this->skProfiles' ";
+                }
+                if(!empty($this->profiles['sName'])){
+                    $sql .= " AND _profiles.sName like '%".$this->profiles['sName']."%'";
+                }
+             
+                if(!empty($this->profiles['skStatus'])){
+                    $sql .= " AND _profiles.skStatus like '%".$this->profiles['skStatus']."%'";
+                }
+                if(is_int($this->profiles['limit'])){
+                    if(is_int($this->profiles['offset'])){
+                        $sql .= " LIMIT ".$this->profiles['offset']." , ".$this->profiles['limit'];
+                    }else{
+                        $sql .= " LIMIT ".$this->profiles['limit'];
+                    }
+                }
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+
+		 public function read_profile(){
+                $sql = "SELECT _profiles.*, _status.sName AS status, _status.sHtml  FROM _profiles INNER JOIN _status ON _status.skStatus = _profiles.skStatus WHERE 1=1 ";
+                if(!empty($this->skProfiles)){
+                    $sql .= " AND skProfiles = '".$this->skProfiles."' ";
+                }
+                if(!empty($this->profiles['sName'])){
+                    $sql .= " AND sName = '".$this->profiles['sName']."'";
+                }
+                  if(is_int($this->profiles['limit'])){
+                    if(is_int($this->profiles['offset'])){
+                        $sql .= " LIMIT ".$this->profiles['offset']." , ".$this->profiles['limit'];
+                    }else{
+                        $sql .= " LIMIT ".$this->profiles['limit'];
+                    }
+                }
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+            
 
 		public function update_profile(){
 			$sql="UPDATE _profiles SET sName='$this->sName', skStatus='$this->skStatus' WHERE skProfiles='$this->skProfiles'";
