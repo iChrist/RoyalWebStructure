@@ -71,7 +71,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	<div class="page-body">
 		<img class="page-lock-img thumbnail" src="<?php echo SYS_URL; ?>core/assets/img/cjs.png" alt="">
 		<div class="page-lock-info">
-			<h1><?php echo $_SESSION['session']['sName']; ?></h1>
+			<h1><?php echo utf8_encode($_SESSION['session']['sName']); ?></h1>
 			<span class="email">
 			<?php echo $_SESSION['session']['sEmail']; ?></span>
 			<span class="locked label label-warning">
@@ -92,7 +92,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
 				<!-- /input-group -->
 				<div class="relogin">
-                                    <a href="<?php echo SYS_URL; ?>logout/">&iquest; No eres <?php echo $_SESSION['session']['sName']; ?> ?</a>
+                                    <a href="<?php echo SYS_URL; ?>logout/">&iquest; No eres <?php echo utf8_encode($_SESSION['session']['sName']); ?> ?</a>
 				</div>
 			</form>
 		</div>
