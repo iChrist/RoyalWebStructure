@@ -10,8 +10,12 @@
 	$arrayPerfilesUsuarios = array();
 	if(isset($data['perfilesusuarios']))
     {
-        $arrayPerfilesUsuarios = $data['perfilesusuarios'];
+		if(($data['perfilesusuarios']))
+		{
+			$arrayPerfilesUsuarios = $data['perfilesusuarios'];
+		}
     }
+	
     if($data['error'])
     {
 ?>
