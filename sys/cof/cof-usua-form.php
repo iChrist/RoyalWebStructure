@@ -7,7 +7,8 @@
     {
         $result = $data['datos']->fetch_assoc();
     }
-	if($data['perfilesusuarios'])
+	$arrayPerfilesUsuarios = array();
+	if(isset($data['perfilesusuarios']))
     {
         $arrayPerfilesUsuarios = $data['perfilesusuarios'];
     }

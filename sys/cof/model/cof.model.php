@@ -3,15 +3,16 @@
                 
             // PUBLIC VARIABLES //
                 public $users = array(
-                    'skUsers'       =>  ''
-                    ,'sName'        =>  ''
-                    ,'sEmail'       =>  ''
-                    ,'sUserName'    =>  ''
-                    ,'sPassword'    =>  ''
-                    ,'skStatus'     =>  ''
-                    ,'dCreated'     =>  ''
-                    ,'limit'        =>  ''
-                    ,'offset'       =>  ''
+                    'skUsers'       		=>  ''
+                    ,'skUsersDistinto'      	=>  ''
+                    ,'sName'       			=>  ''
+                    ,'sEmail'      			=>  ''
+                    ,'sUserName'			=>  ''
+                    ,'sPassword'    		=>  ''
+                    ,'skStatus'     		=>  ''
+                    ,'dCreated'     		=>  ''
+                    ,'limit'        			=>  ''
+                    ,'offset'       			=>  ''
                 );
                 public $profiles = array(
                     'skProfiles'       =>  ''
@@ -101,8 +102,7 @@
                 }
             }
             public function read_user_profile(){
-                $sql = "SELECT * FROM _users_profiles  WHERE 1=1 AND skUsers = '$this->skUsers' ";
-             
+					$sql = "SELECT * FROM _users_profiles  WHERE 1=1 AND skUsers = '".$this->skUsers."' ";
 			    $result = $this->db->query($sql);
                 if($result){
                     if($result->num_rows > 0){
