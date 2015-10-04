@@ -35,7 +35,7 @@
 <?php
     } // ENDIF
 ?>
-    <input type="hidden" name="skUsers" value="<?php echo (isset($result['skUsers'])) ? $result['skUsers'] : '' ; ?>">
+    <input type="hidden" name="skUsers"  id="skUsers" value="<?php echo (isset($result['skUsers'])) ? $result['skUsers'] : '' ; ?>">
     <div class="form-body">
             
             <!-- Alerta de mensajes-->
@@ -216,7 +216,8 @@
                         sEmail: function() {
                           return $( "#sEmail" ).val();
                         },
-                        axn: "validarEmail"
+                        axn: "validarEmail",
+                        skUsers:  $( "#skUsers" ).val()
                       }
                     }
                     
@@ -230,7 +231,8 @@
                         sUserName: function() {
                           return $( "#sUserName" ).val();
                         },
-                        axn: "validarUserName"
+                        axn: "validarUserName",
+                        skUsers:  $( "#skUsers" ).val()
                       }
                     }
                 },

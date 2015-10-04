@@ -94,7 +94,7 @@
                                 // echo 'false'; -> Email no encontrado 
                                 // echo 'true';  -> Email encontrado
                                 $this->users['sEmail'] = $_POST['sEmail'];
-                                $this->users['skUsersDistinto'] = $_POST['skUsers'];
+								$this->users['skUsersDistinto'] = $_POST['skUsers'];
                                 if(parent::read_user())
                                 {
                                     echo 'false';

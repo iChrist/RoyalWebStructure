@@ -4,7 +4,7 @@
             // PUBLIC VARIABLES //
                 public $users = array(
                     'skUsers'       		=>  ''
-                    ,'skUsersDistinto'      	=>  ''
+                    ,'skUsersDistinto'   	=>  ''
                     ,'sName'       			=>  ''
                     ,'sEmail'      			=>  ''
                     ,'sUserName'			=>  ''
@@ -15,14 +15,15 @@
                     ,'offset'       			=>  ''
                 );
                 public $profiles = array(
-                    'skProfiles'       =>  ''
-                    ,'sName'        =>  ''
-                     ,'skStatus'     =>  ''
-                    ,'dCreated'     =>  ''
-                    ,'limit'        =>  ''
-                    ,'offset'       =>  ''
+                    'skProfiles'       	=>  ''
+                    ,'sName'      		=>  ''
+                     ,'skStatus'    	=>  ''
+                    ,'dCreated'     	=>  ''
+                    ,'limit'        		=>  ''
+                    ,'offset'       		=>  ''
                 );
                 public $skUsers;
+                public $skUsersDistinto;
                 public $sName;
                 public $sEmail;
                 public $sUserName;
@@ -30,6 +31,7 @@
                 public $skStatus;
                 public $dCreated;
                 public $skProfiles;
+				
                     
             // PRIVATE VARIABLES //
                     private $data = array();
@@ -71,8 +73,9 @@
 						INNER JOIN _status ON _status.skStatus = _users.skStatus 
 						WHERE 1=1 ";
                 if(!empty($this->skUsersDistinto)){
-                    $sql .= " AND skUsers <> '$this->skUsersDistinto' ";
+                    $sql .= " AND skUsers <> '".$this->skUsersDistinto."' ";
                 }
+				//echo $sql;
 				if(!empty($this->skUsers)){
                     $sql .= " AND skUsers = '$this->skUsers' ";
                 }
