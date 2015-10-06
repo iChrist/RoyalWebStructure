@@ -54,20 +54,18 @@
                         
                         if($this->data['users']){
                             while($row = $this->data['users']->fetch_assoc()){
+                                $actions = $this->printModulesButtons(2,array($row['skUsers']));
                                 $records["data"][] = array(
                                     htmlentities(utf8_encode($row['sName']), ENT_QUOTES)
                                     ,htmlentities(utf8_encode($row['sEmail']), ENT_QUOTES)
                                     ,htmlentities(utf8_encode($row['sUserName']), ENT_QUOTES)
                                     ,htmlentities(utf8_encode($row['sPassword']), ENT_QUOTES)
                                     ,utf8_encode($row['sHtml'])
-                                    ,'<div aria-label="Acciones" role="group" class="btn-group btn-group-xs">'
-                                    . '<a href="javascript:;" class="btn btn-xs btn-default" title="Detalle"><i class="fa fa-eye"></i></a>'
-                                    . '<a href="javascript:;" class="btn btn-xs btn-default" title="Editar"><i class="fa fa-edit"></i></a>'
-                                    . '</div>'
+                                    , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.$actions['sHtml'].'</ul></div>' : ''
+                                    
                                 );
                             }
                         }
-
                         $records["draw"] = $sEcho;
                         $records["recordsTotal"] = $iTotalRecords;
                         $records["recordsFiltered"] = $iTotalRecords;
@@ -75,6 +73,8 @@
                         echo json_encode($records);
                         return false;
                     }
+                    //echo 'HOOOOOOOLAAAAAA!';
+                    //var_dump($this->printModulesButtons(2,array('')));
                     $this->data['status'] = parent::read_status();
                     $this->load_view('cof-usua-con', $this->data);
                 }

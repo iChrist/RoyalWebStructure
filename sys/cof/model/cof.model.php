@@ -75,7 +75,6 @@
                 if(!empty($this->skUsersDistinto)){
                     $sql .= " AND skUsers <> '".$this->skUsersDistinto."' ";
                 }
-				//echo $sql;
 				if(!empty($this->skUsers)){
                     $sql .= " AND skUsers = '$this->skUsers' ";
                 }
