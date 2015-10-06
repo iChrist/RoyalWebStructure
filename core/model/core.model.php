@@ -83,8 +83,8 @@
 
 		protected function load_model($model = NULL, $path = NULL){
 			if($path){
-				if(file_exists(SYS_PATH.$path.$model.".model.php")){
-					require_once(SYS_PATH.$path.$model.".model.php");
+				if(file_exists(SYS_PATH.$path.'/model/'.$model.'.model.php')){
+					require_once(SYS_PATH.$path.'/model/'.$model.'.model.php');
 				}else{
 					$text = "'".$model."' model not found.";
 					$this->_error($text,404);
