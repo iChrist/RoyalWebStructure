@@ -254,10 +254,101 @@
 
 		public function cof_perf_form(){
                     //$this->require_view();
-                    $this->data["msg"] = '';
-                    $this->data["datos"] = false;
+                    $this->data['message'] 		= '';
+                    $this->data['success'] 		= false;
+                    $this->data['error']	 	= false;
+                    $this->data['datos'] 		= false;
+                    
+                   if(isset($_POST['axn']))
+                    {
+                        switch ($_POST['axn'])
+                        {
+                              case "validarProfile":
+                                // echo 'false'; -> UserName no encontrado 
+                                // echo 'true';  -> UserName encontrado
+                                $this->profiles['sName'] = $_POST['sUserName'];
+ 							    if(parent::read_profile())
+                                {
+                                    echo 'false';
+                                }
+                                else
+                                {
+                                    echo 'true';
+                                }
+                                exit;
+                            break;
+                        }
+                    }
+
                     if($_POST){
-                        $this->sName = $_POST['sName'];
+                    	 if($_GET['p1'] || $_POST['skProfiles']){
+ 	                    	 $this->skProfiles 	= isset($_GET['p1']) ? $_GET['p1'] : $_POST['skProfiles'];
+	                         $this->sName 		= $_POST['sName'];
+	                         $this->skStatus 	= $_POST['skStatus'];
+	                        
+	                        
+	                    	 if(parent::update_profile()){
+	                                $this->data['success'] = true;
+	                                $this->data['message'] = 'Registro actualizado con &eacute;xito.';
+	                            }else{
+	                                $this->data['error'] = true;
+	                                $this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
+	                            }
+                    	 }else{
+                    	 	echo "<PRE>";
+                    	 	print_r($_POST);
+                    	 	echo "</PRE>";
+                    	 
+                            $this->skProfiles = substr(md5(microtime()), 1, 32); //Generación UUID.
+                            $this->sName 		= $_POST['sName'];
+                            $this->skStatus 	= $_POST['skStatus'];
+                            $this->skProfiles 	= parent::create_profile();
+                            
+                            if($this->skProfiles){
+ 	                            foreach($_POST as $tCampo => $tValor){
+										if(strstr($tCampo,"skModule")&&$tValor){ 
+											$skModule = "'".$_POST["eSeccion".str_replace("skModule","",$tCampo)]."'";
+											$seR	= ($_POST["R_".str_replace("skModule","",$tCampo)] ? "'R'" : "NULL");
+											$seW	= ($_POST["W_".str_replace("skModule","",$tCampo)] ? "'W'" : "NULL");
+											$seD	= ($_POST["D_".str_replace("skModule","",$tCampo)] ? "'D'" : "NULL");
+											
+										if($_POST["R_".str_replace("skModule","",$tCampo)]){
+										/*$select = "INSERT INTO  _modules_profiles_permissions (skModule,skProfiles,skPermissions) VALUES (".$skModule.",'".$this->skProfiles."',".$seR.") ";*/
+											  $datos = "(".$skModule.",'".$this->skProfiles."',".$seR.")";
+ 											   parent::createPermissions($datos);
+													//$result=mysqli_query($this->cxsis,$select);
+											}
+											if($_POST["W_".str_replace("skModule","",$tCampo)]){
+												$datos = "(".$skModule.",'".$this->skProfiles."',".$seW.")";
+ 											   parent::createPermissions($datos);
+ 													//$result=mysqli_query($this->cxsis,$select);
+											}
+											if($_POST["D_".str_replace("skModule","",$tCampo)]){
+													$datos = "(".$skModule.",'".$this->skProfiles."',".$seW.")";
+													parent::createPermissions($datos);
+													//$result=mysqli_query($this->cxsis,$select);
+ 											}
+										}
+								}
+                                 
+                                die();
+                                                       
+                                
+                                
+                                
+                                $this->data['success'] = true;
+                                $this->data['message'] = 'Registro insertado con &eacute;xito.';
+                                $this->skProfiles = $this->skProfiles;
+                                $this->data['datos'] = parent::read_profile();
+                                
+                             
+                            }else{
+                                $this->data['error'] = true;
+                                $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
+                            }
+                        }
+                    	 
+                        $this->sName 	= $_POST['sName'];
                         $this->skStatus = $_POST['skStatus'];
                         $id = parent::create_profile();
                         if($id){
