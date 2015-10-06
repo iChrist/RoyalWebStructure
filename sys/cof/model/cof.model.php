@@ -67,6 +67,7 @@
                     return false;
                 }
             }
+            
             public function read_user(){
                 $sql = "SELECT _users.*, _status.sName AS status, _status.sHtml  
 						FROM _users 
@@ -104,6 +105,7 @@
                     }
                 }
             }
+            
             public function read_user_profile(){
 					$sql = "SELECT * FROM _users_profiles  WHERE 1=1 AND skUsers = '".$this->skUsers."' ";
 			    $result = $this->db->query($sql);
@@ -227,9 +229,8 @@
             
             
            public function create_profile(){
-                        $sql="SELECT REPLACE(uuid(),'-','') AS uuid"; 
-                        $this->skProfiles = $this->db->query($sql)->fetch_assoc();
-                        $sql= "INSERT INTO _profiles (skProfiles,sName,skStatus) VALUES ('".$this->skProfiles['uuid']."','$this->sName','$this->skStatus')";
+           				 $this->skProfiles = substr(md5(microtime()), 0, 32);
+                         $sql= "INSERT INTO _profiles (skProfiles,sName,skStatus) VALUES ('".$this->skProfiles."','".$this->sName."','".$this->skStatus."')";
 			$result = $this->db->query($sql);
 			if ($result) {
 				return $this->skProfiles;
@@ -239,7 +240,7 @@
 		}
 		
 		
-		public function count_profile(){
+           public function count_profile(){
                 $sql = "SELECT COUNT(*) AS total FROM _profiles WHERE 1=1 ";
                 if(!empty($this->skProfiles)){
                     $sql .= " AND skProfiles = '".$this->skProfiles."' ";
@@ -259,7 +260,8 @@
                     }
                 }
             }
-		 public function read_filter_profile(){
+           
+           public function read_filter_profile(){
                 $sql = "SELECT _profiles.*, _status.sName AS status, _status.sHtml  FROM _profiles INNER JOIN _status ON _status.skStatus = _profiles.skStatus WHERE 1=1 ";
                 if(!empty($this->skProfiles)){
                     $sql .= " AND skUsers = '$this->skProfiles' ";
@@ -288,11 +290,12 @@
                 }
             }
 
-		 public function read_profile(){
+           public function read_profile(){
                 $sql = "SELECT _profiles.*, _status.sName AS status, _status.sHtml  FROM _profiles INNER JOIN _status ON _status.skStatus = _profiles.skStatus WHERE 1=1 ";
                 if(!empty($this->skProfiles)){
                     $sql .= " AND skProfiles = '".$this->skProfiles."' ";
                 }
+                
                 if(!empty($this->profiles['sName'])){
                     $sql .= " AND sName = '".$this->profiles['sName']."'";
                 }
@@ -303,6 +306,8 @@
                         $sql .= " LIMIT ".$this->profiles['limit'];
                     }
                 }
+               /* echo $sql;
+                die();*/
                 $result = $this->db->query($sql);
                 if($result){
                     if($result->num_rows > 0){
@@ -314,17 +319,21 @@
             }
             
 
-		public function update_profile(){
-			$sql="UPDATE _profiles SET sName='$this->sName', skStatus='$this->skStatus' WHERE skProfiles='$this->skProfiles'";
-			$result = $this->db->query($sql);
-			if ($result) {
-				return true;
-			}else{
-				return false;
-			}
+           public function update_profile(){
+			 $sql = "	UPDATE _profiles 
+						SET sName='$this->sName', 
+ 						skStatus='$this->skStatus' 
+						WHERE skProfiles = '$this->skProfiles' ";
+                $result = $this->db->query($sql);
+                if($result){
+                    return true;
+                }else{
+                    return false;
+                }
+
 		}
 
-		public function delete_profile(){
+           public function delete_profile(){
 			$sql="UPDATE _profiles SET skStatus='$this->skStatus' WHERE skProfiles='$this->skProfiles'";
 			$result = $this->db->query($sql);
 			if ($result) {
@@ -334,7 +343,7 @@
 			}
 		}
 
-		public function consulta_Profile(){
+           public function consulta_Profile(){
 			 $sql = "SELECT pr.*
 				FROM _users us
 				INNER JOIN _users_profiles usp ON usp.skUsers = us.skUsers
@@ -350,11 +359,10 @@
 				return false;
 			}
 		}
-                
-                
-                
-                public function createDetail($valores)
-                {
+           
+           
+                  
+           public function createDetail($valores) {
                     $sql = "INSERT INTO _users_profiles (skUsers, skProfiles ) VALUES ".$valores."";
                     $result = $this->db->query($sql);
                     if($result){
@@ -363,5 +371,16 @@
                         return false;
                     }
                 }
+                public function createPermissions($datos) {
+                    $sql = "INSERT INTO _modules_profiles_permissions (skModule, skProfiles,skPermissions ) VALUES ".$datos."";
+                    echo $sql;
+                    $result = $this->db->query($sql);
+                    if($result){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                }
+          
 	}
 ?>

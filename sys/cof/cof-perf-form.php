@@ -1,18 +1,55 @@
-<?php 
-/*echo $data['msg']; 
-if($data['datos']){
-    $result = $data['datos']->fetch_assoc();
-}*/
+<?php
+	/*echo "<pre>";
+	print_r($arrayPerfilesUsuarios);
+	echo "</pre>";*/
+
+    if($data['datos'])
+    {
+        $result = $data['datos']->fetch_assoc();
+    }
+	if($data['datosPerfiles'])
+    {
+        $arrayPerfiles = $data['datosPerfiles'];
+    }
+    if($data['error'])
+    {
 ?>
- 
+        <div class="alert alert-danger display-hide" style="display: block;">
+            <button data-close="alert" class="close"></button>
+            <?php echo $data['message']; ?>
+        </div>
+<?php
+    } // ENDIF
+    if($data['success'])
+    {
+?>
+        <div class="alert alert-success display-hide" style="display: block;">
+            <button data-close="alert" class="close"></button>
+            <?php echo $data['message']; ?>
+        </div>
+<?php
+    } // ENDIF
+?>
 <form id="_save" method="post" class="form-horizontal form-bordered form-row-stripped" role="form">
 
-
+	<input type="hidden" name="skProfiles" value="<?php echo (isset($result['skProfiles'])) ? $result['skProfiles'] : '' ; ?>">
     <div class="form-body">
+    
+    <!-- Alerta de mensajes-->
+            <div class="alert alert-danger display-hide">
+                <button class="close" data-close="alert"></button>
+                Usted tiene algunos errores en el formulario. Por favor, consulte m&aacute;s abajo.
+            </div>
+            <div class="alert alert-success display-hide">
+                <button class="close" data-close="alert"></button>
+                Validaci&oacute;n del formulario exitoso!
+            </div>
+            
+    
         <div class="form-group">
             <label class="col-md-2 control-label">Nombre</label>
             <div class="col-md-4">
-                <input type="text" name="sName" class="form-control" placeholder="Nombre Perfil" value="">                                            
+                <input type="text" name="sName" class="form-control" placeholder="Nombre Perfil" value="<?php echo (isset($result['sName'])) ? utf8_encode($result['sName']) : '' ; ?>">                                            
             </div>
         </div> 
         <div class="form-group">
@@ -20,10 +57,10 @@ if($data['datos']){
             <div class="col-md-4">
                 <div class="radio-list">
                     <label>
-                        <input type="radio" name="skStatus" id="optionsRadios22" value="AC" checked> Activo
+                        <input type="radio" name="skStatus" id="optionsRadios22" value="AC"  <?php echo (isset($result['skStatus']) && $result['skStatus'] == 'AC') ? 'checked' : '' ; ?> checked="checked"> Activo
                     </label>
                     <label>
-                        <input type="radio" name="skStatus" id="optionsRadios23" value="IN" > Inactivo
+                        <input type="radio" name="skStatus" id="optionsRadios23" value="IN" <?php echo (isset($result['skStatus']) && $result['skStatus'] == 'IN') ? 'checked' : '' ; ?>> Inactivo
                     </label>
                 </div>
                 
@@ -36,7 +73,7 @@ if($data['datos']){
           	 
           	 <?php 		
 
-		$select = "CALL stpMapSite('sys-func',0,'',NULL);";
+		$select = "CALL stpMapSite('sys-func',0,'".$result['skProfiles']."',NULL);";
 			//echo $select;
  			$result = $this->db->query($select);
                     
@@ -88,7 +125,7 @@ if($data['datos']){
 				(trim($rSeccion{'sTitle'})!="-" ? ($rSeccion{'eNivel'}==1 ? "<p>" : "<p>").($rSeccion{'eNivel'}==0 ? " " : '').
 				//(trim($rSeccion{'sTitle'})!="-" ? "<label>".
  				"<input type=\"hidden\" name=\"eSeccion".$i."\" id=\"eSeccion".$i."\" value=\"".$rSeccion{'sCodSeccion'}."\" >
- 				<input type=\"checkbox\"  name=\"skModule".$i."\" id=\"skModule".$i."\" onclick=\"marcarHijos(this);\"".
+ 				<input type=\"checkbox\"  name=\"skModule".$i."\" id=\"skModule".$i."\"   ".
  				
 				(!$rSeccion{'peR'}&&!$rSeccion{'peW'}&&!$rSeccion{'peD'}&&!$rSeccion{'peA'}  ? "" : "checked=\"checked\"")." value=\"".$contadorSeccion."\" /><label class='text-muted' for=\"skModule".$i."\"  id=\"skModule".$i."\" >" : "").
 				
@@ -99,17 +136,26 @@ if($data['datos']){
  				(trim($rSeccion{'sTitle'})!="-" ? ($rSeccion{'eNivel'}==1 ? "</label></p>" : "</label></p>") : "").
 				"</div>".
  				"<div class='col-sm-1 col-xs-1 '><p>"."".(trim($rSeccion{'sTitle'})!="-" ? "<input type=\"checkbox\" name=\"R_".$i."\" id=\"R_".$i."\" ".($rSeccion{'seR'} ? "" : "disabled=\"disabled\"")." ". 
- 				(!$rSeccion{'peR'} ? "" : "checked=\"checked\"")." value=\"R\" onclick=\"marcarPadre(this);\" /><label for=\"R_".$i."\">&nbsp; R</label>" : "")."</p></div>".
+ 				(!$rSeccion{'peR'} ? "" : "checked=\"checked\"")." value=\"R\" /><label for=\"R_".$i."\">&nbsp; R</label>" : "")."</p></div>".
  				
  				"<div class='col-sm-1 col-xs-1 '><p>".(trim($rSeccion{'sTitle'})!="-" ? "<input type=\"checkbox\" name=\"W_".$i."\" id=\"W_".$i."\" ".($rSeccion{'seW'} ? " " : "   disabled=\"disabled\"")." ".
-				(!$rSeccion{'peW'} ? "" : "checked=\"checked\"")." value=\"W\" onclick=\"marcarPadre(this);\" /><label for=\"W_".$i."\"> &nbsp;W</label>" : "")."</p></div>".
+				(!$rSeccion{'peW'} ? "" : "checked=\"checked\"")." value=\"W\" /><label for=\"W_".$i."\"> &nbsp;W</label>" : "")."</p></div>".
+				
+				"<div class='col-sm-1 col-xs-1 '>
+				<p>".(trim($rSeccion{'sTitle'})!="-" ? "
+				<input type=\"checkbox\"  name=\"D_".$i."\" id=\"D_".$i."\" ".($rSeccion{'seD'} ? "" : "  disabled=\"disabled\"")." ".
+					(!$rSeccion{'peD'} ? "" : "checked=\"checked\"")." value=\"D\" />
+				<label for=\"D_".$i."\"> &nbsp;D</label>" : "")."
+				</p>
+				</div>".
+				
+				/* 
+				onclick=\"marcarHijos(this);\"
+				onChange=\"marcarPadre(this);\"  */
 				
 				"<div class='col-sm-1 col-xs-1 '><p>".(trim($rSeccion{'sTitle'})!="-" ? "
-				<input type=\"checkbox\"  name=\"D_".$i."\" id=\"D_".$i."\" ".($rSeccion{'seD'} ? "" : "  disabled=\"disabled\"")." ".
-				(!$rSeccion{'peD'} ? "" : "checked=\"checked\"")." value=\"D\" onclick=\"marcarPadre(this);\" /><label for=\"D_".$i."\"> &nbsp;D</label>" : "")."</p></div>".
-				"<div class='col-sm-1 col-xs-1 '><p>".(trim($rSeccion{'sTitle'})!="-" ? "
 				<input type=\"checkbox\"  name=\"A_".$i."\" id=\"A_".$i."\" ".($rSeccion{'seA'} ? "" : "  disabled=\"disabled\"")." ".
-				(!$rSeccion{'peA'} ? "" : "checked=\"checked\"")." value=\"A\" onclick=\"marcarPadre(this);\" /><label for=\"A_".$i."\"> &nbsp;A</label>" : "")."</p></div>".
+				(!$rSeccion{'peA'} ? "" : "checked=\"checked\"")." value=\"A\"  /><label for=\"A_".$i."\"> &nbsp;A</label>" : "")."</p></div>".
 
  								  
 				"</div>";
@@ -134,8 +180,84 @@ if($data['datos']){
         </div>
     </div>
 </form>
+
  <script type="text/javascript">
-  	 function marcarPadre(hijo)
+  	$(document).ready(function(){
+        
+        var form = $('#_save');
+        var error = $('.alert-danger', form);
+        var success = $('.alert-success', form);
+        
+        $("#_save").validate({
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            ignore: "",
+
+            rules:{
+                sName:{
+                    required: true,
+                }
+            },
+            
+            invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar              
+                success.hide();
+                error.show();
+                App.scrollTo(error, -200);
+            },
+            
+            errorPlacement: function (error, element) { // hacer la colocación de error para cada tipo de entrada
+                var icon = $(element).parent('.input-icon').children('i');
+                icon.removeClass('fa-check').addClass("fa-warning");  
+                icon.attr("data-original-title", error.text()).tooltip({'container': 'body'});
+                
+                if (element.parent(".input-group").size() > 0) {
+                    error.insertAfter(element.parent(".input-group"));
+                } else if (element.attr("data-error-container")) { 
+                    error.appendTo(element.attr("data-error-container"));
+                } else if (element.parents('.radio-list').size() > 0) { 
+                    error.appendTo(element.parents('.radio-list').attr("data-error-container"));
+                } else if (element.parents('.radio-inline').size() > 0) { 
+                    error.appendTo(element.parents('.radio-inline').attr("data-error-container"));
+                } else if (element.parents('.checkbox-list').size() > 0) {
+                    error.appendTo(element.parents('.checkbox-list').attr("data-error-container"));
+                } else if (element.parents('.checkbox-inline').size() > 0) { 
+                    error.appendTo(element.parents('.checkbox-inline').attr("data-error-container"));
+                } else {
+                    error.insertAfter(element); // Para otros insumos, sólo realizar comportamiento predeterminado (llamar messages)
+                }
+                
+            },
+            
+            highlight: function (element) { // entradas de error Hightlight
+                $(element)
+                    .closest('.form-group').addClass('has-error'); // conjunto de clases de error
+            },
+            unhighlight: function (element) { // revertir el cambio realizado por hightlight
+            },
+            
+            success: function (label, element) {
+                var icon = $(element).parent('.input-icon').children('i');
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // conjunto de clases de éxito con el grupo control
+                icon.removeClass("fa-warning").addClass("fa-check");
+                
+                
+            },
+            
+            messages:{
+                sName:{
+                    required: "Campo obligatorio.",
+                    // lettersonly: "Solo se aceptan letras en el campo 'Nombre Completo'."
+                }
+                
+            }
+    
+        });
+    }); 
+
+
+/*
+		    function marcarPadre(hijo)
 	{
     		var bSeleccionado=false;
 			id = hijo.id.replace(hijo.value+"_","");
@@ -146,12 +268,16 @@ if($data['datos']){
   			
   				 bSeleccionado=true;
    			}
+   		//	alert(1);
+   				
       			 document.getElementById(padre).checked = bSeleccionado; 
      			 			
  	}
- 	
- 	
-	
+ 	*/
+
+		 /*
+		   
+  	
 	 	function marcarHijos(padre)
 		{ 
   	var bSeleccionado=false;
@@ -235,55 +361,9 @@ if($data['datos']){
 				}
  			marcarHermanos(nid);
 			}
-	}
-
-		   $(document).ready(function(){
+	}*/
+	
+	  $(document).ready(function(){
 		   
- 			   /*$('a#guardarPerfil').click( function() {
- 			$("a#guardarPerfil").hide();
-			$("a#guardarPerfilConfirmar").show();
-  		 });
-												$('a#guardarPerfilConfirmar').click( function() {
-													$("a#guardarPerfilConfirmar").hide();
-														$("a#cargadorPerfil").show();
-													bandera = false;
-													if(!$("#tCodPerfil").val()){
-																  bandera = true;
-															 }
- 										if (bandera==true){
-														$("#msjError").hide();
-														$("#msjError").show();
-														$("#msjError").delay(4000).hide("blind", 600);
-														setTimeout(function(){
-														$("a#cargadorPerfil").hide();
-															$("a#guardarPerfil").show();
-																 }, 4000); 
-										}else{  
-											$("a#cargadorPerfil").show();
-												 $.ajax({
-														url: '/des/cnt/principal.controller.php',
-														type: 'post',
-														cache: false,
-														data: $('form#Datos').serialize(),
-														success: function(data) {
-															$("a#cargadorPerfil").show();
-															if(data == 1){
-																	$("#msjAlert").hide();
-																	$("#msjExito").show();
-																	$("#msjExito").delay(4000).hide("blind", 600);
-																	setTimeout(function(){
-																			window.location.href = "/web/inic-perf/perfiles/";				
-																	 }, 2000); 
-																	 } else {
-																		  $("a#cargadorPerfil").hide();
-																		 $("a#guardarPerfil").show();
-																		$("#msjAlert").hide();
-																		$("#msjAlert").show();
-																		$("#msjAlert").delay(4000).hide("blind", 600);
-																  }
-																 }
-													});
-										}
-										}); */	
 			});
 </script>
