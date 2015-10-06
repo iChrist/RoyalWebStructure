@@ -130,20 +130,16 @@
                                             $result = $this->db->query($sql);
                                             if($result){
                                                 if($result->num_rows > 0){
-                                                    // VERIFICA LOS PERMISOS DEL USUARIO AUTENTICADO.
-                                                    $_secutiry['_modules_profiles_permissions'] = $this->getModulesProfilesPermissions();
-                                                    /*if(!empty($_secutiry['_modules_profiles_permissions'])){
-                                                        if(array_key_exists('R' , $_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$_SESSION['session']['skProfile']])){
-                                                            $this->require_view(TRUE);
-                                                            $sysModule_model->$sysFunction();
-                                                        }else{
-                                                            $this->require_view(FALSE);
-                                                        }
+                                                    // VERIFICA EL ACCESSO AL MODULO DEL USUARIO AUTENTICADO.
+                                                    if($this->verify_access()){
+                                                        $this->require_view(TRUE);
+                                                        $sysModule_model->$sysFunction();
                                                     }else{
                                                         $this->require_view(FALSE);
-                                                    }*/
-                                                    $this->require_view(TRUE);
-                                                    $sysModule_model->$sysFunction();
+                                                        $text = "No tienes permisos para este m&oacute;dulo.";
+                                                        $this->_error($text,500);
+                                                        die();
+                                                    }
                                                 }else{
                                                     // VERIFICA LOS PERMISOS DEL USUARIO AUTENTICADO.
                                                     $this->require_view(FALSE);
@@ -181,9 +177,9 @@
 		protected function load_view($view = "index", $data = array() , $templates = TRUE, $path = NULL){
 			if(file_exists(SYS_PATH.$_GET["sysModule"]."/".$view.".php")){
 				if($templates){
-                                        $_secutiry['_users_profiles'] = $this->getUsersProfiles();
+                                        /*$_secutiry['_users_profiles'] = $this->getUsersProfiles();
                                         $_secutiry['_modules_profiles_permissions'] = $this->getModulesProfilesPermissions();
-                                        $_buttons = $this->getModulesButtons();
+                                        $_buttons = $this->getModulesButtons();*/
                                         
 					require_once(CORE_PATH."stage/header.php");
                                         require_once(CORE_PATH."stage/buttons.php");
@@ -222,6 +218,7 @@
                             ,'sFunction' => $row['sFunction']
                             ,'sScript' => isset($row['sScript']) ? htmlentities($row['sScript'],ENT_QUOTES) : ''
                             ,'iPosition' => $row['iPosition']
+                            ,'iPlace' => $row['iPlace']
                         );
                     }
                     mysqli_free_result($result);
@@ -229,6 +226,63 @@
                     return $data;
                 }
                 
+                protected function printModulesButtons($iPlace = 1,$replace = array()){
+                    $_secutiry['_users_profiles'] = $this->getUsersProfiles();
+                    $_secutiry['_modules_profiles_permissions'] = $this->getModulesProfilesPermissions();
+                    $_buttons = $this->getModulesButtons();
+                    $sHtml = '';
+                    $sScript = '';
+                    if(!empty($_buttons) && count($_buttons) > 0){
+                        if($_SESSION['session']['sGroup'] === 'A'){
+                            for($i=1;$i<=count($_buttons);$i++){
+                                if($_buttons[$i]['iPlace'] == $iPlace ){
+                                    if(count($replace) > 0){
+                                        if(preg_match_all('/\{\{(.*?)\}\}/', $_buttons[$i]['sHtml'], $search) !== FALSE){
+                                            $_buttons[$i]['sHtml'] = str_replace($search[0], $replace, $_buttons[$i]['sHtml']);
+                                        }
+                                    }
+                                    $sHtml .= html_entity_decode($_buttons[$i]['sHtml'],ENT_QUOTES);
+                                    $sScript .= html_entity_decode($_buttons[$i]['sScript'],ENT_QUOTES);
+                                }
+                            }
+                        }else{
+                            if(!empty($_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$_SESSION['session']['skProfile']])){
+                                for($i=1;$i<=count($_buttons);$i++){
+                                    if(array_key_exists($_buttons[$i]['skPermissions'] , $_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$_SESSION['session']['skProfile']])){
+                                        if($_buttons[$i]['iPlace'] == $iPlace ){
+                                            if(count($replace) > 0){
+                                                if(preg_match_all('/\{\{(.*?)\}\}/', $_buttons[$i]['sHtml'], $search) !== FALSE){
+                                                    $_buttons[$i]['sHtml'] = str_replace($search[0], $replace, $_buttons[$i]['sHtml']);
+                                                }
+                                            }
+                                            $sHtml .= html_entity_decode($_buttons[$i]['sHtml'],ENT_QUOTES);
+                                            $sScript .= html_entity_decode($_buttons[$i]['sScript'],ENT_QUOTES);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return array('sHtml' => $sHtml, 'sScript' => $sScript);
+                }
+                
+                protected function verify_access($skPermissions = 'R'){
+                    $_secutiry['_modules_profiles_permissions'] = $this->getModulesProfilesPermissions();
+                    if($_SESSION['session']['sGroup'] === 'A'){
+                        return true;
+                    }else{
+                        if(!empty($_secutiry['_modules_profiles_permissions'])){
+                            if(array_key_exists($skPermissions , $_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$_SESSION['session']['skProfile']])){
+                                return true;
+                            }else{
+                                return false;
+                            }
+                        }else{
+                            return false;
+                        }
+                    }
+                }
+
                 protected function getUsersProfiles(){
                     $sql = "SELECT up.skProfiles, p.sName FROM _users_profiles AS up
                         INNER JOIN _profiles AS p ON p.skProfiles = up.skProfiles
