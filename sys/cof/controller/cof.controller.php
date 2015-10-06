@@ -73,8 +73,6 @@
                         echo json_encode($records);
                         return false;
                     }
-                    //echo 'HOOOOOOOLAAAAAA!';
-                    //var_dump($this->printModulesButtons(2,array('')));
                     $this->data['status'] = parent::read_status();
                     $this->load_view('cof-usua-con', $this->data);
                 }
