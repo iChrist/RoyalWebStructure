@@ -189,6 +189,20 @@
                     }
                     $this->load_view('cof-usua-form', $this->data);
                 }
+                
+                
+                public function cof_usua_det(){
+                    $this->data['datos'] = false;
+                    $this->data['profiles'] = parent::read_profile(); // Mandamos a llamar todos los perfiles para cargarlos en la vista
+                    if($_GET['p1'])
+                    {
+                        $this->skUsers = $_GET['p1'];
+                        $this->data['datos'] = parent::read_user();
+                        $this->data['perfilesusuarios'] = parent::read_user_profile();
+                    }
+                    $this->load_view('cof-usua-det', $this->data);
+                }
+                
                 /* TERMINA MODULO USUARIOS */
                 
 	        public function cof_perf_con(){
