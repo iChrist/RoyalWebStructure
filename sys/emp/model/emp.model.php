@@ -4,8 +4,8 @@
             // PUBLIC VARIABLES //
                 public $areas = array(
                     'skAreas'       =>  ''
-                    ,'nombre'       =>  ''
-                    ,'correo'       =>  ''
+                    ,'sNombre'       =>  ''
+                    ,'sCorreo'       =>  ''
                     ,'skStatus'     =>  ''
                     ,'limit'        =>  ''
                     ,'offset'       =>  ''
@@ -28,14 +28,14 @@
                 if(!empty($this->areas['skAreas'])){
                     $sql .=" AND skAreas = '".$this->areas['skAreas']."'";
                 }
-                if(!empty($this->areas['nombre'])){
-                    $sql .=" AND nombre like '%".$this->areas['nombre']."%'";
+                if(!empty($this->areas['sNombre'])){
+                    $sql .=" AND sNombre like '%".$this->areas['sNombre']."%'";
                 }
-                if(!empty($this->areas['correo'])){
-                    $sql .=" AND correo like '%".$this->areas['correo']."%'";
+                if(!empty($this->areas['sCorreo'])){
+                    $sql .=" AND sCorreo like '%".$this->areas['sCorreo']."%'";
                 }
                 if(!empty($this->areas['skStatus'])){
-                    $sql .=" AND skStatus like '%".$this->areas['skStatus']."%'";
+                    $sql .=" AND areas.skStatus like '%".$this->areas['skStatus']."%'";
                 }
                 $result = $this->db->query($sql);
                 if($result){
@@ -52,20 +52,20 @@
                 if(!empty($this->areas['skAreas'])){
                     $sql .=" AND skAreas = '".$this->areas['skAreas']."'";
                 }
-                if(!empty($this->areas['nombre'])){
-                    $sql .=" AND nombre = '".$this->areas['nombre']."'";
+                if(!empty($this->areas['sNombre'])){
+                    $sql .=" AND sNombre = '".$this->areas['sNombre']."'";
                 }
-                if(!empty($this->areas['correo'])){
-                    $sql .=" AND correo = '".$this->areas['correo']."'";
+                if(!empty($this->areas['sCorreo'])){
+                    $sql .=" AND sCorreo = '".$this->areas['sCorreo']."'";
                 }
                 if(!empty($this->areas['skStatus'])){
-                    $sql .=" AND skStatus = '".$this->areas['skStatus']."'";
+                    $sql .=" AND areas.skStatus = '".$this->areas['skStatus']."'";
                 }
-                if(is_int($this->users['limit'])){
-                    if(is_int($this->users['offset'])){
-                        $sql .= " LIMIT ".$this->users['offset']." , ".$this->users['limit'];
+                if(is_int($this->areas['limit'])){
+                    if(is_int($this->areas['offset'])){
+                        $sql .= " LIMIT ".$this->areas['offset']." , ".$this->areas['limit'];
                     }else{
-                        $sql .= " LIMIT ".$this->users['limit'];
+                        $sql .= " LIMIT ".$this->areas['limit'];
                     }
                 }
                 $result = $this->db->query($sql);
@@ -83,20 +83,20 @@
                 if(!empty($this->areas['skAreas'])){
                     $sql .=" AND skAreas = '".$this->areas['skAreas']."'";
                 }
-                if(!empty($this->areas['nombre'])){
-                    $sql .=" AND nombre like '%".$this->areas['nombre']."%'";
+                if(!empty($this->areas['sNombre'])){
+                    $sql .=" AND sNombre like '%".$this->areas['sNombre']."%'";
                 }
-                if(!empty($this->areas['correo'])){
-                    $sql .=" AND correo like '%".$this->areas['correo']."%'";
+                if(!empty($this->areas['sCorreo'])){
+                    $sql .=" AND sCorreo like '%".$this->areas['sCorreo']."%'";
                 }
                 if(!empty($this->areas['skStatus'])){
-                    $sql .=" AND skStatus like '%".$this->areas['skStatus']."%'";
+                    $sql .=" AND areas.skStatus like '%".$this->areas['skStatus']."%'";
                 }
-                if(is_int($this->users['limit'])){
-                    if(is_int($this->users['offset'])){
-                        $sql .= " LIMIT ".$this->users['offset']." , ".$this->users['limit'];
+                if(is_int($this->areas['limit'])){
+                    if(is_int($this->areas['offset'])){
+                        $sql .= " LIMIT ".$this->areas['offset']." , ".$this->areas['limit'];
                     }else{
-                        $sql .= " LIMIT ".$this->users['limit'];
+                        $sql .= " LIMIT ".$this->areas['limit'];
                     }
                 }
                 $result = $this->db->query($sql);
@@ -110,30 +110,37 @@
             }
             
             public function create_areas(){
-                $sql = "SELECT * FROM areas";
+                $sql = "INSERT INTO areas (skAreas,sNombre,sCorreo,skStatus) VALUES ('".$this->areas['skAreas']."','".$this->areas['sNombre']."','".$this->areas['sCorreo']."','".$this->areas['skStatus']."')";
                 $result = $this->db->query($sql);
                 if($result){
-                    if($result->num_rows > 0){
-                        return $result;
-                    }else{
-                        return false;
-                    }
+                    return $this->areas['skAreas'];
+                }else{
+                    return false;
                 }
             }
             
             public function update_areas(){
-                $sql = "SELECT * FROM areas";
+                $sql = "UPDATE areas SET ";
+                if(!empty($this->areas['sNombre'])){
+                    $sql .=" sNombre = '".$this->areas['sNombre']."' ,";
+                }
+                if(!empty($this->areas['sCorreo'])){
+                    $sql .=" sCorreo = '".$this->areas['sCorreo']."' ,";
+                }
+                if(!empty($this->areas['skStatus'])){
+                    $sql .=" skStatus = '".$this->areas['skStatus']."' ,";
+                }
+                $sql .= " skAreas = '".$this->areas['skAreas']."' WHERE skAreas = '".$this->areas['skAreas']."' LIMIT 1";
                 $result = $this->db->query($sql);
                 if($result){
-                    if($result->num_rows > 0){
-                        return $result;
-                    }else{
-                        return false;
-                    }
+                    return $this->areas['skAreas'];
+                }else{
+                    return false;
                 }
             }
+            
             public function delete_areas(){
-                $sql = "SELECT * FROM areas";
+                $sql = "UPDATE areas SET skStatus = 'DE' WHERE skAreas = '".$this->areas['skAreas']."' LIMIT 1 ";
                 $result = $this->db->query($sql);
                 if($result){
                     if($result->num_rows > 0){

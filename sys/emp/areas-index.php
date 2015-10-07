@@ -27,10 +27,10 @@
                         </tr>
                         <tr role="row" class="filter">
                             <td>
-                                <input type="text" class="form-control form-filter input-sm" name="sName" placeholder="Nombre">
+                                <input type="text" class="form-control form-filter input-sm" name="sNombre" placeholder="Nombre">
                             </td>
                             <td>
-                                <input type="text" class="form-control form-filter input-sm" name="sEmail" placeholder="Correo electr&oacute;nico">
+                                <input type="text" class="form-control form-filter input-sm" name="sCorreo" placeholder="Correo electr&oacute;nico">
                             </td>
                             <td>
                                 <select name="skStatus" class="form-control form-filter input-sm">

@@ -18,14 +18,14 @@
                     if(isset($_GET['axn']) && $_GET['axn'] == 'fetch_all'){
                         
                         // PARAMETROS PARA FILTRADO //
-                        if(isset($_POST['nombre'])){
-                            $this->users['nombre'] = $_POST['nombre'];
+                        if(isset($_POST['sNombre'])){
+                            $this->areas['sNombre'] = $_POST['sNombre'];
                         }
-                        if(isset($_POST['correo'])){
-                            $this->users['correo'] = $_POST['correo'];
+                        if(isset($_POST['sCorreo'])){
+                            $this->areas['sCorreo'] = $_POST['sCorreo'];
                         }
                         if(isset($_POST['skStatus'])){
-                            $this->users['skStatus'] = $_POST['skStatus'];
+                            $this->areas['skStatus'] = $_POST['skStatus'];
                         }
                         
                         // TOTAL DE REGISTROS EN LA TABLA //
@@ -39,8 +39,8 @@
                         // PAGINA //
                         $sEcho = intval($_REQUEST['draw']);
                         
-                        $this->users['limit'] = $iDisplayLength;
-                        $this->users['offset'] = $iDisplayStart;
+                        $this->areas['limit'] = $iDisplayLength;
+                        $this->areas['offset'] = $iDisplayStart;
                         $this->data['areas'] = parent::read_like_areas();
                         
                         $records = array();
@@ -51,10 +51,10 @@
                         
                         if($this->data['areas']){
                             while($row = $this->data['areas']->fetch_assoc()){
-                                $actions = $this->printModulesButtons(2,array($row['skUsers']));
+                                $actions = $this->printModulesButtons(2,array($row['skAreas']));
                                 $records["data"][] = array(
-                                    htmlentities(utf8_encode($row['nombre']), ENT_QUOTES)
-                                    ,htmlentities(utf8_encode($row['correo']), ENT_QUOTES)
+                                    htmlentities(utf8_encode($row['sNombre']), ENT_QUOTES)
+                                    ,htmlentities(utf8_encode($row['sCorreo']), ENT_QUOTES)
                                     ,utf8_encode($row['htmlStatus'])
                                     , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.$actions['sHtml'].'</ul></div>' : ''
                                     
@@ -78,11 +78,52 @@
                 }
                 
                 public function areas_form(){
-                    
+                    $this->data['message'] = '';
+                    $this->data['success'] = false;
+                    $this->data['error'] = false;
+                    $this->data['datos'] = false;
+                    if($_POST){
+                        
+                        if(isset($_POST['axn']) && $_POST['axn'] == 'validarEmail'){
+                            echo 'true';
+                            return true;
+                        }
+                        $this->areas['skAreas'] = !empty($_POST['skAreas']) ? $_POST['skAreas'] : substr(md5(microtime()), 1, 32);
+                        $this->areas['sNombre'] = $_POST['sNombre'];
+                        $this->areas['sCorreo'] = $_POST['sCorreo'];
+                        $this->areas['skStatus'] = $_POST['skStatus'];
+                        if(empty($_POST['skAreas'])){
+                            if(parent::create_areas()){
+                                $this->data['success'] = true;
+                                $this->data['message'] = 'Registro insertado con &eacute;xito.';
+                                $this->data['datos'] = parent::read_equal_areas();
+                            }else{
+                                $this->data['error'] = true;
+                                $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
+                                $this->data['datos'] = $_POST;
+                            }
+                        }else{
+                            if(parent::update_areas()){
+                                $this->data['success'] = true;
+                                $this->data['message'] = 'Registro actualizado con &eacute;xito.';
+                                $this->data['datos'] = parent::read_equal_areas();
+                            }else{
+                                $this->data['error'] = true;
+                                $this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
+                                $this->data['datos'] = $_POST;
+                            }
+                        }
+                    }
+                    if(isset($_GET['p1'])){
+                        $this->areas['skAreas'] = $_GET['p1'];
+                        $this->data['datos'] = parent::read_equal_areas();
+                    }
+                    $this->load_view('areas-form', $this->data);
+                    return true;
                 }
                 
                 public function areas_detail(){
-                    
+                   echo 'areas-detail'; 
                 }
                 /* TERMINA MODULO areas */
                 
