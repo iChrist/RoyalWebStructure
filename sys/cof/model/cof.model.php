@@ -60,6 +60,8 @@
             public function create(){
                 $this->skUsers = substr(md5(microtime()), 0, 32);
                 $sql = "INSERT INTO _users (skUsers,sName,sEmail,sUserName,sPassword,skStatus) VALUES ('$this->skUsers','$this->sName','$this->sEmail','$this->sUserName','$this->sPassword','$this->skStatus')";
+                echo $sql;
+                die();
                 $result = $this->db->query($sql);
                 if($result){
                     return $this->skUsers;

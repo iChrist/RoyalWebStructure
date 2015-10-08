@@ -7,10 +7,7 @@
     {
         $result = $data['datos']->fetch_assoc();
     }
-	if($data['datosPerfiles'])
-    {
-        $arrayPerfiles = $data['datosPerfiles'];
-    }
+ 
     if($data['error'])
     {
 ?>

@@ -139,6 +139,7 @@
                                 $this->data['error'] = true;
                                 $this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
                             }
+                            
                         }else{
                             $this->skUsers = substr(md5(microtime()), 1, 32); //Generación UUID.
                             $this->sName = $_POST['sName'];
@@ -240,13 +241,12 @@
                         
                         if($this->data['profiles']){
                             while($row = $this->data['profiles']->fetch_assoc()){
+                               $actions = $this->printModulesButtons(2,array($row['skProfiles']));
+
                                 $records["data"][] = array(
                                     htmlentities(utf8_encode($row['sName']), ENT_QUOTES)
                                       ,utf8_encode($row['sHtml'])
-                                    ,'<div aria-label="Acciones" role="group" class="btn-group btn-group-xs">'
-                                    . '<a href="javascript:;" class="btn btn-xs btn-default" title="Detalle"><i class="fa fa-eye"></i></a>'
-                                    . '<a href="javascript:;" class="btn btn-xs btn-default" title="Editar"><i class="fa fa-edit"></i></a>'
-                                    . '</div>'
+                                    , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.$actions['sHtml'].'</ul></div>' : ''
                                 );
                             }
                         }
