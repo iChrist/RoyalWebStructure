@@ -231,6 +231,8 @@
            public function create_profile(){
            				 $this->skProfiles = substr(md5(microtime()), 0, 32);
                          $sql= "INSERT INTO _profiles (skProfiles,sName,skStatus) VALUES ('".$this->skProfiles."','".$this->sName."','".$this->skStatus."')";
+                         //echo $sql;
+                         //die();
 			$result = $this->db->query($sql);
 			if ($result) {
 				return $this->skProfiles;
@@ -318,12 +320,14 @@
                 }
             }
             
-
+           
            public function update_profile(){
 			 $sql = "	UPDATE _profiles 
-						SET sName='$this->sName', 
- 						skStatus='$this->skStatus' 
-						WHERE skProfiles = '$this->skProfiles' ";
+						SET sName='".$this->sName."', 
+ 						skStatus='".$this->skStatus."' 
+						WHERE skProfiles = '".$this->skProfiles."' ";
+					//	echo $sql;
+						//die();
                 $result = $this->db->query($sql);
                 if($result){
                     return true;
@@ -373,6 +377,16 @@
                 }
                 public function createPermissions($datos) {
                     $sql = "INSERT INTO _modules_profiles_permissions (skModule, skProfiles,skPermissions ) VALUES ".$datos."";
+                    //echo $sql;
+                    $result = $this->db->query($sql);
+                    if($result){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                }
+                public function delete_permission_profile($profile){
+	                 $sql = " DELETE FROM _modules_profiles_permissions WHERE skProfiles = '".$profile."'";
                     echo $sql;
                     $result = $this->db->query($sql);
                     if($result){
@@ -380,6 +394,7 @@
                     }else{
                         return false;
                     }
+	                
                 }
           
 	}

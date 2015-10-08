@@ -30,6 +30,31 @@
 <?php
     } // ENDIF
 ?>
+<!--<div class="col-md-12">
+                    <div class="portlet green-meadow box">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-cogs"></i>Checkable Tree
+                            </div>
+                            <div class="tools">
+                                <a href="javascript:;" class="collapse">
+                                </a>
+                                <a href="#portlet-config" data-toggle="modal" class="config">
+                                </a>
+                                <a href="javascript:;" class="reload">
+                                </a>
+                                <a href="javascript:;" class="remove">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div id="tree_2" class="tree-demo">
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>-->
+                
 <form id="_save" method="post" class="form-horizontal form-bordered form-row-stripped" role="form">
 
 	<input type="hidden" name="skProfiles" value="<?php echo (isset($result['skProfiles'])) ? $result['skProfiles'] : '' ; ?>">

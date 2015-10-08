@@ -302,16 +302,57 @@
 	                        
 	                        
 	                    	 if(parent::update_profile()){
+	                    	 		parent::delete_permission_profile($_POST['skProfiles']);
+ 	                    	 		if($_POST['skProfiles']){
+		 	                            foreach($_POST as $tCampo => $tValor){
+												if(strstr($tCampo,"skModule")&&$tValor){ 
+													$skModule = "'".$_POST["eSeccion".str_replace("skModule","",$tCampo)]."'";
+													$seR	= ($_POST["R_".str_replace("skModule","",$tCampo)] ? "'R'" : "NULL");
+													$seW	= ($_POST["W_".str_replace("skModule","",$tCampo)] ? "'W'" : "NULL");
+													$seD	= ($_POST["D_".str_replace("skModule","",$tCampo)] ? "'D'" : "NULL");
+													$seA	= ($_POST["A_".str_replace("skModule","",$tCampo)] ? "'A'" : "NULL");
+													
+												if($_POST["R_".str_replace("skModule","",$tCampo)]){
+												/*$select = "INSERT INTO  _modules_profiles_permissions (skModule,skProfiles,skPermissions) VALUES (".$skModule.",'".$this->skProfiles."',".$seR.") ";*/
+													  $datos = "(".$skModule.",'".$_POST['skProfiles']."',".$seR.")";
+		 											   parent::createPermissions($datos);
+															//$result=mysqli_query($this->cxsis,$select);
+													}
+													if($_POST["W_".str_replace("skModule","",$tCampo)]){
+														$datos = "(".$skModule.",'".$_POST['skProfiles']."',".$seW.")";
+		 											   parent::createPermissions($datos);
+		 													//$result=mysqli_query($this->cxsis,$select);
+													}
+													if($_POST["D_".str_replace("skModule","",$tCampo)]){
+															$datos = "(".$skModule.",'".$_POST['skProfiles']."',".$seD.")";
+															parent::createPermissions($datos);
+															//$result=mysqli_query($this->cxsis,$select);
+		 											}
+		 											if($_POST["A_".str_replace("skModule","",$tCampo)]){
+															$datos = "(".$skModule.",'".$_POST['skProfiles']."',".$seA.")";
+															parent::createPermissions($datos);
+															//$result=mysqli_query($this->cxsis,$select);
+		 											}
+												}
+										}
+ 									}
+	                    	 
 	                                $this->data['success'] = true;
 	                                $this->data['message'] = 'Registro actualizado con &eacute;xito.';
+	                            
+	                            
+	                            
 	                            }else{
 	                                $this->data['error'] = true;
 	                                $this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
 	                            }
+	                          
+	                          //FALTA ELIMINAR TODOS LOS PERMISOS QUE TENGA Y DESPUES VOLVER A HACER EL INSERT DE LOS PERMISOS POR MODULO  
+	                            
+	                            
+	                            
                     	 }else{
-                    	 	echo "<PRE>";
-                    	 	print_r($_POST);
-                    	 	echo "</PRE>";
+                     
                     	 
                             $this->skProfiles = substr(md5(microtime()), 1, 32); //Generación UUID.
                             $this->sName 		= $_POST['sName'];
@@ -344,13 +385,7 @@
  											}
 										}
 								}
-                                 
-                                die();
-                                                       
-                                
-                                
-                                
-                                $this->data['success'] = true;
+                                  $this->data['success'] = true;
                                 $this->data['message'] = 'Registro insertado con &eacute;xito.';
                                 $this->skProfiles = $this->skProfiles;
                                 $this->data['datos'] = parent::read_profile();
@@ -359,17 +394,13 @@
                             }else{
                                 $this->data['error'] = true;
                                 $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
+                            
                             }
+                            
+                            
+                            
                         }
-                    	 
-                        $this->sName 	= $_POST['sName'];
-                        $this->skStatus = $_POST['skStatus'];
-                        $id = parent::create_profile();
-                        if($id){
-                            $this->data["msg"] = 'GUADADO CON EXITO';
-                        }else{
-                            $this->data["msg"] = 'ERROR AL GUARDAR';
-                        }
+                    	
                     }
                     if(!empty($_GET['p1'])){
                         $this->skProfiles = $_GET['p1'];
