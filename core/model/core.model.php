@@ -209,6 +209,7 @@
                     $result = $this->db->query($sql);
                     $data = array();
                     while($row = $result->fetch_assoc()){
+                        //array_push($data, array(
                         $data[$row['iPosition']] = array(
                             'skModule' => $row['skModule']
                             ,'sParentModule' => $row['sParentModule']
@@ -220,7 +221,9 @@
                             ,'iPosition' => $row['iPosition']
                             ,'iPlace' => $row['iPlace']
                         );
+                        //));
                     }
+                    //echo ('<pre>'.print_r($data,1).'</pre>');
                     mysqli_free_result($result);
                     mysqli_next_result($this->db);
                     return $data;
@@ -230,6 +233,8 @@
                     $_secutiry['_users_profiles'] = $this->getUsersProfiles();
                     $_secutiry['_modules_profiles_permissions'] = $this->getModulesProfilesPermissions();
                     $_buttons = $this->getModulesButtons();
+                    //echo '<pre>'.print_r($_secutiry,1).'</pre><hr>';
+                    //echo '<pre>'.print_r($_buttons,1).'</pre>';
                     $sHtml = '';
                     $sScript = '';
                     if(!empty($_buttons) && count($_buttons) > 0){
