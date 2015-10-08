@@ -36,6 +36,7 @@
 <link href="<?php echo SYS_URL; ?>core/assets/css/pages/tasks.css" rel="stylesheet" type="text/css"/>
 <link href="<?php echo SYS_URL; ?>core/assets/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color"/>
 <link href="<?php echo SYS_URL; ?>core/assets/css/custom.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo SYS_URL; ?>core/assets/plugins/jstree/dist/themes/default/style.min.css"/>
 <!-- END THEME STYLES -->
 <!-- BEGIN RoyalWeb CORE CSS -->
 <link href="<?php echo SYS_URL; ?>core/assets/css/core.css" rel="stylesheet" type="text/css"/>
@@ -65,7 +66,7 @@
 		<!-- END LOGO -->
 		<!-- BEGIN RESPONSIVE MENU TOGGLER -->
 		<a href="javascript:;" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-		<img src="assets/img/menu-toggler.png" alt=""/>
+		<img src="<?php echo SYS_URL; ?>core/assets/img/menu-toggler.png" alt=""/>
 		</a>
 		<!-- END RESPONSIVE MENU TOGGLER -->
 		<!-- BEGIN TOP NAVIGATION MENU -->
@@ -247,9 +248,6 @@
 				</li>
 					
 				<?php
-			 			/*	Array ( [0] => Array ( [skModule] => [iPosition] => 1 [sParentModule] => [sModule] => [sTitle] => Inicio [sIcons] => ) 
-						[1] => Array ( [skModule] => [iPosition] => 1 [sParentModule] => sys-func [sModule] => [sTitle] => Operaciones [sIcons] => icon-settings ) 
-						[2] => Array ( [skModule] => [iPosition] => 3 [sParentModule] => sys-func [sModule] => [sTitle] => Catalogos [sIcons] => fa fa-archive ) ) */
  				$sMenu="LAT";
  				//print_r($core->GetMenu($sMenu));
 				$array = $core->GetMenu($sMenu);
@@ -291,89 +289,7 @@
  					}				 
 				 				
 				?>
-				<!--<li class="start active ">
-					<a href="index.html">
-					<i class="icon-home"></i>
-					<span class="title">Inicio</span>
-					<span class="selected"></span>
-					</a>
-				</li>
-				<li >
-					<a href="javascript:;">
-					<i class="icon-settings"></i>
-					<span class="title">Opciones</span>
-					<span class="arrow "></span>
-					</a>
-					<ul class="sub-menu">
-						<li>
-							<a href="layout_sidebar_fixed.html">
-							<i class="icon-settings"></i>
-							Configuraci&oacute;n</a>
-						</li>
-						<li>
-							<a href="layout_sidebar_closed.html">
-							<i class="icon-book-open"></i>
-							Log de Mensajes</a>
-						</li>
-						<li>
-							<a href="layout_boxed_page.html">
-							<i class="icon-pin"></i>
-							Mensajes</a>
-						</li>
-					</ul>
-				</li>
-				<li >
-					<a href="javascript:;">
-					<i class="fa fa-archive"></i>
-					<span class="title">Catalogos</span>
-					<span class="arrow "></span>
-					</a>
-					<ul class="sub-menu">
-						<li>
-							<a href="ui_general.html">
-							Empresas</a>
-						</li>
-						<li>
-							<a href="ui_buttons.html">
-							Finanzas</a>
-						</li>
-					</ul>
-				</li>
-				<li >
-					<a href="javascript:;">
-					<i class="icon-settings"></i>
-					<span class="title">Operaciones</span>
-					<span class="arrow "></span>
-					</a>
-					<ul class="sub-menu">
-						<li>
-							<a href="form_controls.html">
-							Empresas</a>
-						</li>
-						<li>
-							<a href="form_layouts.html">
-							Finanzas</a>
-						</li>
-					</ul>
-				</li>
-				<li >
-					<a href="javascript:;">
-					<i class="icon-folder-alt"></i>
-					<span class="title">Consultas</span>
-					<span class="arrow "></span>
-					</a>
-					<ul class="sub-menu">
-						<li>
-							<a href="page_locked.html">
-							Empresas</a>
-						</li>
-						<li>
-							<a href="page_blog.html">
-							Finanzas</a>
-						</li>
-						
-					</ul>
-				</li>-->
+				
 			</ul>
 								<!-- END SIDEBAR MENU -->
 		</div>
