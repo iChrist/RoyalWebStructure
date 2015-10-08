@@ -26,10 +26,10 @@
             'DATABASE_DB' => 'royalweb_structure'
         )
     );
-    define('HOST_DB', $_db['localhost']['HOST_DB']);
-    define('USER_DB', $_db['localhost']['USER_DB']);
-    define('PASSWORD_DB', $_db['localhost']['PASSWORD_DB']);
-    define('DATABASE_DB', $_db['localhost']['DATABASE_DB']);
+    define('HOST_DB', $_db['sys']['HOST_DB']);
+    define('USER_DB', $_db['sys']['USER_DB']);
+    define('PASSWORD_DB', $_db['sys']['PASSWORD_DB']);
+    define('DATABASE_DB', $_db['sys']['DATABASE_DB']);
 // CORE CONFIGURATION //
     define('DEBUG', TRUE);
     if(!isset($_SESSION['sysRequireView'])){
