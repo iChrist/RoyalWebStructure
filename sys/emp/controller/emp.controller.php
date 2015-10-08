@@ -89,9 +89,9 @@
                             return true;
                         }
                         $this->areas['skAreas'] = !empty($_POST['skAreas']) ? $_POST['skAreas'] : substr(md5(microtime()), 1, 32);
-                        $this->areas['sNombre'] = $_POST['sNombre'];
-                        $this->areas['sCorreo'] = $_POST['sCorreo'];
-                        $this->areas['skStatus'] = $_POST['skStatus'];
+                        $this->areas['sNombre'] = utf8_decode($_POST['sNombre']);
+                        $this->areas['sCorreo'] = utf8_decode($_POST['sCorreo']);
+                        $this->areas['skStatus'] = utf8_decode($_POST['skStatus']);
                         if(empty($_POST['skAreas'])){
                             if(parent::create_areas()){
                                 $this->data['success'] = true;

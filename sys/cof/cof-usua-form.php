@@ -190,7 +190,7 @@
         var error = $('.alert-danger', form);
         var success = $('.alert-success', form);
         
-        $("#_save").validate({
+        /*$("#_save").validate({
             errorElement: 'span', //default input error message container
             errorClass: 'help-block', // default input error message class
             focusInvalid: false, // do not focus the last invalid input
@@ -315,13 +315,8 @@
                 sPassword:{
                     required: "Campo obligatorio.",
                 }
-                /*'skProfiles[]':{
-                    required: "Debe seleccionar al menos 1 perfil.",
-                    minlength: "Debe seleccionar al menos 1 perfil.",
-                    // maxlength: "No debe seleccionar mas de {0} perfiles."
-                }*/
             }
     
-        });
+        });*/
     }); 
 </script>

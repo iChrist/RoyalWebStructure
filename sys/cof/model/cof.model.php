@@ -60,7 +60,7 @@
             public function create(){
                 $this->skUsers = substr(md5(microtime()), 0, 32);
                 $sql = "INSERT INTO _users (skUsers,sName,sEmail,sUserName,sPassword,skStatus) VALUES ('$this->skUsers','$this->sName','$this->sEmail','$this->sUserName','$this->sPassword','$this->skStatus')";
-                echo $sql;
+                //echo $sql;
                 die();
                 $result = $this->db->query($sql);
                 if($result){
@@ -78,7 +78,7 @@
                 if(!empty($this->skUsersDistinto)){
                     $sql .= " AND skUsers <> '".$this->skUsersDistinto."' ";
                 }
-				echo $sql;
+			
 				if(!empty($this->skUsers)){
                     $sql .= " AND skUsers = '$this->skUsers' ";
                 }
@@ -160,16 +160,16 @@
             
             public function update(){
                 
-                $sql = "	UPDATE _users 
-						SET sName='$this->sName', 
-						SET sLastNamePaternal='$this->sLastNamePaternal', 
-						SET sLastNameMaternal='$this->sLastNameMaternal', 
-						sEmail='$this->sEmail', 
-						sUserName='$this->sUserName', 
-						sPassword='$this->sPassword', 
-						skStatus='$this->skStatus' 
-						WHERE skUsers = '$this->skUsers' ";
-                $result = $this->db->query($sql);
+                $sql = "UPDATE _users SET
+                    sName='$this->sName', 
+                    sLastNamePaternal='$this->sLastNamePaternal', 
+                    sLastNameMaternal='$this->sLastNameMaternal', 
+                    sEmail='$this->sEmail', 
+                    sUserName='$this->sUserName', 
+                    sPassword='$this->sPassword', 
+                    skStatus='$this->skStatus' 
+                    WHERE skUsers = '$this->skUsers' ";
+                $result = $this->db->query($sql); echo $sql;
                 if($result){
                     return true;
                 }else{
