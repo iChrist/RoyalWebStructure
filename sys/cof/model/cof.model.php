@@ -57,39 +57,37 @@
                 }
             }
             /**/
-            public function create(){
-                $this->skUsers = substr(md5(microtime()), 0, 32);
-                $sql = "INSERT INTO _users (skUsers,sName,sEmail,sUserName,sPassword,skStatus) VALUES ('$this->skUsers','$this->sName','$this->sEmail','$this->sUserName','$this->sPassword','$this->skStatus')";
-                //echo $sql;
-                die();
+            public function create_Users(){
+			$this->users['skUsers'] = substr(md5(microtime()), 0, 32);
+			$sql = "INSERT INTO _users (skUsers,sName,sLastNamePaternal,sLastNameMaternal,sEmail,sUserName,sPassword,skStatus) 
+			VALUES ('".$this->users['skUsers']."','".$this->users['sName']."','".$this->users['sLastNamePaternal']."','".$this->users['sLastNameMaternal']."','".$this->users['sEmail']."','".$this->users['sUserName']."','".$this->users['sPassword']."','".$this->users['skStatus']."')";
+              //  echo "<br><br><br><br><br>".$sql;
                 $result = $this->db->query($sql);
                 if($result){
-                    return $this->skUsers;
+                    return $this->users['skUsers'];
                 }else{
                     return false;
                 }
             }
-            
             public function read_user(){
                 $sql = "SELECT _users.*, _status.sName AS status, _status.sHtml  
 						FROM _users 
 						INNER JOIN _status ON _status.skStatus = _users.skStatus 
 						WHERE 1=1 ";
-                if(!empty($this->skUsersDistinto)){
-                    $sql .= " AND skUsers <> '".$this->skUsersDistinto."' ";
+                if(!empty($this->users['skUsersDistinto'])){
+                    $sql .= " AND _users.skUsers <> '".$this->users['skUsersDistinto']."' ";
                 }
-			
-				if(!empty($this->skUsers)){
-                    $sql .= " AND skUsers = '$this->skUsers' ";
+				if(!empty($this->users['skUsers'])){
+                    $sql .= " AND _users.skUsers ='".$this->users['skUsers']."' ";
                 }
-                if(!empty($this->users['sName'])){
-                    $sql .= " AND sName = '".$this->users['sName']."'";
+				if(!empty($this->users['sName'])){
+                    $sql .= " AND _users.sName = '".$this->users['sName']."'";
                 }
-                if(!empty($this->users['sEmail'])){
-                    $sql .= " AND sEmail = '".$this->users['sEmail']."'";
+				if(!empty($this->users['sEmail'])){
+                    $sql .= " AND _users.sEmail = '".$this->users['sEmail']."'";
                 }
-                if(!empty($this->users['sUserName'])){
-                    $sql .= " AND sUserName = '".$this->users['sUserName']."'";
+				if(!empty($this->users['sUserName'])){
+                    $sql .= " AND _users.sUserName = '".$this->users['sUserName']."'";
                 }
                 if(is_int($this->users['limit'])){
                     if(is_int($this->users['offset'])){
@@ -98,6 +96,7 @@
                         $sql .= " LIMIT ".$this->users['limit'];
                     }
                 }
+				//echo "<br><br><br><br>".$sql;
                 $result = $this->db->query($sql);
                 if($result){
                     if($result->num_rows > 0){
@@ -109,19 +108,9 @@
             }
             
             public function read_user_profile(){
-					$sql = "SELECT * FROM _users_profiles  WHERE 1=1 AND skUsers = '".$this->skUsers."' ";
+					$sql = "SELECT * FROM _users_profiles  WHERE 1=1 AND skUsers = '".$this->users['skUsers']."' ";
 			    $result = $this->db->query($sql);
-                if($result){
-                    if($result->num_rows > 0){
-						$arrayPerfilesUsuarios = array();
-						 while($row = $result->fetch_assoc()){
-						 	$arrayPerfilesUsuarios[] = $row{'skProfiles'};
-						 }
-                        return $arrayPerfilesUsuarios;
-                    }else{
-                        return false;
-                    }
-                }
+          		return $result;
             }
             
             public function read_filter_user(){
@@ -158,18 +147,21 @@
                 }
             }
             
-            public function update(){
+            public function update_Users(){
                 
-                $sql = "UPDATE _users SET
-                    sName='$this->sName', 
-                    sLastNamePaternal='$this->sLastNamePaternal', 
-                    sLastNameMaternal='$this->sLastNameMaternal', 
-                    sEmail='$this->sEmail', 
-                    sUserName='$this->sUserName', 
-                    sPassword='$this->sPassword', 
-                    skStatus='$this->skStatus' 
-                    WHERE skUsers = '$this->skUsers' ";
-                $result = $this->db->query($sql); echo $sql;
+                $sql = "UPDATE _users 
+				SET sName='".$this->users['sName']."', 
+                    sLastNamePaternal='".$this->users['sLastNamePaternal']."', 
+                    sPassword='".$this->users['sPassword']."', 
+                    sLastNameMaternal='".$this->users['sLastNameMaternal']."', 
+                    sEmail='".$this->users['sEmail']."', 
+                    sUserName='".$this->users['sUserName']."', 
+                    skStatus='".$this->users['skStatus']."' 
+                    WHERE skUsers = '".$this->users['skUsers']."'";
+                $result = $this->db->query($sql);
+				
+				$sql = "DELETE from _users_profiles  WHERE skUsers = '".$this->users['skUsers']."'";
+                $this->db->query($sql);
                 if($result){
                     return true;
                 }else{
@@ -178,8 +170,7 @@
             }
             
             public function delete(){
-                
-                $sql = "UPDATE _users SET skStatus='$this->skStatus' WHERE skUsers = '$this->skUsers' ";
+                $sql = "UPDATE _users SET skStatus='".$this->users['skStatus']."' WHERE skUsers = '".$this->users['skUsers']."' ";
                 $result = $this->db->query($sql);
                 if($result){
                     return true;
@@ -190,7 +181,7 @@
             
             public function count_user(){
                 $sql = "SELECT COUNT(*) AS total FROM _users WHERE 1=1 ";
-                if(!empty($this->skUsers)){
+                if(!empty($this->users['skUsers'])){
                     $sql .= " AND skUsers = '$this->skUsers' ";
                 }
                 if(!empty($this->users['sName'])){
@@ -365,12 +356,10 @@
 				return false;
 			}
 		}
-           
-           
-                  
-           public function createDetail($valores) {
+           public function create_Users_profiles($valores) {
                     $sql = "INSERT INTO _users_profiles (skUsers, skProfiles ) VALUES ".$valores."";
-                    $result = $this->db->query($sql);
+                    //echo  $sql."<br><br><br>";die();
+					$result = $this->db->query($sql);
                     if($result){
                         return true;
                     }else{

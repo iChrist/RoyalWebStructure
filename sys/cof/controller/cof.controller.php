@@ -56,10 +56,10 @@
                             while($row = $this->data['users']->fetch_assoc()){
                                 $actions = $this->printModulesButtons(2,array($row['skUsers']));
                                 $records["data"][] = array(
-                                    htmlentities(utf8_encode($row['sName']), ENT_QUOTES)
-                                    ,htmlentities(utf8_encode($row['sEmail']), ENT_QUOTES)
-                                    ,htmlentities(utf8_encode($row['sUserName']), ENT_QUOTES)
-                                    ,htmlentities(utf8_encode($row['sPassword']), ENT_QUOTES)
+                                    htmlentities(($row['sName']), ENT_QUOTES)
+                                    ,htmlentities(($row['sEmail']), ENT_QUOTES)
+                                    ,htmlentities(($row['sUserName']), ENT_QUOTES)
+                                    ,htmlentities(($row['sPassword']), ENT_QUOTES)
                                     ,utf8_encode($row['sHtml'])
                                     , !empty($actions['sHtml']) ? '<div class="dropdown" style="position: absolute;"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.$actions['sHtml'].'</ul></div>' : ''
                                     
@@ -83,7 +83,6 @@
                     $this->data['error'] = false;
                     $this->data['datos'] = false;
                     $this->data['profiles'] = parent::read_profile(); // Mandamos a llamar todos los perfiles para cargarlos en la vista
-                    
                     if(isset($_POST['axn']))
                     {
                         switch ($_POST['axn'])
@@ -91,8 +90,9 @@
                             case "validarEmail":
                                 // echo 'false'; -> Email no encontrado 
                                 // echo 'true';  -> Email encontrado
-                                $this->users['sEmail'] = $_POST['sEmail'];
-								$this->users['skUsersDistinto'] = $_POST['skUsers'];
+								
+                                $this->users['sEmail'] = htmlentities(($_POST['sEmail']));
+								$this->users['skUsersDistinto'] = htmlentities(($_POST['skUsers']));
                                 if(parent::read_user())
                                 {
                                     echo 'false';
@@ -107,8 +107,8 @@
                             case "validarUserName":
                                 // echo 'false'; -> UserName no encontrado 
                                 // echo 'true';  -> UserName encontrado
-                                $this->users['sUserName'] = $_POST['sUserName'];
-                                $this->users['skUsersDistinto'] = $_POST['skUsers'];
+                                $this->users['sUserName'] = htmlentities(($_POST['sUserName']));
+                                $this->users['skUsersDistinto'] = htmlentities(($_POST['skUsers']));
 							    if(parent::read_user())
                                 {
                                     echo 'false';
@@ -125,34 +125,58 @@
                     if($_POST){
                         
                         if($_GET['p1'] || $_POST['skUsers']){
-                            $this->skUsers = isset($_GET['p1']) ? $_GET['p1'] : $_POST['skUsers'];
-                            $this->sName = $_POST['sName'];
-                            $this->sLastNamePaternal = $_POST['sLastNamePaternal'];
-                            $this->sLastNameMaternal = $_POST['sLastNameMaternal'];
-                            $this->sEmail = $_POST['sEmail'];
-                            $this->sUserName = $_POST['sUserName'];
-                            $this->skStatus = $_POST['skStatus'];
-                            if(parent::update()){
+							
+                            $this->users['skUsers'] = isset($_GET['p1']) ? $_GET['p1'] : ($_POST['skUsers']);
+                            $this->users['sName'] = htmlentities(($_POST['sName']));
+                            $this->users['sLastNamePaternal'] = htmlentities(($_POST['sLastNamePaternal']));
+                            $this->users['sLastNameMaternal'] = htmlentities(($_POST['sLastNameMaternal']));
+                            $this->users['sPassword'] = htmlentities(($_POST['sPassword']));
+                            $this->users['sEmail'] = htmlentities(($_POST['sEmail']));
+                            $this->users['sUserName'] = htmlentities(($_POST['sUserName']));
+                            $this->users['skStatus']= htmlentities(($_POST['skStatus']));
+                            if(parent::update_Users()){
                                 $this->data['success'] = true;
                                 $this->data['message'] = 'Registro actualizado con &eacute;xito.';
+							   	if(isset($_POST['skProfiles'])) // En esta parte guardaremos todos los perfiles seleccionados para el nuevo usuario.
+								 {
+                                    $count = count($_POST['skProfiles']);
+                                    $bandera = 1;
+                                    $valores = "";
+                                    foreach ($_POST['skProfiles'] as $profiles)
+                                    {
+                                        if( $bandera == $count )
+                                        {
+                                            $valores .= "('".$this->users['skUsers']."' , '".$profiles."')";
+                                        }
+                                        else
+                                        {
+                                            $valores .= "('".$this->users['skUsers']."' , '".$profiles."'),";
+                                        }
+                                        $bandera++;
+                                    }
+                                    parent::create_Users_profiles($valores);
+                                }
+                                  $this->data['datos'] = parent::read_user();
+								$this->data['perfilesusuarios'] = parent::read_user_profile();
                             }else{
                                 $this->data['error'] = true;
                                 $this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
+                                  $this->data['datos'] = parent::read_user();
+								$this->data['perfilesusuarios'] = parent::read_user_profile();
                             }
                             
                         }else{
-                            $this->skUsers = substr(md5(microtime()), 1, 32); //Generación UUID.
-                            $this->sName = $_POST['sName'];
-                            $this->sLastNamePaternal = $_POST['sLastNamePaternal'];
-                            $this->sLastNameMaternal = $_POST['sLastNameMaternal'];
-                            $this->sEmail = $_POST['sEmail'];
-                            $this->sUserName = $_POST['sUserName'];
-                            // $this->sPassword = substr(md5(microtime()), 1, 16); //Generación de Password aleatorio con longitud de 16 caracteres.
-                            $this->sPassword = $_POST['sPassword'];
-                            $this->skStatus = $_POST['skStatus'];
-                            $this->skUsers = parent::create();
-                            
-                            if($this->skUsers){
+                            $this->users['skUsers'] = substr(md5(microtime()), 1, 32); //Generación UUID.
+                            $this->users['sName'] = htmlentities(($_POST['sName']));
+                            $this->users['sLastNamePaternal'] = htmlentities(($_POST['sLastNamePaternal']));
+                            $this->users['sLastNameMaternal'] = htmlentities(($_POST['sLastNameMaternal']));
+                            $this->users['sEmail'] = htmlentities(($_POST['sEmail']));
+                            $this->users['sUserName'] = htmlentities(($_POST['sUserName']));
+                            $this->users['sPassword'] = htmlentities(($_POST['sPassword']));
+                            $this->users['skStatus'] = htmlentities(($_POST['skStatus']));
+                            $this->users['skUsers'] = parent::create_Users();
+                            echo $this->users['skUsers']."<br>"."<br>"."<br>";
+                            if($this->users['skUsers']){
                                 if(isset($_POST['skProfiles'])) // En esta parte guardaremos todos los perfiles seleccionados para el nuevo usuario.
                                 {
                                     $count = count($_POST['skProfiles']);
@@ -162,20 +186,21 @@
                                     {
                                         if( $bandera == $count )
                                         {
-                                            $valores .= '("'.$this->skUsers.'" , "'.$profiles.'")';
+                                            $valores .= "('".$this->users['skUsers']."' , '".$profiles."')";
                                         }
                                         else
                                         {
-                                            $valores .= '("'.$this->skUsers.'" , "'.$profiles.'"),';
+                                            $valores .= "('".$this->users['skUsers']."' , '".$profiles."'),";
                                         }
                                         $bandera++;
                                     }
-                                    parent::createDetail($valores);
+                                    parent::create_Users_profiles($valores);
                                 }
                                 $this->data['success'] = true;
                                 $this->data['message'] = 'Registro insertado con &eacute;xito.';
-                                $this->skUsers = $this->skUsers;
+                                $this->users['skUsers'] = $this->users['skUsers'];
                                 $this->data['datos'] = parent::read_user();
+								$this->data['perfilesusuarios'] = parent::read_user_profile();
                             }else{
                                 $this->data['error'] = true;
                                 $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
@@ -184,7 +209,7 @@
                     }
 					
                     if($_GET['p1']){
-                        $this->skUsers = $_GET['p1'];
+                        $this->users['skUsers'] = $_GET['p1'];
                         $this->data['datos'] = parent::read_user();
                         $this->data['perfilesusuarios'] = parent::read_user_profile();
                     }
@@ -244,7 +269,7 @@
                                $actions = $this->printModulesButtons(2,array($row['skProfiles']));
 
                                 $records["data"][] = array(
-                                    htmlentities(utf8_encode($row['sName']), ENT_QUOTES)
+                                    htmlentities(($row['sName']), ENT_QUOTES)
                                       ,utf8_encode($row['sHtml'])
                                     , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.$actions['sHtml'].'</ul></div>' : ''
                                 );

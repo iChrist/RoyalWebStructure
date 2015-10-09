@@ -7,13 +7,16 @@
     {
         $result = $data['datos']->fetch_assoc();
     }
+	
+
 	$arrayPerfilesUsuarios = array();
 	if(isset($data['perfilesusuarios']))
     {
-		if(($data['perfilesusuarios']))
-		{
-			$arrayPerfilesUsuarios = $data['perfilesusuarios'];
-		}
+		if($data['perfilesusuarios']->num_rows > 0){
+			 while($row = $data['perfilesusuarios']->fetch_assoc()){
+				$arrayPerfilesUsuarios[] = $row{'skProfiles'};
+			 }
+		 }
     }
 	
     if($data['error'])
@@ -155,9 +158,9 @@
                                     {
                                     ?>
                                         <div class="col-md-4">
-                                                <input type="checkbox" name="skProfiles[]" value="<?php echo $profile['skProfiles']; ?>" <?php echo (in_array($profile['skProfiles'], $arrayPerfilesUsuarios) ? 'checked' : '')?>   />
-                                                <?php echo $profile['sName']; ?>
-                                                <br/>&nbsp;
+                                               <label> <input type="checkbox" name="skProfiles[]" value="<?php echo $profile['skProfiles']; ?>" <?php echo (in_array($profile['skProfiles'], $arrayPerfilesUsuarios) ? 'checked' : '')?>   />
+                                                <?php echo $profile['sName']; ?>    <br/>&nbsp;</label>
+                                            
                                         </div>
                                     <?php
                                     }
@@ -184,13 +187,13 @@
 
 
 <script type="text/javascript">
+
     $(document).ready(function(){
         
         var form = $('#_save');
         var error = $('.alert-danger', form);
         var success = $('.alert-success', form);
-        
-        /*$("#_save").validate({
+        $("#_save").validate({
             errorElement: 'span', //default input error message container
             errorClass: 'help-block', // default input error message class
             focusInvalid: false, // do not focus the last invalid input
@@ -213,11 +216,9 @@
                       url: "",
                       type: "post",
                       data: {
-                        sEmail: function() {
-                          return $( "#sEmail" ).val();
-                        },
+                        sEmail: function (){return $( "#sEmail" ).val();},
                         axn: "validarEmail",
-                        skUsers:  $( "#skUsers" ).val()
+                        skUsers:  function (){return $( "#skUsers" ).val();}
                       }
                     }
                     
@@ -228,11 +229,9 @@
                       url: "",
                       type: "post",
                       data: {
-                        sUserName: function() {
-                          return $( "#sUserName" ).val();
-                        },
+                     	sUserName: function (){return $( "#sUserName" ).val();},
                         axn: "validarUserName",
-                        skUsers:  $( "#skUsers" ).val()
+                        skUsers:   function (){return $( "#skUsers" ).val();}
                       }
                     }
                 },
@@ -317,6 +316,8 @@
                 }
             }
     
-        });*/
+        });
+		
+		
     }); 
 </script>
