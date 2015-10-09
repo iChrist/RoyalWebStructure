@@ -18,6 +18,14 @@
                     ,'limit'        =>  ''
                     ,'offset'       =>  ''
                 );
+                public $tipoempresas = array(
+                    'skTipoEmpresa'       =>  ''
+                    ,'sNombre'       =>  ''
+                     ,'skStatus'     =>  ''
+                    ,'limit'        =>  ''
+                    ,'offset'       =>  ''
+                );
+                
                     
             // PRIVATE VARIABLES //
                     private $data = array();
@@ -248,8 +256,8 @@
                 if(!empty($this->departamentos['sNombre'])){
                     $sql .=" AND sNombre like '%".$this->departamentos['sNombre']."%'";
                 }
-                 if(!empty($this->areas['skStatus'])){
-                    $sql .=" AND cat_departamentos.skStatus like '%".$this->areas['skStatus']."%'";
+                 if(!empty($this->departamentos['skStatus'])){
+                    $sql .=" AND cat_departamentos.skStatus like '%".$this->departamentos['skStatus']."%'";
                 }
                 if(is_int($this->departamentos['limit'])){
                     if(is_int($this->departamentos['offset'])){
@@ -267,5 +275,114 @@
                     }
                 }
             }
+             /* TERMINA MODULO DE DEPARTAMENTOS*/
+             
+            /* EMPIEZA MODULO DE TIPOS DE EMPRESAS*/ 
+            public function create_tipoempresas(){
+                $sql = "INSERT INTO cat_tipos_empresas (skTipoEmpresa,sNombre,skStatus) VALUES ('".$this->tipoempresas['skTipoEmpresa']."','".$this->tipoempresas['sNombre']."','".$this->tipoempresas['skStatus']."')";
+                $result = $this->db->query($sql);
+                if($result){
+                    return $this->tipoempresas['skTipoEmpresa'];
+                }else{
+                    return false;
+                }
+            }
+            
+            public function update_tipoempresas(){
+                $sql = "UPDATE cat_tipos_empresas SET ";
+                if(!empty($this->tipoempresas['sNombre'])){
+                    $sql .=" sNombre = '".$this->tipoempresas['sNombre']."' ,";
+                }
+                
+                if(!empty($this->tipoempresas['skStatus'])){
+                    $sql .=" skStatus = '".$this->tipoempresas['skStatus']."' ,";
+                }
+                $sql .= " skTipoEmpresa = '".$this->tipoempresas['skTipoEmpresa']."' WHERE skTipoEmpresa = '".$this->tipoempresas['skTipoEmpresa']."' LIMIT 1";
+                $result = $this->db->query($sql);
+                if($result){
+                    return $this->tipoempresas['skTipoEmpresa'];
+                }else{
+                    return false;
+                }
+            }
+            
+            public function count_tipoempresas(){
+                $sql = "SELECT COUNT(*) AS total FROM cat_tipos_empresas WHERE 1=1 ";
+                if(!empty($this->tipoempresas['skTipoEmpresa'])){
+                    $sql .=" AND skTipoEmpresa = '".$this->tipoempresas['skTipoEmpresa']."'";
+                }
+                if(!empty($this->tipoempresas['sNombre'])){
+                    $sql .=" AND sNombre like '%".$this->tipoempresas['sNombre']."%'";
+                }
+               
+                if(!empty($this->tipoempresas['skStatus'])){
+                    $sql .=" AND cat_tipos_empresas.skStatus like '%".$this->tipoempresas['skStatus']."%'";
+                }
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+            
+            public function read_equal_tipoempresas(){
+                $sql = "SELECT cat_tipos_empresas.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_tipos_empresas INNER JOIN _status ON _status.skStatus = cat_tipos_empresas.skStatus WHERE 1=1 ";
+                if(!empty($this->tipoempresas['skTipoEmpresa'])){
+                    $sql .=" AND skTipoEmpresa = '".$this->tipoempresas['skTipoEmpresa']."'";
+                }
+                if(!empty($this->tipoempresas['sNombre'])){
+                    $sql .=" AND sNombre = '".$this->tipoempresas['sNombre']."'";
+                }
+             
+                if(!empty($this->tipoempresas['skStatus'])){
+                    $sql .=" AND cat_tipos_empresas.skStatus = '".$this->tipoempresas['skStatus']."'";
+                }
+                if(is_int($this->tipoempresas['limit'])){
+                    if(is_int($this->tipoempresas['offset'])){
+                        $sql .= " LIMIT ".$this->tipoempresas['offset']." , ".$this->tipoempresas['limit'];
+                    }else{
+                        $sql .= " LIMIT ".$this->tipoempresas['limit'];
+                    }
+                }
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+             public function read_like_tipoempresas(){
+                $sql = "SELECT cat_tipos_empresas.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_tipos_empresas INNER JOIN _status ON _status.skStatus = cat_tipos_empresas.skStatus WHERE 1=1 ";
+                if(!empty($this->tipoempresas['skTipoEmpresa'])){
+                    $sql .=" AND skTipoEmpresa = '".$this->tipoempresas['skTipoEmpresa']."'";
+                }
+                if(!empty($this->tipoempresas['sNombre'])){
+                    $sql .=" AND sNombre like '%".$this->tipoempresas['sNombre']."%'";
+                }
+                 if(!empty($this->tipoempresas['skStatus'])){
+                    $sql .=" AND cat_tipos_empresas.skStatus like '%".$this->tipoempresas['skStatus']."%'";
+                }
+                if(is_int($this->tipoempresas['limit'])){
+                    if(is_int($this->tipoempresas['offset'])){
+                        $sql .= " LIMIT ".$this->tipoempresas['offset']." , ".$this->tipoempresas['limit'];
+                    }else{
+                        $sql .= " LIMIT ".$this->tipoempresas['limit'];
+                    }
+                }
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+            
 	}
 ?>
