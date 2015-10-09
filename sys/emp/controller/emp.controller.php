@@ -21,8 +21,8 @@
                         if(isset($_POST['sNombre'])){
                             $this->areas['sNombre'] = $_POST['sNombre'];
                         }
-                        if(isset($_POST['sCorreo'])){
-                            $this->areas['sCorreo'] = $_POST['sCorreo'];
+                        if(isset($_POST['sTitulo'])){
+                            $this->areas['sTitulo'] = $_POST['sTitulo'];
                         }
                         if(isset($_POST['skStatus'])){
                             $this->areas['skStatus'] = $_POST['skStatus'];
@@ -53,9 +53,9 @@
                             while($row = $this->data['areas']->fetch_assoc()){
                                 $actions = $this->printModulesButtons(2,array($row['skAreas']));
                                 $records["data"][] = array(
-                                    htmlentities(utf8_encode($row['sNombre']), ENT_QUOTES)
-                                    ,htmlentities(utf8_encode($row['sCorreo']), ENT_QUOTES)
-                                    ,utf8_encode($row['htmlStatus'])
+                                    $row['sNombre']
+                                    ,$row['sTitulo']
+                                    ,$row['htmlStatus']
                                     , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.$actions['sHtml'].'</ul></div>' : ''
                                     
                                 );
@@ -89,9 +89,9 @@
                             return true;
                         }
                         $this->areas['skAreas'] = !empty($_POST['skAreas']) ? $_POST['skAreas'] : substr(md5(microtime()), 1, 32);
-                        $this->areas['sNombre'] = utf8_decode($_POST['sNombre']);
-                        $this->areas['sCorreo'] = utf8_decode($_POST['sCorreo']);
-                        $this->areas['skStatus'] = utf8_decode($_POST['skStatus']);
+                        $this->areas['sNombre'] = htmlentities($_POST['sNombre'],ENT_QUOTES);
+                        $this->areas['sTitulo'] = htmlentities($_POST['sTitulo'],ENT_QUOTES);
+                        $this->areas['skStatus'] = htmlentities($_POST['skStatus'],ENT_QUOTES);
                         if(empty($_POST['skAreas'])){
                             if(parent::create_areas()){
                                 $this->data['success'] = true;

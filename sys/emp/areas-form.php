@@ -45,12 +45,12 @@
         </div>
             
         <div class="form-group">
-            <label class="control-label col-md-2">Correo Electrónico <span aria-required="true" class="required"> * </span>
+            <label class="control-label col-md-2">T&iacute;tulo <span aria-required="true" class="required"> * </span>
             </label>
             <div class="col-md-4">
                 <div class="input-icon right">
                     <i class="fa"></i>
-                    <input type="email" name="sCorreo" id="sCorreo" class="form-control" placeholder="correo@dominio.com" value="<?php echo (isset($result['sCorreo'])) ? $result['sCorreo'] : '' ; ?>" >
+                    <input type="text" name="sTitulo" id="sNombre" class="form-control" placeholder="T&iacute;tulo" value="<?php echo (isset($result['sTitulo'])) ? utf8_encode($result['sTitulo']) : '' ; ?>" >
                 </div>
             </div>
         </div>
@@ -98,20 +98,10 @@
             
             rules:{
                 sNombre:{
-                    required: true,
+                    required: true
                 },
-                sCorreo:{
-                    required: true,
-                    email: true,
-                    remote: {
-                        url: "",
-                        type: "post",
-                        data: {
-                            axn: "validarEmail",
-                            sEmail: $( "#sCorreo" ).val(),
-                            skUsers:  $( "#skAreas" ).val()
-                        }
-                    }
+                sTitulo:{
+                    required: true
                 }
             },
             
@@ -161,10 +151,8 @@
                 sNombre:{
                     required: "Campo obligatorio."
                 },
-                sCorreo:{
-                    required: "Campo obligatorio.",
-                    email: "Por favor, ingrese una direcci&oacute;n de 'Correo electr&oacute;nico' valida.",
-                    remote: "El correo electr&oacute;nico ingresado ya est&aacute; en uso, intente con otro correo electr&oacute;nico."
+                sTitulo:{
+                    required: "Campo obligatorio."
                 }
             }
         });

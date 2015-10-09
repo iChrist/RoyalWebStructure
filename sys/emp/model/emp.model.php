@@ -5,7 +5,7 @@
                 public $areas = array(
                     'skAreas'       =>  ''
                     ,'sNombre'       =>  ''
-                    ,'sCorreo'       =>  ''
+                    ,'sTitulo'       =>  ''
                     ,'skStatus'     =>  ''
                     ,'limit'        =>  ''
                     ,'offset'       =>  ''
@@ -39,8 +39,8 @@
                 if(!empty($this->areas['sNombre'])){
                     $sql .=" AND sNombre like '%".$this->areas['sNombre']."%'";
                 }
-                if(!empty($this->areas['sCorreo'])){
-                    $sql .=" AND sCorreo like '%".$this->areas['sCorreo']."%'";
+                if(!empty($this->areas['sTitulo'])){
+                    $sql .=" AND sTitulo like '%".$this->areas['sTitulo']."%'";
                 }
                 if(!empty($this->areas['skStatus'])){
                     $sql .=" AND areas.skStatus like '%".$this->areas['skStatus']."%'";
@@ -63,8 +63,8 @@
                 if(!empty($this->areas['sNombre'])){
                     $sql .=" AND sNombre = '".$this->areas['sNombre']."'";
                 }
-                if(!empty($this->areas['sCorreo'])){
-                    $sql .=" AND sCorreo = '".$this->areas['sCorreo']."'";
+                if(!empty($this->areas['sTitulo'])){
+                    $sql .=" AND sTitulo = '".$this->areas['sTitulo']."'";
                 }
                 if(!empty($this->areas['skStatus'])){
                     $sql .=" AND areas.skStatus = '".$this->areas['skStatus']."'";
@@ -94,8 +94,8 @@
                 if(!empty($this->areas['sNombre'])){
                     $sql .=" AND sNombre like '%".$this->areas['sNombre']."%'";
                 }
-                if(!empty($this->areas['sCorreo'])){
-                    $sql .=" AND sCorreo like '%".$this->areas['sCorreo']."%'";
+                if(!empty($this->areas['sTitulo'])){
+                    $sql .=" AND sTitulo like '%".$this->areas['sTitulo']."%'";
                 }
                 if(!empty($this->areas['skStatus'])){
                     $sql .=" AND areas.skStatus like '%".$this->areas['skStatus']."%'";
@@ -118,7 +118,7 @@
             }
             
             public function create_areas(){
-                $sql = "INSERT INTO areas (skAreas,sNombre,sCorreo,skStatus) VALUES ('".$this->areas['skAreas']."','".$this->areas['sNombre']."','".$this->areas['sCorreo']."','".$this->areas['skStatus']."')";
+                $sql = "INSERT INTO areas (skAreas,sNombre,sTitulo,skStatus) VALUES ('".$this->areas['skAreas']."','".$this->areas['sNombre']."','".$this->areas['sTitulo']."','".$this->areas['skStatus']."')";
                 $result = $this->db->query($sql);
                 if($result){
                     return $this->areas['skAreas'];
@@ -132,8 +132,8 @@
                 if(!empty($this->areas['sNombre'])){
                     $sql .=" sNombre = '".$this->areas['sNombre']."' ,";
                 }
-                if(!empty($this->areas['sCorreo'])){
-                    $sql .=" sCorreo = '".$this->areas['sCorreo']."' ,";
+                if(!empty($this->areas['sTitulo'])){
+                    $sql .=" sTitulo = '".$this->areas['sTitulo']."' ,";
                 }
                 if(!empty($this->areas['skStatus'])){
                     $sql .=" skStatus = '".$this->areas['skStatus']."' ,";
