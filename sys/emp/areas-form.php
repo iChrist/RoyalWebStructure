@@ -78,10 +78,9 @@
             </div>
         </div>
             
-        <div class="clearfix"></div>
-            
     </div>
 </form>
+<div class="clearfix"></div>
 
 <script type="text/javascript">
     $(document).ready(function(){

@@ -65,6 +65,7 @@
         <!-- End: life time stats -->
     </div>
 </div>
+<div class="clearfix"></div>
 <script type="text/javascript">
 jQuery(document).ready(function() {       
    // init ajax table 

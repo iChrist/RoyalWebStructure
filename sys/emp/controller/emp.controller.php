@@ -83,11 +83,6 @@
                     $this->data['error'] = false;
                     $this->data['datos'] = false;
                     if($_POST){
-                        
-                        if(isset($_POST['axn']) && $_POST['axn'] == 'validarEmail'){
-                            echo 'true';
-                            return true;
-                        }
                         $this->areas['skAreas'] = !empty($_POST['skAreas']) ? $_POST['skAreas'] : substr(md5(microtime()), 1, 32);
                         $this->areas['sNombre'] = htmlentities($_POST['sNombre'],ENT_QUOTES);
                         $this->areas['sTitulo'] = htmlentities($_POST['sTitulo'],ENT_QUOTES);
@@ -123,7 +118,12 @@
                 }
                 
                 public function areas_detail(){
-                   echo 'areas-detail'; 
+                    if(isset($_GET['p1'])){
+                        $this->areas['skAreas'] = $_GET['p1'];
+                        $this->data['datos'] = parent::read_equal_areas();
+                    }
+                    $this->load_view('areas-detail', $this->data);
+                    return true;
                 }
                 /* TERMINA MODULO areas */
                 
