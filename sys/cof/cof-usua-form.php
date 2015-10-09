@@ -318,6 +318,9 @@
     
         });
 		
-		
+		/*var a = < ?php echo ($data['success'] ? 1 : 0); ?>;
+		if(a==1){
+			setInterval(function(){ alert("Hello"); }, 1000);
+		}*/
     }); 
 </script>
