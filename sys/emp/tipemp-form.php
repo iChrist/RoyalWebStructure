@@ -19,7 +19,7 @@
 <?php
     }//ENDIF
 ?>
-    <input type="hidden" name="skAreas"  id="skAreas" value="<?php echo (isset($result['skAreas'])) ? $result['skAreas'] : '' ; ?>">
+    <input type="hidden" name="skTipoEmpresa"  id="skTipoEmpresa" value="<?php echo (isset($result['skTipoEmpresa'])) ? $result['skTipoEmpresa'] : '' ; ?>">
     <div class="form-body">
             
         <!-- COMIENZA ALERTA DE MENSAJES DE VALIDACION -->
@@ -44,17 +44,7 @@
             </div>
         </div>
             
-        <div class="form-group">
-            <label class="control-label col-md-2">T&iacute;tulo <span aria-required="true" class="required"> * </span>
-            </label>
-            <div class="col-md-4">
-                <div class="input-icon right">
-                    <i class="fa"></i>
-                    <input type="text" name="sTitulo" id="sNombre" class="form-control" placeholder="T&iacute;tulo" value="<?php echo (isset($result['sTitulo'])) ? utf8_encode($result['sTitulo']) : '' ; ?>" >
-                </div>
-            </div>
-        </div>
-            
+                    
         <div class="form-group">
             <label class="control-label col-md-2">Estatus <span aria-required="true" class="required"> * </span>
             </label>
@@ -78,9 +68,10 @@
             </div>
         </div>
             
+        <div class="clearfix"></div>
+            
     </div>
 </form>
-<div class="clearfix"></div>
 
 <script type="text/javascript">
     $(document).ready(function(){
@@ -97,10 +88,7 @@
             
             rules:{
                 sNombre:{
-                    required: true
-                },
-                sTitulo:{
-                    required: true
+                    required: true,
                 }
             },
             
@@ -148,9 +136,6 @@
             
             messages:{
                 sNombre:{
-                    required: "Campo obligatorio."
-                },
-                sTitulo:{
                     required: "Campo obligatorio."
                 }
             }
