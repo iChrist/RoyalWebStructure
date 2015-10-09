@@ -10,6 +10,14 @@
                     ,'limit'        =>  ''
                     ,'offset'       =>  ''
                 );
+                
+                public $departamentos = array(
+                    'skDepartamento'       =>  ''
+                    ,'sNombre'       =>  ''
+                     ,'skStatus'     =>  ''
+                    ,'limit'        =>  ''
+                    ,'offset'       =>  ''
+                );
                     
             // PRIVATE VARIABLES //
                     private $data = array();
@@ -151,5 +159,113 @@
                 }
             }
             /* TERMINA MODULO areas */
+            
+            /*EMPIEZA MODULO DE DEPARTAMENTOS*/
+            public function create_departamentos(){
+                $sql = "INSERT INTO cat_departamentos (skDepartamento,sNombre,skStatus) VALUES ('".$this->departamentos['skDepartamento']."','".$this->departamentos['sNombre']."','".$this->departamentos['skStatus']."')";
+                $result = $this->db->query($sql);
+                if($result){
+                    return $this->departamentos['skDepartamentos'];
+                }else{
+                    return false;
+                }
+            }
+            
+            public function update_departamentos(){
+                $sql = "UPDATE cat_departamentos SET ";
+                if(!empty($this->departamentos['sNombre'])){
+                    $sql .=" sNombre = '".$this->departamentos['sNombre']."' ,";
+                }
+                
+                if(!empty($this->departamentos['skStatus'])){
+                    $sql .=" skStatus = '".$this->departamentos['skStatus']."' ,";
+                }
+                $sql .= " skDepartamento = '".$this->departamentos['skDepartamento']."' WHERE skDepartamento = '".$this->departamentos['skDepartamento']."' LIMIT 1";
+                $result = $this->db->query($sql);
+                if($result){
+                    return $this->departamentos['skDepartamento'];
+                }else{
+                    return false;
+                }
+            }
+            
+             public function count_departamentos(){
+                $sql = "SELECT COUNT(*) AS total FROM cat_departamentos WHERE 1=1 ";
+                if(!empty($this->departamentos['skDepartamento'])){
+                    $sql .=" AND skDepartamento = '".$this->departamentos['skDepartamento']."'";
+                }
+                if(!empty($this->departamentos['sNombre'])){
+                    $sql .=" AND sNombre like '%".$this->departamentos['sNombre']."%'";
+                }
+               
+                if(!empty($this->departamentos['skStatus'])){
+                    $sql .=" AND cat_departamentos.skStatus like '%".$this->departamentos['skStatus']."%'";
+                }
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+             
+             public function read_equal_departamentos(){
+                $sql = "SELECT cat_departamentos.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_departamentos INNER JOIN _status ON _status.skStatus = cat_departamentos.skStatus WHERE 1=1 ";
+                if(!empty($this->departamentos['skDepartamento'])){
+                    $sql .=" AND skDepartamento = '".$this->departamentos['skDepartamento']."'";
+                }
+                if(!empty($this->departamentos['sNombre'])){
+                    $sql .=" AND sNombre = '".$this->departamentos['sNombre']."'";
+                }
+             
+                if(!empty($this->departamentos['skStatus'])){
+                    $sql .=" AND cat_departamentos.skStatus = '".$this->departamentos['skStatus']."'";
+                }
+                if(is_int($this->departamentos['limit'])){
+                    if(is_int($this->departamentos['offset'])){
+                        $sql .= " LIMIT ".$this->departamentos['offset']." , ".$this->areas['limit'];
+                    }else{
+                        $sql .= " LIMIT ".$this->departamentos['limit'];
+                    }
+                }
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+             
+             public function read_like_departamentos(){
+                $sql = "SELECT cat_departamentos.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_departamentos INNER JOIN _status ON _status.skStatus = cat_departamentos.skStatus WHERE 1=1 ";
+                if(!empty($this->departamentos['skDepartamento'])){
+                    $sql .=" AND skDepartamento = '".$this->departamentos['skDepartamento']."'";
+                }
+                if(!empty($this->departamentos['sNombre'])){
+                    $sql .=" AND sNombre like '%".$this->departamentos['sNombre']."%'";
+                }
+                 if(!empty($this->areas['skStatus'])){
+                    $sql .=" AND cat_departamentos.skStatus like '%".$this->areas['skStatus']."%'";
+                }
+                if(is_int($this->departamentos['limit'])){
+                    if(is_int($this->departamentos['offset'])){
+                        $sql .= " LIMIT ".$this->departamentos['offset']." , ".$this->departamentos['limit'];
+                    }else{
+                        $sql .= " LIMIT ".$this->departamentos['limit'];
+                    }
+                }
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
 	}
 ?>
