@@ -209,8 +209,7 @@
                     $result = $this->db->query($sql);
                     $data = array();
                     while($row = $result->fetch_assoc()){
-                        //array_push($data, array(
-                        $data[$row['iPosition']] = array(
+                        $data[$row['iPosition'].'-'.$row['iPlace']] = array(
                             'skModule' => $row['skModule']
                             ,'sParentModule' => $row['sParentModule']
                             ,'skButtons' => $row['skButtons']
@@ -221,7 +220,6 @@
                             ,'iPosition' => $row['iPosition']
                             ,'iPlace' => $row['iPlace']
                         );
-                        //));
                     }
                     //echo ('<pre>'.print_r($data,1).'</pre>');
                     mysqli_free_result($result);
@@ -233,35 +231,33 @@
                     $_secutiry['_users_profiles'] = $this->getUsersProfiles();
                     $_secutiry['_modules_profiles_permissions'] = $this->getModulesProfilesPermissions();
                     $_buttons = $this->getModulesButtons();
-                    //echo '<pre>'.print_r($_secutiry,1).'</pre><hr>';
-                    //echo '<pre>'.print_r($_buttons,1).'</pre>';
                     $sHtml = '';
                     $sScript = '';
                     if(!empty($_buttons) && count($_buttons) > 0){
                         if($_SESSION['session']['sGroup'] === 'A'){
-                            for($i=1;$i<=count($_buttons);$i++){
-                                if($_buttons[$i]['iPlace'] == $iPlace ){
+                            foreach($_buttons AS $k => &$v){
+                                if($v['iPlace'] == $iPlace ){
                                     if(count($replace) > 0){
-                                        if(preg_match_all('/\{\{(.*?)\}\}/', $_buttons[$i]['sHtml'], $search) !== FALSE){
-                                            $_buttons[$i]['sHtml'] = str_replace($search[0], $replace, $_buttons[$i]['sHtml']);
+                                        if(preg_match_all('/\{\{(.*?)\}\}/', $v['sHtml'], $search) !== FALSE){
+                                            $v['sHtml'] = str_replace($search[0], $replace, $v['sHtml']);
                                         }
                                     }
-                                    $sHtml .= html_entity_decode($_buttons[$i]['sHtml'],ENT_QUOTES);
-                                    $sScript .= html_entity_decode($_buttons[$i]['sScript'],ENT_QUOTES);
+                                    $sHtml .= html_entity_decode($v['sHtml'],ENT_QUOTES);
+                                    $sScript .= html_entity_decode($v['sScript'],ENT_QUOTES);
                                 }
                             }
                         }else{
                             if(!empty($_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$_SESSION['session']['skProfile']])){
-                                for($i=1;$i<=count($_buttons);$i++){
-                                    if(array_key_exists($_buttons[$i]['skPermissions'] , $_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$_SESSION['session']['skProfile']])){
-                                        if($_buttons[$i]['iPlace'] == $iPlace ){
+                                foreach($_buttons AS $k => &$v){
+                                    if(array_key_exists($v['skPermissions'] , $_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$_SESSION['session']['skProfile']])){
+                                        if($v['iPlace'] == $iPlace ){
                                             if(count($replace) > 0){
-                                                if(preg_match_all('/\{\{(.*?)\}\}/', $_buttons[$i]['sHtml'], $search) !== FALSE){
-                                                    $_buttons[$i]['sHtml'] = str_replace($search[0], $replace, $_buttons[$i]['sHtml']);
+                                                if(preg_match_all('/\{\{(.*?)\}\}/', $v['sHtml'], $search) !== FALSE){
+                                                    $v['sHtml'] = str_replace($search[0], $replace, $v['sHtml']);
                                                 }
                                             }
-                                            $sHtml .= html_entity_decode($_buttons[$i]['sHtml'],ENT_QUOTES);
-                                            $sScript .= html_entity_decode($_buttons[$i]['sScript'],ENT_QUOTES);
+                                            $sHtml .= html_entity_decode($v['sHtml'],ENT_QUOTES);
+                                            $sScript .= html_entity_decode($v['sScript'],ENT_QUOTES);
                                         }
                                     }
                                 }
@@ -278,7 +274,7 @@
                     }else{
                         if(!empty($_secutiry['_modules_profiles_permissions'])){
                             if(array_key_exists($skPermissions , $_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$_SESSION['session']['skProfile']])){
-                                return true;
+                                return true; 
                             }else{
                                 return false;
                             }
@@ -311,6 +307,7 @@
                     while($row = $result->fetch_assoc()){
                         $data[$row['skModule']][$row['skProfiles']][$row['skPermissions']] = $row['sNamePermission'];
                     }
+                    //echo ('<pre>'.print_r($data,1).'</pre>');
                     mysqli_free_result($result);
                     mysqli_next_result($this->db);
                     return $data;
@@ -319,7 +316,6 @@
 		public function _error(&$text, $error = 404){
                     require_once(CORE_PATH.$error.'.php');
                     exit;
-                    //echo "<table border='1' style='width:100%;'><tr><td style='padding-top:20px;'><center><h3><span style='color:red;'>".$error." : </span>".$text."</h3></center></td></tr></table>";
 		}
 		
 		
