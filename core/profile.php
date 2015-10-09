@@ -69,7 +69,7 @@ License: You must have a valid license purchased only from themeforest(the above
             </a>
 	</div>
 	<div class="page-body">
-		<img class="page-lock-img thumbnail" src="<?php echo SYS_URL; ?>core/assets/img/cjs.png" alt="">
+		<img class="page-lock-img thumbnail" src="<?php echo SYS_URL; ?>core/assets/img/avatar.png" alt="">
 		<div class="page-lock-info">
 			<h1><?php echo utf8_encode($_SESSION['session']['sName']); ?></h1>
 			<span class="email">
