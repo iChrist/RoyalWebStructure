@@ -199,8 +199,8 @@
                         
                          
                         $this->departamentos['skDepartamento'] = !empty($_POST['skDepartamento']) ? $_POST['skDepartamento'] : substr(md5(microtime()), 1, 32);
-                        $this->departamentos['sNombre'] = utf8_decode($_POST['sNombre']);
-                         $this->departamentos['skStatus'] = utf8_decode($_POST['skStatus']);
+                        $this->departamentos['sNombre'] = htmlentities($_POST['sNombre'],ENT_QUOTES);
+                         $this->departamentos['skStatus'] = htmlentities($_POST['skStatus'],ENT_QUOTES);
                         if(empty($_POST['skDepartamento'])){
                             if(parent::create_departamentos()){
                                 $this->data['success'] = true;
@@ -224,7 +224,7 @@
                         }
                     }
                     if(isset($_GET['p1'])){
-                        $this->departamentos['skDepartamentos'] = $_GET['p1'];
+                        $this->departamentos['skDepartamento'] = $_GET['p1'];
                         $this->data['datos'] = parent::read_equal_departamentos();
                     }
                     $this->load_view('departamentos-form', $this->data);

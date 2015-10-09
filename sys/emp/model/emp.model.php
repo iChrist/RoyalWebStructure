@@ -165,7 +165,7 @@
                 $sql = "INSERT INTO cat_departamentos (skDepartamento,sNombre,skStatus) VALUES ('".$this->departamentos['skDepartamento']."','".$this->departamentos['sNombre']."','".$this->departamentos['skStatus']."')";
                 $result = $this->db->query($sql);
                 if($result){
-                    return $this->departamentos['skDepartamentos'];
+                    return $this->departamentos['skDepartamento'];
                 }else{
                     return false;
                 }
@@ -225,7 +225,7 @@
                 }
                 if(is_int($this->departamentos['limit'])){
                     if(is_int($this->departamentos['offset'])){
-                        $sql .= " LIMIT ".$this->departamentos['offset']." , ".$this->areas['limit'];
+                        $sql .= " LIMIT ".$this->departamentos['offset']." , ".$this->departamentos['limit'];
                     }else{
                         $sql .= " LIMIT ".$this->departamentos['limit'];
                     }
