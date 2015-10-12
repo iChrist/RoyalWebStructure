@@ -205,7 +205,7 @@
 		}
                 
                 protected function getModulesButtons(){
-                    $sql = "CALL test('".$_GET['sysController']."');";
+                    $sql = "CALL test('".$_GET['sysController']."','".$_SESSION['session']['skProfile']."','".$_SESSION['session']['sGroup']."');";
                     $result = $this->db->query($sql);
                     $data = array();
                     while($row = $result->fetch_assoc()){
@@ -221,7 +221,7 @@
                             ,'iPlace' => $row['iPlace']
                         );
                     }
-                    //echo ('<pre>'.print_r($data,1).'</pre>');
+                    //exit('<pre>'.print_r($data,1).'</pre>');
                     mysqli_free_result($result);
                     mysqli_next_result($this->db);
                     return $data;
@@ -249,7 +249,7 @@
                         }else{
                             if(!empty($_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$_SESSION['session']['skProfile']])){
                                 foreach($_buttons AS $k => &$v){
-                                    if(array_key_exists($v['skPermissions'] , $_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$_SESSION['session']['skProfile']])){
+                                    //if(array_key_exists($v['skPermissions'] , $_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$_SESSION['session']['skProfile']])){
                                         if($v['iPlace'] == $iPlace ){
                                             if(count($replace) > 0){
                                                 if(preg_match_all('/\{\{(.*?)\}\}/', $v['sHtml'], $search) !== FALSE){
@@ -259,7 +259,7 @@
                                             $sHtml .= html_entity_decode($v['sHtml'],ENT_QUOTES);
                                             $sScript .= html_entity_decode($v['sScript'],ENT_QUOTES);
                                         }
-                                    }
+                                    //}
                                 }
                             }
                         }
@@ -269,6 +269,7 @@
                 
                 protected function verify_access($skPermissions = 'R'){
                     $_secutiry['_modules_profiles_permissions'] = $this->getModulesProfilesPermissions();
+                    //exit('<pre>'.print_r($_secutiry['_modules_profiles_permissions'],1).'</pre>');
                     if($_SESSION['session']['sGroup'] === 'A'){
                         return true;
                     }else{
@@ -278,6 +279,7 @@
                             }else{
                                 return false;
                             }
+                            //return true;
                         }else{
                             return false;
                         }
@@ -307,7 +309,7 @@
                     while($row = $result->fetch_assoc()){
                         $data[$row['skModule']][$row['skProfiles']][$row['skPermissions']] = $row['sNamePermission'];
                     }
-                    //echo ('<pre>'.print_r($data,1).'</pre>');
+                    //exit('<pre>'.print_r($data,1).'</pre>');
                     mysqli_free_result($result);
                     mysqli_next_result($this->db);
                     return $data;

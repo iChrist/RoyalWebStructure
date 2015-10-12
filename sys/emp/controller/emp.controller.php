@@ -14,6 +14,9 @@
 		}
 
                 /* COMIENZA MODULO areas */
+                public function areas_index1(){
+                    echo "dfdfd";
+                }
                 public function areas_index(){
                     if(isset($_GET['axn']) && $_GET['axn'] == 'fetch_all'){
                         
