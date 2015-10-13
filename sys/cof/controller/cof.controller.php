@@ -391,7 +391,7 @@
 											$seR	= ($_POST["R_".str_replace("skModule","",$tCampo)] ? "'R'" : "NULL");
 											$seW	= ($_POST["W_".str_replace("skModule","",$tCampo)] ? "'W'" : "NULL");
 											$seD	= ($_POST["D_".str_replace("skModule","",$tCampo)] ? "'D'" : "NULL");
-											
+											$seA	= ($_POST["A_".str_replace("skModule","",$tCampo)] ? "'A'" : "NULL");
 										if($_POST["R_".str_replace("skModule","",$tCampo)]){
 										/*$select = "INSERT INTO  _modules_profiles_permissions (skModule,skProfiles,skPermissions) VALUES (".$skModule.",'".$this->skProfiles."',".$seR.") ";*/
 											  $datos = "(".$skModule.",'".$this->skProfiles."',".$seR.")";
@@ -408,6 +408,11 @@
 													parent::createPermissions($datos);
 													//$result=mysqli_query($this->cxsis,$select);
  											}
+ 											if($_POST["A_".str_replace("skModule","",$tCampo)]){
+															$datos = "(".$skModule.",'".$_POST['skProfiles']."',".$seA.")";
+															parent::createPermissions($datos);
+															//$result=mysqli_query($this->cxsis,$select);
+		 											}
 										}
 								}
                                   $this->data['success'] = true;
