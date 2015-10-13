@@ -378,7 +378,7 @@
                 }
                 public function delete_permission_profile($profile){
 	                 $sql = " DELETE FROM _modules_profiles_permissions WHERE skProfiles = '".$profile."'";
-                    echo $sql;
+                    //echo $sql;
                     $result = $this->db->query($sql);
                     if($result){
                         return true;
