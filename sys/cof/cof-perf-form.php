@@ -95,7 +95,7 @@
           	 
           	 <?php 		
 
-		$select = "CALL stpMapSite('sys-func',0,'".($result['skProfiles'] ? $result['skProfiles'] : '')."',NULL);";
+		$select = "CALL stpMapSite('sys-func',0,'".((isset($result['skProfiles'])) ? $result['skProfiles'] : '' )."',NULL);";
 			//echo $select;
  			$result = $this->db->query($select);
                     
