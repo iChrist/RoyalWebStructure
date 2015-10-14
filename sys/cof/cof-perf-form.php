@@ -139,12 +139,12 @@
 				$contadorNivel1=1;
 				$contadorSeccion=sprintf("%02d",$contadorNivel0);
  			}
-			$tTitulo = (trim($rSeccion{'sTitle'})=="-" ? "<div class='page-subheader' style='margin: 0px 0 15px;padding:0;'></div>" : trim(($rSeccion{'sTitle'})));
+			$tTitulo = (trim(utf8_encode($rSeccion{'sTitle'}))=="-" ? "<div class='page-subheader' style='margin: 0px 0 15px;padding:0;'></div>" : trim((utf8_encode($rSeccion{'sTitle'}))));
 			//echo $tTitulo;
 			$tr="<div class='form-group'>".
 				"<div class='checkbox-list col-sm-7 col-xs-7'>".$ind."".($rSeccion{'eNivel'}==0 ? "" : "").
 				
-				(trim($rSeccion{'sTitle'})!="-" ? ($rSeccion{'eNivel'}==1 ? "<p>" : "<p>").($rSeccion{'eNivel'}==0 ? " " : '').
+				(trim(utf8_encode($rSeccion{'sTitle'}))!="-" ? ($rSeccion{'eNivel'}==1 ? "<p>" : "<p>").($rSeccion{'eNivel'}==0 ? " " : '').
 				//(trim($rSeccion{'sTitle'})!="-" ? "<label>".
  				"<input type=\"hidden\" name=\"eSeccion".$i."\" id=\"eSeccion".$i."\" value=\"".$rSeccion{'sCodSeccion'}."\" >
  				<input type=\"checkbox\"  name=\"skModule".$i."\" id=\"skModule".$i."\"   ".
