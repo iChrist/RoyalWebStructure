@@ -266,7 +266,7 @@
 			 				 echo '<li>
 									<a href="javascript:;">
 									<i class="'.$datos[$j]['sIcons'].'"></i>
-									'.$datos[$j]['sTitle'].' 
+									'.utf8_encode($datos[$j]['sTitle']).' 
 									'.(count($datModul)!=0 ? "<span class=\"arrow \"></span>" : "").'
 									';
 									 
@@ -274,7 +274,7 @@
 									 echo'<ul class="sub-menu">';
 									 for($k=0;$k<count($datModul);$k++) {
  									echo '	<li>
-											<a href="'.SYS_URL."sys/".$datModul[$k]['sModule']."/".$datModul[$k]['skModule']."/".$datModul[$k]['sName']."/".'"> '.$datModul[$k]['sTitle'].'</a>
+											<a href="'.SYS_URL."sys/".$datModul[$k]['sModule']."/".$datModul[$k]['skModule']."/".$datModul[$k]['sName']."/".'"> '.utf8_encode($datModul[$k]['sTitle']).'</a>
 										</li>
 										 ';
 										
