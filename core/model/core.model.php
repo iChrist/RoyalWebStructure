@@ -267,18 +267,27 @@
                     return array('sHtml' => $sHtml, 'sScript' => $sScript);
                 }
                 
-                protected function verify_access($skPermissions = 'R'){
+                protected function verify_access($skPermissions = NULL){
                     $_secutiry['_modules_profiles_permissions'] = $this->getModulesProfilesPermissions();
                     //exit('<pre>'.print_r($_secutiry['_modules_profiles_permissions'],1).'</pre>');
                     if($_SESSION['session']['sGroup'] === 'A'){
                         return true;
                     }else{
                         if(!empty($_secutiry['_modules_profiles_permissions'])){
-                            if(array_key_exists($skPermissions , $_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$_SESSION['session']['skProfile']])){
+                            if($skPermissions != NULL){
+                                if(array_key_exists($skPermissions , $_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$_SESSION['session']['skProfile']])){
+                                    return true; 
+                                }else{
+                                    return false;
+                                }  
+                            }else{
+                                return true;
+                            }
+                            /*if(array_key_exists($skPermissions , $_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$_SESSION['session']['skProfile']])){
                                 return true; 
                             }else{
                                 return false;
-                            }
+                            }*/
                             //return true;
                         }else{
                             return false;
