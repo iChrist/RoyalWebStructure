@@ -74,6 +74,10 @@
 <script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/lib/table-ajax.js"></script>
 <!-- END AJAX TABLE SCRIPTS & PLUGINS -->
 
+<!-- TOAST SCRIPTS -->
+<script src="<?php echo SYS_URL; ?>core/assets/plugins/bootstrap-toastr/toastr.min.js"></script>
+<script src="<?php echo SYS_URL; ?>core/assets/lib/ui-toastr.js"></script>
+
 <!-- BEGIN RoyalWeb CORE SCRIPTS -->
 <script src="<?php echo SYS_URL; ?>core/assets/lib/core.js" type="text/javascript"></script>
 <!-- END RoyalWeb CORE SCRIPTS -->
@@ -91,6 +95,7 @@ jQuery(document).ready(function() {
    Index.initKnowElements();
    Index.initDashboardDaterange();
    Tasks.initDashboardWidget();
+   UIToastr.init();
 });
 </script>
 <!-- END JAVASCRIPTS -->

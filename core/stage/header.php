@@ -27,6 +27,7 @@
 <link href="<?php echo SYS_URL; ?>core/assets/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css"/>
 <link href="<?php echo SYS_URL; ?>core/assets/plugins/fullcalendar/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css"/>
 <link href="<?php echo SYS_URL; ?>core/assets/plugins/jqvmap/jqvmap/jqvmap.css" rel="stylesheet" type="text/css"/>
+<link href="<?php echo SYS_URL; ?>core/assets/plugins/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css"/>
 <!-- END PAGE LEVEL PLUGIN STYLES -->
 <!-- BEGIN THEME STYLES -->
 <link href="<?php echo SYS_URL; ?>core/assets/css/style-conquer.css" rel="stylesheet" type="text/css"/>
