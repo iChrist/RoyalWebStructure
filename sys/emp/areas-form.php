@@ -84,8 +84,7 @@
 <div class="clearfix"></div>
 
 <script type="text/javascript">
-    
-var toastr = '';
+    var toastr = '';
     $(document).ready(function(){
         
         /* VALIDATIONS */
