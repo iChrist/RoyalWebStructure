@@ -2,7 +2,7 @@
     if($data['datos']){
         $result = $data['datos']->fetch_assoc();
     }
-    if($data['error']){
+    if(!$data['response']){
 ?>
         <div class="alert alert-danger display-hide" style="display: block;">
             <button data-close="alert" class="close"></button>
@@ -10,7 +10,7 @@
         </div>
 <?php
     }//ENDIF
-    if($data['success']){
+    if(!$data['response']){
 ?>
         <div class="alert alert-success display-hide" style="display: block;">
             <button data-close="alert" class="close"></button>
@@ -19,6 +19,7 @@
 <?php
     }//ENDIF
 ?>
+<form id="_save" method="post" class="form-horizontal" role="form"> 
     <input type="hidden" name="skAreas"  id="skAreas" value="<?php echo (isset($result['skAreas'])) ? $result['skAreas'] : '' ; ?>">
     <div class="form-body">
             
@@ -83,13 +84,45 @@
 <div class="clearfix"></div>
 
 <script type="text/javascript">
+    var isValid = '';
+    var toastr = '';
+    function _save(url){
+        if(!isValid.form()){
+            return false;
+        }
+        var formdata = false;
+        if (window.FormData) {
+            formdata = new FormData($("#_save")[0]);
+            //formdata.append("custom", "valor");
+        }
+        $.ajax({
+            type: "POST",
+            url: "",
+            data: formdata,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function(data){
+                if(!data['response']){
+                    toastr.success(data['message'], "Notificaci&oacute;n");
+                    setInterval(function(){ 
+                        location.assign(url); 
+                    }, 3000);
+                }else{
+                    toastr.error(data['message'], "Notificaci&oacute;n");
+                }
+            }
+        });
+    }
+    
     $(document).ready(function(){
         
+        /* VALIDATIONS */
         var form = $('#_save');
         var error = $('.alert-danger', form);
         var success = $('.alert-success', form);
         
-        $("#_save").validate({
+        isValid = $("#_save").validate({
             errorElement: 'span', //default input error message container
             errorClass: 'help-block', // default input error message class
             focusInvalid: false, // do not focus the last invalid input
@@ -155,5 +188,23 @@
                 }
             }
         });
+        
+        /* NOTIFICATIONS */
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "positionClass": "toast-top-right",
+            "onclick": null,
+            "showDuration": "2000",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+        
+        
     }); 
 </script>

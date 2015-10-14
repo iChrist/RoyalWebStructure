@@ -212,8 +212,18 @@
                         $data[$row['iPosition'].'-'.$row['iPlace']] = array(
                             'skModule' => $row['skModule']
                             ,'sParentModule' => $row['sParentModule']
+                            ,'sModuleRedirect' => SYS_URL.SYS_PROJECT.$row['sModuleRedirect']
                             ,'skButtons' => $row['skButtons']
-                            ,'sHtml' => str_replace('{{url}}', SYS_URL.SYS_PROJECT.$row['sUrl'], htmlentities($row['sHtml'],ENT_QUOTES))
+                            ,'sHtml' => 
+                                str_replace(
+                                    '{{sModuleRedirect}}',
+                                    SYS_URL.SYS_PROJECT.$row['sModuleRedirect'],
+                                    str_replace(
+                                    '{{url}}', 
+                                    SYS_URL.SYS_PROJECT.$row['sUrl'], 
+                                    htmlentities($row['sHtml'],ENT_QUOTES)
+                                    )
+                                )
                             ,'skPermissions' => $row['skPermissions']
                             ,'sFunction' => $row['sFunction']
                             ,'sScript' => isset($row['sScript']) ? htmlentities($row['sScript'],ENT_QUOTES) : ''

@@ -82,8 +82,7 @@
                 
                 public function areas_form(){
                     $this->data['message'] = '';
-                    $this->data['success'] = false;
-                    $this->data['error'] = false;
+                    $this->data['response'] = true;
                     $this->data['datos'] = false;
                     if($_POST){
                         $this->areas['skAreas'] = !empty($_POST['skAreas']) ? $_POST['skAreas'] : substr(md5(microtime()), 1, 32);
@@ -92,23 +91,31 @@
                         $this->areas['skStatus'] = htmlentities($_POST['skStatus'],ENT_QUOTES);
                         if(empty($_POST['skAreas'])){
                             if(parent::create_areas()){
-                                $this->data['success'] = true;
+                                $this->data['response'] = true;
                                 $this->data['message'] = 'Registro insertado con &eacute;xito.';
-                                $this->data['datos'] = parent::read_equal_areas();
+                                echo json_encode($this->data);
+                                header('Content-Type: application/json');
+                                return true;
                             }else{
-                                $this->data['error'] = true;
+                                $this->data['response'] = true;
                                 $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
-                                $this->data['datos'] = $_POST;
+                                echo json_encode($this->data);
+                                header('Content-Type: application/json');
+                                return false;
                             }
                         }else{
                             if(parent::update_areas()){
-                                $this->data['success'] = true;
+                                $this->data['response'] = true;
                                 $this->data['message'] = 'Registro actualizado con &eacute;xito.';
-                                $this->data['datos'] = parent::read_equal_areas();
+                                echo json_encode($this->data);
+                                header('Content-Type: application/json');
+                                return true;
                             }else{
-                                $this->data['error'] = true;
+                                $this->data['response'] = true;
                                 $this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
-                                $this->data['datos'] = $_POST;
+                                echo json_encode($this->data);
+                                header('Content-Type: application/json');
+                                return false;
                             }
                         }
                     }
