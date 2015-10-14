@@ -83,7 +83,7 @@
 <!-- END RoyalWeb CORE SCRIPTS -->
 
 <script type="text/javascript">
-jQuery(document).ready(function() {    
+jQuery(document).ready(function() {
    App.init(); // initlayout and core plugins
    Index.init();
    Index.initJQVMAP(); // init index page's custom scripts
