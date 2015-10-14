@@ -273,8 +273,9 @@
 									echo '</a>';
 									 echo'<ul class="sub-menu">';
 									 for($k=0;$k<count($datModul);$k++) {
- 									echo '	<li>
-											<a href="'.SYS_URL."sys/".$datModul[$k]['sModule']."/".$datModul[$k]['skModule']."/".$datModul[$k]['sName']."/".'"> '.utf8_encode($datModul[$k]['sTitle']).'</a>
+									 
+ 									echo '	<li >
+											<a  href="'.SYS_URL."sys/".$datModul[$k]['sModule']."/".$datModul[$k]['skModule']."/".$datModul[$k]['sName']."/".'"> '.utf8_encode($datModul[$k]['sTitle']).'</a>
 										</li>
 										 ';
 										
