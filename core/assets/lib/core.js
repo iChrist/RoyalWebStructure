@@ -1,5 +1,5 @@
 // SAVE DATA //
-var isValid = '';
+var isValid = ''; 
 function _save(url){
     if(!isValid.form()){
         return false;
