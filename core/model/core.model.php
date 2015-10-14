@@ -348,9 +348,19 @@
 					while($row= $result->fetch_assoc()){
 					
 							$html.='<li>
-						<i class="fa fa-home"></i>
-						<a href="'.SYS_URL.$row['sParentModule'].'/'.$row['skModule'].'/'.$row['sName'].'/">'.$row['sTitle'].'</a>
-						<i class="fa fa-angle-right"></i>
+						<i class="fa fa-home"></i>';
+						$tArchivo=SYS_PATH.$row['sModule'].'/'.$row['skModule'].'.php';
+						//echo $tArchivo."<br>";
+						 if((!file_exists($tArchivo))){
+							$html.='<span class="disabled-link" >'.utf8_encode($row['sTitle']).'</span>';
+							
+						}else{
+ 						$html.='<a  href="'.SYS_URL.'sys/'.$row['sModule'].'/'.$row['skModule'].'/'.$row['sName'].'/">'.utf8_encode($row['sTitle']).'</a>';
+ 						}
+						
+						
+						
+						$html.='<i class="fa fa-angle-right"></i>
 					</li>';
 							//$html.= $row['sPkModule']."<br>";
 		
