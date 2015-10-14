@@ -80,7 +80,7 @@
                     $this->load_view('areas-index', $this->data);
                 }
                 
-                public function areas_form(){
+                public function areas_form(){ 
                     $this->data['message'] = '';
                     $this->data['response'] = true;
                     $this->data['datos'] = false;
