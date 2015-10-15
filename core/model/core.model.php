@@ -80,10 +80,10 @@
                     $this->sModule =$rSeccion['sModule'];    
                     $this->sTitle = $rSeccion['sTitle'];
                     
-                    $sql = "INSERT INTO _accessLog (skUsers, skModules,dAccess ) VALUES ('".$_SESSION['session']['skUsers']."','".$this->skModule."',CURRENT_TIMESTAMP)";
-                   /* echo $sql;
-                    die();*/
-                    $result = $this->db->query($sql);
+                    //$sql = "INSERT INTO _accessLog (skUsers, skModules,dAccess ) VALUES ('".$_SESSION['session']['skUsers']."','".$this->skModule."',CURRENT_TIMESTAMP)";
+                 
+                    /*die();*/
+                    //$result = $this->db->query($sql);
                     /*if($result){
                         return true;
                     }else{
@@ -289,7 +289,22 @@
                 
                 protected function verify_access($skPermissions = NULL){
                     $_secutiry['_modules_profiles_permissions'] = $this->getModulesProfilesPermissions();
-                    //exit('<pre>'.print_r($_secutiry['_modules_profiles_permissions'],1).'</pre>');
+                    if(!$this->is_ajax()){
+                        if(!empty($_SERVER['HTTP_CLIENT_IP'])){
+                            $ip = $_SERVER['HTTP_CLIENT_IP'];
+                        }elseif(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){
+                            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+                        }else{
+                            $ip = $_SERVER['REMOTE_ADDR'];
+                        }
+                        $sql = "INSERT INTO _accessLog (skUsers, skModules, sIp, dAccess) VALUES ('".$_SESSION['session']['skUsers']."','".$this->skModule."','".$ip."',CURRENT_TIMESTAMP)";
+                        $result = $this->db->query($sql);
+                        if($result){
+                            return true;
+                        }else{
+                            return false;
+                        }
+                    }
                     if($_SESSION['session']['sGroup'] === 'A'){
                         return true;
                     }else{
@@ -303,18 +318,25 @@
                             }else{
                                 return true;
                             }
-                            /*if(array_key_exists($skPermissions , $_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$_SESSION['session']['skProfile']])){
-                                return true; 
-                            }else{
-                                return false;
-                            }*/
-                            //return true;
                         }else{
                             return false;
                         }
                     }
                 }
-
+                
+                public function is_ajax(){
+                    $headers = getallheaders();
+                    if(isset($headers['X-Requested-With'])){
+                        if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'){
+                            return true;
+                        }else{
+                            return false;
+                        }
+                    }else{
+                        return false;
+                    }
+                }
+                
                 protected function getUsersProfiles(){
                     $sql = "SELECT up.skProfiles, p.sName FROM _users_profiles AS up
                         INNER JOIN _profiles AS p ON p.skProfiles = up.skProfiles
