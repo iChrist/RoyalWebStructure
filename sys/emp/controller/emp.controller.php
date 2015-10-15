@@ -93,28 +93,28 @@
                             if(parent::create_areas()){
                                 $this->data['response'] = true;
                                 $this->data['message'] = 'Registro insertado con &eacute;xito.';
-                                echo json_encode($this->data);
                                 header('Content-Type: application/json');
+                                echo json_encode($this->data);
                                 return true;
                             }else{
                                 $this->data['response'] = true;
                                 $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
-                                echo json_encode($this->data);
                                 header('Content-Type: application/json');
+                                echo json_encode($this->data);
                                 return false;
                             }
                         }else{
                             if(parent::update_areas()){
                                 $this->data['response'] = true;
                                 $this->data['message'] = 'Registro actualizado con &eacute;xito.';
-                                echo json_encode($this->data);
                                 header('Content-Type: application/json');
+                                echo json_encode($this->data);
                                 return true;
                             }else{
                                 $this->data['response'] = true;
                                 $this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
-                                echo json_encode($this->data);
                                 header('Content-Type: application/json');
+                                echo json_encode($this->data);
                                 return false;
                             }
                         }
