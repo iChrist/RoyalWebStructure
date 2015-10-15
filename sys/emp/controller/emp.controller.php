@@ -32,8 +32,18 @@
                         }
                         
                         // TOTAL DE REGISTROS EN LA TABLA //
-                        $getTotal = parent::count_areas()->fetch_assoc();
-                        $iTotalRecords = $getTotal['total'];
+                        $total = parent::count_areas();
+                        if(!$total){
+                            $records["data"] = array(); 
+                            $records["draw"] = 0;
+                            $records["recordsTotal"] = 0;
+                            $records["recordsFiltered"] = 0;
+                            header('Content-Type: application/json');
+                            echo json_encode($records);
+                            return false;
+                        }
+                        $total = $total->fetch_assoc();
+                        $iTotalRecords = $total['total'];
                         // "LIMIT" TOTAL DE REGISTROS PARA MOSTRAR //
                         $iDisplayLength = intval($_REQUEST['length']);
                         $iDisplayLength = ($iDisplayLength < 0) ? $iTotalRecords : $iDisplayLength; 
@@ -64,12 +74,13 @@
                                 );
                             }
                         }
+                        
                         $records["draw"] = $sEcho;
                         $records["recordsTotal"] = $iTotalRecords;
                         $records["recordsFiltered"] = $iTotalRecords;
-
+                        header('Content-Type: application/json');
                         echo json_encode($records);
-                        return false;
+                        return true;
                     }
                     
                     // INCLUYE UN MODELO DE OTRO MODULO //
