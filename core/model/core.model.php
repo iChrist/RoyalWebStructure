@@ -79,6 +79,16 @@
                     $this->sParentModule = $rSeccion{'sParentModule'};
                     $this->sModule =$rSeccion['sModule'];    
                     $this->sTitle = $rSeccion['sTitle'];
+                    
+                    $sql = "INSERT INTO _accessLog (skUsers, skModules,dAccess ) VALUES ('".$_SESSION['session']['skUsers']."','".$this->skModule."',CURRENT_TIMESTAMP)";
+                   /* echo $sql;
+                    die();*/
+                    $result = $this->db->query($sql);
+                    /*if($result){
+                        return true;
+                    }else{
+                        return false;
+                    }*/
 		}
 
 		protected function load_model($model = NULL, $path = NULL){
