@@ -1,28 +1,12 @@
 <?php
+    $result = array();
     if($data['datos']){
         $result = $data['datos']->fetch_assoc();
     }
-    if(!$data['response']){
-?>
-        <div class="alert alert-danger display-hide" style="display: block;">
-            <button data-close="alert" class="close"></button>
-            <?php echo $data['message']; ?>
-        </div>
-<?php
-    }//ENDIF
-    if(!$data['response']){
-?>
-        <div class="alert alert-success display-hide" style="display: block;">
-            <button data-close="alert" class="close"></button>
-            <?php echo $data['message']; ?>
-        </div>
-<?php
-    }//ENDIF
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form"> 
     <input type="hidden" name="skAreas"  id="skAreas" value="<?php echo (isset($result['skAreas'])) ? $result['skAreas'] : '' ; ?>">
-    <div class="form-body">
-            
+    <div class="form-body"> 
         <!-- COMIENZA ALERTA DE MENSAJES DE VALIDACION -->
         <div class="alert alert-danger display-hide">
             <button class="close" data-close="alert"></button>
@@ -84,7 +68,6 @@
 <div class="clearfix"></div>
 
 <script type="text/javascript">
-    var toastr = '';
     $(document).ready(function(){
         
         /* VALIDATIONS */
@@ -158,23 +141,5 @@
                 }
             }
         });
-        
-        /* NOTIFICATIONS */
-        toastr.options = {
-            "closeButton": true,
-            "debug": false,
-            "positionClass": "toast-top-right",
-            "onclick": null,
-            "showDuration": "2000",
-            "hideDuration": "1000",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut"
-        }
-        
-        
     }); 
 </script>

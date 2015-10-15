@@ -79,7 +79,7 @@
 <script src="<?php echo SYS_URL; ?>core/assets/lib/ui-toastr.js"></script>
 
 <!-- BEGIN RoyalWeb CORE SCRIPTS -->
-<script src="<?php echo SYS_URL; ?>core/assets/lib/core.js" type="text/javascript"></script>
+<!--<script src="<?php echo SYS_URL; ?>core/assets/lib/core.js" type="text/javascript"></script>-->
 <!-- END RoyalWeb CORE SCRIPTS -->
 
 <script type="text/javascript">
