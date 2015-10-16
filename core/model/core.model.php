@@ -1,5 +1,5 @@
 <?php
-	Class Core_Model {
+        Class Core_Model Extends Core_Functions {
 		
 		// PUBLIC VARIABLES //
                 public $skModule;
@@ -28,10 +28,9 @@
 		}
 
 		public function __destruct(){
-			if(!mysqli_connect_errno()){
-                //mysqli_next_result($this->db);
-				$this->db->close();
-			}
+                    if(!mysqli_connect_errno()){
+                        $this->db->close();
+                    }
 		}
                 
                 protected function reconnect(){
@@ -73,22 +72,11 @@
                     $result = $this->db->query($select);
                     $rSeccion = $result->fetch_assoc();
                     mysqli_free_result($result);
-                    //mysqli_next_result($this->db);
                     $this->skModule =$rSeccion{'skModule'};
                     $this->tCodPrimerHijo =$rSeccion{'tCodPrimerHijo'};
                     $this->sParentModule = $rSeccion{'sParentModule'};
                     $this->sModule =$rSeccion['sModule'];    
                     $this->sTitle = $rSeccion['sTitle'];
-                    
-                    //$sql = "INSERT INTO _accessLog (skUsers, skModules,dAccess ) VALUES ('".$_SESSION['session']['skUsers']."','".$this->skModule."',CURRENT_TIMESTAMP)";
-                 
-                    /*die();*/
-                    //$result = $this->db->query($sql);
-                    /*if($result){
-                        return true;
-                    }else{
-                        return false;
-                    }*/
 		}
 
 		protected function load_model($model = NULL, $path = NULL){
@@ -187,17 +175,12 @@
 		protected function load_view($view = "index", $data = array() , $templates = TRUE, $path = NULL){
 			if(file_exists(SYS_PATH.$_GET["sysModule"]."/".$view.".php")){
 				if($templates){
-                                        /*$_secutiry['_users_profiles'] = $this->getUsersProfiles();
-                                        $_secutiry['_modules_profiles_permissions'] = $this->getModulesProfilesPermissions();
-                                        $_buttons = $this->getModulesButtons();*/
-                                        
-					require_once(CORE_PATH."stage/header.php");
-                                        require_once(CORE_PATH."stage/buttons.php");
-					require_once(SYS_PATH.$_GET["sysModule"]."/".$view.".php");
-					require_once(CORE_PATH."stage/footer.php");
-                                        require_once(CORE_PATH."model/core.js.functions.php");
+                                    require_once(CORE_PATH."stage/header.php");
+                                    require_once(CORE_PATH."stage/buttons.php");
+                                    require_once(SYS_PATH.$_GET["sysModule"]."/".$view.".php");
+                                    require_once(CORE_PATH."stage/footer.php");
 				}else{
-					require_once(SYS_PATH.$_GET["sysModule"]."/".$view.".php");
+                                    require_once(SYS_PATH.$_GET["sysModule"]."/".$view.".php");
 				}
 			}else{
 				 $text = "'".$view."' view not found.";

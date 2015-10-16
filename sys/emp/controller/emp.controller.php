@@ -14,9 +14,7 @@
 		}
 
                 /* COMIENZA MODULO areas */
-                public function areas_index1(){
-                    echo "dfdfd";
-                }
+                
                 public function areas_index(){
                     if(isset($_GET['axn']) && $_GET['axn'] == 'fetch_all'){
                         
@@ -31,53 +29,35 @@
                             $this->areas['skStatus'] = $_POST['skStatus'];
                         }
                         
-                        // TOTAL DE REGISTROS EN LA TABLA //
+                        // OBTENER REGISTROS //
                         $total = parent::count_areas();
-                        if(!$total){
-                            $records["data"] = array(); 
-                            $records["draw"] = 0;
-                            $records["recordsTotal"] = 0;
-                            $records["recordsFiltered"] = 0;
+                        $records = Core_Functions::table_ajax($total);
+                        if($records['recordsTotal'] === 0){
                             header('Content-Type: application/json');
                             echo json_encode($records);
                             return false;
                         }
-                        $total = $total->fetch_assoc();
-                        $iTotalRecords = $total['total'];
-                        // "LIMIT" TOTAL DE REGISTROS PARA MOSTRAR //
-                        $iDisplayLength = intval($_REQUEST['length']);
-                        $iDisplayLength = ($iDisplayLength < 0) ? $iTotalRecords : $iDisplayLength; 
-                        // "OFFSET" //
-                        $iDisplayStart = intval($_REQUEST['start']);
-                        // PAGINA //
-                        $sEcho = intval($_REQUEST['draw']);
                         
-                        $this->areas['limit'] = $iDisplayLength;
-                        $this->areas['offset'] = $iDisplayStart;
-                        $this->data['areas'] = parent::read_like_areas();
+                        $this->areas['limit'] = $records['limit'];
+                        $this->areas['offset'] = $records['offset'];
+                        $this->data['data'] = parent::read_like_areas();
                         
-                        $records = array();
-                        $records["data"] = array(); 
-
-                        $end = $iDisplayStart + $iDisplayLength;
-                        $end = $end > $iTotalRecords ? $iTotalRecords : $end;
-                        
-                        if($this->data['areas']){
-                            while($row = $this->data['areas']->fetch_assoc()){
-                                $actions = $this->printModulesButtons(2,array($row['skAreas']));
-                                $records["data"][] = array(
-                                    $row['sNombre']
-                                    ,$row['sTitulo']
-                                    ,$row['htmlStatus']
-                                    , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.$actions['sHtml'].'</ul></div>' : ''
-                                    
-                                );
-                            }
+                        if(!$this->data['data']){
+                            header('Content-Type: application/json');
+                            echo json_encode($records);
+                            return false;
                         }
                         
-                        $records["draw"] = $sEcho;
-                        $records["recordsTotal"] = $iTotalRecords;
-                        $records["recordsFiltered"] = $iTotalRecords;
+                        while($row = $this->data['data']->fetch_assoc()){
+                            $actions = $this->printModulesButtons(2,array($row['skAreas']));
+                            array_push($records['data'], array(
+                                $row['sNombre']
+                                ,$row['sTitulo']
+                                ,$row['htmlStatus']
+                                , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.$actions['sHtml'].'</ul></div>' : ''
+                            ));
+                        }
+                        
                         header('Content-Type: application/json');
                         echo json_encode($records);
                         return true;
