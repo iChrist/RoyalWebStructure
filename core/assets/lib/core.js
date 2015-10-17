@@ -5,6 +5,7 @@ function _save(url){
     if(!isValid.form()){
         return false;
     }
+    $('.page-title-loading').css('display','inline');
     var formdata = false;
     if (window.FormData) {
         formdata = new FormData($("#_save")[0]);
@@ -26,6 +27,7 @@ function _save(url){
             }else{
                 toastr.error(data['message'], "Notificaci&oacute;n");
             }
+            $('.page-title-loading').css('display','none');
         }
     });
 }
