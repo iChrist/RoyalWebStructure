@@ -1,8 +1,10 @@
 // SAVE DATA //
 var toastr = '';
 var isValid = ''; 
-function _save(url){
+function _save(obj,url){
+    obj.disabled = true;
     if(!isValid.form()){
+        obj.disabled = false;
         return false;
     }
     $('.page-title-loading').css('display','inline');
@@ -19,13 +21,16 @@ function _save(url){
         contentType: false,
         processData: false,
         success: function(data){
-            if(data['response']){
+            if(!data['response']){
                 toastr.success(data['message'], "Notificaci&oacute;n");
                 setInterval(function(){ 
                     location.assign(url); 
                 }, 3000);
             }else{
                 toastr.error(data['message'], "Notificaci&oacute;n");
+                setInterval(function(){ 
+                    obj.disabled = false;
+                }, 3000);
             }
             $('.page-title-loading').css('display','none');
         }
