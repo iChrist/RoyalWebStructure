@@ -21,7 +21,7 @@ function _save(obj,url){
         contentType: false,
         processData: false,
         success: function(data){
-            if(!data['response']){
+            if(data['response']){
                 toastr.success(data['message'], "Notificaci&oacute;n");
                 setInterval(function(){ 
                     location.assign(url); 
