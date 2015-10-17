@@ -173,20 +173,30 @@
 		}
 
 		protected function load_view($view = "index", $data = array() , $templates = TRUE, $path = NULL){
-			if(file_exists(SYS_PATH.$_GET["sysModule"]."/".$view.".php")){
-				if($templates){
+                        if($path != NULL){
+                            if(file_exists(SYS_PATH.$path.$view.".php")){
+                                require_once(SYS_PATH.$path.$view.".php");
+                            }else{
+                                $text = "'".$view."' view not found.";
+				 $this->_error($text,404);
+                                 die();
+                            }
+                        }else{
+                            if(file_exists(SYS_PATH.$_GET["sysModule"]."/".$view.".php")){
+                                if($templates){
                                     require_once(CORE_PATH."stage/header.php");
                                     require_once(CORE_PATH."stage/buttons.php");
                                     require_once(SYS_PATH.$_GET["sysModule"]."/".$view.".php");
                                     require_once(CORE_PATH."stage/footer.php");
-				}else{
+                                }else{
                                     require_once(SYS_PATH.$_GET["sysModule"]."/".$view.".php");
-				}
-			}else{
-				 $text = "'".$view."' view not found.";
-				 $this->_error($text,404);
-                                 die();
-			}
+                                }
+                            }else{
+                                $text = "'".$view."' view not found.";
+                                $this->_error($text,404);
+                                die();
+                            }
+                        }
 		}
 
 		protected function require_view($bool = TRUE){

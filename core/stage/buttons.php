@@ -2,7 +2,9 @@
 <div class="col-md-6 col-sm-12">
     <div class="btn-group btn-group-xs" role="group" aria-label="Acciones">
         <?php
-            $buttons = $core->printModulesButtons();
+            $buttons = $core->printModulesButtons(1,array(
+                isset($_GET['p1']) ? $_GET['p1'] : NULL
+            ));
             echo $buttons['sHtml'];
         ?>
     </div>

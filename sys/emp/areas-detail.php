@@ -1,5 +1,6 @@
 <?php
-    if($data['datos']){
+    $result = array();
+    if(isset($data['datos']) && $data['datos']){
         $result = $data['datos']->fetch_assoc();
     }
 ?>

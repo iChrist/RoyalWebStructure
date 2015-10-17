@@ -133,7 +133,7 @@
                         $this->data['datos'] = parent::read_equal_areas();
                     }
                     ob_start();
-                    $this->load_view('areas-pdf', $this->data, FALSE);
+                    $this->load_view('areas-pdf', $this->data, FALSE, 'emp/pdf/');
                     $content = ob_get_clean();
                     $title = 'Areas';
                     Core_Functions::pdf($content, $title, 'P', 'A4', 'es', true, 'UTF-8', array(3, 3, 3, 3));
