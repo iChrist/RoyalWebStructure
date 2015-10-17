@@ -36,7 +36,7 @@
                                 <select name="skStatus" class="form-control form-filter input-sm">
                                     <option value="">- Estatus -</option>
                                 <?php
-                                    if($data['status']){
+                                    if(isset($data['status'])){
                                         while($row = $data['status']->fetch_assoc()){
                                 ?>
                                             <option value="<?php echo $row['skStatus']; ?>">

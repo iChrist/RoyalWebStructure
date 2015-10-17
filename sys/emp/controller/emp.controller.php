@@ -126,6 +126,19 @@
                     $this->load_view('areas-detail', $this->data);
                     return true;
                 }
+                
+                public function areas_pdf(){
+                    if(isset($_GET['p1'])){
+                        $this->areas['skAreas'] = $_GET['p1'];
+                        $this->data['datos'] = parent::read_equal_areas();
+                    }
+                    ob_start();
+                    $this->load_view('areas-pdf', $this->data, FALSE);
+                    $content = ob_get_clean();
+                    $title = 'Areas';
+                    Core_Functions::pdf($content, $title, 'P', 'A4', 'es', true, 'UTF-8', array(3, 3, 3, 3));
+                    return true;
+                }
                 /* TERMINA MODULO areas */
                 
                 
