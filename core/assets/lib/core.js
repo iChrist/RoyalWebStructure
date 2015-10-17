@@ -7,6 +7,8 @@ function _save(obj,url){
         obj.disabled = false;
         return false;
     }
+    $('.alert-danger').hide();
+    $('.alert-success').show();
     $('.page-title-loading').css('display','inline');
     var formdata = false;
     if (window.FormData) {

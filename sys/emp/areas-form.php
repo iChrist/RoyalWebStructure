@@ -35,7 +35,7 @@
             <div class="col-md-4">
                 <div class="input-icon right">
                     <i class="fa"></i>
-                    <input type="text" name="sTitulo" id="sNombre" class="form-control" placeholder="T&iacute;tulo" value="<?php echo (isset($result['sTitulo'])) ? utf8_encode($result['sTitulo']) : '' ; ?>" >
+                    <input type="text" name="sTitulo" id="sTitulo" class="form-control" placeholder="T&iacute;tulo" value="<?php echo (isset($result['sTitulo'])) ? utf8_encode($result['sTitulo']) : '' ; ?>" >
                 </div>
             </div>
         </div>
@@ -69,18 +69,12 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-        
         /* VALIDATIONS */
-        var form = $('#_save');
-        var error = $('.alert-danger', form);
-        var success = $('.alert-success', form);
-        
         isValid = $("#_save").validate({
             errorElement: 'span', //default input error message container
             errorClass: 'help-block', // default input error message class
             focusInvalid: false, // do not focus the last invalid input
             ignore: "",
-            
             rules:{
                 sNombre:{
                     required: true
@@ -89,18 +83,15 @@
                     required: true
                 }
             },
-            
             invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar              
-                success.hide();
-                error.show();
-                App.scrollTo(error, -200);
+                $('.alert-success').hide();
+                $('.alert-danger').show();
+                App.scrollTo($('.alert-danger'), -200);
             },
-            
             errorPlacement: function (error, element) { // hacer la colocación de error para cada tipo de entrada
                 var icon = $(element).parent('.input-icon').children('i');
                 icon.removeClass('fa-check').addClass("fa-warning");  
-                icon.attr("data-original-title", error.text()).tooltip({'container': 'body'});
-
+                icon.attr("data-original-title", $('.alert-danger').text()).tooltip({'container': 'body'});
                 if (element.parent(".input-group").size() > 0) {
                     error.insertAfter(element.parent(".input-group"));
                 } else if (element.attr("data-error-container")) { 
@@ -117,21 +108,16 @@
                     error.insertAfter(element); // Para otros insumos, sólo realizar comportamiento predeterminado (llamar messages)
                 }
             },
-            
             highlight: function (element) { // entradas de error Hightlight
-                $(element)
-                    .closest('.form-group').addClass('has-error'); // conjunto de clases de error
+                $(element).closest('.form-group').addClass('has-error'); // conjunto de clases de error
             },
-            
             unhighlight: function (element) { // revertir el cambio realizado por hightlight
             },
-            
             success: function (label, element) {
                 var icon = $(element).parent('.input-icon').children('i');
                 $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // conjunto de clases de éxito con el grupo control
                 icon.removeClass("fa-warning").addClass("fa-check");
             },
-            
             messages:{
                 sNombre:{
                     required: "Campo obligatorio."
