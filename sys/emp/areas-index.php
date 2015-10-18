@@ -16,7 +16,7 @@
                                 Nombre
                             </th>
                             <th width="25%">
-                                Correo electr&oacute;nico
+                                T&iacute;tulo
                             </th>
                             <th width="25%">
                                 Estatus
@@ -30,7 +30,7 @@
                                 <input type="text" class="form-control form-filter input-sm" name="sNombre" placeholder="Nombre">
                             </td>
                             <td>
-                                <input type="text" class="form-control form-filter input-sm" name="sCorreo" placeholder="Correo electr&oacute;nico">
+                                <input type="text" class="form-control form-filter input-sm" name="sTitulo" placeholder="T&iacute;tulo">
                             </td>
                             <td>
                                 <select name="skStatus" class="form-control form-filter input-sm">
