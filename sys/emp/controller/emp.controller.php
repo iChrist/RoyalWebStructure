@@ -79,6 +79,7 @@
                     return true;
                 }
                 
+                 
                 public function areas_form(){ 
                     $this->data['message'] = '';
                     $this->data['response'] = true;
@@ -151,6 +152,8 @@
                 
                 
                 /*EMPIEZA MODULO DE DEPARTAMENTOS*/
+                
+                 
                 
                 public function departamentos_index(){
                     if(isset($_GET['axn']) && $_GET['axn'] == 'fetch_all'){
@@ -256,56 +259,58 @@
                 /* TERMINA MODULO DE DEPARTAMENTOS*/
                 
                 
-                public function tipemp_index(){
-                    if(isset($_GET['axn']) && $_GET['axn'] == 'fetch_all'){
-                        
-                        // PARAMETROS PARA FILTRADO //
-                        if(isset($_POST['sNombre'])){
-                            $this->tipoempresas['sNombre'] = $_POST['sNombre'];
-                        }
-                        
-                        if(isset($_POST['skStatus'])){
-                            $this->tipoempresas['skStatus'] = $_POST['skStatus'];
-                        }
-                        
-                        // TOTAL DE REGISTROS EN LA TABLA //
-                        $getTotal = parent::count_tipoempresas()->fetch_assoc();
-                        $iTotalRecords = $getTotal['total'];
-                        // "LIMIT" TOTAL DE REGISTROS PARA MOSTRAR //
-                        $iDisplayLength = intval($_REQUEST['length']);
-                        $iDisplayLength = ($iDisplayLength < 0) ? $iTotalRecords : $iDisplayLength; 
-                        // "OFFSET" //
-                        $iDisplayStart = intval($_REQUEST['start']);
-                        // PAGINA //
-                        $sEcho = intval($_REQUEST['draw']);
-                        
-                        $this->tipoempresas['limit'] = $iDisplayLength;
-                        $this->tipoempresas['offset'] = $iDisplayStart;
-                        $this->data['tipoempresas'] = parent::read_like_tipoempresas();
-                        
-                        $records = array();
-                        $records["data"] = array(); 
+                                
+                /*EMPIEZA MODULO DE TIPO DE EMPRESAS*/
+                 public function tipemp_index(){
+                    if(isset($_GET['axn'])){
+                        switch ($_GET['axn']) {
+                            case 'pdf':
+                                $this->tipemp_pdf();
+                                break;
+                            case 'fetch_all':
+                                // PARAMETROS PARA FILTRADO //
+                                if(isset($_POST['sNombre'])){
+                                    $this->tipoempresas['sNombre'] = $_POST['sNombre'];
+                                }
+                               
+                                if(isset($_POST['skStatus'])){
+                                    $this->tipoempresas['skStatus'] = $_POST['skStatus'];
+                                }
 
-                        $end = $iDisplayStart + $iDisplayLength;
-                        $end = $end > $iTotalRecords ? $iTotalRecords : $end;
-                        
-                        if($this->data['tipoempresas']){
-                            while($row = $this->data['tipoempresas']->fetch_assoc()){
-                                $actions = $this->printModulesButtons(2,array($row['skTipoEmpresa']));
-                                $records["data"][] = array(
-                                    htmlentities(utf8_encode($row['sNombre']), ENT_QUOTES)
-                                     ,utf8_encode($row['htmlStatus'])
-                                    , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.$actions['sHtml'].'</ul></div>' : ''
-                                    
-                                );
-                            }
-                        }
-                        $records["draw"] = $sEcho;
-                        $records["recordsTotal"] = $iTotalRecords;
-                        $records["recordsFiltered"] = $iTotalRecords;
+                                // OBTENER REGISTROS //
+                                $total = parent::count_tipoempresas();
+                                $records = Core_Functions::table_ajax($total);
+                                if($records['recordsTotal'] === 0){
+                                    header('Content-Type: application/json');
+                                    echo json_encode($records);
+                                    return false;
+                                }
 
-                        echo json_encode($records);
-                        return false;
+                                $this->tipoempresas['limit'] = $records['limit'];
+                                $this->tipoempresas['offset'] = $records['offset'];
+                                $this->data['data'] = parent::read_like_tipoempresas();
+
+                                if(!$this->data['data']){
+                                    header('Content-Type: application/json');
+                                    echo json_encode($records);
+                                    return false;
+                                }
+
+                                while($row = $this->data['data']->fetch_assoc()){
+                                    $actions = $this->printModulesButtons(2,array($row['skTipoEmpresa']));
+                                    array_push($records['data'], array(
+                                        $row['sNombre']
+                                         ,$row['htmlStatus']
+                                        , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.$actions['sHtml'].'</ul></div>' : ''
+                                    ));
+                                }
+
+                                header('Content-Type: application/json');
+                                echo json_encode($records);
+                                return true;
+                                break;
+                        }
+                        return true;
                     }
                     
                     // INCLUYE UN MODELO DE OTRO MODULO //
@@ -314,14 +319,12 @@
                     
                     // RETORNA LA VISTA areas-index.php //
                     $this->load_view('tipemp-index', $this->data);
+                    return true;
                 }
-                
-                /*EMPIEZA MODULO DE TIPO DE EMPRESAS*/
-                
+                	
                  public function tipemp_form(){
-                    $this->data['message'] = '';
-                    $this->data['success'] = false;
-                    $this->data['error'] = false;
+                  	$this->data['message'] = '';
+                    $this->data['response'] = true;
                     $this->data['datos'] = false;
                     if($_POST){
                         
@@ -331,23 +334,35 @@
                          $this->tipoempresas['skStatus'] = htmlentities($_POST['skStatus'],ENT_QUOTES);
                         if(empty($_POST['skTipoEmpresa'])){
                             if(parent::create_tipoempresas()){
-                                $this->data['success'] = true;
+                            	$this->data['response'] = true;
                                 $this->data['message'] = 'Registro insertado con &eacute;xito.';
-                                $this->data['datos'] = parent::read_equal_tipoempresas();
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return true;
+                                
                             }else{
-                                $this->data['error'] = true;
+                            	 $this->data['response'] = true;
                                 $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
-                                $this->data['datos'] = $_POST;
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return false;
+                                
                             }
                         }else{
                             if(parent::update_tipoempresas()){
-                                $this->data['success'] = true;
+                            	 $this->data['response'] = true;
                                 $this->data['message'] = 'Registro actualizado con &eacute;xito.';
-                                $this->data['datos'] = parent::read_equal_tipoempresas();
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return true;
                             }else{
-                                $this->data['error'] = true;
+                            	 $this->data['response'] = true;
                                 $this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
-                                $this->data['datos'] = $_POST;
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return false;
+
+                              
                             }
                         }
                     }
@@ -358,6 +373,9 @@
                     $this->load_view('tipemp-form', $this->data);
                     return true;
                 }
+                 
+                 
+                 
                 
                 
 	}

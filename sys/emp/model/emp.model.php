@@ -178,7 +178,6 @@
                     return false;
                 }
             }
-            
             public function update_departamentos(){
                 $sql = "UPDATE cat_departamentos SET ";
                 if(!empty($this->departamentos['sNombre'])){
@@ -196,8 +195,7 @@
                     return false;
                 }
             }
-            
-             public function count_departamentos(){
+            public function count_departamentos(){
                 $sql = "SELECT COUNT(*) AS total FROM cat_departamentos WHERE 1=1 ";
                 if(!empty($this->departamentos['skDepartamento'])){
                     $sql .=" AND skDepartamento = '".$this->departamentos['skDepartamento']."'";
@@ -218,8 +216,7 @@
                     }
                 }
             }
-             
-             public function read_equal_departamentos(){
+            public function read_equal_departamentos(){
                 $sql = "SELECT cat_departamentos.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_departamentos INNER JOIN _status ON _status.skStatus = cat_departamentos.skStatus WHERE 1=1 ";
                 if(!empty($this->departamentos['skDepartamento'])){
                     $sql .=" AND skDepartamento = '".$this->departamentos['skDepartamento']."'";
@@ -247,8 +244,7 @@
                     }
                 }
             }
-             
-             public function read_like_departamentos(){
+            public function read_like_departamentos(){
                 $sql = "SELECT cat_departamentos.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_departamentos INNER JOIN _status ON _status.skStatus = cat_departamentos.skStatus WHERE 1=1 ";
                 if(!empty($this->departamentos['skDepartamento'])){
                     $sql .=" AND skDepartamento = '".$this->departamentos['skDepartamento']."'";
@@ -278,34 +274,6 @@
              /* TERMINA MODULO DE DEPARTAMENTOS*/
              
             /* EMPIEZA MODULO DE TIPOS DE EMPRESAS*/ 
-            public function create_tipoempresas(){
-                $sql = "INSERT INTO cat_tipos_empresas (skTipoEmpresa,sNombre,skStatus) VALUES ('".$this->tipoempresas['skTipoEmpresa']."','".$this->tipoempresas['sNombre']."','".$this->tipoempresas['skStatus']."')";
-                $result = $this->db->query($sql);
-                if($result){
-                    return $this->tipoempresas['skTipoEmpresa'];
-                }else{
-                    return false;
-                }
-            }
-            
-            public function update_tipoempresas(){
-                $sql = "UPDATE cat_tipos_empresas SET ";
-                if(!empty($this->tipoempresas['sNombre'])){
-                    $sql .=" sNombre = '".$this->tipoempresas['sNombre']."' ,";
-                }
-                
-                if(!empty($this->tipoempresas['skStatus'])){
-                    $sql .=" skStatus = '".$this->tipoempresas['skStatus']."' ,";
-                }
-                $sql .= " skTipoEmpresa = '".$this->tipoempresas['skTipoEmpresa']."' WHERE skTipoEmpresa = '".$this->tipoempresas['skTipoEmpresa']."' LIMIT 1";
-                $result = $this->db->query($sql);
-                if($result){
-                    return $this->tipoempresas['skTipoEmpresa'];
-                }else{
-                    return false;
-                }
-            }
-            
             public function count_tipoempresas(){
                 $sql = "SELECT COUNT(*) AS total FROM cat_tipos_empresas WHERE 1=1 ";
                 if(!empty($this->tipoempresas['skTipoEmpresa'])){
@@ -327,7 +295,6 @@
                     }
                 }
             }
-            
             public function read_equal_tipoempresas(){
                 $sql = "SELECT cat_tipos_empresas.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_tipos_empresas INNER JOIN _status ON _status.skStatus = cat_tipos_empresas.skStatus WHERE 1=1 ";
                 if(!empty($this->tipoempresas['skTipoEmpresa'])){
@@ -356,7 +323,7 @@
                     }
                 }
             }
-             public function read_like_tipoempresas(){
+            public function read_like_tipoempresas(){
                 $sql = "SELECT cat_tipos_empresas.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_tipos_empresas INNER JOIN _status ON _status.skStatus = cat_tipos_empresas.skStatus WHERE 1=1 ";
                 if(!empty($this->tipoempresas['skTipoEmpresa'])){
                     $sql .=" AND skTipoEmpresa = '".$this->tipoempresas['skTipoEmpresa']."'";
@@ -383,6 +350,32 @@
                     }
                 }
             }
-            
+            public function create_tipoempresas(){
+                $sql = "INSERT INTO cat_tipos_empresas (skTipoEmpresa,sNombre,skStatus) VALUES ('".$this->tipoempresas['skTipoEmpresa']."','".$this->tipoempresas['sNombre']."','".$this->tipoempresas['skStatus']."')";
+                $result = $this->db->query($sql);
+                if($result){
+                    return $this->tipoempresas['skTipoEmpresa'];
+                }else{
+                    return false;
+                }
+            }
+            public function update_tipoempresas(){
+                $sql = "UPDATE cat_tipos_empresas SET ";
+                if(!empty($this->tipoempresas['sNombre'])){
+                    $sql .=" sNombre = '".$this->tipoempresas['sNombre']."' ,";
+                }
+                
+                if(!empty($this->tipoempresas['skStatus'])){
+                    $sql .=" skStatus = '".$this->tipoempresas['skStatus']."' ,";
+                }
+                $sql .= " skTipoEmpresa = '".$this->tipoempresas['skTipoEmpresa']."' WHERE skTipoEmpresa = '".$this->tipoempresas['skTipoEmpresa']."' LIMIT 1";
+                $result = $this->db->query($sql);
+                if($result){
+                    return $this->tipoempresas['skTipoEmpresa'];
+                }else{
+                    return false;
+                }
+            }
+             /* TERMINA MODULO DE TIPOS DE EMPRESAS*/ 
 	}
 ?>
