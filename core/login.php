@@ -9,8 +9,8 @@
             while($row = $result->fetch_assoc()){
                 //$_SESSION['session']['skProfile'] = 'profile2';
                 $_SESSION['session']['skUsers'] = $row['skUsers'];	
-                $_SESSION['session']['sName'] = $row['sName'];
-                $_SESSION['session']['sUserName'] = $row['sUserName'];
+                $_SESSION['session']['sName'] = utf8_encode($row['sName']);
+                $_SESSION['session']['sUserName'] = utf8_encode($row['sUserName']);
                 $_SESSION['session']['sEmail'] = $row['sEmail'];
                 $_SESSION['session']['sGroup'] = $row['sGroup'];
             }

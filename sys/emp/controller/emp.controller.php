@@ -55,10 +55,10 @@
                                 while($row = $this->data['data']->fetch_assoc()){
                                     $actions = $this->printModulesButtons(2,array($row['skAreas']));
                                     array_push($records['data'], array(
-                                        $row['sNombre']
-                                        ,$row['sTitulo']
-                                        ,$row['htmlStatus']
-                                        , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.$actions['sHtml'].'</ul></div>' : ''
+                                         utf8_encode($row['sNombre'])
+                                        ,utf8_encode($row['sTitulo'])
+                                        ,utf8_encode($row['htmlStatus'])
+                                        , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
                                     ));
                                 }
 
@@ -85,9 +85,9 @@
                     $this->data['datos'] = false;
                     if($_POST){
                         $this->areas['skAreas'] = !empty($_POST['skAreas']) ? $_POST['skAreas'] : substr(md5(microtime()), 1, 32);
-                        $this->areas['sNombre'] = htmlentities($_POST['sNombre'],ENT_QUOTES);
-                        $this->areas['sTitulo'] = htmlentities($_POST['sTitulo'],ENT_QUOTES);
-                        $this->areas['skStatus'] = htmlentities($_POST['skStatus'],ENT_QUOTES);
+                        $this->areas['sNombre'] = utf8_decode($_POST['sNombre']);
+                        $this->areas['sTitulo'] = utf8_decode($_POST['sTitulo']);
+                        $this->areas['skStatus'] = utf8_decode($_POST['skStatus']);
                         if(empty($_POST['skAreas'])){
                             if(parent::create_areas()){
                                 $this->data['response'] = true;
