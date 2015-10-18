@@ -9,15 +9,7 @@
                             <!--<button type="button" class="btn btn-sm btn-default" id="enable_filter"><i class="fa fa-search"></i> Buscar</button>-->
                         </div>
                     </div>
-<div class="dropdown">
-<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-Acciones
-<span class="caret"></span>
-</button>
-<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-<li><a href="#">Action</a></li>
-</ul>
-</div>
+
                     <!--<table class="table table-striped table-hover table-filter" width="100%" style="width:100%;display: none;">
                         <tr role="row" class="filter">
                             <td><b>Filtros: </b></td>
