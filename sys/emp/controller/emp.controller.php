@@ -16,51 +16,58 @@
                 /* COMIENZA MODULO areas */
                 
                 public function areas_index(){
-                    if(isset($_GET['axn']) && $_GET['axn'] == 'fetch_all'){
-                        
-                        // PARAMETROS PARA FILTRADO //
-                        if(isset($_POST['sNombre'])){
-                            $this->areas['sNombre'] = $_POST['sNombre'];
+                    if(isset($_GET['axn'])){
+                        switch ($_GET['axn']) {
+                            case 'pdf':
+                                $this->areas_pdf();
+                                break;
+                            case 'fetch_all':
+                                // PARAMETROS PARA FILTRADO //
+                                if(isset($_POST['sNombre'])){
+                                    $this->areas['sNombre'] = $_POST['sNombre'];
+                                }
+                                if(isset($_POST['sTitulo'])){
+                                    $this->areas['sTitulo'] = $_POST['sTitulo'];
+                                }
+                                if(isset($_POST['skStatus'])){
+                                    $this->areas['skStatus'] = $_POST['skStatus'];
+                                }
+
+                                // OBTENER REGISTROS //
+                                $total = parent::count_areas();
+                                $records = Core_Functions::table_ajax($total);
+                                if($records['recordsTotal'] === 0){
+                                    header('Content-Type: application/json');
+                                    echo json_encode($records);
+                                    return false;
+                                }
+
+                                $this->areas['limit'] = $records['limit'];
+                                $this->areas['offset'] = $records['offset'];
+                                $this->data['data'] = parent::read_like_areas();
+
+                                if(!$this->data['data']){
+                                    header('Content-Type: application/json');
+                                    echo json_encode($records);
+                                    return false;
+                                }
+
+                                while($row = $this->data['data']->fetch_assoc()){
+                                    $actions = $this->printModulesButtons(2,array($row['skAreas']));
+                                    array_push($records['data'], array(
+                                        $row['sNombre']
+                                        ,$row['sTitulo']
+                                        ,$row['htmlStatus']
+                                        , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.$actions['sHtml'].'</ul></div>' : ''
+                                    ));
+                                }
+
+                                header('Content-Type: application/json');
+                                echo json_encode($records);
+                                return true;
+                                break;
                         }
-                        if(isset($_POST['sTitulo'])){
-                            $this->areas['sTitulo'] = $_POST['sTitulo'];
-                        }
-                        if(isset($_POST['skStatus'])){
-                            $this->areas['skStatus'] = $_POST['skStatus'];
-                        }
                         
-                        // OBTENER REGISTROS //
-                        $total = parent::count_areas();
-                        $records = Core_Functions::table_ajax($total);
-                        if($records['recordsTotal'] === 0){
-                            header('Content-Type: application/json');
-                            echo json_encode($records);
-                            return false;
-                        }
-                        
-                        $this->areas['limit'] = $records['limit'];
-                        $this->areas['offset'] = $records['offset'];
-                        $this->data['data'] = parent::read_like_areas();
-                        
-                        if(!$this->data['data']){
-                            header('Content-Type: application/json');
-                            echo json_encode($records);
-                            return false;
-                        }
-                        
-                        while($row = $this->data['data']->fetch_assoc()){
-                            $actions = $this->printModulesButtons(2,array($row['skAreas']));
-                            array_push($records['data'], array(
-                                $row['sNombre']
-                                ,$row['sTitulo']
-                                ,$row['htmlStatus']
-                                , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.$actions['sHtml'].'</ul></div>' : ''
-                            ));
-                        }
-                        
-                        header('Content-Type: application/json');
-                        echo json_encode($records);
-                        return true;
                     }
                     
                     // INCLUYE UN MODELO DE OTRO MODULO //
@@ -127,7 +134,7 @@
                     return true;
                 }
                 
-                public function areas_pdf(){
+                private function areas_pdf(){
                     if(isset($_GET['p1'])){
                         $this->areas['skAreas'] = $_GET['p1'];
                         $this->data['datos'] = parent::read_equal_areas();
