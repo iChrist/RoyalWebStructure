@@ -6,18 +6,7 @@
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form"> 
     <input type="hidden" name="skAreas"  id="skAreas" value="<?php echo (isset($result['skAreas'])) ? $result['skAreas'] : '' ; ?>">
-    <div class="form-body"> 
-        <!-- COMIENZA ALERTA DE MENSAJES DE VALIDACION -->
-        <div class="alert alert-danger display-hide">
-            <button class="close" data-close="alert"></button>
-            Usted tiene algunos errores en el formulario. Por favor, consulte m&aacute;s abajo.
-        </div>
-        <div class="alert alert-success display-hide">
-            <button class="close" data-close="alert"></button>
-            Validaci&oacute;n del formulario exitoso!
-        </div>
-        <!-- TERMINA ALERTA DE MENSAJES DE VALIDACION -->
-            
+    <div class="form-body">
         <div class="form-group">
             <label class="control-label col-md-2">Nombre <span aria-required="true" class="required"> * </span>
             </label>
