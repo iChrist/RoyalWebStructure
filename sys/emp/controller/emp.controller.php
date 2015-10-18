@@ -67,7 +67,7 @@
                                 return true;
                                 break;
                         }
-                        
+                        return true;
                     }
                     
                     // INCLUYE UN MODELO DE OTRO MODULO //
@@ -76,6 +76,7 @@
                     
                     // RETORNA LA VISTA areas-index.php //
                     $this->load_view('areas-index', $this->data);
+                    return true;
                 }
                 
                 public function areas_form(){ 
