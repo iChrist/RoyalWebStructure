@@ -58,7 +58,7 @@
             }
             /**/
             public function create_Users(){
-			$this->users['skUsers'] = substr(md5(microtime()), 0, 32);
+
 			$sql = "INSERT INTO _users (skUsers,sName,sLastNamePaternal,sLastNameMaternal,sEmail,sUserName,sPassword,skStatus) 
 			VALUES ('".$this->users['skUsers']."','".$this->users['sName']."','".$this->users['sLastNamePaternal']."','".$this->users['sLastNameMaternal']."','".$this->users['sEmail']."','".$this->users['sUserName']."','".$this->users['sPassword']."','".$this->users['skStatus']."')";
               //  echo "<br><br><br><br><br>".$sql;
@@ -115,8 +115,8 @@
             
             public function read_filter_user(){
                 $sql = "SELECT _users.*, _status.sName AS status, _status.sHtml  FROM _users INNER JOIN _status ON _status.skStatus = _users.skStatus WHERE 1=1 ";
-                if(!empty($this->skUsers)){
-                    $sql .= " AND skUsers = '$this->skUsers' ";
+                if(!empty($this->users['skUsers'])){
+                    $sql .= " AND skUsers = '".$this->users['skUsers']."' ";
                 }
                 if(!empty($this->users['sName'])){
                     $sql .= " AND _users.sName like '%".$this->users['sName']."%'";
@@ -159,7 +159,7 @@
                     skStatus='".$this->users['skStatus']."' 
                     WHERE skUsers = '".$this->users['skUsers']."'";
                 $result = $this->db->query($sql);
-				
+				//echo $sql;die();
 				$sql = "DELETE from _users_profiles  WHERE skUsers = '".$this->users['skUsers']."'";
                 $this->db->query($sql);
                 if($result){
@@ -182,7 +182,7 @@
             public function count_user(){
                 $sql = "SELECT COUNT(*) AS total FROM _users WHERE 1=1 ";
                 if(!empty($this->users['skUsers'])){
-                    $sql .= " AND skUsers = '$this->skUsers' ";
+                    $sql .= " AND skUsers = '".$this->users['skUsers']."' ";
                 }
                 if(!empty($this->users['sName'])){
                     $sql .= " AND _users.sName like '%".$this->users['sName']."%'";
@@ -196,6 +196,7 @@
                 if(!empty($this->users['skStatus'])){
                     $sql .= " AND _users.skStatus like '%".$this->users['skStatus']."%'";
                 }
+				//echo $sql;die();
                 $result = $this->db->query($sql);
                 if($result){
                     if($result->num_rows > 0){
