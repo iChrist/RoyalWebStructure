@@ -85,7 +85,7 @@
                     $this->data['datos'] = false;
                     if($_POST){
                         $this->areas['skAreas'] = !empty($_POST['skAreas']) ? $_POST['skAreas'] : substr(md5(microtime()), 1, 32);
-                        $this->areas['sNombre'] = $_POST['sNombre'];
+                        $this->areas['sNombre'] = htmlentities($_POST['sNombre'],ENT_QUOTES);
                         $this->areas['sTitulo'] = htmlentities($_POST['sTitulo'],ENT_QUOTES);
                         $this->areas['skStatus'] = htmlentities($_POST['skStatus'],ENT_QUOTES);
                         if(empty($_POST['skAreas'])){
