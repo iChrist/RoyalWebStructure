@@ -132,6 +132,13 @@
                         $this->areas['skAreas'] = $_GET['p1'];
                         $this->data['datos'] = parent::read_equal_areas();
                     }
+                    if(isset($_GET['axn'])){
+                        switch ($_GET['axn']) {
+                            case 'pdf':
+                                $this->areas_pdf();
+                                break;
+                        }
+                    }
                     $this->load_view('areas-detail', $this->data);
                     return true;
                 }
