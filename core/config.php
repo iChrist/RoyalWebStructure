@@ -12,6 +12,7 @@
         die();
     }
 // DATABASE CONFIGURATION //
+    $_db_idx = 'sys';
     $_db = array(
         'sys' => array(
             'HOST_DB' => 'royalweb.com.mx',
@@ -26,10 +27,10 @@
             'DATABASE_DB' => 'royalweb_structure'
         )
     );
-    define('HOST_DB', $_db['sys']['HOST_DB']);
-    define('USER_DB', $_db['sys']['USER_DB']);
-    define('PASSWORD_DB', $_db['sys']['PASSWORD_DB']);
-    define('DATABASE_DB', $_db['sys']['DATABASE_DB']);
+    define('HOST_DB', $_db[$_db_idx]['HOST_DB']);
+    define('USER_DB', $_db[$_db_idx]['USER_DB']);
+    define('PASSWORD_DB', $_db[$_db_idx]['PASSWORD_DB']);
+    define('DATABASE_DB', $_db[$_db_idx]['DATABASE_DB']);
 // CORE CONFIGURATION //
     define('DEBUG', TRUE);
     if(!isset($_SESSION['sysRequireView'])){
