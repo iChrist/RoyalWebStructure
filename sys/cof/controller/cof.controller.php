@@ -291,45 +291,70 @@
                                 $this->load_view('cof-perf-con', $this->data);*/
 			}
 
-		public function cof_perf_form(){
-                    //$this->require_view();
-                    $this->data['message'] 		= '';
-                    $this->data['success'] 		= false;
-                    $this->data['error']	 	= false;
-                    $this->data['datos'] 		= false;
+	        public function cof_perf_form(){
+                    $this->data['message'] = '';
+                    $this->data['response'] = true;
+                    $this->data['datos'] = false;
                     
-                   if(isset($_POST['axn']))
-                    {
-                        switch ($_POST['axn'])
-                        {
-                              case "validarProfile":
-                                // echo 'false'; -> UserName no encontrado 
-                                // echo 'true';  -> UserName encontrado
-                                $this->profiles['sName'] = $_POST['sUserName'];
- 							    if(parent::read_profile())
-                                {
-                                    echo 'false';
-                                }
-                                else
-                                {
-                                    echo 'true';
-                                }
-                                exit;
-                            break;
-                        }
-                    }
+                  
 
                     if($_POST){
-                    	 if($_GET['p1'] || $_POST['skProfiles']){
- 	                    	 $this->skProfiles 	= isset($_GET['p1']) ? $_GET['p1'] : $_POST['skProfiles'];
-	                         $this->sName 		= $_POST['sName'];
-	                         $this->skStatus 	= $_POST['skStatus'];
+  	                    	// $this->skProfiles 	= isset($_GET['p1']) ? $_GET['p1'] : $_POST['skProfiles'];
+  	                    	 $this->profiles['skProfiles'] = !empty($_POST['skProfiles']) ? $_POST['skProfiles'] : substr(md5(microtime()), 1, 32);
+  	                    	 $this->profiles['sName'] = htmlentities($_POST['sName'],ENT_QUOTES);
+  	                    	 $this->profiles['skStatus'] = htmlentities($_POST['skStatus'],ENT_QUOTES);
+ 	                        
 	                        
+	                    
+	                        if(empty($_POST['skProfiles'])){
+		                        if(parent::create_profile()){
+		                        
+		                        	foreach($_POST as $tCampo => $tValor){
+										if(strstr($tCampo,"skModule")&&$tValor){ 
+											$skModule = "'".$_POST["eSeccion".str_replace("skModule","",$tCampo)]."'";
+											
+											$seR	= (isset($_POST["R_".str_replace("skModule","",$tCampo)]) ? "'R'" : "NULL");
+											$seW	= (isset($_POST["W_".str_replace("skModule","",$tCampo)]) ? "'W'" : "NULL");
+											$seD	= (isset($_POST["D_".str_replace("skModule","",$tCampo)]) ? "'D'" : "NULL");
+											$seA	= (isset($_POST["A_".str_replace("skModule","",$tCampo)]) ? "'A'" : "NULL");
+												if(isset($_POST["R_".str_replace("skModule","",$tCampo)])){
+ 													  $datos = "(".$skModule.",'".$_POST['skProfiles']."',".$seR.")";
+		 											   parent::createPermissions($datos);
+ 													}
+													if(isset($_POST["W_".str_replace("skModule","",$tCampo)])){
+														$datos = "(".$skModule.",'".$_POST['skProfiles']."',".$seW.")";
+		 											   parent::createPermissions($datos);
+ 													}
+													if(isset($_POST["D_".str_replace("skModule","",$tCampo)])){
+															$datos = "(".$skModule.",'".$_POST['skProfiles']."',".$seD.")";
+															parent::createPermissions($datos);
+ 		 											}
+		 											if(isset($_POST["A_".str_replace("skModule","",$tCampo)])){
+															$datos = "(".$skModule.",'".$_POST['skProfiles']."',".$seA.")";
+															parent::createPermissions($datos);
+ 		 											}
+ 		 											}
+									}
+		                        	
+ 	                                $this->data['response'] = true;
+	                                $this->data['message'] = 'Registro insertado con &eacute;xito.';
+	                                header('Content-Type: application/json');
+	                                echo json_encode($this->data);
+	                                return true;
+ 		                        }else{
+	                                $this->data['response'] = true;
+	                                $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
+	                                header('Content-Type: application/json');
+	                                echo json_encode($this->data);
+	                                return false;
+	                           }
+
 	                        
-	                    	 if(parent::update_profile()){
-	                    	 		parent::delete_permission_profile($_POST['skProfiles']);
- 	                    	 		if($_POST['skProfiles']){
-		 	                            foreach($_POST as $tCampo => $tValor){
+	                        }else{
+                            if(parent::update_profile()){
+                            	
+	                    	 	parent::delete_permission_profile($_POST['skProfiles']);
+	                    	 	foreach($_POST as $tCampo => $tValor){
 												if(strstr($tCampo,"skModule")&&$tValor){ 
 													$skModule = "'".$_POST["eSeccion".str_replace("skModule","",$tCampo)]."'";
 													$seR	= (isset($_POST["R_".str_replace("skModule","",$tCampo)]) ? "'R'" : "NULL");
@@ -360,81 +385,29 @@
 		 											}
 												}
 										}
- 									}
- 								 
-	                                $this->data['success'] = true;
-	                                $this->data['message'] = 'Registro actualizado con &eacute;xito.';
-	                            
-	                            
-	                            
-	                            }else{
-	                                $this->data['error'] = true;
-	                                $this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
-	                            }
-	                          
-	                          //FALTA ELIMINAR TODOS LOS PERMISOS QUE TENGA Y DESPUES VOLVER A HACER EL INSERT DE LOS PERMISOS POR MODULO  
-	                            
-	                            
-	                            
-                    	 }else{
-                     
-                    	 
-                            $this->skProfiles = substr(md5(microtime()), 1, 32); //Generación UUID.
-                            $this->sName 		= $_POST['sName'];
-                            $this->skStatus 	= $_POST['skStatus'];
-                            $this->skProfiles 	= parent::create_profile();
-                            
-                            if($this->skProfiles){
- 	                            foreach($_POST as $tCampo => $tValor){
-										if(strstr($tCampo,"skModule")&&$tValor){ 
-											$skModule = "'".$_POST["eSeccion".str_replace("skModule","",$tCampo)]."'";
-											
-											$seR	= (isset($_POST["R_".str_replace("skModule","",$tCampo)]) ? "'R'" : "NULL");
-											$seW	= (isset($_POST["W_".str_replace("skModule","",$tCampo)]) ? "'W'" : "NULL");
-											$seD	= (isset($_POST["D_".str_replace("skModule","",$tCampo)]) ? "'D'" : "NULL");
-											$seA	= (isset($_POST["A_".str_replace("skModule","",$tCampo)]) ? "'A'" : "NULL");
-												if(isset($_POST["R_".str_replace("skModule","",$tCampo)])){
- 													  $datos = "(".$skModule.",'".$_POST['skProfiles']."',".$seR.")";
-		 											   parent::createPermissions($datos);
- 													}
-													if(isset($_POST["W_".str_replace("skModule","",$tCampo)])){
-														$datos = "(".$skModule.",'".$_POST['skProfiles']."',".$seW.")";
-		 											   parent::createPermissions($datos);
- 													}
-													if(isset($_POST["D_".str_replace("skModule","",$tCampo)])){
-															$datos = "(".$skModule.",'".$_POST['skProfiles']."',".$seD.")";
-															parent::createPermissions($datos);
- 		 											}
-		 											if(isset($_POST["A_".str_replace("skModule","",$tCampo)])){
-															$datos = "(".$skModule.",'".$_POST['skProfiles']."',".$seA.")";
-															parent::createPermissions($datos);
- 		 											}
-										}
-								}
-								
-                                  $this->data['success'] = true;
-                                $this->data['message'] = 'Registro insertado con &eacute;xito.';
-                                $this->skProfiles = $this->skProfiles;
-                                $this->data['datos'] = parent::read_profile();
-                                
-                             
+										
+                                $this->data['response'] = true;
+                                $this->data['message'] = 'Registro actualizado con &eacute;xito.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return true;
                             }else{
-                                $this->data['error'] = true;
-                                $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
-                            
+                                $this->data['response'] = true;
+                                $this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return false;
                             }
-                            
-                            
-                            
-                        }
-                    	
+                     
+                       }
                     }
                     if(!empty($_GET['p1'])){
                         $this->skProfiles = $_GET['p1'];
                         $this->data['datos'] = parent::read_profile();
                     }
                     $this->load_view('cof-perf-form', $this->data);
-		}
+             
+                 }
 		
 		  
 	}
