@@ -79,10 +79,10 @@
                 
                 public function cof_usua_form(){
                     $this->data['message'] = '';
-                    $this->data['success'] = false;
-                    $this->data['error'] = false;
+                    $this->data['response'] = true;
                     $this->data['datos'] = false;
-                    $this->data['profiles'] = parent::read_profile(); // Mandamos a llamar todos los perfiles para cargarlos en la vista
+
+					$this->data['profiles'] = parent::read_profile(); // Mandamos a llamar todos los perfiles para cargarlos en la vista
                     if(isset($_POST['axn']))
                     {
                         switch ($_POST['axn'])
@@ -123,21 +123,18 @@
                     }
                     
                     if($_POST){
-                        
-                        if($_GET['p1'] || $_POST['skUsers']){
-							
-                            $this->users['skUsers'] = isset($_GET['p1']) ? $_GET['p1'] : ($_POST['skUsers']);
-                            $this->users['sName'] = htmlentities(($_POST['sName']));
-                            $this->users['sLastNamePaternal'] = htmlentities(($_POST['sLastNamePaternal']));
-                            $this->users['sLastNameMaternal'] = htmlentities(($_POST['sLastNameMaternal']));
-                            $this->users['sPassword'] = htmlentities(($_POST['sPassword']));
-                            $this->users['sEmail'] = htmlentities(($_POST['sEmail']));
-                            $this->users['sUserName'] = htmlentities(($_POST['sUserName']));
-                            $this->users['skStatus']= htmlentities(($_POST['skStatus']));
-                            if(parent::update_Users()){
-                                $this->data['success'] = true;
-                                $this->data['message'] = 'Registro actualizado con &eacute;xito.';
-							   	if(isset($_POST['skProfiles'])) // En esta parte guardaremos todos los perfiles seleccionados para el nuevo usuario.
+                       			$this->users['skUsers'] 				= ($_POST['skUsers'] ? $_POST['skUsers'] : substr(md5(microtime()), 1, 32));
+								$this->users['sName'] 				= (utf8_decode($_POST['sName']));
+								$this->users['sLastNamePaternal'] 	= (utf8_decode($_POST['sLastNamePaternal']));
+								$this->users['sLastNameMaternal']	= (utf8_decode($_POST['sLastNameMaternal']));
+								$this->users['sPassword'] 			= (utf8_decode($_POST['sPassword']));
+								$this->users['sEmail'] 				= (utf8_decode($_POST['sEmail']));
+								$this->users['sUserName']	 		= (utf8_decode($_POST['sUserName']));
+								$this->users['skStatus']				= (utf8_decode($_POST['skStatus']));
+								
+                        if($_POST['skUsers']){
+								if(parent::update_Users()){
+                                if(isset($_POST['skProfiles'])) // En esta parte guardaremos todos los perfiles seleccionados para el nuevo usuario.
 								 {
                                     $count = count($_POST['skProfiles']);
                                     $bandera = 1;
@@ -155,65 +152,67 @@
                                         $bandera++;
                                     }
                                     parent::create_Users_profiles($valores);
-                                }
-                                  $this->data['datos'] = parent::read_user();
-								$this->data['perfilesusuarios'] = parent::read_user_profile();
+								}
+                                $this->data['response'] = true;
+                                $this->data['message'] = 'Registro actualizado con &eacute;xito.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return true;
                             }else{
-                                $this->data['error'] = true;
+                                $this->data['response'] = false;
                                 $this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
-                                  $this->data['datos'] = parent::read_user();
-								$this->data['perfilesusuarios'] = parent::read_user_profile();
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return false;
                             }
-                            
                         }else{
-                            $this->users['skUsers'] = substr(md5(microtime()), 1, 32); //Generación UUID.
-                            $this->users['sName'] = htmlentities(($_POST['sName']));
-                            $this->users['sLastNamePaternal'] = htmlentities(($_POST['sLastNamePaternal']));
-                            $this->users['sLastNameMaternal'] = htmlentities(($_POST['sLastNameMaternal']));
-                            $this->users['sEmail'] = htmlentities(($_POST['sEmail']));
-                            $this->users['sUserName'] = htmlentities(($_POST['sUserName']));
-                            $this->users['sPassword'] = htmlentities(($_POST['sPassword']));
-                            $this->users['skStatus'] = htmlentities(($_POST['skStatus']));
-                            $this->users['skUsers'] = parent::create_Users();
-                            echo $this->users['skUsers']."<br>"."<br>"."<br>";
-                            if($this->users['skUsers']){
-                                if(isset($_POST['skProfiles'])) // En esta parte guardaremos todos los perfiles seleccionados para el nuevo usuario.
-                                {
-                                    $count = count($_POST['skProfiles']);
-                                    $bandera = 1;
-                                    $valores = "";
-                                    foreach ($_POST['skProfiles'] as $profiles)
-                                    {
-                                        if( $bandera == $count )
-                                        {
-                                            $valores .= "('".$this->users['skUsers']."' , '".$profiles."')";
-                                        }
-                                        else
-                                        {
-                                            $valores .= "('".$this->users['skUsers']."' , '".$profiles."'),";
-                                        }
-                                        $bandera++;
-                                    }
-                                    parent::create_Users_profiles($valores);
-                                }
-                                $this->data['success'] = true;
-                                $this->data['message'] = 'Registro insertado con &eacute;xito.';
-                                $this->users['skUsers'] = $this->users['skUsers'];
-                                $this->data['datos'] = parent::read_user();
-								$this->data['perfilesusuarios'] = parent::read_user_profile();
-                            }else{
-                                $this->data['error'] = true;
-                                $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
+							if($this->users['skUsers']){
+								
+								if(parent::create_Users()){
+										$bandera = 1;
+									if(isset($_POST['skProfiles'])) // En esta parte guardaremos todos los perfiles seleccionados para el nuevo usuario.
+									{
+										$count = count($_POST['skProfiles']);
+										$valores = "";
+										foreach ($_POST['skProfiles'] as $profiles)
+										{
+											if( $bandera == $count )
+											{
+												$valores .= "('".$this->users['skUsers']."' , '".$profiles."')";
+											}
+											else
+											{
+												$valores .= "('".$this->users['skUsers']."' , '".$profiles."'),";
+											}
+											$bandera++;
+										}
+										$rRespuesta = parent::create_Users_profiles($valores);
+									}
+									
+									$this->data['response'] = true;
+									$this->data['message'] = 'Registro insertado con &eacute;xito.';
+									header('Content-Type: application/json');
+									echo json_encode($this->data);
+									return true;
+								}else{
+									$this->data['response'] = false;
+									$this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
+									header('Content-Type: application/json');
+									echo json_encode($this->data);
+									return false;
+                            	}
                             }
                         }
                     }
 					
-                    if($_GET['p1']){
+					if(isset($_GET['p1'])){
                         $this->users['skUsers'] = $_GET['p1'];
                         $this->data['datos'] = parent::read_user();
                         $this->data['perfilesusuarios'] = parent::read_user_profile();
                     }
+                    
                     $this->load_view('cof-usua-form', $this->data);
+                    return true;
                 }
                 
                 

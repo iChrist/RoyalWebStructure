@@ -9,53 +9,25 @@
                             <!--<button type="button" class="btn btn-sm btn-default" id="enable_filter"><i class="fa fa-search"></i> Buscar</button>-->
                         </div>
                     </div>
-
-                    <!--<table class="table table-striped table-hover table-filter" width="100%" style="width:100%;display: none;">
-                        <tr role="row" class="filter">
-                            <td><b>Filtros: </b></td>
-                            <td>
-                                <input type="text" class="form-control form-filter input-sm" name="sName" placeholder="Nombre">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control form-filter input-sm" name="sEmail" placeholder="Correo electr&oacute;nico">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control form-filter input-sm" name="sUserName" placeholder="Nombre de usuario">
-                            </td>
-                            <td>
-                                <select name="skStatus" class="form-control form-filter input-sm">
-                                    <option value="">- Estatus -</option>
-                                    <option value="AC">Activo</option>
-                                    <option value="IN">Inactivo</option>
-                                </select>
-                            </td>
-                            <td>
-                                <div aria-label="Acciones" role="group" class="btn-group btn-group-xs">
-                                    <button class="btn btn-xs btn-warning filter-submit margin-bottom"><i class="fa fa-search"></i> Buscar</button>
-                                    <button class="btn btn-xs btn-danger filter-cancel"><i class="fa fa-times"></i> Reiniciar</button>
-                                </div>
-                            </td>
-                        </tr>
-                        </table>-->
                         <table class="table table-striped table-bordered table-hover" id="datatable_ajax">
                         <thead>
                         <tr role="row" class="heading">
-                            <th width="16%">
+                            <th width="30%">
                                 Nombre
                             </th>
-                            <th width="16%">
+                            <th width="15%">
                                 Correo electr&oacute;nico
                             </th>
-                            <th width="16%">
-                                Nombre de usuario
+                            <th width="15%">
+                                Nombre Usuario
                             </th>
-                            <th width="16%">
-                                Contrase&ntilde;a
+                            <th width="15%">
+                                Contraseña
                             </th>
-                            <th width="16%">
+                            <th width="15%">
                                 Estatus
                             </th>
-                            <th width="16%">
+                            <th width="10%">
                                 Acciones
                             </th>
                         </tr>
@@ -67,14 +39,15 @@
                                 <input type="text" class="form-control form-filter input-sm" name="sEmail" placeholder="Correo electr&oacute;nico">
                             </td>
                             <td>
-                                <input type="text" class="form-control form-filter input-sm" name="sUserName" placeholder="Nombre de usuario">
+                                <input type="text" class="form-control form-filter input-sm" name="sUserName" placeholder="Nombre Usuario">
                             </td>
-                            <td></td>
+                            <td>
+                            </td>
                             <td>
                                 <select name="skStatus" class="form-control form-filter input-sm">
                                     <option value="">- Estatus -</option>
                                 <?php
-                                    if($data['status']){
+                                    if(isset($data['status'])){
                                         while($row = $data['status']->fetch_assoc()){
                                 ?>
                                             <option value="<?php echo $row['skStatus']; ?>">
@@ -103,12 +76,10 @@
         <!-- End: life time stats -->
     </div>
 </div>
+<div class="clearfix"></div>
 <script type="text/javascript">
-jQuery(document).ready(function() {       
+$(document).ready(function(){       
    // init ajax table 
    TableAjax.init('?axn=fetch_all');
-   $("#enable_filter").click(function(){
-       $(".table-filter").css("display","block");
-   });
 });
 </script>

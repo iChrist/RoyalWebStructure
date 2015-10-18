@@ -1,14 +1,8 @@
 <?php
-	/*echo "<pre>";
-	print_r($arrayPerfilesUsuarios);
-	echo "</pre>";*/
-
-    if($data['datos'])
-    {
+    $result = array();
+    if($data['datos']){
         $result = $data['datos']->fetch_assoc();
     }
-	
-
 	$arrayPerfilesUsuarios = array();
 	if(isset($data['perfilesusuarios']))
     {
@@ -18,40 +12,11 @@
 			 }
 		 }
     }
-	
-    if($data['error'])
-    {
+
 ?>
-        <div class="alert alert-danger display-hide" style="display: block;">
-            <button data-close="alert" class="close"></button>
-            <?php echo $data['message']; ?>
-        </div>
-<?php
-    } // ENDIF
-    if($data['success'])
-    {
-?>
-        <div class="alert alert-success display-hide" style="display: block;">
-            <button data-close="alert" class="close"></button>
-            <?php echo $data['message']; ?>
-        </div>
-<?php
-    } // ENDIF
-?>
+<form id="_save" method="post" class="form-horizontal" role="form"> 
     <input type="hidden" name="skUsers"  id="skUsers" value="<?php echo (isset($result['skUsers'])) ? $result['skUsers'] : '' ; ?>">
     <div class="form-body">
-            
-            <!-- Alerta de mensajes-->
-            <div class="alert alert-danger display-hide">
-                <button class="close" data-close="alert"></button>
-                Usted tiene algunos errores en el formulario. Por favor, consulte más abajo.
-            </div>
-            <div class="alert alert-success display-hide">
-                <button class="close" data-close="alert"></button>
-                Validación del formulario exitoso!
-            </div>
-            
-            
             <div class="form-group">
                 <label class="control-label col-md-2">Nombres <span aria-required="true" class="required"> * </span>
                 </label>
@@ -189,16 +154,12 @@
 <script type="text/javascript">
 
     $(document).ready(function(){
-        
-        var form = $('#_save');
-        var error = $('.alert-danger', form);
-        var success = $('.alert-success', form);
-        $("#_save").validate({
+        /* VALIDATIONS */
+        isValid = $("#_save").validate({
             errorElement: 'span', //default input error message container
             errorClass: 'help-block', // default input error message class
             focusInvalid: false, // do not focus the last invalid input
             ignore: "",
-
             rules:{
                 sName:{
                     required: true,
@@ -244,18 +205,15 @@
                     // maxlength: 2
                 }
             },
-            
             invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar              
-                success.hide();
-                error.show();
-                App.scrollTo(error, -200);
+                $('.alert-success').hide();
+                $('.alert-danger').show();
+                App.scrollTo($('.alert-danger'), -200);
             },
-            
             errorPlacement: function (error, element) { // hacer la colocación de error para cada tipo de entrada
                 var icon = $(element).parent('.input-icon').children('i');
                 icon.removeClass('fa-check').addClass("fa-warning");  
-                icon.attr("data-original-title", error.text()).tooltip({'container': 'body'});
-                
+                icon.attr("data-original-title", $('.alert-danger').text()).tooltip({'container': 'body'});
                 if (element.parent(".input-group").size() > 0) {
                     error.insertAfter(element.parent(".input-group"));
                 } else if (element.attr("data-error-container")) { 
@@ -271,24 +229,17 @@
                 } else {
                     error.insertAfter(element); // Para otros insumos, sólo realizar comportamiento predeterminado (llamar messages)
                 }
-                
             },
-            
             highlight: function (element) { // entradas de error Hightlight
-                $(element)
-                    .closest('.form-group').addClass('has-error'); // conjunto de clases de error
+                $(element).closest('.form-group').addClass('has-error'); // conjunto de clases de error
             },
             unhighlight: function (element) { // revertir el cambio realizado por hightlight
             },
-            
             success: function (label, element) {
                 var icon = $(element).parent('.input-icon').children('i');
                 $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // conjunto de clases de éxito con el grupo control
                 icon.removeClass("fa-warning").addClass("fa-check");
-                
-                
             },
-            
             messages:{
                 sName:{
                     required: "Campo obligatorio.",
@@ -315,12 +266,6 @@
                     required: "Campo obligatorio.",
                 }
             }
-    
         });
-		
-		/*var a = < ?php echo ($data['success'] ? 1 : 0); ?>;
-		if(a==1){
-			setInterval(function(){ alert("Hello"); }, 1000);
-		}*/
     }); 
 </script>
