@@ -1,5 +1,4 @@
 <?php 
-    require_once(CORE_PATH."model/core.model.php");
     global $core;
 ?>  
     <!DOCTYPE html>
@@ -57,7 +56,7 @@
 	<div class="header-inner">
 		<!-- BEGIN LOGO -->
 		<div class="page-logo">
-            <a href="index.html">
+            <a href="<?php echo SYS_URL; ?>">
                 <img src="<?php echo SYS_URL; ?>core/assets/img/RoyalWeb-White.png" alt="logo" style="width:110px;height:40px;margin:5px;"/>
             </a>
         </div>
@@ -76,124 +75,6 @@
 		<!-- BEGIN TOP NAVIGATION MENU -->
 		<ul class="nav navbar-nav pull-right">
 			<!-- BEGIN NOTIFICATION DROPDOWN -->
-			<!--<li class="dropdown" id="header_notification_bar">
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-				<i class="icon-bell"></i>
-				<span class="badge badge-success">
-				2</span>
-				</a>
-				<ul class="dropdown-menu extended notification">
-					<li>
-						<p>
-							 Tienes 2 notificaciones nuevas
-						</p>
-					</li>
-					<li>
-						<ul class="dropdown-menu-list scroller" style="height: 250px;">
-							<li>
-								<a href="#">
-								<span class="label label-sm label-icon label-success">
-								<i class="fa fa-plus"></i>
-								</span>
-								Nuevo Usuario Registrado <span class="time">
-								3 Minutos </span>
-								</a>
-							</li>
-							<li>
-								<a href="#">
-								<span class="label label-sm label-icon label-danger">
-								<i class="fa fa-bolt"></i>
-								</span>
-								Registro de Documentacion <span class="time">
-								5 Minutos</span>
-								</a>
-							</li>
-						</ul>
-					</li>
-					<li class="external">
-						<a href="#">Ver todas las Notificaciones <i class="fa fa-angle-right"></i></a>
-					</li>
-				</ul>
-			</li>-->
-			<!-- END NOTIFICATION DROPDOWN -->
-			<!-- BEGIN INBOX DROPDOWN -->
-			<!--<li class="dropdown" id="header_inbox_bar">
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-				<i class="icon-envelope-open"></i>
-				<span class="badge badge-info">
-				5 </span>
-				</a>
-				<ul class="dropdown-menu extended inbox">
-					<li>
-						<p>
-							Tienes 4 Mensajes Nuevos
-						</p>
-					</li>
-					<li>
-						<ul class="dropdown-menu-list scroller" style="height: 250px;">
-							<li>
-								<a href="inbox.html?a=view">
-								<span class="photo">
-								<img src="./assets/img/avatar2.jpg" alt=""/>
-								</span>
-								<span class="subject">
-								<span class="from">
-								Christian Jimenez</span>
-								<span class="time">
-								Justo Ahora </span>
-								</span>
-								<span class="message">
-								Ver nuevas . </span>
-								</a>
-							</li>
-							
-						</ul>
-					</li>
-					<li class="external">
-						<a href="inbox.html">Ver todos los Correos <i class="fa fa-angle-right"></i></a>
-					</li>
-				</ul>-->
-			</li>
-			<!-- END INBOX DROPDOWN -->
-			<!-- BEGIN TODO DROPDOWN -->
-			<!--<li class="dropdown" id="header_task_bar">
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-				<i class="icon-calendar"></i>
-				<span class="badge badge-warning">
-				5 </span>
-				</a>
-				<ul class="dropdown-menu extended tasks">
-					<li>
-						<p>
-							 Ustedes tiene 3 Tareas Pendientes
-						</p>
-					</li>
-					<li>
-						<ul class="dropdown-menu-list scroller" style="height: 250px;">
-							<li>
-								<a href="#">
-								<span class="task">
-								<span class="desc">
-								Referencia pedimento 20000019238</span>
-								<span class="percent">
-								30% </span>
-								</span>
-								<span class="progress">
-								<span style="width: 40%;" class="progress-bar progress-bar-success" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
-								<span class="sr-only">
-								40% Completa </span>
-								</span>
-								</span>
-								</a>
-							</li>
-							
-						</ul>
-					</li>
-					<li class="external">
-						<a href="#">Ver tareas pendientes <i class="fa fa-angle-right"></i></a>
-					</li>
-				</ul>
-			</li>-->
 			<!-- END TODO DROPDOWN -->
 			<li class="devider">
 				 &nbsp;
@@ -202,7 +83,7 @@
 			<li class="dropdown user">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
 				<img alt="" src="assets/img/avatar3_small.jpg"/>
-				<span class="username username-hide-on-mobile"><?php echo utf8_encode($_SESSION['session']['sName']);?> </span>
+				<span class="username username-hide-on-mobile"><?php echo $_SESSION['session']['sName'];?> </span>
 				<i class="fa fa-angle-down"></i>
 				</a>
 				<ul class="dropdown-menu">
