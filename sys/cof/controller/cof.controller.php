@@ -56,12 +56,12 @@
                             while($row = $this->data['users']->fetch_assoc()){
                                 $actions = $this->printModulesButtons(2,array($row['skUsers']));
                                 $records["data"][] = array(
-                                    htmlentities(($row['sName']), ENT_QUOTES)
-                                    ,htmlentities(($row['sEmail']), ENT_QUOTES)
-                                    ,htmlentities(($row['sUserName']), ENT_QUOTES)
-                                    ,htmlentities(($row['sPassword']), ENT_QUOTES)
+                                    utf8_encode(($row['sName']))
+                                    ,utf8_encode(($row['sEmail']))
+                                    ,utf8_encode(($row['sUserName']))
+                                    ,utf8_encode(($row['sPassword']))
                                     ,utf8_encode($row['sHtml'])
-                                    , !empty($actions['sHtml']) ? '<div class="dropdown" style="position: absolute;"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.$actions['sHtml'].'</ul></div>' : ''
+                                    , !empty($actions['sHtml']) ? '<div class="dropdown" style="position: absolute;"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
                                     
                                 );
                             }
@@ -215,7 +215,6 @@
                     return true;
                 }
                 
-                
                 public function cof_usua_det(){
                     $this->data['datos'] = false;
                     $this->data['profiles'] = parent::read_profile(); // Mandamos a llamar todos los perfiles para cargarlos en la vista
@@ -229,7 +228,9 @@
                 }
                 
                 /* TERMINA MODULO USUARIOS */
-                
+              
+			  
+			   
 	        public function cof_perf_con(){
 	        	 if(isset($_GET['axn']) && $_GET['axn'] == 'fetch_all'){
                         
@@ -268,7 +269,7 @@
                                $actions = $this->printModulesButtons(2,array($row['skProfiles']));
 
                                 $records["data"][] = array(
-                                    htmlentities(($row['sName']), ENT_QUOTES)
+                                    utf8_encode(($row['sName']))
                                       ,utf8_encode($row['sHtml'])
                                     , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.$actions['sHtml'].'</ul></div>' : ''
                                 );

@@ -2,7 +2,8 @@
 	Abstract Class Cof_Model Extends Core_Model {
                 
             // PUBLIC VARIABLES //
-                public $users = array(
+                
+				  public $users = array(
                     'skUsers'       		=>  ''
                     ,'skUsersDistinto'   	=>  ''
                     ,'sName'       			=>  ''
