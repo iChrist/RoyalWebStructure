@@ -28,7 +28,20 @@
                 </div>
             </div>
         </div>
-            
+        
+        <h4>Fracciones arancelarias <a href="#" class="btn btn-default btn-xs add-input"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></h4>
+        <div id="fraccionesArancelarias">
+        <div class="form-group">
+            <label class="control-label col-md-2"></label>
+            <div class="col-md-4">
+                <div class="input-group">
+                    <input type="text" name="fraccionArancelaria[]" class="form-control" placeholder="Fracci&oacute;n arancelaria">
+                    <span class="input-group-addon" id="basic-addon2"><a href="#" class="delete-input"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></span>
+                </div>
+            </div>
+        </div>
+        </div>
+        
         <div class="form-group">
             <label class="control-label col-md-2">Estatus <span aria-required="true" class="required"> * </span>
             </label>
@@ -55,9 +68,67 @@
     </div>
 </form>
 <div class="clearfix"></div>
-
+<form id="fileupload" action="assets/plugins/jquery-file-upload/server/php/" method="POST" enctype="multipart/form-data">
+						<!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+						<div class="row fileupload-buttonbar">
+							<div class="col-lg-7">
+								<!-- The fileinput-button span is used to style the file input field as button -->
+								<span class="btn btn-success fileinput-button">
+								<i class="fa fa-plus"></i>
+								<span>
+								Add files... </span>
+								<input type="file" name="files[]" multiple="">
+								</span>
+								<button type="submit" class="btn btn-primary start">
+								<i class="fa fa-upload"></i>
+								<span>
+								Start upload </span>
+								</button>
+								<button type="reset" class="btn btn-warning cancel">
+								<i class="fa fa-ban-circle"></i>
+								<span>
+								Cancel upload </span>
+								</button>
+								<button type="button" class="btn btn-danger delete">
+								<i class="fa fa-trash"></i>
+								<span>
+								Delete </span>
+								</button>
+								<input type="checkbox" class="toggle">
+								<!-- The global file processing state -->
+								<span class="fileupload-process">
+								</span>
+							</div>
+							<!-- The global progress information -->
+							<div class="col-lg-5 fileupload-progress fade">
+								<!-- The global progress bar -->
+								<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+									<div class="progress-bar progress-bar-success" style="width:0%;">
+									</div>
+								</div>
+								<!-- The extended global progress information -->
+								<div class="progress-extended">
+									 &nbsp;
+								</div>
+							</div>
+						</div>
+						<!-- The table listing the files available for upload/download -->
+						<table role="presentation" class="table table-striped clearfix">
+						<tbody class="files">
+						</tbody>
+						</table>
+					</form>
 <script type="text/javascript">
     $(document).ready(function(){
+        /* AGREGA INPUT */
+        $('.add-input').click(function(){
+            $("#fraccionesArancelarias").append('<div class="form-group"><label class="control-label col-md-2"></label><div class="col-md-4"><div class="input-group"><input type="text" name="fraccionArancelaria[]" class="form-control" placeholder="Fracci&oacute;n arancelaria"><span class="input-group-addon"><a href="#" class="delete-input"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></span></div></div></div>');
+        });
+        /* ELIMINA INPUT */
+        $('body').delegate('.delete-input','click',function(){  
+            $(this).parent().parent().parent().parent().remove();
+        });
+        
         /* VALIDATIONS */
         isValid = $("#_save").validate({
             errorElement: 'span', //default input error message container
