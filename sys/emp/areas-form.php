@@ -4,7 +4,7 @@
         $result = $data['datos']->fetch_assoc();
     }
 ?>
-<form id="_save" method="post" class="form-horizontal" role="form"> 
+<form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data"> 
     <input type="hidden" name="skAreas"  id="skAreas" value="<?php echo (isset($result['skAreas'])) ? $result['skAreas'] : '' ; ?>">
     <div class="form-body">
         <div class="form-group">
