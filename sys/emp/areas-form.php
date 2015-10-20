@@ -29,18 +29,36 @@
             </div>
         </div>
         
-        <h4>Fracciones arancelarias <a href="#" class="btn btn-default btn-xs add-input"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></h4>
+        <h4>Fracciones arancelarias <a href="#" class="btn btn-default btn-xs add-fraccion"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></h4>
         <div id="fraccionesArancelarias">
-        <div class="form-group">
-            <label class="control-label col-md-2"></label>
-            <div class="col-md-4">
-                <div class="input-group">
-                    <input type="text" name="fraccionArancelaria[]" class="form-control" placeholder="Fracci&oacute;n arancelaria">
-                    <span class="input-group-addon" id="basic-addon2"><a href="#" class="delete-input"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></span>
+            <div class="form-group">
+                <label class="control-label col-md-2"></label>
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <input type="text" name="fraccionArancelaria0[sNombre]" class="form-control" placeholder="Fracci&oacute;n arancelaria">
+                        <span class="input-group-addon" id="basic-addon2"><a href="#" class="delete-fraccion"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></span>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <label class="control-label col-md-2"></label>
+                <div class="col-md-4">
+                    <h5>Descripciones <a href="#" class="btn btn-default btn-xs add-descripcion" fraccion="0"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></h5>
+                </div>
+                <div class="clearfix"></div>
+                <div class="fraccionesArancelariasDescripciones">
+                    <div class="form-group">
+                    <label class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                        <textarea name="fraccionArancelaria0[sDescripcion][]" class="form-control" placeholder="Descripción en espa&ntilde;ol"></textarea>
+                        <textarea name="fraccionArancelaria0[sDescripcionIngles][]" class="form-control" placeholder="Descripción en ingl&eacute;s"></textarea>
+                        <span class="input-group-addon" id="basic-addon2"><a href="#" class="delete-descripcion" fraccion="0"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></span>
+                        </div>
+                    </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        </div>
+        </div><!-- TERMINA DE div id=fraccionesArancelarias -->
         
         <div class="form-group">
             <label class="control-label col-md-2">Estatus <span aria-required="true" class="required"> * </span>
@@ -119,16 +137,28 @@
 						</table>
 					</form>
 <script type="text/javascript">
+    var fraccion = 1;
     $(document).ready(function(){
-        /* AGREGA INPUT */
-        $('.add-input').click(function(){
-            $("#fraccionesArancelarias").append('<div class="form-group"><label class="control-label col-md-2"></label><div class="col-md-4"><div class="input-group"><input type="text" name="fraccionArancelaria[]" class="form-control" placeholder="Fracci&oacute;n arancelaria"><span class="input-group-addon"><a href="#" class="delete-input"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></span></div></div></div>');
+        
+        
+        /* AGREGA INPUT FRACCION */
+        $('.add-fraccion').click(function(){
+            var html = '<div class="form-group"><label class="control-label col-md-2"></label><div class="col-md-4"><div class="input-group"><input type="text" name="fraccionArancelaria'+fraccion+'[sNombre]" class="form-control" placeholder="Fracci&oacute;n arancelaria"><span class="input-group-addon" id="basic-addon2"><a href="#" class="delete-fraccion"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></span></div></div><div class="clearfix"></div><label class="control-label col-md-2"></label><div class="col-md-4"><h5>Descripciones <a href="#" class="btn btn-default btn-xs add-descripcion" fraccion="'+fraccion+'"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></h5></div><div class="clearfix"></div><div class="fraccionesArancelariasDescripciones"><div class="form-group"><label class="control-label col-md-2"></label><div class="col-md-4"><div class="input-group"><textarea name="fraccionArancelaria'+fraccion+'[sDescripcion][]" class="form-control" placeholder="Descripción en espa&ntilde;ol"></textarea><textarea name="fraccionArancelaria'+fraccion+'[sDescripcionIngles][]" class="form-control" placeholder="Descripción en ingl&eacute;s"></textarea><span class="input-group-addon" id="basic-addon2"><a href="#" class="delete-descripcion" fraccion="'+fraccion+'"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></span></div></div></div></div></div>';
+            $("#fraccionesArancelarias").append(html);
+            fraccion ++;
         });
-        /* ELIMINA INPUT */
-        $('body').delegate('.delete-input','click',function(){  
+        /* ELIMINA INPUT FRACCION*/
+        $('body').delegate('.delete-fraccion','click',function(){  
             $(this).parent().parent().parent().parent().remove();
         });
-        
+        /* AGREGA TEXTAREA DESCRIPCIONES */
+        //$('.add-descripcion').click(function(){
+        $('body').delegate('.add-descripcion','click',function(){
+            var numFraccion = $(this).attr('fraccion');
+            console.log(numFraccion);
+            var html = '<div class="form-group"><label class="control-label col-md-2"></label><div class="col-md-4"><div class="input-group"><textarea name="fraccionArancelaria'+numFraccion+'[sDescripcion][]" class="form-control" placeholder="Descripción en espa&ntilde;ol"></textarea><textarea name="fraccionArancelaria'+numFraccion+'[sDescripcionIngles][]" class="form-control" placeholder="Descripción en ingl&eacute;s"></textarea><span class="input-group-addon" id="basic-addon2"><a href="#" class="delete-descripcion" fraccion="'+numFraccion+'"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></span></div></div></div>';    
+            $(this).parent().parent().next('div').next('div').append(html);
+        });
         /* VALIDATIONS */
         isValid = $("#_save").validate({
             errorElement: 'span', //default input error message container
