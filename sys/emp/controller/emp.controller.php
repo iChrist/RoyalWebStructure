@@ -380,6 +380,80 @@
                     $this->load_view('tipemp-form', $this->data);
                     return true;
                 }
+                
+                 /* EMPIEZA MODULO DE EMPRESAS*/
+                 public function empresas_index(){
+                    if(isset($_GET['axn'])){
+                        switch ($_GET['axn']) {
+                            case 'pdf':
+                                $this->empresas_pdf();
+                                break;
+                            case 'fetch_all':
+                                // PARAMETROS PARA FILTRADO //
+                                if(isset($_POST['sRFC'])){
+                                    $this->empresas['sRFC'] = $_POST['sRFC'];
+                                }
+                                if(isset($_POST['sNombre'])){
+                                    $this->empresas['sNombre'] = $_POST['sNombre'];
+                                }
+                                 if(isset($_POST['sNombreCorto'])){
+                                    $this->empresas['sNombreCorto'] = $_POST['sNombreCorto'];
+                                }
+                               
+                                if(isset($_POST['skStatus'])){
+                                    $this->empresas['skStatus'] = $_POST['skStatus'];
+                                }
+
+                                // OBTENER REGISTROS //
+                                $total = parent::count_empresas();
+                                $records = Core_Functions::table_ajax($total);
+                                if($records['recordsTotal'] === 0){
+                                    header('Content-Type: application/json');
+                                    echo json_encode($records);
+                                    return false;
+                                }
+
+                                $this->empresas['limit'] = $records['limit'];
+                                $this->empresas['offset'] = $records['offset'];
+                                $this->data['data'] = parent::read_like_empresas();
+
+                                if(!$this->data['data']){
+                                    header('Content-Type: application/json');
+                                    echo json_encode($records);
+                                    return false;
+                                }
+
+                                while($row = $this->data['data']->fetch_assoc()){
+                                    $actions = $this->printModulesButtons(2,array($row['skEmpresa']));
+                                    array_push($records['data'], array(
+                                        $row['sRFC'],
+                                        $row['sNombre'],
+                                        $row['sNombreCorto'],
+                                        $row['tipoEmpresa'],
+                                         $row['dFechaCreacion'],
+                                          $row['htmlStatus']
+                                        , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.$actions['sHtml'].'</ul></div>' : ''
+                                    ));
+                                }
+
+                                header('Content-Type: application/json');
+                                echo json_encode($records);
+                                return true;
+                                break;
+                        }
+                        return true;
+                    }
+                    
+                    // INCLUYE UN MODELO DE OTRO MODULO //
+                    $this->load_model('cof','cof');
+                    $this->data['status'] = Cof_Model::read_status();
+                    
+                    // RETORNA LA VISTA areas-index.php //
+                    $this->load_view('empresas-index', $this->data);
+                    return true;
+                }
+                 
+                /* TERMINA MODULO DE EMPRESAS */
                  
                  
                  
