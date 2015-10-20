@@ -85,6 +85,7 @@
                     $this->data['response'] = true;
                     $this->data['datos'] = false;
                     if($_POST){
+                        exit('</pre>'.print_r($_POST,1).'</pre>');
                         $this->areas['skAreas'] = !empty($_POST['skAreas']) ? $_POST['skAreas'] : substr(md5(microtime()), 1, 32);
                         $this->areas['sNombre'] = utf8_decode($_POST['sNombre']);
                         $this->areas['sTitulo'] = utf8_decode($_POST['sTitulo']);
