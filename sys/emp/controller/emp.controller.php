@@ -85,6 +85,7 @@
                     $this->data['response'] = true;
                     $this->data['datos'] = false;
                     if($_POST){
+                        //exit('</pre>'.print_r($_POST,1).'</pre>');
                         $this->areas['skAreas'] = !empty($_POST['skAreas']) ? $_POST['skAreas'] : substr(md5(microtime()), 1, 32);
                         $this->areas['sNombre'] = utf8_decode($_POST['sNombre']);
                         $this->areas['sTitulo'] = utf8_decode($_POST['sTitulo']);
@@ -380,6 +381,139 @@
                     $this->load_view('tipemp-form', $this->data);
                     return true;
                 }
+                
+                 /* EMPIEZA MODULO DE EMPRESAS*/
+                 public function empresas_index(){
+                    if(isset($_GET['axn'])){
+                        switch ($_GET['axn']) {
+                            case 'pdf':
+                                $this->empresas_pdf();
+                                break;
+                            case 'fetch_all':
+                                // PARAMETROS PARA FILTRADO //
+                                if(isset($_POST['sRFC'])){
+                                    $this->empresas['sRFC'] = $_POST['sRFC'];
+                                }
+                                if(isset($_POST['sNombre'])){
+                                    $this->empresas['sNombre'] = $_POST['sNombre'];
+                                }
+                                 if(isset($_POST['sNombreCorto'])){
+                                    $this->empresas['sNombreCorto'] = $_POST['sNombreCorto'];
+                                }
+                               
+                                if(isset($_POST['skStatus'])){
+                                    $this->empresas['skStatus'] = $_POST['skStatus'];
+                                }
+
+                                // OBTENER REGISTROS //
+                                $total = parent::count_empresas();
+                                $records = Core_Functions::table_ajax($total);
+                                if($records['recordsTotal'] === 0){
+                                    header('Content-Type: application/json');
+                                    echo json_encode($records);
+                                    return false;
+                                }
+
+                                $this->empresas['limit'] = $records['limit'];
+                                $this->empresas['offset'] = $records['offset'];
+                                $this->data['data'] = parent::read_like_empresas();
+
+                                if(!$this->data['data']){
+                                    header('Content-Type: application/json');
+                                    echo json_encode($records);
+                                    return false;
+                                }
+
+                                while($row = $this->data['data']->fetch_assoc()){
+                                    $actions = $this->printModulesButtons(2,array($row['skEmpresa']));
+                                    array_push($records['data'], array(
+                                        $row['sRFC'],
+                                        $row['sNombre'],
+                                        $row['sNombreCorto'],
+                                        $row['tipoEmpresa'],
+                                         $row['dFechaCreacion'],
+                                          $row['htmlStatus']
+                                        , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.$actions['sHtml'].'</ul></div>' : ''
+                                    ));
+                                }
+
+                                header('Content-Type: application/json');
+                                echo json_encode($records);
+                                return true;
+                                break;
+                        }
+                        return true;
+                    }
+                    
+                    // INCLUYE UN MODELO DE OTRO MODULO //
+                    $this->load_model('cof','cof');
+                    $this->data['status'] = Cof_Model::read_status();
+                    
+                    // RETORNA LA VISTA areas-index.php //
+                    $this->load_view('empresas-index', $this->data);
+                    return true;
+                }
+                 
+               
+                
+                public function empresas_form(){
+                  	$this->data['message'] = '';
+                    $this->data['response'] = true;
+                    $this->data['datos'] = false;
+                    $this->data['tiposEmpresas'] = parent::read_equal_tipoempresas(); // Mandamos a llamar todos los perfiles para cargarlos en la vista
+                     $this->load_model('cof','cof');
+                    $this->data['status'] = Cof_Model::read_status();
+                    if($_POST){
+                        
+                         
+                        $this->empresas['skEmpresa'] = !empty($_POST['skEmpresa']) ? $_POST['skEmpresa'] : substr(md5(microtime()), 1, 32);
+                        $this->empresas['sNombre'] = htmlentities($_POST['sNombre'],ENT_QUOTES);
+                        $this->empresas['sNombreCorto'] = htmlentities($_POST['sNombreCorto'],ENT_QUOTES);
+                        $this->empresas['sRFC'] = htmlentities($_POST['sRFC'],ENT_QUOTES);
+                        $this->empresas['skStatus'] = htmlentities($_POST['skStatus'],ENT_QUOTES);
+                        if(empty($_POST['skEmpresa'])){
+                            if(parent::create_empresas()){
+                            	$this->data['response'] = true;
+                                $this->data['message'] = 'Registro insertado con &eacute;xito.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return true;
+                                
+                            }else{
+                            	 $this->data['response'] = true;
+                                $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return false;
+                                
+                            }
+                        }else{
+                            if(parent::update_empresas()){
+                            	 $this->data['response'] = true;
+                                $this->data['message'] = 'Registro actualizado con &eacute;xito.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return true;
+                            }else{
+                            	 $this->data['response'] = true;
+                                $this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return false;
+
+                              
+                            }
+                        }
+                    }
+                    if(isset($_GET['p1'])){
+                        $this->empresas['skEmpresa'] = $_GET['p1'];
+                        $this->data['datos'] = parent::read_equal_empresas();
+                    }
+                    $this->load_view('empresas-form', $this->data);
+                    return true;
+                }
+                
+                 /* TERMINA MODULO DE EMPRESAS */
                  
                  
                  

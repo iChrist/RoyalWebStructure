@@ -4,7 +4,7 @@
         $result = $data['datos']->fetch_assoc();
     }
 ?>
-<form id="_save" method="post" class="form-horizontal" role="form"> 
+<form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data"> 
     <input type="hidden" name="skAreas"  id="skAreas" value="<?php echo (isset($result['skAreas'])) ? $result['skAreas'] : '' ; ?>">
     <div class="form-body">
         <div class="form-group">
@@ -28,7 +28,38 @@
                 </div>
             </div>
         </div>
-            
+        
+        <h4>Fracciones arancelarias <a href="#" class="btn btn-default btn-xs add-fraccion"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></h4>
+        <div id="fraccionesArancelarias">
+            <div class="form-group">
+                <label class="control-label col-md-2"></label>
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <input type="text" name="fraccionArancelaria[0][sNombre]" class="form-control" placeholder="Fracci&oacute;n arancelaria">
+                        <span class="input-group-addon" id="basic-addon2"><a href="#" class="delete-fraccion"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></span>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <label class="control-label col-md-2"></label>
+                <div class="col-md-4">
+                    <h5>Descripciones <a href="#" class="btn btn-default btn-xs add-descripcion" fraccion="0"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></h5>
+                </div>
+                <div class="clearfix"></div>
+                <div class="fraccionesArancelariasDescripciones">
+                    <div class="form-group">
+                    <label class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                        <textarea name="fraccionArancelaria[0][sDescripcion][]" class="form-control" placeholder="Descripción en espa&ntilde;ol"></textarea>
+                        <textarea name="fraccionArancelaria[0][sDescripcionIngles][]" class="form-control" placeholder="Descripción en ingl&eacute;s"></textarea>
+                        <span class="input-group-addon" id="basic-addon2"><a href="#" class="delete-descripcion" fraccion="0"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></span>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- TERMINA DE div id=fraccionesArancelarias -->
+        
         <div class="form-group">
             <label class="control-label col-md-2">Estatus <span aria-required="true" class="required"> * </span>
             </label>
@@ -55,9 +86,84 @@
     </div>
 </form>
 <div class="clearfix"></div>
-
+<form id="fileupload" action="assets/plugins/jquery-file-upload/server/php/" method="POST" enctype="multipart/form-data">
+						<!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+						<div class="row fileupload-buttonbar">
+							<div class="col-lg-7">
+								<!-- The fileinput-button span is used to style the file input field as button -->
+								<span class="btn btn-success fileinput-button">
+								<i class="fa fa-plus"></i>
+								<span>
+								Add files... </span>
+								<input type="file" name="files[]" multiple="">
+								</span>
+								<button type="submit" class="btn btn-primary start">
+								<i class="fa fa-upload"></i>
+								<span>
+								Start upload </span>
+								</button>
+								<button type="reset" class="btn btn-warning cancel">
+								<i class="fa fa-ban-circle"></i>
+								<span>
+								Cancel upload </span>
+								</button>
+								<button type="button" class="btn btn-danger delete">
+								<i class="fa fa-trash"></i>
+								<span>
+								Delete </span>
+								</button>
+								<input type="checkbox" class="toggle">
+								<!-- The global file processing state -->
+								<span class="fileupload-process">
+								</span>
+							</div>
+							<!-- The global progress information -->
+							<div class="col-lg-5 fileupload-progress fade">
+								<!-- The global progress bar -->
+								<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+									<div class="progress-bar progress-bar-success" style="width:0%;">
+									</div>
+								</div>
+								<!-- The extended global progress information -->
+								<div class="progress-extended">
+									 &nbsp;
+								</div>
+							</div>
+						</div>
+						<!-- The table listing the files available for upload/download -->
+						<table role="presentation" class="table table-striped clearfix">
+						<tbody class="files">
+						</tbody>
+						</table>
+					</form>
 <script type="text/javascript">
+    var fraccion = 1;
     $(document).ready(function(){
+        
+        
+        /* AGREGAR FRACCION */
+        $('body').delegate('.add-fraccion', 'click', function(){
+            var html = '<div class="form-group"><label class="control-label col-md-2"></label><div class="col-md-4"><div class="input-group"><input type="text" name="fraccionArancelaria['+fraccion+'][sNombre]" class="form-control" placeholder="Fracci&oacute;n arancelaria"><span class="input-group-addon" id="basic-addon2"><a href="#" class="delete-fraccion"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></span></div></div><div class="clearfix"></div><label class="control-label col-md-2"></label><div class="col-md-4"><h5>Descripciones <a href="#" class="btn btn-default btn-xs add-descripcion" fraccion="'+fraccion+'"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></h5></div><div class="clearfix"></div><div class="fraccionesArancelariasDescripciones"><div class="form-group"><label class="control-label col-md-2"></label><div class="col-md-4"><div class="input-group"><textarea name="fraccionArancelaria['+fraccion+'][sDescripcion][]" class="form-control" placeholder="Descripción en espa&ntilde;ol"></textarea><textarea name="fraccionArancelaria['+fraccion+'][sDescripcionIngles][]" class="form-control" placeholder="Descripción en ingl&eacute;s"></textarea><span class="input-group-addon" id="basic-addon2"><a href="#" class="delete-descripcion" fraccion="'+fraccion+'"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></span></div></div></div></div></div>';
+            $("#fraccionesArancelarias").append(html);
+            fraccion ++;
+        });
+        /* ELIMINAR FRACCION */
+        $('body').delegate('.delete-fraccion','click',function(){  
+            $(this).parent().parent().parent().parent().remove();
+        });
+        
+        /* AGREGAR DESCRIPCIONES */
+        $('body').delegate('.add-descripcion','click',function(){
+            var numFraccion = $(this).attr('fraccion');
+            console.log(numFraccion);
+            var html = '<div class="form-group"><label class="control-label col-md-2"></label><div class="col-md-4"><div class="input-group"><textarea name="fraccionArancelaria['+numFraccion+'][sDescripcion][]" class="form-control" placeholder="Descripción en espa&ntilde;ol"></textarea><textarea name="fraccionArancelaria['+numFraccion+'][sDescripcionIngles][]" class="form-control" placeholder="Descripción en ingl&eacute;s"></textarea><span class="input-group-addon" id="basic-addon2"><a href="#" class="delete-descripcion" fraccion="'+numFraccion+'"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></span></div></div></div>';    
+            $(this).parent().parent().next('div').next('div').append(html);
+        });
+        /* ELIMINAR DESCRIPCIONES */
+        $('body').delegate('.delete-descripcion','click',function(){  
+            $(this).parent().parent().parent().parent().remove();
+        });
+        
         /* VALIDATIONS */
         isValid = $("#_save").validate({
             errorElement: 'span', //default input error message container

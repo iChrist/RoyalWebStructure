@@ -4,8 +4,9 @@
     <!DOCTYPE html>
     <!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
     <!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
-    <!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->
+    <!--[if !IE]><!--> <!--<![endif]-->
         <!-- BEGIN HEAD -->
+    <html lang="en" class="no-js">
     <head>
     <meta charset="utf-8"/>
     <title><?php echo $core->sTitle; ?></title>
@@ -26,7 +27,13 @@
 <link href="<?php echo SYS_URL; ?>core/assets/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css"/>
 <link href="<?php echo SYS_URL; ?>core/assets/plugins/fullcalendar/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css"/>
 <link href="<?php echo SYS_URL; ?>core/assets/plugins/jqvmap/jqvmap/jqvmap.css" rel="stylesheet" type="text/css"/>
+<!-- NOTIFICATIONS !-->
 <link href="<?php echo SYS_URL; ?>core/assets/plugins/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css"/>
+<!-- FILE UPLOADS !-->
+<link href="<?php echo SYS_URL; ?>core/assets/plugins/jquery-file-upload/blueimp-gallery/blueimp-gallery.min.css" rel="stylesheet"/>
+<link href="<?php echo SYS_URL; ?>core/assets/plugins/jquery-file-upload/css/jquery.fileupload.css" rel="stylesheet"/>
+<link href="<?php echo SYS_URL; ?>core/assets/plugins/jquery-file-upload/css/jquery.fileupload-ui.css" rel="stylesheet"/>
+
 <!-- END PAGE LEVEL PLUGIN STYLES -->
 <!-- BEGIN THEME STYLES -->
 <link href="<?php echo SYS_URL; ?>core/assets/css/style-conquer.css" rel="stylesheet" type="text/css"/>
