@@ -135,13 +135,13 @@
             {% if (!i && !o.options.autoUpload) { %}
                 <button class="btn btn-success start" disabled>
                     <i class="fa fa-upload"></i>
-                    <span>Start</span>
+                    <span>Subir</span>
                 </button>
             {% } %}
             {% if (!i) { %}
                 <button class="btn btn-danger cancel">
                     <i class="fa fa-ban"></i>
-                    <span>Cancel</span>
+                    <span>Cancelar</span>
                 </button>
             {% } %}
         </td>
@@ -178,13 +178,13 @@
                     {% if (file.deleteUrl) { %}
                         <button class="btn btn-danger delete btn-sm" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
                             <i class="fa fa-trash-o"></i>
-                            <span>Delete</span>
+                            <span>Eliminar</span>
                         </button>
                         <input type="checkbox" name="delete" value="1" class="toggle">
                     {% } else { %}
                         <button class="btn btn-warning cancel btn-sm">
                             <i class="fa fa-ban"></i>
-                            <span>Cancel</span>
+                            <span>Cancelar</span>
                         </button>
                     {% } %}
                 </td>
@@ -206,7 +206,7 @@ jQuery(document).ready(function() {
    Index.initDashboardDaterange();
    Tasks.initDashboardWidget();
    UIToastr.init();
-   FormFileUpload.init();
+   //FormFileUpload.init();
 });
 </script>
 <!-- END JAVASCRIPTS -->

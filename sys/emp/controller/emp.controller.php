@@ -81,6 +81,12 @@
                 
                  
                 public function areas_form(){ 
+                    if(isset($_GET['axn'])){
+                        if($_GET['axn']==='fileUpload'){
+                            $upload_handler = new UploadHandler();
+                            return true;
+                        }
+                    }
                     $this->data['message'] = '';
                     $this->data['response'] = true;
                     $this->data['datos'] = false;

@@ -3,28 +3,33 @@ var FormFileUpload = function () {
 
     return {
         //main function to initiate the module
-        init: function () {
+        init: function (_url) {
 
              // Initialize the jQuery File Upload widget:
             $('#fileupload').fileupload({
                 // Uncomment the following to send cross-domain cookies:
                 //xhrFields: {withCredentials: true},                
-                url: 'assets/plugins/jquery-file-upload/server/php/'
+                //url: 'assets/plugins/jquery-file-upload/server/php/'
+                autoUpload: false,
+                sequentialUploads: true,
+                //url: 'assets/plugins/jquery-file-upload/server/php/'
+                url: _url
             });
 
             // Enable iframe cross-domain access via redirect option:
-            $('#fileupload').fileupload(
+            /*$('#fileupload').fileupload(
                 'option',
                 'redirect',
                 window.location.href.replace(
                     /\/[^\/]*$/,
                     '/cors/result.html?%s'
                 )
-            );
+            );*/
 
             // Demo settings:
             $('#fileupload').fileupload('option', {
-                url: $('#fileupload').fileupload('option', 'url'),
+                //url: $('#fileupload').fileupload('option', 'url'),
+                url: _url,
                 // Enable image resizing, except for Android and Opera,
                 // which actually support image resizing, but fail to
                 // send Blob objects via XHR requests:
@@ -35,9 +40,10 @@ var FormFileUpload = function () {
             });
 
                 // Upload server status check for browsers with CORS support:
-            if ($.support.cors) {
+            /*if ($.support.cors) {
                 $.ajax({
-                    url: 'assets/plugins/jquery-file-upload/server/php/',
+                    //url: 'assets/plugins/jquery-file-upload/server/php/',
+                    url: _url,
                     type: 'HEAD'
                 }).fail(function () {
                     $('<div class="alert alert-danger"/>')
@@ -45,17 +51,20 @@ var FormFileUpload = function () {
                                 new Date())
                         .appendTo('#fileupload');
                 });
-            }
+            }*/
             
             ////////////////////
 
             // Initialize the jQuery File Upload widget:
-            $('#fileupload').fileupload({
+            /*$('#fileupload').fileupload({
                 // Uncomment the following to send cross-domain cookies:
                 //xhrFields: {withCredentials: true},
                 autoUpload: false,
-                url: 'assets/plugins/jquery-file-upload/server/php/'
-            });
+                sequentialUploads: true,
+                //url: 'assets/plugins/jquery-file-upload/server/php/'
+                url: _url
+                
+            });*/
 
             // initialize uniform checkboxes  
             App.initUniform('.fileupload-toggle-checkbox');
