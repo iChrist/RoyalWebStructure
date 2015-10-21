@@ -454,7 +454,66 @@
                     return true;
                 }
                  
-                /* TERMINA MODULO DE EMPRESAS */
+               
+                
+                public function empresas_form(){
+                  	$this->data['message'] = '';
+                    $this->data['response'] = true;
+                    $this->data['datos'] = false;
+                    $this->data['tiposEmpresas'] = parent::read_equal_tipoempresas(); // Mandamos a llamar todos los perfiles para cargarlos en la vista
+                     $this->load_model('cof','cof');
+                    $this->data['status'] = Cof_Model::read_status();
+                    if($_POST){
+                        
+                         
+                        $this->empresas['skEmpresa'] = !empty($_POST['skEmpresa']) ? $_POST['skEmpresa'] : substr(md5(microtime()), 1, 32);
+                        $this->empresas['sNombre'] = htmlentities($_POST['sNombre'],ENT_QUOTES);
+                        $this->empresas['sNombreCorto'] = htmlentities($_POST['sNombreCorto'],ENT_QUOTES);
+                        $this->empresas['sRFC'] = htmlentities($_POST['sRFC'],ENT_QUOTES);
+                        $this->empresas['skStatus'] = htmlentities($_POST['skStatus'],ENT_QUOTES);
+                        if(empty($_POST['skEmpresa'])){
+                            if(parent::create_empresas()){
+                            	$this->data['response'] = true;
+                                $this->data['message'] = 'Registro insertado con &eacute;xito.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return true;
+                                
+                            }else{
+                            	 $this->data['response'] = true;
+                                $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return false;
+                                
+                            }
+                        }else{
+                            if(parent::update_empresas()){
+                            	 $this->data['response'] = true;
+                                $this->data['message'] = 'Registro actualizado con &eacute;xito.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return true;
+                            }else{
+                            	 $this->data['response'] = true;
+                                $this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return false;
+
+                              
+                            }
+                        }
+                    }
+                    if(isset($_GET['p1'])){
+                        $this->empresas['skEmpresa'] = $_GET['p1'];
+                        $this->data['datos'] = parent::read_equal_empresas();
+                    }
+                    $this->load_view('empresas-form', $this->data);
+                    return true;
+                }
+                
+                 /* TERMINA MODULO DE EMPRESAS */
                  
                  
                  
