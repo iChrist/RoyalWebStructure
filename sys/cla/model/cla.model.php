@@ -133,6 +133,18 @@
                 }
             }
         }
+        
+        public function read_equal_numerosParte(){
+            $sql = "SELECT numPar.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_numerosParte AS numPar INNER JOIN _status ON _status.skStatus = numPar.skStatus WHERE 1=1 ";
+            $result = $this->db->query($sql);
+            if($result){
+                if($result->num_rows > 0){
+                    return $result;
+                }else{
+                    return false;
+                }
+            }
+        }
 
         public function create_cat_descripcionFraccion_archivos(){
             $sql = "INSERT INTO cat_descripcionFraccion_archivos (skFraccionArancelariaDescripcion,sArchivo,skStatus) "
@@ -246,7 +258,7 @@
             }
           /* TERMINA create_cat_numeros_partes */
         
-        public function create_cat_numeros_partes(){
+        public function create_cat_numerosParte(){
             $sql = "INSERT INTO cat_numerosParte_fraccionesArancelarias (skFraccionArancelaria,skNumeroParte,sNombre,skStatus,dFechaCreacion,skUsersCreacion) 
             VALUES ('".$this->numparfraran['skFraccionArancelaria']."','".$this->numparfraran['skNumeroParte']."','".$this->numparfraran['sNombre']."',
                     '".$this->numparfraran['skStatus'].",'".$this->numparfraran['dFechaCreacion']."','".$this->numparfraran['skStatus']."',

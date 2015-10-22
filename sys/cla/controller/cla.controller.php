@@ -82,23 +82,82 @@
             $this->data['message'] = '';
             $this->data['response'] = true;
             $this->data['datos'] = false;
-            
-            $this->desArc['skFraccionArancelariaDescripcion'] = !empty($_POST['skFraccionArancelariaDescripcion']) ? $_POST['skFraccionArancelariaDescripcion'] : substr(md5(microtime()), 1, 32);
-            $this->create_cat_descripcionFraccion_archivos();
-            
-            $this->fraAraDes['skFraccionArancelariaDescripcion'] = !empty($_POST['skFraccionArancelariaDescripcion']) ? $_POST['skFraccionArancelariaDescripcion'] : substr(md5(microtime()), 1, 32);
-            $this->create_cat_fraccionesArancelarias_descripcionFraccion();
-            
-            $this->desArc['sNombre'] = utf8_decode($_POST['sNombre']);
-            $this->load_view('cla-form');
+            if($_POST){
+                $this->numPar['skNumeroParte'] = !empty($_POST['skNumeroParte']) ? $_POST['skNumeroParte'] : substr(md5(microtime()), 1, 32);
+                $this->numPar['sNombre'] = !empty($_POST['sNombre']) ? utf8_decode($_POST['sNombre']) : NULL ;
+                $this->numPar['sDecripcion'] = !empty($_POST['sDecripcion']) ? utf8_decode($_POST['sDecripcion']) : NULL ;
+                $this->numPar['skStatus'] = !empty($_POST['skStatus']) ? utf8_decode($_POST['skStatus']) : 'IN' ;
+                $this->numPar['dFechaCreacion'] = 'CURRENT_TIMESTAMP';
+                $this->numPar['skUsersCreacion'] = $_SESSION['session']['skUsers'];
+                if(empty($_POST['skNumeroParte'])){
+                    // HACEMOS TRANSACIÓN AQUÍ //
+                    $flag = false;
+                    $skNumeroParte = parent::create_cat_numerosParte();
+                    if($skNumeroParte){
+                        $flag = true;
+                        // HACEMOS FOREACH DE FRACCIONES //
+                        // HACEMOS FOREACH DE DESCRIPCIONES //
+                        // HACEMOS FOREACH DE ARCHIVOS (IMAGENES) //
+                    }
+                    if($flag){
+                        $this->data['response'] = true;
+                        $this->data['message'] = 'Registro insertado con &eacute;xito.';
+                        header('Content-Type: application/json');
+                        echo json_encode($this->data);
+                        return true;
+                    }else{
+                        $this->data['response'] = true;
+                        $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
+                        header('Content-Type: application/json');
+                        echo json_encode($this->data);
+                        return false;
+                    }
+                }else{
+                    // HACEMOS TRANSACIÓN AQUÍ //
+                    $flag = true;
+                    if($flag){
+                        $this->data['response'] = true;
+                        $this->data['message'] = 'Registro actualizado con &eacute;xito.';
+                        header('Content-Type: application/json');
+                        echo json_encode($this->data);
+                        return true;
+                    }else{
+                        $this->data['response'] = true;
+                        $this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
+                        header('Content-Type: application/json');
+                        echo json_encode($this->data);
+                        return false;
+                    }
+                }
+            }
+            if(isset($_GET['p1'])){
+                $this->numPar['skNumeroParte'] = $_GET['p1'];
+                $this->data['datos'] = parent::read_equal_numPar();
+            }
             $this->load_view('cla-form', $this->data);
+            return true;
+        }
+
+        public function numPar_detail(){
+            if(isset($_GET['p1'])){
+                $this->numPar['skNumeroParte'] = $_GET['p1'];
+                $this->data['datos'] = parent::read_equal_numPar();
+            }
+            if(isset($_GET['axn'])){
+                switch ($_GET['axn']) {
+                    case 'pdf':
+                        $this->numPar_pdf();
+                        break;
+                }
+            }
+            $this->load_view('numPar-detail', $this->data);
             return true;
         }
 
         private function cla_pdf(){
             if(isset($_GET['p1'])){
                 $this->numPar['skNumeroParte'] = $_GET['p1'];
-                $this->data['datos'] = parent::read_equal_>numPar();
+                $this->data['datos'] = parent::read_equal_numPar();
             }
             ob_start();
             $this->load_view('cla-pdf', $this->data, FALSE, 'cla/pdf/');
