@@ -24,7 +24,7 @@
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form"> 
      <div class="form-body"> 
-       
+    <input type="hidden" name="skEmpresa"  id="skEmpresa" value="<?php echo (isset($result['skEmpresa'])) ? $result['skEmpresa'] : '' ; ?>">
         <div class="form-group">
             <label class="control-label col-md-2">RFC <span aria-required="true" class="required"> * </span>
             </label>
@@ -47,7 +47,7 @@
             </div>
         </div>
          <div class="form-group">
-            <label class="control-label col-md-2">Nombre Corto <span aria-required="true" class="required"> * </span>
+            <label class="control-label col-md-2">Nombre Corto 
             </label>
             <div class="col-md-4">
                 <div class="input-icon right">
@@ -68,7 +68,7 @@
                                 <select class="form-control"id="skTipoEmpresa" name="skTipoEmpresa">
                                 		<option value=""> Seleccionar...</option>
                                 	<?php  foreach ($data['tiposEmpresas'] as $profile)  {  ?>
-                                		<option value="<?php echo $profile['skTipoEmpresa']; ?>"> <?php echo $profile['sNombre']; ?></option>
+                                		<option value="<?php echo $profile['skTipoEmpresa']; ?>" <?php echo ($profile['skTipoEmpresa']==$result['skTipoEmpresa'] ? 'selected="selected"' : '')?>> <?php echo $profile['sNombre']; ?></option>
                                 	<?php }   ?>
                                 </select>
                                </div>
@@ -88,7 +88,7 @@
                                 <select class="form-control"id="skStatus" name="skStatus">
                                 		<option value=""> Seleccionar...</option>
                                 	<?php  foreach ($data['status'] as $status)  {  ?>
-                                		<option value="<?php echo $status['skStatus']; ?>"> <?php echo $status['sName']; ?></option>
+                                		<option value="<?php echo $status['skStatus']; ?>" <?php echo ($status['skStatus']==$result['skStatus'] ? 'selected="selected"' : '')?>> <?php echo $status['sName']; ?></option>
                                 	<?php }   ?>
                                 </select>
                                </div>
@@ -108,6 +108,14 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
+     if($("sRFC").length){	
+		     if($("sRFC").attr("value").match(/^[a-zA-Z]{3,4}(\d{6})((\D|\d){3})?$/)){
+			    alert("good");
+		    }else{
+			    alert("bad");
+			    
+		    }
+    }
         /* VALIDATIONS */
         isValid = $("#_save").validate({
             errorElement: 'span', //default input error message container
@@ -115,10 +123,26 @@
             focusInvalid: false, // do not focus the last invalid input
             ignore: "",
             rules:{
+            	sRFC:{
+                    required: true,
+                     remote: {
+                      url: "",
+                      type: "post",
+                      data: {
+                        sRFC: function (){return $( "#sRFC" ).val();},
+                        axn: "validarRFC",
+                        skEmpresa:  function (){return $( "#skEmpresa" ).val();}
+                      }
+                    }
+                    
+                },
+               
                 skTipoEmpresa:{
                     required: true
                 },
                 sNombre:{
+                    required: true
+                },skStatus:{
                     required: true
                 }
                
@@ -159,9 +183,14 @@
                 icon.removeClass("fa-warning").addClass("fa-check");
             },
             messages:{
-                skTipoEmpresa:{
+            	sRFC:{
+                    required: "Campo obligatorio.",
+                     remote: "El RFC Ingresado ya Existe."
+                },skTipoEmpresa:{
                     required: "Campo obligatorio."
                 },sNombre:{
+                    required: "Campo obligatorio."
+                },skStatus:{
                     required: "Campo obligatorio."
                 }
             }

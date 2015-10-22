@@ -460,17 +460,44 @@
                   	$this->data['message'] = '';
                     $this->data['response'] = true;
                     $this->data['datos'] = false;
-                    $this->data['tiposEmpresas'] = parent::read_equal_tipoempresas(); // Mandamos a llamar todos los perfiles para cargarlos en la vista
-                     $this->load_model('cof','cof');
+                    $this->data['tiposEmpresas'] = parent::read_equal_tipoempresas();
+                    $this->load_model('cof','cof');
                     $this->data['status'] = Cof_Model::read_status();
+                    
+                    	 if(isset($_POST['axn']))
+                    	 {
+                        	switch ($_POST['axn'])
+		                        {
+		                            case "validarRFC":
+		                                // echo 'false'; -> Email no encontrado 
+		                                // echo 'true';  -> Email encontrado
+										
+		                                $this->empresas['sRFC'] = htmlentities(($_POST['sRFC']));
+										$this->empresas['skEmpresaDistinta'] = (($_POST['skEmpresa']));
+		                                if(parent::read_empresa())
+		                                {
+		                                    echo 'false';
+		                                }
+		                                else
+		                                {
+		                                    echo 'true';
+		                                }
+		                                exit;
+		                            break;
+		                            
+		                            
+		                        }
+		                   }
                     if($_POST){
-                        
+                    
                          
                         $this->empresas['skEmpresa'] = !empty($_POST['skEmpresa']) ? $_POST['skEmpresa'] : substr(md5(microtime()), 1, 32);
+                        $this->empresas['skTipoEmpresa'] = htmlentities($_POST['skTipoEmpresa'],ENT_QUOTES);
+                        $this->empresas['skStatus'] = htmlentities($_POST['skStatus'],ENT_QUOTES);
                         $this->empresas['sNombre'] = htmlentities($_POST['sNombre'],ENT_QUOTES);
                         $this->empresas['sNombreCorto'] = htmlentities($_POST['sNombreCorto'],ENT_QUOTES);
+                        
                         $this->empresas['sRFC'] = htmlentities($_POST['sRFC'],ENT_QUOTES);
-                        $this->empresas['skStatus'] = htmlentities($_POST['skStatus'],ENT_QUOTES);
                         if(empty($_POST['skEmpresa'])){
                             if(parent::create_empresas()){
                             	$this->data['response'] = true;
