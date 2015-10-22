@@ -87,59 +87,49 @@
 </form>
 <div class="clearfix"></div>
 <form id="fileupload" action="assets/plugins/jquery-file-upload/server/php/" method="POST" enctype="multipart/form-data">
-						<!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
-						<div class="row fileupload-buttonbar">
-							<div class="col-lg-7">
-								<!-- The fileinput-button span is used to style the file input field as button -->
-								<span class="btn btn-success fileinput-button">
-								<i class="fa fa-plus"></i>
-								<span>
-								Add files... </span>
-								<input type="file" name="files[]" multiple="">
-								</span>
-								<button type="submit" class="btn btn-primary start">
-								<i class="fa fa-upload"></i>
-								<span>
-								Start upload </span>
-								</button>
-								<button type="reset" class="btn btn-warning cancel">
-								<i class="fa fa-ban-circle"></i>
-								<span>
-								Cancel upload </span>
-								</button>
-								<button type="button" class="btn btn-danger delete">
-								<i class="fa fa-trash"></i>
-								<span>
-								Delete </span>
-								</button>
-								<input type="checkbox" class="toggle">
-								<!-- The global file processing state -->
-								<span class="fileupload-process">
-								</span>
-							</div>
-							<!-- The global progress information -->
-							<div class="col-lg-5 fileupload-progress fade">
-								<!-- The global progress bar -->
-								<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-									<div class="progress-bar progress-bar-success" style="width:0%;">
-									</div>
-								</div>
-								<!-- The extended global progress information -->
-								<div class="progress-extended">
-									 &nbsp;
-								</div>
-							</div>
-						</div>
-						<!-- The table listing the files available for upload/download -->
-						<table role="presentation" class="table table-striped clearfix">
-						<tbody class="files">
-						</tbody>
-						</table>
-					</form>
+    <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+    <div class="row fileupload-buttonbar">
+        <div class="col-lg-7">
+            <span class="btn btn-default fileinput-button">
+                <i class="fa fa-plus"></i><span> Archivo(s)</span><input type="file" name="files[]" multiple="">
+            </span>
+            <button type="submit" class="btn btn-primary start">
+                <i class="fa fa-upload"></i><span> Subir</span>
+            </button>
+            <button type="reset" class="btn btn-warning cancel">
+                <i class="fa fa-ban"></i><span> Cancelar</span>
+            </button>
+            <button type="button" class="btn btn-danger delete">
+                <i class="fa fa-trash-o"></i><span> Eliminar</span>
+            </button>
+            <input type="checkbox" class="toggle">
+                <span class="fileupload-process">
+            </span>
+        </div>
+        <!-- The global progress information -->
+        <div class="col-lg-5 fileupload-progress fade">
+            <!-- The global progress bar -->
+            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar progress-bar-success" style="width:0%;">
+                    </div>
+            </div>
+            <!-- The extended global progress information -->
+            <div class="progress-extended">
+                     &nbsp;
+            </div>
+        </div>
+    </div>
+    <!-- The table listing the files available for upload/download -->
+    <table role="presentation" class="table table-striped clearfix">
+    <tbody class="files">
+    </tbody>
+    </table>
+</form>
 <script type="text/javascript">
     var fraccion = 1;
     $(document).ready(function(){
         
+        FormFileUpload.init('?axn=fileUpload');
         
         /* AGREGAR FRACCION */
         $('body').delegate('.add-fraccion', 'click', function(){
