@@ -78,7 +78,7 @@
         /* COMIENZA MODULO clasifiación arancelaria */
         
         /* COMIENZA cat_descripcionFraccion_archivos */
-<<<<<<< HEAD
+
         public function count_numerosParte(){
             $sql = "SELECT COUNT(*) AS total FROM cat_numerosParte WHERE 1=1 ";
             if(!empty($this->numPar['skNumeroParte'])){
@@ -91,7 +91,7 @@
                 $sql .=" AND sDecripcion like '%".$this->numPar['sDecripcion']."%'";
             }
             if(!empty($this->numPar['skStatus'])){
-                $sql .=" AND numPar.skStatus like '%".$this->numPar['skStatus']."%'";
+                $sql .=" AND skStatus like '%".$this->numPar['skStatus']."%'";
             }
             $result = $this->db->query($sql);
             if($result){
@@ -133,8 +133,6 @@
                 }
             }
         }
-=======
->>>>>>> c0584230ec38c6fbfadba09b2708ad46c3be93d0
 
         public function create_cat_descripcionFraccion_archivos(){
             $sql = "INSERT INTO cat_descripcionFraccion_archivos (skFraccionArancelariaDescripcion,sArchivo,skStatus) "
@@ -213,38 +211,9 @@
         
         
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
+
         /* COMIENZA create_cat_numeros_partes */
-        public function create_cat_numeros_partes(){
+        /*public function create_cat_numeros_partes(){
             $sql = "INSERT INTO cat_numeros_partes (skNumeroParte,sNombre,sDescripcion,skStatus,dFechaCreacion,skUsersCreacion) 
             VALUES ('".$this->cat_numeros_partes['skNumeroParte']."','".$this->cat_numeros_partes['sNombre']."','".$this->cat_numeros_partes['sDescripcion']."','".$this->cat_numeros_partes['skStatus'].",'".$this->cat_numeros_partes['dFechaCreacion']."','".$this->cat_numeros_partes['skStatus']."',CURRENT_TIMESTAMP,'".$this->cat_numeros_partes['skUsersCreacion']."')";
             $result = $this->db->query($sql);
@@ -253,7 +222,7 @@
             }else{
                 return false;
             }
-        }
+        }*/
           
           public function update_cat_numeros_partes(){
                 $sql = "UPDATE cat_numeros_partes SET ";
@@ -280,8 +249,8 @@
         public function create_cat_numeros_partes(){
             $sql = "INSERT INTO cat_numerosParte_fraccionesArancelarias (skFraccionArancelaria,skNumeroParte,sNombre,skStatus,dFechaCreacion,skUsersCreacion) 
             VALUES ('".$this->numparfraran['skFraccionArancelaria']."','".$this->numparfraran['skNumeroParte']."','".$this->numparfraran['sNombre']."',
-            		'".$this->numparfraran['skStatus'].",'".$this->numparfraran['dFechaCreacion']."','".$this->numparfraran['skStatus']."',
-            		CURRENT_TIMESTAMP,'".$this->numparfraran['skUsersCreacion']."')";
+                    '".$this->numparfraran['skStatus'].",'".$this->numparfraran['dFechaCreacion']."','".$this->numparfraran['skStatus']."',
+                    CURRENT_TIMESTAMP,'".$this->numparfraran['skUsersCreacion']."')";
             $result = $this->db->query($sql);
             if($result){
                 return $this->numparfraran['skFraccionArancelaria'];
@@ -311,20 +280,9 @@
                 }
             }
         
-         
-        
-      
         
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
         
     }
 ?>
