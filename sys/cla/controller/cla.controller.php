@@ -74,7 +74,7 @@
             $this->data['status'] = Cof_Model::read_status();
             
             // RETORNA LA VISTA >numPar-index.php //
-            $this->load_view('cla-index', $this->data);
+            $this->load_view('claara-index', $this->data);
             return true;
         }
 
