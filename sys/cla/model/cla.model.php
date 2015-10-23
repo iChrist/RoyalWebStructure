@@ -82,7 +82,7 @@
         public function count_numerosParte(){
             $sql = "SELECT COUNT(*) AS total FROM cat_numerosParte WHERE 1=1 ";
             $sql = "	SELECT COUNT(a.skNumeroParte)AS total
-					FROM(
+					FROM (
 							SELECT
 								np.*, fnNombresFraccionesArancelarias(np.skNumeroParte)AS TodosLosNombres,
 								fnNombresFraccionesArancelariasDescripciones(np.skNumeroParte)AS TodasLasDescripciones
@@ -128,13 +128,13 @@
 					INNER JOIN _status ON _status.skStatus = numPar.skStatus 
 					WHERE 1=1 ";
             if(!empty($this->numPar['skNumeroParte'])){
-                $sql .=" AND skNumeroParte = '".$this->numPar['skNumeroParte']."'";
+                $sql .=" AND numPar.skNumeroParte = '".$this->numPar['skNumeroParte']."'";
             }
             if(!empty($this->numPar['sNombre'])){
-                $sql .=" AND (sNombre like '%".$this->numPar['sNombre']."%' or TodosLosNombres like '%".$this->numPar['sNombre']."%')";
+                $sql .=" AND (numPar.sNombre like '%".$this->numPar['sNombre']."%' or numPar.TodosLosNombres like '%".$this->numPar['sNombre']."%')";
             }
             if(!empty($this->numPar['sDecripcion'])){
-                $sql .=" AND (sDecripcion like '%".$this->numPar['sDecripcion']."%' or TodasLasDescripciones like '%".$this->numPar['sDecripcion']."%')";
+                $sql .=" AND (numPar.sDecripcion like '%".$this->numPar['sDecripcion']."%' or numPar.TodasLasDescripciones like '%".$this->numPar['sDecripcion']."%')";
             }
             if(!empty($this->numPar['skStatus'])){
                 $sql .=" AND numPar.skStatus like '%".$this->numPar['skStatus']."%'";
@@ -146,7 +146,7 @@
                     $sql .= " LIMIT ".$this->numPar['limit'];
                 }
             }
-			//echo $sql;die();
+			echo $sql;die();
             $result = $this->db->query($sql);
             if($result){
                 if($result->num_rows > 0){
