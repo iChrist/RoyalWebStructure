@@ -79,9 +79,54 @@
         }
 
         public function claara_form(){
+            //exit('<pre>'.print_r($_POST,1).'</pre>');
             $this->data['message'] = '';
             $this->data['response'] = true;
             $this->data['datos'] = false;
+            $_POST = array(
+                'skNumeroParte' => substr(md5(microtime()), 1, 32)
+                ,'sNombre'  => 'sNombre'
+                ,'sDecripcion' => 'sDecripcion'
+                ,'skStatus'=>'AC'
+                ,'dFechaCreacion'=>'CURRENT_TIMESTAMP'
+                ,'skUsersCreacion'=>$_SESSION['session']['skUsers']
+                    
+                ,'fraccionArancelaria'=>array(
+                    array(
+                        'sNombre'=>'fraccion1'
+                        ,'sDescripcion'=>array(
+                             'dEsp1'
+                            ,'dEsp2'
+                        )
+                        ,'sDescripcionIngles'=> array(
+                             'dIng1'
+                            ,'dIng2'
+                        )
+                        ,'archivos'=>array(
+                            array(
+                                 'file1.png'
+                                ,'file1.png'
+                            ),
+                            array(
+                                 'file2.png'
+                                ,'file22.png'
+                            )
+                        )
+                    ),
+                    array(
+                        'sNombre'=>'fraccion2'
+                        ,'sDescripcion'=>array(
+                             'dEsp1'
+                            ,'dEsp2'
+                        )
+                        ,'sDescripcionIngles'=> array(
+                             'dIng1'
+                            ,'dIng2'
+                        )
+                    )
+                )
+            );
+            exit('<pre>'.print_r($_POST,1).'</pre>');
             if($_POST){
                 $this->numPar['skNumeroParte'] = !empty($_POST['skNumeroParte']) ? $_POST['skNumeroParte'] : substr(md5(microtime()), 1, 32);
                 $this->numPar['sNombre'] = !empty($_POST['sNombre']) ? utf8_decode($_POST['sNombre']) : NULL ;

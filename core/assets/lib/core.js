@@ -23,7 +23,8 @@ function _save(obj,url){
         contentType: false,
         processData: false,
         success: function(data){
-            if(data['response']){
+            obj.disabled = false;
+            /*if(data['response']){
                 toastr.success(data['message'], "Notificaci&oacute;n");
                 setInterval(function(){ 
                     location.assign(url); 
@@ -34,7 +35,7 @@ function _save(obj,url){
                     obj.disabled = false;
                 }, 3000);
             }
-            $('.page-title-loading').css('display','none');
+            $('.page-title-loading').css('display','none');*/
         }
     });
 }
