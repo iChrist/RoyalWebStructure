@@ -19,15 +19,52 @@
         </div>
             
         <div class="form-group">
-            <label class="control-label col-md-2">T&iacute;tulo <span aria-required="true" class="required"> * </span>
+            <label class="control-label col-md-2">Descripci&oacute;n <span aria-required="true" class="required"> * </span>
             </label>
             <div class="col-md-4">
                 <div class="input-icon right">
                     <i class="fa"></i>
-                    <input type="text" name="sTitulo" id="sTitulo" class="form-control" placeholder="T&iacute;tulo" value="<?php echo (isset($result['sTitulo'])) ? utf8_encode($result['sTitulo']) : '' ; ?>" >
+                    <textarea name="sDescripcion" id="sDescripcion" class="form-control" placeholder="Descripción">
+                        <?php echo (isset($result['sDescripcion'])) ? utf8_encode($result['sDescripcion']) : '' ; ?>
+                    </textarea>
                 </div>
             </div>
         </div>
+        <h3>Fracciones arancelarias <a href="#" class="btn btn-default add-fraccion"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></h3>   
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th><center>Fracci&oacute;n</center></th>
+                        <td colspan="2">
+                            <input type="text" name="fraccionArancelaria[0][sNombre]" class="form-control" placeholder="Fracci&oacute;n arancelaria">
+                        </td>
+                        <td align="center"><a href="#" class="btn btn-default delete-fraccion"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th colspan="2"><center>Descripciones</center></th>
+                        <th><center>Fotos</center></th>
+                        <td align="center"><a href="#" class="btn btn-default add-descripcion" fraccion="0"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></td>
+                    </tr>
+                    <tr>
+                        <td><textarea name="fraccionArancelaria[0][sDescripcion][]" class="form-control" placeholder="Descripción en espa&ntilde;ol"></textarea></td>
+                        <td><textarea name="fraccionArancelaria[0][sDescripcionIngles][]" class="form-control" placeholder="Descripción en ingl&eacute;s"></textarea></td>
+                        <td><input type="file" name="fraccionArancelaria[0][archivos][]" multiple></td>
+                        <td align="center"><a href="#" class="btn btn-default delete-descripcion" fraccion="0"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        
+        <!--<tr>
+            <td></td>
+            <td><textarea name="fraccionArancelaria[0][sDescripcion][]" class="form-control" placeholder="Descripción en espa&ntilde;ol"></textarea></td>
+            <td><textarea name="fraccionArancelaria[0][sDescripcionIngles][]" class="form-control" placeholder="Descripción en ingl&eacute;s"></textarea></td>
+            <td align="center"><a href="#" class="btn btn-default delete-descripcion" fraccion="0"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>
+        </tr>-->
         
         <h4>Fracciones arancelarias <a href="#" class="btn btn-default btn-xs add-fraccion"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></h4>
         <div id="fraccionesArancelarias">
@@ -164,7 +201,7 @@
                 sNombre:{
                     required: true
                 },
-                sTitulo:{
+                sDescripcion:{
                     required: true
                 }
             },
@@ -207,7 +244,7 @@
                 sNombre:{
                     required: "Campo obligatorio."
                 },
-                sTitulo:{
+                sDescripcion:{
                     required: "Campo obligatorio."
                 }
             }

@@ -83,7 +83,7 @@
             $this->data['message'] = '';
             $this->data['response'] = true;
             $this->data['datos'] = false;
-            $_POST = array(
+            /*$_POST = array(
                 'skNumeroParte' => substr(md5(microtime()), 1, 32)
                 ,'sNombre'  => 'sNombre'
                 ,'sDecripcion' => 'sDecripcion'
@@ -125,8 +125,8 @@
                         )
                     )
                 )
-            );
-            exit('<pre>'.print_r($_POST,1).'</pre>');
+            );*/
+            //exit('<pre>'.print_r($_POST,1).'</pre>');
             if($_POST){
                 $this->numPar['skNumeroParte'] = !empty($_POST['skNumeroParte']) ? $_POST['skNumeroParte'] : substr(md5(microtime()), 1, 32);
                 $this->numPar['sNombre'] = !empty($_POST['sNombre']) ? utf8_decode($_POST['sNombre']) : NULL ;
