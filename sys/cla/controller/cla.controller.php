@@ -79,7 +79,7 @@
         }
 
         public function claara_form(){
-            //exit('<pre>'.print_r($_POST,1).'</pre>');
+            if($_POST){ exit('<pre>'.print_r($_FILES,1).'</pre>'); }
             $this->data['message'] = '';
             $this->data['response'] = true;
             $this->data['datos'] = false;
@@ -179,7 +179,7 @@
                 $this->numPar['skNumeroParte'] = $_GET['p1'];
                 $this->data['datos'] = parent::read_equal_numPar();
             }
-            $this->load_view('cla-form', $this->data);
+            $this->load_view('claara-form', $this->data);
             return true;
         }
 
