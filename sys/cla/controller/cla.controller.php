@@ -13,12 +13,12 @@
         }
 
         /* COMIENZA MODULO clasifiación arancelaria */
-        public function cla_index(){
+        public function claara_index(){
             //exit('<pre>'.print_r($_GET,1).'</pre>');
             if(isset($_GET['axn'])){
                 switch ($_GET['axn']) {
                     case 'pdf':
-                        $this->cla_pdf();
+                        $this->claara_pdf();
                         break;
                     case 'fetch_all':
                         // PARAMETROS PARA FILTRADO //
@@ -78,7 +78,7 @@
             return true;
         }
 
-        public function cla_form(){
+        public function claara_form(){
             $this->data['message'] = '';
             $this->data['response'] = true;
             $this->data['datos'] = false;
@@ -138,7 +138,7 @@
             return true;
         }
 
-        public function numPar_detail(){
+        public function claara_detail(){
             if(isset($_GET['p1'])){
                 $this->numPar['skNumeroParte'] = $_GET['p1'];
                 $this->data['datos'] = parent::read_equal_numPar();
@@ -146,7 +146,7 @@
             if(isset($_GET['axn'])){
                 switch ($_GET['axn']) {
                     case 'pdf':
-                        $this->numPar_pdf();
+                        $this->claara_pdf();
                         break;
                 }
             }
@@ -154,7 +154,7 @@
             return true;
         }
 
-        private function cla_pdf(){
+        private function claara_pdf(){
             if(isset($_GET['p1'])){
                 $this->numPar['skNumeroParte'] = $_GET['p1'];
                 $this->data['datos'] = parent::read_equal_numPar();
