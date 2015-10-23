@@ -74,16 +74,16 @@
             $this->data['status'] = Cof_Model::read_status();
             
             // RETORNA LA VISTA >numPar-index.php //
-            $this->load_view('cla-index', $this->data);
+            $this->load_view('claara-index', $this->data);
             return true;
         }
 
         public function claara_form(){
-            //exit('<pre>'.print_r($_POST,1).'</pre>');
+            if($_POST){ exit('<pre>'.print_r($_FILES,1).'</pre>'); }
             $this->data['message'] = '';
             $this->data['response'] = true;
             $this->data['datos'] = false;
-            $_POST = array(
+            /*$_POST = array(
                 'skNumeroParte' => substr(md5(microtime()), 1, 32)
                 ,'sNombre'  => 'sNombre'
                 ,'sDecripcion' => 'sDecripcion'
@@ -185,7 +185,9 @@
                         // HACEMOS FOREACH DE DESCRIPCIONES //
                         // HACEMOS FOREACH DE ARCHIVOS (IMAGENES) //
                     }
-            if($_POST){
+             );
+            //exit('<pre>'.print_r($_POST,1).'</pre>');
+             if($_POST){
                /* $this->numPar['skNumeroParte'] = !empty($_POST['skNumeroParte']) ? $_POST['skNumeroParte'] : substr(md5(microtime()), 1, 32);
                 $this->numPar['sNombre'] = !empty($_POST['sNombre']) ? utf8_decode($_POST['sNombre']) : NULL ;
                 $this->numPar['sDecripcion'] = !empty($_POST['sDecripcion']) ? utf8_decode($_POST['sDecripcion']) : NULL ;
@@ -237,7 +239,7 @@
                 $this->numPar['skNumeroParte'] = $_GET['p1'];
                 $this->data['datos'] = parent::read_equal_numPar();
             }
-            $this->load_view('cla-form', $this->data);
+            $this->load_view('claara-form', $this->data);
             return true;
         }
 
