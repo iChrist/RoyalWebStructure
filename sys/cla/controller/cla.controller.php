@@ -185,7 +185,7 @@
                         // HACEMOS FOREACH DE DESCRIPCIONES //
                         // HACEMOS FOREACH DE ARCHIVOS (IMAGENES) //
                     }
-             );
+       
             //exit('<pre>'.print_r($_POST,1).'</pre>');
              if($_POST){
                /* $this->numPar['skNumeroParte'] = !empty($_POST['skNumeroParte']) ? $_POST['skNumeroParte'] : substr(md5(microtime()), 1, 32);
