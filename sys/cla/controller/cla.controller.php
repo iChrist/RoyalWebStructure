@@ -83,7 +83,7 @@
             $this->data['message'] = '';
             $this->data['response'] = true;
             $this->data['datos'] = false;
-            /*$_POST = array(
+            $_POST = array(
                 'skNumeroParte' => substr(md5(microtime()), 1, 32)
                 ,'sNombre'  => 'sNombre'
                 ,'sDecripcion' => 'sDecripcion'
