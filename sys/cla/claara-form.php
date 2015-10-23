@@ -52,7 +52,17 @@
             </div>
         </div>
         
-        <h3>Fracciones arancelarias <a href="#" class="btn btn-default add-fraccion"><i class="fa fa-plus"></i></a></h3>   
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-reorder"></i>Fracciones arancelarias
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="add-fraccion"><i class="fa fa-plus"></i> Agregar</a>    
+                    <a class="collapse" href="javascript:;"></a>
+                </div>
+            </div>
+        <div class="portlet-body form">
         <div class="table-responsive">
             <table class="table table-bordered" id="fraccionesArancelarias">
                 <tbody>
@@ -61,25 +71,26 @@
                         <td colspan="2">
                             <input type="text" name="fraccionArancelaria[0][sNombre]" class="form-control" placeholder="Fracci&oacute;n arancelaria">
                         </td>
-                        <td align="center"><a href="#" class="btn btn-default delete-fraccion"><i class="fa fa-trash-o"></i></a></td>
+                        <td align="center"><a href="javascript:;" class="btn btn-default delete-fraccion"><i class="fa fa-trash-o"></i></a></td>
                     </tr>
                     <tr>
                         <th colspan="2"><center>Descripciones</center></th>
                         <th><center>Fotos</center></th>
-                        <td align="center"><a href="#" class="btn btn-default add-descripcion" fraccion="0"><i class="fa fa-plus"></i></a></td>
+                        <td align="center"><a href="javascript:;" class="btn btn-default add-descripcion" fraccion="0"><i class="fa fa-plus"></i></a></td>
                     </tr>
                     <tbody id="fraccionDescripciones_0">
                         <tr>
                             <td><textarea name="fraccionArancelaria[0][sDescripcion][]" class="form-control" placeholder="Descripci&oacute;n en espa&ntilde;ol"></textarea></td>
                             <td><textarea name="fraccionArancelaria[0][sDescripcionIngles][]" class="form-control" placeholder="Descripci&oacute;n en ingl&eacute;s"></textarea></td>
                             <td><center><div class="fileUpload btn btn-default"><span><i class="fa fa-cloud-upload"></i></span><input type="file"  name="fraccionArancelaria[0][archivos][0][]" class="BtnUpload" multiple /></div></center></td>
-                            <td align="center"><a href="#" class="btn btn-default delete-descripcion" fraccion="0"><i class="fa fa-trash-o"></i></a></td>
+                            <td align="center"><a href="javascript:;" class="btn btn-default delete-descripcion" fraccion="0"><i class="fa fa-trash-o"></i></a></td>
                         </tr>
                     </tbody>
                 </tbody>
             </table>
         </div>
-        
+        </div>
+        </div>
     </div>
 </form>
 <div class="clearfix"></div>
@@ -89,7 +100,7 @@
         
         /* AGREGAR FRACCION */
         $('body').delegate('.add-fraccion', 'click', function(){
-            var html_fraccion = '<tbody><tr class="gray"><th><center>Fracci&oacute;n</center></th><td colspan="2"><input type="text" name="fraccionArancelaria['+fraccion+'][sNombre]" class="form-control" placeholder="Fracci&oacute;n arancelaria"></td><td align="center"><a href="#" class="btn btn-default delete-fraccion"><i class="fa fa-trash-o"></i></a></td></tr><tr><th colspan="2"><center>Descripciones</center></th><th><center>Fotos</center></th><td align="center"><a href="#" class="btn btn-default add-descripcion" fraccion="'+fraccion+'"><i class="fa fa-plus"></i></a></td></tr><tbody id="fraccionDescripciones_'+fraccion+'"><tr><td><textarea name="fraccionArancelaria['+fraccion+'][sDescripcion][]" class="form-control" placeholder="Descripci&oacute;n en espa&ntilde;ol"></textarea></td><td><textarea name="fraccionArancelaria['+fraccion+'][sDescripcionIngles][]" class="form-control" placeholder="Descripci&oacute;n en ingl&eacute;s"></textarea></td><td><center><div class="fileUpload btn btn-default"><span><i class="fa fa-cloud-upload"></i></span><input type="file" name="fraccionArancelaria['+fraccion+'][archivos]['+fraccion+'][]" class="upload" multiple /></div></center></td><td align="center"><a href="#" class="btn btn-default delete-descripcion" fraccion="'+fraccion+'"><i class="fa fa-trash-o"></i></a></td></tr></tbody></tbody>';
+            var html_fraccion = '<tbody><tr class="gray"><th><center>Fracci&oacute;n</center></th><td colspan="2"><input type="text" name="fraccionArancelaria['+fraccion+'][sNombre]" class="form-control" placeholder="Fracci&oacute;n arancelaria"></td><td align="center"><a href="javascript:;" class="btn btn-default delete-fraccion"><i class="fa fa-trash-o"></i></a></td></tr><tr><th colspan="2"><center>Descripciones</center></th><th><center>Fotos</center></th><td align="center"><a href="javascript:;" class="btn btn-default add-descripcion" fraccion="'+fraccion+'"><i class="fa fa-plus"></i></a></td></tr><tbody id="fraccionDescripciones_'+fraccion+'"><tr><td><textarea name="fraccionArancelaria['+fraccion+'][sDescripcion][]" class="form-control" placeholder="Descripci&oacute;n en espa&ntilde;ol"></textarea></td><td><textarea name="fraccionArancelaria['+fraccion+'][sDescripcionIngles][]" class="form-control" placeholder="Descripci&oacute;n en ingl&eacute;s"></textarea></td><td><center><div class="fileUpload btn btn-default"><span><i class="fa fa-cloud-upload"></i></span><input type="file" name="fraccionArancelaria['+fraccion+'][archivos]['+fraccion+'][]" class="BtnUpload" multiple /></div></center></td><td align="center"><a href="javascript:;" class="btn btn-default delete-descripcion" fraccion="'+fraccion+'"><i class="fa fa-trash-o"></i></a></td></tr></tbody></tbody>';
             $("#fraccionesArancelarias").append(html_fraccion);
             fraccion ++;
         });
@@ -101,7 +112,7 @@
         /* AGREGAR DESCRIPCIONES */
         $('body').delegate('.add-descripcion','click',function(){
             var numFraccion = $(this).attr('fraccion');
-            var html_descripcion = '<tr><td><textarea name="fraccionArancelaria['+numFraccion+'][sDescripcion][]" class="form-control" placeholder="Descripci&oacute;n en espa&ntilde;ol"></textarea></td><td><textarea name="fraccionArancelaria['+numFraccion+'][sDescripcionIngles][]" class="form-control" placeholder="Descripci&oacute;n en ingl&eacute;s"></textarea></td><td><center><div class="fileUpload btn btn-default"><span><i class="fa fa-cloud-upload"></i></span><input type="file" name="fraccionArancelaria['+numFraccion+'][archivos]['+numFraccion+'][]" class="upload" multiple /></div></center></td><td align="center"><a href="#" class="btn btn-default delete-descripcion" fraccion="'+numFraccion+'"><i class="fa fa-trash-o"></i></a></td></tr>';
+            var html_descripcion = '<tr><td><textarea name="fraccionArancelaria['+numFraccion+'][sDescripcion][]" class="form-control" placeholder="Descripci&oacute;n en espa&ntilde;ol"></textarea></td><td><textarea name="fraccionArancelaria['+numFraccion+'][sDescripcionIngles][]" class="form-control" placeholder="Descripci&oacute;n en ingl&eacute;s"></textarea></td><td><center><div class="fileUpload btn btn-default"><span><i class="fa fa-cloud-upload"></i></span><input type="file" name="fraccionArancelaria['+numFraccion+'][archivos]['+numFraccion+'][]" class="BtnUpload" multiple /></div></center></td><td align="center"><a href="javascript:;" class="btn btn-default delete-descripcion" fraccion="'+numFraccion+'"><i class="fa fa-trash-o"></i></a></td></tr>';
             $("#fraccionDescripciones_" + numFraccion).append(html_descripcion);
         });
         /* ELIMINAR DESCRIPCIONES */
