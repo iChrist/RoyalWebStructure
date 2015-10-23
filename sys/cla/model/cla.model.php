@@ -248,16 +248,26 @@
         
 
         /* COMIENZA create_cat_numeros_partes */
-        /*public function create_cat_numeros_partes(){
+        public function create_cat_numeros_partes(){
             $sql = "INSERT INTO cat_numeros_partes (skNumeroParte,sNombre,sDescripcion,skStatus,dFechaCreacion,skUsersCreacion) 
-            VALUES ('".$this->cat_numeros_partes['skNumeroParte']."','".$this->cat_numeros_partes['sNombre']."','".$this->cat_numeros_partes['sDescripcion']."','".$this->cat_numeros_partes['skStatus'].",'".$this->cat_numeros_partes['dFechaCreacion']."','".$this->cat_numeros_partes['skStatus']."',CURRENT_TIMESTAMP,'".$this->cat_numeros_partes['skUsersCreacion']."')";
+            VALUES 
+            ('".$this->cat_numeros_partes['skNumeroParte']."',
+            '".$this->cat_numeros_partes['sNombre']."',
+            '".$this->cat_numeros_partes['sDescripcion']."',
+            '".$this->cat_numeros_partes['skStatus']."',
+             CURRENT_TIMESTAMP,
+            '".$this->cat_numeros_partes['skUsersCreacion']."'
+            )";
+            
+            //echo $sql;
+            die();
             $result = $this->db->query($sql);
             if($result){
                 return $this->cat_numeros_partes['skNumeroParte'];
             }else{
                 return false;
             }
-        }*/
+        }
           
           public function update_cat_numeros_partes(){
                 $sql = "UPDATE cat_numeros_partes SET ";
@@ -281,7 +291,7 @@
             }
           /* TERMINA create_cat_numeros_partes */
         
-        public function create_cat_numerosParte(){
+        public function create_cat_numparfraran(){
             $sql = "INSERT INTO cat_numerosParte_fraccionesArancelarias (skFraccionArancelaria,skNumeroParte,sNombre,skStatus,dFechaCreacion,skUsersCreacion) 
             VALUES ('".$this->numparfraran['skFraccionArancelaria']."','".$this->numparfraran['skNumeroParte']."','".$this->numparfraran['sNombre']."',
                     '".$this->numparfraran['skStatus'].",'".$this->numparfraran['dFechaCreacion']."','".$this->numparfraran['skStatus']."',
