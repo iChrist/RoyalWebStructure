@@ -11,7 +11,7 @@ tr.gray{
     overflow: hidden;
     margin: 10px;
 }
-.fileUpload input.upload {
+.fileUpload input.BtnUpload {
     position: absolute;
     top: 0;
     right: 0;
