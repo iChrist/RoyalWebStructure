@@ -33,6 +33,8 @@
 <link href="<?php echo SYS_URL; ?>core/assets/plugins/jquery-file-upload/blueimp-gallery/blueimp-gallery.min.css" rel="stylesheet"/>
 <link href="<?php echo SYS_URL; ?>core/assets/plugins/jquery-file-upload/css/jquery.fileupload.css" rel="stylesheet"/>
 <link href="<?php echo SYS_URL; ?>core/assets/plugins/jquery-file-upload/css/jquery.fileupload-ui.css" rel="stylesheet"/>
+<!-- !-->
+<link href="<?php echo SYS_URL; ?>core/assets/plugins/typeahead/typeahead.css" rel="stylesheet"/>
 
 <!-- END PAGE LEVEL PLUGIN STYLES -->
 <!-- BEGIN THEME STYLES -->

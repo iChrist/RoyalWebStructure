@@ -83,6 +83,12 @@
             $this->data['message'] = '';
             $this->data['response'] = true;
             $this->data['datos'] = false;
+            if(isset($_GET['p1'])){
+                $this->numPar['skNumeroParte'] = $_GET['p1'];
+                $this->data['datos'] = parent::read_equal_numPar();
+            }
+            $this->load_view('claara-form', $this->data);
+            return true;
             $_POST = array(
                 'skNumeroParte' => substr(md5(microtime()), 1, 32)
                 ,'sNombre'  => 'sNombre'

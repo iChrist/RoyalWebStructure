@@ -1,5 +1,5 @@
 <?php
-    Abstract Class Cla_Model Extends Core_Model {
+    Abstract Class Mer_Model Extends Core_Model {
 
         // PUBLIC VARIABLES //
         public $desArc = array(

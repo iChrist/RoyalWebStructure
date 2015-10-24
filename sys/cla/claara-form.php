@@ -76,7 +76,7 @@
                     <tr>
                         <th colspan="2"><center>Descripciones</center></th>
                         <th><center>Fotos</center></th>
-                        <td align="center"><a href="javascript:;" class="btn btn-default add-descripcion" fraccion="0"><i class="fa fa-plus"></i></a></td>
+                        <td align="center"><a href="javascript:;" class="btn btn-default add-descripcion" fraccion="0" descripcion="0"><i class="fa fa-plus"></i></a></td>
                     </tr>
                     <tbody id="fraccionDescripciones_0">
                         <tr>
@@ -96,13 +96,15 @@
 <div class="clearfix"></div>
 <script type="text/javascript">
     var fraccion = 1;
+    var fraccionDescripcion = 1;
     $(document).ready(function(){
         
         /* AGREGAR FRACCION */
         $('body').delegate('.add-fraccion', 'click', function(){
-            var html_fraccion = '<tbody><tr class="gray"><th><center>Fracci&oacute;n</center></th><td colspan="2"><input type="text" name="fraccionArancelaria['+fraccion+'][sNombre]" class="form-control" placeholder="Fracci&oacute;n arancelaria"></td><td align="center"><a href="javascript:;" class="btn btn-default delete-fraccion"><i class="fa fa-trash-o"></i></a></td></tr><tr><th colspan="2"><center>Descripciones</center></th><th><center>Fotos</center></th><td align="center"><a href="javascript:;" class="btn btn-default add-descripcion" fraccion="'+fraccion+'"><i class="fa fa-plus"></i></a></td></tr><tbody id="fraccionDescripciones_'+fraccion+'"><tr><td><textarea name="fraccionArancelaria['+fraccion+'][sDescripcion][]" class="form-control" placeholder="Descripci&oacute;n en espa&ntilde;ol"></textarea></td><td><textarea name="fraccionArancelaria['+fraccion+'][sDescripcionIngles][]" class="form-control" placeholder="Descripci&oacute;n en ingl&eacute;s"></textarea></td><td><center><div class="fileUpload btn btn-default"><span><i class="fa fa-cloud-upload"></i></span><input type="file" name="fraccionArancelaria['+fraccion+'][archivos]['+fraccion+'][]" class="BtnUpload" multiple /></div></center></td><td align="center"><a href="javascript:;" class="btn btn-default delete-descripcion" fraccion="'+fraccion+'"><i class="fa fa-trash-o"></i></a></td></tr></tbody></tbody>';
+            var html_fraccion = '<tbody><tr class="gray"><th><center>Fracci&oacute;n</center></th><td colspan="2"><input type="text" name="fraccionArancelaria['+fraccion+'][sNombre]" class="form-control" placeholder="Fracci&oacute;n arancelaria"></td><td align="center"><a href="javascript:;" class="btn btn-default delete-fraccion"><i class="fa fa-trash-o"></i></a></td></tr><tr><th colspan="2"><center>Descripciones</center></th><th><center>Fotos</center></th><td align="center"><a href="javascript:;" class="btn btn-default add-descripcion" fraccion="'+fraccion+'"><i class="fa fa-plus"></i></a></td></tr><tbody id="fraccionDescripciones_'+fraccion+'"><tr><td><textarea name="fraccionArancelaria['+fraccion+'][sDescripcion][]" class="form-control" placeholder="Descripci&oacute;n en espa&ntilde;ol"></textarea></td><td><textarea name="fraccionArancelaria['+fraccion+'][sDescripcionIngles][]" class="form-control" placeholder="Descripci&oacute;n en ingl&eacute;s"></textarea></td><td><center><div class="fileUpload btn btn-default"><span><i class="fa fa-cloud-upload"></i></span><input type="file" name="fraccionArancelaria['+fraccion+'][archivos]['+fraccionDescripcion+'][]" class="BtnUpload" multiple /></div></center></td><td align="center"><a href="javascript:;" class="btn btn-default delete-descripcion" fraccion="'+fraccion+'"><i class="fa fa-trash-o"></i></a></td></tr></tbody></tbody>';
             $("#fraccionesArancelarias").append(html_fraccion);
             fraccion ++;
+            fraccionDescripcion ++;
         });
         /* ELIMINAR FRACCION */
         $('body').delegate('.delete-fraccion','click',function(){  
@@ -112,7 +114,7 @@
         /* AGREGAR DESCRIPCIONES */
         $('body').delegate('.add-descripcion','click',function(){
             var numFraccion = $(this).attr('fraccion');
-            var html_descripcion = '<tr><td><textarea name="fraccionArancelaria['+numFraccion+'][sDescripcion][]" class="form-control" placeholder="Descripci&oacute;n en espa&ntilde;ol"></textarea></td><td><textarea name="fraccionArancelaria['+numFraccion+'][sDescripcionIngles][]" class="form-control" placeholder="Descripci&oacute;n en ingl&eacute;s"></textarea></td><td><center><div class="fileUpload btn btn-default"><span><i class="fa fa-cloud-upload"></i></span><input type="file" name="fraccionArancelaria['+numFraccion+'][archivos]['+numFraccion+'][]" class="BtnUpload" multiple /></div></center></td><td align="center"><a href="javascript:;" class="btn btn-default delete-descripcion" fraccion="'+numFraccion+'"><i class="fa fa-trash-o"></i></a></td></tr>';
+            var html_descripcion = '<tr><td><textarea name="fraccionArancelaria['+numFraccion+'][sDescripcion][]" class="form-control" placeholder="Descripci&oacute;n en espa&ntilde;ol"></textarea></td><td><textarea name="fraccionArancelaria['+numFraccion+'][sDescripcionIngles][]" class="form-control" placeholder="Descripci&oacute;n en ingl&eacute;s"></textarea></td><td><center><div class="fileUpload btn btn-default"><span><i class="fa fa-cloud-upload"></i></span><input type="file" name="fraccionArancelaria['+numFraccion+'][archivos]['+fraccionDescripcion+'][]" class="BtnUpload" multiple /></div></center></td><td align="center"><a href="javascript:;" class="btn btn-default delete-descripcion" fraccion="'+numFraccion+'"><i class="fa fa-trash-o"></i></a></td></tr>';
             $("#fraccionDescripciones_" + numFraccion).append(html_descripcion);
         });
         /* ELIMINAR DESCRIPCIONES */
@@ -120,9 +122,10 @@
             $(this).parent().parent().remove();
         });
         
-        $('.BtnUpload').change(function(){
+        $('body').delegate('.BtnUpload','change',function(){
             $(this).parent().removeClass('btn-default');
             $(this).parent().addClass('btn-success');
+            console.log($(this).val());
         });
         
         /* VALIDATIONS */

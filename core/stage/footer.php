@@ -108,6 +108,9 @@
 <script src="<?php echo SYS_URL; ?>core/assets/plugins/jquery-file-upload/js/jquery.fileupload-ui.js"></script>
 <!-- File Upload Plugin -->
 <script src="<?php echo SYS_URL; ?>core/assets/lib/form-fileupload.js"></script>
+<!-- autocomplete plugin -->
+<script src="<?php echo SYS_URL; ?>core/assets/plugins/typeahead/handlebars.min.js" type="text/javascript"></script>
+<script src="<?php echo SYS_URL; ?>core/assets/plugins/typeahead/typeahead.bundle.min.js" type="text/javascript"></script>
 
 
 <!-- BEGIN RoyalWeb CORE SCRIPTS -->
