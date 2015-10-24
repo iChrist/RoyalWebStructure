@@ -92,7 +92,7 @@
             $_POST = array(
                 'skNumeroParte' => substr(md5(microtime()), 1, 32)
                 ,'sNombre'  => 'sNombre'
-                ,'sDecripcion' => 'sDecripcion'
+                ,'sDescripcion' => 'sDecripcion'
                 ,'skStatus'=>'AC'
                 ,'dFechaCreacion'=>'CURRENT_TIMESTAMP'
                 ,'skUsersCreacion'=>$_SESSION['session']['skUsers']
@@ -111,7 +111,7 @@
                         ,'archivos'=>array(
                             array(
                                  'file1.png'
-                                ,'file1.png'
+                                ,'file111.png'
                             ),
                             array(
                                  'file2.png'
@@ -132,7 +132,8 @@
                     )
                 )
             );
-           echo "<PRE>";
+            echo "<PRE>";
+          
             print_r($_POST);
             echo "<PRE>";
            // exit('<pre>'.print_r($_POST).'</pre>');
@@ -141,57 +142,96 @@
            	echo $tValor['skNumeroParte'];
            }*/
            
-				echo $_POST["skNumeroParte"] . "<br>";
-				echo $_POST["sNombre"] . "<br>";
-				echo $_POST["sDecripcion"] . "<br>";
-				echo $_POST["skStatus"] . "<br>";
-				echo $_POST["dFechaCreacion"] . "<br>";
-				echo $_POST["skUsersCreacion"] . "<br>";
+				//$this->numPar['skNumeroParte'] = $_POST["skNumeroParte"] . "<br>";
+				//echo $_POST["sNombre"] . "<br>";
+				//echo $_POST["sDecripcion"] . "<br>";
+				//echo $_POST["skStatus"] . "<br>";
+				//echo $_POST["dFechaCreacion"] . "<br>";
+				//echo $_POST["skUsersCreacion"] . "<br>";
 				
-				foreach($_POST['fraccionArancelaria'] as $campo=>$valor)
+				$this->numPar['skNumeroParte'] = !empty($_POST['skNumeroParte']) ? $_POST['skNumeroParte'] : substr(md5(microtime()), 1, 32);
+                $this->numPar['sNombre'] = !empty($_POST['sNombre']) ? utf8_decode($_POST['sNombre']) : NULL ;
+                $this->numPar['sDescripcion'] = !empty($_POST['sDescripcion']) ? utf8_decode($_POST['sDescripcion']) : NULL ;
+                $this->numPar['skStatus'] = !empty($_POST['skStatus']) ? utf8_decode($_POST['skStatus']) : 'IN' ;
+                $this->numPar['dFechaCreacion'] = 'CURRENT_TIMESTAMP';
+                $this->numPar['skUsersCreacion'] = $_SESSION['session']['skUsers'];
+				
+				
+                $skNumeroParte = parent::create_cat_numeroParte();
+                    if($skNumeroParte){
+                    
+                    foreach($_POST['fraccionArancelaria'] as $campo=>$valor)
 				{
-						echo "<PRE>";
-						 print_r($_POST['fraccionArancelaria'][$campo]['sNombre'])."<br>";
-						echo "</PRE>";
-						if(isset($_POST['fraccionArancelaria'][$campo]['sDescripcion'])){	
-								foreach(($_POST['fraccionArancelaria'][$campo]['sDescripcion']) as $campo2=>$valor2)
-								{
-								//echo  $_POST['fraccionArancelaria'][$campo]."<br>";
-								echo "<PRE>";
-								 print_r($_POST['fraccionArancelaria'][$campo]['sDescripcion'][$campo2])."<br>";
-								echo "</PRE>";
-		 								
+					
+					
+					//	echo "<PRE>";
+ 						$this->numparfraran['skFraccionArancelaria'] = !empty($_POST['skFraccionArancelaria']) ? $_POST['skFraccionArancelaria'] : substr(md5(microtime()), 1, 32);
+						$this->numparfraran['skNumeroParte'] =  $this->numPar['skNumeroParte'] ;
+						$this->numparfraran['skStatus'] =  'AC' ;
+						$this->numparfraran['skUsersCreacion'] =  $this->numPar['skUsersCreacion'] ;
+						$this->numparfraran['sNombre'] = !empty($_POST['fraccionArancelaria'][$campo]['sNombre']) ? utf8_decode($_POST['fraccionArancelaria'][$campo]['sNombre']) : NULL ;
+						$skFraccionArancelaria = parent::create_cat_numparfraran();
+						    if($skFraccionArancelaria){
+							    
+							    if(isset($_POST['fraccionArancelaria'][$campo]['sDescripcion'])){	
+							foreach(($_POST['fraccionArancelaria'][$campo]['sDescripcion']) as $campo2=>$valor2)
+							{
+ 						$this->fraAraDes['skFraccionArancelariaDescripcion'] = !empty($_POST['skFraccionArancelariaDescripcion']) ? $_POST['skFraccionArancelariaDescripcion'] : substr(md5(microtime()), 1, 32);
+  						$this->fraAraDes['skFraccionArancelaria'] =  $this->numparfraran['skFraccionArancelaria'] ;
+ 						$this->fraAraDes['skUsersCreacion'] =  $this->numparfraran['skUsersCreacion'] ;
+  						$this->fraAraDes['sDescripcion'] = !empty($_POST['fraccionArancelaria'][$campo]['sDescripcion'][$campo2]) ? utf8_decode($_POST['fraccionArancelaria'][$campo]['sDescripcion'][$campo2]) : NULL ;
+  						$this->fraAraDes['sDescripcionIngles'] = !empty($_POST['fraccionArancelaria'][$campo]['sDescripcionIngles'][$campo2]) ? utf8_decode($_POST['fraccionArancelaria'][$campo]['sDescripcionIngles'][$campo2]) : NULL ;
+  		 							
+  		 							$skFraccionArancelariaDescripcion = parent::create_cat_fraccionesArancelarias_descripcionFraccion();	
+		 					
+  		 						if(isset($_POST['fraccionArancelaria'][$campo]['archivos'][$campo2])){
+				 						foreach($_POST['fraccionArancelaria'][$campo]['archivos'][$campo2] as $campo3=>$valor3)
+										{
+ 			$this->desArc['skArchivoFraccionArancelaria'] = !empty($_POST['skArchivoFraccionArancelaria']) ? $_POST['skArchivoFraccionArancelaria'] : substr(md5(microtime()), 1, 32);
+  			$this->desArc['skFraccionArancelariaDescripcion'] =  $this->fraAraDes['skFraccionArancelariaDescripcion'] ;
+  			$this->desArc['sArchivo'] =  $_POST['fraccionArancelaria'][$campo]['archivos'][$campo2][$campo3] ;
+  								$skArchivosFrancciones = parent::create_cat_descripcionFraccion_archivos();
+  			
+ 			 							/*echo "<PRE>";
+										 print_r($_POST['fraccionArancelaria'][$campo]['archivos'][$campo][$campo3])."<br>";
+										echo "</PRE>";*/
+										
+										
+				  						}
+			  						}
 		 						}
- 						}
- 						if(isset($_POST['fraccionArancelaria'][$campo]['sDescripcionIngles'])){
+		 					}
+  						}
+ 					
+
+						
+ 					/*	if(isset($_POST['fraccionArancelaria'][$campo]['sDescripcionIngles'])){
 	 						foreach(($_POST['fraccionArancelaria'][$campo]['sDescripcionIngles']) as $campo2=>$valor2)
 							{
-							//echo  $_POST['fraccionArancelaria'][$campo]."<br>";
-							echo "<PRE>";
-							 print_r($_POST['fraccionArancelaria'][$campo]['sDescripcionIngles'][$campo2])."<br>";
-							echo "</PRE>";
-	 								
-	 						}
+ 								echo "<PRE>";
+ 								print_r($_POST['fraccionArancelaria'][$campo]['sDescripcionIngles'][$campo2])."<br>";
+ 								echo "</PRE>";
+ 	 						}
  						}
- 						if(isset($_POST['fraccionArancelaria'][$campo]['archivos'][$campo])){
+ 						*/
+ 						
+ 						/*if(isset($_POST['fraccionArancelaria'][$campo]['archivos'][$campo])){
 	 						foreach($_POST['fraccionArancelaria'][$campo]['archivos'][$campo] as $campo2=>$valor2)
 							{
-							//echo  $_POST['fraccionArancelaria'][$campo]."<br>";
-							echo "<PRE>";
+ 							echo "<PRE>";
 							 print_r($_POST['fraccionArancelaria'][$campo]['archivos'][$campo][$campo2])."<br>";
 							echo "</PRE>";
 	  						}
-  						}
+  						}*/
 						
  				}
-           $skNumeroParte = parent::create_cat_numeros_partes();
-                    if($skNumeroParte){
+                    
                         //$flag = true;
                         // HACEMOS FOREACH DE FRACCIONES //
                         // HACEMOS FOREACH DE DESCRIPCIONES //
                         // HACEMOS FOREACH DE ARCHIVOS (IMAGENES) //
                     }
-       
+                    	
             //exit('<pre>'.print_r($_POST,1).'</pre>');
              if($_POST){
                /* $this->numPar['skNumeroParte'] = !empty($_POST['skNumeroParte']) ? $_POST['skNumeroParte'] : substr(md5(microtime()), 1, 32);
@@ -203,7 +243,7 @@
                 if(empty($_POST['skNumeroParte'])){
                     // HACEMOS TRANSACIÓN AQUÍ //
                     $flag = false;
-                    $skNumeroParte = parent::create_cat_numeros_partes();
+                    $skNumeroParte = parent::create_cat_numeroParte();
                     if($skNumeroParte){
                         //$flag = true;
                         // HACEMOS FOREACH DE FRACCIONES //
