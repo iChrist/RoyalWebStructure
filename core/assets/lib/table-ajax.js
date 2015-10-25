@@ -2,9 +2,9 @@ var TableAjax = function () {
 
     var initPickers = function () {
         //init date pickers
-        $('.date-picker').datepicker({
+        /*$('.date-picker').datepicker({
             autoclose: true
-        });
+        });*/
     }
 
     var handleRecords = function (url) {

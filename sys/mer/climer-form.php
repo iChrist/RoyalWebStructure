@@ -8,8 +8,7 @@
     <input type="hidden" name="skAreas"  id="skAreas" value="<?php echo (isset($result['skAreas'])) ? $result['skAreas'] : '' ; ?>">
     <div class="form-body">
         <div class="form-group">
-            <label class="control-label col-md-2">Referencia <span aria-required="true" class="required"> * </span>
-            </label>
+            <label class="control-label col-md-2">Referencia <span aria-required="true" class="required"> * </span></label>
             <div class="col-md-4">
                 <div class="input-icon right">
                     <i class="fa"></i>
@@ -19,8 +18,7 @@
         </div>
         
         <div class="form-group">
-            <label class="control-label col-md-2">Pedimento <span aria-required="true" class="required"> * </span>
-            </label>
+            <label class="control-label col-md-2">Pedimento <span aria-required="true" class="required"> * </span></label>
             <div class="col-md-4">
                 <div class="input-icon right">
                     <i class="fa"></i>
@@ -30,8 +28,7 @@
         </div>
         
         <div class="form-group">
-            <label class="control-label col-md-2">Factura <span aria-required="true" class="required"> * </span>
-            </label>
+            <label class="control-label col-md-2">Factura <span aria-required="true" class="required"> * </span></label>
             <div class="col-md-4">
                 <div class="input-icon right">
                     <i class="fa"></i>
@@ -41,12 +38,13 @@
         </div>
         
         <div class="form-group">
-            <label class="control-label col-md-2">Fecha de previo <span aria-required="true" class="required"> * </span>
-            </label>
+            <label class="control-label col-md-2">Fecha de previo <span aria-required="true" class="required"> * </span></label>
             <div class="col-md-4">
-                <div class="input-icon right">
-                    <i class="fa"></i>
-                    <input type="text" name="dFechaPrevio" id="dFechaPrevio" class="form-control" placeholder="dd/mm/aaaa" value="<?php echo (isset($result['dFechaPrevio'])) ? utf8_encode($result['dFechaPrevio']) : '' ; ?>" >
+                <div data-date-format="dd/mm/yyyy" class="input-group date date-picker">
+                    <input type="text" readonly="" class="form-control">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                    </span>
                 </div>
             </div>
         </div>
@@ -74,6 +72,18 @@
             </div>
         </div>
         
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Country Auto Complete</label>
+            <div class="col-sm-4">
+                <div class="input-group">
+                    <input type="text" id="typeahead_example_2" name="typeahead_example_2" class="form-control round-left"/>
+                    <span class="input-group-addon">
+                        <i class="fa fa-search"></i>
+                    </span>											
+                </div>
+            </div>
+        </div>
+        
         <div class="portlet">
             <div class="portlet-title">
                 <div class="caption">
@@ -93,10 +103,7 @@
                             <input type="search" id="mercancia" name="mercancia" autocomplete="off" class="form-control" placeholder="Buscar mercancia">
                         </td>
                         <td align="center">
-                            <div class="btn-group" role="group" aria-label="Acciones">
-                                <a href="javascript:;" class="btn btn-default ver-mercancia"><i class="fa fa-eye"></i></a>
-                                <a href="javascript:;" class="btn btn-default add-mercancia"><i class="fa fa-plus"></i></a>
-                            </div>
+                            <a href="javascript:;" class="btn btn-default add-mercancia"><i class="fa fa-plus"></i></a>
                         </td>
                     </tr>
                     <tr>
@@ -104,8 +111,8 @@
                         <th>Fracci&oacute;n Arancelaria</th>
                         <th>Descripci&oacute;n espa&ntilde;ol</th>
                         <th>Descripci&oacute;n ingl&eacute;s</th>
-                        <th>Fotos</th>
-                        <th>Acciones</th>
+                        <th><center>Fotos</center></th>
+                        <th><center>Acciones</center></th>
                     </tr>
                     <tbody id="mercancias">
                     <tr>
@@ -113,8 +120,15 @@
                         <td>Fracci&oacute;n Arancelaria</td>
                         <td>Descripci&oacute;n espa&ntilde;ol</td>
                         <td>Descripci&oacute;n ingl&eacute;s</td>
-                        <td>Fotos</td>
-                        <td>Acciones</td>
+                        <td align="center">
+                            <a href="javascript:;" class="btn btn-default btn-xs add-mercancia"><i class="fa fa-camera"></i></a>
+                        </td>
+                        <td align="center">
+                            <div class="btn-group" role="group" aria-label="Acciones">
+                                <a href="javascript:;" class="btn btn-default btn-xs ver-mercancia"><i class="fa fa-eye"></i></a>
+                                <a href="javascript:;" class="btn btn-default btn-xs add-mercancia"><i class="fa fa-trash-o"></i></a>
+                            </div>
+                        </td>
                     </tr>
                     </tbody>
                 </tbody>

@@ -210,6 +210,10 @@ jQuery(document).ready(function() {
    Tasks.initDashboardWidget();
    UIToastr.init();
    //FormFileUpload.init();
+   
+    $('.date-picker').datepicker({
+        autoclose: true
+    });
 });
 </script>
 <!-- END JAVASCRIPTS -->
