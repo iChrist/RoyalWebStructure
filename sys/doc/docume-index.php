@@ -80,7 +80,7 @@ echo "</pre>";*/
                                     if(isset($data['regimenes'])){
                                         while($row = $data['regimenes']->fetch_assoc()){
                                 ?>
-                <option value="<?php echo $row['skRegimen']; ?>"> <?php echo $row['sNombre']; ?> </option>
+                <option value="<?php echo $row['skRegimen']; ?>"> <?php echo utf8_encode($row['sNombre']); ?> </option>
                 <?php
                                         }//ENDIF
                                     }//ENDWHILE
@@ -92,7 +92,7 @@ echo "</pre>";*/
                                     if(isset($data['clavedocumento'])){
                                         while($row = $data['clavedocumento']->fetch_assoc()){
                                 ?>
-                <option value="<?php echo $row['skClaveDocumento']; ?>"> <?php echo $row['sNombre']; ?> </option>
+                <option value="<?php echo $row['skClaveDocumento']; ?>"> <?php echo utf8_encode($row['sNombre']); ?> </option>
                 <?php
                                         }//ENDIF
                                     }//ENDWHILE
@@ -104,7 +104,7 @@ echo "</pre>";*/
                                     if(isset($data['corresponsalia'])){
                                         while($row = $data['corresponsalia']->fetch_assoc()){
                                 ?>
-                <option value="<?php echo $row['skCorresponsalia']; ?>"> <?php echo $row['sNombre']; ?> </option>
+                <option value="<?php echo $row['skCorresponsalia']; ?>"> <?php echo utf8_encode($row['sNombre']); ?> </option>
                 <?php
                                         }//ENDIF
                                     }//ENDWHILE
@@ -113,10 +113,10 @@ echo "</pre>";*/
             <td><select name="skConocimientoMaritimo" class="form-control form-filter input-sm">
                 <option value="">- Conocimiento Marítimo -</option>
                 <?php
-                                    if(isset($data['skConocimientoMaritimo'])){
-                                        while($row = $data['skConocimientoMaritimo']->fetch_assoc()){
+                                    if(isset($data['conocimientomaritimo'])){
+                                        while($row = $data['conocimientomaritimo']->fetch_assoc()){
                                 ?>
-                <option value="<?php echo $row['skConocimientoMaritimo']; ?>"> <?php echo $row['sNombre']; ?> </option>
+                <option value="<?php echo $row['skConocimientoMaritimo']; ?>"> <?php echo utf8_encode($row['sNombre']); ?> </option>
                 <?php
                                         }//ENDIF
                                     }//ENDWHILE

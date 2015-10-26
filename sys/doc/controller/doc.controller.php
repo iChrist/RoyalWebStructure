@@ -37,8 +37,8 @@
 					if(isset($_POST['skTipoServicio'])){
 						$this->recepciondocumentos['skTipoServicio'] = $_POST['skTipoServicio'];
 					}
-					if(isset($_POST['skRecepcionDocumento'])){
-						$this->recepciondocumentos['skRecepcionDocumento'] = $_POST['skRecepcionDocumento'];
+					if(isset($_POST['skRegimen'])){
+						$this->recepciondocumentos['skRegimen'] = $_POST['skRegimen'];
 					}
 					if(isset($_POST['skClaveDocumento'])){
 						$this->recepciondocumentos['skClaveDocumento'] = $_POST['skClaveDocumento'];
@@ -83,8 +83,8 @@
 							,utf8_encode($row['ClaveDocumento'])
 							,utf8_encode($row['Corresponsalia'])
 							,utf8_encode($row['ConocimientoMaritimo'])
-							,utf8_encode($row['dFechaCreacion'])
-							,utf8_encode($row['htmlStatus'])
+							,(date("d/m/Y", strtotime($row['dFechaProgramacion'])))
+ 							,utf8_encode($row['htmlStatus'])
 							, !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
 						));
 					}
@@ -100,13 +100,26 @@
 					// INCLUYE UN MODELO DE OTRO MODULO //
 					$this->load_model('cof','cof');
 					$this->data['status'] = Cof_Model::read_status();
-					$this->data['empresa'] = Cof_Model::read_status();
+/*					$this->data['empresa'] = Cof_Model::read_status();
 					$this->data['tipotramite'] = Cof_Model::read_status();
 					$this->data['regimen'] = Cof_Model::read_status();
 					$this->data['clavedocumento'] = Cof_Model::read_status();
 					$this->data['coresponsalia'] = Cof_Model::read_status();
 					$this->data['conocimientomaritimo'] = Cof_Model::read_status();
-					
+*/
+
+					$this->load_model('emp','emp');
+					$objEmpresa = new Emp_Model();
+					$this->data['empresas'] = $objEmpresa->read_empresa();
+					$this->data['tipostramites'] = parent::read_tipos_tramites();
+					$this->data['tiposservicios'] = parent::read_tipos_servicios();
+					$this->data['regimenes'] = parent::read_regimenes();
+					$this->data['clavedocumento'] = parent::read_clave_documento();
+					$this->data['corresponsalia'] = parent::read_corresponsalia();
+					$this->data['conocimientomaritimo'] = parent::read_conocimiento_maritimo();
+										
+
+
 					// RETORNA LA VISTA areas-index.php //
 					$this->load_view('docume-index', $this->data);
 					return true;
