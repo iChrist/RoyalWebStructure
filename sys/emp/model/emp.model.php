@@ -1,5 +1,5 @@
 <?php
-	Abstract Class Emp_Model Extends Core_Model {
+	 Class Emp_Model Extends Core_Model {
                 
             // PUBLIC VARIABLES //
                 public $areas = array(
