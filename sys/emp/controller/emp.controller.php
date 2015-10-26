@@ -469,7 +469,7 @@
                     $this->data['tiposEmpresas'] = parent::read_equal_tipoempresas();
                     $this->load_model('cof','cof');
                     $this->data['status'] = Cof_Model::read_status();
-                    
+                      
                     	 if(isset($_POST['axn']))
                     	 {
                         	switch ($_POST['axn'])
