@@ -25,8 +25,8 @@
                         if(isset($_POST['sNombre'])){
                             $this->numPar['sNombre'] = $_POST['sNombre'];
                         }
-                        if(isset($_POST['sDecripcion'])){
-                            $this->numPar['sDecripcion'] = $_POST['sDecripcion'];
+                        if(isset($_POST['sDescripcion'])){
+                            $this->numPar['sDescripcion'] = $_POST['sDescripcion'];
                         }
                         if(isset($_POST['skStatus'])){
                             $this->numPar['skStatus'] = $_POST['skStatus'];
@@ -55,7 +55,7 @@
                             $actions = $this->printModulesButtons(2,array($row['skNumeroParte']));
                             array_push($records['data'], array(
                                  utf8_encode($row['sNombre'])
-                                ,utf8_encode($row['sDecripcion'])
+                                ,utf8_encode($row['sDescripcion'])
                                 ,utf8_encode($row['htmlStatus'])
                                 , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
                             ));
@@ -92,7 +92,7 @@
             $_POST = array(
                 'skNumeroParte' => substr(md5(microtime()), 1, 32)
                 ,'sNombre'  => 'sNombre'
-                ,'sDescripcion' => 'sDecripcion'
+                ,'sDescripcion' => 'sDescripcion'
                 ,'skStatus'=>'AC'
                 ,'dFechaCreacion'=>'CURRENT_TIMESTAMP'
                 ,'skUsersCreacion'=>$_SESSION['session']['skUsers']
@@ -144,7 +144,7 @@
            
 				//$this->numPar['skNumeroParte'] = $_POST["skNumeroParte"] . "<br>";
 				//echo $_POST["sNombre"] . "<br>";
-				//echo $_POST["sDecripcion"] . "<br>";
+				//echo $_POST["sDescripcion"] . "<br>";
 				//echo $_POST["skStatus"] . "<br>";
 				//echo $_POST["dFechaCreacion"] . "<br>";
 				//echo $_POST["skUsersCreacion"] . "<br>";
@@ -236,7 +236,7 @@
              if($_POST){
                /* $this->numPar['skNumeroParte'] = !empty($_POST['skNumeroParte']) ? $_POST['skNumeroParte'] : substr(md5(microtime()), 1, 32);
                 $this->numPar['sNombre'] = !empty($_POST['sNombre']) ? utf8_decode($_POST['sNombre']) : NULL ;
-                $this->numPar['sDecripcion'] = !empty($_POST['sDecripcion']) ? utf8_decode($_POST['sDecripcion']) : NULL ;
+                $this->numPar['sDescripcion'] = !empty($_POST['sDescripcion']) ? utf8_decode($_POST['sDescripcion']) : NULL ;
                 $this->numPar['skStatus'] = !empty($_POST['skStatus']) ? utf8_decode($_POST['skStatus']) : 'IN' ;
                 $this->numPar['dFechaCreacion'] = 'CURRENT_TIMESTAMP';
                 $this->numPar['skUsersCreacion'] = $_SESSION['session']['skUsers'];*/

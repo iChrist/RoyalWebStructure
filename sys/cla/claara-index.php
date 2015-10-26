@@ -29,7 +29,7 @@
                                 <input type="text" class="form-control form-filter input-sm" name="sNombre" placeholder="Nombre">
                             </td>
                             <td>
-                                <input type="text" class="form-control form-filter input-sm" name="sDecripcion" placeholder="Descripci&oacute;n">
+                                <input type="text" class="form-control form-filter input-sm" name="sDescripcion" placeholder="Descripci&oacute;n">
                             </td>
                             <td>
                                 <select name="skStatus" class="form-control form-filter input-sm">
