@@ -140,8 +140,8 @@
             }
             
             public function create_recepciondocumentos(){
-				
-                $sql = "INSERT INTO ope_recepciones_documentos (	skRecepcionDocumento,sReferencia,skEmpresa,skTipoTramite,
+				$datetime = DateTime::createFromFormat('d/m/y',$this->recepciondocumentos['dFechaProgramacion']);
+				$sql = "INSERT INTO ope_recepciones_documentos (	skRecepcionDocumento,sReferencia,skEmpresa,skTipoTramite,
 																skTipoServicio,skRegimen,skClaveDocumento,skCorresponsalia,skConocimientoMaritimo,skStatus,
 																dFechaProgramacion,dFechaCreacion,skUsersCreacion,dFechaModificacion,skUsersModificacion) 
 						VALUES ('".$this->recepciondocumentos['skRecepcionDocumento']."',
@@ -154,12 +154,11 @@
 								'".$this->recepciondocumentos['skCorresponsalia']."',
 								'".$this->recepciondocumentos['skConocimientoMaritimo']."',
 								'AC',
-								'".$this->recepciondocumentos['dFechaProgramacion']."',
+								'".$datetime->format('Y-m-d')."',
 								CURRENT_TIMESTAMP(),
 								'".$_SESSION['session']['skUsers']."',
 								CURRENT_TIMESTAMP(),
 								'".$_SESSION['session']['skUsers']."')";
-								
 				//echo $sql;die();
                 $result = $this->db->query($sql);
                 if($result){
@@ -197,9 +196,9 @@
                     $sql .=" skConocimientoMaritimo = '".$this->recepciondocumentos['skConocimientoMaritimo']."' ,";
                 }
 				if(!empty($this->recepciondocumentos['dFechaProgramacion'])){
-                  //  $sql .=" dFechaProgramacion = '".$this->recepciondocumentos['dFechaProgramacion']."' ,";
-                    $sql .=" dFechaProgramacion = CURRENT_TIMESTAMP() ,";
-                }
+					$datetime = DateTime::createFromFormat('d/m/y',$this->recepciondocumentos['dFechaProgramacion']);
+                  	$sql .=" dFechaProgramacion = '".($datetime->format('Y-m-d'))."' ,";
+                 }
                     $sql .=" dFechaModificacion = CURRENT_TIMESTAMP() ,";
                     $sql .=" skUsersModificacion = '".$_SESSION['session']['skUsers']."'";
                 $sql .= "  WHERE skRecepcionDocumento = '".$this->recepciondocumentos['skRecepcionDocumento']."' LIMIT 1";
