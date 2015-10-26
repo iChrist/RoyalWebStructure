@@ -71,19 +71,17 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="form-group">
-            <label class="col-sm-3 control-label">Country Auto Complete</label>
-            <div class="col-sm-4">
-                <div class="input-group">
-                    <input type="text" id="typeahead_example_2" name="typeahead_example_2" class="form-control round-left"/>
-                    <span class="input-group-addon">
-                        <i class="fa fa-search"></i>
-                    </span>											
-                </div>
+            <label class="control-label col-md-2">GitHub</label>
+            <div class="col-md-4">
+                <select class="form-control js-data-example-ajax">
+                    <option value="0" selected="selected">select2/select2</option>
+                </select>
             </div>
         </div>
         
+        <div class="clearfix"></div>
         <div class="portlet">
             <div class="portlet-title">
                 <div class="caption">
@@ -143,39 +141,42 @@
     var fraccion = 1;
     $(document).ready(function(){
         
-        
-        // Example #3
-        var custom = new Bloodhound({
-          datumTokenizer: function(d) { return d.tokens; },
-          queryTokenizer: Bloodhound.tokenizers.whitespace,
-          remote: '?axn=listarMercancias&search=%QUERY'
+        function formatRepo (data) {
+            if (data.loading) return data.text;
+            var markup = '<div class="clearfix"><div class="col-md-6">'+data.id+'.-'+data.name+'</div></div>';
+            return markup;
+        }
+  
+        function formatRepoSelection (repo) {
+          return repo.name || repo.text;
+        }
+        $(".js-data-example-ajax").select2({
+            ajax: {
+                url: "",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                return {
+                    axn: "listarMercancias",
+                    search: params.term
+                    //page: params.page
+                };
+            },
+            processResults: function (data, page) {
+                return {
+                    results: data.items
+                };
+            },
+            cache: true
+            },
+            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+            placeholder: "Search for a movie",
+            minimumInputLength: 1,
+            templateResult: formatRepo,
+            templateSelection: formatRepoSelection
         });
-         
-        custom.initialize();
-         
-        $('#mercancia').typeahead(null,{
-          name: 'mercancia',
-          displayKey: 'name',
-          source: custom.ttAdapter(),
-          templates: {
-            suggestion: Handlebars.compile([
-              '<div class="media">',
-                    '<div class="media-body">',
-                        '<h4 class="media-heading">{{value}}</h4>',
-                        '<p>{{sFraccionArancelaria}}</p>',
-                        '<p>{{sDescripcion}}</p>',
-                        '<p>{{sDecripcionIngles}}</p>',
-                    '</div>',
-              '</div>',
-            ].join('')),
-            empty: [
-                '<div class="empty-message">',
-                  '<center><h4>No se encontraron resultados.</h4></center>',
-                '</div>'
-            ].join('')
-          }
-        });
-        
+    
+
         
         
         /* AGREGAR FRACCION */

@@ -62,7 +62,8 @@
 <!-- END PAGE LEVEL SCRIPTS -->
 
 <!-- BEGIN AJAX TABLE SCRIPTS & PLUGINS -->
-<script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/select2/select2.min.js"></script>
+<!--<script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/select2/select2.min.js"></script>-->
+<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
 <script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
 <script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>

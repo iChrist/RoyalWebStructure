@@ -86,7 +86,7 @@
             if(isset($_GET['axn'])){
                 switch ($_GET['axn']) {
                     case "listarMercancias":
-                        $search = $_GET['search'];
+                        /*$search = $_GET['search'];
                         $max = rand(5, 10);
                         $results = array();
                         for($i = 0; $i <= $max; $i++) {
@@ -97,7 +97,25 @@
                                 "sDecripcionIngles" => "sDecripcionIngles",
                                 "tokens" => array($search, $search . rand(1, 10))
                             );
-                        }
+                        }*/
+                        $results = array(
+                            "total_count" => 1,
+                            "incomplete_results" => false,
+                            "items" => array(
+                                array(
+                                    "id" => 1,
+                                    "name" => "RoyalWebStructure1"
+                                ),
+                                array(
+                                    "id" => 2,
+                                    "name" => "RoyalWebStructure2"
+                                ),
+                                array(
+                                    "id" => 3,
+                                    "name" => "RoyalWebStructure3"
+                                )
+                            ) 
+                        );
                         echo json_encode($results);
                         return true;
                     break;
