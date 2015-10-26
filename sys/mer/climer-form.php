@@ -72,14 +72,14 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
             <label class="control-label col-md-2">GitHub</label>
             <div class="col-md-4">
                 <select class="form-control js-data-example-ajax">
-                    <option value="0" selected="selected">select2/select2</option>
+                    <option value="0" selected="selected">- Seleccione mercancia -</option>
                 </select>
             </div>
-        </div>
+        </div>!-->
         
         <div class="clearfix"></div>
         <div class="portlet">
@@ -98,7 +98,9 @@
                     <tr class="gray">
                         <th colspan="2"><center>Mercancia</center></th>
                         <td colspan="3">
-                            <input type="search" id="mercancia" name="mercancia" autocomplete="off" class="form-control" placeholder="Buscar mercancia">
+                            <select class="form-control js-data-example-ajax">
+                                <option value="0" selected="selected">- Seleccione mercancia -</option>
+                            </select>
                         </td>
                         <td align="center">
                             <a href="javascript:;" class="btn btn-default add-mercancia"><i class="fa fa-plus"></i></a>
@@ -150,6 +152,7 @@
         function formatRepoSelection (repo) {
           return repo.name || repo.text;
         }
+        
         $(".js-data-example-ajax").select2({
             ajax: {
                 url: "",
@@ -170,8 +173,7 @@
             cache: true
             },
             escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-            placeholder: "Search for a movie",
-            minimumInputLength: 1,
+            minimumInputLength: 3,
             templateResult: formatRepo,
             templateSelection: formatRepoSelection
         });
