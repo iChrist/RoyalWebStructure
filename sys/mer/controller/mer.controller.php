@@ -79,48 +79,71 @@
         }
 
         public function climer_form(){
-            if($_POST){ exit('<pre>'.print_r($_FILES,1).'</pre>'); }
+            //if($_POST){ exit('<pre>'.print_r($_POST,1).'</pre>'); }
             $this->data['message'] = '';
             $this->data['response'] = true;
             $this->data['datos'] = false;
+            $this->load_model('emp','emp');
+            $objEmpresa = new Emp_Model();
+            $this->data['empresas'] = $objEmpresa->read_empresa();
             if(isset($_GET['axn'])){
                 switch ($_GET['axn']) {
                     case "listarMercancias":
-                        /*$search = $_GET['search'];
-                        $max = rand(5, 10);
-                        $results = array();
-                        for($i = 0; $i <= $max; $i++) {
-                            $results[] = array(
-                                "value" => $search . ' - ' . rand(10, 100),
-                                "sFraccionArancelaria" => "sFraccionArancelaria",
-                                "sDescripcion" => "sDescripcion",
-                                "sDecripcionIngles" => "sDecripcionIngles",
-                                "tokens" => array($search, $search . rand(1, 10))
-                            );
-                        }*/
-                        $results = array(
-                            "total_count" => 1,
-                            "incomplete_results" => false,
-                            "items" => array(
-                                array(
-                                    "id" => 1,
-                                    "name" => "RoyalWebStructure1"
-                                ),
-                                array(
-                                    "id" => 2,
-                                    "name" => "RoyalWebStructure2"
-                                ),
-                                array(
-                                    "id" => 3,
-                                    "name" => "RoyalWebStructure3"
-                                )
-                            ) 
-                        );
-                        echo json_encode($results);
+                        if(isset($_POST['sNombre'])){
+                            $this->numPar['sNombre'] = $_POST['sNombre'];
+                        }
+                        $this->data['data'] = parent::read_like_numerosParte();
+                        $records = array();
+                        while($row = $this->data['data']->fetch_assoc()){
+                            array_push($records, array(
+                                 'id' => utf8_encode($row['skNumeroParte']) 
+                                ,'sNombre' => utf8_encode($row['sNombre'])
+                                ,'sDescripcion' => utf8_encode($row['sDescripcion'])
+                            ));
+                        }
+                        echo json_encode($records);
                         return true;
                     break;
                 }
                 return true;
+            }
+            if($_POST){
+                $this->empMer['skEmpresaMercancia'] = !empty($_POST['skEmpresaMercancia']) ? $_POST['skEmpresaMercancia'] : substr(md5(microtime()), 1, 32);
+                $this->empMer['skEmpresa'] = utf8_decode($_POST['skEmpresa']);
+                $this->empMer['sReferencia'] = utf8_decode($_POST['sReferencia']);
+                $this->empMer['sPedimento'] = utf8_decode($_POST['sPedimento']);
+                $this->empMer['sFactura'] = utf8_decode($_POST['sFactura']);
+                $this->empMer['dFechaPrevio'] = date("Y-m-d", strtotime($_POST['dFechaPrevio']));
+                $this->empMer['skStatus'] = utf8_decode($_POST['skStatus']);
+                if(empty($_POST['skEmpresaMercancia'])){
+                    if(parent::create_empMer()){
+                        $this->data['response'] = true;
+                        $this->data['message'] = 'Registro insertado con &eacute;xito.';
+                        header('Content-Type: application/json');
+                        echo json_encode($this->data);
+                        return true;
+                    }else{
+                        $this->data['response'] = true;
+                        $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
+                        header('Content-Type: application/json');
+                        echo json_encode($this->data);
+                        return false;
+                    }
+                }else{
+                    if(parent::update_empMer()){
+                        $this->data['response'] = true;
+                        $this->data['message'] = 'Registro actualizado con &eacute;xito.';
+                        header('Content-Type: application/json');
+                        echo json_encode($this->data);
+                        return true;
+                    }else{
+                        $this->data['response'] = true;
+                        $this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
+                        header('Content-Type: application/json');
+                        echo json_encode($this->data);
+                        return false;
+                    }
+                }
             }
             if(isset($_GET['p1'])){
                 $this->numPar['skNumeroParte'] = $_GET['p1'];

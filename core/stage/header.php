@@ -29,7 +29,6 @@
 <link href="<?php echo SYS_URL; ?>core/assets/plugins/jqvmap/jqvmap/jqvmap.css" rel="stylesheet" type="text/css"/>
 <!-- SELECT2 AUTOCOMPLETE !-->
 <link href="<?php echo SYS_URL; ?>core/assets/plugins/select2/select2.css" rel="stylesheet" type="text/css"/>
-<!--<link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />-->
 <!-- NOTIFICATIONS !-->
 <link href="<?php echo SYS_URL; ?>core/assets/plugins/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css"/>
 <!-- FILE UPLOADS !-->

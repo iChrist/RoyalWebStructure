@@ -1,4 +1,4 @@
-<form id="_save" method="post" class="form-horizontal" role="form"> 
+<!--<form id="_save" method="post" class="form-horizontal" role="form">-->
 <div class="col-md-6 col-sm-12">
     <div class="btn-group btn-group-xs" role="group" aria-label="Acciones">
         <?php

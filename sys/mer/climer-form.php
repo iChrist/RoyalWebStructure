@@ -5,7 +5,26 @@
     }
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data"> 
-    <input type="hidden" name="skAreas"  id="skAreas" value="<?php echo (isset($result['skAreas'])) ? $result['skAreas'] : '' ; ?>">
+    <input type="hidden" name="skEmpresaMercancia"  id="skEmpresaMercancia" value="<?php echo (isset($result['skEmpresaMercancia'])) ? $result['skEmpresaMercancia'] : '' ; ?>">
+    
+    <div class="form-group">
+        <label class="control-label col-md-2">Empresa <span aria-required="true" class="required"> * </span> </label>
+        <div class="col-md-4">
+            <select name="skEmpresa" id="skEmpresa" class="form-control form-filter input-sm">
+            <option value="">- Empresa -</option>
+          <?php
+            if(isset($data['empresas'])){
+                while($record = $data['empresas']->fetch_assoc()){
+        ?>
+            <option value="<?php echo $record['skEmpresa']; ?>" <?php echo (isset($result['skEmpresa'])) ? ($result['skEmpresa'] == $record['skEmpresa'] ? 'selected' : '' ) : '' ; ?> > <?php echo utf8_encode($record['sNombre']." (".$record['sRFC'].")"); ?> </option>
+        <?php
+                }//ENDWHILE
+            }//ENDIF
+        ?>
+        </select>
+      </div>
+    </div> 
+    
     <div class="form-body">
         <div class="form-group">
             <label class="control-label col-md-2">Referencia <span aria-required="true" class="required"> * </span></label>
@@ -40,8 +59,8 @@
         <div class="form-group">
             <label class="control-label col-md-2">Fecha de previo <span aria-required="true" class="required"> * </span></label>
             <div class="col-md-4">
-                <div data-date-format="dd/mm/yyyy" class="input-group date date-picker">
-                    <input type="text" readonly="" class="form-control">
+                <div data-date-format="dd-mm-yyyy" class="input-group date date-picker">
+                    <input type="text" name="dFechaPrevio" id="dFechaPrevio" class="form-control" readonly="">
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                     </span>
@@ -71,15 +90,6 @@
                 </div>
             </div>
         </div>
-
-        <!--<div class="form-group">
-            <label class="control-label col-md-2">GitHub</label>
-            <div class="col-md-4">
-                <select class="form-control js-data-example-ajax">
-                    <option value="0" selected="selected">- Seleccione mercancia -</option>
-                </select>
-            </div>
-        </div>!-->
         
         <div class="clearfix"></div>
         <div class="portlet">
@@ -98,8 +108,8 @@
                     <tr class="gray">
                         <th colspan="2"><center>Mercancia</center></th>
                         <td colspan="3">
-                            <select class="form-control js-data-example-ajax">
-                                <option value="0" selected="selected">- Seleccione mercancia -</option>
+                            <select class="form-control" id="mercancias">
+                                <option value="" selected="selected">- Seleccione mercancia -</option>
                             </select>
                         </td>
                         <td align="center">
@@ -145,15 +155,15 @@
         
         function formatRepo (data) {
             if (data.loading) return data.text;
-            var markup = '<div class="clearfix"><div class="col-md-6">'+data.id+'.-'+data.name+'</div></div>';
+            var markup = '<div class="clearfix"><div class="col-md-6"><h4>'+data.sNombre+'</h4><p>'+data.sDescripcion+'</p></div></div>';
             return markup;
         }
   
-        function formatRepoSelection (repo) {
-          return repo.name || repo.text;
+        function formatRepoSelection (data) {
+          return data.sNombre || data.text;
         }
         
-        $(".js-data-example-ajax").select2({
+        $("#mercancias").select2({
             ajax: {
                 url: "",
                 dataType: 'json',
@@ -167,7 +177,7 @@
             },
             processResults: function (data, page) {
                 return {
-                    results: data.items
+                    results: data
                 };
             },
             cache: true
