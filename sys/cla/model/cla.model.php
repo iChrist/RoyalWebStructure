@@ -13,7 +13,7 @@
         public $fraAraDes = array(
              'skFraccionArancelariaDescripcion' =>  NULL
             ,'skFraccionArancelaria'    =>  NULL
-            ,'sDecripcion'  =>  NULL
+            ,'sDescripcion'  =>  NULL
             ,'sDescripcionIngles'   =>  NULL
             ,'sModelo'  =>  NULL
             ,'skStatus' =>  NULL
