@@ -3,7 +3,8 @@
 
         // PUBLIC VARIABLES //
         public $desArc = array(
-             'skFraccionArancelariaDescripcion'  =>  NULL
+             'skArchivoFraccionArancelaria' => NULL
+            ,'skFraccionArancelariaDescripcion'  =>  NULL
             ,'sArchivo'     =>  NULL
             ,'skStatus'     =>  NULL
             ,'limit'        =>  NULL
@@ -145,8 +146,56 @@
             }
         }
         
-        public function read_equal_numerosParte(){
+        public function read_equal_numPar(){
             $sql = "SELECT numPar.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_numerosParte AS numPar INNER JOIN _status ON _status.skStatus = numPar.skStatus WHERE 1=1 ";
+            if(!empty($this->numPar['skNumeroParte'])){
+                $sql .=" AND (numPar.skNumeroParte = '".$this->numPar['skNumeroParte']."') ";
+            }
+            $result = $this->db->query($sql);
+            if($result){
+                if($result->num_rows > 0){
+                    return $result;
+                }else{
+                    return false;
+                }
+            }
+        }
+
+        public function read_equal_numparfraran(){
+            $sql = "SELECT numparfraran.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_numerosParte_fraccionesArancelarias AS numparfraran INNER JOIN _status ON _status.skStatus = numparfraran.skStatus WHERE 1=1 ";
+            if(!empty($this->numparfraran['skNumeroParte'])){
+                $sql .=" AND (numparfraran.skNumeroParte = '".$this->numparfraran['skNumeroParte']."') ";
+            }
+            $result = $this->db->query($sql);
+            if($result){
+                if($result->num_rows > 0){
+                    return $result;
+                }else{
+                    return false;
+                }
+            }
+        }
+
+        public function read_equal_fraAraDes(){
+            $sql = "SELECT fraAraDes.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_fraccionesArancelarias_descripcionFraccion AS fraAraDes INNER JOIN _status ON _status.skStatus = fraAraDes.skStatus WHERE 1=1 ";
+            if(!empty($this->fraAraDes['skFraccionArancelaria'])){
+                $sql .=" AND (fraAraDes.skFraccionArancelaria = '".$this->fraAraDes['skFraccionArancelaria']."') ";
+            }
+            $result = $this->db->query($sql);
+            if($result){
+                if($result->num_rows > 0){
+                    return $result;
+                }else{
+                    return false;
+                }
+            }
+        }
+
+        public function read_equal_desArc(){
+            $sql = "SELECT desArc.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_descripcionFraccion_archivos AS desArc INNER JOIN _status ON _status.skStatus = desArc.skStatus WHERE 1=1 ";
+            if(!empty($this->desArc['skFraccionArancelariaDescripcion'])){
+                $sql .=" AND (desArc.skFraccionArancelariaDescripcion = '".$this->desArc['skFraccionArancelariaDescripcion']."') ";
+            }
             $result = $this->db->query($sql);
             if($result){
                 if($result->num_rows > 0){

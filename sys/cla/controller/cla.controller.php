@@ -84,8 +84,81 @@
             $this->data['response'] = true;
             $this->data['datos'] = false;
             if(isset($_GET['p1'])){
+                // OBTENER NUMERO DE PARTE //
                 $this->numPar['skNumeroParte'] = $_GET['p1'];
-                $this->data['datos'] = parent::read_equal_numPar();
+                $numPar = parent::read_equal_numPar();
+                if($numPar){
+                    $datos = array();
+                    $a = 0;
+                    while($_numPar = $numPar->fetch_assoc()){
+                        $datos['numPar'][$a] = array(
+                             utf8_encode($_numPar['skNumeroParte'])
+                            ,utf8_encode($_numPar['sNombre'])
+                            ,utf8_encode($_numPar['sDescripcion'])
+                            ,utf8_encode($_numPar['skStatus'])
+                            ,!empty($_numPar['dFechaCreacion']) ? date("d-m-Y", strtotime($_numPar['dFechaCreacion'])) : ''
+                            ,utf8_encode($_numPar['skUsersCreacion'])
+                            ,!empty($_numPar['dFechaModificacion']) ? date("d-m-Y", strtotime($_numPar['dFechaModificacion'])) : ''
+                            ,utf8_encode($_numPar['skUsersModificacion'])
+                        );
+                        // OBTENER FRACCIONES ARANCELARIAS //
+                        $this->numparfraran['skNumeroParte'] = $_numPar['skNumeroParte'];
+                        $numparfraran = parent::read_equal_numparfraran();
+                        if(!$numparfraran){ continue; }
+                        $b = 0;
+                        while($_numparfraran = $numparfraran->fetch_assoc()){
+                            $datos['numPar'][$a]['numparfraran'][$b] = array(
+                                 utf8_encode($_numparfraran['skFraccionArancelaria'])
+                                ,utf8_encode($_numparfraran['skNumeroParte'])
+                                ,utf8_encode($_numparfraran['sNombre'])
+                                ,utf8_encode($_numparfraran['skStatus'])
+                                ,!empty($_numparfraran['dFechaCreacion']) ? date("d-m-Y", strtotime($_numparfraran['dFechaCreacion'])) : ''
+                                ,utf8_encode($_numparfraran['skUsersCreacion'])
+                                ,!empty($_numparfraran['dFechaModificacion']) ? date("d-m-Y", strtotime($_numparfraran['dFechaModificacion'])) : ''
+                                ,utf8_encode($_numparfraran['skUsersModificacion'])
+                            );
+                            $this->fraAraDes['skFraccionArancelaria'] = $_numparfraran['skFraccionArancelaria'];
+                            $fraAraDes = parent::read_equal_fraAraDes();
+                            if(!$fraAraDes){ continue; }
+                            $c = 0;
+                            while($_fraAraDes = $fraAraDes->fetch_assoc()){
+                                $datos['numPar'][$a]['numparfraran'][$b]['fraAraDes'][$c] = array(
+                                     utf8_encode($_fraAraDes['skFraccionArancelariaDescripcion'])
+                                    ,utf8_encode($_fraAraDes['skFraccionArancelaria'])
+                                    ,utf8_encode($_fraAraDes['sDescripcion'])
+                                    ,utf8_encode($_fraAraDes['sDescripcionIngles'])
+                                    ,utf8_encode($_fraAraDes['sModelo'])
+                                    ,utf8_encode($_fraAraDes['skStatus'])
+                                    ,!empty($_fraAraDes['dFechaCreacion']) ? date("d-m-Y", strtotime($_fraAraDes['dFechaCreacion'])) : ''
+                                    ,utf8_encode($_fraAraDes['skUsersCreacion'])
+                                    ,!empty($_fraAraDes['dFechaModificacion']) ? date("d-m-Y", strtotime($_fraAraDes['dFechaModificacion'])) : ''
+                                    ,utf8_encode($_fraAraDes['skUsersModificacion'])
+                                );
+                                $this->desArc['skFraccionArancelariaDescripcion'] = $_fraAraDes['skFraccionArancelariaDescripcion'];
+                                $desArc = parent::read_equal_desArc();
+                                if(!$desArc){ continue; }
+                                $d = 0;
+                                while($_desArc = $desArc->fetch_assoc()){
+                                    $datos['numPar'][$a]['numparfraran'][$b]['fraAraDes'][$c]['desArc'][$d] = array(
+                                         utf8_encode($_desArc['skArchivoFraccionArancelaria'])
+                                        ,utf8_encode($_desArc['skFraccionArancelariaDescripcion'])
+                                        ,utf8_encode($_desArc['sArchivo'])
+                                        ,utf8_encode($_desArc['skStatus'])
+                                    );
+                                    $d++;     
+                                }
+                                $c++;
+                            }
+                            $b++;
+                        }
+                        $a++;
+                    }
+                    $this->data['datos'] = $datos;
+                }
+                header('Content-Type: application/json');
+                echo json_encode($this->data);
+                exit;
+                //exit('<pre>'.print_r($this->data,1).'</pre>');
             }
             $this->load_view('claara-form', $this->data);
             return true;
