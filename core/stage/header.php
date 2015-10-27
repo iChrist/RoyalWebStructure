@@ -54,6 +54,9 @@
 <!-- END RoyalWeb CORE CSS -->
 <script src="<?php echo SYS_URL; ?>core/assets/plugins/jquery-1.11.0.min.js" type="text/javascript"></script>
 <!-- BEGIN RoyalWeb CORE SCRIPTS -->
+<script type="text/javascript">
+    var SYS_URL = '<?php echo SYS_URL; ?>';
+</script>
 <script src="<?php echo SYS_URL; ?>core/assets/lib/core.js" type="text/javascript"></script>
 <!-- END RoyalWeb CORE SCRIPTS -->
 <link rel="shortcut icon" href="<?php echo SYS_URL; ?>core/assets/img/favicon.ico"/>
@@ -93,7 +96,7 @@
 			<!-- BEGIN USER LOGIN DROPDOWN -->
 			<li class="dropdown user">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-				<img alt="" src="assets/img/avatar3_small.jpg"/>
+                                    <img alt="" src="<?php echo SYS_URL; ?>core/assets/img/avatar.png" width="30px" height="30px" />
 				<span class="username username-hide-on-mobile"><?php echo $_SESSION['session']['sName'];?> </span>
 				<i class="fa fa-angle-down"></i>
 				</a>

@@ -19,12 +19,12 @@ var TableAjax = function () {
             onError: function (grid) {
                 // execute some code on network or other general error  
             },
-            loadingMessage: 'Loading...',
+            loadingMessage: 'Cargando...',
             dataTable: { // here you can define a typical datatable settings from http://datatables.net/usage/options 
                 "language": { // language settings
                     // metronic spesific
-                    "customGroupActions": "_TOTAL_ records selected:  ",
-                    "customAjaxRequestGeneralError": "Could not complete request. Please check your internet connection",
+                    "customGroupActions": "_TOTAL_ registros seleccionados:  ",
+                    "customAjaxRequestGeneralError": "No se pudieron obtener los registros, revise su conexi&oacute;n a internet.",
 
                     // data tables spesific
                     "lengthMenu": "<span class='seperator'>|</span>Ver _MENU_ registros",

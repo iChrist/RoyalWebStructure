@@ -6,7 +6,7 @@ global $core;
                         <div class="col-md-6 col-sm-12">
                             <h3 class="page-title">
                             <?php echo utf8_encode($core->sTitle); ?>
-                                <img class="page-title-loading" style="width:50px;height:50px;display:none;" alt="cargando..." src="<?php echo SYS_URL; ?>core/assets/img/loading.gif">
+                                <img class="page-title-loading" style="width:50px;height:50px;display:none;" alt="cargando..." src="<?php echo SYS_URL; ?>core/assets/img/loading-request.gif">
 			</h3>
                         </div>
                         <?php
