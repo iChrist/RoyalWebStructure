@@ -119,8 +119,8 @@
                     $this->data['datos'] = $this->getNumeroParte();
                 }
             }
-            $this->load_view('claara-form', $this->data);
-            return true;
+          //  $this->load_view('claara-form', $this->data);
+           // return true;
 
             if($_POST){
              	$this->numPar['skNumeroParte'] = !empty($_POST['skNumeroParte']) ? $_POST['skNumeroParte'] : substr(md5(microtime()), 1, 32);
@@ -158,7 +158,7 @@
                                 $this->desArc['skFraccionArancelariaDescripcion'] =  $this->fraAraDes['skFraccionArancelariaDescripcion'] ;
                                 $this->desArc['sArchivo'] =  $_FILES['fraccionArancelaria']['name'][$campo]['archivos'][$campo2][$campo3] ;                             
                                 // ESTA ES LA RUTA DONDE SE GUARDARAN LOS ARCHIVOS DEL MODULO (claara-form) //
-                                $serv = SYS_PATH.$_GET['sysModule'].'/files/claara_form/';
+                                $serv = SYS_PATH.$_GET['sysModule'].'/files/claara-form/';
                                 //echo $serv;
                                 $ruta = $serv .$this->desArc['skFraccionArancelariaDescripcion'];
                                 if(!file_exists($ruta)){ 

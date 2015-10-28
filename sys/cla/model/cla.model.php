@@ -264,8 +264,8 @@
                     . "sModelo = '".$this->fraAraDes['sModelo']."',"
                     . "skStatus = '".$this->fraAraDes['skStatus']."',"
                     . "dFechaModificacion = '".$this->fraAraDes['dFechaModificacion']."',"
-                    . "skUsersModificacion = '".$this->fraAraDes['skUsersModificacion']."'"
-                    . " WHERE skFraccionArancelariaDescripcion = '".$this->fraAraDes['skFraccionArancelariaDescripcion']."'";
+                    . "skUsersModificacion = '".$this->fraAraDes['skUsersModificacion']."',"
+                    . " skFraccionArancelariaDescripcion = '".$this->fraAraDes['skFraccionArancelariaDescripcion']."' WHERE skFraccionArancelariaDescripcion = '".$this->fraAraDes['skFraccionArancelariaDescripcion']."'";
             $result = $this->db->query($sql);
             if($result){
                 return $this->fraAraDes['skFraccionArancelariaDescripcion'];
