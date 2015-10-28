@@ -138,6 +138,7 @@
             <div class="modal-body form thumbnail-clas">
                 
             </div>
+            <div class="clearfix"></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
             </div>
@@ -154,11 +155,12 @@
                 axn: 'listImg',
                 skFraccionArancelariaDescripcion: skFraccionArancelariaDescripcion 
             },function(data){
-                var thumbnails = ''; 
+                var thumbnails = '<div class="col-md-4 col-sm-4 col-xs-4"><img alt="'+data[0]['sArchivo']+'" src="http://vision7.com.mx/admin/files/news/1715916695insua.jpg" class="img-responsive img-thumbnail img-view" width="400px" height="400px" style="margin-left:15px;"></div><div class="col-md-8 col-sm-8 col-xs-8">'; 
                 $('.thumbnail-clas').html(thumbnails);
                 $.each(data,function(k,v){ //'+v.src+'
                     thumbnails += '<img src="http://vision7.com.mx/admin/thumbnail.php?width=297&height=221&url=http://vision7.com.mx/admin/files/news/1715916695insua.jpg" alt="'+v.sArchivo+'" width="80px" height="80px" style="margin-left:15px;" class="img-thumbnail">';
                 });
+                thumbnails += '</div>';
                 //'<a data-rel="fancybox-button" title="Project Name" href="http://vision7.com.mx/admin/files/news/1715916695insua.jpg" class="mix-preview fancybox-button"></a>'
                 $('.thumbnail-clas').html(thumbnails);
                 $('#modal_fotos').modal();
