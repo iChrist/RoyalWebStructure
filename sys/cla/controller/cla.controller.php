@@ -79,10 +79,39 @@
         }
         
         public function claara_form(){
-            if($_POST){ exit('<pre>'.print_r($_POST,1).'</pre>'); }
+            //if($_POST){ exit('<pre>'.print_r($_POST,1).'</pre>'); }
             $this->data['message'] = '';
             $this->data['response'] = true;
             $this->data['datos'] = false;
+            if(isset($_POST['axn'])){
+                if($_POST['axn']=='listImg'){
+                    $this->desArc['skFraccionArancelariaDescripcion'] = $_POST['skFraccionArancelariaDescripcion'];
+                    $desArc = parent::read_equal_desArc();
+                    $datos = array();
+                    if(!$desArc){
+                        header('Content-Type: application/json');
+                        echo json_encode($datos);
+                        return false;
+                    }
+                    while($_desArc = $desArc->fetch_assoc()){
+                        $datos[] = array(
+                             'src'=>utf8_encode(SYS_URL.$_GET['sysProject'].'/'.$_GET['sysModule'].'/files/claara-form/'.$_desArc['skFraccionArancelariaDescripcion'].'/'.$_desArc['sArchivo'])
+                            ,'sArchivo'=>utf8_encode($_desArc['sArchivo'])
+                        );    
+                    }
+                    header('Content-Type: application/json');
+                    echo json_encode($datos);
+                    return true;
+                }
+            }
+            if(isset($_GET['p2'])){
+                $imagePath = isset($_GET['url']) ? $_GET['url'] : FALSE;
+                $width = isset($_GET['width']) ? $_GET['width'] : 100;
+                $height = isset($_GET['height']) ? $_GET['height'] : 100;	
+                $imagePath = 'http://vision7.com.mx/admin/files/banner/1737876976dannycapdam.jpg';
+                Core_Functions::thumbnailImage($imagePath,$width,$height);
+                return true;
+            }
             if(isset($_GET['p1'])){
                 // OBTENER NUMERO DE PARTE //
                 $this->data['datos'] = $this->getNumeroParte();

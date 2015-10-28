@@ -76,7 +76,7 @@
                     <tr class="gray">
                         <th><center>Fracci&oacute;n</center></th>
                         <td colspan="2">
-                            <input type="text" name="fraccionArancelaria[<?php echo $fraccion; ?>][skFraccionArancelaria]" value="<?php echo $numparfraran['skFraccionArancelaria']; ?>" class="form-control">
+                            <input type="hidden" name="fraccionArancelaria[<?php echo $fraccion; ?>][skFraccionArancelaria]" value="<?php echo $numparfraran['skFraccionArancelaria']; ?>" class="form-control">
                             <input type="text" name="fraccionArancelaria[<?php echo $fraccion; ?>][sNombre]" value="<?php echo $numparfraran['sNombre']; ?>" class="form-control" placeholder="Fracci&oacute;n arancelaria">
                         </td>
                         <td align="center"><a href="javascript:;" class="btn btn-default delete-fraccion"><i class="fa fa-trash-o"></i></a></td>
@@ -84,7 +84,9 @@
                     <tr>
                         <th colspan="2"><center>Descripciones</center></th>
                         <th><center>Fotos</center></th>
-                        <td align="center"><a href="javascript:;" class="btn btn-default btn-xs add-descripcion" fraccion="0" descripcion="0"><i class="fa fa-plus"></i></a></td>
+                        <td align="center">
+                            <a href="javascript:;" class="btn btn-default btn-xs add-descripcion" fraccion="0" descripcion="0"><i class="fa fa-plus"></i></a>
+                        </td>
                     </tr>
                     <tbody id="fraccionDescripciones_<?php echo $fraccion; ?>">
                     <?php
@@ -94,13 +96,16 @@
                     ?>
                         <tr>
                             <td>
-                                <input type="text" name="fraccionArancelaria[<?php echo $fraccionDescripcion; ?>][skFraccionArancelariaDescripcion][]" value="<?php echo $fraAraDes['skFraccionArancelariaDescripcion']; ?>" class="form-control">
+                                <input type="hidden" name="fraccionArancelaria[<?php echo $fraccionDescripcion; ?>][skFraccionArancelariaDescripcion][]" value="<?php echo $fraAraDes['skFraccionArancelariaDescripcion']; ?>" class="form-control">
                                 <textarea name="fraccionArancelaria[<?php echo $fraccionDescripcion; ?>][sDescripcion][]" class="form-control" placeholder="Descripci&oacute;n en espa&ntilde;ol"><?php echo $fraAraDes['sDescripcion']; ?></textarea>
                             </td>
                             <td>
                                 <textarea name="fraccionArancelaria[<?php echo $fraccionDescripcion; ?>][sDescripcionIngles][]" class="form-control" placeholder="Descripci&oacute;n en ingl&eacute;s"><?php echo $fraAraDes['sDescripcionIngles']; ?></textarea>
                             </td>
-                            <td align="center"><div class="fileUpload btn btn-default btn-xs"><span><i class="fa fa-cloud-upload"></i></span><input type="file"  name="fraccionArancelaria[<?php echo $fraccion; ?>][archivos][<?php echo $fraccionDescripcion; ?>][]" class="BtnUpload" multiple /></div></td>
+                            <td align="center">
+                                <div class="fileUpload btn btn-default btn-xs"><span><i class="fa fa-cloud-upload"></i></span><input type="file"  name="fraccionArancelaria[<?php echo $fraccion; ?>][archivos][<?php echo $fraccionDescripcion; ?>][]" class="BtnUpload" multiple /></div>
+                                <a href="#" data-toggle="modal" role="button" class="btn btn-default btn-xs modal_fotos" skFraccionArancelariaDescripcion="<?php echo $fraAraDes['skFraccionArancelariaDescripcion']; ?>"><i class="fa fa-camera"></i></a>
+                            </td>
                             <td align="center"><div style="margin:15px;"><a href="javascript:;" class="btn btn-default btn-xs delete-descripcion" fraccion="<?php echo $fraccion; ?>"><i class="fa fa-trash-o"></i></a></div></td>
                         </tr>
                     <?php
@@ -133,7 +138,9 @@
                     <tr>
                         <th colspan="2"><center>Descripciones</center></th>
                         <th><center>Fotos</center></th>
-                        <td align="center"><a href="javascript:;" class="btn btn-default btn-xs add-descripcion" fraccion="0" descripcion="0"><i class="fa fa-plus"></i></a></td>
+                        <td align="center">
+                            <a href="javascript:;" class="btn btn-default btn-xs add-descripcion" fraccion="0" descripcion="0"><i class="fa fa-plus"></i></a>
+                        </td>
                     </tr>
                     <tbody id="fraccionDescripciones_0">
                         <tr>
@@ -144,7 +151,9 @@
                             <td>
                                 <textarea name="fraccionArancelaria[0][sDescripcionIngles][]" class="form-control" placeholder="Descripci&oacute;n en ingl&eacute;s"></textarea>
                             </td>
-                            <td align="center"><div class="fileUpload btn btn-default btn-xs"><span><i class="fa fa-cloud-upload"></i></span><input type="file"  name="fraccionArancelaria[0][archivos][0][]" class="BtnUpload" multiple /></div></td>
+                            <td align="center">
+                                <div class="fileUpload btn btn-default btn-xs"><span><i class="fa fa-cloud-upload"></i></span><input type="file"  name="fraccionArancelaria[0][archivos][0][]" class="BtnUpload" multiple /></div>
+                            </td>
                             <td align="center"><div style="margin:15px;"><a href="javascript:;" class="btn btn-default btn-xs delete-descripcion" fraccion="0"><i class="fa fa-trash-o"></i></a></div></td>
                         </tr>
                     </tbody>
@@ -159,6 +168,37 @@
     </div>
 </form>
 <div class="clearfix"></div>
+
+<!-- MODAL PARA VISUALIZAR IMAGENES !-->
+<!-- Large modal -->
+
+<div id="myModal_example" class="modal fade bs-example-modal-lg" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+    
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PARA VISUALIZAR FOTOS !-->
+<div id="modal_fotos" class="modal fade" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-full">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">Clasificaci&oacute;n arancelaria</h4>
+            </div>
+            <div class="modal-body form thumbnail-clas">
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script type="text/javascript">
     var fraccion = <?php if($fraccion==0){ echo 1; }else{ echo $fraccion; } ?>;
     var fraccionDescripcion = <?php if($fraccionDescripcion==0){ echo 1; }else{ echo $fraccionDescripcion; } ?>;
@@ -191,6 +231,23 @@
             $(this).parent().removeClass('btn-default');
             $(this).parent().addClass('btn-success');
             console.log($(this).val());
+        });
+        
+        $('body').delegate('.modal_fotos','click',function(){
+            var skFraccionArancelariaDescripcion = $(this).attr('skFraccionArancelariaDescripcion');
+            $.post('',{ 
+                axn: 'listImg',
+                skFraccionArancelariaDescripcion: skFraccionArancelariaDescripcion 
+            },function(data){
+                var thumbnails = ''; 
+                $('.thumbnail-clas').html(thumbnails);
+                $.each(data,function(k,v){ //'+v.src+'
+                    thumbnails += '<img src="http://vision7.com.mx/admin/thumbnail.php?width=297&height=221&url=http://vision7.com.mx/admin/files/news/1715916695insua.jpg" alt="'+v.sArchivo+'" width="80px" height="80px" style="margin-left:15px;" class="img-thumbnail">';
+                });
+                //'<a data-rel="fancybox-button" title="Project Name" href="http://vision7.com.mx/admin/files/news/1715916695insua.jpg" class="mix-preview fancybox-button"></a>'
+                $('.thumbnail-clas').html(thumbnails);
+                $('#modal_fotos').modal();
+            });
         });
         
         /* VALIDATIONS */

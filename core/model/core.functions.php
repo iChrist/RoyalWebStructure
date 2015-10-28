@@ -42,7 +42,7 @@ Class Core_Functions {
     }
     
     /**
-    * PDF
+    * table_ajax
     *
     * @param	obj		$total - database query object
     * @return	array
@@ -72,6 +72,25 @@ Class Core_Functions {
         $records['limit'] = $iDisplayLength;
         $records['offset'] = $iDisplayStart;
         return $records;
+    }
+    
+    /**
+    * thumbnailImage
+    *
+    * @param	string		$imagePath - path to image
+    * @param	integer		$width - width 
+    * @param	integer		$height - height
+    * @return	string          thumbnail image
+    */
+    function thumbnailImage($imagePath,$width,$height) {
+        if( !$imagePath ){
+            return  false;
+        }
+        $imagick = new \Imagick($imagePath);
+        $imagick->setbackgroundcolor('rgb(64, 64, 64)');
+        $imagick->thumbnailImage($width, $height, true, false);
+        header("Content-Type: image/jpg");
+        echo $imagick->getImageBlob();
     }
 }
 ?>
