@@ -268,7 +268,7 @@
                     . " WHERE skFraccionArancelariaDescripcion = '".$this->fraAraDes['skFraccionArancelariaDescripcion']."'";
             $result = $this->db->query($sql);
             if($result){
-                return $this->fraAraDes['skAreas'];
+                return $this->fraAraDes['skFraccionArancelariaDescripcion'];
             }else{
                 return false;
             }

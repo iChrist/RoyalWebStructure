@@ -209,10 +209,68 @@
                         $skFraccionArancelaria = parent::create_cat_numparfraran();
                         if($skFraccionArancelaria){
                         
+                        if(isset($_POST['fraccionArancelaria'][$campo]['sDescripcion'])){   
+                          foreach(($_POST['fraccionArancelaria'][$campo]['sDescripcion']) as $campo2=>$valor2){
+                          
+                          $this->fraAraDes['skFraccionArancelariaDescripcion'] = !empty($_POST['skFraccionArancelariaDescripcion']) ? $_POST['skFraccionArancelariaDescripcion'] : substr(md5(microtime()), 1, 32);
+                            $this->fraAraDes['skFraccionArancelaria'] =  $this->numparfraran['skFraccionArancelaria'] ;
+                            $this->fraAraDes['skUsersCreacion'] =  $this->numparfraran['skUsersCreacion'] ;
+                            $this->fraAraDes['sDescripcion'] = !empty($_POST['fraccionArancelaria'][$campo]['sDescripcion'][$campo2]) ? utf8_decode($_POST['fraccionArancelaria'][$campo]['sDescripcion'][$campo2]) : NULL ;
+                            $this->fraAraDes['sDescripcionIngles'] = !empty($_POST['fraccionArancelaria'][$campo]['sDescripcionIngles'][$campo2]) ? utf8_decode($_POST['fraccionArancelaria'][$campo]['sDescripcionIngles'][$campo2]) : NULL ;
+                            
+                            
+                            if(empty($_POST['skFraccionArancelariaDescripcion'])){
+                            $skFraccionArancelariaDescripcion = parent::create_cat_fraccionesArancelarias_descripcionFraccion(); 
+                               
+                           
+                            }else{
+                            $skFraccionArancelariaDescripcion = parent::update_cat_fraccionesArancelarias_descripcionFraccion(); 
+
+ 	                            
+                            }
+                            //ARCHIVOS
+                          
+                          
+                          }
+                        }
+                        
+                        
+                        
+                        
+                        
                         }            
                       }else{
-                        $skNumeroParte = parent::update_numparfraran();
-                        if($skNumeroParte){
+                        $skFraccionArancelaria = parent::update_numparfraran();
+                        if($skFraccionArancelaria){
+                        
+                        if(isset($_POST['fraccionArancelaria'][$campo]['sDescripcion'])){   
+                          foreach(($_POST['fraccionArancelaria'][$campo]['sDescripcion']) as $campo2=>$valor2){
+                          
+                          $this->fraAraDes['skFraccionArancelariaDescripcion'] = !empty($_POST['skFraccionArancelariaDescripcion']) ? $_POST['skFraccionArancelariaDescripcion'] : substr(md5(microtime()), 1, 32);
+                            $this->fraAraDes['skFraccionArancelaria'] =  $this->numparfraran['skFraccionArancelaria'] ;
+                            $this->fraAraDes['skUsersCreacion'] =  $this->numparfraran['skUsersCreacion'] ;
+                            $this->fraAraDes['sDescripcion'] = !empty($_POST['fraccionArancelaria'][$campo]['sDescripcion'][$campo2]) ? utf8_decode($_POST['fraccionArancelaria'][$campo]['sDescripcion'][$campo2]) : NULL ;
+                            $this->fraAraDes['sDescripcionIngles'] = !empty($_POST['fraccionArancelaria'][$campo]['sDescripcionIngles'][$campo2]) ? utf8_decode($_POST['fraccionArancelaria'][$campo]['sDescripcionIngles'][$campo2]) : NULL ;
+                            
+                            
+                            if(empty($_POST['skFraccionArancelariaDescripcion'])){
+                            $skFraccionArancelariaDescripcion = parent::create_cat_fraccionesArancelarias_descripcionFraccion(); 
+                               
+                           
+                            }else{
+                            $skFraccionArancelariaDescripcion = parent::update_cat_fraccionesArancelarias_descripcionFraccion(); 
+
+ 	                            
+                            }
+                            //ARCHIVOS
+                          
+                          
+                          }
+                        }
+                        
+                        
+                        
+                        
 
                         }
                       }
