@@ -166,24 +166,14 @@
                 exit;*/
                 //exit('<pre>'.print_r($this->data,1).'</pre>');
              }
-            $this->load_view('claara-form', $this->data);
+            //$this->load_view('claara-form', $this->data);
            // return true;
                 
             
             
         
 				
-			/*	$this->numPar['skNumeroParte'] = !empty($_POST['skNumeroParte']) ? $_POST['skNumeroParte'] : substr(md5(microtime()), 1, 32);
-                $this->numPar['sNombre'] = !empty($_POST['sNombre']) ? utf8_decode($_POST['sNombre']) : NULL ;
-                $this->numPar['sDescripcion'] = !empty($_POST['sDescripcion']) ? utf8_decode($_POST['sDescripcion']) : NULL ;
-                $this->numPar['skStatus'] = !empty($_POST['skStatus']) ? utf8_decode($_POST['skStatus']) : 'IN' ;
-                $this->numPar['dFechaCreacion'] = 'CURRENT_TIMESTAMP';
-                $this->numPar['skUsersCreacion'] = $_SESSION['session']['skUsers'];
- 				
-                $skNumeroParte = parent::create_cat_numeroParte();
-                    if($skNumeroParte){
-                     }
-                     */
+		
                     	
             //exit('<pre>'.print_r($_POST,1).'</pre>');
              if($_POST){
@@ -207,10 +197,7 @@
                         
                         foreach($_POST['fraccionArancelaria'] as $campo=>$valor)
 				{
-					
-					
-					//	echo "<PRE>";
- 						$this->numparfraran['skFraccionArancelaria'] = !empty($_POST['skFraccionArancelaria']) ? $_POST['skFraccionArancelaria'] : substr(md5(microtime()), 1, 32);
+  						$this->numparfraran['skFraccionArancelaria'] = !empty($_POST['skFraccionArancelaria']) ? $_POST['skFraccionArancelaria'] : substr(md5(microtime()), 1, 32);
 						$this->numparfraran['skNumeroParte'] =  $this->numPar['skNumeroParte'] ;
 						$this->numparfraran['skStatus'] =  'AC' ;
 						$this->numparfraran['skUsersCreacion'] =  $this->numPar['skUsersCreacion'] ;
@@ -292,6 +279,41 @@
                     }
                 }else{
                 
+                
+                 $skNumeroParte = parent::update_cat_numeros_partes();
+                    if($skNumeroParte){
+                    
+                     foreach($_POST['fraccionArancelaria'] as $campo=>$valor)
+				{
+  						$this->numparfraran['skFraccionArancelaria'] = !empty($_POST['skFraccionArancelaria']) ? $_POST['skFraccionArancelaria'] : substr(md5(microtime()), 1, 32);
+						$this->numparfraran['skNumeroParte'] =  $this->numPar['skNumeroParte'] ;
+						$this->numparfraran['skStatus'] =  'AC' ;
+						$this->numparfraran['skUsersCreacion'] =  $this->numPar['skUsersCreacion'] ;
+						$this->numparfraran['sNombre'] = !empty($_POST['fraccionArancelaria'][$campo]['sNombre']) ? utf8_decode($_POST['fraccionArancelaria'][$campo]['sNombre']) : NULL ;
+						
+						if(empty($_POST['skFraccionArancelaria'])){
+							$skFraccionArancelaria = parent::create_cat_numparfraran();
+						    if($skFraccionArancelaria){
+						    
+						    
+						    }
+						
+						}else{
+ 							 $skNumeroParte = parent::update_numparfraran();
+							 if($skNumeroParte){
+							 
+							 
+						     }
+							
+							
+						}
+						
+			}
+                    
+                    
+                    
+                    
+                    }
                 
                 
                 
