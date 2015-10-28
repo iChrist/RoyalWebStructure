@@ -2,7 +2,6 @@
     $result = array();
     if($data['datos']){
     }
-    //echo '<pre>'.print_r($data['datos']['numPar'],1).'</pre>';
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data"> 
     <input type="hidden" name="skNumeroParte"  id="skNumeroParte" value="<?php echo (isset($data['datos']['numPar']['skNumeroParte'])) ? $data['datos']['numPar']['skNumeroParte'] : '' ; ?>">
