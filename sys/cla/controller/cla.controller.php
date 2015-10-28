@@ -111,16 +111,6 @@
                 Core_Functions::thumbnailImage($imagePath,$width,$height);
                 return true;
             }
-            if(isset($_GET['p1'])){
-                // OBTENER NUMERO DE PARTE //
-                 $this->numPar['skNumeroParte'] = $_GET['p1'];
-                $numPar = parent::read_equal_numPar();
-                if($numPar){
-                    $this->data['datos'] = $this->getNumeroParte();
-                }
-            }
-          //  $this->load_view('claara-form', $this->data);
-           // return true;
 
             if($_POST){
              	$this->numPar['skNumeroParte'] = !empty($_POST['skNumeroParte']) ? $_POST['skNumeroParte'] : substr(md5(microtime()), 1, 32);
@@ -293,6 +283,17 @@
                   }
                 }
             }
+            // MOSTRAR LA VISTA //
+            if(isset($_GET['p1'])){
+                // OBTENER NUMERO DE PARTE //
+                 $this->numPar['skNumeroParte'] = $_GET['p1'];
+                $numPar = parent::read_equal_numPar();
+                if($numPar){
+                    $this->data['datos'] = $this->getNumeroParte();
+                }
+            }
+            $this->load_view('claara-form', $this->data);
+            return true;
         }
         
         // OBTENER NUMERO DE PARTE //
