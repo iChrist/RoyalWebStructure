@@ -72,7 +72,7 @@
                         $fraccion = 0;
                         foreach($data['datos']['numPar']['numparfraran'] AS $numparfraran){
                 ?>
-                <tbody>
+                <tr><td><table class="table table-bordered">
                     <tr class="gray">
                         <th><center>Fracci&oacute;n</center></th>
                         <td colspan="2">
@@ -86,12 +86,12 @@
                         <th><center>Fotos</center></th>
                         <td align="center"><a href="javascript:;" class="btn btn-default btn-xs add-descripcion" fraccion="0" descripcion="0"><i class="fa fa-plus"></i></a></td>
                     </tr>
+                    <tbody id="fraccionDescripciones_<?php echo $fraccion; ?>">
                     <?php
                         if(isset($numparfraran['fraAraDes'])){
                             $fraccionDescripcion = 0;
                             foreach($numparfraran['fraAraDes'] AS $fraAraDes){
                     ?>
-                    <tbody id="fraccionDescripciones_<?php echo $fraccion; ?>">
                         <tr>
                             <td>
                                 <input type="text" name="fraccionArancelaria[<?php echo $fraccionDescripcion; ?>][skFraccionArancelariaDescripcion][]" value="<?php echo $fraAraDes['skFraccionArancelariaDescripcion']; ?>" class="form-control">
@@ -103,22 +103,29 @@
                             <td align="center"><div class="fileUpload btn btn-default btn-xs"><span><i class="fa fa-cloud-upload"></i></span><input type="file"  name="fraccionArancelaria[<?php echo $fraccion; ?>][archivos][<?php echo $fraccionDescripcion; ?>][]" class="BtnUpload" multiple /></div></td>
                             <td align="center"><div style="margin:15px;"><a href="javascript:;" class="btn btn-default btn-xs delete-descripcion" fraccion="<?php echo $fraccion; ?>"><i class="fa fa-trash-o"></i></a></div></td>
                         </tr>
-                    </tbody>
                     <?php
                             $fraccionDescripcion++;
-                            }//FOREACH                        
+                            }//FOREACH     
+                    ?>
+                    </tbody>
+                    <?php
                         }//ENDIF
                     ?>
-                </tbody>
+                </table></td></tr>
+                
+                
                 <?php
                         $fraccion++;
                         }//ENDFOREACH
                     }else{
                 ?>
-                <tbody>
+                
+                
+                <table class="table table-bordered">
                     <tr class="gray">
                         <th><center>Fracci&oacute;n</center></th>
                         <td colspan="2">
+                            <input type="text" name="fraccionArancelaria[0][skFraccionArancelaria]" value="" class="form-control">
                             <input type="text" name="fraccionArancelaria[0][sNombre]" class="form-control" placeholder="Fracci&oacute;n arancelaria">
                         </td>
                         <td align="center"><a href="javascript:;" class="btn btn-default delete-fraccion"><i class="fa fa-trash-o"></i></a></td>
@@ -130,13 +137,18 @@
                     </tr>
                     <tbody id="fraccionDescripciones_0">
                         <tr>
-                            <td><textarea name="fraccionArancelaria[0][sDescripcion][]" class="form-control" placeholder="Descripci&oacute;n en espa&ntilde;ol"></textarea></td>
-                            <td><textarea name="fraccionArancelaria[0][sDescripcionIngles][]" class="form-control" placeholder="Descripci&oacute;n en ingl&eacute;s"></textarea></td>
+                            <td>
+                                <input type="text" name="fraccionArancelaria[0][skFraccionArancelariaDescripcion][]" value="" class="form-control">
+                                <textarea name="fraccionArancelaria[0][sDescripcion][]" class="form-control" placeholder="Descripci&oacute;n en espa&ntilde;ol"></textarea>
+                            </td>
+                            <td>
+                                <textarea name="fraccionArancelaria[0][sDescripcionIngles][]" class="form-control" placeholder="Descripci&oacute;n en ingl&eacute;s"></textarea>
+                            </td>
                             <td align="center"><div class="fileUpload btn btn-default btn-xs"><span><i class="fa fa-cloud-upload"></i></span><input type="file"  name="fraccionArancelaria[0][archivos][0][]" class="BtnUpload" multiple /></div></td>
                             <td align="center"><div style="margin:15px;"><a href="javascript:;" class="btn btn-default btn-xs delete-descripcion" fraccion="0"><i class="fa fa-trash-o"></i></a></div></td>
                         </tr>
                     </tbody>
-                </tbody>
+                </table>
                 <?php
                     }//ENDIF
                 ?>
@@ -154,14 +166,14 @@
         
         /* AGREGAR FRACCION */
         $('body').delegate('.add-fraccion', 'click', function(){
-            var html_fraccion = '<tbody><tr class="gray"><th><center>Fracci&oacute;n</center></th><td colspan="2"><input type="text" name="fraccionArancelaria['+fraccion+'][sNombre]" class="form-control" placeholder="Fracci&oacute;n arancelaria"></td><td align="center"><a href="javascript:;" class="btn btn-default delete-fraccion"><i class="fa fa-trash-o"></i></a></td></tr><tr><th colspan="2"><center>Descripciones</center></th><th><center>Fotos</center></th><td align="center"><a href="javascript:;" class="btn btn-default btn-xs add-descripcion" fraccion="'+fraccion+'"><i class="fa fa-plus"></i></a></td></tr><tbody id="fraccionDescripciones_'+fraccion+'"><tr><td><textarea name="fraccionArancelaria['+fraccion+'][sDescripcion][]" class="form-control" placeholder="Descripci&oacute;n en espa&ntilde;ol"></textarea></td><td><textarea name="fraccionArancelaria['+fraccion+'][sDescripcionIngles][]" class="form-control" placeholder="Descripci&oacute;n en ingl&eacute;s"></textarea></td><td align="center"><div class="fileUpload btn btn-default btn-xs"><span><i class="fa fa-cloud-upload"></i></span><input type="file" name="fraccionArancelaria['+fraccion+'][archivos]['+fraccionDescripcion+'][]" class="BtnUpload" multiple /></div></td><td align="center"><div style="margin:15px;"><a href="javascript:;" class="btn btn-default btn-xs delete-descripcion" fraccion="'+fraccion+'"><i class="fa fa-trash-o"></i></a></div></td></tr></tbody></tbody>';
+            var html_fraccion = '<tr><td><table class="table table-bordered"><tr class="gray"><th><center>Fracci&oacute;n</center></th><td colspan="2"><input type="text" name="fraccionArancelaria['+fraccion+'][sNombre]" class="form-control" placeholder="Fracci&oacute;n arancelaria"></td><td align="center"><a href="javascript:;" class="btn btn-default delete-fraccion"><i class="fa fa-trash-o"></i></a></td></tr><tr><th colspan="2"><center>Descripciones</center></th><th><center>Fotos</center></th><td align="center"><a href="javascript:;" class="btn btn-default btn-xs add-descripcion" fraccion="'+fraccion+'"><i class="fa fa-plus"></i></a></td></tr><tbody id="fraccionDescripciones_'+fraccion+'"><tr><td><textarea name="fraccionArancelaria['+fraccion+'][sDescripcion][]" class="form-control" placeholder="Descripci&oacute;n en espa&ntilde;ol"></textarea></td><td><textarea name="fraccionArancelaria['+fraccion+'][sDescripcionIngles][]" class="form-control" placeholder="Descripci&oacute;n en ingl&eacute;s"></textarea></td><td align="center"><div class="fileUpload btn btn-default btn-xs"><span><i class="fa fa-cloud-upload"></i></span><input type="file" name="fraccionArancelaria['+fraccion+'][archivos]['+fraccionDescripcion+'][]" class="BtnUpload" multiple /></div></td><td align="center"><div style="margin:15px;"><a href="javascript:;" class="btn btn-default btn-xs delete-descripcion" fraccion="'+fraccion+'"><i class="fa fa-trash-o"></i></a></div></td></tr></tbody></table></td></tr>';
             $("#fraccionesArancelarias").append(html_fraccion);
             fraccion ++;
             fraccionDescripcion ++;
         });
         /* ELIMINAR FRACCION */
         $('body').delegate('.delete-fraccion','click',function(){  
-            $(this).parent().parent().parent().remove();
+            $(this).parent().parent().parent().parent().parent().parent().remove();
         });
         
         /* AGREGAR DESCRIPCIONES */
