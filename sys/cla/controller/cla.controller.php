@@ -254,6 +254,7 @@
                         ,'skUsersCreacion'=>utf8_encode($_numPar['skUsersCreacion'])
                         ,'dFechaModificacion'=>!empty($_numPar['dFechaModificacion']) ? date("d-m-Y", strtotime($_numPar['dFechaModificacion'])) : ''
                         ,'skUsersModificacion'=>utf8_encode($_numPar['skUsersModificacion'])
+                        ,'htmlStatus'=>utf8_encode($_numPar['htmlStatus'])
                     );
                     // OBTENER FRACCIONES ARANCELARIAS //
                     $this->numparfraran['skNumeroParte'] = $_numPar['skNumeroParte'];
@@ -312,18 +313,68 @@
         }
         
         public function claara_detail(){
+            $this->data['message'] = '';
+            $this->data['response'] = true;
+            $this->data['datos'] = false;
             if(isset($_GET['p1'])){
+                // OBTENER NUMERO DE PARTE //
                 $this->numPar['skNumeroParte'] = $_GET['p1'];
-                $this->data['datos'] = parent::read_equal_numPar();
-            }
-            if(isset($_GET['axn'])){
-                switch ($_GET['axn']) {
-                    case 'pdf':
-                        $this->claara_pdf();
-                        break;
+                $numPar = parent::read_equal_numPar();
+                if($numPar){
+                    $this->data['datos'] = $this->getNumeroParte();
                 }
             }
-            $this->load_view('numPar-detail', $this->data);
+            //exit('<pre>'.print_r($this->data['datos'],1).'</pre>');
+            if(isset($_GET['axn'])){
+                switch ($_GET['axn']) {
+                    case 'listImg':
+                        $this->desArc['skFraccionArancelariaDescripcion'] = $_POST['skFraccionArancelariaDescripcion'];
+                        $desArc = parent::read_equal_desArc();
+                        $datos = array();
+                        if(!$desArc){
+                            header('Content-Type: application/json');
+                            echo json_encode($datos);
+                            return false;
+                        }
+                        while($_desArc = $desArc->fetch_assoc()){
+                            $datos[] = array(
+                                 'src'=>utf8_encode(SYS_URL.$_GET['sysProject'].'/'.$_GET['sysModule'].'/files/claara-form/'.$_desArc['skFraccionArancelariaDescripcion'].'/'.$_desArc['sArchivo'])
+                                ,'sArchivo'=>utf8_encode($_desArc['sArchivo'])
+                            );    
+                        }
+                        header('Content-Type: application/json');
+                        echo json_encode($datos);
+                        return true;
+                    break;
+                    case 'pdf':
+                        $this->claara_pdf();
+                    break;
+                }
+            }
+
+            if(isset($_POST['axn'])){
+                if($_POST['axn']=='listImg'){
+                    $this->desArc['skFraccionArancelariaDescripcion'] = $_POST['skFraccionArancelariaDescripcion'];
+                    $desArc = parent::read_equal_desArc();
+                    $datos = array();
+                    if(!$desArc){
+                        header('Content-Type: application/json');
+                        echo json_encode($datos);
+                        return false;
+                    }
+                    while($_desArc = $desArc->fetch_assoc()){
+                        $datos[] = array(
+                             'src'=>utf8_encode(SYS_URL.$_GET['sysProject'].'/'.$_GET['sysModule'].'/files/claara-form/'.$_desArc['skFraccionArancelariaDescripcion'].'/'.$_desArc['sArchivo'])
+                            ,'sArchivo'=>utf8_encode($_desArc['sArchivo'])
+                        );    
+                    }
+                    header('Content-Type: application/json');
+                    echo json_encode($datos);
+                    return true;
+                }
+            }
+
+            $this->load_view('claara-detail', $this->data);
             return true;
         }
 
