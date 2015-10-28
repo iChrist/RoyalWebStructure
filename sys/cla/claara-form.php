@@ -1,11 +1,11 @@
 <?php
     $result = array();
     if($data['datos']){
-        $result = $data['datos']->fetch_assoc();
     }
+    //echo '<pre>'.print_r($data['datos']['numPar'],1).'</pre>';
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data"> 
-    <input type="hidden" name="skAreas"  id="skAreas" value="<?php echo (isset($result['skAreas'])) ? $result['skAreas'] : '' ; ?>">
+    <input type="hidden" name="skNumeroParte"  id="skNumeroParte" value="<?php echo (isset($data['datos']['numPar']['skNumeroParte'])) ? $data['datos']['numPar']['skNumeroParte'] : '' ; ?>">
     <div class="form-body">
         <div class="form-group">
             <label class="control-label col-md-2">Nombre <span aria-required="true" class="required"> * </span>
@@ -13,7 +13,7 @@
             <div class="col-md-4">
                 <div class="input-icon right">
                     <i class="fa"></i>
-                    <input type="text" name="sNombre" id="sNombre" class="form-control" placeholder="Nombre" value="<?php echo (isset($result['sNombre'])) ? utf8_encode($result['sNombre']) : '' ; ?>" >
+                    <input type="text" name="sNombre" id="sNombre" class="form-control" placeholder="Nombre" value="<?php echo (isset($data['datos']['numPar']['sNombre'])) ? $data['datos']['numPar']['sNombre'] : '' ; ?>" >
                 </div>
             </div>
         </div>
@@ -24,7 +24,7 @@
             <div class="col-md-4">
                 <div class="input-icon right">
                     <i class="fa"></i>
-                    <textarea name="sDescripcion" id="sDescripcion" class="form-control" placeholder="Descripci&oacute;n"><?php echo (isset($result['sDescripcion'])) ? utf8_encode($result['sDescripcion']) : '' ; ?></textarea>
+                    <textarea name="sDescripcion" id="sDescripcion" class="form-control" placeholder="Descripci&oacute;n"><?php echo (isset($data['datos']['numPar']['sDescripcion'])) ? $data['datos']['numPar']['sDescripcion'] : '' ; ?></textarea>
                 </div>
             </div>
         </div>
@@ -37,14 +37,14 @@
                     <label>
                         <div class="">
                             <span>
-                                <input type="radio" name="skStatus" value="AC" <?php echo (isset($result['skStatus']) && $result['skStatus'] == 'AC') ? 'checked' : '' ; ?> checked="checked"> Activo
+                                <input type="radio" name="skStatus" value="AC" <?php echo (isset($data['datos']['numPar']['skStatus']) && $data['datos']['numPar']['skStatus'] == 'AC') ? 'checked' : '' ; ?> checked="checked"> Activo
                             </span>
                         </div>
                     </label>
                     <label>
                         <div class="">
                             <span>
-                                <input type="radio" name="skStatus" value="IN" <?php echo (isset($result['skStatus']) && $result['skStatus'] == 'IN') ? 'checked' : '' ; ?>> Inactivo
+                                <input type="radio" name="skStatus" value="IN" <?php echo (isset($data['datos']['numPar']['skStatus']) && $data['datos']['numPar']['skStatus'] == 'IN') ? 'checked' : '' ; ?>> Inactivo
                             </span>
                         </div>
                     </label>
@@ -65,6 +65,56 @@
         <div class="portlet-body form">
         <div class="table-responsive">
             <table class="table table-bordered" id="fraccionesArancelarias">
+                <?php 
+                    $fraccion = 0;
+                    $fraccionDescripcion = 0;
+                    if(isset($data['datos']['numPar']['numparfraran'])){
+                        $fraccion = 0;
+                        foreach($data['datos']['numPar']['numparfraran'] AS $numparfraran){
+                ?>
+                <tbody>
+                    <tr class="gray">
+                        <th><center>Fracci&oacute;n</center></th>
+                        <td colspan="2">
+                            <input type="text" name="fraccionArancelaria[<?php echo $fraccion; ?>][skFraccionArancelaria]" value="<?php echo $numparfraran['skFraccionArancelaria']; ?>" class="form-control">
+                            <input type="text" name="fraccionArancelaria[<?php echo $fraccion; ?>][sNombre]" value="<?php echo $numparfraran['sNombre']; ?>" class="form-control" placeholder="Fracci&oacute;n arancelaria">
+                        </td>
+                        <td align="center"><a href="javascript:;" class="btn btn-default delete-fraccion"><i class="fa fa-trash-o"></i></a></td>
+                    </tr>
+                    <tr>
+                        <th colspan="2"><center>Descripciones</center></th>
+                        <th><center>Fotos</center></th>
+                        <td align="center"><a href="javascript:;" class="btn btn-default btn-xs add-descripcion" fraccion="0" descripcion="0"><i class="fa fa-plus"></i></a></td>
+                    </tr>
+                    <?php
+                        if(isset($numparfraran['fraAraDes'])){
+                            $fraccionDescripcion = 0;
+                            foreach($numparfraran['fraAraDes'] AS $fraAraDes){
+                    ?>
+                    <tbody id="fraccionDescripciones_<?php echo $fraccion; ?>">
+                        <tr>
+                            <td>
+                                <input type="text" name="fraccionArancelaria[<?php echo $fraccionDescripcion; ?>][skFraccionArancelariaDescripcion][]" value="<?php echo $fraAraDes['skFraccionArancelariaDescripcion']; ?>" class="form-control">
+                                <textarea name="fraccionArancelaria[<?php echo $fraccionDescripcion; ?>][sDescripcion][]" class="form-control" placeholder="Descripci&oacute;n en espa&ntilde;ol"><?php echo $fraAraDes['sDescripcion']; ?></textarea>
+                            </td>
+                            <td>
+                                <textarea name="fraccionArancelaria[<?php echo $fraccionDescripcion; ?>][sDescripcionIngles][]" class="form-control" placeholder="Descripci&oacute;n en ingl&eacute;s"><?php echo $fraAraDes['sDescripcionIngles']; ?></textarea>
+                            </td>
+                            <td align="center"><div class="fileUpload btn btn-default btn-xs"><span><i class="fa fa-cloud-upload"></i></span><input type="file"  name="fraccionArancelaria[<?php echo $fraccion; ?>][archivos][<?php echo $fraccionDescripcion; ?>][]" class="BtnUpload" multiple /></div></td>
+                            <td align="center"><div style="margin:15px;"><a href="javascript:;" class="btn btn-default btn-xs delete-descripcion" fraccion="<?php echo $fraccion; ?>"><i class="fa fa-trash-o"></i></a></div></td>
+                        </tr>
+                    </tbody>
+                    <?php
+                            $fraccionDescripcion++;
+                            }//FOREACH                        
+                        }//ENDIF
+                    ?>
+                </tbody>
+                <?php
+                        $fraccion++;
+                        }//ENDFOREACH
+                    }else{
+                ?>
                 <tbody>
                     <tr class="gray">
                         <th><center>Fracci&oacute;n</center></th>
@@ -87,6 +137,9 @@
                         </tr>
                     </tbody>
                 </tbody>
+                <?php
+                    }//ENDIF
+                ?>
             </table>
         </div>
         </div>
@@ -95,8 +148,8 @@
 </form>
 <div class="clearfix"></div>
 <script type="text/javascript">
-    var fraccion = 1;
-    var fraccionDescripcion = 1;
+    var fraccion = <?php if($fraccion==0){ echo 1; }else{ echo $fraccion; } ?>;
+    var fraccionDescripcion = <?php if($fraccionDescripcion==0){ echo 1; }else{ echo $fraccionDescripcion; } ?>;
     $(document).ready(function(){
         
         /* AGREGAR FRACCION */
