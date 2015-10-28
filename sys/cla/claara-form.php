@@ -130,7 +130,7 @@
                     <tr class="gray">
                         <th><center>Fracci&oacute;n</center></th>
                         <td colspan="2">
-                            <input type="text" name="fraccionArancelaria[0][skFraccionArancelaria]" value="" class="form-control">
+                            <input type="hidden" name="fraccionArancelaria[0][skFraccionArancelaria]" value="" class="form-control">
                             <input type="text" name="fraccionArancelaria[0][sNombre]" class="form-control" placeholder="Fracci&oacute;n arancelaria">
                         </td>
                         <td align="center"><a href="javascript:;" class="btn btn-default delete-fraccion"><i class="fa fa-trash-o"></i></a></td>
@@ -145,7 +145,7 @@
                     <tbody id="fraccionDescripciones_0">
                         <tr>
                             <td>
-                                <input type="text" name="fraccionArancelaria[0][skFraccionArancelariaDescripcion][]" value="" class="form-control">
+                                <input type="hidden" name="fraccionArancelaria[0][skFraccionArancelariaDescripcion][]" value="" class="form-control">
                                 <textarea name="fraccionArancelaria[0][sDescripcion][]" class="form-control" placeholder="Descripci&oacute;n en espa&ntilde;ol"></textarea>
                             </td>
                             <td>
@@ -186,7 +186,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h4 class="modal-title">Clasificaci&oacute;n arancelaria</h4>
+                <h4 class="modal-title">Fotos</h4>
             </div>
             <div class="modal-body form thumbnail-clas">
                 

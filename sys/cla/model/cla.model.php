@@ -316,9 +316,10 @@
                     $sql .=" skStatus = '".$this->numPar['skStatus']."' ,";
                 }
                 $sql .= " skNumeroParte = '".$this->numPar['skNumeroParte']."' WHERE skNumeroParte = '".$this->numPar['skNumeroParte']."' LIMIT 1";
+               
                 $result = $this->db->query($sql);
                 if($result){
-                    return $this->numPar['skAreas'];
+                    return $this->numPar['skNumeroParte'];
                 }else{
                     return false;
                 }
@@ -351,7 +352,9 @@
                 if(!empty($this->numparfraran['skStatus'])){
                     $sql .=" skStatus = '".$this->numparfraran['skStatus']."' ,";
                 }
-                $sql .= " skFraccionArancelaria = '".$this->numparfraran['skNumeroParte']."' WHERE skFraccionArancelaria = '".$this->numparfraran['skFraccionArancelaria']."' LIMIT 1";
+                $sql .= " skFraccionArancelaria = '".$this->numparfraran['skFraccionArancelaria']."' WHERE skFraccionArancelaria = '".$this->numparfraran['skFraccionArancelaria']."' LIMIT 1";
+             //   echo $sql;
+              //  die();
                 $result = $this->db->query($sql);
                 if($result){
                     return $this->numparfraran['skFraccionArancelaria'];

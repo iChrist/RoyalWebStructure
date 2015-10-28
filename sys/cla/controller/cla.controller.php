@@ -79,7 +79,6 @@
         }
         
         public function claara_form(){
-            //if($_POST){ exit('<pre>'.print_r($_POST,1).'</pre>'); }
             $this->data['message'] = '';
             $this->data['response'] = true;
             $this->data['datos'] = false;
@@ -114,91 +113,44 @@
             }
             if(isset($_GET['p1'])){
                 // OBTENER NUMERO DE PARTE //
-                $this->data['datos'] = $this->getNumeroParte();
-                /*header('Content-Type: application/json');
-                echo json_encode($this->data);
-                exit;*/
-                //exit('<pre>'.print_r($this->data,1).'</pre>');
+                 $this->numPar['skNumeroParte'] = $_GET['p1'];
+                $numPar = parent::read_equal_numPar();
+                if($numPar){
+                    $this->data['datos'] = $this->getNumeroParte();
+                }
             }
             $this->load_view('claara-form', $this->data);
             return true;
-            $_POST = array(
-                'skNumeroParte' => substr(md5(microtime()), 1, 32)
-                ,'sNombre'  => 'sNombre'
-                ,'sDescripcion' => 'sDescripcion'
-                ,'skStatus'=>'AC'
-                ,'dFechaCreacion'=>'CURRENT_TIMESTAMP'
-                ,'skUsersCreacion'=>$_SESSION['session']['skUsers']
-                    
-                ,'fraccionArancelaria'=>array(
-                    array(
-                        'sNombre'=>'fraccion1'
-                        ,'sDescripcion'=>array(
-                             'dEsp1'
-                            ,'dEsp2'
-                        )
-                        ,'sDescripcionIngles'=> array(
-                             'dIng1'
-                            ,'dIng2'
-                        )
-                        ,'archivos'=>array(
-                            array(
-                                 'file1.png'
-                                ,'file111.png'
-                            ),
-                            array(
-                                 'file2.png'
-                                ,'file22.png'
-                            )
-                        )
-                    ),
-                    array(
-                        'sNombre'=>'fraccion2'
-                        ,'sDescripcion'=>array(
-                             'dEspa1'
-                            ,'dEspa2'
-                        )
-                        ,'sDescripcionIngles'=> array(
-                             'dIngle1'
-                            ,'dIngle2'
-                        )
-                    )
-                )
-            );
-            echo "<PRE>";
-          
-            print_r($_POST);
-            echo "<PRE>";
-           // exit('<pre>'.print_r($_POST).'</pre>');
-          /* foreach($_POST as $tCampo => $tValor){
-           
-           	echo $tValor['skNumeroParte'];
-           }*/
-           
-				//$this->numPar['skNumeroParte'] = $_POST["skNumeroParte"] . "<br>";
-				//echo $_POST["sNombre"] . "<br>";
-				//echo $_POST["sDescripcion"] . "<br>";
-				//echo $_POST["skStatus"] . "<br>";
-				//echo $_POST["dFechaCreacion"] . "<br>";
-				//echo $_POST["skUsersCreacion"] . "<br>";
+                
+            
+            
+        
 				
-				$this->numPar['skNumeroParte'] = !empty($_POST['skNumeroParte']) ? $_POST['skNumeroParte'] : substr(md5(microtime()), 1, 32);
+		
+                    	
+            //exit('<pre>'.print_r($_POST,1).'</pre>');
+             if($_POST){
+             	$this->numPar['skNumeroParte'] = !empty($_POST['skNumeroParte']) ? $_POST['skNumeroParte'] : substr(md5(microtime()), 1, 32);
                 $this->numPar['sNombre'] = !empty($_POST['sNombre']) ? utf8_decode($_POST['sNombre']) : NULL ;
                 $this->numPar['sDescripcion'] = !empty($_POST['sDescripcion']) ? utf8_decode($_POST['sDescripcion']) : NULL ;
                 $this->numPar['skStatus'] = !empty($_POST['skStatus']) ? utf8_decode($_POST['skStatus']) : 'IN' ;
                 $this->numPar['dFechaCreacion'] = 'CURRENT_TIMESTAMP';
                 $this->numPar['skUsersCreacion'] = $_SESSION['session']['skUsers'];
-				
-				
-                $skNumeroParte = parent::create_cat_numeroParte();
+               
+                if(empty($_POST['skNumeroParte'])){
+                    // HACEMOS TRANSACIÓN AQUÍ //
+                    $flag = false;
+                    $skNumeroParte = parent::create_cat_numeroParte();
                     if($skNumeroParte){
-                    
-                    foreach($_POST['fraccionArancelaria'] as $campo=>$valor)
+                        //$flag = true;
+                        // HACEMOS FOREACH DE FRACCIONES //
+                        // HACEMOS FOREACH DE DESCRIPCIONES //
+                        // HACEMOS FOREACH DE ARCHIVOS (IMAGENES) //
+                        
+                        
+                        foreach($_POST['fraccionArancelaria'] as $campo=>$valor)
 				{
-					
-					
-					//	echo "<PRE>";
- 						$this->numparfraran['skFraccionArancelaria'] = !empty($_POST['skFraccionArancelaria']) ? $_POST['skFraccionArancelaria'] : substr(md5(microtime()), 1, 32);
+  						$this->numparfraran['skFraccionArancelaria'] = !empty($_POST['skFraccionArancelaria']) ? $_POST['skFraccionArancelaria'] : substr(md5(microtime()), 1, 32);
 						$this->numparfraran['skNumeroParte'] =  $this->numPar['skNumeroParte'] ;
 						$this->numparfraran['skStatus'] =  'AC' ;
 						$this->numparfraran['skUsersCreacion'] =  $this->numPar['skUsersCreacion'] ;
@@ -216,72 +168,54 @@
   						$this->fraAraDes['sDescripcionIngles'] = !empty($_POST['fraccionArancelaria'][$campo]['sDescripcionIngles'][$campo2]) ? utf8_decode($_POST['fraccionArancelaria'][$campo]['sDescripcionIngles'][$campo2]) : NULL ;
   		 							
   		 							$skFraccionArancelariaDescripcion = parent::create_cat_fraccionesArancelarias_descripcionFraccion();	
-		 					
-  		 						if(isset($_POST['fraccionArancelaria'][$campo]['archivos'][$campo2])){
-				 						foreach($_POST['fraccionArancelaria'][$campo]['archivos'][$campo2] as $campo3=>$valor3)
+  		 							//ARCHIVOS
+  		 						if(isset($_FILES['fraccionArancelaria']['name'][$campo]['archivos'][$campo2])){
+				 						foreach($_FILES['fraccionArancelaria']['name'][$campo]['archivos'][$campo2] as $campo3=>$valor3)
 										{
- 			$this->desArc['skArchivoFraccionArancelaria'] = !empty($_POST['skArchivoFraccionArancelaria']) ? $_POST['skArchivoFraccionArancelaria'] : substr(md5(microtime()), 1, 32);
-  			$this->desArc['skFraccionArancelariaDescripcion'] =  $this->fraAraDes['skFraccionArancelariaDescripcion'] ;
-  			$this->desArc['sArchivo'] =  $_POST['fraccionArancelaria'][$campo]['archivos'][$campo2][$campo3] ;
-  								$skArchivosFrancciones = parent::create_cat_descripcionFraccion_archivos();
-  			
- 			 							/*echo "<PRE>";
-										 print_r($_POST['fraccionArancelaria'][$campo]['archivos'][$campo][$campo3])."<br>";
-										echo "</PRE>";*/
 										
+ 			$this->desArc['skArchivoFraccionArancelaria'] = !empty($_FILES['skArchivoFraccionArancelaria']) ? $_FILES['skArchivoFraccionArancelaria'] : substr(md5(microtime()), 1, 32);
+  			$this->desArc['skFraccionArancelariaDescripcion'] =  $this->fraAraDes['skFraccionArancelariaDescripcion'] ;
+  			$this->desArc['sArchivo'] =  $_FILES['fraccionArancelaria']['name'][$campo]['archivos'][$campo2][$campo3] ;
+  			
+   										$serv= SYS_PATH."cla/files/numpart-form/";
+  										//echo $serv;
+ 											$ruta = $serv .$this->desArc['skFraccionArancelariaDescripcion'];
+											if(!file_exists($ruta))
+											{ 
+											mkdir ($ruta,0777,true);
+ 											}
+ 											
+ 											if (is_uploaded_file($_FILES['fraccionArancelaria']['tmp_name'][$campo]['archivos'][$campo][$campo3]))
+												{
+												 $nombreDirectorio = $ruta;
+												 $nombreFichero = $_FILES['fraccionArancelaria']['name'][$campo]['archivos'][$campo][$campo3];
+												// echo "nombre Directorio: ".$nombreDirectorio;
+												// echo "nombre Fichero: ".$nombreFichero;
+												$nombreCompleto = $nombreFichero;
+												 
+ 												 $idUnico = time();
+												 $nombreFichero = $idUnico . "-" . $nombreFichero;
+ 												 
+												move_uploaded_file($_FILES['fraccionArancelaria']['tmp_name'][$campo]['archivos'][$campo][$campo3], $nombreDirectorio."/".$nombreFichero);
+												 
+												}
+ 
 										
 				  						}
 			  						}
+		 						
+		 						
 		 						}
 		 					}
   						}
  					
 
-						
- 					/*	if(isset($_POST['fraccionArancelaria'][$campo]['sDescripcionIngles'])){
-	 						foreach(($_POST['fraccionArancelaria'][$campo]['sDescripcionIngles']) as $campo2=>$valor2)
-							{
- 								echo "<PRE>";
- 								print_r($_POST['fraccionArancelaria'][$campo]['sDescripcionIngles'][$campo2])."<br>";
- 								echo "</PRE>";
- 	 						}
- 						}
- 						*/
- 						
- 						/*if(isset($_POST['fraccionArancelaria'][$campo]['archivos'][$campo])){
-	 						foreach($_POST['fraccionArancelaria'][$campo]['archivos'][$campo] as $campo2=>$valor2)
-							{
- 							echo "<PRE>";
-							 print_r($_POST['fraccionArancelaria'][$campo]['archivos'][$campo][$campo2])."<br>";
-							echo "</PRE>";
-	  						}
-  						}*/
+				
 						
  				}
                     
-                        //$flag = true;
-                        // HACEMOS FOREACH DE FRACCIONES //
-                        // HACEMOS FOREACH DE DESCRIPCIONES //
-                        // HACEMOS FOREACH DE ARCHIVOS (IMAGENES) //
-                    }
-                    	
-            //exit('<pre>'.print_r($_POST,1).'</pre>');
-             if($_POST){
-               /* $this->numPar['skNumeroParte'] = !empty($_POST['skNumeroParte']) ? $_POST['skNumeroParte'] : substr(md5(microtime()), 1, 32);
-                $this->numPar['sNombre'] = !empty($_POST['sNombre']) ? utf8_decode($_POST['sNombre']) : NULL ;
-                $this->numPar['sDescripcion'] = !empty($_POST['sDescripcion']) ? utf8_decode($_POST['sDescripcion']) : NULL ;
-                $this->numPar['skStatus'] = !empty($_POST['skStatus']) ? utf8_decode($_POST['skStatus']) : 'IN' ;
-                $this->numPar['dFechaCreacion'] = 'CURRENT_TIMESTAMP';
-                $this->numPar['skUsersCreacion'] = $_SESSION['session']['skUsers'];*/
-                if(empty($_POST['skNumeroParte'])){
-                    // HACEMOS TRANSACIÓN AQUÍ //
-                    $flag = false;
-                    $skNumeroParte = parent::create_cat_numeroParte();
-                    if($skNumeroParte){
-                        //$flag = true;
-                        // HACEMOS FOREACH DE FRACCIONES //
-                        // HACEMOS FOREACH DE DESCRIPCIONES //
-                        // HACEMOS FOREACH DE ARCHIVOS (IMAGENES) //
+                    
+                    
                     }
                     if($flag){
                         $this->data['response'] = true;
@@ -297,6 +231,45 @@
                         return false;
                     }
                 }else{
+                
+                
+                 $skNumeroParte = parent::update_cat_numeros_partes();
+                    if($skNumeroParte){
+                    
+                     foreach($_POST['fraccionArancelaria'] as $campo=>$valor)
+				{
+  						$this->numparfraran['skFraccionArancelaria'] = !empty($_POST['skFraccionArancelaria']) ? $_POST['skFraccionArancelaria'] : substr(md5(microtime()), 1, 32);
+						$this->numparfraran['skNumeroParte'] =  $this->numPar['skNumeroParte'] ;
+						$this->numparfraran['skStatus'] =  'AC' ;
+						$this->numparfraran['skUsersCreacion'] =  $this->numPar['skUsersCreacion'] ;
+						$this->numparfraran['sNombre'] = !empty($_POST['fraccionArancelaria'][$campo]['sNombre']) ? utf8_decode($_POST['fraccionArancelaria'][$campo]['sNombre']) : NULL ;
+						
+						if(empty($_POST['skFraccionArancelaria'])){
+							$skFraccionArancelaria = parent::create_cat_numparfraran();
+						    if($skFraccionArancelaria){
+						    
+						    
+						    }
+						
+						}else{
+ 							 $skNumeroParte = parent::update_numparfraran();
+							 if($skNumeroParte){
+							 
+							 
+						     }
+							
+							
+						}
+						
+			}
+                    
+                    
+                    
+                    
+                    }
+                
+                
+                
                     // HACEMOS TRANSACIÓN AQUÍ //
                     $flag = true;
                     if($flag){
@@ -320,7 +293,9 @@
             }
             $this->load_view('claara-form', $this->data);
             return true;
-        }
+    
+    
+    }
         
         // OBTENER NUMERO DE PARTE //
         private function getNumeroParte(){
@@ -395,6 +370,7 @@
             }
             return $datos;
         }
+        
         public function claara_detail(){
             if(isset($_GET['p1'])){
                 $this->numPar['skNumeroParte'] = $_GET['p1'];
