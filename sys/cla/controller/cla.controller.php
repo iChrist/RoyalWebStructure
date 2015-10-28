@@ -157,7 +157,8 @@
                                 $this->desArc['skArchivoFraccionArancelaria'] = !empty($_FILES['skArchivoFraccionArancelaria']) ? $_FILES['skArchivoFraccionArancelaria'] : substr(md5(microtime()), 1, 32);
                                 $this->desArc['skFraccionArancelariaDescripcion'] =  $this->fraAraDes['skFraccionArancelariaDescripcion'] ;
                                 $this->desArc['sArchivo'] =  $_FILES['fraccionArancelaria']['name'][$campo]['archivos'][$campo2][$campo3] ;                             
-                                $serv= SYS_PATH."cla/files/numpart-form/";
+                                // ESTA ES LA RUTA DONDE SE GUARDARAN LOS ARCHIVOS DEL MODULO (claara-form) //
+                                $serv = SYS_PATH.$_GET['sysModule'].'/files/claara_form/';
                                 //echo $serv;
                                 $ruta = $serv .$this->desArc['skFraccionArancelariaDescripcion'];
                                 if(!file_exists($ruta)){ 
