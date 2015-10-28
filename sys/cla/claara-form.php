@@ -203,7 +203,6 @@
     var fraccion = <?php if($fraccion==0){ echo 1; }else{ echo $fraccion; } ?>;
     var fraccionDescripcion = <?php if($fraccionDescripcion==0){ echo 1; }else{ echo $fraccionDescripcion; } ?>;
     $(document).ready(function(){
-        
         /* AGREGAR FRACCION */
         $('body').delegate('.add-fraccion', 'click', function(){
             var html_fraccion = '<tr><td><table class="table table-bordered"><tr class="gray"><th><center>Fracci&oacute;n</center></th><td colspan="2"><input type="text" name="fraccionArancelaria['+fraccion+'][sNombre]" class="form-control" placeholder="Fracci&oacute;n arancelaria"></td><td align="center"><a href="javascript:;" class="btn btn-default delete-fraccion"><i class="fa fa-trash-o"></i></a></td></tr><tr><th colspan="2"><center>Descripciones</center></th><th><center>Fotos</center></th><td align="center"><a href="javascript:;" class="btn btn-default btn-xs add-descripcion" fraccion="'+fraccion+'"><i class="fa fa-plus"></i></a></td></tr><tbody id="fraccionDescripciones_'+fraccion+'"><tr><td><textarea name="fraccionArancelaria['+fraccion+'][sDescripcion][]" class="form-control" placeholder="Descripci&oacute;n en espa&ntilde;ol"></textarea></td><td><textarea name="fraccionArancelaria['+fraccion+'][sDescripcionIngles][]" class="form-control" placeholder="Descripci&oacute;n en ingl&eacute;s"></textarea></td><td align="center"><div class="fileUpload btn btn-default btn-xs"><span><i class="fa fa-cloud-upload"></i></span><input type="file" name="fraccionArancelaria['+fraccion+'][archivos]['+fraccionDescripcion+'][]" class="BtnUpload" multiple /></div></td><td align="center"><div style="margin:15px;"><a href="javascript:;" class="btn btn-default btn-xs delete-descripcion" fraccion="'+fraccion+'"><i class="fa fa-trash-o"></i></a></div></td></tr></tbody></table></td></tr>';
@@ -230,7 +229,6 @@
         $('body').delegate('.BtnUpload','change',function(){
             $(this).parent().removeClass('btn-default');
             $(this).parent().addClass('btn-success');
-            console.log($(this).val());
         });
         
         $('body').delegate('.modal_fotos','click',function(){
@@ -239,7 +237,9 @@
                 axn: 'listImg',
                 skFraccionArancelariaDescripcion: skFraccionArancelariaDescripcion 
             },function(data){
-                var thumbnails = '<div class="col-md-4 col-sm-4 col-xs-4"><img alt="'+data[0]['sArchivo']+'" src="http://vision7.com.mx/admin/files/news/1715916695insua.jpg" class="img-responsive img-thumbnail img-view" width="400px" height="400px" style="margin-left:15px;"></div><div class="col-md-8 col-sm-8 col-xs-8">'; 
+                console.log(data);
+                //'+data[0]['sArchivo']+'
+                var thumbnails = '<div class="col-md-4 col-sm-4 col-xs-4"><img alt="" src="http://vision7.com.mx/admin/files/news/1715916695insua.jpg" class="img-responsive img-thumbnail img-view" width="400px" height="400px" style="margin-left:15px;"></div><div class="col-md-8 col-sm-8 col-xs-8">'; 
                 $('.thumbnail-clas').html(thumbnails);
                 $.each(data,function(k,v){ //'+v.src+'
                     thumbnails += '<img src="http://vision7.com.mx/admin/thumbnail.php?width=297&height=221&url=http://vision7.com.mx/admin/files/news/1715916695insua.jpg" alt="'+v.sArchivo+'" width="80px" height="80px" style="margin-left:15px;" class="img-thumbnail">';
