@@ -159,12 +159,17 @@
                 $('.thumbnail-clas').html(thumbnails);
                 $.each(data,function(k,v){ //'+v.src+'
                     //thumbnails += '<img src="http://vision7.com.mx/admin/thumbnail.php?width=297&height=221&url=http://vision7.com.mx/admin/files/news/1715916695insua.jpg" alt="'+v.sArchivo+'" width="80px" height="80px" style="margin-left:15px;" class="img-thumbnail">';
-                    thumbnails += '<img src="'+v.src+'" alt="'+v.sArchivo+'" width="80px" height="80px" style="margin-left:15px;" class="img-thumbnail">';
+                    thumbnails += '<img src="'+v.src+'" alt="'+v.sArchivo+'" width="80px" height="80px" style="margin-left:15px;" class="img-thumbnail img-preview">';
                 });
                 thumbnails += '</div>';
                 $('.thumbnail-clas').html(thumbnails);
                 $('#modal_fotos').modal();
             });
+        });
+
+        $('body').delegate('.img-preview','click',function(){
+            var src = $(this).attr('src');
+            $('.img-view').attr('src',src);
         });
     }); 
 </script>
