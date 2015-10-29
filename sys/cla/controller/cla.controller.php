@@ -148,7 +148,7 @@
                                 $this->desArc['skArchivoFraccionArancelaria'] = !empty($_FILES['skArchivoFraccionArancelaria']) ? $_FILES['skArchivoFraccionArancelaria'] : substr(md5(microtime()), 1, 32);
                                 $this->desArc['skFraccionArancelariaDescripcion'] =  $this->fraAraDes['skFraccionArancelariaDescripcion'] ;
                                 $this->desArc['sArchivo'] =  $_FILES['fraccionArancelaria']['name'][$campo]['archivos'][$campo2][$campo3] ;
-                                parent::create_cat_descripcionFraccion_archivos();
+                                
                                 // ESTA ES LA RUTA DONDE SE GUARDARAN LOS ARCHIVOS DEL MODULO (claara-form) //
                                 $serv = SYS_PATH.$_GET['sysModule'].'/files/claara-form/';
                                 //echo $serv;
@@ -166,7 +166,10 @@
                                   $idUnico = time();
                                   $nombreFichero = $idUnico . "-" . $nombreFichero;
 
-                                  move_uploaded_file($_FILES['fraccionArancelaria']['tmp_name'][$campo]['archivos'][$campo][$campo3], $nombreDirectorio."/".$nombreFichero);
+                                  if(move_uploaded_file($_FILES['fraccionArancelaria']['tmp_name'][$campo]['archivos'][$campo][$campo3], $nombreDirectorio."/".$nombreFichero)){
+                                        $this->desArc['sArchivo'] = $nombreFichero;
+                                        parent::create_cat_descripcionFraccion_archivos();
+                                  }
                                 }
                               }
                             }
