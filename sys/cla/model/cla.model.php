@@ -209,7 +209,6 @@
         public function create_cat_descripcionFraccion_archivos(){
             $sql = "INSERT INTO cat_descripcionFraccion_archivos (skArchivoFraccionArancelaria,skFraccionArancelariaDescripcion,sArchivo,skStatus) "
                     . "VALUES ('".$this->desArc['skArchivoFraccionArancelaria']."','".$this->desArc['skFraccionArancelariaDescripcion']."','".$this->desArc['sArchivo']."','AC')";
-            //echo $sql;
             $result = $this->db->query($sql); 
             if($result){
                 return $this->desArc['skFraccionArancelariaDescripcion'];

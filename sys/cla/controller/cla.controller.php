@@ -133,6 +133,7 @@
                         $this->numparfraran['sNombre'] = !empty($_POST['fraccionArancelaria'][$campo]['sNombre']) ? utf8_decode($_POST['fraccionArancelaria'][$campo]['sNombre']) : NULL ;
                         $skFraccionArancelaria = parent::create_cat_numparfraran();
                       if($skFraccionArancelaria){
+                        $flag = true;
                         if(isset($_POST['fraccionArancelaria'][$campo]['sDescripcion'])){   
                           foreach(($_POST['fraccionArancelaria'][$campo]['sDescripcion']) as $campo2=>$valor2){
                             $this->fraAraDes['skFraccionArancelariaDescripcion'] = !empty($_POST['skFraccionArancelariaDescripcion']) ? $_POST['skFraccionArancelariaDescripcion'] : substr(md5(microtime()), 1, 32);
@@ -146,7 +147,8 @@
                               foreach($_FILES['fraccionArancelaria']['name'][$campo]['archivos'][$campo2] as $campo3=>$valor3){                                     
                                 $this->desArc['skArchivoFraccionArancelaria'] = !empty($_FILES['skArchivoFraccionArancelaria']) ? $_FILES['skArchivoFraccionArancelaria'] : substr(md5(microtime()), 1, 32);
                                 $this->desArc['skFraccionArancelariaDescripcion'] =  $this->fraAraDes['skFraccionArancelariaDescripcion'] ;
-                                $this->desArc['sArchivo'] =  $_FILES['fraccionArancelaria']['name'][$campo]['archivos'][$campo2][$campo3] ;                             
+                                $this->desArc['sArchivo'] =  $_FILES['fraccionArancelaria']['name'][$campo]['archivos'][$campo2][$campo3] ;
+                                parent::create_cat_descripcionFraccion_archivos();
                                 // ESTA ES LA RUTA DONDE SE GUARDARAN LOS ARCHIVOS DEL MODULO (claara-form) //
                                 $serv = SYS_PATH.$_GET['sysModule'].'/files/claara-form/';
                                 //echo $serv;
@@ -180,7 +182,7 @@
                     echo json_encode($this->data);
                     return true;
                   }else{
-                    $this->data['response'] = true;
+                    $this->data['response'] = false;
                     $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
                     header('Content-Type: application/json');
                     echo json_encode($this->data);
@@ -202,7 +204,7 @@
                         if(isset($_POST['fraccionArancelaria'][$campo]['sDescripcion'])){   
                           foreach(($_POST['fraccionArancelaria'][$campo]['sDescripcion']) as $campo2=>$valor2){
                           
-                          $this->fraAraDes['skFraccionArancelariaDescripcion'] = !empty($_POST['skFraccionArancelariaDescripcion']) ? $_POST['skFraccionArancelariaDescripcion'] : substr(md5(microtime()), 1, 32);
+                            $this->fraAraDes['skFraccionArancelariaDescripcion'] = !empty($_POST['skFraccionArancelariaDescripcion']) ? $_POST['skFraccionArancelariaDescripcion'] : substr(md5(microtime()), 1, 32);
                             $this->fraAraDes['skFraccionArancelaria'] =  $this->numparfraran['skFraccionArancelaria'] ;
                             $this->fraAraDes['skUsersCreacion'] =  $this->numparfraran['skUsersCreacion'] ;
                             $this->fraAraDes['sDescripcion'] = !empty($_POST['fraccionArancelaria'][$campo]['sDescripcion'][$campo2]) ? utf8_decode($_POST['fraccionArancelaria'][$campo]['sDescripcion'][$campo2]) : NULL ;
