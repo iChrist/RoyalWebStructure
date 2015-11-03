@@ -51,6 +51,7 @@
 <!-- END THEME STYLES -->
 <!-- BEGIN RoyalWeb CORE CSS -->
 <link href="<?php echo SYS_URL; ?>core/assets/css/core.css" rel="stylesheet" type="text/css"/>
+<link href="<?php echo SYS_URL; ?>core/assets/css/no-more-tables.css" rel="stylesheet" type="text/css"/>
 <!-- END RoyalWeb CORE CSS -->
 <script src="<?php echo SYS_URL; ?>core/assets/plugins/jquery-1.11.0.min.js" type="text/javascript"></script>
 <!-- BEGIN RoyalWeb CORE SCRIPTS -->

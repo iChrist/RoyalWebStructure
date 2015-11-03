@@ -11,7 +11,76 @@
         public function __destruct(){
 
         }
+        public function test_excel(){
+            require_once(CORE_PATH."assets/PHPExcel/Classes/PHPExcel/IOFactory.php");
+            $objReader = PHPExcel_IOFactory::createReader('Excel2007');
+            $objPHPExcel = $objReader->load(SYS_PATH."/cla/files/ClasificacionMercancias.xlsx");
+            $sReferencia = NULL;
+            
+            // CARGAMOS EL MODELO DE EMPRESAS //
+            $this->load_model('emp','emp');
+            $emp = new Emp_Model();
+            
+            //  Get worksheet dimensions
+            $sheet = $objPHPExcel->getSheet(0); 
+            $highestRow = $sheet->getHighestRow(); 
+            $highestColumn = $sheet->getHighestColumn();
+            //  Loop through each row of the worksheet in turn
+            for ($row = 2; $row <= $highestRow; $row++){ 
+                //  Read a row of data into an array
+                $rowData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row,
+                                                NULL,
+                                                TRUE,
+                                                FALSE);
+                //  Insert row data array into your database of choice here
+               
+               if(empty($rowData[0][0]) && empty($rowData[0][1])){
+                   break;
+               }
+               
+               $this->cla['skClasificacion'] = substr(md5(microtime()), 1, 32);
+               $this->cla['skStatus'] = 'AC';
+               $this->cla['skUsersCreacion'] = $_SESSION['session']['skUsers'];
+               
+               $this->cla['sReferencia'] = $rowData[0][0];
+               $this->cla['sPedimento'] = $rowData[0][1];
+               //$this->cla['skEmpresa'] = $rowData[0][2];
+               
+                $emp->empresas['sNombre'] = trim($rowData[0][2],"");
+                $empresa = $emp->read_like_empresas();
+                echo '<pre>'.print_r($empresa,1).'</pre>'; echo "<hr>";
+                /*if(!$empresa){
+                    $this->empresas['skEmpresa'] = substr(md5(microtime()), 1, 32);
+                    $emp->empresas['skTipoEmpresa'] = 'N/A';
+                    $emp->empresas['skStatus'] = 'AC';
+                    $skEmpresa = $emp->create_empresas();
+                    if(!$skEmpresa){
+                        break;
+                    }
+                    $this->cla['sPedimento'] = $skEmpresa;
+                }else{
+                    $rEmpresa = $empresa->fetch_assoc();
+                    echo '<pre>'.print_r($rEmpresa,1).'</pre>'; echo "<hr>";
+                }*/
+                
+                $this->claMer['sFraccion'] = $rowData[0][3];
+                $this->claMer['sDescripcion'] = $rowData[0][4];
+                $this->claMer['sDescripcionIngles'] = $rowData[0][5];
+                $this->claMer['sNumeroParte'] = $rowData[0][6];
 
+                $this->cla['dFechaPrevio'] = $rowData[0][7];
+                $this->cla['sfactura'] = $rowData[0][8];
+               
+               
+               echo '<pre>'.print_r($rowData[0],1).'</pre>'; echo "<hr>";
+                /*if($sReferencia == NULL){
+                    $sReferencia = $rowData[0][0];
+                }*/
+                
+            }
+            // Echo memory peak usage
+            echo date('H:i:s') , " Peak memory usage: " , (memory_get_peak_usage(true) / 1024 / 1024) , " MB" , EOL;
+        }
         /* COMIENZA MODULO clasifiación arancelaria */
         public function claara_index(){
             //exit('<pre>'.print_r($_GET,1).'</pre>');

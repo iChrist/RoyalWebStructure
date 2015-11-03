@@ -463,16 +463,16 @@
 						INNER JOIN rel_cat_empresas_cat_tipos_empresas  rce ON rce.skEmpresa = ce.skEmpresa
 						INNER JOIN cat_tipos_empresas cte ON cte.skTipoEmpresa = rce.skTipoEmpresa WHERE 1=1 ";
                 if(!empty($this->empresas['skEmpresa'])){
-                    $sql .=" AND skEmpresa = '".$this->empresas['skEmpresa']."'";
+                    $sql .=" AND ce.skEmpresa = '".$this->empresas['skEmpresa']."'";
                 }
                 if(!empty($this->empresas['sNombre'])){
-                    $sql .=" AND sNombre like '%".$this->empresas['sNombre']."%'";
+                    $sql .=" AND ce.sNombre like '%".$this->empresas['sNombre']."%'";
                 }
                  if(!empty($this->empresas['sNombreCorto'])){
-                    $sql .=" AND sNombreCorto like '%".$this->empresas['sNombreCorto']."%'";
+                    $sql .=" AND ce.sNombreCorto like '%".$this->empresas['sNombreCorto']."%'";
                 }
                 if(!empty($this->empresas['sRFC'])){
-                    $sql .=" AND sRFC like '%".$this->empresas['sRFC']."%'";
+                    $sql .=" AND ce.sRFC like '%".$this->empresas['sRFC']."%'";
                 }
                  if(!empty($this->empresas['skStatus'])){
                     $sql .=" AND ce.skStatus like '%".$this->empresas['skStatus']."%'";

@@ -1,7 +1,52 @@
 <?php
-    Abstract Class Cla_Model Extends Core_Model {
+    Class Cla_Model Extends Core_Model {
 
         // PUBLIC VARIABLES //
+       
+        /* COMIENZA CLASIFICACIÓN DE MERCANCIAS */
+        public $cla = array(
+             'skClasificacion' => NULL
+            ,'skEmpresa' => NULL
+            ,'sReferencia' => NULL
+            ,'sPedimento' => NULL
+            ,'dFechaPrevio' => NULL
+            ,'sfactura' => NULL
+            ,'skStatus' => NULL
+            ,'dFechaCreacion' => NULL
+            ,'skUsersCreacion' => NULL
+            ,'dFechaModificacion' => NULL
+            ,'skUsersModificacion' => NULL
+            ,'limit'        =>  NULL
+            ,'offset'       =>  NULL
+        );
+        
+        public $claMer = array(
+             'skClasificacionMercancia' => NULL
+            ,'skClasificacion' => NULL
+            ,'sFraccion' => NULL
+            ,'sDescripcion' => NULL
+            ,'sDescripcionIngles' => NULL
+            ,'sNumeroParte' => NULL
+            ,'skStatus' => NULL
+            ,'dFechaCreacion' => NULL
+            ,'skUsersCreacion' => NULL
+            ,'dFechaModificacion' => NULL
+            ,'skUsersModificacion' => NULL
+            ,'limit'        =>  NULL
+            ,'offset'       =>  NULL
+        );
+        
+        public $claMerArc = array(
+             'skClasificacionMercanciaArchivo' => NULL
+            ,'skClasificacionMercancia' => NULL
+            ,'sArchivo' => NULL
+            ,'skStatus' => NULL
+            ,'limit'        =>  NULL
+            ,'offset'       =>  NULL
+        );
+        /* TERMINA CLASIFICACIÓN DE MERCANCIAS */
+        
+        
         public $desArc = array(
              'skArchivoFraccionArancelaria' => NULL
             ,'skFraccionArancelariaDescripcion'  =>  NULL
@@ -63,6 +108,207 @@
         public function __destruct(){
 
         }
+        
+        /* COMIENZA CLASIFICACIÓN DE MERCANCIAS */
+        
+        public function count_cla(){
+            $sql = "SELECT COUNT(*) AS total FROM cat_clasificacion AS cla WHERE 1=1 ";
+            if(!empty($this->cla['skEmpresa'])){
+                $sql .=" AND skEmpresa like '%".$this->cla['skEmpresa']."%'";
+            }
+            if(!empty($this->cla['sReferencia'])){
+                $sql .=" AND sReferencia like '%".$this->cla['sReferencia']."%'";
+            }
+            if(!empty($this->cla['sPedimento'])){
+                $sql .=" AND sPedimento like '%".$this->cla['sPedimento']."%'";
+            }
+            if(!empty($this->cla['dFechaPrevio'])){
+                $sql .=" AND dFechaPrevio like '%".$this->cla['dFechaPrevio']."%'";
+            }
+            if(!empty($this->cla['sfactura'])){
+                $sql .=" AND sfactura like '%".$this->cla['sfactura']."%'";
+            }
+            if(!empty($this->cla['skStatus'])){
+                $sql .=" AND cla.skStatus like '%".$this->cla['skStatus']."%'";
+            }
+            $result = $this->db->query($sql);
+            if($result){
+                if($result->num_rows > 0){
+                    return $result;
+                }else{
+                    return false;
+                }
+            }
+        }
+        
+        public function read_like_cla(){
+            $sql = "SELECT cla.*, emp.sNombre AS empresa, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
+                . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
+                . "INNER JOIN cat_empresas AS emp ON emp.skEmpresa = cla.skEmpresa WHERE 1=1 ";
+            if(!empty($this->cla['skEmpresa'])){
+                $sql .=" AND skEmpresa like '%".$this->cla['skEmpresa']."%'";
+            }
+            if(!empty($this->cla['sReferencia'])){
+                $sql .=" AND sReferencia like '%".$this->cla['sReferencia']."%'";
+            }
+            if(!empty($this->cla['sPedimento'])){
+                $sql .=" AND sPedimento like '%".$this->cla['sPedimento']."%'";
+            }
+            if(!empty($this->cla['dFechaPrevio'])){
+                $sql .=" AND dFechaPrevio like '%".$this->cla['dFechaPrevio']."%'";
+            }
+            if(!empty($this->cla['sfactura'])){
+                $sql .=" AND sfactura like '%".$this->cla['sfactura']."%'";
+            }
+            if(!empty($this->cla['skStatus'])){
+                $sql .=" AND cla.skStatus like '%".$this->cla['skStatus']."%'";
+            }
+            $result = $this->db->query($sql);
+            if($result){
+                if($result->num_rows > 0){
+                    return $result;
+                }else{
+                    return false;
+                }
+            }
+        }
+        
+        public function read_equal_cla(){
+            $sql = "SELECT cla.*, emp.sNombre AS empresa, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
+                . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
+                . "INNER JOIN cat_empresas AS emp ON emp.skEmpresa = cla.skEmpresa WHERE 1=1 ";
+            if(!empty($this->cla['skClasificacion'])){
+                $sql .=" AND (cla.skClasificacion = '".$this->cla['skClasificacion']."') ";
+            }
+            $result = $this->db->query($sql);
+            if($result){
+                if($result->num_rows > 0){
+                    return $result;
+                }else{
+                    return false;
+                }
+            }
+        }
+        
+        public function create_cla(){
+            $sql = "INSERT INTO cat_clasificacion 
+            (skClasificacion,skEmpresa,sReferencia,sPedimento,dFechaPrevio,sfactura,skStatus,dFechaCreacion,skUsersCreacion) 
+            VALUES 
+            ('".$this->cla['skClasificacion']."',
+            '".$this->cla['skEmpresa']."',
+            '".$this->cla['sReferencia']."',
+            '".$this->cla['sPedimento']."',
+            '".$this->cla['dFechaPrevio']."',
+            '".$this->cla['sfactura']."',
+            '".$this->cla['skStatus']."',
+             CURRENT_TIMESTAMP,
+            '".$this->cla['skUsersCreacion']."'
+            )";
+            $result = $this->db->query($sql);
+            if($result){
+                return $this->cla['skClasificacion'];
+            }else{
+                return false;
+            }
+        }
+        
+        public function update_cla(){
+            $sql = "UPDATE cat_clasificacion SET "
+                . "skEmpresa = '".$this->cla['skEmpresa']."',"
+                . "sReferencia = '".$this->cla['sReferencia']."',"
+                . "sPedimento = '".$this->cla['sPedimento']."',"
+                . "dFechaPrevio = '".$this->cla['dFechaPrevio']."',"
+                . "sfactura = '".$this->cla['sfactura']."',"
+                . "skStatus = '".$this->cla['skStatus']."',"
+                . "dFechaModificacion = '".$this->cla['dFechaModificacion']."',"
+                . "skUsersModificacion = '".$this->cla['skUsersModificacion']."'"
+                . " WHERE skClasificacion = '".$this->cla['skClasificacion']."'";
+            $result = $this->db->query($sql);
+            if($result){
+                return $this->cla['skClasificacion'];
+            }else{
+                return false;
+            }
+        }
+        
+        /* cat_clasificacionMercancia */
+        public function read_equal_claMer(){
+            $sql = "SELECT claMer.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacionMercancia AS claMer "
+                . "INNER JOIN _status ON _status.skStatus = claMer.skStatus WHERE 1=1 ";
+            if(!empty($this->claMer['skClasificacionMercancia'])){
+                $sql .=" AND (claMer.skClasificacionMercancia = '".$this->claMer['skClasificacionMercancia']."') ";
+            }
+            if(!empty($this->claMer['skClasificacion'])){
+                $sql .=" AND (claMer.skClasificacion = '".$this->claMer['skClasificacion']."') ";
+            }
+            $result = $this->db->query($sql);
+            if($result){
+                if($result->num_rows > 0){
+                    return $result;
+                }else{
+                    return false;
+                }
+            }
+        }
+        public function create_claMer(){
+            $sql = "INSERT INTO cat_clasificacionMercancia 
+            (skClasificacionMercancia,skClasificacion,sFraccion,sDescripcion,sDescripcionIngles,sNumeroParte,skStatus,dFechaCreacion,skUsersCreacion) 
+            VALUES 
+            ('".$this->claMer['skClasificacionMercancia']."',
+            '".$this->claMer['skClasificacion']."',
+            '".$this->claMer['sFraccion']."',
+            '".$this->claMer['sDescripcion']."',
+            '".$this->claMer['sDescripcionIngles']."',
+            '".$this->claMer['sNumeroParte']."',
+            '".$this->claMer['skStatus']."',
+             CURRENT_TIMESTAMP,
+            '".$this->claMer['skUsersCreacion']."'
+            )";
+            $result = $this->db->query($sql);
+            if($result){
+                return $this->claMer['skClasificacionMercancia'];
+            }else{
+                return false;
+            }
+        }
+        
+        /* cat_clasificacionMercancia_archivos */
+        public function read_equal_claMerArc(){
+            $sql = "SELECT claMerArc.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacionMercancia_archivos AS claMerArc "
+                . "INNER JOIN _status ON _status.skStatus = claMerArc.skStatus WHERE 1=1 ";
+            if(!empty($this->claMerArc['skClasificacionMercanciaArchivo'])){
+                $sql .=" AND (claMerArc.skClasificacionMercanciaArchivo = '".$this->claMerArc['skClasificacionMercanciaArchivo']."') ";
+            }
+            if(!empty($this->claMerArc['skClasificacionMercancia'])){
+                $sql .=" AND (claMerArc.skClasificacionMercancia = '".$this->claMerArc['skClasificacionMercancia']."') ";
+            }
+            $result = $this->db->query($sql);
+            if($result){
+                if($result->num_rows > 0){
+                    return $result;
+                }else{
+                    return false;
+                }
+            }
+        }
+        public function create_claMerArc(){
+            $sql = "INSERT INTO cat_clasificacionMercancia 
+            (skClasificacionMercanciaArchivo,skClasificacionMercancia,sArchivo,skStatus) 
+            VALUES 
+            ('".$this->claMerArc['skClasificacionMercanciaArchivo']."',
+            '".$this->claMerArc['skClasificacionMercancia']."',
+            '".$this->claMerArc['sArchivo']."',
+            '".$this->claMerArc['skStatus']."'
+            )";
+            $result = $this->db->query($sql);
+            if($result){
+                return $this->claMerArc['skClasificacionMercanciaArchivo'];
+            }else{
+                return false;
+            }
+        }
+        /* TERMINA CLASIFICACIÓN DE MERCANCIAS */
+        
         
         /* COMIENZA MODULO clasifiación arancelaria */
         
