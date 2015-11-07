@@ -83,23 +83,7 @@ echo "</pre>";
         </select>
       </div>
     </div>    
-    <div class="form-group">
-      <label class="control-label col-md-2">Regimen <span aria-required="true" class="required"> * </span> </label>
-      <div class="col-md-4">
-        <select name="skRegimen" id="skRegimen" class="form-control form-filter input-sm">
-          <option value="">- Regimen -</option>
-          <?php
-                                    if(isset($data['regimenes'])){
-                                        while($rRegimen = $data['regimenes']->fetch_assoc()){
-                                ?>
-          <option value="<?php echo $rRegimen['skRegimen']; ?>" <?php echo (isset($result['skRegimen'])) ? ($result['skRegimen'] == $rRegimen['skRegimen'] ? 'selected' : '' ) : '' ; ?> > <?php echo utf8_encode($rRegimen['sNombre']); ?> </option>
-          <?php
-                                        }//ENDIF
-                                    }//ENDWHILE
-                                ?>
-        </select>
-      </div>
-    </div>
+    
     <div class="form-group">
       <label class="control-label col-md-2">Clave de Documento <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
@@ -179,9 +163,6 @@ echo "</pre>";
                 skEmpresa:{
                     required: true
                 },
-				skRegimen:{
-                    required: true
-                },
 				skClaveDocumento:{
                     required: true
                 },
@@ -236,9 +217,6 @@ invalidHandler: function (event, validator) { //alerta de error de visualizació
                     required: true
                 },
                 skEmpresa:{
-                    required: true
-                },
-				skRegimen:{
                     required: true
                 },
 				skClaveDocumento:{

@@ -59,16 +59,7 @@ echo "</pre>";
                 </h4>
             </div>
         </div>
-        <div class="form-group">
-            <label class="control-label col-md-2">Regimen </label>
-            <div class="col-md-4">
-                <h4>
-                    <?php 
-                        echo (isset($result['Regimen'])) ? utf8_encode($result['Regimen']) : '' ;
-                    ?>
-                </h4>
-            </div>
-        </div> 
+         
         <div class="form-group">
             <label class="control-label col-md-2">Clave de Documento </label>
             <div class="col-md-4">

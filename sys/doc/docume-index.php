@@ -28,7 +28,6 @@ echo "</pre>";*/
             <th width="10%"> Tipo de Tramite </th>
             <th width="10%"> Tipo de Servicios </th>
             <th width="10%"> Empresa </th>
-            <th width="10%"> Regimen </th>
             <th width="10%"> Clave de Documento </th>
             <th width="10%"> Corresponsalía </th>
             <th width="10%"> Conocimiento Marítimo </th>
@@ -69,18 +68,6 @@ echo "</pre>";*/
                                         while($row = $data['empresas']->fetch_assoc()){
                                 ?>
                 <option value="<?php echo $row['skEmpresa']; ?>"> <?php echo utf8_encode($row['sNombre']." (".$row['sRFC'].")"); ?> </option>
-                <?php
-                                        }//ENDIF
-                                    }//ENDWHILE
-                                ?>
-              </select></td>
-            <td><select name="skRegimen" class="form-control form-filter input-sm">
-                <option value="">- Regimen -</option>
-                <?php
-                                    if(isset($data['regimenes'])){
-                                        while($row = $data['regimenes']->fetch_assoc()){
-                                ?>
-                <option value="<?php echo $row['skRegimen']; ?>"> <?php echo utf8_encode($row['sNombre']); ?> </option>
                 <?php
                                         }//ENDIF
                                     }//ENDWHILE
