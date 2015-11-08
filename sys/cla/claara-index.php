@@ -12,10 +12,31 @@
                         <thead>
                         <tr role="row" class="heading">
                             <th width="25%">
-                                Nombre
+                                Referencia
+                            </th>
+                            <th width="25%">
+                                Pedimento
+                            </th>
+                            <th width="25%">
+                                Cliente
+                            </th>
+                            <th width="25%">
+                                Fracci&oacute;n
                             </th>
                             <th width="25%">
                                 Descripci&oacute;n
+                            </th>
+                            <th width="25%">
+                                Ingl&eacute;s
+                            </th>
+                            <th width="25%">
+                                F. Previo
+                            </th>
+                            <th width="25%">
+                                Factura
+                            </th>
+                            <th width="25%">
+                                Autor
                             </th>
                             <th width="25%">
                                 Estatus
@@ -26,10 +47,44 @@
                         </tr>
                         <tr role="row" class="filter">
                             <td>
-                                <input type="text" class="form-control form-filter input-sm" name="sNombre" placeholder="Nombre">
+                                <input type="text" class="form-control form-filter input-sm" name="sReferencia" placeholder="Referencia">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control form-filter input-sm" name="sPedimento" placeholder="Pedimento">
+                            </td>
+                            <td>
+                                <select name="skEmpresa" class="form-control form-filter input-sm">
+                                    <option value="">- Cliente -</option>
+                                <?php
+                                    if(isset($data['empresas'])){
+                                        while($row = $data['empresas']->fetch_assoc()){
+                                ?>
+                                            <option value="<?php echo $row['skEmpresa']; ?>">
+                                                <?php echo utf8_encode($row['sNombre']); ?>
+                                            </option>
+                                <?php
+                                        }//ENDIF
+                                    }//ENDWHILE
+                                ?>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control form-filter input-sm" name="sFraccion" placeholder="Fraccion">
                             </td>
                             <td>
                                 <input type="text" class="form-control form-filter input-sm" name="sDescripcion" placeholder="Descripci&oacute;n">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control form-filter input-sm" name="sDescripcionIngles" placeholder="Descripci&oacute;n ingl&eacute;s">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control form-filter input-sm" name="dFechaPrevio" placeholder="F. Previo">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control form-filter input-sm" name="sFactura" placeholder="Factura">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control form-filter input-sm" name="skCreador" placeholder="Autor">
                             </td>
                             <td>
                                 <select name="skStatus" class="form-control form-filter input-sm">

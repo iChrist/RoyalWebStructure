@@ -1,3 +1,9 @@
+/* BOTON DE MENU EMERGENTE */
+.dropdown {
+    /*position: absolute !important;*/
+    position: relative !important;
+}
+
 .actions-buttons {
     background-color: #444444 !important;
     color: #f0f0f0 !important;

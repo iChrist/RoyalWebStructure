@@ -1,5 +1,5 @@
 <?php
-	Abstract Class Cof_Model Extends Core_Model {
+	Class Cof_Model Extends Core_Model {
                 
             // PUBLIC VARIABLES //
                 

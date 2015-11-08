@@ -51,6 +51,16 @@
             </div>
         </div>
         
+        <div class="form-group">
+            <label class="control-label col-md-2">Archivo Excel
+            </label>
+            <div class="col-md-4">
+                <input type="file" name="xlfile" id="xlf" />
+            </div>
+        </div>
+        
+        <pre id="out"></pre><br>
+        
         <div class="portlet">
             <div class="portlet-title">
                 <div class="caption">
@@ -198,6 +208,159 @@
     </div>
 </div>
 
+<!-- SCRIPT FOR SHEETS JS !-->
+<!-- uncomment the next line here and in xlsxworker.js for encoding support -->
+<!--<script src="<?php echo SYS_URL ?>core/assets/sheetjs/dist/cpexcel.js"></script>-->
+<script src="<?php echo SYS_URL ?>core/assets/sheetjs/shim.js"></script>
+<script src="<?php echo SYS_URL ?>core/assets/sheetjs/jszip.js"></script>
+<script src="<?php echo SYS_URL ?>core/assets/sheetjs/xlsx.js"></script>
+<!-- uncomment the next line here and in xlsxworker.js for ODS support -->
+<script src="<?php echo SYS_URL ?>core/assets/sheetjs/dist/ods.js"></script>
+<script type="text/javascript">
+var X = XLSX;
+var XW = {
+	/* worker message */
+	msg: 'xlsx',
+	/* worker scripts */
+	rABS: '<?php echo SYS_URL ?>core/assets/sheetjs/xlsxworker2.js',
+	norABS: '<?php echo SYS_URL ?>core/assets/sheetjs/xlsxworker1.js',
+	noxfer: '<?php echo SYS_URL ?>core/assets/sheetjs/xlsxworker.js'
+};
+
+var rABS = typeof FileReader !== "undefined" && typeof FileReader.prototype !== "undefined" && typeof FileReader.prototype.readAsBinaryString !== "undefined";
+var use_worker = typeof Worker !== 'undefined';
+var transferable = use_worker;
+var wtf_mode = false;
+
+function fixdata(data) {
+	var o = "", l = 0, w = 10240;
+	for(; l<data.byteLength/w; ++l) o+=String.fromCharCode.apply(null,new Uint8Array(data.slice(l*w,l*w+w)));
+	o+=String.fromCharCode.apply(null, new Uint8Array(data.slice(l*w)));
+	return o;
+}
+
+function ab2str(data) {
+	var o = "", l = 0, w = 10240;
+	for(; l<data.byteLength/w; ++l) o+=String.fromCharCode.apply(null,new Uint16Array(data.slice(l*w,l*w+w)));
+	o+=String.fromCharCode.apply(null, new Uint16Array(data.slice(l*w)));
+	return o;
+}
+
+function s2ab(s) {
+	var b = new ArrayBuffer(s.length*2), v = new Uint16Array(b);
+	for (var i=0; i != s.length; ++i) v[i] = s.charCodeAt(i);
+	return [v, b];
+}
+
+function xw_noxfer(data, cb) {
+	var worker = new Worker(XW.noxfer);
+	worker.onmessage = function(e) {
+		switch(e.data.t) {
+			case 'ready': break;
+			case 'e': console.error(e.data.d); break;
+			case XW.msg: cb(JSON.parse(e.data.d)); break;
+		}
+	};
+	var arr = rABS ? data : btoa(fixdata(data));
+	worker.postMessage({d:arr,b:rABS});
+}
+
+function xw_xfer(data, cb) {
+	var worker = new Worker(rABS ? XW.rABS : XW.norABS);
+	worker.onmessage = function(e) {
+		switch(e.data.t) {
+			case 'ready': break;
+			case 'e': console.error(e.data.d); break;
+			default: xx=ab2str(e.data).replace(/\n/g,"\\n").replace(/\r/g,"\\r"); console.log("done"); cb(JSON.parse(xx)); break;
+		}
+	};
+	if(rABS) {
+		var val = s2ab(data);
+		worker.postMessage(val[1], [val[1]]);
+	} else {
+		worker.postMessage(data, [data]);
+	}
+}
+
+function xw(data, cb) {
+	if(transferable) xw_xfer(data, cb);
+	else xw_noxfer(data, cb);
+}
+
+function to_json(workbook) {
+	var result = {};
+	workbook.SheetNames.forEach(function(sheetName) {
+		var roa = X.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+		if(roa.length > 0){
+			result[sheetName] = roa;
+		}
+	});
+	return result;
+}
+
+function process_wb(wb) {
+	var output = "";
+	output = JSON.stringify(to_json(wb), 2, 2);
+        
+        $("#sDescripcion").val(JSON.stringify(to_json(wb)));
+        $('.page-title-loading').css('display','inline');
+        $.ajax({
+            method: "POST",
+            url: "",
+            data: { 
+                axn: "json_excel",
+                sDescripcion: $("#sDescripcion").val()
+            }
+        })
+        .done(function( data ) {
+            if(data['response']){
+                toastr.success(data['message'], "Notificaci&oacute;n");
+                // AQUI SE HACE LA REDIRECCION
+            }else{
+                toastr.error(data['message'], "Notificaci&oacute;n");
+                setInterval(function(){ 
+                    obj.disabled = false;
+                }, 3000);
+            }
+            $('.page-title-loading').css('display','none');
+        });
+        
+        
+	if(out.innerText === undefined) out.textContent = output;
+	else out.innerText = output;
+	if(typeof console !== 'undefined') console.log("output", new Date());
+}
+
+var xlf = document.getElementById('xlf');
+function handleFile(e) {
+	var files = e.target.files;
+	var f = files[0];
+	{
+		var reader = new FileReader();
+		var name = f.name;
+		reader.onload = function(e) {
+			if(typeof console !== 'undefined') console.log("onload", new Date(), rABS, use_worker);
+			var data = e.target.result;
+			if(use_worker) {
+				xw(data, process_wb);
+			} else {
+				var wb;
+				if(rABS) {
+					wb = X.read(data, {type: 'binary'});
+				} else {
+				var arr = fixdata(data);
+					wb = X.read(btoa(arr), {type: 'base64'});
+				}
+				process_wb(wb);
+			}
+		};
+		if(rABS) reader.readAsBinaryString(f);
+		else reader.readAsArrayBuffer(f);
+	}
+}
+
+if(xlf.addEventListener) xlf.addEventListener('change', handleFile, false);
+</script>
 
 <script type="text/javascript">
     var fraccion = <?php if($fraccion==0){ echo 1; }else{ echo $fraccion; } ?>;

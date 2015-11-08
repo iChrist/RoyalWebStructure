@@ -142,27 +142,36 @@
         }
         
         public function read_like_cla(){
-            $sql = "SELECT cla.*, emp.sNombre AS empresa, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
+            $sql = "SELECT cla.*, emp.sNombre AS empresa, CONCAT(u.sName,' ',u.sLastNamePaternal,' ',u.sLastNameMaternal) AS usersCreacion, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
                 . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
-                . "INNER JOIN cat_empresas AS emp ON emp.skEmpresa = cla.skEmpresa WHERE 1=1 ";
+                . "INNER JOIN cat_empresas AS emp ON emp.skEmpresa = cla.skEmpresa "
+                . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE 1=1 ";
             if(!empty($this->cla['skEmpresa'])){
-                $sql .=" AND skEmpresa like '%".$this->cla['skEmpresa']."%'";
+                $sql .=" AND cla.skEmpresa like '%".$this->cla['skEmpresa']."%'";
             }
             if(!empty($this->cla['sReferencia'])){
-                $sql .=" AND sReferencia like '%".$this->cla['sReferencia']."%'";
+                $sql .=" AND cla.sReferencia like '%".$this->cla['sReferencia']."%'";
             }
             if(!empty($this->cla['sPedimento'])){
-                $sql .=" AND sPedimento like '%".$this->cla['sPedimento']."%'";
+                $sql .=" AND cla.sPedimento like '%".$this->cla['sPedimento']."%'";
             }
             if(!empty($this->cla['dFechaPrevio'])){
-                $sql .=" AND dFechaPrevio like '%".$this->cla['dFechaPrevio']."%'";
+                $sql .=" AND cla.dFechaPrevio like '%".$this->cla['dFechaPrevio']."%'";
             }
             if(!empty($this->cla['sfactura'])){
-                $sql .=" AND sfactura like '%".$this->cla['sfactura']."%'";
+                $sql .=" AND cla.sfactura like '%".$this->cla['sfactura']."%'";
             }
             if(!empty($this->cla['skStatus'])){
                 $sql .=" AND cla.skStatus like '%".$this->cla['skStatus']."%'";
             }
+            if(is_int($this->cla['limit'])){
+                if(is_int($this->cla['offset'])){
+                    $sql .= " LIMIT ".$this->cla['offset']." , ".$this->cla['limit'];
+                }else{
+                    $sql .= " LIMIT ".$this->cla['limit'];
+                }
+            }
+            //exit($sql);
             $result = $this->db->query($sql);
             if($result){
                 if($result->num_rows > 0){
@@ -180,6 +189,21 @@
             if(!empty($this->cla['skClasificacion'])){
                 $sql .=" AND (cla.skClasificacion = '".$this->cla['skClasificacion']."') ";
             }
+            $result = $this->db->query($sql);
+            if($result){
+                if($result->num_rows > 0){
+                    return $result;
+                }else{
+                    return false;
+                }
+            }
+        }
+        
+        public function get_cla(){
+            $sql = "SELECT skClasificacion FROM cat_clasificacion WHERE "
+                . " (sReferencia = '".$this->cla['sReferencia']."' "
+                . " OR sPedimento = '".$this->cla['sPedimento']."') "
+                . " AND (skEmpresa = '".$this->cla['skEmpresa']."') ";
             $result = $this->db->query($sql);
             if($result){
                 if($result->num_rows > 0){

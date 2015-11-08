@@ -460,8 +460,8 @@
 						FROM
 							cat_empresas ce
 						INNER JOIN _status st ON  st.skStatus = ce.skStatus
-						INNER JOIN rel_cat_empresas_cat_tipos_empresas  rce ON rce.skEmpresa = ce.skEmpresa
-						INNER JOIN cat_tipos_empresas cte ON cte.skTipoEmpresa = rce.skTipoEmpresa WHERE 1=1 ";
+						LEFT JOIN rel_cat_empresas_cat_tipos_empresas  rce ON rce.skEmpresa = ce.skEmpresa
+						LEFT JOIN cat_tipos_empresas cte ON cte.skTipoEmpresa = rce.skTipoEmpresa WHERE 1=1 ";
                 if(!empty($this->empresas['skEmpresa'])){
                     $sql .=" AND ce.skEmpresa = '".$this->empresas['skEmpresa']."'";
                 }
@@ -486,7 +486,7 @@
                     }else{
                         $sql .= " LIMIT ".$this->empresas['limit'];
                     }
-                }
+                }//echo $sql;
                 $result = $this->db->query($sql);
                 if($result){
                     if($result->num_rows > 0){
@@ -498,8 +498,8 @@
             }
               public function create_empresas(){
                 $sql = "INSERT INTO cat_empresas (skEmpresa,sNombre,sNombreCorto,sRFC,skStatus, dFechaCreacion) VALUES ('".$this->empresas['skEmpresa']."','".$this->empresas['sNombre']."','".$this->empresas['sNombreCorto']."','".$this->empresas['sRFC']."','".$this->empresas['skStatus']."', CURRENT_TIMESTAMP())";
-               // echo $sql;
-               // die();
+                //echo $sql;
+                //die();
                 $result = $this->db->query($sql);
                 $sql="INSERT INTO rel_cat_empresas_cat_tipos_empresas(skEmpresa,skTipoEmpresa) VALUES('".$this->empresas['skEmpresa']."','".$this->empresas['skTipoEmpresa']."')";
                 $result = $this->db->query($sql);
