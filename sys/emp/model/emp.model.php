@@ -459,7 +459,7 @@
 							cte.sNombre AS tipoEmpresa
 						FROM
 							cat_empresas ce
-						INNER JOIN _status st ON  st.skStatus = ce.skStatus
+						LEFT JOIN _status st ON  st.skStatus = ce.skStatus
 						LEFT JOIN rel_cat_empresas_cat_tipos_empresas  rce ON rce.skEmpresa = ce.skEmpresa
 						LEFT JOIN cat_tipos_empresas cte ON cte.skTipoEmpresa = rce.skTipoEmpresa WHERE 1=1 ";
                 if(!empty($this->empresas['skEmpresa'])){
@@ -480,13 +480,15 @@
                  if(!empty($this->empresas['skTipoEmpresa'])){
                     $sql .=" AND ce.skTipoEmpresa like '%".$this->empresas['skTipoEmpresa']."%'";
                 }
+                
                 if(is_int($this->empresas['limit'])){
                     if(is_int($this->empresas['offset'])){
                         $sql .= " LIMIT ".$this->empresas['offset']." , ".$this->empresas['limit'];
                     }else{
                         $sql .= " LIMIT ".$this->empresas['limit'];
                     }
-                }//echo $sql;
+                }
+               // echo $sql;
                 $result = $this->db->query($sql);
                 if($result){
                     if($result->num_rows > 0){
@@ -537,7 +539,7 @@
               public function read_empresa(){
                 $sql = "SELECT cat_empresas.*, _status.sName AS status, _status.sHtml  
 						FROM cat_empresas 
-						INNER JOIN _status ON _status.skStatus = cat_empresas.skStatus 
+						LEFT JOIN _status ON _status.skStatus = cat_empresas.skStatus 
 						WHERE 1=1 ";
                 if(!empty($this->empresas['skEmpresaDistinta'])){
                     $sql .= " AND cat_empresas.skEmpresa <> '".$this->empresas['skEmpresaDistinta']."' ";

@@ -223,9 +223,10 @@
                     }
                     
                     // INCLUYE UN MODELO DE OTRO MODULO //
-                    
-                    $this->load_model('cof','cof');
-                    $this->data['status'] = Cof_Model::read_status();
+                     $this->load_model('cof','cof');
+                    $cof = new Cof_Model();
+                    $this->data['status'] = $cof->read_status();
+                   
                     
                     // RETORNA LA VISTA areas-index.php //
                     $this->load_view('departamentos-index', $this->data);
