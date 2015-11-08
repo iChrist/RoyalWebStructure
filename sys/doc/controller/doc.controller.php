@@ -12,7 +12,7 @@
 		public function __destruct(){
 		
 		}
-				/*COMIENZA MODULO REGIMEN */
+				/*COMIENZA MODULO DE RECEPCION DE DOCUMENTOS */
  
 					public function docume_index(){
 					if(isset($_GET['axn'])){
@@ -36,9 +36,6 @@
 					}
 					if(isset($_POST['skTipoServicio'])){
 						$this->recepciondocumentos['skTipoServicio'] = $_POST['skTipoServicio'];
-					}
-					if(isset($_POST['skRegimen'])){
-						$this->recepciondocumentos['skRegimen'] = $_POST['skRegimen'];
 					}
 					if(isset($_POST['skClaveDocumento'])){
 						$this->recepciondocumentos['skClaveDocumento'] = $_POST['skClaveDocumento'];
@@ -79,7 +76,6 @@
 							,utf8_encode($row['TipoTramite'])
 							,utf8_encode($row['TipoServicio'])
 							,utf8_encode($row['Empresa'])
-							,utf8_encode($row['Regimen'])
 							,utf8_encode($row['ClaveDocumento'])
 							,utf8_encode($row['Corresponsalia'])
 							,utf8_encode($row['ConocimientoMaritimo'])
@@ -102,7 +98,6 @@
 					$this->data['status'] = Cof_Model::read_status();
 /*					$this->data['empresa'] = Cof_Model::read_status();
 					$this->data['tipotramite'] = Cof_Model::read_status();
-					$this->data['regimen'] = Cof_Model::read_status();
 					$this->data['clavedocumento'] = Cof_Model::read_status();
 					$this->data['coresponsalia'] = Cof_Model::read_status();
 					$this->data['conocimientomaritimo'] = Cof_Model::read_status();
@@ -113,7 +108,6 @@
 					$this->data['empresas'] = $objEmpresa->read_empresa();
 					$this->data['tipostramites'] = parent::read_tipos_tramites();
 					$this->data['tiposservicios'] = parent::read_tipos_servicios();
-					$this->data['regimenes'] = parent::read_regimenes();
 					$this->data['clavedocumento'] = parent::read_clave_documento();
 					$this->data['corresponsalia'] = parent::read_corresponsalia();
 					$this->data['conocimientomaritimo'] = parent::read_conocimiento_maritimo();
@@ -134,7 +128,6 @@
 					$this->data['empresas'] = $objEmpresa->read_empresa();
 					$this->data['tipostramites'] = parent::read_tipos_tramites();
 					$this->data['tiposservicios'] = parent::read_tipos_servicios();
-					$this->data['regimenes'] = parent::read_regimenes();
 					$this->data['clavedocumento'] = parent::read_clave_documento();
 					$this->data['corresponsalia'] = parent::read_corresponsalia();
 					$this->data['conocimientomaritimo'] = parent::read_conocimiento_maritimo();
@@ -145,7 +138,6 @@
 					$this->recepciondocumentos['skEmpresa'] = utf8_decode($_POST['skEmpresa']);
 					$this->recepciondocumentos['skTipoTramite'] = utf8_decode($_POST['skTipoTramite']);
 					$this->recepciondocumentos['skTipoServicio'] = utf8_decode($_POST['skTipoServicio']);
-					$this->recepciondocumentos['skRegimen'] = utf8_decode($_POST['skRegimen']);
 					$this->recepciondocumentos['skClaveDocumento'] = utf8_decode($_POST['skClaveDocumento']);
 					$this->recepciondocumentos['skCorresponsalia'] = utf8_decode($_POST['skCorresponsalia']);
 					$this->recepciondocumentos['skConocimientoMaritimo'] = utf8_decode($_POST['skConocimientoMaritimo']);
@@ -199,6 +191,6 @@
 					return true;
 					}
 
-				/*TERMINA MODULO REGIMEN */
+				/*TERMINA MODULO CAPTURA DE DOCUMENTOS */
 	}
 ?>

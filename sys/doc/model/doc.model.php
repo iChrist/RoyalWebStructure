@@ -19,7 +19,7 @@
             public function __destruct(){
 
             }
-			 /* COMIENZA MODULO REGIMENES JCBB*/
+			 /* COMIENZA MODULO RECEPCION DE DOCUMENTOS JCBB*/
             public function count_recepciondocumentos(){
                 $sql = "SELECT COUNT(*) AS total FROM ope_recepciones_documentos WHERE 1=1 ";
                 if(!empty($this->recepciondocumentos['skRecepcionDocumento'])){
@@ -37,9 +37,7 @@
 				if(!empty($this->recepciondocumentos['skTipoServicio'])){
                     $sql .=" AND skTipoServicio = '".$this->recepciondocumentos['skTipoServicio']."'";
                 }
-				if(!empty($this->recepciondocumentos['skRegimen'])){
-                    $sql .=" AND skRegimen = '".$this->recepciondocumentos['skRegimen']."'";
-                }
+			 
 				if(!empty($this->recepciondocumentos['skClaveDocumento'])){
                     $sql .=" AND skClaveDocumento = '".$this->recepciondocumentos['skClaveDocumento']."'";
                 }
@@ -75,7 +73,6 @@
 								ce.sNombre AS Empresa, 
 								ctt.sNombre AS TipoTramite, 
 								cts.sNombre AS TipoServicio, 
-								cr.sNombre AS Regimen, 
 								ccd.sNombre AS ClaveDocumento, 
 								cc.sNombre AS Corresponsalia, 
 								ccm.sNombre AS ConocimientoMaritimo, 
@@ -85,7 +82,6 @@
 						INNER JOIN cat_empresas  ce ON ce.skEmpresa = rd.skEmpresa 
 						INNER JOIN cat_tipos_tramites  ctt ON ctt.skTipoTramite = rd.skTipoTramite 
 						INNER JOIN cat_tipos_servicios  cts ON cts.skTipoServicio = rd.skTipoServicio 
-						INNER JOIN cat_regimenes  cr ON cr.skRegimen = rd.skRegimen 
 						INNER JOIN cat_claves_documentos  ccd ON ccd.skClaveDocumento = rd.skClaveDocumento 
 						INNER JOIN cat_corresponsalias  cc ON cc.skCorresponsalia = rd.skCorresponsalia 
 						INNER JOIN cat_conocimientos_maritimos  ccm ON ccm.skConocimientoMaritimo = rd.skConocimientoMaritimo  
@@ -108,9 +104,6 @@
                 }
                 if(!empty($this->recepciondocumentos['skTipoServicio'])){
                     $sql .=" AND rd.skTipoServicio like '%".$this->recepciondocumentos['skTipoServicio']."%'";
-                }
-                if(!empty($this->recepciondocumentos['skRegimen'])){
-                    $sql .=" AND rd.skRegimen like '%".$this->recepciondocumentos['skRegimen']."%'";
                 }
                 if(!empty($this->recepciondocumentos['skClaveDocumento'])){
                     $sql .=" AND rd.skClaveDocumento like '%".$this->recepciondocumentos['skClaveDocumento']."%'";
@@ -142,14 +135,13 @@
             public function create_recepciondocumentos(){
 				$datetime = DateTime::createFromFormat('d/m/y',$this->recepciondocumentos['dFechaProgramacion']);
 				$sql = "INSERT INTO ope_recepciones_documentos (	skRecepcionDocumento,sReferencia,skEmpresa,skTipoTramite,
-																skTipoServicio,skRegimen,skClaveDocumento,skCorresponsalia,skConocimientoMaritimo,skStatus,
+																skTipoServicio,skClaveDocumento,skCorresponsalia,skConocimientoMaritimo,skStatus,
 																dFechaProgramacion,dFechaCreacion,skUsersCreacion,dFechaModificacion,skUsersModificacion) 
 						VALUES ('".$this->recepciondocumentos['skRecepcionDocumento']."',
 								'".$this->recepciondocumentos['sReferencia']."',
 								'".$this->recepciondocumentos['skEmpresa']."',
 								'".$this->recepciondocumentos['skTipoTramite']."',
 								'".$this->recepciondocumentos['skTipoServicio']."',
-								'".$this->recepciondocumentos['skRegimen']."',
 								'".$this->recepciondocumentos['skClaveDocumento']."',
 								'".$this->recepciondocumentos['skCorresponsalia']."',
 								'".$this->recepciondocumentos['skConocimientoMaritimo']."',
@@ -182,9 +174,6 @@
                 }
 				if(!empty($this->recepciondocumentos['skTipoServicio'])){
                     $sql .=" skTipoServicio = '".$this->recepciondocumentos['skTipoServicio']."' ,";
-                }
-				if(!empty($this->recepciondocumentos['skRegimen'])){
-                    $sql .=" skRegimen = '".$this->recepciondocumentos['skRegimen']."' ,";
                 }
 				if(!empty($this->recepciondocumentos['skClaveDocumento'])){
                     $sql .=" skClaveDocumento = '".$this->recepciondocumentos['skClaveDocumento']."' ,";
@@ -249,39 +238,6 @@
 			public function read_tipos_servicios(){
 				$sql = "	SELECT 	rd.*
 						FROM cat_tipos_servicios rd 
-						WHERE 1=1 ";
-				if(!empty($this->recepciondocumentos['skTipoTramite'])){
-					$sql .=" AND rd.skTipoTramite = '".$this->recepciondocumentos['skTipoTramite']."'";
-				}
-				if(!empty($this->recepciondocumentos['sNombre'])){
-					$sql .=" AND rd.sNombre like '%".$this->recepciondocumentos['sNombre']."%'";
-				}
-				if(!empty($this->recepciondocumentos['skStatus'])){
-					$sql .=" AND rd.skStatus like '%".$this->recepciondocumentos['skStatus']."%'";
-				}else{
-					$sql .=" AND rd.skStatus = 'AC'";
-				}
-				
-				if(is_int($this->recepciondocumentos['limit'])){
-					if(is_int($this->recepciondocumentos['offset'])){
-						$sql .= " LIMIT ".$this->recepciondocumentos['offset']." , ".$this->recepciondocumentos['limit'];
-					}else{
-						$sql .= " LIMIT ".$this->recepciondocumentos['limit'];
-					}
-				}
-				//echo $sql;die();
-				$result = $this->db->query($sql);
-				if($result){
-					if($result->num_rows > 0){
-						return $result;
-					}else{
-						return false;
-					}
-				}
-			}
-			public function read_regimenes(){
-				$sql = "	SELECT 	rd.*
-						FROM cat_regimenes rd 
 						WHERE 1=1 ";
 				if(!empty($this->recepciondocumentos['skTipoTramite'])){
 					$sql .=" AND rd.skTipoTramite = '".$this->recepciondocumentos['skTipoTramite']."'";
@@ -413,7 +369,7 @@
 			}
 
 			
-			 /* COMIENZA MODULO REGIMENES JCBB*/
+			 /* COMIENZA MODULO  JCBB*/
 		   
 		   
 	}

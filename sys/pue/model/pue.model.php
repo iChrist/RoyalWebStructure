@@ -14,16 +14,6 @@
                     ,'limit'        =>  ''
                     ,'offset'       =>  ''
                 );
-                public $regimenes = array(
-                    'skRegimen'       =>  ''
-                    ,'sNombre'       =>  ''
-                    ,'sDescripcion'       =>  ''
-                    ,'skStatus'     =>  ''
-                    ,'limit'        =>  ''
-                    ,'offset'       =>  ''
-                );
-                
-                
                     
             // PRIVATE VARIABLES //
                     private $data = array();
@@ -384,105 +374,8 @@
             
 			
 			
-			 /* COMIENZA MODULO REGIMENES JCBB*/
-            public function count_regimenes(){
-                $sql = "SELECT COUNT(*) AS total FROM cat_regimenes WHERE 1=1 ";
-                if(!empty($this->regimenes['skRegimen'])){
-                    $sql .=" AND skRegimen = '".$this->regimenes['skRegimen']."'";
-                }
-                if(!empty($this->regimenes['sNombre'])){
-                    $sql .=" AND sNombre like '%".$this->regimenes['sNombre']."%'";
-                }
-                if(!empty($this->regimenes['sDescripcion'])){
-                    $sql .=" AND sDescripcion like '%".$this->regimenes['sDescripcion']."%'";
-                }
-                if(!empty($this->regimenes['skStatus'])){
-                    $sql .=" AND skStatus like '%".$this->regimenes['skStatus']."%'";
-                }
-				//echo $sql;die();
-                $result = $this->db->query($sql);
-                if($result){
-                    if($result->num_rows > 0){
-                        return $result;
-                    }else{
-                        return false;
-                    }
-                }
-            }
             
-            public function read_regimenes(){
-                $sql = "SELECT cat_regimenes.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_regimenes INNER JOIN _status ON _status.skStatus = cat_regimenes.skStatus WHERE 1=1 ";
-                if(!empty($this->regimenes['skRegimen'])){
-                    $sql .=" AND skRegimen = '".$this->regimenes['skRegimen']."'";
-                }
-                if(!empty($this->regimenes['sNombre'])){
-                    $sql .=" AND sNombre like '%".$this->regimenes['sNombre']."%'";
-                }
-                if(!empty($this->regimenes['sDescripcion'])){
-                    $sql .=" AND sDescripcion like '%".$this->regimenes['sDescripcion']."%'";
-                }
-                if(!empty($this->regimenes['skStatus'])){
-                    $sql .=" AND cat_regimenes.skStatus like '%".$this->regimenes['skStatus']."%'";
-                }
-                if(is_int($this->regimenes['limit'])){
-                    if(is_int($this->regimenes['offset'])){
-                        $sql .= " LIMIT ".$this->regimenes['offset']." , ".$this->regimenes['limit'];
-                    }else{
-                        $sql .= " LIMIT ".$this->regimenes['limit'];
-                    }
-                }
-				//echo $sql;die();
-                $result = $this->db->query($sql);
-                if($result){
-                    if($result->num_rows > 0){
-                        return $result;
-                    }else{
-                        return false;
-                    }
-                }
-            }
             
-            public function create_regimenes(){
-                $sql = "INSERT INTO cat_regimenes (skRegimen,sNombre,sDescripcion,skStatus,dFechaCreacion,skUsersCreacion,dFechaModificacion,skUsersModificacion) 
-						VALUES ('".$this->regimenes['skRegimen']."',
-								'".$this->regimenes['sNombre']."',
-								'".$this->regimenes['sDescripcion']."',
-								'".$this->regimenes['skStatus']."',
-								CURRENT_TIMESTAMP(),
-								'".$_SESSION['session']['skUsers']."',
-								CURRENT_TIMESTAMP(),
-								'".$_SESSION['session']['skUsers']."')";
-                $result = $this->db->query($sql);
-                if($result){
-                    return $this->regimenes['skRegimen'];
-                }else{
-                    return false;
-                }
-            }
-            
-            public function update_regimenes(){
-                $sql = "UPDATE cat_regimenes SET ";
-                if(!empty($this->regimenes['sNombre'])){
-                    $sql .=" sNombre = '".$this->regimenes['sNombre']."' ,";
-                }
-                if(!empty($this->regimenes['sDescripcion'])){
-                    $sql .=" sDescripcion = '".$this->regimenes['sDescripcion']."' ,";
-                }
-                if(!empty($this->regimenes['skStatus'])){
-                    $sql .=" skStatus = '".$this->regimenes['skStatus']."' ,";
-                }
-                    $sql .=" dFechaModificacion = CURRENT_TIMESTAMP() ,";
-                    $sql .=" skUsersModificacion = '".$_SESSION['session']['skUsers']."' ,";
-                $sql .= " skRegimen = '".$this->regimenes['skRegimen']."' WHERE skRegimen = '".$this->regimenes['skRegimen']."' LIMIT 1";
-                $result = $this->db->query($sql);
-                if($result){
-                    return $this->regimenes['skRegimen'];
-                }else{
-                    return false;
-                }
-            }
-			
-			 /* COMIENZA MODULO REGIMENES JCBB*/
 		   
 		   
 	}
