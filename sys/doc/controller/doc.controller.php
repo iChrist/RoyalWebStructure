@@ -28,6 +28,17 @@
 					if(isset($_POST['sReferencia'])){
 						$this->recepciondocumentos['sReferencia'] = $_POST['sReferencia'];
 					}
+					if(isset($_POST['sPedimento'])){
+						$this->recepciondocumentos['sPedimento'] = $_POST['sPedimento'];
+					}
+					if(isset($_POST['sMercancia'])){
+						$this->recepciondocumentos['sMercancia'] = $_POST['sMercancia'];
+					}
+					
+					if(isset($_POST['sObservaciones'])){
+						$this->recepciondocumentos['sObservaciones'] = $_POST['sObservaciones'];
+					}
+					
 					if(isset($_POST['skEmpresa'])){
 						$this->recepciondocumentos['skEmpresa'] = $_POST['skEmpresa'];
 					}
@@ -42,9 +53,6 @@
 					}
 					if(isset($_POST['skCorresponsalia'])){
 						$this->recepciondocumentos['skCorresponsalia'] = $_POST['skCorresponsalia'];
-					}
-					if(isset($_POST['skConocimientoMaritimo'])){
-						$this->recepciondocumentos['skConocimientoMaritimo'] = $_POST['skConocimientoMaritimo'];
 					}
 					if(isset($_POST['skStatus'])){
 						$this->recepciondocumentos['skStatus'] = $_POST['skStatus'];
@@ -73,13 +81,16 @@
 						$actions = $this->printModulesButtons(2,array($row['skRecepcionDocumento']));
 						array_push($records['data'], array(
 							 utf8_encode($row['sReferencia'])
+							,utf8_encode($row['sPedimento'])
+							,utf8_encode($row['sMercancia'])
+							,utf8_encode($row['sObservaciones'])
+							
 							,utf8_encode($row['TipoTramite'])
 							,utf8_encode($row['TipoServicio'])
 							,utf8_encode($row['Empresa'])
 							,utf8_encode($row['ClaveDocumento'])
 							,utf8_encode($row['Corresponsalia'])
-							,utf8_encode($row['ConocimientoMaritimo'])
-							,(date("d/m/Y", strtotime($row['dFechaProgramacion'])))
+							,utf8_encode($row['dFechaCreacion'])
  							,utf8_encode($row['htmlStatus'])
 							, !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
 						));
@@ -100,7 +111,6 @@
 					$this->data['tipotramite'] = Cof_Model::read_status();
 					$this->data['clavedocumento'] = Cof_Model::read_status();
 					$this->data['coresponsalia'] = Cof_Model::read_status();
-					$this->data['conocimientomaritimo'] = Cof_Model::read_status();
 */
 
 					$this->load_model('emp','emp');
@@ -110,7 +120,6 @@
 					$this->data['tiposservicios'] = parent::read_tipos_servicios();
 					$this->data['clavedocumento'] = parent::read_clave_documento();
 					$this->data['corresponsalia'] = parent::read_corresponsalia();
-					$this->data['conocimientomaritimo'] = parent::read_conocimiento_maritimo();
 										
 
 
@@ -130,18 +139,19 @@
 					$this->data['tiposservicios'] = parent::read_tipos_servicios();
 					$this->data['clavedocumento'] = parent::read_clave_documento();
 					$this->data['corresponsalia'] = parent::read_corresponsalia();
-					$this->data['conocimientomaritimo'] = parent::read_conocimiento_maritimo();
 					if($_POST){
 					//exit('</pre>'.print_r($_POST,1).'</pre>');
 					$this->recepciondocumentos['skRecepcionDocumento'] = !empty($_POST['skRecepcionDocumento']) ? $_POST['skRecepcionDocumento'] : substr(md5(microtime()), 1, 32);
 					$this->recepciondocumentos['sReferencia'] = utf8_decode($_POST['sReferencia']);
+					$this->recepciondocumentos['sPedimento'] = utf8_decode($_POST['sPedimento']);
+					$this->recepciondocumentos['sMercancia'] = utf8_decode($_POST['sMercancia']);
+					$this->recepciondocumentos['sObservaciones'] = utf8_decode($_POST['sObservaciones']);
+					
 					$this->recepciondocumentos['skEmpresa'] = utf8_decode($_POST['skEmpresa']);
 					$this->recepciondocumentos['skTipoTramite'] = utf8_decode($_POST['skTipoTramite']);
 					$this->recepciondocumentos['skTipoServicio'] = utf8_decode($_POST['skTipoServicio']);
 					$this->recepciondocumentos['skClaveDocumento'] = utf8_decode($_POST['skClaveDocumento']);
 					$this->recepciondocumentos['skCorresponsalia'] = utf8_decode($_POST['skCorresponsalia']);
-					$this->recepciondocumentos['skConocimientoMaritimo'] = utf8_decode($_POST['skConocimientoMaritimo']);
-					$this->recepciondocumentos['dFechaProgramacion'] = utf8_decode($_POST['dFechaProgramacion']);
 					
 						if(empty($_POST['skRecepcionDocumento'])){
 							if(parent::create_recepciondocumentos()){
