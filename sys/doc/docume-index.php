@@ -120,7 +120,7 @@ echo "</pre>";*/
             <td><div aria-label="Acciones" role="group" class="btn-group btn-group-xs" style="width:100px">
                 <button class="btn btn-xs btn-default filter-submit margin-bottom"><i class="fa fa-search"></i> Buscar</button>
                 <button class="btn btn-xs btn-warning filter-cancel"><i class="fa fa-refresh"></i></button>
-              </div></td>
+              </div></td> 
           </tr>
         </thead>
         <tbody>
