@@ -32,6 +32,7 @@ echo "</pre>";*/
             <th width="10%"> Clave de Documento </th>
             <th width="10%"> Corresponsalía </th>
             <th width="10%"> Mercancía </th>
+            <th width="10%"> Observaciones </th>
             
             <th width="10%"> Fecha </th>
             <th width="10%"> Estatus </th>
@@ -116,7 +117,7 @@ echo "</pre>";*/
                                     }//ENDWHILE
                                 ?>
               </select></td>
-            <td><div aria-label="Acciones" role="group" class="btn-group btn-group-xs">
+            <td><div aria-label="Acciones" role="group" class="btn-group btn-group-xs" style="width:100px">
                 <button class="btn btn-xs btn-default filter-submit margin-bottom"><i class="fa fa-search"></i> Buscar</button>
                 <button class="btn btn-xs btn-warning filter-cancel"><i class="fa fa-refresh"></i></button>
               </div></td>

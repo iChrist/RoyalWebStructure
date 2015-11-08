@@ -82,14 +82,13 @@
 						array_push($records['data'], array(
 							 utf8_encode($row['sReferencia'])
 							,utf8_encode($row['sPedimento'])
-							,utf8_encode($row['sMercancia'])
-							,utf8_encode($row['sObservaciones'])
-							
 							,utf8_encode($row['TipoTramite'])
 							,utf8_encode($row['TipoServicio'])
 							,utf8_encode($row['Empresa'])
 							,utf8_encode($row['ClaveDocumento'])
 							,utf8_encode($row['Corresponsalia'])
+							,utf8_encode($row['sMercancia'])
+							,utf8_encode($row['sObservaciones'])
 							,utf8_encode($row['dFechaCreacion'])
  							,utf8_encode($row['htmlStatus'])
 							, !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
