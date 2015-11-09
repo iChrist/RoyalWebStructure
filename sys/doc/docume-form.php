@@ -47,6 +47,7 @@ echo "</pre>";
         </div>
       </div>
     </div>
+    
     <div class="form-group">
       <label class="control-label col-md-2">Referencia <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
@@ -56,16 +57,14 @@ echo "</pre>";
       </div>
     </div>
     <div class="form-group">
-            <label class="control-label col-md-2">Fecha de Programación <span aria-required="true" class="required"> * </span></label>
-            <div class="col-md-4">
-                <div data-date-format="dd/mm/yyyy" class="input-group date date-picker">
-                    <input type="text" readonly class="form-control" name="dFechaProgramacion" id="dFechaProgramacion" value="<?php echo (isset($result['dFechaProgramacion'])) ? utf8_encode($result['dFechaProgramacion']) : '' ; ?>">
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
-                    </span>
-                </div>
-            </div>
+      <label class="control-label col-md-2">Pedimento <span aria-required="true" class="required"> * </span> </label>
+      <div class="col-md-4">
+        <div class="input-icon right"> <i class="fa"></i>
+          <input type="text" name="sPedimento" id="sPedimento" class="form-control" placeholder="Pedimento" value="<?php echo (isset($result['sPedimento'])) ? utf8_encode($result['sPedimento']) : '' ; ?>" >
         </div>
+      </div>
+    </div>
+     
     <div class="form-group">
       <label class="control-label col-md-2">Empresa <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
@@ -119,22 +118,22 @@ echo "</pre>";
       </div>
     </div>
     <div class="form-group">
-      <label class="control-label col-md-2">Conocimiento Marítimo <span aria-required="true" class="required"> * </span> </label>
+      <label class="control-label col-md-2">Mercancía <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
-        <select name="skConocimientoMaritimo" id="skConocimientoMaritimo" class="form-control form-filter input-sm">
-          <option value="">- Conocimiento Marítimo -</option>
-          <?php
-                                    if(isset($data['conocimientomaritimo'])){
-                                        while($rConocimientoMaritimo = $data['conocimientomaritimo']->fetch_assoc()){
-                                ?>
-          <option value="<?php echo $rConocimientoMaritimo['skConocimientoMaritimo']; ?>" <?php echo (isset($result['skConocimientoMaritimo'])) ? ($result['skConocimientoMaritimo'] == $rConocimientoMaritimo['skConocimientoMaritimo'] ? 'selected' : '' ) : '' ; ?> >  <?php echo utf8_encode($rConocimientoMaritimo['sNombre']); ?> </option>
-          <?php
-                                        }//ENDIF
-                                    }//ENDWHILE
-                                ?>
-        </select>
+        <div class="input-icon right"> <i class="fa"></i>
+          <input type="text" name="sMercancia" id="sMercancia" class="form-control" placeholder="Mercancía" value="<?php echo (isset($result['sMercancia'])) ? utf8_encode($result['sMercancia']) : '' ; ?>" >
+        </div>
       </div>
     </div>
+    <div class="form-group">
+      <label class="control-label col-md-2">Observaciones <span aria-required="true" class="required"> * </span> </label>
+      <div class="col-md-4">
+        <div class="input-icon right"> <i class="fa"></i>
+          <input type="text" name="sObservaciones" id="sObservaciones" class="form-control" placeholder="Mercancía" value="<?php echo (isset($result['sObservaciones'])) ? utf8_encode($result['sObservaciones']) : '' ; ?>" >
+        </div>
+      </div>
+    </div>
+    
     
     
      
@@ -160,6 +159,16 @@ echo "</pre>";
                 sReferencia:{
                     required: true
                 },
+                sPedimento:{
+                    required: true
+                },
+				sMercancia:{
+                    required: true
+                },
+				sObservaciones:{
+                    required: true
+                },
+				
                 skEmpresa:{
                     required: true
                 },
@@ -167,12 +176,6 @@ echo "</pre>";
                     required: true
                 },
 				skCorresponsalia:{
-                    required: true
-                },
-				skConocimientoMaritimo:{
-                    required: true
-                },
-				dFechaProgramacion:{
                     required: true
                 }
             },
@@ -216,6 +219,16 @@ invalidHandler: function (event, validator) { //alerta de error de visualizació
                 sReferencia:{
                     required: true
                 },
+                sPedimento:{
+                    required: true
+                },
+				sMercancia:{
+                    required: true
+                },
+				Observaciones:{
+                    required: true
+                },
+				
                 skEmpresa:{
                     required: true
                 },
@@ -223,12 +236,6 @@ invalidHandler: function (event, validator) { //alerta de error de visualizació
                     required: true
                 },
 				skCorresponsalia:{
-                    required: true
-                },
-				skConocimientoMaritimo:{
-                    required: true
-                },
-				dFechaProgramacion:{
                     required: true
                 }
             }

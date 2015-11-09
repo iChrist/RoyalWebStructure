@@ -72,8 +72,9 @@
                     
                     // INCLUYE UN MODELO DE OTRO MODULO //
                     $this->load_model('cof','cof');
-                    $this->data['status'] = Cof_Model::read_status();
-                    
+                    $cof = new Cof_Model();
+                    $this->data['status'] = $cof->read_status();
+                     
                     // RETORNA LA VISTA areas-index.php //
                     $this->load_view('areas-index', $this->data);
                     return true;
@@ -222,8 +223,10 @@
                     }
                     
                     // INCLUYE UN MODELO DE OTRO MODULO //
-                    $this->load_model('cof','cof');
-                    $this->data['status'] = Cof_Model::read_status();
+                     $this->load_model('cof','cof');
+                    $cof = new Cof_Model();
+                    $this->data['status'] = $cof->read_status();
+                   
                     
                     // RETORNA LA VISTA areas-index.php //
                     $this->load_view('departamentos-index', $this->data);
@@ -328,9 +331,10 @@
                     }
                     
                     // INCLUYE UN MODELO DE OTRO MODULO //
-                    $this->load_model('cof','cof');
-                    $this->data['status'] = Cof_Model::read_status();
-                    
+                     $this->load_model('cof','cof');
+                    $cof = new Cof_Model();
+                    $this->data['status'] = $cof->read_status();
+                     
                     // RETORNA LA VISTA areas-index.php //
                     $this->load_view('tipemp-index', $this->data);
                     return true;
@@ -437,13 +441,12 @@
                                         $row['sNombre'],
                                         $row['sNombreCorto'],
                                         $row['tipoEmpresa'],
-                                         $row['dFechaCreacion'],
-                                          $row['htmlStatus']
-                                        , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.$actions['sHtml'].'</ul></div>' : ''
+                                        $row['dFechaCreacion'],
+                                        $row['htmlStatus'],
+                                         !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.$actions['sHtml'].'</ul></div>' : ''
                                     ));
                                 }
-
-                                header('Content-Type: application/json');
+                                 header('Content-Type: application/json');
                                 echo json_encode($records);
                                 return true;
                                 break;
@@ -453,7 +456,8 @@
                     
                     // INCLUYE UN MODELO DE OTRO MODULO //
                     $this->load_model('cof','cof');
-                    $this->data['status'] = Cof_Model::read_status();
+                    $cof = new Cof_Model();
+                    $this->data['status'] = $cof->read_status();
                     
                     // RETORNA LA VISTA areas-index.php //
                     $this->load_view('empresas-index', $this->data);
@@ -468,7 +472,8 @@
                     $this->data['datos'] = false;
                     $this->data['tiposEmpresas'] = parent::read_equal_tipoempresas();
                     $this->load_model('cof','cof');
-                    $this->data['status'] = Cof_Model::read_status();
+                    $cof = new Cof_Model();
+                    $this->data['status'] = $cof->read_status();
                       
                     	 if(isset($_POST['axn']))
                     	 {
@@ -502,8 +507,8 @@
                         $this->empresas['skStatus'] = htmlentities($_POST['skStatus'],ENT_QUOTES);
                         $this->empresas['sNombre'] = htmlentities($_POST['sNombre'],ENT_QUOTES);
                         $this->empresas['sNombreCorto'] = htmlentities($_POST['sNombreCorto'],ENT_QUOTES);
-                        
                         $this->empresas['sRFC'] = htmlentities($_POST['sRFC'],ENT_QUOTES);
+                        
                         if(empty($_POST['skEmpresa'])){
                             if(parent::create_empresas()){
                             	$this->data['response'] = true;

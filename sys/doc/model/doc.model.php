@@ -5,6 +5,10 @@
                 public $recepciondocumentos = array(
                     'skRecepcionDocumento'    		=>  ''
                     ,'sReferencia'     				=>  ''
+                    ,'sPedimento'     				=>  ''
+                    ,'sMercancia'     				=>  ''
+                    ,'sObservaciones'     				=>  ''
+					
                     ,'sDescripcion'    			  	=>  ''
                     ,'skStatus'     				=>  ''
                     ,'limit'        					=>  ''
@@ -28,6 +32,16 @@
                 if(!empty($this->recepciondocumentos['sReferencia'])){
                     $sql .=" AND sReferencia like '%".$this->recepciondocumentos['sReferencia']."%'";
                 }
+                if(!empty($this->recepciondocumentos['sPedimento'])){
+                    $sql .=" AND sPedimento like '%".$this->recepciondocumentos['sPedimento']."%'";
+                }
+				if(!empty($this->recepciondocumentos['sMercancia'])){
+                    $sql .=" AND sMercancia like '%".$this->recepciondocumentos['sMercancia']."%'";
+                }
+				if(!empty($this->recepciondocumentos['sObservaciones'])){
+                    $sql .=" AND sObservaciones like '%".$this->recepciondocumentos['sObservaciones']."%'";
+                }
+				
 				if(!empty($this->recepciondocumentos['skEmpresa'])){
                     $sql .=" AND skEmpresa = '".$this->recepciondocumentos['skEmpresa']."'";
                 }
@@ -44,19 +58,13 @@
 				if(!empty($this->recepciondocumentos['skCorresponsalia'])){
                     $sql .=" AND skCorresponsalia = '".$this->recepciondocumentos['skCorresponsalia']."'";
                 }
-				if(!empty($this->recepciondocumentos['skConocimientoMaritimo'])){
-                    $sql .=" AND skConocimientoMaritimo = '".$this->recepciondocumentos['skConocimientoMaritimo']."'";
-                }
 				if(!empty($this->recepciondocumentos['skStatus'])){
                     $sql .=" AND skStatus = '".$this->recepciondocumentos['skStatus']."'";
                 }
 				if(!empty($this->recepciondocumentos['skStatus'])){
                     $sql .=" AND skStatus = '".$this->recepciondocumentos['skStatus']."'";
                 }
-				if(!empty($this->recepciondocumentos['dFechaProgramacion'])){
-                    $sql .=" AND dFechaProgramacion = '".$this->recepciondocumentos['dFechaProgramacion']."'";
-                }
-				//echo $sql;die();
+ 				//echo $sql;die();
                 $result = $this->db->query($sql);
                 if($result){
                     if($result->num_rows > 0){
@@ -75,7 +83,6 @@
 								cts.sNombre AS TipoServicio, 
 								ccd.sNombre AS ClaveDocumento, 
 								cc.sNombre AS Corresponsalia, 
-								ccm.sNombre AS ConocimientoMaritimo, 
 								st.sHtml AS htmlStatus 
 						FROM ope_recepciones_documentos rd 
 						INNER JOIN _status  st ON st.skStatus = rd.skStatus 
@@ -84,7 +91,6 @@
 						INNER JOIN cat_tipos_servicios  cts ON cts.skTipoServicio = rd.skTipoServicio 
 						INNER JOIN cat_claves_documentos  ccd ON ccd.skClaveDocumento = rd.skClaveDocumento 
 						INNER JOIN cat_corresponsalias  cc ON cc.skCorresponsalia = rd.skCorresponsalia 
-						INNER JOIN cat_conocimientos_maritimos  ccm ON ccm.skConocimientoMaritimo = rd.skConocimientoMaritimo  
 						INNER JOIN _status ON _status.skStatus = rd.skStatus 
 						WHERE 1=1 ";
                 if(!empty($this->recepciondocumentos['skRecepcionDocumento'])){
@@ -93,6 +99,16 @@
                 if(!empty($this->recepciondocumentos['sReferencia'])){
                     $sql .=" AND rd.sReferencia like '%".$this->recepciondocumentos['sReferencia']."%'";
                 }
+                if(!empty($this->recepciondocumentos['sPedimento'])){
+                    $sql .=" AND rd.sPedimento like '%".$this->recepciondocumentos['sPedimento']."%'";
+                }
+				if(!empty($this->recepciondocumentos['sMercancia'])){
+                    $sql .=" AND rd.sMercancia like '%".$this->recepciondocumentos['sMercancia']."%'";
+                }
+				if(!empty($this->recepciondocumentos['sObservaciones'])){
+                    $sql .=" AND rd.sObservaciones like '%".$this->recepciondocumentos['sObservaciones']."%'";
+                }
+				
                 if(!empty($this->recepciondocumentos['skStatus'])){
                     $sql .=" AND rd.skStatus like '%".$this->recepciondocumentos['skStatus']."%'";
                 }
@@ -110,9 +126,6 @@
                 }
                 if(!empty($this->recepciondocumentos['skCorresponsalia'])){
                     $sql .=" AND rd.skCorresponsalia like '%".$this->recepciondocumentos['skCorresponsalia']."%'";
-                }
-                if(!empty($this->recepciondocumentos['skConocimientoMaritimo'])){
-                    $sql .=" AND rd.skConocimientoMaritimo like '%".$this->recepciondocumentos['skConocimientoMaritimo']."%'";
                 }
                 if(is_int($this->recepciondocumentos['limit'])){
                     if(is_int($this->recepciondocumentos['offset'])){
@@ -133,18 +146,20 @@
             }
             
             public function create_recepciondocumentos(){
-				$datetime = DateTime::createFromFormat('d/m/y',$this->recepciondocumentos['dFechaProgramacion']);
-				$sql = "INSERT INTO ope_recepciones_documentos (	skRecepcionDocumento,sReferencia,skEmpresa,skTipoTramite,
-																skTipoServicio,skClaveDocumento,skCorresponsalia,skConocimientoMaritimo,skStatus,
-																dFechaProgramacion,dFechaCreacion,skUsersCreacion,dFechaModificacion,skUsersModificacion) 
+ 				$sql = "INSERT INTO ope_recepciones_documentos (	skRecepcionDocumento,sReferencia,sPedimento,sMercancia,sObservaciones,skEmpresa,skTipoTramite,
+																skTipoServicio,skClaveDocumento,skCorresponsalia,skStatus,
+																dFechaCreacion,skUsersCreacion,dFechaModificacion,skUsersModificacion) 
 						VALUES ('".$this->recepciondocumentos['skRecepcionDocumento']."',
 								'".$this->recepciondocumentos['sReferencia']."',
+								'".$this->recepciondocumentos['sPedimento']."',
+								'".$this->recepciondocumentos['sMercancia']."',
+								'".$this->recepciondocumentos['sObservaciones']."',
+								
 								'".$this->recepciondocumentos['skEmpresa']."',
 								'".$this->recepciondocumentos['skTipoTramite']."',
 								'".$this->recepciondocumentos['skTipoServicio']."',
 								'".$this->recepciondocumentos['skClaveDocumento']."',
 								'".$this->recepciondocumentos['skCorresponsalia']."',
-								'".$this->recepciondocumentos['skConocimientoMaritimo']."',
 								'AC',
 								'".$datetime->format('Y-m-d')."',
 								CURRENT_TIMESTAMP(),
@@ -166,6 +181,16 @@
                 if(!empty($this->recepciondocumentos['sReferencia'])){
                     $sql .=" sReferencia = '".$this->recepciondocumentos['sReferencia']."' ,";
                 }
+                if(!empty($this->recepciondocumentos['sPedimento'])){
+                    $sql .=" sPedimento = '".$this->recepciondocumentos['sPedimento']."' ,";
+                }
+				if(!empty($this->recepciondocumentos['sMercancia'])){
+                    $sql .=" sMercancia = '".$this->recepciondocumentos['sMercancia']."' ,";
+                }
+				if(!empty($this->recepciondocumentos['sObservaciones'])){
+                    $sql .=" sObservaciones = '".$this->recepciondocumentos['sObservaciones']."' ,";
+                }
+				
                 if(!empty($this->recepciondocumentos['skEmpresa'])){
                     $sql .=" skEmpresa = '".$this->recepciondocumentos['skEmpresa']."' ,";
                 }
@@ -181,14 +206,7 @@
 				if(!empty($this->recepciondocumentos['skCorresponsalia'])){
                     $sql .=" skCorresponsalia = '".$this->recepciondocumentos['skCorresponsalia']."' ,";
                 }
-				if(!empty($this->recepciondocumentos['skConocimientoMaritimo'])){
-                    $sql .=" skConocimientoMaritimo = '".$this->recepciondocumentos['skConocimientoMaritimo']."' ,";
-                }
-				if(!empty($this->recepciondocumentos['dFechaProgramacion'])){
-					$datetime = DateTime::createFromFormat('d/m/y',$this->recepciondocumentos['dFechaProgramacion']);
-                  	$sql .=" dFechaProgramacion = '".($datetime->format('Y-m-d'))."' ,";
-                 }
-                    $sql .=" dFechaModificacion = CURRENT_TIMESTAMP() ,";
+                     $sql .=" dFechaModificacion = CURRENT_TIMESTAMP() ,";
                     $sql .=" skUsersModificacion = '".$_SESSION['session']['skUsers']."'";
                 $sql .= "  WHERE skRecepcionDocumento = '".$this->recepciondocumentos['skRecepcionDocumento']."' LIMIT 1";
 				//echo $sql;die();
@@ -307,39 +325,6 @@
 						WHERE 1=1 ";
 				if(!empty($this->recepciondocumentos['skCorresponsalia'])){
 					$sql .=" AND rd.skCorresponsalia = '".$this->recepciondocumentos['skCorresponsalia']."'";
-				}
-				if(!empty($this->recepciondocumentos['sNombre'])){
-					$sql .=" AND rd.sNombre like '%".$this->recepciondocumentos['sNombre']."%'";
-				}
-				if(!empty($this->recepciondocumentos['skStatus'])){
-					$sql .=" AND rd.skStatus like '%".$this->recepciondocumentos['skStatus']."%'";
-				}else{
-					$sql .=" AND rd.skStatus = 'AC'";
-				}
-				
-				if(is_int($this->recepciondocumentos['limit'])){
-					if(is_int($this->recepciondocumentos['offset'])){
-						$sql .= " LIMIT ".$this->recepciondocumentos['offset']." , ".$this->recepciondocumentos['limit'];
-					}else{
-						$sql .= " LIMIT ".$this->recepciondocumentos['limit'];
-					}
-				}
-				//echo $sql;die();
-				$result = $this->db->query($sql);
-				if($result){
-					if($result->num_rows > 0){
-						return $result;
-					}else{
-						return false;
-					}
-				}
-			}
-			public function read_conocimiento_maritimo(){
-				$sql = "	SELECT 	rd.*
-						FROM cat_conocimientos_maritimos rd 
-						WHERE 1=1 ";
-				if(!empty($this->recepciondocumentos['skTipoTramite'])){
-					$sql .=" AND rd.skTipoTramite = '".$this->recepciondocumentos['skTipoTramite']."'";
 				}
 				if(!empty($this->recepciondocumentos['sNombre'])){
 					$sql .=" AND rd.sNombre like '%".$this->recepciondocumentos['sNombre']."%'";

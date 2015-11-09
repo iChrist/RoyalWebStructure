@@ -25,18 +25,22 @@ echo "</pre>";*/
         <thead>
           <tr role="row" class="heading">
             <th width="10%"> Referencia </th>
+            <th width="10%"> Pedimento </th>
             <th width="10%"> Tipo de Tramite </th>
             <th width="10%"> Tipo de Servicios </th>
             <th width="10%"> Empresa </th>
             <th width="10%"> Clave de Documento </th>
             <th width="10%"> Corresponsalía </th>
-            <th width="10%"> Conocimiento Marítimo </th>
-            <th width="10%"> Fecha de Programación </th>
+            <th width="10%"> Mercancía </th>
+            <th width="10%"> Observaciones </th>
+            
+            <th width="10%"> Fecha </th>
             <th width="10%"> Estatus </th>
             <th width="10%"> Acciones </th>
           </tr>
           <tr role="row" class="filter">
             <td><input type="text" class="form-control form-filter input-sm" name="sReferencia" placeholder="Referencia"></td>
+            <td><input type="text" class="form-control form-filter input-sm" name="sPedimento" placeholder="Pedimentos"></td>
             <td><select name="skTipoTramite" class="form-control form-filter input-sm">
                 <option value="">- Tipos de Tramites -</option>
                 <?php
@@ -97,18 +101,9 @@ echo "</pre>";*/
                                     }//ENDWHILE
                                 ?>
               </select></td>
-            <td><select name="skConocimientoMaritimo" class="form-control form-filter input-sm">
-                <option value="">- Conocimiento Marítimo -</option>
-                <?php
-                                    if(isset($data['conocimientomaritimo'])){
-                                        while($row = $data['conocimientomaritimo']->fetch_assoc()){
-                                ?>
-                <option value="<?php echo $row['skConocimientoMaritimo']; ?>"> <?php echo utf8_encode($row['sNombre']); ?> </option>
-                <?php
-                                        }//ENDIF
-                                    }//ENDWHILE
-                                ?>
-              </select></td>
+            <td><input type="text" class="form-control form-filter input-sm" name="sMercancia" placeholder="Mercancía"></td>
+            <td><input type="text" class="form-control form-filter input-sm" name="sObservaciones" placeholder="Observaciones"></td>
+            
             <td></td>
             <td><select name="skStatus" class="form-control form-filter input-sm">
                 <option value="">- Estatus -</option>
@@ -122,10 +117,10 @@ echo "</pre>";*/
                                     }//ENDWHILE
                                 ?>
               </select></td>
-            <td><div aria-label="Acciones" role="group" class="btn-group btn-group-xs">
+            <td><div aria-label="Acciones" role="group" class="btn-group btn-group-xs" style="width:100px">
                 <button class="btn btn-xs btn-default filter-submit margin-bottom"><i class="fa fa-search"></i> Buscar</button>
                 <button class="btn btn-xs btn-warning filter-cancel"><i class="fa fa-refresh"></i></button>
-              </div></td>
+              </div></td> 
           </tr>
         </thead>
         <tbody>
