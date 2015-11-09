@@ -4,26 +4,71 @@
     }
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data"> 
-    <input type="hidden" name="skNumeroParte"  id="skNumeroParte" value="<?php echo (isset($data['datos']['numPar']['skNumeroParte'])) ? $data['datos']['numPar']['skNumeroParte'] : '' ; ?>">
+    <input type="hidden" name="skClasificacion"  id="skClasificacion" value="<?php echo (isset($data['datos']['numPar']['skClasificacion'])) ? $data['datos']['numPar']['skClasificacion'] : '' ; ?>">
+    <input type="hidden" id="sJson" />
     <div class="form-body">
         <div class="form-group">
-            <label class="control-label col-md-2">Nombre <span aria-required="true" class="required"> * </span>
+            <label class="control-label col-md-2">Referencia <span aria-required="true" class="required"> * </span>
             </label>
             <div class="col-md-4">
                 <div class="input-icon right">
                     <i class="fa"></i>
-                    <input type="text" name="sNombre" id="sNombre" class="form-control" placeholder="Nombre" value="<?php echo (isset($data['datos']['numPar']['sNombre'])) ? $data['datos']['numPar']['sNombre'] : '' ; ?>" >
+                    <input type="text" name="sReferencia" id="sReferencia" class="form-control" placeholder="Referencia" value="<?php echo (isset($data['datos']['numPar']['sReferencia'])) ? $data['datos']['numPar']['sReferencia'] : '' ; ?>" >
                 </div>
             </div>
         </div>
-            
+        
         <div class="form-group">
-            <label class="control-label col-md-2">Descripci&oacute;n <span aria-required="true" class="required"> * </span>
+            <label class="control-label col-md-2">Pedimento <span aria-required="true" class="required"> * </span>
             </label>
             <div class="col-md-4">
                 <div class="input-icon right">
                     <i class="fa"></i>
-                    <textarea name="sDescripcion" id="sDescripcion" class="form-control" placeholder="Descripci&oacute;n"><?php echo (isset($data['datos']['numPar']['sDescripcion'])) ? $data['datos']['numPar']['sDescripcion'] : '' ; ?></textarea>
+                    <input type="text" name="sPedimento" id="sPedimento" class="form-control" placeholder="Pedimento" value="<?php echo (isset($data['datos']['numPar']['sPedimento'])) ? $data['datos']['numPar']['sPedimento'] : '' ; ?>" >
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="control-label col-md-2">Cliente <span aria-required="true" class="required"> * </span>
+            </label>
+            <div class="col-md-4">
+                <select name="skEmpresa" class="form-control form-filter input-sm">
+                    <option value="">- Cliente -</option>
+                <?php
+                    if(isset($data['empresas'])){
+                        while($row = $data['empresas']->fetch_assoc()){
+                ?>
+                            <option value="<?php echo $row['skEmpresa']; ?>">
+                                <?php echo utf8_encode($row['sNombre']); ?>
+                            </option>
+                <?php
+                        }//ENDIF
+                    }//ENDWHILE
+                ?>
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="control-label col-md-2">Factura <span aria-required="true" class="required"> * </span>
+            </label>
+            <div class="col-md-4">
+                <div class="input-icon right">
+                    <i class="fa"></i>
+                    <input type="text" name="sFactura" id="sFactura" class="form-control" placeholder="Factura" value="<?php echo (isset($data['datos']['numPar']['sFactura'])) ? $data['datos']['numPar']['sFactura'] : '' ; ?>" >
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="control-label col-md-2">Fecha de previo </label>
+            <div class="col-md-4">
+                <div data-date-format="dd-mm-yyyy" class="input-group date date-picker">
+                    <input type="text" name="dFechaPrevio" id="dFechaPrevio" class="form-control" readonly="">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                    </span>
                 </div>
             </div>
         </div>
@@ -59,12 +104,12 @@
             </div>
         </div>
         
-        <pre id="out"></pre><br>
+        <div class="clearfix"><h3 id="total"></h3></div>
         
         <div class="portlet">
             <div class="portlet-title">
                 <div class="caption">
-                    <i class="fa fa-reorder"></i>Fracciones arancelarias
+                    <i class="fa fa-reorder"></i>Clasificaci&oacute;n de mercancias
                 </div>
                 <div class="tools">
                     <a href="javascript:;" class="add-fraccion"><i class="fa fa-plus"></i> Agregar</a>    
@@ -73,104 +118,54 @@
             </div>
         <div class="portlet-body form">
         <div class="table-responsive">
-            <table class="table table-bordered" id="fraccionesArancelarias">
-                <?php 
-                    $fraccion = 0;
-                    $fraccionDescripcion = 0;
+            <!--<table class="table table-bordered" id="fraccionesArancelarias">!-->
+                <?php
                     if(isset($data['datos']['numPar']['numparfraran'])){
-                        $fraccion = 0;
                         foreach($data['datos']['numPar']['numparfraran'] AS $numparfraran){
                 ?>
-                <tr><td><table class="table table-bordered">
-                    <tr class="gray">
-                        <th><center>Fracci&oacute;n</center></th>
-                        <td colspan="2">
-                            <input type="hidden" name="fraccionArancelaria[<?php echo $fraccion; ?>][skFraccionArancelaria]" value="<?php echo $numparfraran['skFraccionArancelaria']; ?>" class="form-control">
-                            <input type="text" name="fraccionArancelaria[<?php echo $fraccion; ?>][sNombre]" value="<?php echo $numparfraran['sNombre']; ?>" class="form-control" placeholder="Fracci&oacute;n arancelaria">
-                        </td>
-                        <td align="center"><a href="javascript:;" class="btn btn-default delete-fraccion"><i class="fa fa-trash-o"></i></a></td>
-                    </tr>
-                    <tr>
-                        <th colspan="2"><center>Descripciones</center></th>
-                        <th><center>Fotos</center></th>
-                        <td align="center">
-                            <a href="javascript:;" class="btn btn-default btn-xs add-descripcion" fraccion="0" descripcion="0"><i class="fa fa-plus"></i></a>
-                        </td>
-                    </tr>
-                    <tbody id="fraccionDescripciones_<?php echo $fraccion; ?>">
-                    <?php
-                        if(isset($numparfraran['fraAraDes'])){
-                            $fraccionDescripcion = 0;
-                            foreach($numparfraran['fraAraDes'] AS $fraAraDes){
-                    ?>
-                        <tr>
-                            <td>
-                                <input type="hidden" name="fraccionArancelaria[<?php echo $fraccionDescripcion; ?>][skFraccionArancelariaDescripcion][]" value="<?php echo $fraAraDes['skFraccionArancelariaDescripcion']; ?>" class="form-control">
-                                <textarea name="fraccionArancelaria[<?php echo $fraccionDescripcion; ?>][sDescripcion][]" class="form-control" placeholder="Descripci&oacute;n en espa&ntilde;ol"><?php echo $fraAraDes['sDescripcion']; ?></textarea>
-                            </td>
-                            <td>
-                                <textarea name="fraccionArancelaria[<?php echo $fraccionDescripcion; ?>][sDescripcionIngles][]" class="form-control" placeholder="Descripci&oacute;n en ingl&eacute;s"><?php echo $fraAraDes['sDescripcionIngles']; ?></textarea>
-                            </td>
-                            <td align="center">
-                                <div class="fileUpload btn btn-default btn-xs"><span><i class="fa fa-cloud-upload"></i></span><input type="file"  name="fraccionArancelaria[<?php echo $fraccion; ?>][archivos][<?php echo $fraccionDescripcion; ?>][]" class="BtnUpload" multiple /></div>
-                                <a href="#" data-toggle="modal" role="button" class="btn btn-default btn-xs modal_fotos" skFraccionArancelariaDescripcion="<?php echo $fraAraDes['skFraccionArancelariaDescripcion']; ?>"><i class="fa fa-camera"></i></a>
-                            </td>
-                            <td align="center"><div style="margin:15px;"><a href="javascript:;" class="btn btn-default btn-xs delete-descripcion" fraccion="<?php echo $fraccion; ?>"><i class="fa fa-trash-o"></i></a></div></td>
-                        </tr>
-                    <?php
-                            $fraccionDescripcion++;
-                            }//FOREACH     
-                    ?>
-                    </tbody>
-                    <?php
-                        }//ENDIF
-                    ?>
-                </table></td></tr>
                 
                 
                 <?php
-                        $fraccion++;
                         }//ENDFOREACH
                     }else{
                 ?>
                 
                 
-                <table class="table table-bordered">
-                    <tr class="gray">
-                        <th><center>Fracci&oacute;n</center></th>
-                        <td colspan="2">
-                            <input type="hidden" name="fraccionArancelaria[0][skFraccionArancelaria]" value="" class="form-control">
-                            <input type="text" name="fraccionArancelaria[0][sNombre]" class="form-control" placeholder="Fracci&oacute;n arancelaria">
-                        </td>
-                        <td align="center"><a href="javascript:;" class="btn btn-default delete-fraccion"><i class="fa fa-trash-o"></i></a></td>
-                    </tr>
+                <table class="table table-bordered" id="fraccionesArancelarias">
                     <tr>
-                        <th colspan="2"><center>Descripciones</center></th>
-                        <th><center>Fotos</center></th>
-                        <td align="center">
-                            <a href="javascript:;" class="btn btn-default btn-xs add-descripcion" fraccion="0" descripcion="0"><i class="fa fa-plus"></i></a>
+                        <td>
+                            <table class="table table-bordered">
+                                <tr class="gray">
+                                    <th><center>Fracci&oacute;n arancelaria</center></th>
+                                    <td>
+                                        <input type="text" name="sFraccion[]" class="form-control" placeholder="Fracci&oacute;n arancelaria">
+                                    </td>
+                                    <th><center>N&uacute;mero de parte</center></th>
+                                    <td>
+                                        <input type="text" name="sNumeroParte[]" class="form-control" placeholder="N&uacute;mero de parte">
+                                    </td>
+                                    <td align="center"><a href="javascript:;" class="btn btn-default delete-fraccion"><i class="fa fa-trash-o"></i></a></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="2"><center>Descripci&oacute;n</center></th>
+                                    <th colspan="2"><center>Descripci&oacute;n ingl&eacute;s</center></th>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <textarea name="sDescripcion[]" class="form-control" placeholder="Descripci&oacute;n en espa&ntilde;ol"></textarea>
+                                    </td>
+                                    <td colspan="2">
+                                        <textarea name="sDescripcionIngles[]" class="form-control" placeholder="Descripci&oacute;n en ingl&eacute;s"></textarea>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
-                    <tbody id="fraccionDescripciones_0">
-                        <tr>
-                            <td>
-                                <input type="hidden" name="fraccionArancelaria[0][skFraccionArancelariaDescripcion][]" value="" class="form-control">
-                                <textarea name="fraccionArancelaria[0][sDescripcion][]" class="form-control" placeholder="Descripci&oacute;n en espa&ntilde;ol"></textarea>
-                            </td>
-                            <td>
-                                <textarea name="fraccionArancelaria[0][sDescripcionIngles][]" class="form-control" placeholder="Descripci&oacute;n en ingl&eacute;s"></textarea>
-                            </td>
-                            <td align="center">
-                                <div class="fileUpload btn btn-default btn-xs"><span><i class="fa fa-cloud-upload"></i></span><input type="file"  name="fraccionArancelaria[0][archivos][0][]" class="BtnUpload" multiple /></div>
-                            </td>
-                            <td align="center"><div style="margin:15px;"><a href="javascript:;" class="btn btn-default btn-xs delete-descripcion" fraccion="0"><i class="fa fa-trash-o"></i></a></div></td>
-                        </tr>
-                    </tbody>
                 </table>
                 <?php
                     }//ENDIF
                 ?>
-            </table>
+            <!--</table>!-->
         </div>
         </div>
         </div>
@@ -301,21 +296,23 @@ function to_json(workbook) {
 function process_wb(wb) {
 	var output = "";
 	output = JSON.stringify(to_json(wb), 2, 2);
-        
-        $("#sDescripcion").val(JSON.stringify(to_json(wb)));
+        var total = to_json(wb);
+        $("#total").html("Procesando " + total['Hoja1'].length + " Registros...");
+        $("#sJson").val(JSON.stringify(to_json(wb)));
         $('.page-title-loading').css('display','inline');
         $.ajax({
             method: "POST",
             url: "",
             data: { 
                 axn: "json_excel",
-                sDescripcion: $("#sDescripcion").val()
+                sJson: $("#sJson").val()
             }
         })
         .done(function( data ) {
             if(data['response']){
                 toastr.success(data['message'], "Notificaci&oacute;n");
                 // AQUI SE HACE LA REDIRECCION
+                location.reload();
             }else{
                 toastr.error(data['message'], "Notificaci&oacute;n");
                 setInterval(function(){ 
@@ -326,9 +323,9 @@ function process_wb(wb) {
         });
         
         
-	if(out.innerText === undefined) out.textContent = output;
+	/*if(out.innerText === undefined) out.textContent = output;
 	else out.innerText = output;
-	if(typeof console !== 'undefined') console.log("output", new Date());
+	if(typeof console !== 'undefined') console.log("output", new Date());*/
 }
 
 var xlf = document.getElementById('xlf');
@@ -363,30 +360,18 @@ if(xlf.addEventListener) xlf.addEventListener('change', handleFile, false);
 </script>
 
 <script type="text/javascript">
-    var fraccion = <?php if($fraccion==0){ echo 1; }else{ echo $fraccion; } ?>;
-    var fraccionDescripcion = <?php if($fraccionDescripcion==0){ echo 1; }else{ echo $fraccionDescripcion; } ?>;
+    var fraccion = 0;
+    var fraccionDescripcion = 0;
     $(document).ready(function(){
         /* AGREGAR FRACCION */
         $('body').delegate('.add-fraccion', 'click', function(){
-            var html_fraccion = '<tr><td><table class="table table-bordered"><tr class="gray"><th><center>Fracci&oacute;n</center></th><td colspan="2"><input type="text" name="fraccionArancelaria['+fraccion+'][sNombre]" class="form-control" placeholder="Fracci&oacute;n arancelaria"></td><td align="center"><a href="javascript:;" class="btn btn-default delete-fraccion"><i class="fa fa-trash-o"></i></a></td></tr><tr><th colspan="2"><center>Descripciones</center></th><th><center>Fotos</center></th><td align="center"><a href="javascript:;" class="btn btn-default btn-xs add-descripcion" fraccion="'+fraccion+'"><i class="fa fa-plus"></i></a></td></tr><tbody id="fraccionDescripciones_'+fraccion+'"><tr><td><textarea name="fraccionArancelaria['+fraccion+'][sDescripcion][]" class="form-control" placeholder="Descripci&oacute;n en espa&ntilde;ol"></textarea></td><td><textarea name="fraccionArancelaria['+fraccion+'][sDescripcionIngles][]" class="form-control" placeholder="Descripci&oacute;n en ingl&eacute;s"></textarea></td><td align="center"><div class="fileUpload btn btn-default btn-xs"><span><i class="fa fa-cloud-upload"></i></span><input type="file" name="fraccionArancelaria['+fraccion+'][archivos]['+fraccionDescripcion+'][]" class="BtnUpload" multiple /></div></td><td align="center"><div style="margin:15px;"><a href="javascript:;" class="btn btn-default btn-xs delete-descripcion" fraccion="'+fraccion+'"><i class="fa fa-trash-o"></i></a></div></td></tr></tbody></table></td></tr>';
+            var html_fraccion = '<tr><td><table class="table table-bordered"><tr class="gray"><th><center>Fracci&oacute;n arancelaria</center></th><td><input type="text" name="sFraccion[]" class="form-control" placeholder="Fracci&oacute;n arancelaria"></td><th><center>N&uacute;mero de parte</center></th><td><input type="text" name="sNumeroParte[]" class="form-control" placeholder="N&uacute;mero de parte"></td><td align="center"><a href="javascript:;" class="btn btn-default delete-fraccion"><i class="fa fa-trash-o"></i></a></td></tr><tr><th colspan="2"><center>Descripci&oacute;n</center></th><th colspan="2"><center>Descripci&oacute;n ingl&eacute;s</center></th></tr><tr><td colspan="2"><textarea name="sDescripcion[]" class="form-control" placeholder="Descripci&oacute;n en espa&ntilde;ol"></textarea></td><td colspan="2"><textarea name="sDescripcionIngles[]" class="form-control" placeholder="Descripci&oacute;n en ingl&eacute;s"></textarea></td></tr></table></td></tr>';
             $("#fraccionesArancelarias").append(html_fraccion);
-            fraccion ++;
-            fraccionDescripcion ++;
         });
         /* ELIMINAR FRACCION */
         $('body').delegate('.delete-fraccion','click',function(){  
+            console.log($(this).parent().parent().parent().parent().parent().parent());
             $(this).parent().parent().parent().parent().parent().parent().remove();
-        });
-        
-        /* AGREGAR DESCRIPCIONES */
-        $('body').delegate('.add-descripcion','click',function(){
-            var numFraccion = $(this).attr('fraccion');
-            var html_descripcion = '<tr><td><textarea name="fraccionArancelaria['+numFraccion+'][sDescripcion][]" class="form-control" placeholder="Descripci&oacute;n en espa&ntilde;ol"></textarea></td><td><textarea name="fraccionArancelaria['+numFraccion+'][sDescripcionIngles][]" class="form-control" placeholder="Descripci&oacute;n en ingl&eacute;s"></textarea></td><td align="center"><div class="fileUpload btn btn-default btn-xs"><span><i class="fa fa-cloud-upload"></i></span><input type="file" name="fraccionArancelaria['+numFraccion+'][archivos]['+fraccionDescripcion+'][]" class="BtnUpload" multiple /></div></td><td align="center"><div style="margin:15px;"><a href="javascript:;" class="btn btn-default btn-xs delete-descripcion" fraccion="'+numFraccion+'"><i class="fa fa-trash-o"></i></a></div></td></tr>';
-            $("#fraccionDescripciones_" + numFraccion).append(html_descripcion);
-        });
-        /* ELIMINAR DESCRIPCIONES */
-        $('body').delegate('.delete-descripcion','click',function(){  
-            $(this).parent().parent().parent().remove();
         });
         
         $('body').delegate('.BtnUpload','change',function(){
@@ -424,12 +409,19 @@ if(xlf.addEventListener) xlf.addEventListener('change', handleFile, false);
             focusInvalid: false, // do not focus the last invalid input
             ignore: "",
             rules:{
-                sNombre:{
+                sReferencia:{
                     required: true
                 },
-                sDescripcion:{
+                sPedimento:{
+                    required: true
+                },
+                skEmpresa:{
+                    required: true
+                },
+                sFactura:{
                     required: true
                 }
+                
             },
             invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar              
                 $('.alert-success').hide();
@@ -467,10 +459,16 @@ if(xlf.addEventListener) xlf.addEventListener('change', handleFile, false);
                 icon.removeClass("fa-warning").addClass("fa-check");
             },
             messages:{
-                sNombre:{
+                sReferencia:{
                     required: "Campo obligatorio."
                 },
-                sDescripcion:{
+                sPedimento:{
+                    required: "Campo obligatorio."
+                },
+                skEmpresa:{
+                    required: "Campo obligatorio."
+                },
+                sFactura:{
                     required: "Campo obligatorio."
                 }
             }

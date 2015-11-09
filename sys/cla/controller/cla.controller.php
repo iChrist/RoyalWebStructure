@@ -16,21 +16,22 @@
             $emp->empresas['sNombre'] = $sNombre;
             $empresa = $emp->read_like_empresas();
             if(!$empresa){
-                $emp->empresas['skEmpresa'] = substr(md5(microtime()), 1, 32);
+                /*$emp->empresas['skEmpresa'] = substr(md5(microtime()), 1, 32);
                 $emp->empresas['skTipoEmpresa'] = 'N/A';
                 $emp->empresas['skStatus'] = 'AC';
                 $skEmpresa = $emp->create_empresas();
                 if(!$skEmpresa){
                     return false;
                 }
-                return array($skEmpresa,$sNombre);
+                return array($skEmpresa,$sNombre);*/
+                return false;
             }else{
                 $rEmpresa = $empresa->fetch_row();
                 return array($rEmpresa[0] , $rEmpresa[1]);
             }
         }
         // IMPORTAR EXCEL //
-        public function import_excel(&$data){
+        public function import_excel(&$data , &$dFechaImportacion){
             ini_set('memory_limit', '-1');
             //echo date('H:i:s').'<hr>';
             require_once(CORE_PATH."assets/PHPExcel/Classes/PHPExcel/IOFactory.php");
@@ -43,6 +44,7 @@
             $skEmpresa = NULL;
             $skClasificacion = NULL;
             
+            $this->cla['dFechaImportacion'] = $dFechaImportacion;
             $this->cla['skStatus'] = 'AC';
             $this->cla['skUsersCreacion'] = $_SESSION['session']['skUsers'];
             
@@ -62,6 +64,10 @@
             if(!count($data)){
                 return false;
             }
+            $flag = true;
+            $message = false;
+            $cad  ="";
+            $i=0;
             foreach($data AS $k => $v){
                 //var_dump($v['REFERENCIA']);
                 // VERIFICACMOS QUE VENGA REFERENCIA Y PEDIMENTO //
@@ -70,9 +76,12 @@
                     }
                 // VERIFICAMOS SI EXISTE EMPRESA O LA CREAMOS //
                     if($sEmpresa != trim(utf8_decode($v['CLIENTE'])," ")){
-                        $empresa = $this->exist_empresa($emp , trim(utf8_decode($v['CLIENTE'])," "));
+                        $cliente = trim(utf8_decode($v['CLIENTE'])," ");
+                        $empresa = $this->exist_empresa($emp , $cliente);
                         if(!$empresa){ 
-                            echo ' BREAK EMPRESA ';
+                            $flag = false;
+                            $message = "No est&aacute; registrado el cliente: '".$cliente."' en el sistema.";
+                            //echo ' BREAK EMPRESA ';
                             break;
                         }
                         $skEmpresa = $empresa[0];
@@ -92,7 +101,7 @@
                 if(!isset($v['FACTURA'])){
                     $v['FACTURA'] = "";
                 }
-                $this->cla['sfactura'] = $v['FACTURA'];
+                $this->cla['sFactura'] = $v['FACTURA'];
                 
                 // OBTIENE LA CLASIFICACIÓN //
                     if(
@@ -107,7 +116,9 @@
                             $this->cla['skClasificacion'] = substr(md5(microtime()), 1, 32);
                             $skClasificacion = $this->create_cla();
                             if(!$skClasificacion){ 
-                                echo ' BREAK CLASIFICACION ';
+                                $flag = false;
+                                $message = "Hubo un error al registar la clasificaci&oacute;n.";
+                                //echo ' BREAK CLASIFICACION ';
                                 break;
                             }
                             $this->cla['skClasificacion'] = $skClasificacion;
@@ -151,90 +162,27 @@
                         
                         $skClasificacionMercancia = $this->create_claMer();
                         if(!$skClasificacionMercancia){ 
-                            echo ' BREAK CLASIFICACION MERCANCIA ';
+                            $flag = false;
+                            $message = "Hubo un error al registar la mercancia.";
+                            //echo ' BREAK CLASIFICACION MERCANCIA ';
                             break;
                         }
                 
-                
-                
+                $i++;
             }
-            return true;
-            
-            for($row = 2; $row <= $highestRow; $row++){ 
-            //for($row = 2; $row <= 31; $row++){ 
-                
-                // LEEMOS LOS DATOS Y LOS METEMOS A UN ARRAY //
-                    $rowData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row,
-                                            NULL,
-                                            TRUE,
-                                            FALSE);
-                
-                // VERIFICACMOS QUE VENGA REFERENCIA Y PEDIMENTO //
-                    if(empty($rowData[0][0]) && empty($rowData[0][1])){
-                        break;
-                    }
-                
-                // VERIFICAMOS SI EXISTE EMPRESA O LA CREAMOS //
-                    if($sEmpresa != trim($rowData[0][2]," ")){
-                        $empresa = $this->exist_empresa($emp , trim($rowData[0][2]," "));
-                        if(!$empresa){ 
-                            echo ' BREAK EMPRESA ';
-                            break;
-                        }
-                        $skEmpresa = $empresa[0];
-                        $sEmpresa = $empresa[1];
-                    }
-                    
-                $this->cla['skEmpresa'] = $skEmpresa;
-                $this->cla['sReferencia'] = $rowData[0][0];
-                $this->cla['sPedimento'] = $rowData[0][1];
-                //$this->cla['dFechaPrevio'] = $rowData[0][7];
-                $this->cla['sfactura'] = $rowData[0][8];
-                // OBTIENE LA CLASIFICACIÓN //
-                    if(
-                        $sReferencia === trim($rowData[0][0]," ")
-                        && $sPedimento === trim($rowData[0][1]," ")
-                        && $sEmpresa === trim($rowData[0][2]," ")
-                    ){
-                        $this->cla['skClasificacion'] = $skClasificacion;
-                    }else{
-                        $cla = $this->get_cla();
-                        if(!$cla){
-                            $this->cla['skClasificacion'] = substr(md5(microtime()), 1, 32);
-                            $skClasificacion = $this->create_cla();
-                            if(!$skClasificacion){ 
-                                echo ' BREAK CLASIFICACION ';
-                                break;
-                            }
-                            $this->cla['skClasificacion'] = $skClasificacion;
-                            $sReferencia = trim($rowData[0][0]," ");
-                            $sPedimento = trim($rowData[0][1]," ");
-                        }else{
-                            $rCla = $cla->fetch_row();
-                            $this->cla['skClasificacion'] = $rCla[0];
-                            $skClasificacion = $rCla[0];
-                            $sReferencia = trim($rowData[0][0]," ");
-                            $sPedimento = trim($rowData[0][1]," ");
-                        }
-                    }
-                    
-                    // AGREGAMOS LAS FRACCIONES //
-                        $this->claMer['skClasificacionMercancia'] = substr(md5(microtime()), 1, 32);
-                        $this->claMer['skClasificacion'] = $skClasificacion;
-                        $this->claMer['sFraccion'] = $rowData[0][3];
-                        $this->claMer['sDescripcion'] = utf8_decode($rowData[0][4]);
-                        $this->claMer['sDescripcionIngles'] = utf8_decode($rowData[0][5]);
-                        $this->claMer['sNumeroParte'] = $rowData[0][6];
-                        
-                        $skClasificacionMercancia = $this->create_claMer();
-                        if(!$skClasificacionMercancia){ 
-                            echo ' BREAK CLASIFICACION MERCANCIA ';
-                            break;
-                        }
-                
+            //echo $i.'<br>'.$cad;
+            if(!$flag){
+                return array(
+                "response"=>false
+                ,"message"=>$message
+            );
             }
+            return array(
+                "response"=>true
+                ,"message"=>"Importaci&oacute;n realizada con &eacute;xito"
+            );
             // Echo memory peak usage
-            echo date('H:i:s') , " Peak memory usage: " , (memory_get_peak_usage(true) / 1024 / 1024) , " MB" , EOL;
+            //echo date('H:i:s') , " Peak memory usage: " , (memory_get_peak_usage(true) / 1024 / 1024) , " MB" , EOL;
         }
         
         /* COMIENZA MODULO clasifiación arancelaria */
@@ -248,6 +196,8 @@
                         break;
                     case 'fetch_all':
                         // PARAMETROS PARA FILTRADO //
+                        $this->cla['orderBy'] = "sPedimento";
+                        
                         if(isset($_POST['sReferencia'])){
                             $this->cla['sReferencia'] = $_POST['sReferencia'];
                         }
@@ -258,19 +208,22 @@
                             $this->cla['skEmpresa'] = $_POST['skEmpresa'];
                         }
                         if(isset($_POST['sFraccion'])){
-                            $this->cla['sFraccion'] = $_POST['sFraccion'];
+                            $this->claMer['sFraccion'] = $_POST['sFraccion'];
                         }
                         if(isset($_POST['sDescripcion'])){
-                            $this->cla['sDescripcion'] = $_POST['sDescripcion'];
+                            $this->claMer['sDescripcion'] = $_POST['sDescripcion'];
                         }
                         if(isset($_POST['sDescripcionIngles'])){
-                            $this->cla['sDescripcionIngles'] = $_POST['sDescripcionIngles'];
+                            $this->claMer['sDescripcionIngles'] = $_POST['sDescripcionIngles'];
                         }
-                        if(isset($_POST['dFrecha'])){
-                            $this->cla['sFactura'] = $_POST['sFactura'];
+                        if(isset($_POST['sNumeroParte'])){
+                            $this->claMer['sNumeroParte'] = $_POST['sNumeroParte'];
                         }
                         if(isset($_POST['sFactura'])){
                             $this->cla['sFactura'] = $_POST['sFactura'];
+                        }
+                        if(isset($_POST['dFechaPrevio'])){
+                            $this->cla['dFechaPrevio'] = $_POST['dFechaPrevio'];
                         }
                         if(isset($_POST['skCreador'])){
                             $this->cla['skCreador'] = $_POST['skCreador'];
@@ -301,34 +254,46 @@
                         $i = 0;
                         while($row = $this->data['data']->fetch_assoc()){
                             $actions = $this->printModulesButtons(2,array($row['skClasificacion']));
-                            $records['data'][$i] = array(
-                                 utf8_encode($row['sReferencia']) // REFERENCIA
-                                ,utf8_encode($row['sPedimento']) // PEDIMENTO
-                                ,utf8_encode($row['empresa']) // EMPRESA (CLIENTE)
-                                
-                                ,'' // FRACCIÓN
-                                ,'' // DESCRIPCIÓN
-                                ,'' // DESCIPCIÓN INGLÉS
-                                
-                                ,utf8_encode($row['dFechaPrevio']) // FECHA PREVIO
-                                ,utf8_encode($row['sfactura']) // FACTURA
-                                ,utf8_encode($row['usersCreacion']) // usersCreacion
-                                
-                                ,utf8_encode($row['htmlStatus']) // STATUS
-                                , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
-                            );
                             $this->claMer['skClasificacion'] = $row['skClasificacion'];
-                            $claMer = $this->read_equal_claMer();
+                            if(
+                                   isset($_POST['sFraccion'])
+                                || isset($_POST['sDescripcion'])
+                                || isset($_POST['sDescripcionIngles'])
+                                || isset($_POST['sNumeroParte'])
+                            ){
+                               $this->claMer['skClasificacion'] = NULL; 
+                            }
+                            $this->claMer['limit'] = $records['limit'];
+                            $this->claMer['offset'] = $records['offset'];
+                            //$claMer = $this->read_equal_claMer();
+                            $claMer = $this->read_like_claMer();
                             if(!$claMer){
                                 $records = array();
                                 break;
                             }
                             while($rClaMer = $claMer->fetch_assoc()){
-                                $records['data'][$i][3] = utf8_encode($rClaMer['sFraccion']);
-                                $records['data'][$i][4] = utf8_encode($rClaMer['sDescripcion']);
-                                $records['data'][$i][5] = utf8_encode($rClaMer['sDescripcionIngles']);
+                                
+                                $records['data'][$i] = array(
+                                 utf8_encode($row['sReferencia']) // REFERENCIA
+                                ,utf8_encode($row['sPedimento']) // PEDIMENTO
+                                ,utf8_encode($row['empresa']) // EMPRESA (CLIENTE)
+                                
+                                ,utf8_encode($rClaMer['sFraccion']) // FRACCIÓN
+                                ,utf8_encode($rClaMer['sDescripcion']) // DESCRIPCIÓN
+                                ,utf8_encode($rClaMer['sDescripcionIngles']) // DESCIPCIÓN INGLÉS
+                                ,utf8_encode($rClaMer['sNumeroParte']) // NUMERO DE PARTE (MODELO)
+                                
+                                ,utf8_encode($row['dFechaPrevio']) // FECHA PREVIO
+                                ,utf8_encode($row['sFactura']) // FACTURA
+                                ,utf8_encode($row['usersCreacion']) // usersCreacion
+                                
+                                ,utf8_encode($row['htmlStatus']) // STATUS
+                                , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
+                                
+                                );
+                                
+                             $i++;   
                             }
-                            $i++;
                         }
                         //exit('<pre>'.print_r($records,1).'</pre>');
                         header('Content-Type: application/json');
@@ -343,6 +308,9 @@
             $this->load_model('cof','cof');
             $cof = new Cof_Model();
             $this->data['status'] = $cof->read_status();
+            
+            // LISTAR TODOS LOS USUARIOS
+            $this->data['users'] = $cof->read_user();
             
             // INCLUYE EL MODELO DEL MODULO emp //
             $this->load_model('emp','emp');
@@ -360,18 +328,21 @@
             $this->data['datos'] = false;
             if(isset($_POST['axn'])){
                 if($_POST['axn']=='json_excel'){
+                    $dFechaImportacion = date('Y-m-d H:i:s');
                     ini_set('memory_limit', '-1');
-                    $data = json_decode($_POST['sDescripcion'],1);
-                    $response = $this->import_excel($data['Hoja1']);
-                    if($response){
-                        $this->data['response'] = true;
-                        $this->data['message'] = 'Registro insertado con &eacute;xito.';
+                    $data = json_decode($_POST['sJson'],1);
+                    $response = $this->import_excel($data['Hoja1'],$dFechaImportacion);
+                    if($response['response']){
+                        $this->data['response'] = $response['response'];
+                        $this->data['message'] = $response['message'];
                         header('Content-Type: application/json');
                         echo json_encode($this->data);
                         return true;
                     }else{
-                       $this->data['response'] = true;
-                        $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
+                        $this->cla['dFechaImportacion'] = $dFechaImportacion;
+                        $this->detele_cla();
+                        $this->data['response'] = $response['response'];
+                        $this->data['message'] = $response['message'];
                         header('Content-Type: application/json');
                         echo json_encode($this->data);
                         return false;
@@ -407,190 +378,142 @@
             }
 
             if($_POST){
-             	$this->numPar['skNumeroParte'] = !empty($_POST['skNumeroParte']) ? $_POST['skNumeroParte'] : substr(md5(microtime()), 1, 32);
-                $this->numPar['sNombre'] = !empty($_POST['sNombre']) ? utf8_decode($_POST['sNombre']) : NULL ;
-                $this->numPar['sDescripcion'] = !empty($_POST['sDescripcion']) ? utf8_decode($_POST['sDescripcion']) : NULL ;
-                $this->numPar['skStatus'] = !empty($_POST['skStatus']) ? utf8_decode($_POST['skStatus']) : 'IN' ;
-                $this->numPar['dFechaCreacion'] = 'CURRENT_TIMESTAMP';
-                $this->numPar['skUsersCreacion'] = $_SESSION['session']['skUsers'];
-               
-
-                if(empty($_POST['skNumeroParte'])){
-                  $flag = false;
-                  $skNumeroParte = parent::create_cat_numeroParte();
-                  if($skNumeroParte){
-                    foreach($_POST['fraccionArancelaria'] as $campo=>$valor){
-                        $this->numparfraran['skFraccionArancelaria'] = !empty($_POST['skFraccionArancelaria']) ? $_POST['skFraccionArancelaria'] : substr(md5(microtime()), 1, 32);
-                        $this->numparfraran['skNumeroParte'] =  $this->numPar['skNumeroParte'] ;
-                        $this->numparfraran['skStatus'] =  'AC' ;
-                        $this->numparfraran['skUsersCreacion'] =  $this->numPar['skUsersCreacion'] ;
-                        $this->numparfraran['sNombre'] = !empty($_POST['fraccionArancelaria'][$campo]['sNombre']) ? utf8_decode($_POST['fraccionArancelaria'][$campo]['sNombre']) : NULL ;
-                        $skFraccionArancelaria = parent::create_cat_numparfraran();
-                      if($skFraccionArancelaria){
-                        $flag = true;
-                        if(isset($_POST['fraccionArancelaria'][$campo]['sDescripcion'])){   
-                          foreach(($_POST['fraccionArancelaria'][$campo]['sDescripcion']) as $campo2=>$valor2){
-                            $this->fraAraDes['skFraccionArancelariaDescripcion'] = !empty($_POST['skFraccionArancelariaDescripcion']) ? $_POST['skFraccionArancelariaDescripcion'] : substr(md5(microtime()), 1, 32);
-                            $this->fraAraDes['skFraccionArancelaria'] =  $this->numparfraran['skFraccionArancelaria'] ;
-                            $this->fraAraDes['skUsersCreacion'] =  $this->numparfraran['skUsersCreacion'] ;
-                            $this->fraAraDes['sDescripcion'] = !empty($_POST['fraccionArancelaria'][$campo]['sDescripcion'][$campo2]) ? utf8_decode($_POST['fraccionArancelaria'][$campo]['sDescripcion'][$campo2]) : NULL ;
-                            $this->fraAraDes['sDescripcionIngles'] = !empty($_POST['fraccionArancelaria'][$campo]['sDescripcionIngles'][$campo2]) ? utf8_decode($_POST['fraccionArancelaria'][$campo]['sDescripcionIngles'][$campo2]) : NULL ;
-                            $skFraccionArancelariaDescripcion = parent::create_cat_fraccionesArancelarias_descripcionFraccion();    
-                            //ARCHIVOS
-                            if(isset($_FILES['fraccionArancelaria']['name'][$campo]['archivos'][$campo2])){
-                              foreach($_FILES['fraccionArancelaria']['name'][$campo]['archivos'][$campo2] as $campo3=>$valor3){                                     
-                                $this->desArc['skArchivoFraccionArancelaria'] = !empty($_FILES['skArchivoFraccionArancelaria']) ? $_FILES['skArchivoFraccionArancelaria'] : substr(md5(microtime()), 1, 32);
-                                $this->desArc['skFraccionArancelariaDescripcion'] =  $this->fraAraDes['skFraccionArancelariaDescripcion'] ;
-                                $this->desArc['sArchivo'] =  $_FILES['fraccionArancelaria']['name'][$campo]['archivos'][$campo2][$campo3] ;
-                                
-                                // ESTA ES LA RUTA DONDE SE GUARDARAN LOS ARCHIVOS DEL MODULO (claara-form) //
-                                $serv = SYS_PATH.$_GET['sysModule'].'/files/claara-form/';
-                                //echo $serv;
-                                $ruta = $serv .$this->desArc['skFraccionArancelariaDescripcion'];
-                                if(!file_exists($ruta)){ 
-                                  mkdir ($ruta,0777,true);
-                                }
-                                if (is_uploaded_file($_FILES['fraccionArancelaria']['tmp_name'][$campo]['archivos'][$campo][$campo3])){
-                                  $nombreDirectorio = $ruta;
-                                  $nombreFichero = $_FILES['fraccionArancelaria']['name'][$campo]['archivos'][$campo][$campo3];
-                                  // echo "nombre Directorio: ".$nombreDirectorio;
-                                  // echo "nombre Fichero: ".$nombreFichero;
-                                  $nombreCompleto = $nombreFichero;
-
-                                  $idUnico = time();
-                                  $nombreFichero = $idUnico . "-" . $nombreFichero;
-
-                                  if(move_uploaded_file($_FILES['fraccionArancelaria']['tmp_name'][$campo]['archivos'][$campo][$campo3], $nombreDirectorio."/".$nombreFichero)){
-                                        $this->desArc['sArchivo'] = $nombreFichero;
-                                        parent::create_cat_descripcionFraccion_archivos();
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
+                //exit('<pre>'.print_r(count($_POST['sFraccion']),1).'</pre>');
+             	$this->cla['skClasificacion'] = !empty($_POST['skClasificacion']) ? $_POST['skClasificacion'] : substr(md5(microtime()), 1, 32);
+                $this->cla['sReferencia'] = !empty($_POST['sReferencia']) ? utf8_decode($_POST['sReferencia']) : NULL ;
+                $this->cla['sPedimento'] = !empty($_POST['sPedimento']) ? utf8_decode($_POST['sPedimento']) : NULL ;
+                $this->cla['skEmpresa'] = !empty($_POST['skEmpresa']) ? utf8_decode($_POST['skEmpresa']) : NULL ;
+                $this->cla['sFactura'] = !empty($_POST['sFactura']) ? utf8_decode($_POST['sFactura']) : NULL ;
+                $this->cla['dFechaPrevio'] = !empty($_POST['dFechaPrevio']) ? utf8_decode($_POST['dFechaPrevio']) : NULL ;
+                $this->cla['skStatus'] = !empty($_POST['skStatus']) ? utf8_decode($_POST['skStatus']) : 'IN' ;
+                $this->cla['dFechaCreacion'] = 'CURRENT_TIMESTAMP';
+                $this->cla['skUsersCreacion'] = $_SESSION['session']['skUsers'];
+                $this->cla['dFechaImportacion'] = date('Y-m-d H:i:s');
+                
+                
+                $this->claMer['skStatus'] = !empty($_POST['skStatus']) ? utf8_decode($_POST['skStatus']) : 'IN' ;
+                $this->claMer['dFechaCreacion'] = 'CURRENT_TIMESTAMP';
+                $this->claMer['skUsersCreacion'] = $_SESSION['session']['skUsers'];
+                
+                if(empty($_POST['skClasificacion'])){
+                    $skClasificacion = $this->create_cla();
+                    if(!$skClasificacion){
+                        $this->detele_cla();
+                        $this->data['response'] = false;
+                        $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
+                        header('Content-Type: application/json');
+                        echo json_encode($this->data);
+                        return false;
                     }
-                  }
-                  if($flag){
-                    $this->data['response'] = true;
-                    $this->data['message'] = 'Registro insertado con &eacute;xito.';
-                    header('Content-Type: application/json');
-                    echo json_encode($this->data);
-                    return true;
-                  }else{
-                    $this->data['response'] = false;
-                    $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
-                    header('Content-Type: application/json');
-                    echo json_encode($this->data);
-                    return false;
-                  }
-                }else{             
-                  $skNumeroParte = parent::update_cat_numeros_partes();
-                  if($skNumeroParte){
-                    foreach($_POST['fraccionArancelaria'] as $campo=>$valor){
-                      $this->numparfraran['skFraccionArancelaria'] = !empty($_POST['skFraccionArancelaria']) ? $_POST['skFraccionArancelaria'] : substr(md5(microtime()), 1, 32);
-                      $this->numparfraran['skNumeroParte'] =  $this->numPar['skNumeroParte'] ;
-                      $this->numparfraran['skStatus'] =  'AC' ;
-                      $this->numparfraran['skUsersCreacion'] =  $this->numPar['skUsersCreacion'] ;
-                      $this->numparfraran['sNombre'] = !empty($_POST['fraccionArancelaria'][$campo]['sNombre']) ? utf8_decode($_POST['fraccionArancelaria'][$campo]['sNombre']) : NULL ;            
-                      if(empty($_POST['skFraccionArancelaria'])){
-                        $skFraccionArancelaria = parent::create_cat_numparfraran();
-                        if($skFraccionArancelaria){
-                        
-                        if(isset($_POST['fraccionArancelaria'][$campo]['sDescripcion'])){   
-                          foreach(($_POST['fraccionArancelaria'][$campo]['sDescripcion']) as $campo2=>$valor2){
-                          
-                            $this->fraAraDes['skFraccionArancelariaDescripcion'] = !empty($_POST['skFraccionArancelariaDescripcion']) ? $_POST['skFraccionArancelariaDescripcion'] : substr(md5(microtime()), 1, 32);
-                            $this->fraAraDes['skFraccionArancelaria'] =  $this->numparfraran['skFraccionArancelaria'] ;
-                            $this->fraAraDes['skUsersCreacion'] =  $this->numparfraran['skUsersCreacion'] ;
-                            $this->fraAraDes['sDescripcion'] = !empty($_POST['fraccionArancelaria'][$campo]['sDescripcion'][$campo2]) ? utf8_decode($_POST['fraccionArancelaria'][$campo]['sDescripcion'][$campo2]) : NULL ;
-                            $this->fraAraDes['sDescripcionIngles'] = !empty($_POST['fraccionArancelaria'][$campo]['sDescripcionIngles'][$campo2]) ? utf8_decode($_POST['fraccionArancelaria'][$campo]['sDescripcionIngles'][$campo2]) : NULL ;
-                            
-                            
-                            if(empty($_POST['skFraccionArancelariaDescripcion'])){
-                            $skFraccionArancelariaDescripcion = parent::create_cat_fraccionesArancelarias_descripcionFraccion(); 
-                               
-                           
-                            }else{
-                            $skFraccionArancelariaDescripcion = parent::update_cat_fraccionesArancelarias_descripcionFraccion(); 
-
- 	                            
+                    $this->claMer['skClasificacion'] = $skClasificacion;
+                    if(isset($_POST['sFraccion'])){
+                        for($i=0;$i < count($_POST['sFraccion']);$i++){
+                            $this->claMer['skClasificacionMercancia'] = substr(md5(microtime()), 1, 32);
+                            $this->claMer['sFraccion'] = isset($_POST['sFraccion'][$i]) ? $_POST['sFraccion'][$i] : NULL;
+                            $this->claMer['sNumeroParte'] = isset($_POST['sNumeroParte'][$i]) ? $_POST['sNumeroParte'][$i] : NULL;
+                            $this->claMer['sDescripcion'] = isset($_POST['sDescripcion'][$i]) ? $_POST['sDescripcion'][$i] : NULL;
+                            $this->claMer['sDescripcionIngles'] = isset($_POST['sDescripcionIngles'][$i]) ? $_POST['sDescripcionIngles'][$i] : NULL;
+                            $skClasificacionMercancia = $this->create_claMer();
+                            if(!$skClasificacionMercancia){
+                                $this->detele_cla();
+                                $this->data['response'] = false;
+                                $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return false;
+                                break;
                             }
-                            //ARCHIVOS
-                          
-                          
-                          }
                         }
-                        
-                        
-                        
-                        
-                        
-                        }            
-                      }else{
-                        $skFraccionArancelaria = parent::update_numparfraran();
-                        if($skFraccionArancelaria){
-                        
-                        if(isset($_POST['fraccionArancelaria'][$campo]['sDescripcion'])){   
-                          foreach(($_POST['fraccionArancelaria'][$campo]['sDescripcion']) as $campo2=>$valor2){
-                          
-                          $this->fraAraDes['skFraccionArancelariaDescripcion'] = !empty($_POST['skFraccionArancelariaDescripcion']) ? $_POST['skFraccionArancelariaDescripcion'] : substr(md5(microtime()), 1, 32);
-                            $this->fraAraDes['skFraccionArancelaria'] =  $this->numparfraran['skFraccionArancelaria'] ;
-                            $this->fraAraDes['skUsersCreacion'] =  $this->numparfraran['skUsersCreacion'] ;
-                            $this->fraAraDes['sDescripcion'] = !empty($_POST['fraccionArancelaria'][$campo]['sDescripcion'][$campo2]) ? utf8_decode($_POST['fraccionArancelaria'][$campo]['sDescripcion'][$campo2]) : NULL ;
-                            $this->fraAraDes['sDescripcionIngles'] = !empty($_POST['fraccionArancelaria'][$campo]['sDescripcionIngles'][$campo2]) ? utf8_decode($_POST['fraccionArancelaria'][$campo]['sDescripcionIngles'][$campo2]) : NULL ;
-                            
-                            
-                            if(empty($_POST['skFraccionArancelariaDescripcion'])){
-                            $skFraccionArancelariaDescripcion = parent::create_cat_fraccionesArancelarias_descripcionFraccion(); 
-                               
-                           
-                            }else{
-                            $skFraccionArancelariaDescripcion = parent::update_cat_fraccionesArancelarias_descripcionFraccion(); 
-
- 	                            
-                            }
-                            //ARCHIVOS
-                          
-                          
-                          }
-                        }
-                        
-                        
-                        
-                        
-
-                        }
-                      }
                     }
-                  }
-                  // HACEMOS TRANSACIÓN AQUÍ //
-                  $flag = true;
-                  if($flag){
-                    $this->data['response'] = true;
-                    $this->data['message'] = 'Registro actualizado con &eacute;xito.';
-                    header('Content-Type: application/json');
-                    echo json_encode($this->data);
-                    return true;
-                  }else{
-                    $this->data['response'] = true;
-                    $this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
-                    header('Content-Type: application/json');
-                    echo json_encode($this->data);
-                    return false;
-                  }
+                }else{
+                    $skClasificacion = $this->update_cla();
+                    if(!$skClasificacion){
+                        $this->detele_cla();
+                        $this->data['response'] = false;
+                        $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
+                        header('Content-Type: application/json');
+                        echo json_encode($this->data);
+                        return false;
+                    }
+                    if(isset($_POST['sFraccion'])){
+                        for($i=0;$i<=count($_POST['sFraccion']);$i++){
+                            $this->claMer['skClasificacionMercancia'] = isset($_POST['skClasificacionMercancia'][$i]) ? $_POST['skClasificacionMercancia'][$i] : NULL;
+                            $this->claMer['sFraccion'] = isset($_POST['sFraccion'][$i]) ? $_POST['sFraccion'][$i] : NULL;
+                            $this->claMer['sNumeroParte'] = isset($_POST['sNumeroParte'][$i]) ? $_POST['sNumeroParte'][$i] : NULL;
+                            $this->claMer['sDescripcion'] = isset($_POST['sDescripcion'][$i]) ? $_POST['sDescripcion'][$i] : NULL;
+                            $this->claMer['sDescripcionIngles'] = isset($_POST['sDescripcionIngles'][$i]) ? $_POST['sDescripcionIngles'][$i] : NULL;
+                            $skClasificacionMercancia = $this->create_claMer();
+                            if(!$skClasificacionMercancia){
+                                $this->detele_cla();
+                                $this->data['response'] = false;
+                                $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return false;
+                                break;
+                            }
+                        }
+                    }
                 }
+                $this->data['response'] = true;
+                $this->data['message'] = 'Registro insertado con &eacute;xito.';
+                header('Content-Type: application/json');
+                echo json_encode($this->data);
+                return true;
+                
             }
             // MOSTRAR LA VISTA //
             if(isset($_GET['p1'])){
                 // OBTENER NUMERO DE PARTE //
-                 $this->numPar['skNumeroParte'] = $_GET['p1'];
-                $numPar = parent::read_equal_numPar();
-                if($numPar){
-                    $this->data['datos'] = $this->getNumeroParte();
+                $this->cla['skClasificacion'] = $_GET['p1'];
+                $data = parent::read_equal_cla();
+                if(!$data){
+                    return false;
                 }
+                $i = 0;
+                $records = array();
+                while($row = $data->fetch_assoc()){
+                    $this->claMer['skClasificacion'] = $row['skClasificacion'];
+                    $claMer = parent::read_equal_claMer();
+                    if(!$claMer){
+                        $records = array();
+                        break;
+                    }
+                    $records = array(
+                         'skClasificacion' => $row['skClasificacion'] 
+                        ,'skEmpresa' => $row['skEmpresa'] 
+                        ,'sReferencia' => $row['sReferencia'] 
+                        ,'sPedimento' => $row['sPedimento']
+                        ,'dFechaPrevio' => $row['dFechaPrevio']
+                        ,'sFactura' => $row['sFactura']
+                        ,'skStatus' => $row['skStatus']
+                        ,'dFechaCreacion' => $row['dFechaCreacion']
+                        ,'skUsersCreacion' => $row['skUsersCreacion']
+                        ,'dFechaModificacion' => $row['dFechaModificacion']
+                        ,'skUsersModificacion' => $row['skUsersModificacion']
+                        ,'dFechaImportacion' => $row['dFechaImportacion']
+                    );
+                    while($rClaMer = $claMer->fetch_assoc()){
+
+                        $records['mercancias'][$i] = array(
+                            'sFraccion'=>utf8_encode($rClaMer['sFraccion']) // FRACCIÓN
+                           ,'sNumeroParte'=>utf8_encode($rClaMer['sNumeroParte']) // NUMERO DE PARTE (MODELO)
+                           ,'sDescripcion'=>utf8_encode($rClaMer['sDescripcion']) // DESCRIPCIÓN
+                           ,'sDescripcionIngles'=>utf8_encode($rClaMer['sDescripcionIngles']) // DESCIPCIÓN INGLÉS
+                        );
+
+                     $i++;   
+                    }
+                }
+                $this->data['data']['clasificacion'] = $records;
+                exit('<pre>'.print_r($this->data['data']['clasificacion'],1).'</pre>');
             }
+            
+            // INCLUYE EL MODELO DEL MODULO emp //
+            $this->load_model('emp','emp');
+            $emp = new Emp_Model();
+            $this->data['empresas'] = $emp->read_equal_empresas();
+            
             $this->load_view('claara-form', $this->data);
             return true;
         }

@@ -4,20 +4,33 @@
         // PUBLIC VARIABLES //
        
         /* COMIENZA CLASIFICACIÓN DE MERCANCIAS */
+        public $claExcel = array(
+             'sReferencia'=>NULL
+            ,'sPedimento'=>NULL
+            ,'skEmpresa'=>NULL
+            ,'sFraccion'=>NULL
+            ,'sDescripcion'=>NULL
+            ,'sDescripcionIngles'=>NULL
+            ,'sNumeroParte'=>NULL
+            ,'dFechaPrevio'=>NULL
+            ,'sFactura'=>NULL
+        );
         public $cla = array(
              'skClasificacion' => NULL
             ,'skEmpresa' => NULL
             ,'sReferencia' => NULL
             ,'sPedimento' => NULL
             ,'dFechaPrevio' => NULL
-            ,'sfactura' => NULL
+            ,'sFactura' => NULL
             ,'skStatus' => NULL
             ,'dFechaCreacion' => NULL
             ,'skUsersCreacion' => NULL
             ,'dFechaModificacion' => NULL
             ,'skUsersModificacion' => NULL
+            ,'dFechaImportacion' => NULL
             ,'limit'        =>  NULL
             ,'offset'       =>  NULL
+            ,'orderBy' => NULL
         );
         
         public $claMer = array(
@@ -34,6 +47,7 @@
             ,'skUsersModificacion' => NULL
             ,'limit'        =>  NULL
             ,'offset'       =>  NULL
+            ,'orderBy' => NULL
         );
         
         public $claMerArc = array(
@@ -158,11 +172,14 @@
             if(!empty($this->cla['dFechaPrevio'])){
                 $sql .=" AND cla.dFechaPrevio like '%".$this->cla['dFechaPrevio']."%'";
             }
-            if(!empty($this->cla['sfactura'])){
-                $sql .=" AND cla.sfactura like '%".$this->cla['sfactura']."%'";
+            if(!empty($this->cla['sFactura'])){
+                $sql .=" AND cla.sFactura like '%".$this->cla['sFactura']."%'";
             }
             if(!empty($this->cla['skStatus'])){
                 $sql .=" AND cla.skStatus like '%".$this->cla['skStatus']."%'";
+            }
+            if(!empty($this->cla['orderBy'])){
+                $sql .=" ORDER BY ".$this->cla['orderBy'];
             }
             if(is_int($this->cla['limit'])){
                 if(is_int($this->cla['offset'])){
@@ -213,21 +230,43 @@
                 }
             }
         }
+        public function create_claExcel(){
+            $sql = "INSERT INTO cat_claExcel 
+                (sReferencia,sPedimento,skEmpresa,sFraccion,sDescripcion,sDescripcionIngles,sNumeroParte,dFechaPrevio,sFactura)VALUES
+                (
+                '".$this->claExcel['sReferencia']."',
+                '".$this->claExcel['sPedimento']."',
+                '".$this->claExcel['skEmpresa']."',
+                '".$this->claExcel['sFraccion']."',
+                '".$this->claExcel['sDescripcion']."',
+                '".$this->claExcel['sDescripcionIngles']."',
+                '".$this->claExcel['sNumeroParte']."',
+                '".$this->claExcel['dFechaPrevio']."',
+                '".$this->claExcel['sFactura']."'
+                );";
+                $result = $this->db->query($sql);
+                if($result){
+                    return $sql;
+                }else{
+                    return false;
+                }
+        }
         
         public function create_cla(){
             $sql = "INSERT INTO cat_clasificacion 
-            (skClasificacion,skEmpresa,sReferencia,sPedimento,dFechaPrevio,sfactura,skStatus,dFechaCreacion,skUsersCreacion) 
+            (skClasificacion,skEmpresa,sReferencia,sPedimento,dFechaPrevio,sFactura,skStatus,dFechaCreacion,skUsersCreacion,dFechaImportacion) 
             VALUES 
             ('".$this->cla['skClasificacion']."',
             '".$this->cla['skEmpresa']."',
             '".$this->cla['sReferencia']."',
             '".$this->cla['sPedimento']."',
             '".$this->cla['dFechaPrevio']."',
-            '".$this->cla['sfactura']."',
+            '".$this->cla['sFactura']."',
             '".$this->cla['skStatus']."',
              CURRENT_TIMESTAMP,
-            '".$this->cla['skUsersCreacion']."'
-            )";
+            '".$this->cla['skUsersCreacion']."',
+            '".$this->cla['dFechaImportacion']."'
+            );";
             $result = $this->db->query($sql);
             if($result){
                 return $this->cla['skClasificacion'];
@@ -242,11 +281,21 @@
                 . "sReferencia = '".$this->cla['sReferencia']."',"
                 . "sPedimento = '".$this->cla['sPedimento']."',"
                 . "dFechaPrevio = '".$this->cla['dFechaPrevio']."',"
-                . "sfactura = '".$this->cla['sfactura']."',"
+                . "sFactura = '".$this->cla['sFactura']."',"
                 . "skStatus = '".$this->cla['skStatus']."',"
                 . "dFechaModificacion = '".$this->cla['dFechaModificacion']."',"
                 . "skUsersModificacion = '".$this->cla['skUsersModificacion']."'"
-                . " WHERE skClasificacion = '".$this->cla['skClasificacion']."'";
+                . " WHERE skClasificacion = '".$this->cla['skClasificacion']."';";
+            $result = $this->db->query($sql);
+            if($result){
+                return $this->cla['skClasificacion'];
+            }else{
+                return false;
+            }
+        }
+        
+        public function detele_cla(){
+            $sql = "DELETE FROM cat_clasificacion WHERE dFechaImportacion = '".$this->cla['dFechaImportacion']."';";
             $result = $this->db->query($sql);
             if($result){
                 return $this->cla['skClasificacion'];
@@ -256,6 +305,49 @@
         }
         
         /* cat_clasificacionMercancia */
+        public function read_like_claMer(){
+            $sql = "SELECT claMer.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacionMercancia AS claMer "
+                . "INNER JOIN _status ON _status.skStatus = claMer.skStatus WHERE 1=1 ";
+            if(!empty($this->claMer['skClasificacionMercancia'])){
+                $sql .=" AND (claMer.skClasificacionMercancia = '".$this->claMer['skClasificacionMercancia']."') ";
+            }
+            if(!empty($this->claMer['skClasificacion'])){
+                $sql .=" AND (claMer.skClasificacion = '".$this->claMer['skClasificacion']."') ";
+            }
+            if(!empty($this->claMer['sFraccion'])){
+                $sql .=" AND claMer.sFraccion like '%".$this->claMer['sFraccion']."%'";
+            }
+            if(!empty($this->claMer['sDescripcion'])){
+                $sql .=" AND claMer.sDescripcion like '%".$this->claMer['sDescripcion']."%'";
+            }
+            if(!empty($this->claMer['sDescripcionIngles'])){
+                $sql .=" AND claMer.sDescripcionIngles like '%".$this->claMer['sDescripcionIngles']."%'";
+            }
+            if(!empty($this->claMer['sNumeroParte'])){
+                $sql .=" AND claMer.sNumeroParte like '%".$this->claMer['sNumeroParte']."%'";
+            }
+            if(!empty($this->claMer['skStatus'])){
+                $sql .=" AND claMer.skStatus like '%".$this->claMer['skStatus']."%'";
+            }
+            if(!empty($this->claMer['orderBy'])){
+                $sql .=" ORDER BY ".$this->claMer['orderBy'];
+            }
+            if(is_int($this->claMer['limit'])){
+                if(is_int($this->claMer['offset'])){
+                    $sql .= " LIMIT ".$this->claMer['offset']." , ".$this->claMer['limit'];
+                }else{
+                    $sql .= " LIMIT ".$this->claMer['limit'];
+                }
+            }
+            $result = $this->db->query($sql);
+            if($result){
+                if($result->num_rows > 0){
+                    return $result;
+                }else{
+                    return false;
+                }
+            }
+        }
         public function read_equal_claMer(){
             $sql = "SELECT claMer.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacionMercancia AS claMer "
                 . "INNER JOIN _status ON _status.skStatus = claMer.skStatus WHERE 1=1 ";
@@ -264,6 +356,13 @@
             }
             if(!empty($this->claMer['skClasificacion'])){
                 $sql .=" AND (claMer.skClasificacion = '".$this->claMer['skClasificacion']."') ";
+            }
+            if(is_int($this->claMer['limit'])){
+                if(is_int($this->claMer['offset'])){
+                    $sql .= " LIMIT ".$this->claMer['offset']." , ".$this->claMer['limit'];
+                }else{
+                    $sql .= " LIMIT ".$this->claMer['limit'];
+                }
             }
             $result = $this->db->query($sql);
             if($result){
@@ -287,7 +386,7 @@
             '".$this->claMer['skStatus']."',
              CURRENT_TIMESTAMP,
             '".$this->claMer['skUsersCreacion']."'
-            )";
+            );";
             $result = $this->db->query($sql);
             if($result){
                 return $this->claMer['skClasificacionMercancia'];

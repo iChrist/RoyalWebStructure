@@ -30,6 +30,9 @@
                                 Ingl&eacute;s
                             </th>
                             <th width="25%">
+                                Num. Parte
+                            </th>
+                            <th width="25%">
                                 F. Previo
                             </th>
                             <th width="25%">
@@ -76,6 +79,9 @@
                             </td>
                             <td>
                                 <input type="text" class="form-control form-filter input-sm" name="sDescripcionIngles" placeholder="Descripci&oacute;n ingl&eacute;s">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control form-filter input-sm" name="sNumeroParte" placeholder="Num. Parte">
                             </td>
                             <td>
                                 <input type="text" class="form-control form-filter input-sm" name="dFechaPrevio" placeholder="F. Previo">
