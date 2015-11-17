@@ -4,7 +4,7 @@
     }
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data"> 
-    <input type="hidden" name="skClasificacion"  id="skClasificacion" value="<?php echo (isset($data['datos']['numPar']['skClasificacion'])) ? $data['datos']['numPar']['skClasificacion'] : '' ; ?>">
+    <input type="hidden" name="skClasificacion"  id="skClasificacion" value="<?php echo (isset($data['data']['clasificacion']['skClasificacion'])) ? $data['data']['clasificacion']['skClasificacion'] : '' ; ?>">
     <input type="hidden" id="sJson" />
     <div class="form-body">
         <div class="form-group">
@@ -13,7 +13,7 @@
             <div class="col-md-4">
                 <div class="input-icon right">
                     <i class="fa"></i>
-                    <input type="text" name="sReferencia" id="sReferencia" class="form-control" placeholder="Referencia" value="<?php echo (isset($data['datos']['numPar']['sReferencia'])) ? $data['datos']['numPar']['sReferencia'] : '' ; ?>" >
+                    <input type="text" name="sReferencia" id="sReferencia" class="form-control" placeholder="Referencia" value="<?php echo (isset($data['data']['clasificacion']['sReferencia'])) ? $data['data']['clasificacion']['sReferencia'] : '' ; ?>" >
                 </div>
             </div>
         </div>
@@ -24,7 +24,7 @@
             <div class="col-md-4">
                 <div class="input-icon right">
                     <i class="fa"></i>
-                    <input type="text" name="sPedimento" id="sPedimento" class="form-control" placeholder="Pedimento" value="<?php echo (isset($data['datos']['numPar']['sPedimento'])) ? $data['datos']['numPar']['sPedimento'] : '' ; ?>" >
+                    <input type="text" name="sPedimento" id="sPedimento" class="form-control" placeholder="Pedimento" value="<?php echo (isset($data['data']['clasificacion']['sPedimento'])) ? $data['data']['clasificacion']['sPedimento'] : '' ; ?>" >
                 </div>
             </div>
         </div>
@@ -39,7 +39,7 @@
                     if(isset($data['empresas'])){
                         while($row = $data['empresas']->fetch_assoc()){
                 ?>
-                            <option value="<?php echo $row['skEmpresa']; ?>">
+                    <option value="<?php echo $row['skEmpresa']; ?>" <?php if(isset($data['data']['clasificacion']['skEmpresa'])){if($data['data']['clasificacion']['skEmpresa']==$row['skEmpresa']){ echo 'selected';}} ?>>
                                 <?php echo utf8_encode($row['sNombre']); ?>
                             </option>
                 <?php
@@ -56,7 +56,7 @@
             <div class="col-md-4">
                 <div class="input-icon right">
                     <i class="fa"></i>
-                    <input type="text" name="sFactura" id="sFactura" class="form-control" placeholder="Factura" value="<?php echo (isset($data['datos']['numPar']['sFactura'])) ? $data['datos']['numPar']['sFactura'] : '' ; ?>" >
+                    <input type="text" name="sFactura" id="sFactura" class="form-control" placeholder="Factura" value="<?php echo (isset($data['data']['clasificacion']['sFactura'])) ? $data['data']['clasificacion']['sFactura'] : '' ; ?>" >
                 </div>
             </div>
         </div>
@@ -65,7 +65,7 @@
             <label class="control-label col-md-2">Fecha de previo </label>
             <div class="col-md-4">
                 <div data-date-format="dd-mm-yyyy" class="input-group date date-picker">
-                    <input type="text" name="dFechaPrevio" id="dFechaPrevio" class="form-control" readonly="">
+                    <input type="text" name="dFechaPrevio" id="dFechaPrevio" class="form-control" readonly="" value="<?php echo (isset($data['data']['clasificacion']['dFechaPrevio'])) ? $data['data']['clasificacion']['dFechaPrevio'] : '' ; ?>">
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                     </span>
@@ -81,14 +81,14 @@
                     <label>
                         <div class="">
                             <span>
-                                <input type="radio" name="skStatus" value="AC" <?php echo (isset($data['datos']['numPar']['skStatus']) && $data['datos']['numPar']['skStatus'] == 'AC') ? 'checked' : '' ; ?> checked="checked"> Activo
+                                <input type="radio" name="skStatus" value="AC" <?php echo (isset($data['data']['clasificacion']['skStatus']) && $data['data']['clasificacion']['skStatus'] == 'AC') ? 'checked' : '' ; ?> checked="checked"> Activo
                             </span>
                         </div>
                     </label>
                     <label>
                         <div class="">
                             <span>
-                                <input type="radio" name="skStatus" value="IN" <?php echo (isset($data['datos']['numPar']['skStatus']) && $data['datos']['numPar']['skStatus'] == 'IN') ? 'checked' : '' ; ?>> Inactivo
+                                <input type="radio" name="skStatus" value="IN" <?php echo (isset($data['data']['clasificacion']['skStatus']) && $data['data']['clasificacion']['skStatus'] == 'IN') ? 'checked' : '' ; ?>> Inactivo
                             </span>
                         </div>
                     </label>
@@ -120,13 +120,47 @@
         <div class="table-responsive">
             <!--<table class="table table-bordered" id="fraccionesArancelarias">!-->
                 <?php
-                    if(isset($data['datos']['numPar']['numparfraran'])){
-                        foreach($data['datos']['numPar']['numparfraran'] AS $numparfraran){
+                    if(isset($data['data']['clasificacion']['mercancias'])){
                 ?>
-                
-                
+                    <table class="table table-bordered" id="fraccionesArancelarias">
+                <?php
+                        foreach($data['data']['clasificacion']['mercancias'] AS $val){
+                ?>
+                    <tr>
+                        <td>
+                            <table class="table table-bordered">
+                                <tr class="gray">
+                                    <th><center>Fracci&oacute;n arancelaria</center></th>
+                                    <td>
+                                        <input type="hidden" name="skClasificacionMercancia[]" value="<?php echo $val['skClasificacionMercancia']; ?>">
+                                        <input type="text" name="sFraccion[]" class="form-control" placeholder="Fracci&oacute;n arancelaria" value="<?php echo $val['sFraccion']; ?>">
+                                    </td>
+                                    <th><center>N&uacute;mero de parte</center></th>
+                                    <td>
+                                        <input type="text" name="sNumeroParte[]" class="form-control" placeholder="N&uacute;mero de parte" value="<?php echo $val['sNumeroParte']; ?>">
+                                    </td>
+                                    <td align="center"><a href="javascript:;" class="btn btn-default delete-fraccion"><i class="fa fa-trash-o"></i></a></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="2"><center>Descripci&oacute;n</center></th>
+                                    <th colspan="2"><center>Descripci&oacute;n ingl&eacute;s</center></th>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <textarea name="sDescripcion[]" class="form-control" placeholder="Descripci&oacute;n en espa&ntilde;ol"><?php echo $val['sDescripcion']; ?></textarea>
+                                    </td>
+                                    <td colspan="2">
+                                        <textarea name="sDescripcionIngles[]" class="form-control" placeholder="Descripci&oacute;n en ingl&eacute;s"><?php echo $val['sDescripcionIngles']; ?></textarea>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
                 <?php
                         }//ENDFOREACH
+                ?>
+                    </table>
+                <?php
                     }else{
                 ?>
                 

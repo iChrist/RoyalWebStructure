@@ -357,6 +357,9 @@
             if(!empty($this->claMer['skClasificacion'])){
                 $sql .=" AND (claMer.skClasificacion = '".$this->claMer['skClasificacion']."') ";
             }
+            if(!empty($this->claMer['skStatus'])){
+                $sql .=" AND (claMer.skStatus = '".$this->claMer['skStatus']."') ";
+            }
             if(is_int($this->claMer['limit'])){
                 if(is_int($this->claMer['offset'])){
                     $sql .= " LIMIT ".$this->claMer['offset']." , ".$this->claMer['limit'];
@@ -395,6 +398,38 @@
             }
         }
         
+        public function update_claMer(){
+            $sql = "UPDATE cat_clasificacionMercancia SET "
+                . "sFraccion = '".$this->claMer['sFraccion']."',"
+                . "sDescripcion = '".$this->claMer['sDescripcion']."',"
+                . "sDescripcionIngles = '".$this->claMer['sDescripcionIngles']."',"
+                . "sNumeroParte = '".$this->claMer['sNumeroParte']."',"
+                . "skStatus = '".$this->claMer['skStatus']."',"
+                . "dFechaModificacion = '".$this->claMer['dFechaModificacion']."',"
+                . "skUsersModificacion = '".$this->claMer['skUsersModificacion']."'"
+                . " WHERE skClasificacionMercancia = '".$this->claMer['skClasificacionMercancia']."';";
+            $result = $this->db->query($sql);
+            if($result){
+                return $this->cla['skClasificacion'];
+            }else{
+                return false;
+            }
+        }
+        
+        public function delete_claMer(){
+            $sql = "UPDATE cat_clasificacionMercancia SET "
+                . "skStatus = '".$this->claMer['skStatus']."',"
+                . "dFechaModificacion = '".$this->claMer['dFechaModificacion']."',"
+                . "skUsersModificacion = '".$this->claMer['skUsersModificacion']."'"
+                . " WHERE skClasificacion = '".$this->claMer['skClasificacion']."';";
+            $result = $this->db->query($sql);
+            if($result){
+                return $this->cla['skClasificacion'];
+            }else{
+                return false;
+            }
+        }
+        
         /* cat_clasificacionMercancia_archivos */
         public function read_equal_claMerArc(){
             $sql = "SELECT claMerArc.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacionMercancia_archivos AS claMerArc "
@@ -404,6 +439,9 @@
             }
             if(!empty($this->claMerArc['skClasificacionMercancia'])){
                 $sql .=" AND (claMerArc.skClasificacionMercancia = '".$this->claMerArc['skClasificacionMercancia']."') ";
+            }
+            if(!empty($this->claMerArc['skStatus'])){
+                $sql .=" AND (claMerArc.skStatus = '".$this->claMerArc['skStatus']."') ";
             }
             $result = $this->db->query($sql);
             if($result){

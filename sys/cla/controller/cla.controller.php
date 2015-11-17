@@ -263,6 +263,7 @@
                             ){
                                $this->claMer['skClasificacion'] = NULL; 
                             }
+                            $this->claMer['skStatus'] = 'AC';
                             $this->claMer['limit'] = $records['limit'];
                             $this->claMer['offset'] = $records['offset'];
                             //$claMer = $this->read_equal_claMer();
@@ -378,7 +379,7 @@
             }
 
             if($_POST){
-                //exit('<pre>'.print_r(count($_POST['sFraccion']),1).'</pre>');
+                //exit('<pre>'.print_r($_POST,1).'</pre>');
              	$this->cla['skClasificacion'] = !empty($_POST['skClasificacion']) ? $_POST['skClasificacion'] : substr(md5(microtime()), 1, 32);
                 $this->cla['sReferencia'] = !empty($_POST['sReferencia']) ? utf8_decode($_POST['sReferencia']) : NULL ;
                 $this->cla['sPedimento'] = !empty($_POST['sPedimento']) ? utf8_decode($_POST['sPedimento']) : NULL ;
@@ -394,6 +395,8 @@
                 $this->claMer['skStatus'] = !empty($_POST['skStatus']) ? utf8_decode($_POST['skStatus']) : 'IN' ;
                 $this->claMer['dFechaCreacion'] = 'CURRENT_TIMESTAMP';
                 $this->claMer['skUsersCreacion'] = $_SESSION['session']['skUsers'];
+                $this->claMer['dFechaModificacion'] = 'CURRENT_TIMESTAMP';
+                $this->claMer['skUsersModificacion'] = $_SESSION['session']['skUsers'];
                 
                 if(empty($_POST['skClasificacion'])){
                     $skClasificacion = $this->create_cla();
@@ -426,6 +429,8 @@
                         }
                     }
                 }else{
+                    $this->cla['dFechaModificacion'] = 'CURRENT_TIMESTAMP';
+                    $this->cla['skUsersModificacion'] = $_SESSION['session']['skUsers'];
                     $skClasificacion = $this->update_cla();
                     if(!$skClasificacion){
                         $this->detele_cla();
@@ -435,28 +440,47 @@
                         echo json_encode($this->data);
                         return false;
                     }
+                    $this->claMer['skClasificacion'] = $_POST['skClasificacion'];
+                    $this->claMer['skStatus'] = 'IN';     
+                    $this->delete_claMer();
                     if(isset($_POST['sFraccion'])){
-                        for($i=0;$i<=count($_POST['sFraccion']);$i++){
-                            $this->claMer['skClasificacionMercancia'] = isset($_POST['skClasificacionMercancia'][$i]) ? $_POST['skClasificacionMercancia'][$i] : NULL;
+                        $this->claMer['skStatus'] = 'AC'; 
+                        for($i=0;$i < count($_POST['sFraccion']);$i++){
+                            $this->claMer['skClasificacionMercancia'] = isset($_POST['skClasificacionMercancia'][$i]) ? $_POST['skClasificacionMercancia'][$i] : FALSE;
                             $this->claMer['sFraccion'] = isset($_POST['sFraccion'][$i]) ? $_POST['sFraccion'][$i] : NULL;
                             $this->claMer['sNumeroParte'] = isset($_POST['sNumeroParte'][$i]) ? $_POST['sNumeroParte'][$i] : NULL;
                             $this->claMer['sDescripcion'] = isset($_POST['sDescripcion'][$i]) ? $_POST['sDescripcion'][$i] : NULL;
                             $this->claMer['sDescripcionIngles'] = isset($_POST['sDescripcionIngles'][$i]) ? $_POST['sDescripcionIngles'][$i] : NULL;
-                            $skClasificacionMercancia = $this->create_claMer();
-                            if(!$skClasificacionMercancia){
-                                $this->detele_cla();
-                                $this->data['response'] = false;
-                                $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
-                                header('Content-Type: application/json');
-                                echo json_encode($this->data);
-                                return false;
-                                break;
+                            
+                            if($this->claMer['skClasificacionMercancia']){
+                                $skClasificacionMercancia = $this->update_claMer();
+                                if(!$skClasificacionMercancia){
+                                    $this->detele_cla();
+                                    $this->data['response'] = false;
+                                    $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
+                                    header('Content-Type: application/json');
+                                    echo json_encode($this->data);
+                                    return false;
+                                    break;
+                                }
+                            }else{
+                                $this->claMer['skClasificacionMercancia'] = substr(md5(microtime()), 1, 32);
+                                $skClasificacionMercancia = $this->create_claMer();
+                                if(!$skClasificacionMercancia){
+                                    $this->detele_cla();
+                                    $this->data['response'] = false;
+                                    $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
+                                    header('Content-Type: application/json');
+                                    echo json_encode($this->data);
+                                    return false;
+                                    break;
+                                }
                             }
                         }
                     }
                 }
                 $this->data['response'] = true;
-                $this->data['message'] = 'Registro insertado con &eacute;xito.';
+                $this->data['message'] = 'Operaci&oacute;n realizada con &eacute;xito.';
                 header('Content-Type: application/json');
                 echo json_encode($this->data);
                 return true;
@@ -473,12 +497,6 @@
                 $i = 0;
                 $records = array();
                 while($row = $data->fetch_assoc()){
-                    $this->claMer['skClasificacion'] = $row['skClasificacion'];
-                    $claMer = parent::read_equal_claMer();
-                    if(!$claMer){
-                        $records = array();
-                        break;
-                    }
                     $records = array(
                          'skClasificacion' => $row['skClasificacion'] 
                         ,'skEmpresa' => $row['skEmpresa'] 
@@ -493,20 +511,25 @@
                         ,'skUsersModificacion' => $row['skUsersModificacion']
                         ,'dFechaImportacion' => $row['dFechaImportacion']
                     );
-                    while($rClaMer = $claMer->fetch_assoc()){
+                    $this->claMer['skClasificacion'] = $row['skClasificacion'];
+                    $this->claMer['skStatus'] = 'AC';
+                    $claMer = parent::read_equal_claMer();
+                    if($claMer){
+                        while($rClaMer = $claMer->fetch_assoc()){
+                            $records['mercancias'][$i] = array(
+                                'skClasificacionMercancia'=>utf8_encode($rClaMer['skClasificacionMercancia']) // skClasificacionMercancia
+                               ,'sFraccion'=>utf8_encode($rClaMer['sFraccion']) // FRACCIÓN
+                               ,'sNumeroParte'=>utf8_encode($rClaMer['sNumeroParte']) // NUMERO DE PARTE (MODELO)
+                               ,'sDescripcion'=>utf8_encode($rClaMer['sDescripcion']) // DESCRIPCIÓN
+                               ,'sDescripcionIngles'=>utf8_encode($rClaMer['sDescripcionIngles']) // DESCIPCIÓN INGLÉS
+                            );
 
-                        $records['mercancias'][$i] = array(
-                            'sFraccion'=>utf8_encode($rClaMer['sFraccion']) // FRACCIÓN
-                           ,'sNumeroParte'=>utf8_encode($rClaMer['sNumeroParte']) // NUMERO DE PARTE (MODELO)
-                           ,'sDescripcion'=>utf8_encode($rClaMer['sDescripcion']) // DESCRIPCIÓN
-                           ,'sDescripcionIngles'=>utf8_encode($rClaMer['sDescripcionIngles']) // DESCIPCIÓN INGLÉS
-                        );
-
-                     $i++;   
+                         $i++;   
+                        }
                     }
                 }
                 $this->data['data']['clasificacion'] = $records;
-                exit('<pre>'.print_r($this->data['data']['clasificacion'],1).'</pre>');
+                //exit('<pre>'.print_r($this->data['data']['clasificacion'],1).'</pre>');
             }
             
             // INCLUYE EL MODELO DEL MODULO emp //
