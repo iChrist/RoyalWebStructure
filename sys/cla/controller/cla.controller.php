@@ -191,6 +191,9 @@
             //exit('<pre>'.print_r($_GET,1).'</pre>');
             if(isset($_GET['axn'])){
                 switch ($_GET['axn']) {
+                    case 'excel':
+                        $this->claara_excel();
+                        break;
                     case 'pdf':
                         $this->claara_pdf();
                         break;
@@ -682,7 +685,30 @@
             $this->load_view('claara-detail', $this->data);
             return true;
         }
-
+        
+        public function claara_fotos(){
+            $this->data['message'] = '';
+            $this->data['response'] = true;
+            $this->data['datos'] = false;
+            $this->load_view('claara-fotos', $this->data);
+            return true; 
+        }
+        
+        public function claara_excel(){
+            $path = SYS_PATH.$_GET['sysModule'].'/files/fotos.zip';
+            $zip = new ZipArchive();
+            $res = $zip->open($path.'fotos.zip');
+            //var_dump($res);
+            if ($res) {
+                $zip->extractTo($path);
+                $zip->close();
+                echo 'SI '.$path;
+            }else{
+                echo 'NO '.$path;
+            }
+            return true;
+        }
+        
         private function claara_pdf(){
             if(isset($_GET['p1'])){
                 $this->numPar['skNumeroParte'] = $_GET['p1'];
