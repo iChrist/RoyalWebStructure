@@ -6,6 +6,7 @@
 
         public function __construct(){
                 parent::__construct();
+                ini_set('memory_limit', '-1');
         }
 
         public function __destruct(){
@@ -695,58 +696,73 @@
         }
         
         public function claara_excel(){
+            //echo date('H:i:s') . ' Current memory usage: ' . (memory_get_usage(true) / 1024 / 1024) . " MB <hr>" . PHP_EOL;
+            ini_set('memory_limit', '-1');
             if(isset($_GET['p1'])){
                 $this->cla['skClasificacion'] = $_GET['p1'];
             }
-            $this->data['data'] = parent::read_like_cla();
+            $this->data['data'] = parent::read_equal_cla();           
+            if(!$this->data['data']){
+                return false;
+            }
+            require_once(CORE_PATH."assets/PHPExcel/Classes/PHPExcel/IOFactory.php");
+            /*$objReader = PHPExcel_IOFactory::createReader('Excel5');
+            $objPHPExcel = $objReader->load(SYS_PATH."cla/files/ClasificacionMercancias.xls");*/
+            $objReader = PHPExcel_IOFactory::createReader('Excel2007');
+            $objPHPExcel = $objReader->load(SYS_PATH."cla/files/tplClasificacionMercancias.xlsx");
+            $i = 2;
+            while($row = $this->data['data']->fetch_assoc()){
+                $this->claMer['skClasificacion'] = $row['skClasificacion'];
+                /*if(
+                       isset($_POST['sFraccion'])
+                    || isset($_POST['sNumeroParte'])
+                ){
+                   $this->claMer['skClasificacion'] = NULL; 
+                }*/
+                $this->claMer['skStatus'] = 'AC';
+                $claMer = $this->read_like_claMer();
+                if(!$claMer){
+                    break;
+                }
+                while($rClaMer = $claMer->fetch_assoc()){
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $i, utf8_encode($row['sReferencia']));
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $i, utf8_encode($row['sPedimento']));
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $i, utf8_encode($row['empresa']));
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $i, utf8_encode($rClaMer['sFraccion']));
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $i, utf8_encode($rClaMer['sDescripcion']));
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $i, utf8_encode($rClaMer['sDescripcionIngles']));
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $i, utf8_encode($rClaMer['sNumeroParte']));
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $i, utf8_encode($row['dFechaPrevio']));
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $i, utf8_encode($row['sFactura']));
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(9, $i, utf8_encode($row['usersCreacion']));
+                    $i++;   
+                }
+            }
+
+            //$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+            //$objWriter->save(SYS_PATH.'cla/files/Reporte.xlsx');
             
-            $this->data['data'] = parent::read_equal_cla();
-                        
-                        if(!$this->data['data']){
-                            return false;
-                        }
-                        //exit('<pre>'.print_r($records['data'],1).'</pre>');
-                        $i = 0;
-                        while($row = $this->data['data']->fetch_assoc()){
-                            $actions = $this->printModulesButtons(2,array($row['skClasificacion']));
-                            $this->claMer['skClasificacion'] = $row['skClasificacion'];
-                            if(
-                                   isset($_POST['sFraccion'])
-                                || isset($_POST['sDescripcion'])
-                                || isset($_POST['sDescripcionIngles'])
-                                || isset($_POST['sNumeroParte'])
-                            ){
-                               $this->claMer['skClasificacion'] = NULL; 
-                            }
-                            $this->claMer['skStatus'] = 'AC';
-                            //$claMer = $this->read_equal_claMer();
-                            $claMer = $this->read_like_claMer();
-                            if(!$claMer){ exit('NO CLAMER');
-                                $records = array();
-                                break;
-                            }
-                            while($rClaMer = $claMer->fetch_assoc()){
-                                
-                                $records['data'][$i] = array(
-                                 utf8_encode($row['sReferencia']) // REFERENCIA
-                                ,utf8_encode($row['sPedimento']) // PEDIMENTO
-                                ,utf8_encode($row['empresa']) // EMPRESA (CLIENTE)
-                                
-                                ,utf8_encode($rClaMer['sFraccion']) // FRACCIÓN
-                                ,utf8_encode($rClaMer['sDescripcion']) // DESCRIPCIÓN
-                                ,utf8_encode($rClaMer['sDescripcionIngles']) // DESCIPCIÓN INGLÉS
-                                ,utf8_encode($rClaMer['sNumeroParte']) // NUMERO DE PARTE (MODELO)
-                                
-                                ,utf8_encode($row['dFechaPrevio']) // FECHA PREVIO
-                                ,utf8_encode($row['sFactura']) // FACTURA
-                                ,utf8_encode($row['usersCreacion']) // usersCreacion
-                                );
-                                
-                             $i++;   
-                            }
-                        }
-                        exit('<pre>'.print_r($records,1).'</pre>');
-            return true;
+
+            // Redirect output to a client’s web browser (Excel2007)
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="Reporte.xlsx"');
+            header('Cache-Control: max-age=0');
+            // If you're serving to IE 9, then the following may be needed
+            header('Cache-Control: max-age=1');
+
+            // If you're serving to IE over SSL, then the following may be needed
+            header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+            header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+            header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+            header ('Pragma: public'); // HTTP/1.0
+
+            //$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+            $objWriter->save('php://output');
+
+
+            //exit('<pre>'.print_r($records,1).'</pre>');
+            exit;
         }
         
         public function claara_zip(){
