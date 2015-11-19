@@ -717,10 +717,8 @@
                 return false;
             }
             require_once(CORE_PATH."assets/PHPExcel/Classes/PHPExcel/IOFactory.php");
-            /*$objReader = PHPExcel_IOFactory::createReader('Excel5');
-            $objPHPExcel = $objReader->load(SYS_PATH."cla/files/ClasificacionMercancias.xls");*/
             $objReader = PHPExcel_IOFactory::createReader('Excel2007');
-            $objPHPExcel = $objReader->load(SYS_PATH."cla/files/tplClasificacionMercancias.xlsx");
+            $objPHPExcel = $objReader->load(SYS_PATH."cla/files/claara/tplClasificacionMercancias.xlsx");
             $i = 2;
             while($row = $this->data['data']->fetch_assoc()){
                 $this->claMer['skClasificacion'] = $row['skClasificacion'];
@@ -750,10 +748,6 @@
                 }
             }
 
-            //$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-            //$objWriter->save(SYS_PATH.'cla/files/Reporte.xlsx');
-            
-
             // Redirect output to a client’s web browser (Excel2007)
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             header('Content-Disposition: attachment;filename="Reporte.xlsx"');
@@ -767,8 +761,8 @@
             header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
             header ('Pragma: public'); // HTTP/1.0
 
-            //$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
             $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+            //$objWriter->save(SYS_PATH.'cla/files/claara/Reporte.xlsx');
             $objWriter->save('php://output');
 
 
@@ -787,8 +781,31 @@
                 for($i = 0; $i < $zip->numFiles; $i++) {
                     $filename = $zip->getNameIndex($i);
                     $fileinfo = pathinfo($filename);
-                    echo "zip://".$path."#".$filename, "".$fileinfo['basename']."<br>";
-                    //copy("zip://".$path."#".$filename, "".$fileinfo['basename']);
+
+                    $pos = strrpos($filename, ".jpg");
+                    if ($pos === false){
+                        $type = " --> FOLDER ";
+                        $f = explode('/',$filename);
+                        //var_dump($f);
+                        foreach($f AS $k => &$v){
+                            
+                            if(!empty($v)){
+                                if(!is_dir($destination.$v)){
+                                    //fotos
+                                    //F1
+                                    //NA
+                                    //P1
+                                    //F2
+                                    mkdir($destination.$v, 0777, true);      
+                                }
+                            }
+                        }
+                    }else{
+                        $type = " --> IMG ";
+                    }
+
+                    //echo $filename." --> ".$fileinfo['basename'].$type."<br>";
+                    //copy("zip://".$path."#".$filename , $destination.$fileinfo['basename']);
                 }                  
                 $zip->close();                  
                 exit('SUCCESS');
@@ -798,6 +815,7 @@
                 return false;
             }
 
+            
 
 
             /*$zip = new ZipArchive;
