@@ -331,6 +331,16 @@
             $this->data['message'] = '';
             $this->data['response'] = true;
             $this->data['datos'] = false;
+            if(isset($_GET['axn'])){
+                switch ($_GET['axn']) {
+                    case 'excel':
+                        $this->claara_excel();
+                        break;
+                    case 'pdf':
+                        $this->claara_pdf();
+                        break;
+                }
+            }
             if(isset($_POST['axn'])){
                 if($_POST['axn']=='json_excel'){
                     $dFechaImportacion = date('Y-m-d H:i:s');
@@ -373,14 +383,15 @@
                     return true;
                 }
             }
-            if(isset($_GET['p2'])){
+
+            /*if(isset($_GET['p2'])){
                 $imagePath = isset($_GET['url']) ? $_GET['url'] : FALSE;
                 $width = isset($_GET['width']) ? $_GET['width'] : 100;
                 $height = isset($_GET['height']) ? $_GET['height'] : 100;	
                 $imagePath = 'http://vision7.com.mx/admin/files/banner/1737876976dannycapdam.jpg';
                 Core_Functions::thumbnailImage($imagePath,$width,$height);
                 return true;
-            }
+            }*/
 
             if($_POST){
                 //exit('<pre>'.print_r($_POST,1).'</pre>');
