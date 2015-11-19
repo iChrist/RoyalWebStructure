@@ -105,7 +105,9 @@
 					
 					// INCLUYE UN MODELO DE OTRO MODULO //
 					$this->load_model('cof','cof');
-					$this->data['status'] = Cof_Model::read_status();
+                    $cof = new Cof_Model();
+                    $this->data['status'] = $cof->read_status();
+					
 /*					$this->data['empresa'] = Cof_Model::read_status();
 					$this->data['tipotramite'] = Cof_Model::read_status();
 					$this->data['clavedocumento'] = Cof_Model::read_status();

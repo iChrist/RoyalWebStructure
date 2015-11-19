@@ -559,6 +559,7 @@
 				if(!empty($this->empresas['skStatus'])){
                     $sql .= " AND cat_empresas.skStatus = '".$this->empresas['skStatus']."'";
                 }
+                 $sql .=" ORDER BY cat_empresas.sNombre ASC ";
                 if(is_int($this->empresas['limit'])){
                     if(is_int($this->empresas['offset'])){
                         $sql .= " LIMIT ".$this->empresas['offset']." , ".$this->empresas['limit'];

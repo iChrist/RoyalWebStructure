@@ -395,7 +395,7 @@
                  /* EMPIEZA MODULO DE EMPRESAS*/
                  public function empresas_index(){
                     if(isset($_GET['axn'])){
-                        switch ($_GET['axn']) {
+                       switch ($_GET['axn']) {
                             case 'pdf':
                                 $this->empresas_pdf();
                                 break;
@@ -433,8 +433,7 @@
                                     echo json_encode($records);
                                     return false;
                                 }
-
-                                while($row = $this->data['data']->fetch_assoc()){
+                                 while($row = $this->data['data']->fetch_assoc()){
                                     $actions = $this->printModulesButtons(2,array($row['skEmpresa']));
                                     array_push($records['data'], array(
                                         $row['sRFC'],
@@ -446,7 +445,7 @@
                                          !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.$actions['sHtml'].'</ul></div>' : ''
                                     ));
                                 }
-                                 header('Content-Type: application/json');
+                                  header('Content-Type: application/json');
                                 echo json_encode($records);
                                 return true;
                                 break;
