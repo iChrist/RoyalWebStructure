@@ -12,18 +12,18 @@
 
         }
         // VERIFICA SI LA EMPRESA EXISTE O INSERTA NUEVA //
-        private function exist_empresa(&$emp , &$sNombre){
+        private function exist_empresa($emp , &$sNombre){
             $emp->empresas['sNombre'] = $sNombre;
             $empresa = $emp->read_like_empresas();
             if(!$empresa){
-                /*$emp->empresas['skEmpresa'] = substr(md5(microtime()), 1, 32);
+                $emp->empresas['skEmpresa'] = substr(md5(microtime()), 1, 32);
                 $emp->empresas['skTipoEmpresa'] = 'N/A';
                 $emp->empresas['skStatus'] = 'AC';
                 $skEmpresa = $emp->create_empresas();
                 if(!$skEmpresa){
                     return false;
                 }
-                return array($skEmpresa,$sNombre);*/
+                return array($skEmpresa,$sNombre);
                 return false;
             }else{
                 $rEmpresa = $empresa->fetch_row();
@@ -77,7 +77,7 @@
                 // VERIFICAMOS SI EXISTE EMPRESA O LA CREAMOS //
                     if($sEmpresa != trim(utf8_decode($v['CLIENTE'])," ")){
                         $cliente = trim(utf8_decode($v['CLIENTE'])," ");
-                        $empresa = $this->exist_empresa($emp , $cliente);
+                        $empresa = $this->exist_empresa(new Emp_Model() , $cliente);
                         if(!$empresa){ 
                             $flag = false;
                             $message = "No est&aacute; registrado el cliente: '".$cliente."' en el sistema.";
@@ -695,17 +695,69 @@
         }
         
         public function claara_excel(){
-            $path = SYS_PATH.$_GET['sysModule'].'/files/fotos.zip';
-            $zip = new ZipArchive();
-            $res = $zip->open($path.'fotos.zip');
-            //var_dump($res);
-            if ($res) {
-                $zip->extractTo($path);
-                $zip->close();
-                echo 'SI '.$path;
-            }else{
-                echo 'NO '.$path;
+            if(isset($_GET['p1'])){
+                $this->cla['skClasificacion'] = $_GET['p1'];
             }
+            $this->data['data'] = parent::read_like_cla();
+            
+            $this->data['data'] = parent::read_equal_cla();
+                        
+                        if(!$this->data['data']){
+                            return false;
+                        }
+                        //exit('<pre>'.print_r($records['data'],1).'</pre>');
+                        $i = 0;
+                        while($row = $this->data['data']->fetch_assoc()){
+                            $actions = $this->printModulesButtons(2,array($row['skClasificacion']));
+                            $this->claMer['skClasificacion'] = $row['skClasificacion'];
+                            if(
+                                   isset($_POST['sFraccion'])
+                                || isset($_POST['sDescripcion'])
+                                || isset($_POST['sDescripcionIngles'])
+                                || isset($_POST['sNumeroParte'])
+                            ){
+                               $this->claMer['skClasificacion'] = NULL; 
+                            }
+                            $this->claMer['skStatus'] = 'AC';
+                            //$claMer = $this->read_equal_claMer();
+                            $claMer = $this->read_like_claMer();
+                            if(!$claMer){ exit('NO CLAMER');
+                                $records = array();
+                                break;
+                            }
+                            while($rClaMer = $claMer->fetch_assoc()){
+                                
+                                $records['data'][$i] = array(
+                                 utf8_encode($row['sReferencia']) // REFERENCIA
+                                ,utf8_encode($row['sPedimento']) // PEDIMENTO
+                                ,utf8_encode($row['empresa']) // EMPRESA (CLIENTE)
+                                
+                                ,utf8_encode($rClaMer['sFraccion']) // FRACCIÓN
+                                ,utf8_encode($rClaMer['sDescripcion']) // DESCRIPCIÓN
+                                ,utf8_encode($rClaMer['sDescripcionIngles']) // DESCIPCIÓN INGLÉS
+                                ,utf8_encode($rClaMer['sNumeroParte']) // NUMERO DE PARTE (MODELO)
+                                
+                                ,utf8_encode($row['dFechaPrevio']) // FECHA PREVIO
+                                ,utf8_encode($row['sFactura']) // FACTURA
+                                ,utf8_encode($row['usersCreacion']) // usersCreacion
+                                );
+                                
+                             $i++;   
+                            }
+                        }
+                        exit('<pre>'.print_r($records,1).'</pre>');
+            return true;
+        }
+        
+        public function claara_zip(){
+            $path = SYS_PATH.$_GET['sysModule'].'/files/fotos.zip';
+            $destination = SYS_PATH.$_GET['sysModule'].'/files/';
+            /*$zip = new ZipArchive;
+            $zip->open($path);
+            $zip->extractTo($destination.'/extract');
+            $zip->close();*/
+            rename($destination.'extract/fotos' , $destination.'fotos');
+            //exit('<pre>'.print_r($zip,1).'</pre>');
             return true;
         }
         

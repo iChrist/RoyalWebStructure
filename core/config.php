@@ -29,6 +29,12 @@
             'USER_DB' => 'root',
             'PASSWORD_DB' => '',
             'DATABASE_DB' => 'royalweb_structure'
+        ),
+        'test' => array(
+            'HOST_DB' => 'royalweb.com.mx',
+            'USER_DB' => 'royalweb_rw',
+            'PASSWORD_DB' => 'RoyalWeb',
+            'DATABASE_DB' => 'royalweb_gya'
         )
     );
     define('HOST_DB', $_db[$_db_idx]['HOST_DB']);
