@@ -779,11 +779,32 @@
         public function claara_zip(){
             $path = SYS_PATH.$_GET['sysModule'].'/files/fotos.zip';
             $destination = SYS_PATH.$_GET['sysModule'].'/files/';
+
+
+
+            $zip = new ZipArchive;
+            if ($zip->open($path) === true) {
+                for($i = 0; $i < $zip->numFiles; $i++) {
+                    $filename = $zip->getNameIndex($i);
+                    $fileinfo = pathinfo($filename);
+                    echo "zip://".$path."#".$filename, "".$fileinfo['basename']."<br>";
+                    //copy("zip://".$path."#".$filename, "".$fileinfo['basename']);
+                }                  
+                $zip->close();                  
+                exit('SUCCESS');
+                return true;
+            }else{
+                exit('ERROR');
+                return false;
+            }
+
+
+
             /*$zip = new ZipArchive;
             $zip->open($path);
             $zip->extractTo($destination.'/extract');
             $zip->close();*/
-            rename($destination.'extract/fotos' , $destination.'fotos');
+            //rename($destination.'extract/fotos' , $destination.'fotos');
             //exit('<pre>'.print_r($zip,1).'</pre>');
             return true;
         }
