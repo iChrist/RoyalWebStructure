@@ -702,6 +702,32 @@
             $this->data['message'] = '';
             $this->data['response'] = true;
             $this->data['datos'] = false;
+            if(isset($_POST)){
+                if(!empty($_FILES['zip']['name'])){
+                    $arrayZips = array("application/zip", "application/x-zip", "application/x-zip-compressed");
+                    if(in_array($_FILES['zip']['type'] , $arrayZips)){
+                        //exit('<pre>'.print_r($_FILES['zip'],1).'</pre>');
+                        if( !$this->claara_zip() ){
+                            $this->data['response'] = false;
+                            $this->data['message'] = 'Hubo un error al subir el archivo ZIP.';
+                            header('Content-Type: application/json');
+                            echo json_encode($this->data);
+                            return false;    
+                        }
+                        $this->data['response'] = true;
+                        $this->data['message'] = 'Archivo ZIP subido con &eacute;xito.';
+                        header('Content-Type: application/json');
+                        echo json_encode($this->data);
+                        return true; 
+                    }else{
+                        $this->data['response'] = false;
+                        $this->data['message'] = 'El archivo que intenta subir no es un archivo ZIP.';
+                        header('Content-Type: application/json');
+                        echo json_encode($this->data);
+                        return false;
+                    }
+                }
+            }
             $this->load_view('claara-fotos', $this->data);
             return true; 
         }
@@ -717,10 +743,8 @@
                 return false;
             }
             require_once(CORE_PATH."assets/PHPExcel/Classes/PHPExcel/IOFactory.php");
-            /*$objReader = PHPExcel_IOFactory::createReader('Excel5');
-            $objPHPExcel = $objReader->load(SYS_PATH."cla/files/ClasificacionMercancias.xls");*/
             $objReader = PHPExcel_IOFactory::createReader('Excel2007');
-            $objPHPExcel = $objReader->load(SYS_PATH."cla/files/tplClasificacionMercancias.xlsx");
+            $objPHPExcel = $objReader->load(SYS_PATH."cla/files/claara/tplClasificacionMercancias.xlsx");
             $i = 2;
             while($row = $this->data['data']->fetch_assoc()){
                 $this->claMer['skClasificacion'] = $row['skClasificacion'];
@@ -750,10 +774,6 @@
                 }
             }
 
-            //$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-            //$objWriter->save(SYS_PATH.'cla/files/Reporte.xlsx');
-            
-
             // Redirect output to a client’s web browser (Excel2007)
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             header('Content-Disposition: attachment;filename="Reporte.xlsx"');
@@ -767,8 +787,8 @@
             header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
             header ('Pragma: public'); // HTTP/1.0
 
-            //$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
             $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+            //$objWriter->save(SYS_PATH.'cla/files/claara/Reporte.xlsx');
             $objWriter->save('php://output');
 
 
@@ -777,15 +797,60 @@
         }
         
         public function claara_zip(){
-            $path = SYS_PATH.$_GET['sysModule'].'/files/fotos.zip';
-            $destination = SYS_PATH.$_GET['sysModule'].'/files/';
-            /*$zip = new ZipArchive;
-            $zip->open($path);
-            $zip->extractTo($destination.'/extract');
-            $zip->close();*/
-            rename($destination.'extract/fotos' , $destination.'fotos');
-            //exit('<pre>'.print_r($zip,1).'</pre>');
-            return true;
+            $destination = SYS_PATH.$_GET['sysModule'].'/files/claara/files/';
+            if( !move_uploaded_file($_FILES['zip']['tmp_name'] , $destination.$_FILES['zip']['name']) ){
+                return false;
+            }
+            $path = $destination.$_FILES['zip']['name'];
+            //$path = $destination.'fotos.zip';
+            $folder = null;
+            $zip = new ZipArchive;
+            if ($zip->open($path) === true) {
+                for($i = 0; $i < $zip->numFiles; $i++) {
+                    $filename = $zip->getNameIndex($i);
+                    $fileinfo = pathinfo($filename);
+
+                    $pos = strrpos($filename, ".jpg");
+                    if ($pos === false){
+                        $type = " --> FOLDER ";
+                        $f = explode('/',$filename);
+                        
+                        foreach($f AS $k => &$v){
+                            
+                            if(!empty($v)){
+                            	if($folder === null){
+                            		$folder = $v;
+                            	}else{
+	                            	$folder .= '/'.$v;
+                            	}
+                                if(!is_dir($destination.$folder)){
+                                    //fotos
+                                    //F1
+                                    //NA
+                                    //P1
+                                    //F2
+                                    mkdir($destination.$folder, 0777, true);      
+                                }
+                            }
+                        }
+                        
+                    }else{
+                        $type = " --> IMG ";
+                        //echo "zip://".$path."#".$filename.' => '.$destination.$fileinfo['basename'].'<br><br>';
+                        copy("zip://".$path."#".$filename , $destination.$filename);
+                    }
+                    $folder = null;
+                    //echo $filename." --> ".$fileinfo['basename'].$type."<br>";
+                    //copy("zip://".$path."#".$filename , $destination.$fileinfo['basename']);
+                }                  
+                $zip->close();
+                unlink($path);
+                //exit('SUCCESS');
+                return true;
+            }else{
+                //exit('ERROR');
+                return false;
+            }
         }
         
         private function claara_pdf(){
