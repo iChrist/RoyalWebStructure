@@ -702,6 +702,32 @@
             $this->data['message'] = '';
             $this->data['response'] = true;
             $this->data['datos'] = false;
+            if(isset($_POST)){
+                if(!empty($_FILES['zip']['name'])){
+                    $arrayZips = array("application/zip", "application/x-zip", "application/x-zip-compressed");
+                    if(in_array($_FILES['zip']['type'] , $arrayZips)){
+                        //exit('<pre>'.print_r($_FILES['zip'],1).'</pre>');
+                        if( !$this->claara_zip() ){
+                            $this->data['response'] = false;
+                            $this->data['message'] = 'Hubo un error al subir el archivo ZIP.';
+                            header('Content-Type: application/json');
+                            echo json_encode($this->data);
+                            return false;    
+                        }
+                        $this->data['response'] = true;
+                        $this->data['message'] = 'Archivo ZIP subido con &eacute;xito.';
+                        header('Content-Type: application/json');
+                        echo json_encode($this->data);
+                        return true; 
+                    }else{
+                        $this->data['response'] = false;
+                        $this->data['message'] = 'El archivo que intenta subir no es un archivo ZIP.';
+                        header('Content-Type: application/json');
+                        echo json_encode($this->data);
+                        return false;
+                    }
+                }
+            }
             $this->load_view('claara-fotos', $this->data);
             return true; 
         }
@@ -771,10 +797,11 @@
         }
         
         public function claara_zip(){
-            $path = SYS_PATH.$_GET['sysModule'].'/files/fotos.zip';
-            $destination = SYS_PATH.$_GET['sysModule'].'/files/';
-
-
+            $destination = SYS_PATH.$_GET['sysModule'].'/files/claara/files/';
+            if( !move_uploaded_file($_FILES['zip']['tmp_name'] , $destination.$_FILES['zip']['name']) ){
+                return false;
+            }
+            $path = $destination.$_FILES['zip']['name'];
 
             $zip = new ZipArchive;
             if ($zip->open($path) === true) {
@@ -807,24 +834,14 @@
                     //echo $filename." --> ".$fileinfo['basename'].$type."<br>";
                     //copy("zip://".$path."#".$filename , $destination.$fileinfo['basename']);
                 }                  
-                $zip->close();                  
-                exit('SUCCESS');
+                $zip->close();
+                unlink($path);
+                //exit('SUCCESS');
                 return true;
             }else{
-                exit('ERROR');
+                //exit('ERROR');
                 return false;
             }
-
-            
-
-
-            /*$zip = new ZipArchive;
-            $zip->open($path);
-            $zip->extractTo($destination.'/extract');
-            $zip->close();*/
-            //rename($destination.'extract/fotos' , $destination.'fotos');
-            //exit('<pre>'.print_r($zip,1).'</pre>');
-            return true;
         }
         
         private function claara_pdf(){
