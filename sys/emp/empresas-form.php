@@ -68,7 +68,14 @@
                                 <select class="form-control"id="skTipoEmpresa" name="skTipoEmpresa">
                                 		<option value=""> Seleccionar...</option>
                                 	<?php  foreach ($data['tiposEmpresas'] as $profile)  {  ?>
-                                		<option value="<?php echo $profile['skTipoEmpresa']; ?>" <?php echo ($profile['skTipoEmpresa']==$result['skTipoEmpresa'] ? 'selected="selected"' : '')?>> <?php echo $profile['sNombre']; ?></option>
+                                		<option value="<?php echo $profile['skTipoEmpresa']; ?>" 
+                                		<?php 
+                                		if(isset($result['skTipoEmpresa'])){
+	                                	echo ($result['skTipoEmpresa']==$profile['skTipoEmpresa'] ? 'selected="selected"' : '');
+                                		}
+                                		
+                                		?>> 
+                                		<?php echo $profile['sNombre']; ?></option>
                                 	<?php }   ?>
                                 </select>
                                </div>
@@ -88,7 +95,13 @@
                                 <select class="form-control"id="skStatus" name="skStatus">
                                 		<option value=""> Seleccionar...</option>
                                 	<?php  foreach ($data['status'] as $status)  {  ?>
-                                		<option value="<?php echo $status['skStatus']; ?>" <?php echo ($status['skStatus']==$result['skStatus'] ? 'selected="selected"' : '')?>> <?php echo $status['sName']; ?></option>
+                                		<option value="<?php echo $status['skStatus']; ?>" 
+                                		<?php 
+                                		if(isset($result['skStatus'])){
+	                                	echo ($result['skStatus']==$status['skStatus'] ? 'selected="selected"' : '');
+                                		}
+                                		?>>
+                                 		<?php echo $status['sName']; ?></option>
                                 	<?php }   ?>
                                 </select>
                                </div>

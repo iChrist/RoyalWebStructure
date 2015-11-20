@@ -478,9 +478,9 @@
                     $sql .=" AND ce.skStatus like '%".$this->empresas['skStatus']."%'";
                 }
                  if(!empty($this->empresas['skTipoEmpresa'])){
-                    $sql .=" AND ce.skTipoEmpresa like '%".$this->empresas['skTipoEmpresa']."%'";
+                    $sql .=" AND rce.skTipoEmpresa = '".$this->empresas['skTipoEmpresa']."'";
                 }
-                
+                 $sql .=" ORDER BY ce.sNombre ASC ";
                 if(is_int($this->empresas['limit'])){
                     if(is_int($this->empresas['offset'])){
                         $sql .= " LIMIT ".$this->empresas['offset']." , ".$this->empresas['limit'];
@@ -577,5 +577,7 @@
                     }
                 }
             }
+              
+              
 	}
 ?>
