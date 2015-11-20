@@ -72,7 +72,7 @@
 					while($row = $this->data['data']->fetch_assoc()){
 						$actions = $this->printModulesButtons(2,array($row['skSolicitudRevalidacion']));
 						array_push($records['data'], array(
-							 utf8_encode($row['skEstatusRevalidacion'])
+							 utf8_encode($row['Icono'])
 							 ,utf8_encode($row['sReferencia'])
  							,utf8_encode($row['EmpresaNaviera'])
 							,utf8_encode($row['Tramitador'])
@@ -118,6 +118,8 @@
 					$this->data['message'] = '';
 					$this->data['response'] = true;
 					$this->data['datos'] = false;
+					$this->data['estatus'] = parent::read_estatus();
+					
 					$this->load_model('emp','emp');
 					$objEmpresa = new Emp_Model();
 					$objEmpresa->empresas['skTipoEmpresa'] = 'LINA';
@@ -159,7 +161,8 @@
 					$this->solreva['sReferencia'] = utf8_decode($_POST['sReferencia']);
   					$this->solreva['sObservaciones'] = utf8_decode($_POST['sObservaciones']);
  					$this->solreva['skEmpresaNaviera'] = utf8_decode($_POST['skEmpresaNaviera']);
-					$this->solreva['skUsuarioTramitador'] = utf8_decode($_POST['skUsuarioTramitador']);
+ 					$this->solreva['skEstatusRevalidacion'] = utf8_decode($_POST['skEstatusRevalidacion']);
+ 					$this->solreva['skUsuarioTramitador'] = utf8_decode($_POST['skUsuarioTramitador']);
  						if(empty($_POST['skSolicitudRevalidacion'])){
 							if(parent::create_solreva()){
 								$this->data['response'] = true;

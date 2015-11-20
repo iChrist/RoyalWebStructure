@@ -84,6 +84,23 @@ echo "</pre>";
         </select>
       </div>
     </div>    
+     <div class="form-group">
+      <label class="control-label col-md-2">Estatus Naviera <span aria-required="true" class="required"> * </span> </label>
+      <div class="col-md-10">
+        <div class="radio-list">
+          <?php $i = 0?>
+          <?php while($rEstatus =  $data['estatus']->fetch_assoc()){?>
+          <?php $i++;?>
+          <label>
+          <div class=""> <span>
+            <input type="radio" name="skEstatusRevalidacion" value="<?php echo $rEstatus{'skEstatus'}?>" <?php echo ((isset($result['skEstatusRevalidacion']) ? $result['skEstatusRevalidacion'] : "-") == $rEstatus{'skEstatus'} ? 'checked' : ($i==1 ) ? 'checked' : '' )?>  >
+            <?php echo utf8_encode($rEstatus{'sNombre'})?> </span> </div>
+          </label>
+          <?php }?>
+        </div>
+      </div>
+    </div>
+
     
     <hr>
     <div class="form-group">
