@@ -100,13 +100,14 @@
 					$this->data['clavedocumento'] = Cof_Model::read_status();
 					$this->data['coresponsalia'] = Cof_Model::read_status();
 */
-
 					$this->load_model('emp','emp');
 					$objEmpresa = new Emp_Model();
-					$this->data['empresas'] = $objEmpresa->read_empresa();
+					$objEmpresa->empresas['skTipoEmpresa'] = 'LINA';
+					$this->data['empresas'] = $objEmpresa->read_like_empresas();
+					$this->load_model('cof','cof');
+					$objUsuarios = new Cof_Model();
+					$this->data['tramitadores'] = $objUsuarios->read_user();
 					
- 										
-
 
 					// RETORNA LA VISTA areas-index.php //
 					$this->load_view('solreva-index', $this->data);
@@ -119,11 +120,39 @@
 					$this->data['datos'] = false;
 					$this->load_model('emp','emp');
 					$objEmpresa = new Emp_Model();
-					$this->data['empresas'] = $objEmpresa->read_empresa();
+					$objEmpresa->empresas['skTipoEmpresa'] = 'LINA';
+					$this->data['empresas'] = $objEmpresa->read_like_empresas();
 					
 					$this->load_model('cof','cof');
 					$objUsuarios = new Cof_Model();
 					$this->data['tramitadores'] = $objUsuarios->read_user();
+					
+					if(isset($_POST['axn']))
+                    	 {
+                        	switch ($_POST['axn'])
+		                        {
+		                            case "retornarDatos":
+		                                // echo 'false'; -> Email no encontrado 
+		                                // echo 'true';  -> Email encontrado
+										
+		                                $this->solreva['sReferencia'] = htmlentities(($_POST['sReferencia']));
+		                                $this->solreva['sCliente'] = htmlentities(($_POST['sReferencia']));
+ 		                                $this->data['datos']=parent::read_referencia();
+ 		                                if(parent::read_referencia())
+		                                {
+		                                    echo 'true';
+		                                }
+		                                else
+		                                {
+		                                    echo 'false';
+		                                }
+		                                exit;
+		                            break;
+		                            
+		                            
+		                        }
+		                   }
+					
  					if($_POST){
 					//exit('</pre>'.print_r($_POST,1).'</pre>');
 					$this->solreva['skSolicitudRevalidacion'] = !empty($_POST['skSolicitudRevalidacion']) ? $_POST['skSolicitudRevalidacion'] : substr(md5(microtime()), 1, 32);

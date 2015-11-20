@@ -113,8 +113,7 @@
 					$this->data['clavedocumento'] = Cof_Model::read_status();
 					$this->data['coresponsalia'] = Cof_Model::read_status();
 */
-
-					$this->load_model('emp','emp');
+ 					$this->load_model('emp','emp');
 					$objEmpresa = new Emp_Model();
 					$this->data['empresas'] = $objEmpresa->read_empresa();
 					$this->data['tipostramites'] = parent::read_tipos_tramites();

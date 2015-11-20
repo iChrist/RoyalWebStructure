@@ -24,12 +24,37 @@ echo "</pre>";
         </div>
       </div>
     </div>
-         
+     <div id="dvDatos" class="hidden" >
+     <div class="form-group">
+       
+     	<label class="control-label col-md-2"><b>Cliente</b></label>
+     	<div class="col-md-4">
+       		 <label id="lbCliente" class="control-label col-md-2">aaaa</label>
+        </div>
+      	<label class="control-label col-md-2"><b>Servicio de</b></label>
+	     <div class="col-md-4">
+	        <label id="lbServicio" class="control-label col-md-2">Contenedor</label>
+	     </div>
+    </div>
+    <div class="form-group">
+       
+     	<label class="control-label col-md-2"><b>Ejecutivo</b></label>
+     	<div class="col-md-4">
+       		 <label id="lbEjecutivo" class="control-label col-md-2">Eje</label>
+        </div>
+      	<label class="control-label col-md-2"><b>Mercancia</b></label>
+	     <div class="col-md-4">
+	        <label id="lbMercancia" class="control-label col-md-2">Merca</label>
+	     </div>
+    </div>
+    
+     </div>
+     
     <div class="form-group">
       <label class="control-label col-md-2">Línea Naviera <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
-        <select name="skEmpresa" id="skEmpresa" class="form-control form-filter input-sm">
-          <option value="">- Línea Naviera -</option>
+        <select name="skEmpresaNaviera" id="skEmpresaNaviera" class="form-control form-filter input-sm">
+          <option>- Línea Naviera -</option>
           <?php
                                     if(isset($data['empresas'])){
                                         while($rEmpresa = $data['empresas']->fetch_assoc()){
@@ -45,8 +70,8 @@ echo "</pre>";
       <div class="form-group">
       <label class="control-label col-md-2">Tramitador <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
-        <select name="skEmpresa" id="skEmpresa" class="form-control form-filter input-sm">
-          <option value="">- Tramitador -</option>
+        <select name="skUsuarioTramitador" id="skUsuarioTramitador" class="form-control form-filter input-sm">
+          <option>- Tramitador -</option>
           <?php
                                     if(isset($data['tramitadores'])){
                                         while($rTramitador = $data['tramitadores']->fetch_assoc()){
@@ -63,9 +88,9 @@ echo "</pre>";
     <hr>
     <div class="form-group">
       <label class="control-label col-md-2">Observaciones <span aria-required="true" class="required"> * </span> </label>
-      <div class="col-md-4">
+      <div class="col-md-8">
         <div class="input-icon right"> <i class="fa"></i>
-          <input type="textarea" name="sObservaciones" id="sObservaciones" class="form-control" placeholder="Observaciones" value="<?php echo (isset($result['sObservaciones'])) ? utf8_encode($result['sObservaciones']) : '' ; ?>" >
+          <textarea rows="5"  name="sObservaciones" id="sObservaciones" class="form-control" placeholder="Observaciones" value="<?php echo (isset($result['sObservaciones'])) ? utf8_encode($result['sObservaciones']) : '' ; ?>" ></textarea>
         </div>
       </div>
     </div>
@@ -85,6 +110,7 @@ echo "</pre>";
 <script type="text/javascript">
     var fraccion = 1;
     $(document).ready(function(){
+    
         /* VALIDATIONS */
         isValid = $("#_save").validate({
             errorElement: 'span', //default input error message container
@@ -92,10 +118,24 @@ echo "</pre>";
             focusInvalid: false, // do not focus the last invalid input
             ignore: "",
             rules:{
+              
                 sReferencia:{
-                    required: true
+                    required: true,
+                     remote: {
+                      url: "",
+                      type: "post",
+                      
+                      data: {
+                        sReferencia: function (){return $( "#sReferencia" ).val();},
+                        axn: "retornarDatos",
+                        skEmpresa:  function (){
+                        // return $( "#dvDatos" ).removeClass("hidden");
+                       // return  $("#lbCliente").html("Hamburg");
+                          }
+                      }
+                    }
+                    
                 },
-               
 				sObservaciones:{
                     required: true
                 },
@@ -145,7 +185,8 @@ invalidHandler: function (event, validator) { //alerta de error de visualizació
             },
             messages:{
                 sReferencia:{
-                    required: true
+                    required: true,
+                       remote: "Esta referencia no Existe."
                 },
  				Observaciones:{
                     required: true

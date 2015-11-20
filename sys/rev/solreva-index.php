@@ -37,7 +37,7 @@ echo "</pre>";*/
             <td><input type="text" class="form-control form-filter input-sm" name="sReferencia" placeholder="Referencia"></td>
             
             
-            <td><select name="skEmpresa" class="form-control form-filter input-sm">
+            <td><select name="skEmpresaNaviera" class="form-control form-filter input-sm">
                 <option value="">- Linea Naviera -</option>
                 <?php
                                     if(isset($data['empresas'])){
@@ -53,10 +53,10 @@ echo "</pre>";*/
             <td><select name="skUsuarioTramitador" class="form-control form-filter input-sm">
                 <option value="">- Tramitador -</option>
                 <?php
-                                    if(isset($data['skUsuarioTramitador'])){
-                                        while($row = $data['skUsuarioTramitador']->fetch_assoc()){
+                                    if(isset($data['tramitadores'])){
+                                        while($row = $data['tramitadores']->fetch_assoc()){
                                 ?>
-                <option value="<?php echo $row['skUsuarioTramitador']; ?>"> <?php echo utf8_encode($row['sNombre']); ?> </option>
+                <option value="<?php echo $row['skUsuarioTramitador']; ?>"> <?php echo utf8_encode($row['sName']); ?> </option>
                 <?php
                                         }//ENDIF
                                     }//ENDWHILE

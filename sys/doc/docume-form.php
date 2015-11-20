@@ -66,10 +66,10 @@ echo "</pre>";
     </div>
      
     <div class="form-group">
-      <label class="control-label col-md-2">Empresa <span aria-required="true" class="required"> * </span> </label>
+      <label class="control-label col-md-2">Cliente <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
         <select name="skEmpresa" id="skEmpresa" class="form-control form-filter input-sm">
-          <option value="">- Empresa -</option>
+          <option value="">- Cliente -</option>
           <?php
                                     if(isset($data['empresas'])){
                                         while($rEmpresa = $data['empresas']->fetch_assoc()){

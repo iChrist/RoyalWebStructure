@@ -109,31 +109,21 @@
                 }
             }
             
-            public function create_recepciondocumentos(){
- 				$sql = "INSERT INTO ope_recepciones_documentos (	skRecepcionDocumento,sReferencia,sPedimento,sMercancia,sObservaciones,skEmpresa,skTipoTramite,
-																skTipoServicio,skClaveDocumento,skCorresponsalia,skStatus,
-																dFechaCreacion,skUsersCreacion,dFechaModificacion,skUsersModificacion) 
-						VALUES ('".$this->recepciondocumentos['skRecepcionDocumento']."',
-								'".$this->recepciondocumentos['sReferencia']."',
-								'".$this->recepciondocumentos['sPedimento']."',
-								'".$this->recepciondocumentos['sMercancia']."',
-								'".$this->recepciondocumentos['sObservaciones']."',
-								
-								'".$this->recepciondocumentos['skEmpresa']."',
-								'".$this->recepciondocumentos['skTipoTramite']."',
-								'".$this->recepciondocumentos['skTipoServicio']."',
-								'".$this->recepciondocumentos['skClaveDocumento']."',
-								'".$this->recepciondocumentos['skCorresponsalia']."',
-								'AC',
-								'".$datetime->format('Y-m-d')."',
-								CURRENT_TIMESTAMP(),
-								'".$_SESSION['session']['skUsers']."',
-								CURRENT_TIMESTAMP(),
+            public function create_solreva(){
+ 				$sql = "INSERT INTO ope_solicitud_revalidacion (	skSolicitudRevalidacion,sReferencia,sObservaciones,skEmpresaNaviera,
+																skUsuarioTramitador,skEstatusRevalidacion,dFechaRevalidacion,skUsuarioRevalidacion) 
+						VALUES ('".$this->solreva['skSolicitudRevalidacion']."',
+								'".$this->solreva['sReferencia']."',
+  								'".$this->solreva['sObservaciones']."',
+ 								'".$this->solreva['skEmpresaNaviera']."',
+								'".$this->solreva['skUsuarioTramitador']."',
+								'RE',
+ 								CURRENT_TIMESTAMP(),
 								'".$_SESSION['session']['skUsers']."')";
 				//echo $sql;die();
                 $result = $this->db->query($sql);
                 if($result){
-                    return $this->recepciondocumentos['skRecepcionDocumento'];
+                    return $this->solreva['skSolicitudRevalidacion'];
                 }else{
                     return false;
                 }
@@ -180,6 +170,44 @@
                 }else{
                     return false;
                 }
+            }
+            
+            public function read_referencia(){
+	            $sql = "	SELECT 	rd.*, 
+								st.sName AS status, 
+								ce.sNombre AS Empresa, 
+								ctt.sNombre AS TipoTramite, 
+								cts.sNombre AS TipoServicio, 
+								ccd.sNombre AS ClaveDocumento, 
+								cc.sNombre AS Corresponsalia, 
+								st.sHtml AS htmlStatus 
+						FROM ope_recepciones_documentos rd 
+						INNER JOIN _status  st ON st.skStatus = rd.skStatus 
+						INNER JOIN cat_empresas  ce ON ce.skEmpresa = rd.skEmpresa 
+						INNER JOIN cat_tipos_tramites  ctt ON ctt.skTipoTramite = rd.skTipoTramite 
+						INNER JOIN cat_tipos_servicios  cts ON cts.skTipoServicio = rd.skTipoServicio 
+						INNER JOIN cat_claves_documentos  ccd ON ccd.skClaveDocumento = rd.skClaveDocumento 
+						INNER JOIN cat_corresponsalias  cc ON cc.skCorresponsalia = rd.skCorresponsalia 
+						INNER JOIN _status ON _status.skStatus = rd.skStatus 
+						WHERE 1=1 ";
+                
+                if(!empty($this->solreva['sReferencia'])){
+                    $sql .=" AND rd.sReferencia = '".$this->solreva['sReferencia']."'";
+                }
+                
+                
+               
+				//echo $sql;die();
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+
+	            
             }
 			
 	
