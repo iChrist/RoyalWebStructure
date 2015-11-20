@@ -473,6 +473,7 @@
                     $this->load_model('cof','cof');
                     $cof = new Cof_Model();
                     $this->data['status'] = $cof->read_status();
+                    
                       
                     	 if(isset($_POST['axn']))
                     	 {
