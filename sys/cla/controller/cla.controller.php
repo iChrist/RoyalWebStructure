@@ -6,24 +6,25 @@
 
         public function __construct(){
                 parent::__construct();
+                ini_set('memory_limit', '-1');
         }
 
         public function __destruct(){
 
         }
         // VERIFICA SI LA EMPRESA EXISTE O INSERTA NUEVA //
-        private function exist_empresa(&$emp , &$sNombre){
+        private function exist_empresa($emp , &$sNombre){
             $emp->empresas['sNombre'] = $sNombre;
             $empresa = $emp->read_like_empresas();
             if(!$empresa){
-                /*$emp->empresas['skEmpresa'] = substr(md5(microtime()), 1, 32);
+                $emp->empresas['skEmpresa'] = substr(md5(microtime()), 1, 32);
                 $emp->empresas['skTipoEmpresa'] = 'N/A';
                 $emp->empresas['skStatus'] = 'AC';
                 $skEmpresa = $emp->create_empresas();
                 if(!$skEmpresa){
                     return false;
                 }
-                return array($skEmpresa,$sNombre);*/
+                return array($skEmpresa,$sNombre);
                 return false;
             }else{
                 $rEmpresa = $empresa->fetch_row();
@@ -77,7 +78,7 @@
                 // VERIFICAMOS SI EXISTE EMPRESA O LA CREAMOS //
                     if($sEmpresa != trim(utf8_decode($v['CLIENTE'])," ")){
                         $cliente = trim(utf8_decode($v['CLIENTE'])," ");
-                        $empresa = $this->exist_empresa($emp , $cliente);
+                        $empresa = $this->exist_empresa(new Emp_Model() , $cliente);
                         if(!$empresa){ 
                             $flag = false;
                             $message = "No est&aacute; registrado el cliente: '".$cliente."' en el sistema.";
@@ -330,6 +331,16 @@
             $this->data['message'] = '';
             $this->data['response'] = true;
             $this->data['datos'] = false;
+            if(isset($_GET['axn'])){
+                switch ($_GET['axn']) {
+                    case 'excel':
+                        $this->claara_excel();
+                        break;
+                    case 'pdf':
+                        $this->claara_pdf();
+                        break;
+                }
+            }
             if(isset($_POST['axn'])){
                 if($_POST['axn']=='json_excel'){
                     $dFechaImportacion = date('Y-m-d H:i:s');
@@ -372,14 +383,15 @@
                     return true;
                 }
             }
-            if(isset($_GET['p2'])){
+
+            /*if(isset($_GET['p2'])){
                 $imagePath = isset($_GET['url']) ? $_GET['url'] : FALSE;
                 $width = isset($_GET['width']) ? $_GET['width'] : 100;
                 $height = isset($_GET['height']) ? $_GET['height'] : 100;	
                 $imagePath = 'http://vision7.com.mx/admin/files/banner/1737876976dannycapdam.jpg';
                 Core_Functions::thumbnailImage($imagePath,$width,$height);
                 return true;
-            }
+            }*/
 
             if($_POST){
                 //exit('<pre>'.print_r($_POST,1).'</pre>');
@@ -690,23 +702,146 @@
             $this->data['message'] = '';
             $this->data['response'] = true;
             $this->data['datos'] = false;
+            if(isset($_POST)){
+                if(!empty($_FILES['zip']['name'])){
+                    $arrayZips = array("application/zip", "application/x-zip", "application/x-zip-compressed");
+                    if(in_array($_FILES['zip']['type'] , $arrayZips)){
+                        //exit('<pre>'.print_r($_FILES['zip'],1).'</pre>');
+                        if( !$this->claara_zip() ){
+                            $this->data['response'] = false;
+                            $this->data['message'] = 'Hubo un error al subir el archivo ZIP.';
+                            header('Content-Type: application/json');
+                            echo json_encode($this->data);
+                            return false;    
+                        }
+                        $this->data['response'] = true;
+                        $this->data['message'] = 'Archivo ZIP subido con &eacute;xito.';
+                        header('Content-Type: application/json');
+                        echo json_encode($this->data);
+                        return true; 
+                    }else{
+                        $this->data['response'] = false;
+                        $this->data['message'] = 'El archivo que intenta subir no es un archivo ZIP.';
+                        header('Content-Type: application/json');
+                        echo json_encode($this->data);
+                        return false;
+                    }
+                }
+            }
             $this->load_view('claara-fotos', $this->data);
             return true; 
         }
         
         public function claara_excel(){
-            $path = SYS_PATH.$_GET['sysModule'].'/files/fotos.zip';
-            $zip = new ZipArchive();
-            $res = $zip->open($path.'fotos.zip');
-            //var_dump($res);
-            if ($res) {
-                $zip->extractTo($path);
-                $zip->close();
-                echo 'SI '.$path;
-            }else{
-                echo 'NO '.$path;
+            //echo date('H:i:s') . ' Current memory usage: ' . (memory_get_usage(true) / 1024 / 1024) . " MB <hr>" . PHP_EOL;
+            ini_set('memory_limit', '-1');
+            if(isset($_GET['p1'])){
+                $this->cla['skClasificacion'] = $_GET['p1'];
             }
-            return true;
+            $this->data['data'] = parent::read_equal_cla();           
+            if(!$this->data['data']){
+                return false;
+            }
+            require_once(CORE_PATH."assets/PHPExcel/Classes/PHPExcel/IOFactory.php");
+            $objReader = PHPExcel_IOFactory::createReader('Excel2007');
+            $objPHPExcel = $objReader->load(SYS_PATH."cla/files/claara/tplClasificacionMercancias.xlsx");
+            $i = 2;
+            while($row = $this->data['data']->fetch_assoc()){
+                $this->claMer['skClasificacion'] = $row['skClasificacion'];
+                /*if(
+                       isset($_POST['sFraccion'])
+                    || isset($_POST['sNumeroParte'])
+                ){
+                   $this->claMer['skClasificacion'] = NULL; 
+                }*/
+                $this->claMer['skStatus'] = 'AC';
+                $claMer = $this->read_like_claMer();
+                if(!$claMer){
+                    break;
+                }
+                while($rClaMer = $claMer->fetch_assoc()){
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $i, utf8_encode($row['sReferencia']));
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $i, utf8_encode($row['sPedimento']));
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $i, utf8_encode($row['empresa']));
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $i, utf8_encode($rClaMer['sFraccion']));
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $i, utf8_encode($rClaMer['sDescripcion']));
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $i, utf8_encode($rClaMer['sDescripcionIngles']));
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $i, utf8_encode($rClaMer['sNumeroParte']));
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $i, utf8_encode($row['dFechaPrevio']));
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $i, utf8_encode($row['sFactura']));
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(9, $i, utf8_encode($row['usersCreacion']));
+                    $i++;   
+                }
+            }
+
+            // Redirect output to a client’s web browser (Excel2007)
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="Reporte.xlsx"');
+            header('Cache-Control: max-age=0');
+            // If you're serving to IE 9, then the following may be needed
+            header('Cache-Control: max-age=1');
+
+            // If you're serving to IE over SSL, then the following may be needed
+            header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+            header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+            header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+            header ('Pragma: public'); // HTTP/1.0
+
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+            //$objWriter->save(SYS_PATH.'cla/files/claara/Reporte.xlsx');
+            $objWriter->save('php://output');
+
+
+            //exit('<pre>'.print_r($records,1).'</pre>');
+            exit;
+        }
+        
+        public function claara_zip(){
+            $destination = SYS_PATH.$_GET['sysModule'].'/files/claara/files/';
+            if( !move_uploaded_file($_FILES['zip']['tmp_name'] , $destination.$_FILES['zip']['name']) ){
+                return false;
+            }
+            $path = $destination.$_FILES['zip']['name'];
+
+            $zip = new ZipArchive;
+            if ($zip->open($path) === true) {
+                for($i = 0; $i < $zip->numFiles; $i++) {
+                    $filename = $zip->getNameIndex($i);
+                    $fileinfo = pathinfo($filename);
+
+                    $pos = strrpos($filename, ".jpg");
+                    if ($pos === false){
+                        $type = " --> FOLDER ";
+                        $f = explode('/',$filename);
+                        //var_dump($f);
+                        foreach($f AS $k => &$v){
+                            
+                            if(!empty($v)){
+                                if(!is_dir($destination.$v)){
+                                    //fotos
+                                    //F1
+                                    //NA
+                                    //P1
+                                    //F2
+                                    mkdir($destination.$v, 0777, true);      
+                                }
+                            }
+                        }
+                    }else{
+                        $type = " --> IMG ";
+                    }
+
+                    //echo $filename." --> ".$fileinfo['basename'].$type."<br>";
+                    //copy("zip://".$path."#".$filename , $destination.$fileinfo['basename']);
+                }                  
+                $zip->close();
+                unlink($path);
+                //exit('SUCCESS');
+                return true;
+            }else{
+                //exit('ERROR');
+                return false;
+            }
         }
         
         private function claara_pdf(){

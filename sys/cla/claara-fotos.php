@@ -34,7 +34,15 @@
                 <input type="file" name="zip" id="zip" />
             </div>
         </div>
-        
+
+        <div class="form-group">
+            <div class="col-md-4">
+                <button onclick="_save(this,'http://royalweb.com.mx/RoyalWebStructure/sys/cla/claara-fotos/numero-de-parte/');" class="btn btn-sm btn-default" type="button"><i class="fa fa-floppy-o"></i> Guardar</button>
+            </div>
+        </div>
+
+    </div>
+</form>
         <div class="portlet">
             <div class="portlet-title">
                 <div class="caption">
@@ -44,64 +52,63 @@
                     <a class="collapse" href="javascript:;"></a>
                 </div>
             </div>
-        <div class="portlet-body form">
-            
-            <div class="row" style="padding:10px;">
-                <div class="col-xs-4 col-md-3">
-                    <a href="#" class="thumbnail">
-                        <img src="http://localhost/RoyalWebStructure/core/assets/img/logo.png" alt="GyA">
-                        <div class="caption"><center><p>FOTO X</p></center></div>
-                    </a>
-                </div>
-                <div class="col-xs-4 col-md-3">
-                    <a href="#" class="thumbnail">
-                        <img src="http://localhost/RoyalWebStructure/core/assets/img/logo.png" alt="GyA">
-                        <div class="caption"><center><p>FOTO X</p></center></div>
-                    </a>
-                </div>
-                <div class="col-xs-4 col-md-3">
-                    <a href="#" class="thumbnail">
-                        <img src="http://localhost/RoyalWebStructure/core/assets/img/logo.png" alt="GyA">
-                        <div class="caption"><center><p>FOTO X</p></center></div>
-                    </a>
-                </div>
-                <div class="col-xs-4 col-md-3">
-                    <a href="#" class="thumbnail">
-                        <img src="http://localhost/RoyalWebStructure/core/assets/img/logo.png" alt="GyA">
-                        <div class="caption"><center><p>FOTO X</p></center></div>
-                    </a>
+            <div class="portlet-body form">
+                
+                <div class="row" style="padding:10px;">
+                    <div class="col-xs-4 col-md-3">
+                        <a href="#" class="thumbnail">
+                            <img src="http://localhost/RoyalWebStructure/core/assets/img/logo.png" alt="GyA">
+                            <div class="caption"><center><p>FOTO X</p></center></div>
+                        </a>
+                    </div>
+                    <div class="col-xs-4 col-md-3">
+                        <a href="#" class="thumbnail">
+                            <img src="http://localhost/RoyalWebStructure/core/assets/img/logo.png" alt="GyA">
+                            <div class="caption"><center><p>FOTO X</p></center></div>
+                        </a>
+                    </div>
+                    <div class="col-xs-4 col-md-3">
+                        <a href="#" class="thumbnail">
+                            <img src="http://localhost/RoyalWebStructure/core/assets/img/logo.png" alt="GyA">
+                            <div class="caption"><center><p>FOTO X</p></center></div>
+                        </a>
+                    </div>
+                    <div class="col-xs-4 col-md-3">
+                        <a href="#" class="thumbnail">
+                            <img src="http://localhost/RoyalWebStructure/core/assets/img/logo.png" alt="GyA">
+                            <div class="caption"><center><p>FOTO X</p></center></div>
+                        </a>
+                    </div>
+                    
+                    <div class="col-xs-4 col-md-3">
+                        <a href="#" class="thumbnail">
+                            <img src="http://localhost/RoyalWebStructure/core/assets/img/logo.png" alt="GyA">
+                            <div class="caption"><center><p>FOTO X</p></center></div>
+                        </a>
+                    </div>
+                    <div class="col-xs-4 col-md-3">
+                        <a href="#" class="thumbnail">
+                            <img src="http://localhost/RoyalWebStructure/core/assets/img/logo.png" alt="GyA">
+                            <div class="caption"><center><p>FOTO X</p></center></div>
+                        </a>
+                    </div>
+                    <div class="col-xs-4 col-md-3">
+                        <a href="#" class="thumbnail">
+                            <img src="http://localhost/RoyalWebStructure/core/assets/img/logo.png" alt="GyA">
+                            <div class="caption"><center><p>FOTO X</p></center></div>
+                        </a>
+                    </div>
+                    <div class="col-xs-4 col-md-3">
+                        <a href="#" class="thumbnail">
+                            <img src="http://localhost/RoyalWebStructure/core/assets/img/logo.png" alt="GyA">
+                            <div class="caption"><center><p>FOTO X</p></center></div>
+                        </a>
+                    </div>
                 </div>
                 
-                <div class="col-xs-4 col-md-3">
-                    <a href="#" class="thumbnail">
-                        <img src="http://localhost/RoyalWebStructure/core/assets/img/logo.png" alt="GyA">
-                        <div class="caption"><center><p>FOTO X</p></center></div>
-                    </a>
-                </div>
-                <div class="col-xs-4 col-md-3">
-                    <a href="#" class="thumbnail">
-                        <img src="http://localhost/RoyalWebStructure/core/assets/img/logo.png" alt="GyA">
-                        <div class="caption"><center><p>FOTO X</p></center></div>
-                    </a>
-                </div>
-                <div class="col-xs-4 col-md-3">
-                    <a href="#" class="thumbnail">
-                        <img src="http://localhost/RoyalWebStructure/core/assets/img/logo.png" alt="GyA">
-                        <div class="caption"><center><p>FOTO X</p></center></div>
-                    </a>
-                </div>
-                <div class="col-xs-4 col-md-3">
-                    <a href="#" class="thumbnail">
-                        <img src="http://localhost/RoyalWebStructure/core/assets/img/logo.png" alt="GyA">
-                        <div class="caption"><center><p>FOTO X</p></center></div>
-                    </a>
-                </div>
             </div>
-            
         </div>
-        </div>
-    </div>
-</form>
+
 <div class="clearfix"></div>
 
 <script type="text/javascript">

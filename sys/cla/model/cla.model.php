@@ -200,9 +200,13 @@
         }
         
         public function read_equal_cla(){
-            $sql = "SELECT cla.*, emp.sNombre AS empresa, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
+            /*$sql = "SELECT cla.*, emp.sNombre AS empresa, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
                 . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
-                . "INNER JOIN cat_empresas AS emp ON emp.skEmpresa = cla.skEmpresa WHERE 1=1 ";
+                . "INNER JOIN cat_empresas AS emp ON emp.skEmpresa = cla.skEmpresa WHERE 1=1 ";*/
+            $sql = "SELECT cla.*, emp.sNombre AS empresa, CONCAT(u.sName,' ',u.sLastNamePaternal,' ',u.sLastNameMaternal) AS usersCreacion, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
+                . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
+                . "INNER JOIN cat_empresas AS emp ON emp.skEmpresa = cla.skEmpresa "
+                . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE 1=1 ";
             if(!empty($this->cla['skClasificacion'])){
                 $sql .=" AND (cla.skClasificacion = '".$this->cla['skClasificacion']."') ";
             }

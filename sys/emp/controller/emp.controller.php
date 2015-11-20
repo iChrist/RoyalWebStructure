@@ -436,12 +436,12 @@
                                  while($row = $this->data['data']->fetch_assoc()){
                                     $actions = $this->printModulesButtons(2,array($row['skEmpresa']));
                                     array_push($records['data'], array(
-                                        $row['sRFC'],
-                                        $row['sNombre'],
-                                        $row['sNombreCorto'],
-                                        $row['tipoEmpresa'],
-                                        $row['dFechaCreacion'],
-                                        $row['htmlStatus'],
+                                        utf8_encode($row['sRFC']),
+                                        utf8_encode($row['sNombre']),
+                                        utf8_encode($row['sNombreCorto']),
+                                        utf8_encode($row['tipoEmpresa']),
+                                        utf8_encode($row['dFechaCreacion']),
+                                        utf8_encode($row['htmlStatus']),
                                          !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.$actions['sHtml'].'</ul></div>' : ''
                                     ));
                                 }

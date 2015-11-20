@@ -36,7 +36,7 @@
                 <select name="skEmpresa" class="form-control form-filter input-sm">
                     <option value="">- Cliente -</option>
                 <?php
-                    if(isset($data['empresas'])){
+                    if($data['empresas']){
                         while($row = $data['empresas']->fetch_assoc()){
                 ?>
                     <option value="<?php echo $row['skEmpresa']; ?>" <?php if(isset($data['data']['clasificacion']['skEmpresa'])){if($data['data']['clasificacion']['skEmpresa']==$row['skEmpresa']){ echo 'selected';}} ?>>
