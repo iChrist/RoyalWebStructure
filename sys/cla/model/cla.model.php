@@ -458,6 +458,25 @@
         }
         
         /* cat_clasificacionMercancia_archivos */
+	/*public function create_claMerArc(){
+            $sql = "INSERT INTO cat_clasificacionMercancia_archivos 
+            (skClasificacionMercanciaArchivo,skClasificacionMercancia,sArchivo,skStatus) 
+            VALUES 
+            ('".$this->claMerArc['skClasificacionMercanciaArchivo']."',
+            '".$this->claMerArc['skClasificacionMercancia']."',
+            '".$this->claMerArc['sArchivo']."',
+            '".$this->claMerArc['skStatus']."'
+            )";
+            $result = $this->db->query($sql);
+            if($result){
+                return $this->claMerArc['skClasificacionMercanciaArchivo'];
+            }else{
+                return false;
+            }
+        }*/
+
+
+
         public function read_equal_claMerArc(){
             $sql = "SELECT claMerArc.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacionMercancia_archivos AS claMerArc "
                 . "INNER JOIN _status ON _status.skStatus = claMerArc.skStatus WHERE 1=1 ";

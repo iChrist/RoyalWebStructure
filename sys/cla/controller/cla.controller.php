@@ -918,7 +918,13 @@
                         // type --> IMG //
                         //echo "zip://".$path."#".$filename.' => '.$destination.$fileinfo['basename'].'<br><br>';
 			$filenameOut = str_replace($ignore.'/', '', $filename);
+			//echo $filenameOut.' --> ';
+			$fraNum = explode('/',$filenameOut);
+			//echo '<pre>'.print_r($fraNum,1).'</pre>';
+			/*if(parent::claara_create){
                         copy("zip://".$path."#".$filename , $destination.$filenameOut);
+			}*/
+			copy("zip://".$path."#".$filename , $destination.$filenameOut);
                     }
                     $folder = null;
                     //copy("zip://".$path."#".$filename , $destination.$fileinfo['basename']);
