@@ -773,10 +773,6 @@
                         	echo json_encode($this->data);
 	                        return true;
 				break;
-                                case 'getFoto':
-                                    $this->getFoto();
-                                    return true;
-                                break;
 			}//switch
 		}
                 if(!empty($_FILES['zip']['name'])){
@@ -804,6 +800,14 @@
                     }
                 }
             }
+		if(isset($_GET['axn'])){
+			switch ($_GET['axn']) {
+		            	case 'getFoto':
+					$this->claara_getFoto();
+                                    return true;
+				break;
+			}
+		}
 		$this->data['fracciones'] = parent::read_fracciones();
 		$this->data['numerosParte'] = parent::read_numerosParte();
             $this->load_view('claara-fotos', $this->data);

@@ -124,8 +124,8 @@
 		        toastr.success(data['message'], "Notificaci&oacute;n");
                         var cad = '';
                         $.each(data['datos'], function(k,v){
-                            console.log(getUrl+'?axn=getFoto&url='+v);
-                            //cad +='<div class="col-xs-4 col-md-3"><a href="#" class="thumbnail"><img src="'+getUrl+'?axn=getFoto&url='+v+'" alt="GyA"><div class="caption"><center><p>FOTO X</p></center></div></a></div>';
+                            //console.log(getUrl+'?axn=getFoto&url='+v);
+                            cad +='<div class="col-xs-4 col-md-3"><a href="#" class="thumbnail"><img src="'+getUrl+'?axn=getFoto&url='+v+'" alt="GyA"><div class="caption"><center><p>FOTO X</p></center></div></a></div>';
                         });
                         $("#imgClasificacion").html(cad);
 		    }else{
