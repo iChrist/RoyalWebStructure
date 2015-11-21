@@ -706,36 +706,12 @@
 		if(isset($_POST['axn'])){
 			switch ($_POST['axn']) {
 		            	case 'buscarFotos':
-				/*$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/F1/';
-				$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/F1/P1/';				
-				$this->data['datos'] = array();				
-				foreach(glob($path.'*') as $filename){//echo $filename.' ==> ';
-					if(is_dir($filename)){
-						echo $filename.' ==> ';
-						foreach(glob($filename.'/'.'*') as $filename2){ 
-							//echo basename($filename2).' -- >';
-							array_push($this->data['datos'], basename($filename2));			
-						}					
-					}else{
-						//echo basename($filename) . "  --> ";
-						array_push($this->data['datos'], basename($filename));					
-					}
-				}
-				return true;
-				exit;*/
-				if(!empty($_POST['sFraccion'])){
-					$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/'.$_POST['sFraccion'].'/';
-				}
-				if(!empty($_POST['sNumeroParte'])){
-					$path .= $_POST['sNumeroParte'].'/';
-				}
-				$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/';				
+				/*$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/';				
 				//$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/F1/';
-				//$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/F1/P1/';
-				if(isset($path)){
-					// FOREACH //
-					$this->data['datos'] = array();					
-					foreach(glob($path.'*') as $filename){//echo $filename.' ==> ';
+				//$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/F1/P1/';				
+				$this->data['datos'] = array();
+				foreach(glob($path.'*') as $file){					
+					foreach(glob($file.'/'.'*') as $filename){//echo $filename.' ==> ';
 						if(is_dir($filename)){
 							//echo $filename.' ==> ';
 							foreach(glob($filename.'/'.'*') as $filename2){ 
@@ -747,6 +723,37 @@
 							array_push($this->data['datos'], basename($filename));					
 						}
 					}
+				}
+				header('Content-Type: application/json');
+	                        	echo json_encode($this->data['datos']);
+				return true;
+				exit;*/
+				if(!empty($_POST['sFraccion'])){
+					$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/'.$_POST['sFraccion'].'/';
+				}
+				if(!empty($_POST['sNumeroParte'])){
+					$path .= $_POST['sNumeroParte'].'/';
+				}
+				//$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/';				
+				//$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/F1/';
+				//$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/F1/P1/';
+				if(isset($path)){
+					// FOREACH //
+					$this->data['datos'] = array();					
+					foreach(glob($path.'*') as $file){					
+					foreach(glob($file.'/'.'*') as $filename){//echo $filename.' ==> ';
+						if(is_dir($filename)){
+							//echo $filename.' ==> ';
+							foreach(glob($filename.'/'.'*') as $filename2){ 
+								//echo basename($filename2).' -- >';
+								array_push($this->data['datos'], basename($filename2));			
+							}					
+						}else{
+							//echo basename($filename) . "  --> ";
+							array_push($this->data['datos'], basename($filename));					
+						}
+					}
+				}
 				}
 				if(!$this->data['datos']){
 					$this->data['message'] = 'No hay fotografias para este registro.';
