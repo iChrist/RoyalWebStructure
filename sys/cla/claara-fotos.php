@@ -87,51 +87,8 @@
     </div>
 </form>
 
-                <div class="row" style="padding:10px;">
+                <div class="row" id="imgClasificacion" style="padding:10px;">
                     <!--<div class="col-xs-4 col-md-3">
-                        <a href="#" class="thumbnail">
-                            <img src="http://localhost/RoyalWebStructure/core/assets/img/logo.png" alt="GyA">
-                            <div class="caption"><center><p>FOTO X</p></center></div>
-                        </a>
-                    </div>
-                    <div class="col-xs-4 col-md-3">
-                        <a href="#" class="thumbnail">
-                            <img src="http://localhost/RoyalWebStructure/core/assets/img/logo.png" alt="GyA">
-                            <div class="caption"><center><p>FOTO X</p></center></div>
-                        </a>
-                    </div>
-                    <div class="col-xs-4 col-md-3">
-                        <a href="#" class="thumbnail">
-                            <img src="http://localhost/RoyalWebStructure/core/assets/img/logo.png" alt="GyA">
-                            <div class="caption"><center><p>FOTO X</p></center></div>
-                        </a>
-                    </div>
-                    <div class="col-xs-4 col-md-3">
-                        <a href="#" class="thumbnail">
-                            <img src="http://localhost/RoyalWebStructure/core/assets/img/logo.png" alt="GyA">
-                            <div class="caption"><center><p>FOTO X</p></center></div>
-                        </a>
-                    </div>
-                    
-                    <div class="col-xs-4 col-md-3">
-                        <a href="#" class="thumbnail">
-                            <img src="http://localhost/RoyalWebStructure/core/assets/img/logo.png" alt="GyA">
-                            <div class="caption"><center><p>FOTO X</p></center></div>
-                        </a>
-                    </div>
-                    <div class="col-xs-4 col-md-3">
-                        <a href="#" class="thumbnail">
-                            <img src="http://localhost/RoyalWebStructure/core/assets/img/logo.png" alt="GyA">
-                            <div class="caption"><center><p>FOTO X</p></center></div>
-                        </a>
-                    </div>
-                    <div class="col-xs-4 col-md-3">
-                        <a href="#" class="thumbnail">
-                            <img src="http://localhost/RoyalWebStructure/core/assets/img/logo.png" alt="GyA">
-                            <div class="caption"><center><p>FOTO X</p></center></div>
-                        </a>
-                    </div>
-                    <div class="col-xs-4 col-md-3">
                         <a href="#" class="thumbnail">
                             <img src="http://localhost/RoyalWebStructure/core/assets/img/logo.png" alt="GyA">
                             <div class="caption"><center><p>FOTO X</p></center></div>
@@ -145,6 +102,7 @@
 <div class="clearfix"></div>
 
 <script type="text/javascript">
+        var getUrl = '<?php echo SYS_URL.$_SERVER['REQUEST_URI']; ?>';
 	function buscarFotos(obj){
 		obj.disabled = true;
 	    $('.alert-danger').hide();
@@ -164,6 +122,12 @@
 		success: function(data){
 		    if(data['response']){
 		        toastr.success(data['message'], "Notificaci&oacute;n");
+                        var cad = '';
+                        $.each(data['datos'], function(k,v){
+                            console.log(getUrl+'?axn=getFoto&url='+v);
+                            //cad +='<div class="col-xs-4 col-md-3"><a href="#" class="thumbnail"><img src="'+getUrl+'?axn=getFoto&url='+v+'" alt="GyA"><div class="caption"><center><p>FOTO X</p></center></div></a></div>';
+                        });
+                        $("#imgClasificacion").html(cad);
 		    }else{
 		        toastr.error(data['message'], "Notificaci&oacute;n");
 		    }

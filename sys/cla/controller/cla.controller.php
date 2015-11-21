@@ -728,10 +728,11 @@
 	                        	echo json_encode($this->data['datos']);
 				return true;
 				exit;*/
+				$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/';
 				if(!empty($_POST['sFraccion'])){
-					$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/'.$_POST['sFraccion'].'/';
+					$path .= $_POST['sFraccion'].'/';
 				}
-				if(!empty($_POST['sNumeroParte'])){
+				if(!empty($_POST['sFraccion']) && !empty($_POST['sNumeroParte'])){
 					$path .= $_POST['sNumeroParte'].'/';
 				}
 				//$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/';				
@@ -745,12 +746,17 @@
 						if(is_dir($filename)){
 							//echo $filename.' ==> ';
 							foreach(glob($filename.'/'.'*') as $filename2){ 
+                                                                //echo $filename2.' -- >';
+                                                                $pathImg = explode($_GET['sysProject'],$filename2);
+                                                                $filename2 = SYS_URL.$_GET['sysProject'].$pathImg[1];
 								//echo basename($filename2).' -- >';
-								array_push($this->data['datos'], basename($filename2));			
+								array_push($this->data['datos'], $filename2);			
 							}					
 						}else{
+                                                        $pathImg = explode($_GET['sysProject'],$filename);
+                                                        $filename = SYS_URL.$_GET['sysProject'].$pathImg[1];
 							//echo basename($filename) . "  --> ";
-							array_push($this->data['datos'], basename($filename));					
+							array_push($this->data['datos'], $filename);					
 						}
 					}
 				}
@@ -767,6 +773,10 @@
                         	echo json_encode($this->data);
 	                        return true;
 				break;
+                                case 'getFoto':
+                                    $this->getFoto();
+                                    return true;
+                                break;
 			}//switch
 		}
                 if(!empty($_FILES['zip']['name'])){
@@ -917,6 +927,21 @@
                 //exit('ERROR');
                 return false;
             }
+        }
+        
+        public function claara_getFoto(){
+            $imagePath = isset($_GET['url']) ? $_GET['url'] : FALSE;
+            $width = isset($_GET['width']) ? $_GET['width'] : 250;
+            $height = isset($_GET['height']) ? $_GET['height'] : 250;
+            if( !$imagePath ){
+                return  false;
+            }
+            $imagick = new \Imagick($imagePath);
+            $imagick->setbackgroundcolor('rgb(64, 64, 64)');
+            $imagick->thumbnailImage($width, $height, true, false);
+            header("Content-Type: image/jpg");
+            echo $imagick->getImageBlob();
+            return true;
         }
         
         private function claara_pdf(){
