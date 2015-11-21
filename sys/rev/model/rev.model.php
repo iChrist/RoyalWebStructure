@@ -64,11 +64,14 @@
                 $sql = "	SELECT 	sd.*, 
 								us.sName AS Tramitador, 
 								usr.sName AS UsuarioEjecutivo, 
-								ce.sNombre AS EmpresaNaviera
+								ce.sNombre AS EmpresaNaviera,
+								cs.sNombre AS Estatus,
+								cs.sIcono As Icono
  						FROM ope_solicitud_revalidacion sd 
  						INNER JOIN cat_empresas  ce ON ce.skEmpresa = sd.skEmpresaNaviera 
  						INNER JOIN _users  us ON us.skUsers = sd.skUsuarioTramitador
  						INNER JOIN _users  usr ON usr.skUsers = sd.skUsuarioRevalidacion
+ 						INNER JOIN cat_estatus  cs ON cs.skEstatus = sd.skEstatusRevalidacion
  						WHERE 1=1 ";
                 if(!empty($this->solreva['skSolicitudRevalidacion'])){
                     $sql .=" AND sd.skSolicitudRevalidacion = '".$this->solreva['skSolicitudRevalidacion']."'";
@@ -117,7 +120,7 @@
   								'".$this->solreva['sObservaciones']."',
  								'".$this->solreva['skEmpresaNaviera']."',
 								'".$this->solreva['skUsuarioTramitador']."',
-								'RE',
+								'".$this->solreva['skEstatusRevalidacion']."',
  								CURRENT_TIMESTAMP(),
 								'".$_SESSION['session']['skUsers']."')";
 				//echo $sql;die();
@@ -129,48 +132,6 @@
                 }
             }
             
-            public function update_recepciondocumentos(){
-				
-                $sql = "UPDATE ope_recepciones_documentos SET ";
-                if(!empty($this->recepciondocumentos['sReferencia'])){
-                    $sql .=" sReferencia = '".$this->recepciondocumentos['sReferencia']."' ,";
-                }
-                if(!empty($this->recepciondocumentos['sPedimento'])){
-                    $sql .=" sPedimento = '".$this->recepciondocumentos['sPedimento']."' ,";
-                }
-				if(!empty($this->recepciondocumentos['sMercancia'])){
-                    $sql .=" sMercancia = '".$this->recepciondocumentos['sMercancia']."' ,";
-                }
-				if(!empty($this->recepciondocumentos['sObservaciones'])){
-                    $sql .=" sObservaciones = '".$this->recepciondocumentos['sObservaciones']."' ,";
-                }
-				
-                if(!empty($this->recepciondocumentos['skEmpresa'])){
-                    $sql .=" skEmpresa = '".$this->recepciondocumentos['skEmpresa']."' ,";
-                }
-                if(!empty($this->recepciondocumentos['skTipoTramite'])){
-                    $sql .=" skTipoTramite = '".$this->recepciondocumentos['skTipoTramite']."' ,";
-                }
-				if(!empty($this->recepciondocumentos['skTipoServicio'])){
-                    $sql .=" skTipoServicio = '".$this->recepciondocumentos['skTipoServicio']."' ,";
-                }
-				if(!empty($this->recepciondocumentos['skClaveDocumento'])){
-                    $sql .=" skClaveDocumento = '".$this->recepciondocumentos['skClaveDocumento']."' ,";
-                }
-				if(!empty($this->recepciondocumentos['skCorresponsalia'])){
-                    $sql .=" skCorresponsalia = '".$this->recepciondocumentos['skCorresponsalia']."' ,";
-                }
-                     $sql .=" dFechaModificacion = CURRENT_TIMESTAMP() ,";
-                    $sql .=" skUsersModificacion = '".$_SESSION['session']['skUsers']."'";
-                $sql .= "  WHERE skRecepcionDocumento = '".$this->recepciondocumentos['skRecepcionDocumento']."' LIMIT 1";
-				//echo $sql;die();
-                $result = $this->db->query($sql);
-                if($result){
-                    return $this->recepciondocumentos['skRecepcionDocumento'];
-                }else{
-                    return false;
-                }
-            }
             
             public function read_referencia(){
 	            $sql = "	SELECT 	rd.*, 
@@ -209,10 +170,26 @@
 
 	            
             }
+            
+            public function read_estatus(){
+	            $sql = "	SELECT 	*  FROM cat_estatus ";
+  				//echo $sql;die();
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+
+	            
+            }
+
 			
 	
 			
-			 /* COMIENZA MODULO  JCBB*/
+			 /* COMIENZA MODULO  LAVA*/
 		   
 		   
 	}
