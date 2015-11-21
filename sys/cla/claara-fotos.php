@@ -6,28 +6,6 @@
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data"> 
     <div class="form-body">
         <div class="form-group">
-            <label class="control-label col-md-2">Fracci&oacute;n
-            </label>
-            <div class="col-md-4">
-                <div class="input-icon right">
-                    <i class="fa"></i>
-                    <input type="text" name="sFraccion" id="sFraccion" class="form-control" placeholder="Fracci&oacute;n">
-                </div>
-            </div>
-        </div>
-        
-        <div class="form-group">
-            <label class="control-label col-md-2">N&uacute;mero de parte
-            </label>
-            <div class="col-md-4">
-                <div class="input-icon right">
-                    <i class="fa"></i>
-                    <input type="text" name="sNumeroParte" id="sNumeroParte" class="form-control" placeholder="N&uacute;mero de parte">
-                </div>
-            </div>
-        </div>
-        
-        <div class="form-group">
             <label class="control-label col-md-2">Archivo ZIP
             </label>
             <div class="col-md-4">
@@ -54,8 +32,63 @@
             </div>
             <div class="portlet-body form">
                 
+		<form id="buscarFotos" method="post" class="form-horizontal" role="form" enctype="multipart/form-data"> 
+    <div class="form-body">
+	<input type="hidden" name="axn" value="buscarFotos">
+        <div class="form-group">
+            <label class="control-label col-md-2">Fracci&oacute;n
+            </label>
+            <div class="col-md-4">
+                <select name="sFraccion" class="form-control form-filter input-sm">
+                    <option value="">- Fraccion -</option>
+                <?php
+                    if($data['fracciones']){
+                        while($row = $data['fracciones']->fetch_assoc()){
+                ?>
+                    <option value="<?php echo $row['sFraccion']; ?>">
+                                <?php echo utf8_encode($row['sFraccion']); ?>
+                            </option>
+                <?php
+                        }//ENDIF
+                    }//ENDWHILE
+                ?>
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="control-label col-md-2">N&uacute;mero de parte
+            </label>
+            <div class="col-md-4">
+                <select name="sNumeroParte" class="form-control form-filter input-sm">
+                    <option value="">- N&uacute;mero de parte -</option>
+                <?php
+                    if($data['numerosParte']){
+                        while($row = $data['numerosParte']->fetch_assoc()){
+                ?>
+                    <option value="<?php echo $row['sNumeroParte']; ?>">
+                                <?php echo utf8_encode($row['sNumeroParte']); ?>
+                            </option>
+                <?php
+                        }//ENDIF
+                    }//ENDWHILE
+                ?>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+<label class="control-label col-md-2"></label>
+            <div class="col-md-4">
+                <a href="javascript:;" class="btn btn-sm btn-default" onclick="buscarFotos(this);"><i class="fa fa-search"></i> Buscar</a>
+            </div>
+        </div>
+
+    </div>
+</form>
+
                 <div class="row" style="padding:10px;">
-                    <div class="col-xs-4 col-md-3">
+                    <!--<div class="col-xs-4 col-md-3">
                         <a href="#" class="thumbnail">
                             <img src="http://localhost/RoyalWebStructure/core/assets/img/logo.png" alt="GyA">
                             <div class="caption"><center><p>FOTO X</p></center></div>
@@ -103,7 +136,7 @@
                             <img src="http://localhost/RoyalWebStructure/core/assets/img/logo.png" alt="GyA">
                             <div class="caption"><center><p>FOTO X</p></center></div>
                         </a>
-                    </div>
+                    </div>!-->
                 </div>
                 
             </div>
@@ -112,8 +145,34 @@
 <div class="clearfix"></div>
 
 <script type="text/javascript">
+	function buscarFotos(obj){
+		obj.disabled = true;
+	    $('.alert-danger').hide();
+	    $('.alert-success').show();
+	    $('.page-title-loading').css('display','inline');
+	    var formdata = false;
+	    if (window.FormData) {
+		formdata = new FormData($("#buscarFotos")[0]);
+	    }
+		$.ajax({
+		type: "POST",
+		url: "",
+		data: formdata,
+		cache: false,
+		contentType: false,
+		processData: false,
+		success: function(data){
+		    if(data['response']){
+		        toastr.success(data['message'], "Notificaci&oacute;n");
+		    }else{
+		        toastr.error(data['message'], "Notificaci&oacute;n");
+		    }
+		    $('.page-title-loading').css('display','none');
+		    obj.disabled = false;
+		}
+	    });
+	}
     $(document).ready(function(){
-        
         /* VALIDATIONS */
         isValid = $("#_save").validate({
             errorElement: 'span', //default input error message container
@@ -121,10 +180,7 @@
             focusInvalid: false, // do not focus the last invalid input
             ignore: "",
             rules:{
-                sFraccion:{
-                    required: false
-                },
-                sNumeroParte:{
+                zip:{
                     required: false
                 }
             },
@@ -164,10 +220,7 @@
                 icon.removeClass("fa-warning").addClass("fa-check");
             },
             messages:{
-                sFraccion:{
-                    required: "Campo obligatorio."
-                },
-                sNumeroParte:{
+                zip:{
                     required: "Campo obligatorio."
                 }
             }
