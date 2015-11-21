@@ -18,7 +18,7 @@
             $empresa = $emp->read_like_empresas();
             if(!$empresa){
                 $emp->empresas['skEmpresa'] = substr(md5(microtime()), 1, 32);
-                $emp->empresas['skTipoEmpresa'] = 'CLIE';
+                $emp->empresas['skTipoEmpresa'] = 'N/A';
                 $emp->empresas['skStatus'] = 'AC';
                 $skEmpresa = $emp->create_empresas();
                 if(!$skEmpresa){
@@ -703,6 +703,72 @@
             $this->data['response'] = true;
             $this->data['datos'] = false;
             if(isset($_POST)){
+		if(isset($_POST['axn'])){
+			switch ($_POST['axn']) {
+		            	case 'buscarFotos':
+				/*$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/';				
+				//$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/F1/';
+				//$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/F1/P1/';				
+				$this->data['datos'] = array();
+				foreach(glob($path.'*') as $file){					
+					foreach(glob($file.'/'.'*') as $filename){//echo $filename.' ==> ';
+						if(is_dir($filename)){
+							//echo $filename.' ==> ';
+							foreach(glob($filename.'/'.'*') as $filename2){ 
+								//echo basename($filename2).' -- >';
+								array_push($this->data['datos'], basename($filename2));			
+							}					
+						}else{
+							//echo basename($filename) . "  --> ";
+							array_push($this->data['datos'], basename($filename));					
+						}
+					}
+				}
+				header('Content-Type: application/json');
+	                        	echo json_encode($this->data['datos']);
+				return true;
+				exit;*/
+				if(!empty($_POST['sFraccion'])){
+					$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/'.$_POST['sFraccion'].'/';
+				}
+				if(!empty($_POST['sNumeroParte'])){
+					$path .= $_POST['sNumeroParte'].'/';
+				}
+				//$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/';				
+				//$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/F1/';
+				//$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/F1/P1/';
+				if(isset($path)){
+					// FOREACH //
+					$this->data['datos'] = array();					
+					foreach(glob($path.'*') as $file){					
+					foreach(glob($file.'/'.'*') as $filename){//echo $filename.' ==> ';
+						if(is_dir($filename)){
+							//echo $filename.' ==> ';
+							foreach(glob($filename.'/'.'*') as $filename2){ 
+								//echo basename($filename2).' -- >';
+								array_push($this->data['datos'], basename($filename2));			
+							}					
+						}else{
+							//echo basename($filename) . "  --> ";
+							array_push($this->data['datos'], basename($filename));					
+						}
+					}
+				}
+				}
+				if(!$this->data['datos']){
+					$this->data['message'] = 'No hay fotografias para este registro.';
+					$this->data['response'] = false;
+					header('Content-Type: application/json');
+	                        	echo json_encode($this->data);
+	                        	return false;
+				}
+				$this->data['message'] = 'Fotografias obtenidas.';
+				header('Content-Type: application/json');
+                        	echo json_encode($this->data);
+	                        return true;
+				break;
+			}//switch
+		}
                 if(!empty($_FILES['zip']['name'])){
                     $arrayZips = array("application/zip", "application/x-zip", "application/x-zip-compressed");
                     if(in_array($_FILES['zip']['type'] , $arrayZips)){
@@ -728,6 +794,8 @@
                     }
                 }
             }
+		$this->data['fracciones'] = parent::read_fracciones();
+		$this->data['numerosParte'] = parent::read_numerosParte();
             $this->load_view('claara-fotos', $this->data);
             return true; 
         }
@@ -802,36 +870,43 @@
                 return false;
             }
             $path = $destination.$_FILES['zip']['name'];
-
+            //$path = $destination.'fotos.zip';
+            $folder = null;
             $zip = new ZipArchive;
             if ($zip->open($path) === true) {
                 for($i = 0; $i < $zip->numFiles; $i++) {
                     $filename = $zip->getNameIndex($i);
                     $fileinfo = pathinfo($filename);
-
                     $pos = strrpos($filename, ".jpg");
                     if ($pos === false){
-                        $type = " --> FOLDER ";
+                        // type --> FOLDER //
                         $f = explode('/',$filename);
-                        //var_dump($f);
+                        $ignore = $f[0];
                         foreach($f AS $k => &$v){
                             
                             if(!empty($v)){
-                                if(!is_dir($destination.$v)){
-                                    //fotos
-                                    //F1
-                                    //NA
-                                    //P1
-                                    //F2
-                                    mkdir($destination.$v, 0777, true);      
-                                }
+                            	if($folder === null){
+                            		$folder = $v;
+                            	}else{
+	                            	$folder .= '/'.$v;
+                            	}
+				if($folder === $ignore){
+					$folder=null;				
+				}else{
+		                        if(!is_dir($destination.$folder)){
+		                            mkdir($destination.$folder, 0777, true);      
+		                        }
+				}
                             }
                         }
+                        
                     }else{
-                        $type = " --> IMG ";
+                        // type --> IMG //
+                        //echo "zip://".$path."#".$filename.' => '.$destination.$fileinfo['basename'].'<br><br>';
+			$filenameOut = str_replace($ignore.'/', '', $filename);
+                        copy("zip://".$path."#".$filename , $destination.$filenameOut);
                     }
-
-                    //echo $filename." --> ".$fileinfo['basename'].$type."<br>";
+                    $folder = null;
                     //copy("zip://".$path."#".$filename , $destination.$fileinfo['basename']);
                 }                  
                 $zip->close();

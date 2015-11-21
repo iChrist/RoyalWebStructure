@@ -154,7 +154,7 @@
                 }
             }
         }
-        
+
         public function read_like_cla(){
             $sql = "SELECT cla.*, emp.sNombre AS empresa, CONCAT(u.sName,' ',u.sLastNamePaternal,' ',u.sLastNameMaternal) AS usersCreacion, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
                 . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
@@ -308,7 +308,30 @@
             }
         }
         
-        /* cat_clasificacionMercancia */
+/* cat_clasificacionMercancia */
+	public function read_fracciones(){
+	$sql = "SELECT sFraccion FROM cat_clasificacionMercancia AS claMer WHERE claMer.skStatus = 'AC' ";
+	$result = $this->db->query($sql);
+            if($result){
+                if($result->num_rows > 0){
+                    return $result;
+                }else{
+                    return false;
+                }
+            }
+	}
+
+	public function read_numerosParte(){
+	$sql = "SELECT sNumeroParte FROM cat_clasificacionMercancia AS claMer WHERE claMer.skStatus = 'AC' ";
+	$result = $this->db->query($sql);
+            if($result){
+                if($result->num_rows > 0){
+                    return $result;
+                }else{
+                    return false;
+                }
+            }
+	}
         public function read_like_claMer(){
             $sql = "SELECT claMer.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacionMercancia AS claMer "
                 . "INNER JOIN _status ON _status.skStatus = claMer.skStatus WHERE 1=1 ";
