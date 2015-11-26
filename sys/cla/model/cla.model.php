@@ -52,7 +52,8 @@
         
         public $claMerArc = array(
              'skClasificacionMercanciaArchivo' => NULL
-            ,'skClasificacionMercancia' => NULL
+            ,'sFraccion' => NULL
+            ,'sNumeroParte' => NULL
             ,'sArchivo' => NULL
             ,'skStatus' => NULL
             ,'limit'        =>  NULL
@@ -457,34 +458,45 @@
             }
         }
         
-        /* cat_clasificacionMercancia_archivos */
-	/*public function create_claMerArc(){
-            $sql = "INSERT INTO cat_clasificacionMercancia_archivos 
-            (skClasificacionMercanciaArchivo,skClasificacionMercancia,sArchivo,skStatus) 
-            VALUES 
-            ('".$this->claMerArc['skClasificacionMercanciaArchivo']."',
-            '".$this->claMerArc['skClasificacionMercancia']."',
-            '".$this->claMerArc['sArchivo']."',
-            '".$this->claMerArc['skStatus']."'
-            )";
-            $result = $this->db->query($sql);
-            if($result){
-                return $this->claMerArc['skClasificacionMercanciaArchivo'];
-            }else{
-                return false;
-            }
-        }*/
-
-
-
+/* cat_clasificacionMercancia_archivos */
         public function read_equal_claMerArc(){
             $sql = "SELECT claMerArc.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacionMercancia_archivos AS claMerArc "
                 . "INNER JOIN _status ON _status.skStatus = claMerArc.skStatus WHERE 1=1 ";
             if(!empty($this->claMerArc['skClasificacionMercanciaArchivo'])){
                 $sql .=" AND (claMerArc.skClasificacionMercanciaArchivo = '".$this->claMerArc['skClasificacionMercanciaArchivo']."') ";
             }
-            if(!empty($this->claMerArc['skClasificacionMercancia'])){
-                $sql .=" AND (claMerArc.skClasificacionMercancia = '".$this->claMerArc['skClasificacionMercancia']."') ";
+            if(!empty($this->claMerArc['sFraccion'])){
+                $sql .=" AND (claMerArc.sFraccion = '".$this->claMerArc['sFraccion']."') ";
+            }
+            if(!empty($this->claMerArc['sNumeroParte'])){
+                $sql .=" AND (claMerArc.sNumeroParte = '".$this->claMerArc['sNumeroParte']."') ";
+            }
+            if(!empty($this->claMerArc['sArchivo'])){
+                $sql .=" AND (claMerArc.sArchivo = '".$this->claMerArc['sArchivo']."') ";
+            }
+            if(!empty($this->claMerArc['skStatus'])){
+                $sql .=" AND (claMerArc.skStatus = '".$this->claMerArc['skStatus']."') ";
+            }
+            $result = $this->db->query($sql);
+            if($result){
+                if($result->num_rows > 0){
+                    return $result;
+                }else{
+                    return false;
+                }
+            }
+        }
+        public function read_like_claMerArc(){
+            $sql = "SELECT claMerArc.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacionMercancia_archivos AS claMerArc "
+                . "INNER JOIN _status ON _status.skStatus = claMerArc.skStatus WHERE 1=1 ";
+            if(!empty($this->claMerArc['sFraccion'])){
+                $sql .=" AND (claMerArc.sFraccion like '%".$this->claMerArc['sFraccion']."%') ";
+            }
+            if(!empty($this->claMerArc['sNumeroParte'])){
+                $sql .=" AND (claMerArc.sNumeroParte like '%".$this->claMerArc['sNumeroParte']."%') ";
+            }
+            if(!empty($this->claMerArc['sArchivo'])){
+                $sql .=" AND (claMerArc.sArchivo like '%".$this->claMerArc['sArchivo']."%') ";
             }
             if(!empty($this->claMerArc['skStatus'])){
                 $sql .=" AND (claMerArc.skStatus = '".$this->claMerArc['skStatus']."') ";
@@ -499,17 +511,33 @@
             }
         }
         public function create_claMerArc(){
-            $sql = "INSERT INTO cat_clasificacionMercancia 
-            (skClasificacionMercanciaArchivo,skClasificacionMercancia,sArchivo,skStatus) 
+            $sql = "INSERT INTO cat_clasificacionMercancia_archivos 
+            (skClasificacionMercanciaArchivo,sFraccion,sNumeroParte,sArchivo,skStatus) 
             VALUES 
             ('".$this->claMerArc['skClasificacionMercanciaArchivo']."',
-            '".$this->claMerArc['skClasificacionMercancia']."',
+            '".$this->claMerArc['sFraccion']."',
+            '".$this->claMerArc['sNumeroParte']."',
             '".$this->claMerArc['sArchivo']."',
             '".$this->claMerArc['skStatus']."'
             )";
             $result = $this->db->query($sql);
             if($result){
                 return $this->claMerArc['skClasificacionMercanciaArchivo'];
+            }else{
+                return false;
+            }
+        }
+
+        public function update_claMerArc(){
+            $sql = "UPDATE cat_clasificacionMercancia_archivos SET "
+                . "sFraccion = '".$this->claMer['sFraccion']."',"
+                . "sNumeroParte = '".$this->claMer['sNumeroParte']."',"
+                . "sArchivo = '".$this->claMer['sArchivo']."',"
+                . "skStatus = '".$this->claMer['skStatus']."',"
+                . " WHERE skClasificacionMercanciaArchivo = '".$this->claMer['skClasificacionMercanciaArchivo']."';";
+            $result = $this->db->query($sql);
+            if($result){
+                return $this->cla['skClasificacion'];
             }else{
                 return false;
             }

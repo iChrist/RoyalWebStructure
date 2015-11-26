@@ -904,28 +904,42 @@
                             	}else{
 	                            	$folder .= '/'.$v;
                             	}
-				if($folder === $ignore){
-					$folder=null;				
-				}else{
-		                        if(!is_dir($destination.$folder)){
-		                            mkdir($destination.$folder, 0777, true);      
-		                        }
-				}
+                				if($folder === $ignore){
+                					$folder=null;				
+                				}else{
+                                    //echo $folder.' => ';
+                                    if(!is_dir($destination.$folder)){
+                                        mkdir($destination.$folder, 0777, true);
+                                    }
+                				}
                             }
-                        }
+                        }// foreach
                         
                     }else{
                         // type --> IMG //
                         //echo "zip://".$path."#".$filename.' => '.$destination.$fileinfo['basename'].'<br><br>';
-			$filenameOut = str_replace($ignore.'/', '', $filename);
-			//echo $filenameOut.' --> ';
-			$fraNum = explode('/',$filenameOut);
-			//echo '<pre>'.print_r($fraNum,1).'</pre>';
-			/*if(parent::claara_create){
-                        copy("zip://".$path."#".$filename , $destination.$filenameOut);
-			}*/
-			copy("zip://".$path."#".$filename , $destination.$filenameOut);
-                    }
+            			$filenameOut = str_replace($ignore.'/', '', $filename);
+            			//echo $filenameOut.' --> ';
+            			$fraNum = explode('/',$filenameOut);
+            			//echo '<pre>'.print_r($fraNum,1).'</pre>';
+            			/*if(parent::claara_create){
+                                    copy("zip://".$path."#".$filename , $destination.$filenameOut);
+            			}*/
+            			
+                        //echo $destination.$filenameOut.' --> ';
+                        if(!file_exists($destination.$filenameOut)){
+                            copy("zip://".$path."#".$filename , $destination.$filenameOut);
+                            $arc = explode('/',$filenameOut);
+                            $this->claMerArc['skClasificacionMercanciaArchivo'] = substr(md5(microtime()), 1, 32);
+                            $this->claMerArc['sFraccion'] = $arc[0];
+                            $this->claMerArc['sNumeroParte'] = $arc[1]; 
+                            $this->claMerArc['sArchivo'] = $arc[2];
+                            $this->claMerArc['skStatus'] = 'AC';
+                            $this->create_claMerArc();
+                        }
+
+
+                }
                     $folder = null;
                     //copy("zip://".$path."#".$filename , $destination.$fileinfo['basename']);
                 }                  
