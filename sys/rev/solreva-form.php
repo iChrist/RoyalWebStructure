@@ -134,25 +134,21 @@ echo "</pre>";
             errorClass: 'help-block', // default input error message class
             focusInvalid: false, // do not focus the last invalid input
             ignore: "",
-            rules:{
-              
-                sReferencia:{
+              rules:{
+              sReferencia:{
                     required: true,
                      remote: {
                       url: "",
                       type: "post",
-                      
                       data: {
                         sReferencia: function (){return $( "#sReferencia" ).val();},
-                        axn: "retornarDatos",
-                        skEmpresa:  function (){
-                        // return $( "#dvDatos" ).removeClass("hidden");
-                       // return  $("#lbCliente").html("Hamburg");
-                          }
+                        axn: "validarReferencia",
+                        skSolicitudRevalidacion:  function (){return $( "#skSolicitudRevalidacion" ).val();}
                       }
                     }
                     
                 },
+
 				sObservaciones:{
                     required: true
                 },
