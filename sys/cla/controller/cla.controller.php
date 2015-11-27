@@ -749,12 +749,16 @@
                                                                 //echo $filename2.' -- >';
                                                                 $pathImg = explode($_GET['sysProject'],$filename2);
                                                                 $filename2 = SYS_URL.$_GET['sysProject'].$pathImg[1];
+                                                                $filename2 = SYS_URL.SYS_PROJECT.'/'.$_GET['sysModule'].'/claara-fotos/fotografias/?axn=getFoto&url='.SYS_URL.SYS_PROJECT.$pathImg[1];
+                                                                $filename2 = SYS_URL.SYS_PROJECT.$pathImg[1];
 								//echo basename($filename2).' -- >';
 								array_push($this->data['datos'], $filename2);			
 							}					
 						}else{
                                                         $pathImg = explode($_GET['sysProject'],$filename);
                                                         $filename = SYS_URL.$_GET['sysProject'].$pathImg[1];
+                                                        $filename = SYS_URL.SYS_PROJECT.'/'.$_GET['sysModule'].'/claara-fotos/fotografias/?axn=getFoto&url='.SYS_URL.SYS_PROJECT.$pathImg[1];
+                                                        $filename = SYS_URL.SYS_PROJECT.$pathImg[1];
 							//echo basename($filename) . "  --> ";
 							array_push($this->data['datos'], $filename);					
 						}
@@ -808,8 +812,10 @@
 				break;
 			}
 		}
-		$this->data['fracciones'] = parent::read_fracciones();
-		$this->data['numerosParte'] = parent::read_numerosParte();
+		/*$this->data['fracciones'] = parent::read_fracciones();
+		$this->data['numerosParte'] = parent::read_numerosParte();*/
+        $this->data['fracciones'] = parent::read_fraccionesNumerosParte();
+        $this->data['numerosParte'] = parent::read_fraccionesNumerosParte();
             $this->load_view('claara-fotos', $this->data);
             return true; 
         }
