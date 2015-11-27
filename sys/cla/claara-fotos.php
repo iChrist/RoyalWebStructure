@@ -13,11 +13,11 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
             <div class="col-md-4">
                 <button onclick="_save(this,'http://royalweb.com.mx/RoyalWebStructure/sys/cla/claara-fotos/numero-de-parte/');" class="btn btn-sm btn-default" type="button"><i class="fa fa-floppy-o"></i> Guardar</button>
             </div>
-        </div>
+        </div>!-->
 
     </div>
 </form>
@@ -39,8 +39,8 @@
             <label class="control-label col-md-2">Fracci&oacute;n
             </label>
             <div class="col-md-4">
-                <select name="sFraccion" class="form-control form-filter input-sm">
-                    <option value="">- Fraccion -</option>
+                <select name="sFraccion" id="sFraccion" class="form-control form-filter input-sm">
+                    <option value="">- Todos -</option>
                 <?php
                     if($data['fracciones']){
                         while($row = $data['fracciones']->fetch_assoc()){
@@ -60,10 +60,10 @@
             <label class="control-label col-md-2">N&uacute;mero de parte
             </label>
             <div class="col-md-4">
-                <select name="sNumeroParte" class="form-control form-filter input-sm">
+                <select name="sNumeroParte" id="sNumeroParte" class="form-control form-filter input-sm" disabled>
                     <option value="">- N&uacute;mero de parte -</option>
                 <?php
-                    if($data['numerosParte']){
+                    /*if($data['numerosParte']){
                         while($row = $data['numerosParte']->fetch_assoc()){
                 ?>
                     <option value="<?php echo $row['sNumeroParte']; ?>">
@@ -71,7 +71,7 @@
                             </option>
                 <?php
                         }//ENDIF
-                    }//ENDWHILE
+                    }//ENDWHILE*/
                 ?>
                 </select>
             </div>
@@ -124,9 +124,8 @@
 		        toastr.success(data['message'], "Notificaci&oacute;n");
                         var cad = '';
                         $.each(data['datos'], function(k,v){
-                            //console.log(getUrl+'?axn=getFoto&url='+v);
-                            console.log(v);
-                            cad +='<div class="col-xs-4 col-md-3"><a href="#" class="thumbnail"><img src="'+v+'" alt="GyA"><div class="caption"><center><p>FOTO X</p></center></div></a></div>';
+                            //console.log(v);
+                            cad +='<div class="col-lg-3 col-md-3 col-xs-4"><a href="'+v.sArchivo+'" class="thumbnail" target="_blank"><img src="'+v.sArchivo+'" class="col-lg-12 col-md-12 col-xs-12" alt="GyA"><div class="caption"><center><p>'+v.sFraccion+'<br>'+v.sNumeroParte+'</p></center></div></a></div>';
                         });
                         $("#imgClasificacion").html(cad);
 		    }else{
@@ -138,6 +137,20 @@
 	    });
 	}
     $(document).ready(function(){
+        // CARGAR LOS NUMEROS DE PARTE CORRESPONDIENTES A CADA FRACCION ARANCELARIA //
+        $("#sFraccion").change(function(){
+            $('.page-title-loading').css('display','inline');    
+            $.post("",{ axn : "getNumerosParte" , sFraccion : $("#sFraccion").val() }, function(data){
+                //console.log(data); 
+                var cad = '<option value="">- Todos -</option>';
+                $.each(data,function(k,v){
+                  cad += '<option value="'+v+'">'+v+'</option>'; 
+               });
+               $("#sNumeroParte").html(cad);
+               $("#sNumeroParte").prop('disabled', false);
+               $('.page-title-loading').css('display','none');
+            });
+        });
         /* VALIDATIONS */
         isValid = $("#_save").validate({
             errorElement: 'span', //default input error message container
@@ -146,7 +159,7 @@
             ignore: "",
             rules:{
                 zip:{
-                    required: false
+                    required: true
                 }
             },
             invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar              

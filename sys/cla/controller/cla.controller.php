@@ -706,28 +706,6 @@
 		if(isset($_POST['axn'])){
 			switch ($_POST['axn']) {
 		            	case 'buscarFotos':
-				/*$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/';				
-				//$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/F1/';
-				//$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/F1/P1/';				
-				$this->data['datos'] = array();
-				foreach(glob($path.'*') as $file){					
-					foreach(glob($file.'/'.'*') as $filename){//echo $filename.' ==> ';
-						if(is_dir($filename)){
-							//echo $filename.' ==> ';
-							foreach(glob($filename.'/'.'*') as $filename2){ 
-								//echo basename($filename2).' -- >';
-								array_push($this->data['datos'], basename($filename2));			
-							}					
-						}else{
-							//echo basename($filename) . "  --> ";
-							array_push($this->data['datos'], basename($filename));					
-						}
-					}
-				}
-				header('Content-Type: application/json');
-	                        	echo json_encode($this->data['datos']);
-				return true;
-				exit;*/
 				$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/';
 				if(!empty($_POST['sFraccion'])){
 					$path .= $_POST['sFraccion'].'/';
@@ -741,29 +719,56 @@
 				if(isset($path)){
 					// FOREACH //
 					$this->data['datos'] = array();					
-					foreach(glob($path.'*') as $file){					
-					foreach(glob($file.'/'.'*') as $filename){//echo $filename.' ==> ';
-						if(is_dir($filename)){
-							//echo $filename.' ==> ';
-							foreach(glob($filename.'/'.'*') as $filename2){ 
-                                                                //echo $filename2.' -- >';
-                                                                $pathImg = explode($_GET['sysProject'],$filename2);
-                                                                $filename2 = SYS_URL.$_GET['sysProject'].$pathImg[1];
-                                                                $filename2 = SYS_URL.SYS_PROJECT.'/'.$_GET['sysModule'].'/claara-fotos/fotografias/?axn=getFoto&url='.SYS_URL.SYS_PROJECT.$pathImg[1];
-                                                                $filename2 = SYS_URL.SYS_PROJECT.$pathImg[1];
-								//echo basename($filename2).' -- >';
-								array_push($this->data['datos'], $filename2);			
-							}					
-						}else{
-                                                        $pathImg = explode($_GET['sysProject'],$filename);
-                                                        $filename = SYS_URL.$_GET['sysProject'].$pathImg[1];
-                                                        $filename = SYS_URL.SYS_PROJECT.'/'.$_GET['sysModule'].'/claara-fotos/fotografias/?axn=getFoto&url='.SYS_URL.SYS_PROJECT.$pathImg[1];
-                                                        $filename = SYS_URL.SYS_PROJECT.$pathImg[1];
-							//echo basename($filename) . "  --> ";
-							array_push($this->data['datos'], $filename);					
-						}
-					}
-				}
+					foreach(glob($path.'*') as $file){ //var_dump($file);	
+                                            if(!empty($_POST['sFraccion']) && !empty($_POST['sNumeroParte'])){
+                                                $pathImg = explode($_GET['sysProject'],$file);
+                                                $file = SYS_URL.SYS_PROJECT.$pathImg[1];
+                                                array_push($this->data['datos'], array(
+                                                    "sFraccion"=> isset($_POST['sFraccion']) ? $_POST['sFraccion'] : "",
+                                                    "sNumeroParte"=> isset($_POST['sNumeroParte']) ? $_POST['sNumeroParte'] : "",
+                                                    "sArchivo"=>$file
+                                                    )
+                                                );
+                                            }else{
+                                                foreach(glob($file.'/'.'*') as $filename){//echo $filename.' ==> ';
+                                                    if(is_dir($filename)){
+                                                            //echo $filename.' ==> ';
+                                                            foreach(glob($filename.'/'.'*') as $filename2){ 
+                                                                    //echo $filename2.' -- >';
+                                                                    $pathImg = explode($_GET['sysProject'],$filename2);
+                                                                    $filename2 = SYS_URL.$_GET['sysProject'].$pathImg[1];
+                                                                    $filename2 = SYS_URL.SYS_PROJECT.'/'.$_GET['sysModule'].'/claara-fotos/fotografias/?axn=getFoto&url='.SYS_URL.SYS_PROJECT.$pathImg[1];
+                                                                    $filename2 = SYS_URL.SYS_PROJECT.$pathImg[1];
+                                                                    //echo $pathImg[1].' -- >';
+                                                                    $fra_NumPar = explode('/cla/files/claara/files/',$pathImg[1]);
+                                                                    $fra_NumPar = explode('/',$fra_NumPar[1]);
+                                                                    //echo $fra_NumPar[0];
+                                                                    array_push($this->data['datos'], array(
+                                                                        "sFraccion"=> $fra_NumPar[0],
+                                                                        "sNumeroParte"=> $fra_NumPar[1],
+                                                                        "sArchivo"=>$filename2
+                                                                        )
+                                                                    );			
+                                                            }					
+                                                    }else{
+                                                            $pathImg = explode($_GET['sysProject'],$filename);
+                                                            $filename = SYS_URL.$_GET['sysProject'].$pathImg[1];
+                                                            $filename = SYS_URL.SYS_PROJECT.'/'.$_GET['sysModule'].'/claara-fotos/fotografias/?axn=getFoto&url='.SYS_URL.SYS_PROJECT.$pathImg[1];
+                                                            $filename = SYS_URL.SYS_PROJECT.$pathImg[1];
+                                                            //echo basename($filename) . "  --> ";
+                                                            $fra_NumPar = explode('/cla/files/claara/files/',$pathImg[1]);
+                                                            $fra_NumPar = explode('/',$fra_NumPar[1]);
+                                                            //echo $fra_NumPar[0];
+                                                            array_push($this->data['datos'], array(
+                                                                "sFraccion"=> $fra_NumPar[0],
+                                                                "sNumeroParte"=> $fra_NumPar[1],
+                                                                "sArchivo"=>$filename
+                                                                )
+                                                            );					
+                                                    }
+                                                }//endforeach
+                                            }
+                                        }
 				}
 				if(!$this->data['datos']){
 					$this->data['message'] = 'No hay fotografias para este registro.';
@@ -777,6 +782,20 @@
                         	echo json_encode($this->data);
 	                        return true;
 				break;
+                                
+                                case 'getNumerosParte':
+                                    $this->claMerArc['sFraccion'] = !empty($_POST['sFraccion']) ? $_POST['sFraccion'] : "";
+                                    $numerosParte = $this->data['numerosParte'] = parent::read_numerosParteFotos();
+                                    $data = array();
+                                    if($numerosParte){
+                                        while($row = $numerosParte->fetch_assoc()){
+                                            array_push($data,$row['sNumeroParte']);
+                                        }
+                                    }
+                                    header('Content-Type: application/json');
+                                    echo json_encode($data);
+                                    return true;
+                                break;
 			}//switch
 		}
                 if(!empty($_FILES['zip']['name'])){
@@ -812,10 +831,8 @@
 				break;
 			}
 		}
-		/*$this->data['fracciones'] = parent::read_fracciones();
-		$this->data['numerosParte'] = parent::read_numerosParte();*/
-        $this->data['fracciones'] = parent::read_fraccionesNumerosParte();
-        $this->data['numerosParte'] = parent::read_fraccionesNumerosParte();
+            $this->data['fracciones'] = parent::read_fraccionesFotos();
+            //$this->data['numerosParte'] = parent::read_numerosParteFotos();
             $this->load_view('claara-fotos', $this->data);
             return true; 
         }
