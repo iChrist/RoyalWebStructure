@@ -133,13 +133,10 @@
                     	 {
                         	switch ($_POST['axn'])
 		                        {
-		                            case "retornarDatos":
-		                                // echo 'false'; -> Email no encontrado 
-		                                // echo 'true';  -> Email encontrado
-										
+ 		                             case "validarReferencia":
+ 										
 		                                $this->solreva['sReferencia'] = htmlentities(($_POST['sReferencia']));
-		                                $this->solreva['sCliente'] = htmlentities(($_POST['sReferencia']));
- 		                                $this->data['datos']=parent::read_referencia();
+ 		                                $this->data['revalidaciones']=parent::read_referencia();
  		                                if(parent::read_referencia())
 		                                {
 		                                    echo 'true';
@@ -150,7 +147,7 @@
 		                                }
 		                                exit;
 		                            break;
-		                            
+
 		                            
 		                        }
 		                   }
@@ -204,7 +201,7 @@
 					
 					public function docume_detail(){
 					if(isset($_GET['p1'])){
-					$this->recepciondocumentos['skRecepcionDocumento'] = $_GET['p1'];
+					$this->solreva['skSolicitudRevalidacion'] = $_GET['p1'];
 					$this->data['datos'] = parent::read_recepciondocumentos();
 					}
 					$this->load_view('docume-detail', $this->data);
