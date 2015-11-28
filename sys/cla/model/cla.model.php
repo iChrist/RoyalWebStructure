@@ -55,6 +55,7 @@
             ,'sFraccion' => NULL
             ,'sNumeroParte' => NULL
             ,'sArchivo' => NULL
+            ,'sThumbnail' => NULL
             ,'skStatus' => NULL
             ,'limit'        =>  NULL
             ,'offset'       =>  NULL
@@ -155,6 +156,66 @@
                 }
             }
         }
+// FILTRADO PARA LA CLASIFICACIÓN ARANCELARIA //
+        public function read_filter_cla(){
+            $sql = "SELECT cla.*, claMer.sFraccion, claMer.sDescripcion, claMer.sDescripcionIngles, claMer.sNumeroParte, emp.sNombre AS empresa, CONCAT(u.sName,' ',u.sLastNamePaternal,' ',u.sLastNameMaternal) AS usersCreacion, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
+                . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
+                . "INNER JOIN cat_empresas AS emp ON emp.skEmpresa = cla.skEmpresa "
+                . "INNER JOIN cat_clasificacionMercancia AS claMer ON claMer.skClasificacion = cla.skClasificacion "
+                . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE 1=1 ";
+            if(!empty($this->cla['skEmpresa'])){
+                $sql .=" AND cla.skEmpresa like '%".$this->cla['skEmpresa']."%'";
+            }
+            if(!empty($this->cla['sReferencia'])){
+                $sql .=" AND cla.sReferencia like '%".$this->cla['sReferencia']."%'";
+            }
+            if(!empty($this->cla['sPedimento'])){
+                $sql .=" AND cla.sPedimento like '%".$this->cla['sPedimento']."%'";
+            }
+            if(!empty($this->cla['dFechaPrevio'])){
+                $sql .=" AND cla.dFechaPrevio like '%".$this->cla['dFechaPrevio']."%'";
+            }
+            if(!empty($this->cla['sFactura'])){
+                $sql .=" AND cla.sFactura like '%".$this->cla['sFactura']."%'";
+            }
+            if(!empty($this->cla['skStatus'])){
+                $sql .=" AND cla.skStatus like '%".$this->cla['skStatus']."%'";
+            }
+            /* COMIENZA CLAMER */
+            if(!empty($this->claMer['sFraccion'])){
+                $sql .=" AND claMer.sFraccion like '%".$this->claMer['sFraccion']."%'";
+            }
+            if(!empty($this->claMer['sDescripcion'])){
+                $sql .=" AND claMer.sDescripcion like '%".$this->claMer['sDescripcion']."%'";
+            }
+            if(!empty($this->claMer['sDescripcionIngles'])){
+                $sql .=" AND claMer.sDescripcionIngles like '%".$this->claMer['sDescripcionIngles']."%'";
+            }
+            if(!empty($this->claMer['sNumeroParte'])){
+                $sql .=" AND claMer.sNumeroParte like '%".$this->claMer['sNumeroParte']."%'";
+            }
+            /* TERMINA CLAMER */
+
+            if(!empty($this->cla['orderBy'])){
+                $sql .=" ORDER BY ".$this->cla['orderBy'];
+            }
+            if(is_int($this->cla['limit'])){
+                if(is_int($this->cla['offset'])){
+                    $sql .= " LIMIT ".$this->cla['offset']." , ".$this->cla['limit'];
+                }else{
+                    $sql .= " LIMIT ".$this->cla['limit'];
+                }
+            }
+            //echo $sql;
+            $result = $this->db->query($sql);
+            if($result){
+                if($result->num_rows > 0){
+                    return $result;
+                }else{
+                    return false;
+                }
+            }
+        }
 
         public function read_like_cla(){
             $sql = "SELECT cla.*, emp.sNombre AS empresa, CONCAT(u.sName,' ',u.sLastNamePaternal,' ',u.sLastNameMaternal) AS usersCreacion, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
@@ -189,7 +250,7 @@
                     $sql .= " LIMIT ".$this->cla['limit'];
                 }
             }
-            //exit($sql);
+            //echo $sql;
             $result = $this->db->query($sql);
             if($result){
                 if($result->num_rows > 0){
@@ -344,6 +405,7 @@
                     $sql .= " LIMIT ".$this->claMer['limit'];
                 }
             }
+            //echo $sql;
             $result = $this->db->query($sql);
             if($result){
                 if($result->num_rows > 0){
@@ -488,6 +550,9 @@
             if(!empty($this->claMerArc['sArchivo'])){
                 $sql .=" AND (claMerArc.sArchivo = '".$this->claMerArc['sArchivo']."') ";
             }
+            if(!empty($this->claMerArc['sThumbnail'])){
+                $sql .=" AND (claMerArc.sThumbnail = '".$this->claMerArc['sThumbnail']."') ";
+            }
             if(!empty($this->claMerArc['skStatus'])){
                 $sql .=" AND (claMerArc.skStatus = '".$this->claMerArc['skStatus']."') ";
             }
@@ -512,6 +577,9 @@
             if(!empty($this->claMerArc['sArchivo'])){
                 $sql .=" AND (claMerArc.sArchivo like '%".$this->claMerArc['sArchivo']."%') ";
             }
+            if(!empty($this->claMerArc['sThumbnail'])){
+                $sql .=" AND (claMerArc.sThumbnail like '%".$this->claMerArc['sThumbnail']."%') ";
+            }
             if(!empty($this->claMerArc['skStatus'])){
                 $sql .=" AND (claMerArc.skStatus = '".$this->claMerArc['skStatus']."') ";
             }
@@ -526,12 +594,13 @@
         }
         public function create_claMerArc(){
             $sql = "INSERT INTO cat_clasificacionMercancia_archivos 
-            (skClasificacionMercanciaArchivo,sFraccion,sNumeroParte,sArchivo,skStatus) 
+            (skClasificacionMercanciaArchivo,sFraccion,sNumeroParte,sArchivo,sThumbnail,skStatus) 
             VALUES 
             ('".$this->claMerArc['skClasificacionMercanciaArchivo']."',
             '".$this->claMerArc['sFraccion']."',
             '".$this->claMerArc['sNumeroParte']."',
             '".$this->claMerArc['sArchivo']."',
+            '".$this->claMerArc['sThumbnail']."',
             '".$this->claMerArc['skStatus']."'
             )";
             $result = $this->db->query($sql);
@@ -547,6 +616,7 @@
                 . "sFraccion = '".$this->claMer['sFraccion']."',"
                 . "sNumeroParte = '".$this->claMer['sNumeroParte']."',"
                 . "sArchivo = '".$this->claMer['sArchivo']."',"
+                . "sThumbnail = '".$this->claMer['sThumbnail']."',"
                 . "skStatus = '".$this->claMer['skStatus']."',"
                 . " WHERE skClasificacionMercanciaArchivo = '".$this->claMer['skClasificacionMercanciaArchivo']."';";
             $result = $this->db->query($sql);
