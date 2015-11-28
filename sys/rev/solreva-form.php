@@ -20,12 +20,13 @@ echo "</pre>";
       <label class="control-label col-md-2">Referencia <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
         <div class="input-icon right"> <i class="fa"></i>
-          <input type="text" name="sReferencia" id="sReferencia" class="form-control" placeholder="Referencia" value="<?php echo (isset($result['sReferencia'])) ? utf8_encode($result['sReferencia']) : '' ; ?>" >
+          <input type="text" name="sReferencia" id="sReferencia" class="form-control" onchange="obtenerDatos();" placeholder="Referencia" value="<?php echo (isset($result['sReferencia'])) ? utf8_encode($result['sReferencia']) : '' ; ?>" >
         </div>
       </div>
     </div>
-     <div id="dvDatos" class="hidden" >
-     <div class="form-group">
+     <div id="dvDatos">
+     
+     <!--<div class="form-group">
        
      	<label class="control-label col-md-2"><b>Cliente</b></label>
      	<div class="col-md-4">
@@ -46,7 +47,7 @@ echo "</pre>";
 	     <div class="col-md-4">
 	        <label id="lbMercancia" class="control-label col-md-2">Merca</label>
 	     </div>
-    </div>
+    </div>-->
     
      </div>
      
@@ -125,8 +126,66 @@ echo "</pre>";
   </table>
 </form>
 <script type="text/javascript">
-    var fraccion = 1;
+function obtenerDatos(){
+	  $('.page-title-loading').css('display','inline');
+	 $.post("",{ axn : "obtenerDatos" , sReferencia : $("#sReferencia").val() }, function(data){
+                console.log(data); 
+                
+                  if(data['response']){
+                  alert(1);
+                   alert(data['datos']['sReferencia']);
+                  }
+                   
+                var cad = 'aaaa';
+                /*$.each(data,function(k,v){
+                  cad += '<option value="'+v+'">'+v+'</option>'; 
+               });*/
+               $("#dvDatos").html(cad);
+               /*$("#sNumeroParte").html(cad);
+               $("#sNumeroParte").prop('disabled', false);*/
+               $('.page-title-loading').css('display','none');
+            });
+            
+		//obj.disabled = true;
+	   /* $('.alert-danger').hide();
+	    $('.alert-success').show();*/
+	  
+	   /* var formdata = false;
+	    if (window.FormData) {
+		formdata = new FormData($("#obtenerDatos")[0]);
+	    }
+		$.ajax({
+		type: "POST",
+		url: "",
+		data: formdata,
+ 		cache: false,
+		contentType: false,
+		processData: false,
+		success: function(data){
+ 		    if(data['response']){
+ 		      // toastr.success(data['message'], "Notificaci&oacute;n");
+                        var cad = '';
+                        alert(1);
+                        $.each(data['datos'], function(k,v){
+                        alert(2);
+                            //console.log(getUrl+'?axn=getFoto&url='+v);
+                            console.log(v);
+                            cad +='aaaaaaaaaa';
+                        });
+                        $("#dvDatos").html(cad);
+		    }else{
+		        toastr.error(data['message'], "No se Encuentra la Referencia");
+		    }
+		    $('.page-title-loading').css('display','none');
+		   // obj.disabled = false;
+		}
+	    });*/
+	}
+
     $(document).ready(function(){
+    
+    
+    
     
         /* VALIDATIONS */
         isValid = $("#_save").validate({

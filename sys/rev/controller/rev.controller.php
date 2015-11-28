@@ -114,6 +114,8 @@
 					return true;
 					}
 					
+					
+					
 					public function solreva_form(){ 
 					$this->data['message'] = '';
 					$this->data['response'] = true;
@@ -128,7 +130,47 @@
 					$this->load_model('cof','cof');
 					$objUsuarios = new Cof_Model();
 					$this->data['tramitadores'] = $objUsuarios->read_user();
+					if(isset($_POST['axn']))
+                    	 {
+                        	switch ($_POST['axn'])
+		                        {           
+		                              case "obtenerDatos":
+  		                                $this->solreva['sReferencia'] = htmlentities(($_POST['sReferencia']));
+ 		                                 $this->data['data']=parent::read_referencia();
+ 		                              // if(parent::read_referencia())
+		                               // {
+		                                //    $this->data['response'] = true;
+		                                    while($row = $this->data['data']->fetch_assoc()){
+												$actions = $this->printModulesButtons(2,array($row['skSolicitudRevalidacion']));
+												array_push($records['data'], array(
+													 utf8_encode($row['Icono'])
+													 ,utf8_encode($row['sReferencia'])
+						 							,utf8_encode($row['EmpresaNaviera'])
+													,utf8_encode($row['Tramitador'])
+						   							,utf8_encode($row['sObservaciones'])
+													,utf8_encode($row['dFechaRevalidacion'])
+													, !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
+												));
+											}
 					
+ 											header('Content-Type: application/json');
+											echo json_encode($result);
+											return true;
+		                               /* }
+		                                else
+		                                {
+		                                	 
+		                                    echo 'false';
+		                                }*/
+		                                
+		                               return true;
+		                            break;
+
+		                            
+		                        }
+		                   }
+
+
 					if(isset($_POST['axn']))
                     	 {
                         	switch ($_POST['axn'])
@@ -145,13 +187,11 @@
 		                                {
 		                                    echo 'false';
 		                                }
-		                                exit;
+		                               return true;
 		                            break;
-
-		                            
-		                        }
-		                   }
-					
+		                            }
+		               }
+		                					
  					if($_POST){
 					//exit('</pre>'.print_r($_POST,1).'</pre>');
 					$this->solreva['skSolicitudRevalidacion'] = !empty($_POST['skSolicitudRevalidacion']) ? $_POST['skSolicitudRevalidacion'] : substr(md5(microtime()), 1, 32);
