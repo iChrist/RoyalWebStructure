@@ -125,7 +125,7 @@
                         var cad = '';
                         $.each(data['datos'], function(k,v){
                             //console.log(v);
-                            cad +='<div class="col-lg-3 col-md-3 col-xs-4"><a href="'+v.sArchivo+'" class="thumbnail" target="_blank"><img src="'+v.sArchivo+'" class="col-lg-12 col-md-12 col-xs-12" alt="GyA"><div class="caption"><center><p>'+v.sFraccion+'<br>'+v.sNumeroParte+'</p></center></div></a></div>';
+                            cad +='<div class="col-lg-3 col-md-3 col-xs-4"><a href="'+v.sArchivo+'" class="thumbnail" target="_blank"><img src="'+v.sThumbnail+'" class="col-lg-12 col-md-12 col-xs-12" alt="GyA"><div class="caption"><center><p>'+v.sFraccion+'<br>'+v.sNumeroParte+'</p></center></div></a></div>';
                         });
                         $("#imgClasificacion").html(cad);
 		    }else{

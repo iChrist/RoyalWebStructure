@@ -247,7 +247,8 @@
                         
                         $this->cla['limit'] = $records['limit'];
                         $this->cla['offset'] = $records['offset'];
-                        $this->data['data'] = parent::read_like_cla();
+                        //$this->data['data'] = parent::read_like_cla();
+                        $this->data['data'] = parent::read_filter_cla();
                         
                         if(!$this->data['data']){
                             header('Content-Type: application/json');
@@ -256,6 +257,32 @@
                         }
                         //exit('<pre>'.print_r($records['data'],1).'</pre>');
                         $i = 0;
+                        while($row = $this->data['data']->fetch_assoc()){
+                                $actions = $this->printModulesButtons(2,array($row['skClasificacion']));
+                                $records['data'][$i] = array(
+                                 utf8_encode($row['sReferencia']) // REFERENCIA
+                                ,utf8_encode($row['sPedimento']) // PEDIMENTO
+                                ,utf8_encode($row['empresa']) // EMPRESA (CLIENTE)
+                                
+                                ,utf8_encode($row['sFraccion']) // FRACCIÓN
+                                ,utf8_encode($row['sDescripcion']) // DESCRIPCIÓN
+                                ,utf8_encode($row['sDescripcionIngles']) // DESCIPCIÓN INGLÉS
+                                ,utf8_encode($row['sNumeroParte']) // NUMERO DE PARTE (MODELO)
+                                
+                                ,utf8_encode($row['dFechaPrevio']) // FECHA PREVIO
+                                ,utf8_encode($row['sFactura']) // FACTURA
+                                ,utf8_encode($row['usersCreacion']) // usersCreacion
+                                
+                                ,utf8_encode($row['htmlStatus']) // STATUS
+                                , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
+                                
+                                );
+                                
+                             $i++;   
+                        }
+
+
+                        /*$i = 0;
                         while($row = $this->data['data']->fetch_assoc()){
                             $actions = $this->printModulesButtons(2,array($row['skClasificacion']));
                             $this->claMer['skClasificacion'] = $row['skClasificacion'];
@@ -299,7 +326,7 @@
                                 
                              $i++;   
                             }
-                        }
+                        }*/
                         //exit('<pre>'.print_r($records,1).'</pre>');
                         header('Content-Type: application/json');
                         echo json_encode($records);
@@ -709,16 +736,29 @@
 				$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/';
 				if(!empty($_POST['sFraccion'])){
 					$path .= $_POST['sFraccion'].'/';
+                    $this->claMerArc['sFraccion'] = $_POST['sFraccion'];
 				}
 				if(!empty($_POST['sFraccion']) && !empty($_POST['sNumeroParte'])){
 					$path .= $_POST['sNumeroParte'].'/';
+                    $this->claMerArc['sNumeroParte'] = $_POST['sNumeroParte'];
 				}
+                $this->data['datos'] = array();
+                $result = parent::read_like_claMerArc();
+                while($row = $result->fetch_assoc()){
+                    array_push($this->data['datos'], array(
+                        "sFraccion"=> $row['sFraccion'],
+                        "sNumeroParte"=> $row['sNumeroParte'],
+                        "sArchivo"=> SYS_URL.SYS_PROJECT.'/cla/files/claara/files/'.$row['sFraccion'].'/'.$row['sNumeroParte'].'/'.$row['sArchivo'],
+                        "sThumbnail"=> SYS_URL.SYS_PROJECT.'/cla/files/claara/files/'.$row['sFraccion'].'/'.$row['sNumeroParte'].'/'.$row['sThumbnail']
+                        )
+                    );
+                }
 				//$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/';				
 				//$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/F1/';
 				//$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/F1/P1/';
-				if(isset($path)){
+				/*if(isset($path)){
 					// FOREACH //
-					$this->data['datos'] = array();					
+					$this->data['datos'] = array();				
 					foreach(glob($path.'*') as $file){ //var_dump($file);	
                                             if(!empty($_POST['sFraccion']) && !empty($_POST['sNumeroParte'])){
                                                 $pathImg = explode($_GET['sysProject'],$file);
@@ -769,7 +809,7 @@
                                                 }//endforeach
                                             }
                                         }
-				}
+				}*/
 				if(!$this->data['datos']){
 					$this->data['message'] = 'No hay fotografias para este registro.';
 					$this->data['response'] = false;
@@ -966,6 +1006,7 @@
                             $this->claMerArc['sFraccion'] = $arc[0];
                             $this->claMerArc['sNumeroParte'] = $arc[1]; 
                             $this->claMerArc['sArchivo'] = $arc[2];
+                            $this->claMerArc['sThumbnail'] = 'thumbnail_'.$arc[2];
                             $this->claMerArc['skStatus'] = 'AC';
                             $this->create_claMerArc();
                         }
