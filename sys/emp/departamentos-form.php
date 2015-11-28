@@ -2,35 +2,20 @@
     if($data['datos']){
         $result = $data['datos']->fetch_assoc();
     }
-    if($data['error']){
 ?>
-        <div class="alert alert-danger display-hide" style="display: block;">
-            <button data-close="alert" class="close"></button>
-            <?php echo $data['message']; ?>
-        </div>
-<?php
-    }//ENDIF
-    if($data['success']){
-?>
-        <div class="alert alert-success display-hide" style="display: block;">
-            <button data-close="alert" class="close"></button>
-            <?php echo $data['message']; ?>
-        </div>
-<?php
-    }//ENDIF
-?>
+<form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
     <input type="hidden" name="skDepartamento"  id="skDepartamento" value="<?php echo (isset($result['skDepartamento'])) ? $result['skDepartamento'] : '' ; ?>">
     <div class="form-body">
             
         <!-- COMIENZA ALERTA DE MENSAJES DE VALIDACION -->
-        <div class="alert alert-danger display-hide">
+        <!--<div class="alert alert-danger display-hide">
             <button class="close" data-close="alert"></button>
             Usted tiene algunos errores en el formulario. Por favor, consulte m&aacute;s abajo.
         </div>
         <div class="alert alert-success display-hide">
             <button class="close" data-close="alert"></button>
             Validaci&oacute;n del formulario exitoso!
-        </div>
+        </div>!-->
         <!-- TERMINA ALERTA DE MENSAJES DE VALIDACION -->
             
         <div class="form-group">
@@ -75,34 +60,26 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-        
-        var form = $('#_save');
-        var error = $('.alert-danger', form);
-        var success = $('.alert-success', form);
-        
-        $("#_save").validate({
+        /* VALIDATIONS */
+        isValid = $("#_save").validate({
             errorElement: 'span', //default input error message container
             errorClass: 'help-block', // default input error message class
             focusInvalid: false, // do not focus the last invalid input
             ignore: "",
-            
             rules:{
                 sNombre:{
-                    required: true,
+                    required: true
                 }
             },
-            
             invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar              
-                success.hide();
-                error.show();
-                App.scrollTo(error, -200);
+                $('.alert-success').hide();
+                $('.alert-danger').show();
+                App.scrollTo($('.alert-danger'), -200);
             },
-            
             errorPlacement: function (error, element) { // hacer la colocación de error para cada tipo de entrada
                 var icon = $(element).parent('.input-icon').children('i');
                 icon.removeClass('fa-check').addClass("fa-warning");  
-                icon.attr("data-original-title", error.text()).tooltip({'container': 'body'});
-
+                icon.attr("data-original-title", $('.alert-danger').text()).tooltip({'container': 'body'});
                 if (element.parent(".input-group").size() > 0) {
                     error.insertAfter(element.parent(".input-group"));
                 } else if (element.attr("data-error-container")) { 
@@ -119,21 +96,16 @@
                     error.insertAfter(element); // Para otros insumos, sólo realizar comportamiento predeterminado (llamar messages)
                 }
             },
-            
             highlight: function (element) { // entradas de error Hightlight
-                $(element)
-                    .closest('.form-group').addClass('has-error'); // conjunto de clases de error
+                $(element).closest('.form-group').addClass('has-error'); // conjunto de clases de error
             },
-            
             unhighlight: function (element) { // revertir el cambio realizado por hightlight
             },
-            
             success: function (label, element) {
                 var icon = $(element).parent('.input-icon').children('i');
                 $(element).closest('.form-group').removeClass('has-error').addClass('has-success'); // conjunto de clases de éxito con el grupo control
                 icon.removeClass("fa-warning").addClass("fa-check");
             },
-            
             messages:{
                 sNombre:{
                     required: "Campo obligatorio."

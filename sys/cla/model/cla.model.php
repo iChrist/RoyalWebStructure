@@ -437,8 +437,26 @@
         
 /* cat_clasificacionMercancia_archivos */
         
-        public function read_fraccionesNumerosParte(){
-            $sql = "SELECT claMerArc.sFraccion, claMerArc.sNumeroParte FROM cat_clasificacionMercancia_archivos AS claMerArc WHERE claMerArc.skStatus = 'AC' ";
+        public function read_fraccionesFotos(){
+            $sql = "SELECT DISTINCT claMerArc.sFraccion FROM cat_clasificacionMercancia_archivos AS claMerArc WHERE claMerArc.skStatus = 'AC' ";
+            if(!empty($this->claMerArc['sFraccion'])){
+                $sql .=" AND (claMerArc.sFraccion = '".$this->claMerArc['sFraccion']."') ";
+            }
+            if(!empty($this->claMerArc['sNumeroParte'])){
+                $sql .=" AND (claMerArc.sNumeroParte = '".$this->claMerArc['sNumeroParte']."') ";
+            }
+            $result = $this->db->query($sql);
+            if($result){
+                if($result->num_rows > 0){
+                    return $result;
+                }else{
+                    return false;
+                }
+            }
+        }
+        
+        public function read_numerosParteFotos(){
+            $sql = "SELECT DISTINCT claMerArc.sNumeroParte FROM cat_clasificacionMercancia_archivos AS claMerArc WHERE claMerArc.skStatus = 'AC' ";
             if(!empty($this->claMerArc['sFraccion'])){
                 $sql .=" AND (claMerArc.sFraccion = '".$this->claMerArc['sFraccion']."') ";
             }
