@@ -257,8 +257,8 @@
                         }
                         //exit('<pre>'.print_r($records['data'],1).'</pre>');
                         $i = 0;
-                        while($rClaMer = $claMer->fetch_assoc()){
-                                
+                        while($row = $this->data['data']->fetch_assoc()){
+                                $actions = $this->printModulesButtons(2,array($row['skClasificacion']));
                                 $records['data'][$i] = array(
                                  utf8_encode($row['sReferencia']) // REFERENCIA
                                 ,utf8_encode($row['sPedimento']) // PEDIMENTO
@@ -282,7 +282,7 @@
                         }
 
 
-                        $i = 0;
+                        /*$i = 0;
                         while($row = $this->data['data']->fetch_assoc()){
                             $actions = $this->printModulesButtons(2,array($row['skClasificacion']));
                             $this->claMer['skClasificacion'] = $row['skClasificacion'];
@@ -326,7 +326,7 @@
                                 
                              $i++;   
                             }
-                        }
+                        }*/
                         //exit('<pre>'.print_r($records,1).'</pre>');
                         header('Content-Type: application/json');
                         echo json_encode($records);
