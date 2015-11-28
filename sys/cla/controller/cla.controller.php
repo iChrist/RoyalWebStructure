@@ -953,6 +953,15 @@
                         if(!file_exists($destination.$filenameOut)){
                             copy("zip://".$path."#".$filename , $destination.$filenameOut);
                             $arc = explode('/',$filenameOut);
+                            // Generate thumbnail //
+                            $img = SYS_URL.SYS_PROJECT.'/cla/files/claara/files/'.$filenameOut;
+                            //echo $img . ' ==> '. $destination.$arc[0].'/'.$arc[1].'/thumbnail_'.$arc[2];
+                            $imagick = new \Imagick($img);
+                            //$imagick->cropImage(400,400, 30,10);
+                            $imagick->cropThumbnailImage(150,150);
+                            $imagick->writeImage($destination.$arc[0].'/'.$arc[1].'/thumbnail_'.$arc[2]);
+
+                            // Save img in database //
                             $this->claMerArc['skClasificacionMercanciaArchivo'] = substr(md5(microtime()), 1, 32);
                             $this->claMerArc['sFraccion'] = $arc[0];
                             $this->claMerArc['sNumeroParte'] = $arc[1]; 
