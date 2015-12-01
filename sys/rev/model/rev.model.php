@@ -135,7 +135,8 @@
             
             public function read_referencia(){
 	            $sql = "	SELECT 	rd.*, 
-								st.sName AS status, 
+								st.sName AS status,
+								us.sName AS Ejecutivo,
 								ce.sNombre AS Empresa, 
 								ctt.sNombre AS TipoTramite, 
 								cts.sNombre AS TipoServicio, 
@@ -149,6 +150,7 @@
 						INNER JOIN cat_tipos_servicios  cts ON cts.skTipoServicio = rd.skTipoServicio 
 						INNER JOIN cat_claves_documentos  ccd ON ccd.skClaveDocumento = rd.skClaveDocumento 
 						INNER JOIN cat_corresponsalias  cc ON cc.skCorresponsalia = rd.skCorresponsalia 
+						INNER JOIN _users us ON us.skUsers = rd.skUsersCreacion
 						INNER JOIN _status ON _status.skStatus = rd.skStatus 
 						WHERE 1=1 ";
                 
