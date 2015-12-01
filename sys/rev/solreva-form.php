@@ -26,29 +26,7 @@ echo "</pre>";
     </div>
      <div id="dvDatos">
      
-     <!--<div class="form-group">
-       
-     	<label class="control-label col-md-2"><b>Cliente</b></label>
-     	<div class="col-md-4">
-       		 <label id="lbCliente" class="control-label col-md-2">aaaa</label>
-        </div>
-      	<label class="control-label col-md-2"><b>Servicio de</b></label>
-	     <div class="col-md-4">
-	        <label id="lbServicio" class="control-label col-md-2">Contenedor</label>
-	     </div>
-    </div>
-    <div class="form-group">
-       
-     	<label class="control-label col-md-2"><b>Ejecutivo</b></label>
-     	<div class="col-md-4">
-       		 <label id="lbEjecutivo" class="control-label col-md-2">Eje</label>
-        </div>
-      	<label class="control-label col-md-2"><b>Mercancia</b></label>
-	     <div class="col-md-4">
-	        <label id="lbMercancia" class="control-label col-md-2">Merca</label>
-	     </div>
-    </div>-->
-    
+         
      </div>
      
     <div class="form-group">
@@ -129,58 +107,43 @@ echo "</pre>";
 function obtenerDatos(){
 	  $('.page-title-loading').css('display','inline');
 	 $.post("",{ axn : "obtenerDatos" , sReferencia : $("#sReferencia").val() }, function(data){
-                console.log(data); 
+	 
+                //console.log(data.data[0][0]); 
+              //  var cad="";
+              //if(data['data']){
+              //  if(data.data[0]){    
                 
-                  if(data['response']){
-                  alert(1);
-                   alert(data['datos']['sReferencia']);
-                  }
-                   
-                var cad = 'aaaa';
-                /*$.each(data,function(k,v){
-                  cad += '<option value="'+v+'">'+v+'</option>'; 
-               });*/
-               $("#dvDatos").html(cad);
+    	var	cad='<div class="form-group">'+
+     	'<label class="control-label col-md-2"><b>Cliente</b></label>'+
+     	'<div class="col-md-4">'+
+       	'<label id="lbCliente" class="control-label">'+data.data[0][0]+'</label>'+
+        '</div>'+
+      	'<label class="control-label col-md-2"><b>Servicio de</b></label>'+
+	     '<div class="col-md-4">'+
+	       ' <label id="lbServicio" class="control-label">'+data.data[0][1]+'</label>'+
+	    ' </div>'+
+   ' </div>'+
+    '<div class="form-group">'+
+     	'<label class="control-label col-md-2"><b>Ejecutivo</b></label>'+
+     	'<div class="col-md-4">'+
+       	'	 <label id="lbEjecutivo" class="control-label">'+data.data[0][2]+'</label>'+
+       ' </div>'+
+      	'<label class="control-label col-md-2"><b>Mercancia</b></label>'+
+	    ' <div class="col-md-4">'+
+	    '    <label id="lbMercancia" class="control-label ">'+data.data[0][3]+'</label>'+
+	    ' </div>'+
+   ' </div>';
+   /*}else{
+	   cad+="";
+	   
+   }*/
+                 $("#dvDatos").html(cad);
                /*$("#sNumeroParte").html(cad);
                $("#sNumeroParte").prop('disabled', false);*/
                $('.page-title-loading').css('display','none');
             });
             
-		//obj.disabled = true;
-	   /* $('.alert-danger').hide();
-	    $('.alert-success').show();*/
-	  
-	   /* var formdata = false;
-	    if (window.FormData) {
-		formdata = new FormData($("#obtenerDatos")[0]);
-	    }
-		$.ajax({
-		type: "POST",
-		url: "",
-		data: formdata,
- 		cache: false,
-		contentType: false,
-		processData: false,
-		success: function(data){
- 		    if(data['response']){
- 		      // toastr.success(data['message'], "Notificaci&oacute;n");
-                        var cad = '';
-                        alert(1);
-                        $.each(data['datos'], function(k,v){
-                        alert(2);
-                            //console.log(getUrl+'?axn=getFoto&url='+v);
-                            console.log(v);
-                            cad +='aaaaaaaaaa';
-                        });
-                        $("#dvDatos").html(cad);
-		    }else{
-		        toastr.error(data['message'], "No se Encuentra la Referencia");
-		    }
-		    $('.page-title-loading').css('display','none');
-		   // obj.disabled = false;
-		}
-	    });*/
-	}
+			}
 
     $(document).ready(function(){
     

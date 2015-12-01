@@ -135,35 +135,30 @@
                         	switch ($_POST['axn'])
 		                        {           
 		                              case "obtenerDatos":
-  		                                $this->solreva['sReferencia'] = htmlentities(($_POST['sReferencia']));
+		                              	
+  		                                $this->solreva['sReferencia'] = htmlentities($_POST['sReferencia']);
  		                                 $this->data['data']=parent::read_referencia();
- 		                              // if(parent::read_referencia())
-		                               // {
-		                                //    $this->data['response'] = true;
-		                                    while($row = $this->data['data']->fetch_assoc()){
-												$actions = $this->printModulesButtons(2,array($row['skSolicitudRevalidacion']));
-												array_push($records['data'], array(
-													 utf8_encode($row['Icono'])
-													 ,utf8_encode($row['sReferencia'])
-						 							,utf8_encode($row['EmpresaNaviera'])
-													,utf8_encode($row['Tramitador'])
-						   							,utf8_encode($row['sObservaciones'])
-													,utf8_encode($row['dFechaRevalidacion'])
-													, !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
-												));
+ 		                                 
+ 		                                 if(!$this->data['data']){
+ 		                                 	$this->data['response'] = false;
+ 		                                 	$this->data['message'] = 'La Referencia no existe.';
+											header('Content-Type: application/json');
+											echo json_encode($this->data);
+											return false;
+										}
+										$result['data'] = array();
+ 		                                    while($row = $this->data['data']->fetch_assoc()){
+ 												array_push($result['data'], array(
+													 utf8_encode($row['Empresa'])
+													 ,utf8_encode($row['TipoServicio'])
+						 							,utf8_encode($row['Ejecutivo'])
+													,utf8_encode($row['sMercancia'])
+												)
+												);
 											}
-					
- 											header('Content-Type: application/json');
+  											header('Content-Type: application/json');
 											echo json_encode($result);
-											return true;
-		                               /* }
-		                                else
-		                                {
-		                                	 
-		                                    echo 'false';
-		                                }*/
-		                                
-		                               return true;
+ 		                               return true;
 		                            break;
 
 		                            
