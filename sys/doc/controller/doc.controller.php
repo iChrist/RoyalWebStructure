@@ -139,8 +139,21 @@
 					$this->data['tiposservicios'] = parent::read_tipos_servicios();
 					$this->data['clavedocumento'] = parent::read_clave_documento();
 					$this->data['corresponsalia'] = parent::read_corresponsalia();
+					$this->data['docTipo'] = parent::read_equal_docTipo();
 					if($_POST){
 					//exit('</pre>'.print_r($_POST,1).'</pre>');
+					//echo ('</pre>'.print_r($_FILES,1).'</pre>');
+					foreach($_FILES['skDocTipo'] AS $k=>$v){
+						if($k === 'name'){
+							//echo var_dump($k);
+							foreach($v AS $key => $val){
+								//var_dump($key);
+								// AQUI HACEMOS EL MOVE_UPLOADED_FILE //
+								//echo $_FILES['skDocTipo']['name'][$key]. ' ==> ';
+							}
+						}
+					}
+					//exit;
 					$this->recepciondocumentos['skRecepcionDocumento'] = !empty($_POST['skRecepcionDocumento']) ? $_POST['skRecepcionDocumento'] : substr(md5(microtime()), 1, 32);
 					$this->recepciondocumentos['sReferencia'] = utf8_decode($_POST['sReferencia']);
 					$this->recepciondocumentos['sPedimento'] = utf8_decode($_POST['sPedimento']);

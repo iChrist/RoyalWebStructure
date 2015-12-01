@@ -135,6 +135,21 @@ echo "</pre>";
     </div>
     
     
+    <!-- CARGAR DE rel_recepcionDoc_docTipo !-->
+    <div class="form-group">
+      <label class="control-label col-md-2">Archivos <span aria-required="true" class="required"> * </span> </label>
+      <div class="col-md-4">
+        <?php
+          if(isset($data['corresponsalia'])){
+            while($docTipo = $data['docTipo']->fetch_assoc()){
+        ?>
+              <label>Doc: <?php echo $docTipo['skDocTipo']; ?><input type="file" name="skDocTipo[<?php echo $docTipo['skDocTipo']; ?>]" /></label>
+        <?php
+            }//ENDWHILE
+          }//ENDIF
+        ?>
+      </div>
+    </div>
     
      
   </div>
