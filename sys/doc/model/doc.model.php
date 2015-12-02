@@ -87,9 +87,16 @@
                 }
             }
             /* UPDATE(DELETE) DE TIPOS DE DOCUMENTOS SUBIDOS POR CATALOGO DE TIPOS DE DOCUMENTOS */
-            public function update_recepcionDoc_docTipo(){
-            	$sql="UPDATE rel_recepcionDoc_docTipo SET skStatus = 'IN' WHERE skRecepcionDoc_docTipo = '".$this->recepcionDoc_docTipo['skRecepcionDoc_docTipo']."' ";
+            public function updateStatus_recepcionDoc_docTipo(){
+            	$sql="UPDATE rel_recepcionDoc_docTipo SET skStatus = '".$this->recepcionDoc_docTipo['skStatus']."' WHERE 1=1 ";
+                if(!empty($this->recepcionDoc_docTipo['skRecepcionDocumento'])){
+                    $sql .=" AND skRecepcionDocumento = '".$this->recepcionDoc_docTipo['skRecepcionDocumento']."'";
+                }
+                if(!empty($this->recepcionDoc_docTipo['skRecepcionDoc_docTipo'])){
+                    $sql .=" AND skRecepcionDoc_docTipo = '".$this->recepcionDoc_docTipo['skRecepcionDoc_docTipo']."'";
+                }
             	//exit($sql);
+                $result = $this->db->query($sql);
             	if($result){
                     return true;
                 }else{

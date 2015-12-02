@@ -178,6 +178,34 @@
 								return false;
 							}
 						}else{
+							//echo ('</pre>'.print_r($_POST,1).'</pre>');
+							if(isset($_FILES)){
+								$this->recepcionDoc_docTipo['skRecepcionDocumento'] = $this->recepciondocumentos['skRecepcionDocumento'];
+								$this->recepcionDoc_docTipo['skStatus'] = 'IN';
+                                parent::updateStatus_recepcionDoc_docTipo();
+								foreach($_FILES['skDocTipo'] AS $k=>$v){
+	                                if($k === 'name'){
+	                                    foreach($v AS $key => $val){
+	                                        // AQUI HACEMOS EL MOVE_UPLOADED_FILE //
+	                                        $fileName = time().$_FILES['skDocTipo']['name'][$key];
+	                                        if(move_uploaded_file($_FILES['skDocTipo']['tmp_name'][$key] , SYS_PATH.'/doc/files/'.$fileName)){
+	                                            $this->recepcionDoc_docTipo['skRecepcionDoc_docTipo'] = substr(md5(microtime()), 1, 32);
+	                                            $this->recepcionDoc_docTipo['skRecepcionDocumento'] = $this->recepciondocumentos['skRecepcionDocumento'];
+	                                            $this->recepcionDoc_docTipo['skDocTipo'] = $key;
+	                                            $this->recepcionDoc_docTipo['sFile'] = $fileName;
+	                                            parent::create_recepcionDoc_docTipo();
+	                                        }
+	                                    }
+	                                }
+	                            }
+	                            if(!empty($_POST['skDocTipo'])){
+									foreach($_POST['skDocTipo'] AS $a=>$b){
+										$this->recepcionDoc_docTipo['skRecepcionDoc_docTipo'] = $b;
+										$this->recepcionDoc_docTipo['skStatus'] = 'AC';
+	                                    parent::updateStatus_recepcionDoc_docTipo();
+									}
+								}
+                        	}
 							if(parent::update_recepciondocumentos()){
 								$this->data['response'] = true;
 								$this->data['message'] = 'Registro actualizado con &eacute;xito.';
