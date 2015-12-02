@@ -1,8 +1,8 @@
 <?php
     $result = array();
+    $filesDocTipo = array();
     if($data['datos']){
         $result = $data['datos']->fetch_assoc();
-        $filesDocTipo = array();
         while($row = $data['filesDocTipo']->fetch_assoc()){
             $filesDocTipo[$row['skDocTipo']] = array($row['skRecepcionDoc_docTipo'],$row['sFile']);
         }
