@@ -55,6 +55,21 @@
                     }
                 }
             }
+            public function read_equal_recepcionDoc_docTipo(){
+                $sql="SELECT recepcionDoc_docTipo.* FROM rel_recepcionDoc_docTipo AS recepcionDoc_docTipo WHERE 1=1 ";
+                if(!empty($this->recepcionDoc_docTipo['skRecepcionDocumento'])){
+                    $sql .=" AND skRecepcionDocumento = '".$this->recepcionDoc_docTipo['skRecepcionDocumento']."'";
+                }
+                //exit($sql);
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
             /* INSERT DE TIPOS DE DOCUMENTOS SUBIDOS POR CATALOGO DE TIPOS DE DOCUMENTOS */
             public function create_recepcionDoc_docTipo(){
             	$sql="INSERT INTO rel_recepcionDoc_docTipo () VALUES (
@@ -220,7 +235,6 @@
 								'".$this->recepciondocumentos['skClaveDocumento']."',
 								'".$this->recepciondocumentos['skCorresponsalia']."',
 								'AC',
-								'".$datetime->format('Y-m-d')."',
 								CURRENT_TIMESTAMP(),
 								'".$_SESSION['session']['skUsers']."',
 								CURRENT_TIMESTAMP(),

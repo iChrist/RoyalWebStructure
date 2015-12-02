@@ -132,28 +132,9 @@
 					$this->data['message'] = '';
 					$this->data['response'] = true;
 					$this->data['datos'] = false;
-					$this->load_model('emp','emp');
-					$objEmpresa = new Emp_Model();
-					$this->data['empresas'] = $objEmpresa->read_empresa();
-					$this->data['tipostramites'] = parent::read_tipos_tramites();
-					$this->data['tiposservicios'] = parent::read_tipos_servicios();
-					$this->data['clavedocumento'] = parent::read_clave_documento();
-					$this->data['corresponsalia'] = parent::read_corresponsalia();
-					$this->data['docTipo'] = parent::read_equal_docTipo();
+					
 					if($_POST){
 					//exit('</pre>'.print_r($_POST,1).'</pre>');
-					//echo ('</pre>'.print_r($_FILES,1).'</pre>');
-					foreach($_FILES['skDocTipo'] AS $k=>$v){
-						if($k === 'name'){
-							//echo var_dump($k);
-							foreach($v AS $key => $val){
-								//var_dump($key);
-								// AQUI HACEMOS EL MOVE_UPLOADED_FILE //
-								//echo $_FILES['skDocTipo']['name'][$key]. ' ==> ';
-							}
-						}
-					}
-					//exit;
 					$this->recepciondocumentos['skRecepcionDocumento'] = !empty($_POST['skRecepcionDocumento']) ? $_POST['skRecepcionDocumento'] : substr(md5(microtime()), 1, 32);
 					$this->recepciondocumentos['sReferencia'] = utf8_decode($_POST['sReferencia']);
 					$this->recepciondocumentos['sPedimento'] = utf8_decode($_POST['sPedimento']);
@@ -168,6 +149,22 @@
 					
 						if(empty($_POST['skRecepcionDocumento'])){
 							if(parent::create_recepciondocumentos()){
+                                                            //echo ('</pre>'.print_r($_FILES,1).'</pre>');
+                                                            foreach($_FILES['skDocTipo'] AS $k=>$v){
+                                                                if($k === 'name'){
+                                                                    foreach($v AS $key => $val){
+                                                                        // AQUI HACEMOS EL MOVE_UPLOADED_FILE //
+                                                                        $fileName = time().$_FILES['skDocTipo']['name'][$key];
+                                                                        if(move_uploaded_file($_FILES['skDocTipo']['tmp_name'][$key] , SYS_PATH.'/doc/files/'.$fileName)){
+                                                                            $this->recepcionDoc_docTipo['skRecepcionDoc_docTipo'] = substr(md5(microtime()), 1, 32);
+                                                                            $this->recepcionDoc_docTipo['skRecepcionDocumento'] = $this->recepciondocumentos['skRecepcionDocumento'];
+                                                                            $this->recepcionDoc_docTipo['skDocTipo'] = $key;
+                                                                            $this->recepcionDoc_docTipo['sFile'] = $fileName;
+                                                                            parent::create_recepcionDoc_docTipo();
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
 								$this->data['response'] = true;
 								$this->data['message'] = 'Registro insertado con &eacute;xito.';
 								header('Content-Type: application/json');
@@ -196,13 +193,23 @@
 							}
 						}
 					}
+                                        $this->load_model('emp','emp');
+					$objEmpresa = new Emp_Model();
+					$this->data['empresas'] = $objEmpresa->read_empresa();
+					$this->data['tipostramites'] = parent::read_tipos_tramites();
+					$this->data['tiposservicios'] = parent::read_tipos_servicios();
+					$this->data['clavedocumento'] = parent::read_clave_documento();
+					$this->data['corresponsalia'] = parent::read_corresponsalia();
+					$this->data['docTipo'] = parent::read_equal_docTipo();
 					if(isset($_GET['p1'])){
-					$this->recepciondocumentos['skRecepcionDocumento'] = $_GET['p1'];
-					$this->data['datos'] = parent::read_recepciondocumentos();
+                                            $this->recepciondocumentos['skRecepcionDocumento'] = $_GET['p1'];
+                                            $this->recepcionDoc_docTipo['skRecepcionDocumento'] = $_GET['p1'];
+                                            $this->data['datos'] = parent::read_recepciondocumentos();
+                                            $this->data['filesDocTipo'] = parent::read_equal_recepcionDoc_docTipo();
 					}
-					$this->load_view('docume-form', $this->data);
-					return true;
-					}
+                                        $this->load_view('docume-form', $this->data);
+                                        return true;
+                                    }
 					
 					
 					public function docume_detail(){

@@ -2,6 +2,10 @@
     $result = array();
     if($data['datos']){
         $result = $data['datos']->fetch_assoc();
+        $filesDocTipo = array();
+        while($row = $data['filesDocTipo']->fetch_assoc()){
+            $filesDocTipo[$row['skDocTipo']] = array($row['skRecepcionDoc_docTipo'],$row['sFile']);
+        }
     }
 	
 	
@@ -137,13 +141,29 @@ echo "</pre>";
     
     <!-- CARGAR DE rel_recepcionDoc_docTipo !-->
     <div class="form-group">
-      <label class="control-label col-md-2">Archivos <span aria-required="true" class="required"> * </span> </label>
-      <div class="col-md-4">
+      <label class="control-label col-lg-2 col-md-2 col-xs-2">Archivos <span aria-required="true" class="required"> * </span> </label>
+      <div class="col-lg-4 col-md-2 col-xs-2">
         <?php
-          if(isset($data['corresponsalia'])){
+          if(isset($data['docTipo'])){
             while($docTipo = $data['docTipo']->fetch_assoc()){
         ?>
-              <label>Doc: <?php echo $docTipo['skDocTipo']; ?><input type="file" name="skDocTipo[<?php echo $docTipo['skDocTipo']; ?>]" /></label>
+            <label>
+                <?php 
+                    echo $docTipo['skDocTipo'];
+                    $hidden = false;
+                    if(array_key_exists($docTipo['skDocTipo'] , $filesDocTipo)){
+                        $hidden = true;
+                ?>
+                <span>
+                    <input type="hidden" value="<?php echo $filesDocTipo[$docTipo['skDocTipo']][0]; ?>" />
+                    <a href="<?php echo SYS_URL.SYS_PROJECT; ?>/doc/files/<?php echo $filesDocTipo[$docTipo['skDocTipo']][1]; ?>" target="_blank">Ver archivo</a>
+                    <a href="javascript:;" class="btn btn-default btn-xs delete-doc-tipo" skDocTipo="<?php echo $docTipo['skDocTipo']; ?>"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                </span>
+                <?php
+                    }//ENDIF
+                ?>
+                <input type="file" name="skDocTipo[<?php echo $docTipo['skDocTipo']; ?>]" id="<?php echo $docTipo['skDocTipo']; ?>" <?php if($hidden){ echo 'style="display:none;"';}?> />
+            </label><br>
         <?php
             }//ENDWHILE
           }//ENDIF
@@ -164,6 +184,11 @@ echo "</pre>";
 <script type="text/javascript">
     var fraccion = 1;
     $(document).ready(function(){
+        $(".delete-doc-tipo").click(function(){
+            var skDocTipo = $(this).attr("skDocTipo");
+            $("#"+skDocTipo).css("display","block");
+            $(this).parent().remove();
+        });
         /* VALIDATIONS */
         isValid = $("#_save").validate({
             errorElement: 'span', //default input error message container
