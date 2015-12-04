@@ -8,19 +8,35 @@
                     ,'sPedimento'     				=>  ''
                     ,'sMercancia'     				=>  ''
                     ,'sObservaciones'     				=>  ''
-					
                     ,'sDescripcion'    			  	=>  ''
                     ,'skStatus'     				=>  ''
                     ,'limit'        					=>  ''
                     ,'offset'       					=>  ''
                 );
-                
+
                  public $clavdocu = array(
                     'skClaveDocumento'    		=>  ''
                     ,'sNombre'     				=>  ''
                     ,'skStatus'     			=>  ''
                     ,'limit'        			=>  ''
                     ,'offset'       			=>  ''
+            	/* cat_docTipo */
+                public $docTipo = array(
+				'skDocTipo' =>  NULL
+				,'sNombre'=>  NULL
+				,'skStatus' 			=>  NULL
+				,'limit'    				=>  NULL
+				,'offset'   				=>  NULL
+                );
+                /**/
+                public $recepcionDoc_docTipo = array(
+				'skRecepcionDoc_docTipo' =>  NULL
+				,'skRecepcionDocumento'=>  NULL
+				,'skDocTipo' 			=>  NULL
+				,'sFile' 			=>  NULL
+				,'skStatus' 			=>  NULL
+				,'limit'    				=>  NULL
+				,'offset'   				=>  NULL
                 );
             // PRIVATE VARIABLES //
                     private $data = array();
@@ -31,7 +47,69 @@
             public function __destruct(){
 
             }
+            /* CATALOGO DE TIPOS DE DOCUMENTOS PARA SUBIR COMO ARTCHIVO */
+            public function read_equal_docTipo(){
+            	$sql="SELECT docTipo.* FROM cat_docTipo AS docTipo WHERE skStatus = 'AC'";
+            	//exit($sql);
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+            public function read_equal_recepcionDoc_docTipo(){
+                $sql="SELECT recepcionDoc_docTipo.* FROM rel_recepcionDoc_docTipo AS recepcionDoc_docTipo WHERE 1=1 ";
+                if(!empty($this->recepcionDoc_docTipo['skRecepcionDocumento'])){
+                    $sql .=" AND skRecepcionDocumento = '".$this->recepcionDoc_docTipo['skRecepcionDocumento']."'";
+                }
+                //exit($sql);
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+            /* INSERT DE TIPOS DE DOCUMENTOS SUBIDOS POR CATALOGO DE TIPOS DE DOCUMENTOS */
+            public function create_recepcionDoc_docTipo(){
+            	$sql="INSERT INTO rel_recepcionDoc_docTipo () VALUES (
+            		 '".$this->recepcionDoc_docTipo['skRecepcionDoc_docTipo']."'
+            		,'".$this->recepcionDoc_docTipo['skRecepcionDocumento']."'
+            		,'".$this->recepcionDoc_docTipo['skDocTipo']."'
+            		,'".$this->recepcionDoc_docTipo['sFile']."'
+            		,'AC')";
+            	//exit($sql);
+                $result = $this->db->query($sql);
+                if($result){
+                    return $this->recepcionDoc_docTipo['skRecepcionDoc_docTipo'];
+                }else{
+                	return false;
+                }
+            }
+            /* UPDATE(DELETE) DE TIPOS DE DOCUMENTOS SUBIDOS POR CATALOGO DE TIPOS DE DOCUMENTOS */
+            public function updateStatus_recepcionDoc_docTipo(){
+            	$sql="UPDATE rel_recepcionDoc_docTipo SET skStatus = '".$this->recepcionDoc_docTipo['skStatus']."' WHERE 1=1 ";
+                if(!empty($this->recepcionDoc_docTipo['skRecepcionDocumento'])){
+                    $sql .=" AND skRecepcionDocumento = '".$this->recepcionDoc_docTipo['skRecepcionDocumento']."'";
+                }
+                if(!empty($this->recepcionDoc_docTipo['skRecepcionDoc_docTipo'])){
+                    $sql .=" AND skRecepcionDoc_docTipo = '".$this->recepcionDoc_docTipo['skRecepcionDoc_docTipo']."'";
+                }
+            	//exit($sql);
+                $result = $this->db->query($sql);
+            	if($result){
+                    return true;
+                }else{
+                	return false;
+                }
+            }
 			 /* COMIENZA MODULO RECEPCION DE DOCUMENTOS JCBB*/
+            
             public function count_recepciondocumentos(){
                 $sql = "SELECT COUNT(*) AS total FROM ope_recepciones_documentos WHERE 1=1 ";
                 if(!empty($this->recepciondocumentos['skRecepcionDocumento'])){
@@ -169,7 +247,6 @@
 								'".$this->recepciondocumentos['skClaveDocumento']."',
 								'".$this->recepciondocumentos['skCorresponsalia']."',
 								'AC',
-								'".$datetime->format('Y-m-d')."',
 								CURRENT_TIMESTAMP(),
 								'".$_SESSION['session']['skUsers']."',
 								CURRENT_TIMESTAMP(),
