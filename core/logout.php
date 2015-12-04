@@ -1,5 +1,7 @@
 <?php
     require_once ('config.php');
-    session_destroy();
+	if(isset($_SESSION)){
+		session_destroy();
+	}
     header('Location: '.SYS_URL);
 ?>

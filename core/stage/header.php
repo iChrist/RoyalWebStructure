@@ -75,7 +75,7 @@
                 <img src="<?php echo SYS_URL; ?>core/assets/img/RoyalWeb-White.png" alt="logo" style="width:110px;height:40px;margin:5px;"/>
             </a>
         </div>
-        <form class="search-form search-form-header" role="form" action="index.html">
+        <form class="search-form search-form-header" role="form" action="#">
             <div class="input-icon right">
                 <i class="icon-magnifier"></i>
                 <input type="text" class="form-control input-sm" name="query" placeholder="Buscar...">

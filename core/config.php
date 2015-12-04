@@ -6,6 +6,7 @@
     define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
     session_start();
 // SYSTEM CONFIGURATION //
+    $_GET['sysProject'] = isset($_GET['sysProject']) ? $_GET['sysProject'] : '';
     define('DIR_PATH', 'RoyalWebStructure/');
     define('CORE_PATH', __DIR__.'/');
     define('SYS_PROJECT', $_GET['sysProject']);
