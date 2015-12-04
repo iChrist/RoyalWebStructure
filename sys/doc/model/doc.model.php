@@ -14,6 +14,14 @@
                     ,'limit'        					=>  ''
                     ,'offset'       					=>  ''
                 );
+                
+                 public $clavdocu = array(
+                    'skClaveDocumento'    		=>  ''
+                    ,'sNombre'     				=>  ''
+                    ,'skStatus'     			=>  ''
+                    ,'limit'        			=>  ''
+                    ,'offset'       			=>  ''
+                );
             // PRIVATE VARIABLES //
                     private $data = array();
 
@@ -353,6 +361,106 @@
 				}
 			}
 
+			public function count_clavdocu(){
+                $sql = "SELECT COUNT(*) AS total FROM cat_claves_documentos WHERE 1=1 ";
+                if(!empty($this->clavdocu['skClaveDocumento'])){
+                    $sql .=" AND skClaveDocumento = '".$this->clavdocu['skClaveDocumento']."'";
+                }
+                if(!empty($this->clavdocu['sNombre'])){
+                    $sql .=" AND sNombre like '%".$this->clavdocu['sNombre']."%'";
+                }
+                if(!empty($this->clavdocu['skStatus'])){
+                    $sql .=" AND cat_claves_documentos.skStatus like '%".$this->clavdocu['skStatus']."%'";
+                }
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+			public function read_equal_clavdocu(){
+                $sql = "SELECT cat_claves_documentos.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_claves_documentos INNER JOIN _status ON _status.skStatus = cat_claves_documentos.skStatus WHERE 1=1 ";
+                if(!empty($this->clavdocu['skClaveDocumento'])){
+                    $sql .=" AND skClaveDocumento = '".$this->clavdocu['skClaveDocumento']."'";
+                }
+                if(!empty($this->clavdocu['sNombre'])){
+                    $sql .=" AND sNombre = '".$this->clavdocu['sNombre']."'";
+                }
+                if(!empty($this->clavdocu['skStatus'])){
+                    $sql .=" AND cat_claves_documentos.skStatus = '".$this->clavdocu['skStatus']."'";
+                }
+                if(is_int($this->clavdocu['limit'])){
+                    if(is_int($this->clavdocu['offset'])){
+                        $sql .= " LIMIT ".$this->clavdocu['offset']." , ".$this->clavdocu['limit'];
+                    }else{
+                        $sql .= " LIMIT ".$this->clavdocu['limit'];
+                    }
+                }
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+            public function read_like_clavdocu(){
+                $sql = "SELECT cat_claves_documentos.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_claves_documentos INNER JOIN _status ON _status.skStatus = cat_claves_documentos.skStatus WHERE 1=1 ";
+                if(!empty($this->clavdocu['skClaveDocumento'])){
+                    $sql .=" AND skClaveDocumento = '".$this->clavdocu['skClaveDocumento']."'";
+                }
+                if(!empty($this->clavdocu['sNombre'])){
+                    $sql .=" AND sNombre like '%".$this->clavdocu['sNombre']."%'";
+                }
+               
+                if(!empty($this->clavdocu['skStatus'])){
+                    $sql .=" AND cat_claves_documentos.skStatus like '%".$this->clavdocu['skStatus']."%'";
+                }
+                if(is_int($this->clavdocu['limit'])){
+                    if(is_int($this->clavdocu['offset'])){
+                        $sql .= " LIMIT ".$this->clavdocu['offset']." , ".$this->clavdocu['limit'];
+                    }else{
+                        $sql .= " LIMIT ".$this->clavdocu['limit'];
+                    }
+                }
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+            public function create_clavdocu(){
+                $sql = "INSERT INTO cat_claves_documentos (skClaveDocumento,sNombre,skStatus) VALUES ('".$this->clavdocu['skClaveDocumento']."','".$this->clavdocu['sNombre']."','".$this->clavdocu['skStatus']."')";
+                $result = $this->db->query($sql);
+                if($result){
+                    return $this->clavdocu['skClaveDocumento'];
+                }else{
+                    return false;
+                }
+            }
+            public function update_clavdocu(){
+                $sql = "UPDATE cat_claves_documentos SET ";
+                if(!empty($this->clavdocu['sNombre'])){
+                    $sql .=" sNombre = '".$this->clavdocu['sNombre']."' ,";
+                }
+                if(!empty($this->clavdocu['skStatus'])){
+                    $sql .=" skStatus = '".$this->clavdocu['skStatus']."' ,";
+                }
+                $sql .= " skClaveDocumento = '".$this->clavdocu['skClaveDocumento']."' WHERE skClaveDocumento = '".$this->clavdocu['skClaveDocumentoViejo']."' LIMIT 1";
+                $result = $this->db->query($sql);
+                if($result){
+                    return $this->clavdocu['skClaveDocumento'];
+                }else{
+                    return false;
+                }
+            }
 			
 			 /* COMIENZA MODULO  JCBB*/
 		   
