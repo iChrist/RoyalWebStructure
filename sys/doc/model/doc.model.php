@@ -21,6 +21,16 @@
                     ,'limit'        			=>  ''
                     ,'offset'       			=>  ''
                     );
+                    
+                  public $correspo = array(
+                    'skCorresponsalia'    		=>  ''
+                    ,'sNombre'     				=>  ''
+                    ,'skStatus'     			=>  ''
+                    ,'limit'        			=>  ''
+                    ,'offset'       			=>  ''
+                    );
+                    
+                    
             	/* cat_docTipo */
                 public $docTipo = array(
 				'skDocTipo' =>  NULL
@@ -39,6 +49,7 @@
 				,'limit'    				=>  NULL
 				,'offset'   				=>  NULL
                 );
+                
             // PRIVATE VARIABLES //
                     private $data = array();
 
@@ -535,6 +546,107 @@
                 $result = $this->db->query($sql);
                 if($result){
                     return $this->clavdocu['skClaveDocumento'];
+                }else{
+                    return false;
+                }
+            }
+            
+            public function count_correspo(){
+                $sql = "SELECT COUNT(*) AS total FROM cat_corresponsalias WHERE 1=1 ";
+                if(!empty($this->correspo['skCorresponsalia'])){
+                    $sql .=" AND skCorresponsalia = '".$this->correspo['skCorresponsalia']."'";
+                }
+                if(!empty($this->correspo['sNombre'])){
+                    $sql .=" AND sNombre like '%".$this->correspo['sNombre']."%'";
+                }
+                if(!empty($this->correspo['skStatus'])){
+                    $sql .=" AND cat_corresponsalias.skStatus like '%".$this->correspo['skStatus']."%'";
+                }
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+            public function read_equal_correspo(){
+                $sql = "SELECT cat_corresponsalias.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_corresponsalias INNER JOIN _status ON _status.skStatus = cat_corresponsalias.skStatus WHERE 1=1 ";
+                if(!empty($this->correspo['skCorresponsalia'])){
+                    $sql .=" AND skCorresponsalia = '".$this->correspo['skCorresponsalia']."'";
+                }
+                if(!empty($this->correspo['sNombre'])){
+                    $sql .=" AND sNombre = '".$this->correspo['sNombre']."'";
+                }
+                if(!empty($this->correspo['skStatus'])){
+                    $sql .=" AND cat_corresponsalias.skStatus = '".$this->correspo['skStatus']."'";
+                }
+                if(is_int($this->correspo['limit'])){
+                    if(is_int($this->correspo['offset'])){
+                        $sql .= " LIMIT ".$this->correspo['offset']." , ".$this->correspo['limit'];
+                    }else{
+                        $sql .= " LIMIT ".$this->correspo['limit'];
+                    }
+                }
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+            public function read_like_correspo(){
+                $sql = "SELECT cat_corresponsalias.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_corresponsalias INNER JOIN _status ON _status.skStatus = cat_corresponsalias.skStatus WHERE 1=1 ";
+                if(!empty($this->correspo['skCorresponsalia'])){
+                    $sql .=" AND skCorresponsalia = '".$this->correspo['skCorresponsalia']."'";
+                }
+                if(!empty($this->correspo['sNombre'])){
+                    $sql .=" AND sNombre like '%".$this->correspo['sNombre']."%'";
+                }
+               
+                if(!empty($this->correspo['skStatus'])){
+                    $sql .=" AND cat_corresponsalias.skStatus like '%".$this->correspo['skStatus']."%'";
+                }
+                if(is_int($this->correspo['limit'])){
+                    if(is_int($this->correspo['offset'])){
+                        $sql .= " LIMIT ".$this->correspo['offset']." , ".$this->correspo['limit'];
+                    }else{
+                        $sql .= " LIMIT ".$this->correspo['limit'];
+                    }
+                }
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+            public function create_correspo(){
+                $sql = "INSERT INTO cat_corresponsalias (skCorresponsalia,sNombre,skStatus) VALUES ('".$this->correspo['skCorresponsalia']."','".$this->correspo['sNombre']."','".$this->correspo['skStatus']."')";
+                $result = $this->db->query($sql);
+                if($result){
+                    return $this->correspo['skCorresponsalia'];
+                }else{
+                    return false;
+                }
+            }
+            public function update_correspo(){
+                $sql = "UPDATE cat_corresponsalias SET ";
+                if(!empty($this->correspo['sNombre'])){
+                    $sql .=" sNombre = '".$this->correspo['sNombre']."' ,";
+                }
+                if(!empty($this->correspo['skStatus'])){
+                    $sql .=" skStatus = '".$this->correspo['skStatus']."' ,";
+                }
+                $sql .= " skCorresponsalia = '".$this->correspo['skCorresponsalia']."' WHERE skCorresponsalia = '".$this->correspo['skCorresponsaliaViejo']."' LIMIT 1";
+                $result = $this->db->query($sql);
+                if($result){
+                    return $this->correspo['skCorresponsalia'];
                 }else{
                     return false;
                 }

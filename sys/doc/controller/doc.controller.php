@@ -368,7 +368,7 @@
                     $this->load_view('clavdocu-form', $this->data);
                     return true;
                 }
-					  public function clavdocu_detail(){
+					 public function clavdocu_detail(){
                     if(isset($_GET['p1'])){
                         $this->clavdocu['skClaveDocumento'] = $_GET['p1'];
                         $this->data['datos'] = parent::read_equal_clavdocu();
@@ -383,6 +383,127 @@
                     $this->load_view('clavdocu-detail', $this->data);
                     return true;
                 }
+					  
+					 public function correspo_index(){
+                    if(isset($_GET['axn'])){
+                        switch ($_GET['axn']) {
+                            case 'pdf':
+                                $this->correspo_pdf();
+                                break;
+                            case 'fetch_all':
+                                // PARAMETROS PARA FILTRADO //
+                                if(isset($_POST['skCorresponsalia'])){
+                                    $this->correspo['skCorresponsalia'] = $_POST['skCorresponsalia'];
+                                }
+                                 if(isset($_POST['sNombre'])){
+                                    $this->correspo['sNombre'] = $_POST['sNombre'];
+                                }
+                              
+                                if(isset($_POST['skStatus'])){
+                                    $this->correspo['skStatus'] = $_POST['skStatus'];
+                                }
+
+                                // OBTENER REGISTROS //
+                                $total = parent::count_correspo();
+                                $records = Core_Functions::table_ajax($total);
+                                if($records['recordsTotal'] === 0){
+                                    header('Content-Type: application/json');
+                                    echo json_encode($records);
+                                    return false;
+                                }
+
+                                $this->correspo['limit'] = $records['limit'];
+                                $this->correspo['offset'] = $records['offset'];
+                                $this->data['data'] = parent::read_like_correspo();
+
+                                if(!$this->data['data']){
+                                    header('Content-Type: application/json');
+                                    echo json_encode($records);
+                                    return false;
+                                }
+
+                                while($row = $this->data['data']->fetch_assoc()){
+                                    $actions = $this->printModulesButtons(2,array($row['skCorresponsalia']));
+                                    array_push($records['data'], array(
+                                         utf8_encode($row['skCorresponsalia'])
+                                        ,utf8_encode($row['sNombre'])
+                                        ,utf8_encode($row['htmlStatus'])
+                                        , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
+                                    ));
+                                }
+
+                                header('Content-Type: application/json');
+                                echo json_encode($records);
+                                return true;
+                                break;
+                        }
+                        return true;
+                    }
+                    
+                    // INCLUYE UN MODELO DE OTRO MODULO //
+                    $this->load_model('cof','cof');
+                    $cof = new Cof_Model();
+                    $this->data['status'] = $cof->read_status();
+                     
+                    // RETORNA LA VISTA areas-index.php //
+                    $this->load_view('correspo-index', $this->data);
+                    return true;
+                }
+					 public function correspo_form(){
+                    $this->data['message'] = '';
+                    $this->data['success'] = false;
+                    $this->data['error'] = false;
+                    $this->data['datos'] = false;
+                    if($_POST){
+                        
+                         
+                        $this->correspo['skCorresponsaliaViejo'] = $_POST['skCorresponsaliaViejo'];
+                        $this->correspo['skCorresponsalia'] = $_POST['skCorresponsalia'];
+                        $this->correspo['sNombre'] = htmlentities($_POST['sNombre'],ENT_QUOTES);
+                        $this->correspo['skStatus'] = htmlentities($_POST['skStatus'],ENT_QUOTES);
+                        
+                        
+                        if(empty($_POST['skCorresponsaliaViejo'])){
+                            if(parent::create_correspo()){
+                                $this->data['response'] = true;
+                                $this->data['message'] = 'Registro insertado con &eacute;xito.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return true;
+                            }else{
+                                $this->data['response'] = true;
+                                $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return false;
+                            }
+                        }else{
+                            if(parent::update_correspo()){
+                                $this->data['response'] = true;
+                                $this->data['message'] = 'Registro actualizado con &eacute;xito.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return true;
+                            }else{
+                                $this->data['response'] = true;
+                                $this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return false;
+                            }
+                        }
+                        
+                        
+                    }
+                    if(isset($_GET['p1'])){
+                        $this->correspo['skCorresponsalia'] = $_GET['p1'];
+                        $this->data['datos'] = parent::read_equal_correspo();
+                    }
+                    $this->load_view('correspo-form', $this->data);
+                    return true;
+                }
+					  
+					  
 
 				/*TERMINA MODULO CAPTURA DE DOCUMENTOS */
 	}
