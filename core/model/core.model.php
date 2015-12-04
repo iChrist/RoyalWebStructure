@@ -313,7 +313,19 @@
                             if(!empty($_secutiry['_modules_profiles_permissions'])){
                                 if($skPermissions != NULL){
                                     if(array_key_exists($skPermissions , $_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$_SESSION['session']['skProfile']])){
-                                        return true; 
+                                        if($ownerId){
+                                            if($_SESSION['session']['skUsers'] === $ownerId){
+                                                return true;
+                                            }else{
+                                                $this->require_view(FALSE);
+                                                $text = "No tienes permisos para este m&oacute;dulo.";
+                                                $this->_error($text,500);
+                                                die();
+                                                return false;
+                                            }
+                                        }else{
+                                            return true;
+                                        }
                                     }else{
                                         $this->require_view(FALSE);
                                         $text = "No tienes permisos para este m&oacute;dulo.";

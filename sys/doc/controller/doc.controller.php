@@ -230,11 +230,13 @@
 					$this->data['corresponsalia'] = parent::read_corresponsalia();
 					$this->data['docTipo'] = parent::read_equal_docTipo();
 					if(isset($_GET['p1'])){
-                                            $this->verify_access('W');
                                             $this->recepciondocumentos['skRecepcionDocumento'] = $_GET['p1'];
                                             $this->recepcionDoc_docTipo['skRecepcionDocumento'] = $_GET['p1'];
                                             $this->data['datos'] = parent::read_recepciondocumentos();
                                             $this->data['filesDocTipo'] = parent::read_equal_recepcionDoc_docTipo();
+                                            $result = $this->data['datos']->fetch_assoc();
+                                            //echo '<pre>'.print_r($result,1).'</pre>';
+                                            $this->verify_access('W' , $result['skUsersCreacion']);
 					}
                                         $this->load_view('docume-form', $this->data);
                                         return true;
