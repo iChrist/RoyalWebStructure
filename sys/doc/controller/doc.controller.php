@@ -78,7 +78,7 @@
 					}
 					 
 					while($row = $this->data['data']->fetch_assoc()){
-						$actions = $this->printModulesButtons(2,array($row['skRecepcionDocumento']));
+						$actions = $this->printModulesButtons(2,array($row['skRecepcionDocumento']),$row['skUsersCreacion']);
 						array_push($records['data'], array(
 							 utf8_encode($row['sReferencia'])
 							,utf8_encode($row['sPedimento'])
@@ -128,7 +128,7 @@
 					return true;
 					}
 					
-					public function docume_form(){ 
+					public function docume_form(){
 					$this->data['message'] = '';
 					$this->data['response'] = true;
 					$this->data['datos'] = false;
@@ -230,6 +230,7 @@
 					$this->data['corresponsalia'] = parent::read_corresponsalia();
 					$this->data['docTipo'] = parent::read_equal_docTipo();
 					if(isset($_GET['p1'])){
+                                            $this->verify_access('W');
                                             $this->recepciondocumentos['skRecepcionDocumento'] = $_GET['p1'];
                                             $this->recepcionDoc_docTipo['skRecepcionDocumento'] = $_GET['p1'];
                                             $this->data['datos'] = parent::read_recepciondocumentos();
