@@ -159,8 +159,7 @@
             ignore: "",
             rules:{
                 zip:{
-                    required: true,
-                    accept: "zip"
+                    required: true
                 }
             },
             invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar              
@@ -200,8 +199,7 @@
             },
             messages:{
                 zip:{
-                    required: "Campo obligatorio.",
-                    accept: "Solo se aceptan archivos ZIP." 
+                    required: "Campo obligatorio."
                 }
             }
         });

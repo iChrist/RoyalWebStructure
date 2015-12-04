@@ -70,10 +70,8 @@
             }
             
             // INCLUYE UN MODELO DE OTRO MODULO //
-            
             $this->load_model('cof','cof');
-            $objStatus = new Cof_Model();
-            $this->data['status'] = $objStatus->read_user();
+            $this->data['status'] = Cof_Model::read_status();
             
             // RETORNA LA VISTA >numPar-index.php //
             $this->load_view('climer-index', $this->data);

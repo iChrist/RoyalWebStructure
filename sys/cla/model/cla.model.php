@@ -507,6 +507,7 @@
             if(!empty($this->claMerArc['sNumeroParte'])){
                 $sql .=" AND (claMerArc.sNumeroParte = '".$this->claMerArc['sNumeroParte']."') ";
             }
+            $sql .=" ORDER BY claMerArc.sFraccion ASC ";
             $result = $this->db->query($sql);
             if($result){
                 if($result->num_rows > 0){
@@ -525,6 +526,7 @@
             if(!empty($this->claMerArc['sNumeroParte'])){
                 $sql .=" AND (claMerArc.sNumeroParte = '".$this->claMerArc['sNumeroParte']."') ";
             }
+            $sql .=" ORDER BY claMerArc.sNumeroParte ASC ";
             $result = $this->db->query($sql);
             if($result){
                 if($result->num_rows > 0){

@@ -3,8 +3,10 @@
     $filesDocTipo = array();
     if($data['datos']){
         $result = $data['datos']->fetch_assoc();
-        while($row = $data['filesDocTipo']->fetch_assoc()){
-            $filesDocTipo[$row['skDocTipo']] = array($row['skRecepcionDoc_docTipo'],$row['sFile']);
+        if($data['filesDocTipo']){
+            while($row = $data['filesDocTipo']->fetch_assoc()){
+                $filesDocTipo[$row['skDocTipo']] = array($row['skRecepcionDoc_docTipo'],$row['sFile']);
+            }
         }
     }
 	
@@ -155,7 +157,7 @@ echo "</pre>";
                         $hidden = true;
                 ?>
                 <span>
-                    <input type="hidden" value="<?php echo $filesDocTipo[$docTipo['skDocTipo']][0]; ?>" name="skDocTipo[<?php echo $docTipo['skDocTipo']; ?>]" />
+                    <input type="hidden" value="<?php echo $filesDocTipo[$docTipo['skDocTipo']][0]; ?>" />
                     <a href="<?php echo SYS_URL.SYS_PROJECT; ?>/doc/files/<?php echo $filesDocTipo[$docTipo['skDocTipo']][1]; ?>" target="_blank">Ver archivo</a>
                     <a href="javascript:;" class="btn btn-default btn-xs delete-doc-tipo" skDocTipo="<?php echo $docTipo['skDocTipo']; ?>"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
                 </span>
