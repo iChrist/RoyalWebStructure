@@ -5,6 +5,7 @@
     }
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form"> 
+ <input type="hidden" name="skTipoEmpresaViejo"  id="skTipoEmpresaViejo" value="<?php echo (isset($result['skTipoEmpresa'])) ? $result['skTipoEmpresa'] : '' ; ?>">
      <div class="form-body"> 
        
         <div class="form-group">
@@ -13,7 +14,7 @@
             <div class="col-md-4">
                 <div class="input-icon right">
                     <i class="fa"></i>
-                    <input type="text" name="skTipoEmpresa" id="skTipoEmpresa" class="form-control" placeholder="C&oacute;digo" value="<?php echo (isset($result['skTipoEmpresa'])) ? utf8_encode($result['skTipoEmpresa']) : '' ; ?>" >
+                    <input type="text" name="skTipoEmpresa" maxlength="4" id="skTipoEmpresa" class="form-control" placeholder="C&oacute;digo" value="<?php echo (isset($result['skTipoEmpresa'])) ? utf8_encode($result['skTipoEmpresa']) : '' ; ?>" >
                 </div>
             </div>
         </div>     
@@ -67,7 +68,8 @@
             ignore: "",
             rules:{
                 skTipoEmpresa:{
-                    required: true
+                    required: true,
+                       minlength: 4
                 },
                 sNombre:{
                     required: true
