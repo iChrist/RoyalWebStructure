@@ -514,7 +514,9 @@
             }
             
               public function update_empresas(){
-                $sql = "UPDATE cat_empresas SET ";
+              	$sql="UPDATE rel_cat_empresas_cat_tipos_empresas SET skTipoEmpresa = '".$this->empresas['skTipoEmpresa']."' WHERE skEmpresa = '".$this->empresas['skEmpresa']."' ";
+              	$this->db->query($sql);
+                $sql = "UPDATE cat_empresas  SET ";
                 if(!empty($this->empresas['sNombre'])){
                     $sql .=" sNombre = '".$this->empresas['sNombre']."' ,";
                 }
