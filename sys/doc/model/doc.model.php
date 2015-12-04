@@ -20,6 +20,7 @@
                     ,'skStatus'     			=>  ''
                     ,'limit'        			=>  ''
                     ,'offset'       			=>  ''
+                    );
             	/* cat_docTipo */
                 public $docTipo = array(
 				'skDocTipo' =>  NULL
