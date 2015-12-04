@@ -347,10 +347,12 @@
                     if($_POST){
                         
                          
-                        $this->tipoempresas['skTipoEmpresa'] = !empty($_POST['skTipoEmpresa']) ? $_POST['skTipoEmpresa'] : substr(md5(microtime()), 1, 32);
+                        $this->tipoempresas['skTipoEmpresaViejo'] = $_POST['skTipoEmpresaViejo'];
+                        $this->tipoempresas['skTipoEmpresa'] = $_POST['skTipoEmpresa'];
+                        
                         $this->tipoempresas['sNombre'] = htmlentities($_POST['sNombre'],ENT_QUOTES);
                          $this->tipoempresas['skStatus'] = htmlentities($_POST['skStatus'],ENT_QUOTES);
-                        if(empty($_POST['skTipoEmpresa'])){
+                        if(empty($_POST['skTipoEmpresaViejo'])){
                             if(parent::create_tipoempresas()){
                             	$this->data['response'] = true;
                                 $this->data['message'] = 'Registro insertado con &eacute;xito.';
@@ -391,6 +393,10 @@
                     $this->load_view('tipemp-form', $this->data);
                     return true;
                 }
+                 
+                 
+                 
+                 
                 
                  /* EMPIEZA MODULO DE EMPRESAS*/
                  public function empresas_index(){
