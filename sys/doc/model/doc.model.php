@@ -9,6 +9,10 @@
                     ,'sMercancia'     				=>  ''
                     ,'sObservaciones'     				=>  ''
                     ,'sDescripcion'    			  	=>  ''
+                    ,'sNumContenedor'=>''
+                    ,'iBultos'=>0
+                    ,'fPeso'=>0
+                    ,'fVolumen'=>0
                     ,'skStatus'     				=>  ''
                     ,'limit'        					=>  ''
                     ,'offset'       					=>  ''
@@ -244,25 +248,30 @@
             }
             
             public function create_recepciondocumentos(){
- 				$sql = "INSERT INTO ope_recepciones_documentos (	skRecepcionDocumento,sReferencia,sPedimento,sMercancia,sObservaciones,skEmpresa,skTipoTramite,
-																skTipoServicio,skClaveDocumento,skCorresponsalia,skStatus,
-																dFechaCreacion,skUsersCreacion,dFechaModificacion,skUsersModificacion) 
-						VALUES ('".$this->recepciondocumentos['skRecepcionDocumento']."',
-								'".$this->recepciondocumentos['sReferencia']."',
-								'".$this->recepciondocumentos['sPedimento']."',
-								'".$this->recepciondocumentos['sMercancia']."',
-								'".$this->recepciondocumentos['sObservaciones']."',
-								
-								'".$this->recepciondocumentos['skEmpresa']."',
-								'".$this->recepciondocumentos['skTipoTramite']."',
-								'".$this->recepciondocumentos['skTipoServicio']."',
-								'".$this->recepciondocumentos['skClaveDocumento']."',
-								'".$this->recepciondocumentos['skCorresponsalia']."',
-								'AC',
-								CURRENT_TIMESTAMP(),
-								'".$_SESSION['session']['skUsers']."',
-								CURRENT_TIMESTAMP(),
-								'".$_SESSION['session']['skUsers']."')";
+ 				$sql = "INSERT INTO ope_recepciones_documentos (skRecepcionDocumento,sReferencia,sPedimento,sMercancia,sObservaciones,sNumContenedor,iBultos,fPeso,fVolumen,skEmpresa,skTipoTramite,
+                                        skTipoServicio,skClaveDocumento,skCorresponsalia,
+                                        skStatus,dFechaCreacion,skUsersCreacion,dFechaModificacion,skUsersModificacion) 
+                                        VALUES ('".$this->recepciondocumentos['skRecepcionDocumento']."',
+                                                '".$this->recepciondocumentos['sReferencia']."',
+                                                '".$this->recepciondocumentos['sPedimento']."',
+                                                '".$this->recepciondocumentos['sMercancia']."',
+                                                '".$this->recepciondocumentos['sObservaciones']."',
+                                                
+                                                '".$this->recepciondocumentos['sNumContenedor']."',
+                                                ".$this->recepciondocumentos['iBultos'].",
+                                                ".$this->recepciondocumentos['fPeso'].",
+                                                ".$this->recepciondocumentos['fVolumen'].",
+
+                                                '".$this->recepciondocumentos['skEmpresa']."',
+                                                '".$this->recepciondocumentos['skTipoTramite']."',
+                                                '".$this->recepciondocumentos['skTipoServicio']."',
+                                                '".$this->recepciondocumentos['skClaveDocumento']."',
+                                                '".$this->recepciondocumentos['skCorresponsalia']."',
+                                                'AC',
+                                                CURRENT_TIMESTAMP(),
+                                                '".$_SESSION['session']['skUsers']."',
+                                                CURRENT_TIMESTAMP(),
+                                                '".$_SESSION['session']['skUsers']."')";
 				//echo $sql;die();
                 $result = $this->db->query($sql);
                 if($result){
@@ -287,7 +296,14 @@
 				if(!empty($this->recepciondocumentos['sObservaciones'])){
                     $sql .=" sObservaciones = '".$this->recepciondocumentos['sObservaciones']."' ,";
                 }
-				
+                
+                /* TIPO DE SERVICIO */
+                $sql .=" sNumContenedor = '".$this->recepciondocumentos['sNumContenedor']."' ,";
+                $sql .=" iBultos = ".$this->recepciondocumentos['iBultos']." ,";
+                $sql .=" fPeso = ".$this->recepciondocumentos['fPeso']." ,";
+                $sql .=" fVolumen = ".$this->recepciondocumentos['fVolumen']." ,";
+                /* TERMINA TIPO DE SERVICIO */
+                
                 if(!empty($this->recepciondocumentos['skEmpresa'])){
                     $sql .=" skEmpresa = '".$this->recepciondocumentos['skEmpresa']."' ,";
                 }

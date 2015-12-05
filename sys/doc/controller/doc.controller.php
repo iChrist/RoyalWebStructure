@@ -38,6 +38,19 @@
 					if(isset($_POST['sObservaciones'])){
 						$this->recepciondocumentos['sObservaciones'] = $_POST['sObservaciones'];
 					}
+                                        
+                                        if(isset($_POST['sNumContenedor'])){
+						$this->recepciondocumentos['sNumContenedor'] = $_POST['sNumContenedor'];
+					}
+                                        if(isset($_POST['iBultos'])){
+						$this->recepciondocumentos['iBultos'] = $_POST['iBultos'];
+					}
+                                        if(isset($_POST['fPeso'])){
+						$this->recepciondocumentos['fPeso'] = $_POST['fPeso'];
+					}
+                                        if(isset($_POST['fVolumen'])){
+						$this->recepciondocumentos['fVolumen'] = $_POST['fVolumen'];
+					}
 					
 					if(isset($_POST['skEmpresa'])){
 						$this->recepciondocumentos['skEmpresa'] = $_POST['skEmpresa'];
@@ -76,7 +89,6 @@
 						echo json_encode($records);
 						return false;
 					}
-					 
 					while($row = $this->data['data']->fetch_assoc()){
 						$actions = $this->printModulesButtons(2,array($row['skRecepcionDocumento']),$row['skUsersCreacion']);
 						array_push($records['data'], array(
@@ -146,6 +158,11 @@
 					$this->recepciondocumentos['skTipoServicio'] = utf8_decode($_POST['skTipoServicio']);
 					$this->recepciondocumentos['skClaveDocumento'] = utf8_decode($_POST['skClaveDocumento']);
 					$this->recepciondocumentos['skCorresponsalia'] = utf8_decode($_POST['skCorresponsalia']);
+                                        
+                                        $this->recepciondocumentos['sNumContenedor'] = utf8_decode(!empty($_POST['sNumContenedor']) ? $_POST['sNumContenedor'] : '');
+                                        $this->recepciondocumentos['iBultos'] = utf8_decode(!empty($_POST['iBultos']) ? $_POST['iBultos'] : 0);
+                                        $this->recepciondocumentos['fPeso'] = utf8_decode(!empty($_POST['fPeso']) ? $_POST['fPeso'] : 0);
+                                        $this->recepciondocumentos['fVolumen'] = utf8_decode(!empty($_POST['fVolumen']) ? $_POST['fVolumen'] : 0);
 					
 						if(empty($_POST['skRecepcionDocumento'])){
 							if(parent::create_recepciondocumentos()){
@@ -234,9 +251,13 @@
                                             $this->recepcionDoc_docTipo['skRecepcionDocumento'] = $_GET['p1'];
                                             $this->data['datos'] = parent::read_recepciondocumentos();
                                             $this->data['filesDocTipo'] = parent::read_equal_recepcionDoc_docTipo();
+                                            /*
+                                             * ESTO ES PARA QUE SOLO PUEDA MODIFICAR EL USUARIO QUE CREÓ EL REGISTRO
+                                             */
                                             $result = $this->data['datos']->fetch_assoc();
-                                            //echo '<pre>'.print_r($result,1).'</pre>';
+                                            $this->data['datos']->data_seek(0);
                                             $this->verify_access('W' , $result['skUsersCreacion']);
+                                            /* FINALIZA SEGURIDAD DE AUTOR DE REGISTRO */
 					}
                                         $this->load_view('docume-form', $this->data);
                                         return true;

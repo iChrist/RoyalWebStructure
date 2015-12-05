@@ -11,11 +11,8 @@
     }
 	
 	
-/*echo "<pre>";
-print_r($data);
-echo "</pre>";
-
-*/
+//echo "<pre>".print_r($data,1)."</pre>";
+//echo "<pre>".print_r($result,1)."</pre>";
 ?>
 
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
@@ -37,6 +34,7 @@ echo "</pre>";
         </div>
       </div>
     </div>
+    <hr>
     <div class="form-group">
       <label class="control-label col-md-2">Tipo Servicios <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-10">
@@ -45,15 +43,52 @@ echo "</pre>";
           <?php while($rTiposervicio =  $data['tiposservicios']->fetch_assoc()){?>
           <?php $i++;?>
           <label>
-          <div class=""> <span>
-            <input type="radio" name="skTipoServicio" value="<?php echo $rTiposervicio{'skTipoServicio'}?>" <?php echo ((isset($result['skTipoServicio']) ? $result['skTipoServicio'] : "-") == $rTiposervicio{'skTipoServicio'} ? 'checked' : ($i==1 ) ? 'checked' : '' )?>  >
-            <?php echo utf8_encode($rTiposervicio{'sNombre'})?> </span> </div>
+                <input type="radio" class="tipoServicio" tipo="<?php echo utf8_encode($rTiposervicio{'sNombre'}); ?>" name="skTipoServicio" value="<?php echo $rTiposervicio{'skTipoServicio'}?>" <?php echo ((isset($result['skTipoServicio']) ? $result['skTipoServicio'] : "-") == $rTiposervicio{'skTipoServicio'} ? 'checked' : ($i==1 ) ? 'checked' : '' )?>  >
+                <?php echo utf8_encode($rTiposervicio{'sNombre'}); ?>
           </label>
           <?php }?>
         </div>
       </div>
     </div>
-    
+    <!--  DATOS PARA EL TIPO DE SERVICIO !-->
+        <!-- CONTENEDOR !-->
+        <div class="form-group contenedor">
+            <label class="control-label col-md-2">N&uacute;m. Contenedor <span aria-required="true" class="required"> * </span> </label>
+            <div class="col-md-4">
+                <div class="input-icon right"> <i class="fa"></i>
+                    <input type="text" name="sNumContenedor" id="sNumContenedor" class="form-control contenedor" placeholder="N&uacute;m. Contenedor" value="<?php echo (isset($result['sNumContenedor'])) ? utf8_encode($result['sNumContenedor']) : '' ; ?>" >
+                </div>
+            </div>
+        </div>
+        <!-- CARGA SUELTA !-->
+        <div class="form-group cargaSuelta">
+            <label class="control-label col-md-2">Bultos <span aria-required="true" class="required"> * </span> </label>
+            <div class="col-md-4">
+                <div class="input-icon right"> <i class="fa"></i>
+                    <input type="text" name="iBultos" id="iBultos" class="form-control cargaSuelta" placeholder="Bultos" value="<?php echo (isset($result['iBultos'])) ? utf8_encode($result['iBultos']) : '' ; ?>" >
+                </div>
+            </div>
+        </div>
+        <div class="form-group cargaSuelta">
+            <label class="control-label col-md-2">peso <span aria-required="true" class="required"> * </span> </label>
+            <div class="col-md-4">
+                <div class="input-icon right"> <i class="fa"></i>
+                    <input type="text" name="fPeso" id="fPeso" class="form-control cargaSuelta" placeholder="Peso" value="<?php echo (isset($result['fPeso'])) ? utf8_encode($result['fPeso']) : '' ; ?>" >
+                </div>
+            </div>
+        </div>
+        <div class="form-group cargaSuelta">
+            <label class="control-label col-md-2">Volumen <span aria-required="true" class="required"> * </span> </label>
+            <div class="col-md-4">
+                <div class="input-icon right"> <i class="fa"></i>
+                    <input type="text" name="fVolumen" id="fVolumen" class="form-control cargaSuelta" placeholder="Volumen" value="<?php echo (isset($result['fVolumen'])) ? utf8_encode($result['fVolumen']) : '' ; ?>" >
+                </div>
+            </div>
+        </div>
+        <hr>
+    <!-- TERMINA DATOS PARA EL TIPO DE SERVICIO !-->
+      
+      
     <div class="form-group">
       <label class="control-label col-md-2">Referencia <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
@@ -186,17 +221,54 @@ echo "</pre>";
 <script type="text/javascript">
     var fraccion = 1;
     $(document).ready(function(){
+        /*
+         * HABILITA EL CAMPO DE Núm. Contenedor
+         */
+        var tipo = $('.tipoServicio:checked').attr("tipo"); 
+        switch(tipo){
+            case "Contenedor":
+                $(".cargaSuelta").val('');
+                $(".cargaSuelta").css("display","none");
+                $(".contenedor").css("display","block");
+                break;
+            case "Carga Suelta":
+                $(".contenedor").val('');
+                $(".contenedor").css("display","none");
+                $(".cargaSuelta").css("display","block");
+                break;
+        }
+        $(".tipoServicio").click(function(){
+           tipo = $(this).attr("tipo"); 
+           switch(tipo){
+               case "Contenedor":
+                   $(".cargaSuelta").val('');
+                   $(".cargaSuelta").css("display","none");
+                   $(".contenedor").css("display","block");
+                   break;
+               case "Carga Suelta":
+                   $(".contenedor").val('');
+                   $(".contenedor").css("display","none");
+                   $(".cargaSuelta").css("display","block");
+                   break;
+           }
+        });
+        /*
+         * Muestra el input type file para un documento
+         * que sustituirá al actual.
+         */
         $(".delete-doc-tipo").click(function(){
             var skDocTipo = $(this).attr("skDocTipo");
             $("#"+skDocTipo).css("display","block");
             $(this).parent().remove();
         });
-        /* VALIDATIONS */
+        /*
+         * VALIDACIONES DEL FORMULARIO
+         */
         isValid = $("#_save").validate({
             errorElement: 'span', //default input error message container
             errorClass: 'help-block', // default input error message class
             focusInvalid: false, // do not focus the last invalid input
-            ignore: "",
+            ignore: ":hidden",
             rules:{
                 sReferencia:{
                     required: true
@@ -204,20 +276,31 @@ echo "</pre>";
                 sPedimento:{
                     required: true
                 },
-				sMercancia:{
+                sMercancia:{
                     required: true
                 },
-				sObservaciones:{
+                sObservaciones:{
                     required: true
                 },
-				
-                skEmpresa:{
+		skEmpresa:{
                     required: true
                 },
-				skClaveDocumento:{
+                skClaveDocumento:{
                     required: true
                 },
-				skCorresponsalia:{
+                skCorresponsalia:{
+                    required: true
+                },
+                sNumContenedor:{
+                    required: true
+                },
+                iBultos:{
+                    required: true
+                },
+                fPeso:{
+                    required: true
+                },
+                fVolumen:{
                     required: true
                 }
             },
@@ -259,26 +342,37 @@ invalidHandler: function (event, validator) { //alerta de error de visualizació
             },
             messages:{
                 sReferencia:{
-                    required: true
+                    required: "Campo obligatorio"
                 },
                 sPedimento:{
-                    required: true
+                    required: "Campo obligatorio"
                 },
-				sMercancia:{
-                    required: true
+                sMercancia:{
+                    required: "Campo obligatorio"
                 },
-				Observaciones:{
-                    required: true
-                },
-				
+                Observaciones:{
+                    required: "Campo obligatorio"
+                },		
                 skEmpresa:{
-                    required: true
+                    required: "Campo obligatorio"
                 },
-				skClaveDocumento:{
-                    required: true
+                skClaveDocumento:{
+                    required: "Campo obligatorio"
                 },
-				skCorresponsalia:{
-                    required: true
+                skCorresponsalia:{
+                    required: "Campo obligatorio"
+                },
+                sNumContenedor:{
+                    required: "Campo obligatorio"
+                },
+                iBultos:{
+                    required: "Campo obligatorio"
+                },
+                fPeso:{
+                    required: "Campo obligatorio"
+                },
+                fVolumen:{
+                    required: "Campo obligatorio"
                 }
             }
         });
