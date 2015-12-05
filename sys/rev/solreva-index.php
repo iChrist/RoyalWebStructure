@@ -26,16 +26,29 @@ echo "</pre>";*/
           <tr role="row" class="heading">
             <th width="3%" >E</th>
             <th width="15%"> Referencia </th>
+             <th width="10%"> Fecha </th>
+            <th width="15%"> Ejecutivo </th>
             <th width="10%"> Linea Naviera </th>
             <th width="10%"> Tramitador </th>
              <th width="10%"> Observaciones </th>
-             <th width="10%"> Fecha </th>
             <th width="10%"> Acciones </th>
           </tr>
           <tr role="row" class="filter">
           <td></td>
             <td><input type="text" class="form-control form-filter input-sm" name="sReferencia" placeholder="Referencia"></td>
-            
+            <td></td>
+            <td><select name="skUsuarioRevalidacion" class="form-control form-filter input-sm">
+                <option value="">- Ejecutivo -</option>
+                <?php
+                                    if(isset($data['ejecutivo'])){
+                                        while($row = $data['ejecutivo']->fetch_assoc()){
+                                ?>
+                <option value="<?php echo $row['skUsuarioRevalidacion']; ?>"> <?php echo utf8_encode($row['sName']); ?> </option>
+                <?php
+                                        }//ENDIF
+                                    }//ENDWHILE
+                                ?>
+              </select></td>
             
             <td><select name="skEmpresaNaviera" class="form-control form-filter input-sm">
                 <option value="">- Linea Naviera -</option>
@@ -64,8 +77,7 @@ echo "</pre>";*/
               </select></td>
             
             <td><input type="text" class="form-control form-filter input-sm" name="sObservaciones" placeholder="Observaciones"></td>
-            
-            <td></td>
+           
             
             <td><div aria-label="Acciones" role="group" class="btn-group btn-group-xs" style="width:100px">
                 <button class="btn btn-xs btn-default filter-submit margin-bottom"><i class="fa fa-search"></i> Buscar</button>

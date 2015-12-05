@@ -74,10 +74,12 @@
 						array_push($records['data'], array(
 							 utf8_encode($row['Icono'])
 							 ,utf8_encode($row['sReferencia'])
+							 ,utf8_encode($row['dFechaRevalidacion'])
+							 ,utf8_encode($row['UsuarioEjecutivo'])
  							,utf8_encode($row['EmpresaNaviera'])
 							,utf8_encode($row['Tramitador'])
    							,utf8_encode($row['sObservaciones'])
-							,utf8_encode($row['dFechaRevalidacion'])
+							
 							, !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
 						));
 					}
@@ -107,6 +109,9 @@
 					$this->load_model('cof','cof');
 					$objUsuarios = new Cof_Model();
 					$this->data['tramitadores'] = $objUsuarios->read_user();
+					$this->load_model('cof','cof');
+					$objEjecutivo = new Cof_Model();
+					$this->data['ejecutivo'] = $objEjecutivo->read_user();
 					
 
 					// RETORNA LA VISTA areas-index.php //
