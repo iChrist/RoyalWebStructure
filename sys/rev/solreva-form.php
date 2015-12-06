@@ -24,6 +24,7 @@ echo "</pre>";
         </div>
       </div>
     </div>
+    <hr>
      <div id="dvDatos">
      
          
@@ -33,7 +34,7 @@ echo "</pre>";
       <label class="control-label col-md-2">Línea Naviera <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
         <select name="skEmpresaNaviera" id="skEmpresaNaviera" class="form-control form-filter input-sm">
-          <option>- Línea Naviera -</option>
+          <option value="">- Línea Naviera -</option>
           <?php
                                     if(isset($data['empresas'])){
                                         while($rEmpresa = $data['empresas']->fetch_assoc()){
@@ -50,7 +51,7 @@ echo "</pre>";
       <label class="control-label col-md-2">Tramitador <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
         <select name="skUsuarioTramitador" id="skUsuarioTramitador" class="form-control form-filter input-sm">
-          <option>- Tramitador -</option>
+          <option value="">- Tramitador -</option>
           <?php
                                     if(isset($data['tramitadores'])){
                                         while($rTramitador = $data['tramitadores']->fetch_assoc()){
@@ -70,16 +71,19 @@ echo "</pre>";
           <?php $i = 0?>
           <?php while($rEstatus =  $data['estatus']->fetch_assoc()){?>
           <?php $i++;?>
-          <label>
-          <div class=""> <span>
+          <label class="col-md-2">
+           <span>
             <input type="radio" name="skEstatusRevalidacion" value="<?php echo $rEstatus{'skEstatus'}?>" <?php echo ((isset($result['skEstatusRevalidacion']) ? $result['skEstatusRevalidacion'] : "-") == $rEstatus{'skEstatus'} ? 'checked' : ($i==1 ) ? 'checked' : '' )?>  >
-            <?php echo utf8_encode($rEstatus{'sNombre'})?> </span> </div>
+            <?php echo utf8_encode($rEstatus{'sNombre'})?> </span> 
           </label>
           <?php }?>
         </div>
       </div>
     </div>
-
+    <div id="dvRechazos">
+     
+         
+     </div>
     
     <hr>
     <div class="form-group">
@@ -142,7 +146,7 @@ function obtenerDatos(){
                $("#sNumeroParte").prop('disabled', false);*/
                $('.page-title-loading').css('display','none');
             });
-            
+          //  $('.page-title-loading').css('display','none');
 			}
 
     $(document).ready(function(){
@@ -176,7 +180,8 @@ function obtenerDatos(){
                 },
 				
                 skEmpresaNaviera:{
-                    required: true
+                    required: true,
+                     minlength: 1 
                 },
 				skUsuarioTramitador:{
                     required: true
@@ -220,18 +225,18 @@ invalidHandler: function (event, validator) { //alerta de error de visualizació
             },
             messages:{
                 sReferencia:{
-                    required: true,
+                    required:"Ingresa una Referencia",
                        remote: "Esta referencia no Existe."
                 },
  				Observaciones:{
                     required: true
                 },
-				
-                skEmpresaNaviera:{
-                    required: true
+                 skEmpresaNaviera:{
+                    required: "Selecciona una Línea Naviera",
+                    minlength: 1 ,
                 },
 				skUsuarioTramitador:{
-                    required: true
+                    required: "Selecciona un Tramitador"
                 }
             }
         });
