@@ -135,6 +135,9 @@
 					$this->load_model('cof','cof');
 					$objUsuarios = new Cof_Model();
 					$this->data['tramitadores'] = $objUsuarios->read_user();
+					
+					
+					$this->data['profiles'] = parent::read_like_rechazos(); 
 					if(isset($_POST['axn']))
                     	 {
                         	switch ($_POST['axn'])
@@ -198,7 +201,7 @@
 					$this->solreva['sReferencia'] = utf8_decode($_POST['sReferencia']);
   					$this->solreva['sObservaciones'] = utf8_decode($_POST['sObservaciones']);
  					$this->solreva['skEmpresaNaviera'] = utf8_decode($_POST['skEmpresaNaviera']);
- 					$this->solreva['skEstatusRevalidacion'] = utf8_decode($_POST['skEstatusRevalidacion']);
+ 					//$this->solreva['skEstatusRevalidacion'] = utf8_decode($_POST['skEstatusRevalidacion']);
  					$this->solreva['skUsuarioTramitador'] = utf8_decode($_POST['skUsuarioTramitador']);
  						if(empty($_POST['skSolicitudRevalidacion'])){
 							if(parent::create_solreva()){

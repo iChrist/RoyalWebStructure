@@ -76,6 +76,7 @@
 								us.sName AS Tramitador, 
 								usr.sName AS UsuarioEjecutivo, 
 								ce.sNombre AS EmpresaNaviera,
+								
 								cs.sNombre AS Estatus,
 								cs.sIcono As Icono
  						FROM ope_solicitud_revalidacion sd 
@@ -131,7 +132,7 @@
   								'".$this->solreva['sObservaciones']."',
  								'".$this->solreva['skEmpresaNaviera']."',
 								'".$this->solreva['skUsuarioTramitador']."',
-								'".$this->solreva['skEstatusRevalidacion']."',
+								'PR',
  								CURRENT_TIMESTAMP(),
 								'".$_SESSION['session']['skUsers']."')";
 				//echo $sql;die();
@@ -153,7 +154,7 @@
 								cts.sNombre AS TipoServicio, 
 								ccd.sNombre AS ClaveDocumento, 
 								cc.sNombre AS Corresponsalia, 
-								st.sHtml AS htmlStatus 
+								st.sHtml  
 						FROM ope_recepciones_documentos rd 
 						INNER JOIN _status  st ON st.skStatus = rd.skStatus 
 						INNER JOIN cat_empresas  ce ON ce.skEmpresa = rd.skEmpresa 
