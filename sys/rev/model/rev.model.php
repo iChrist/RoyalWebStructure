@@ -143,6 +143,24 @@
                     return false;
                 }
             }
+             public function update_solreva(){
+                
+                $sql = "UPDATE ope_solicitud_revalidacion 
+				SET skEmpresaNaviera='".$this->solreva['skEmpresaNaviera']."', 
+                    skUsuarioTramitador='".$this->solreva['skUsuarioTramitador']."', 
+                    sObservaciones='".$this->solreva['sObservaciones']."', 
+                    skEstatusRevalidacion='".$this->solreva['skEstatusRevalidacion']."' 
+                    WHERE skSolicitudRevalidacion = '".$this->solreva['skSolicitudRevalidacion']."'";
+                $result = $this->db->query($sql);
+				//echo $sql;die();
+				$sql = "DELETE from rel_solicitud_revalidaciones_rechazos  WHERE skSolicitudRevalidacion = '".$this->solreva['skSolicitudRevalidacion']."'";
+                $this->db->query($sql);
+                if($result){
+                    return $this->solreva['skSolicitudRevalidacion'];
+                }else{
+                    return false;
+                }
+            }
             
             
             public function read_referencia(){
@@ -186,7 +204,7 @@
             }
             
             public function read_estatus(){
-	            $sql = "	SELECT 	*  FROM cat_estatus ";
+	            $sql = "	SELECT 	*  FROM cat_estatus WHERE skStatus='AC' ";
   				//echo $sql;die();
                 $result = $this->db->query($sql);
                 if($result){
@@ -293,6 +311,7 @@
                         $sql .= " LIMIT ".$this->rechazos['limit'];
                     }
                 }
+             
                 $result = $this->db->query($sql);
                 if($result){
                     if($result->num_rows > 0){
@@ -329,6 +348,25 @@
                 }
             }
 			 /* COMIENZA MODULO  LAVA*/
+			 
+			  public function create_solreva_rechazos($valores) {
+                    $sql = "INSERT INTO rel_solicitud_revalidaciones_rechazos (skSolicitudRevalidacion, skRechazo ) VALUES ".$valores."";
+                    //echo  $sql."<br><br><br>";die();
+					$result = $this->db->query($sql);
+                    if($result){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                }
+                
+                 public function read_solreva_rechazos(){
+					$sql = "SELECT * FROM rel_solicitud_revalidaciones_rechazos  WHERE 1=1 AND skSolicitudRevalidacion = '".$this->solreva['skSolicitudRevalidacion']."' ";
+					
+			    $result = $this->db->query($sql);
+          		return $result;
+            }
+            
 		   
 		   
 	}

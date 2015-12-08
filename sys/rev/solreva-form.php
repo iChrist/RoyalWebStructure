@@ -5,11 +5,11 @@
     }
 	
 	$arrayRechazos = array();
-	if(isset($data['rechazos']))
+	if(isset($data['rechazosSolicitud']))
     {
-		if($data['rechazos']->num_rows > 0){
-			 while($row = $data['rechazos']->fetch_assoc()){
-				$arrayRechazos[] = $row{'rechazos'};
+		if($data['rechazosSolicitud']->num_rows > 0){
+			 while($row = $data['rechazosSolicitud']->fetch_assoc()){
+				$arrayRechazos[] = $row{'skRechazo'};
 			 }
 		 }
     }
@@ -28,7 +28,7 @@ echo "</pre>";
       <label class="col-md-2">Referencia <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
         <div class="input-icon right"> <i class="fa"></i>
-          <input type="text" name="sReferencia" id="sReferencia" class="form-control" onblur="obtenerDatos();" placeholder="Referencia" value="<?php echo (isset($result['sReferencia'])) ? utf8_encode($result['sReferencia']) : '' ; ?>" >
+          <input type="text" name="sReferencia" id="sReferencia" class="form-control" onChange="obtenerDatos();" placeholder="Referencia" value="<?php echo (isset($result['sReferencia'])) ? utf8_encode($result['sReferencia']) : '' ; ?>" >
         </div>
       </div>
     </div>
@@ -84,7 +84,7 @@ echo "</pre>";
           <?php $i++;?>
           <label class="col-md-2">
            <span>
-            <input type="radio" name="skEstatusRevalidacion" value="<?php echo $rEstatus{'skEstatus'}?>" <?php echo ((isset($result['skEstatusRevalidacion']) ? $result['skEstatusRevalidacion'] : "-") == $rEstatus{'skEstatus'} ? 'checked' : ($i==1 ) ? 'checked' : '' )?>  >
+            <input type="radio" class="tipoEstatus" tipo="<?php echo utf8_encode($rEstatus{'skEstatus'}); ?>" name="skEstatusRevalidacion" value="<?php echo $rEstatus{'skEstatus'}?>" <?php echo ((isset($result['skEstatusRevalidacion']) ? $result['skEstatusRevalidacion'] : "-") == $rEstatus{'skEstatus'} ? 'checked' : '' ? 'checked' : '' )?>  >
             <?php echo utf8_encode($rEstatus{'sNombre'})?> </span> 
           </label>
           <?php }?>
@@ -93,24 +93,54 @@ echo "</pre>";
     </div>
      
     
-    <div id="dvRechazos">
-     
-         
+    <div id="dvRechazos" style="display:none;">
+    <hr>
+     <div class="form-group">
+                <label class="col-md-2">Rechazos <span aria-required="true" class="required"> * <div class="help-block">( Elija al menos 1 rechazo )</div> </span>
+                </label>
+                <div class="col-md-10">
+                    <div class="row">
+                        <div class="checkbox-list">
+                                                           
+                                <?php 
+                                if($data['rechazos'])
+                                {
+                                    foreach ($data['rechazos'] as $rechazo)
+                                    {
+                                    ?>
+                                        <div class="col-md-6">
+                                               <label> <input type="checkbox" name="skRechazo[]" value="<?php echo $rechazo['skRechazo']; ?>" <?php  echo (in_array($rechazo['skRechazo'], $arrayRechazos) ? 'checked' : '') ?>   />
+                                                <?php echo $rechazo['sNombre']; ?>    <br/>&nbsp;</label>
+                                            
+                                        </div>
+                                    <?php
+                                    }
+                                }
+                                ?>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+            </div>
+         <hr>
      </div>
     
-
+     </div>
+      <!-- Cierra div dvEstatusNaviera-->
+      
+      
     <div class="form-group">
-      <label class="control-label col-md-2">Observaciones <span aria-required="true" class="required"> * </span> </label>
+      <label class=" col-md-2">Observaciones <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-8">
         <div class="input-icon right"> <i class="fa"></i>
-          <textarea rows="5"  name="sObservaciones" id="sObservaciones" class="form-control" placeholder="Observaciones" value="<?php echo (isset($result['sObservaciones'])) ? utf8_encode($result['sObservaciones']) : '' ; ?>" ></textarea>
+          <textarea rows="5"  name="sObservaciones" id="sObservaciones" class="form-control" placeholder="Observaciones"  ><?php echo (isset($result['sObservaciones'])) ? utf8_encode($result['sObservaciones']) : '' ; ?></textarea>
         </div>
       </div>
     </div>
     
     
-      </div>
-      <!-- Cierra div dvEstatusNaviera-->
+ 
     
     
      
@@ -134,6 +164,28 @@ function lanzadera(){
 
     window.onload = lanzadera;
     
+    
+     var tipo = $('.tipoEstatus:checked').attr("tipo"); 
+        switch(tipo){
+            case "RE":
+                 $("#dvRechazos").css("display","block");
+                break;
+            case "RV":
+                  $("#dvRechazos").css("display","none");
+                  break;
+        }
+        $(".tipoEstatus").click(function(){
+            tipo = $(this).attr("tipo"); 
+           // alert(tipo);
+           switch(tipo){
+               case "RE":
+                 $("#dvRechazos").css("display","block");
+                break;
+            case "RV":
+                  $("#dvRechazos").css("display","none");
+                  break;
+           }
+        });
 function obtenerDatos(){
 	  $('.page-title-loading').css('display','inline');
 	 $.post("",{ axn : "obtenerDatos" , sReferencia : $("#sReferencia").val() }, function(data){
@@ -144,21 +196,21 @@ function obtenerDatos(){
               //  if(data.data[0]){    
                 
     	var	cad='<div class="form-group">'+
-     	'<label class="col-md-2"><b>Cliente</b></label>'+
+     	'<label class="col-md-2">Cliente</label>'+
      	'<div class="col-md-4">'+
        	'<label id="lbCliente" class="control-label">'+data.data[0][0]+'</label>'+
         '</div>'+
-      	'<label class="control-label col-md-2"><b>Servicio de</b></label>'+
+      	'<label class="control-label col-md-2">Tipo de Servicio</label>'+
 	     '<div class="col-md-4">'+
 	       ' <label id="lbServicio" class="control-label">'+data.data[0][1]+'</label>'+
 	    ' </div>'+
    ' </div>'+
     '<div class="form-group">'+
-     	'<label class="col-md-2"><b>Ejecutivo</b></label>'+
+     	'<label class="col-md-2">Ejecutivo</label>'+
      	'<div class="col-md-4">'+
        	'	 <label id="lbEjecutivo" class="control-label">'+data.data[0][2]+'</label>'+
        ' </div>'+
-      	'<label class="control-label col-md-2"><b>Mercancia</b></label>'+
+      	'<label class="control-label col-md-2">Mercancia</label>'+
 	    ' <div class="col-md-4">'+
 	    '    <label id="lbMercancia" class="control-label ">'+data.data[0][3]+'</label>'+
 	    ' </div>'+
@@ -185,7 +237,7 @@ function obtenerDatos(){
             errorElement: 'span', //default input error message container
             errorClass: 'help-block', // default input error message class
             focusInvalid: false, // do not focus the last invalid input
-            ignore: "",
+            ignore: "input[type='checkbox']:hidden",
               rules:{
               sReferencia:{
                     required: true,
@@ -211,7 +263,14 @@ function obtenerDatos(){
                 },
 				skUsuarioTramitador:{
                     required: true
-                }
+                },
+                /*skEstatusRevalidacion:{
+                    required: true
+                },*/
+                /* 'skRechazo[]':{
+                    required: true,
+                    minlength: 1
+                 }*/
             },
 
 invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar              
@@ -261,6 +320,10 @@ invalidHandler: function (event, validator) { //alerta de error de visualizació
                     required: "Selecciona una Línea Naviera",
                     minlength: 1 ,
                 },
+                /*skEstatusRevalidacion:{
+                	required: "Selecciona un Estatus",
+                    required: true
+                },*/
 				skUsuarioTramitador:{
                     required: "Selecciona un Tramitador"
                 }
