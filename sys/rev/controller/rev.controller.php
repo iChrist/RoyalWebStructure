@@ -135,6 +135,9 @@
 					$this->load_model('cof','cof');
 					$objUsuarios = new Cof_Model();
 					$this->data['tramitadores'] = $objUsuarios->read_user();
+					
+					
+					$this->data['profiles'] = parent::read_like_rechazos(); 
 					if(isset($_POST['axn']))
                     	 {
                         	switch ($_POST['axn'])
@@ -198,7 +201,7 @@
 					$this->solreva['sReferencia'] = utf8_decode($_POST['sReferencia']);
   					$this->solreva['sObservaciones'] = utf8_decode($_POST['sObservaciones']);
  					$this->solreva['skEmpresaNaviera'] = utf8_decode($_POST['skEmpresaNaviera']);
- 					$this->solreva['skEstatusRevalidacion'] = utf8_decode($_POST['skEstatusRevalidacion']);
+ 					//$this->solreva['skEstatusRevalidacion'] = utf8_decode($_POST['skEstatusRevalidacion']);
  					$this->solreva['skUsuarioTramitador'] = utf8_decode($_POST['skUsuarioTramitador']);
  						if(empty($_POST['skSolicitudRevalidacion'])){
 							if(parent::create_solreva()){
@@ -249,5 +252,124 @@
 					}
 
 				/*TERMINA MODULO CAPTURA DE DOCUMENTOS */
+				
+				 public function rechazos_index(){
+                    if(isset($_GET['axn'])){
+                        switch ($_GET['axn']) {
+                            case 'pdf':
+                                $this->rechazos_pdf();
+                                break;
+                            case 'fetch_all':
+                                // PARAMETROS PARA FILTRADO //
+                                if(isset($_POST['sNombre'])){
+                                    $this->rechazos['sNombre'] = $_POST['sNombre'];
+                                }
+                                if(isset($_POST['skUserCreacion'])){
+                                    $this->rechazos['skUserCreacion'] = $_POST['skUserCreacion'];
+                                }
+                                if(isset($_POST['skStatus'])){
+                                    $this->rechazos['skStatus'] = $_POST['skStatus'];
+                                }
+
+                                // OBTENER REGISTROS //
+                                $total = parent::count_rechazos();
+                                $records = Core_Functions::table_ajax($total);
+                                if($records['recordsTotal'] === 0){
+                                    header('Content-Type: application/json');
+                                    echo json_encode($records);
+                                    return false;
+                                }
+
+                                $this->rechazos['limit'] = $records['limit'];
+                                $this->rechazos['offset'] = $records['offset'];
+                                $this->data['data'] = parent::read_like_rechazos();
+
+                                if(!$this->data['data']){
+                                    header('Content-Type: application/json');
+                                    echo json_encode($records);
+                                    return false;
+                                }
+
+                                while($row = $this->data['data']->fetch_assoc()){
+                                    $actions = $this->printModulesButtons(2,array($row['skRechazo']));
+                                    array_push($records['data'], array(
+                                         utf8_encode($row['sNombre'])
+                                        ,utf8_encode($row['UsuarioCreacion'])
+                                        ,utf8_encode($row['dFechaCreacion'])
+                                        ,utf8_encode($row['htmlStatus'])
+                                        , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
+                                    ));
+                                }
+
+                                header('Content-Type: application/json');
+                                echo json_encode($records);
+                                return true;
+                                break;
+                        }
+                        return true;
+                    }
+                    
+                    // INCLUYE UN MODELO DE OTRO MODULO //
+                    $this->load_model('cof','cof');
+                    $cof = new Cof_Model();
+                    $this->data['status'] = $cof->read_status();
+                     
+                    // RETORNA LA VISTA areas-index.php //
+                    $this->load_view('rechazos-index', $this->data);
+                    return true;
+                }
+				 
+				 public function rechazos_form(){ 
+                    if(isset($_GET['axn'])){
+                        if($_GET['axn']==='fileUpload'){
+                            $upload_handler = new UploadHandler();
+                            return true;
+                        }
+                    }
+                    $this->data['message'] = '';
+                    $this->data['response'] = true;
+                    $this->data['datos'] = false;
+                    if($_POST){
+                        //exit('</pre>'.print_r($_POST,1).'</pre>');
+                        $this->rechazos['skRechazo'] = !empty($_POST['skRechazo']) ? $_POST['skRechazo'] : substr(md5(microtime()), 1, 32);
+                        $this->rechazos['sNombre'] = utf8_decode($_POST['sNombre']);
+                         $this->rechazos['skStatus'] = utf8_decode($_POST['skStatus']);
+                        if(empty($_POST['skRechazo'])){
+                            if(parent::create_rechazos()){
+                                $this->data['response'] = true;
+                                $this->data['message'] = 'Registro insertado con &eacute;xito.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return true;
+                            }else{
+                                $this->data['response'] = true;
+                                $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return false;
+                            }
+                        }else{
+                            if(parent::update_rechazos()){
+                                $this->data['response'] = true;
+                                $this->data['message'] = 'Registro actualizado con &eacute;xito.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return true;
+                            }else{
+                                $this->data['response'] = true;
+                                $this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return false;
+                            }
+                        }
+                    }
+                    if(isset($_GET['p1'])){
+                        $this->areas['skRechazo'] = $_GET['p1'];
+                        $this->data['datos'] = parent::read_equal_rechazos();
+                    }
+                    $this->load_view('rechazos-form', $this->data);
+                    return true;
+                }
 	}
 ?>

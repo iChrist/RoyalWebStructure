@@ -4,7 +4,15 @@
         $result = $data['datos']->fetch_assoc();
     }
 	
-	
+	$arrayRechazos = array();
+	if(isset($data['rechazos']))
+    {
+		if($data['rechazos']->num_rows > 0){
+			 while($row = $data['rechazos']->fetch_assoc()){
+				$arrayRechazos[] = $row{'rechazos'};
+			 }
+		 }
+    }
 /*echo "<pre>";
 print_r($data);
 echo "</pre>";
@@ -17,28 +25,29 @@ echo "</pre>";
   <div class="form-body">
        
     <div class="form-group">
-      <label class="control-label col-md-2">Referencia <span aria-required="true" class="required"> * </span> </label>
+      <label class="col-md-2">Referencia <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
         <div class="input-icon right"> <i class="fa"></i>
-          <input type="text" name="sReferencia" id="sReferencia" class="form-control" onchange="obtenerDatos();" placeholder="Referencia" value="<?php echo (isset($result['sReferencia'])) ? utf8_encode($result['sReferencia']) : '' ; ?>" >
+          <input type="text" name="sReferencia" id="sReferencia" class="form-control" onblur="obtenerDatos();" placeholder="Referencia" value="<?php echo (isset($result['sReferencia'])) ? utf8_encode($result['sReferencia']) : '' ; ?>" >
         </div>
       </div>
     </div>
+    <hr>
      <div id="dvDatos">
      
          
      </div>
      
     <div class="form-group">
-      <label class="control-label col-md-2">Línea Naviera <span aria-required="true" class="required"> * </span> </label>
+      <label class="col-md-2">Línea Naviera <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
         <select name="skEmpresaNaviera" id="skEmpresaNaviera" class="form-control form-filter input-sm">
-          <option>- Línea Naviera -</option>
+          <option value="">- Línea Naviera -</option>
           <?php
                                     if(isset($data['empresas'])){
                                         while($rEmpresa = $data['empresas']->fetch_assoc()){
                                 ?>
-          <option value="<?php echo $rEmpresa['skEmpresa']; ?>" <?php echo (isset($result['skEmpresa'])) ? ($result['skEmpresa'] == $rEmpresa['skEmpresa'] ? 'selected' : '' ) : '' ; ?> > <?php echo utf8_encode($rEmpresa['sNombre']." (".$rEmpresa['sRFC'].")"); ?> </option>
+          <option value="<?php echo $rEmpresa['skEmpresa']; ?>" <?php echo (isset($result['skEmpresaNaviera'])) ? ($result['skEmpresaNaviera'] == $rEmpresa['skEmpresa'] ? 'selected="selected"' : '' ) : '' ; ?> > <?php echo utf8_encode($rEmpresa['sNombre']." (".$rEmpresa['sRFC'].")"); ?> </option>
           <?php
                                         }//ENDIF
                                     }//ENDWHILE
@@ -46,42 +55,50 @@ echo "</pre>";
         </select>
       </div>
     </div>  
+        <hr>
+    
       <div class="form-group">
-      <label class="control-label col-md-2">Tramitador <span aria-required="true" class="required"> * </span> </label>
+      <label class="col-md-2">Tramitador <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
         <select name="skUsuarioTramitador" id="skUsuarioTramitador" class="form-control form-filter input-sm">
-          <option>- Tramitador -</option>
+          <option value="">- Tramitador -</option>
           <?php
                                     if(isset($data['tramitadores'])){
                                         while($rTramitador = $data['tramitadores']->fetch_assoc()){
                                 ?>
-          <option value="<?php echo $rTramitador['skUsers']; ?>" <?php echo (isset($result['skUsers'])) ? ($result['skUsers'] == $rTramitador['skUsers'] ? 'selected' : '' ) : '' ; ?> > <?php echo utf8_encode($rTramitador['sName']); ?> </option>
+          <option value="<?php echo $rTramitador['skUsers']; ?>" <?php echo (isset($result['skUsuarioTramitador'])) ? ($result['skUsuarioTramitador'] == $rTramitador['skUsers'] ? 'selected="selected"' : '' ) : '' ; ?> > <?php echo utf8_encode($rTramitador['sName']); ?> </option>
           <?php
                                         }//ENDIF
                                     }//ENDWHILE
                                 ?>
         </select>
       </div>
-    </div>    
+    </div> 
+       <div id="dvEstatusNaviera" style="display:none">
      <div class="form-group">
-      <label class="control-label col-md-2">Estatus Naviera <span aria-required="true" class="required"> * </span> </label>
+      <label class="col-md-2">Estatus Naviera <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-10">
         <div class="radio-list">
           <?php $i = 0?>
           <?php while($rEstatus =  $data['estatus']->fetch_assoc()){?>
           <?php $i++;?>
-          <label>
-          <div class=""> <span>
+          <label class="col-md-2">
+           <span>
             <input type="radio" name="skEstatusRevalidacion" value="<?php echo $rEstatus{'skEstatus'}?>" <?php echo ((isset($result['skEstatusRevalidacion']) ? $result['skEstatusRevalidacion'] : "-") == $rEstatus{'skEstatus'} ? 'checked' : ($i==1 ) ? 'checked' : '' )?>  >
-            <?php echo utf8_encode($rEstatus{'sNombre'})?> </span> </div>
+            <?php echo utf8_encode($rEstatus{'sNombre'})?> </span> 
           </label>
           <?php }?>
         </div>
       </div>
     </div>
-
+     
     
-    <hr>
+    <div id="dvRechazos">
+     
+         
+     </div>
+    
+
     <div class="form-group">
       <label class="control-label col-md-2">Observaciones <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-8">
@@ -91,6 +108,9 @@ echo "</pre>";
       </div>
     </div>
     
+    
+      </div>
+      <!-- Cierra div dvEstatusNaviera-->
     
     
      
@@ -104,6 +124,16 @@ echo "</pre>";
   </table>
 </form>
 <script type="text/javascript">
+
+function lanzadera(){
+ 	if(document.getElementById("skSolicitudRevalidacion").value){
+		obtenerDatos();
+		document.getElementById('dvEstatusNaviera').style.display ='block';
+	}
+}
+
+    window.onload = lanzadera;
+    
 function obtenerDatos(){
 	  $('.page-title-loading').css('display','inline');
 	 $.post("",{ axn : "obtenerDatos" , sReferencia : $("#sReferencia").val() }, function(data){
@@ -114,7 +144,7 @@ function obtenerDatos(){
               //  if(data.data[0]){    
                 
     	var	cad='<div class="form-group">'+
-     	'<label class="control-label col-md-2"><b>Cliente</b></label>'+
+     	'<label class="col-md-2"><b>Cliente</b></label>'+
      	'<div class="col-md-4">'+
        	'<label id="lbCliente" class="control-label">'+data.data[0][0]+'</label>'+
         '</div>'+
@@ -124,7 +154,7 @@ function obtenerDatos(){
 	    ' </div>'+
    ' </div>'+
     '<div class="form-group">'+
-     	'<label class="control-label col-md-2"><b>Ejecutivo</b></label>'+
+     	'<label class="col-md-2"><b>Ejecutivo</b></label>'+
      	'<div class="col-md-4">'+
        	'	 <label id="lbEjecutivo" class="control-label">'+data.data[0][2]+'</label>'+
        ' </div>'+
@@ -142,7 +172,7 @@ function obtenerDatos(){
                $("#sNumeroParte").prop('disabled', false);*/
                $('.page-title-loading').css('display','none');
             });
-            
+          //  $('.page-title-loading').css('display','none');
 			}
 
     $(document).ready(function(){
@@ -176,7 +206,8 @@ function obtenerDatos(){
                 },
 				
                 skEmpresaNaviera:{
-                    required: true
+                    required: true,
+                     minlength: 1 
                 },
 				skUsuarioTramitador:{
                     required: true
@@ -220,18 +251,18 @@ invalidHandler: function (event, validator) { //alerta de error de visualizació
             },
             messages:{
                 sReferencia:{
-                    required: true,
+                    required:"Ingresa una Referencia",
                        remote: "Esta referencia no Existe."
                 },
  				Observaciones:{
                     required: true
                 },
-				
-                skEmpresaNaviera:{
-                    required: true
+                 skEmpresaNaviera:{
+                    required: "Selecciona una Línea Naviera",
+                    minlength: 1 ,
                 },
 				skUsuarioTramitador:{
-                    required: true
+                    required: "Selecciona un Tramitador"
                 }
             }
         });
