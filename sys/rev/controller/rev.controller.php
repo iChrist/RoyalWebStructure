@@ -137,7 +137,7 @@
 					$this->data['tramitadores'] = $objUsuarios->read_user();
 					
 					
-					$this->data['profiles'] = parent::read_like_rechazos(); 
+					$this->data['rechazos'] = parent::read_like_rechazos(); 
 					if(isset($_POST['axn']))
                     	 {
                         	switch ($_POST['axn'])
@@ -201,10 +201,12 @@
 					$this->solreva['sReferencia'] = utf8_decode($_POST['sReferencia']);
   					$this->solreva['sObservaciones'] = utf8_decode($_POST['sObservaciones']);
  					$this->solreva['skEmpresaNaviera'] = utf8_decode($_POST['skEmpresaNaviera']);
- 					//$this->solreva['skEstatusRevalidacion'] = utf8_decode($_POST['skEstatusRevalidacion']);
+ 					$this->solreva['skEstatusRevalidacion'] =  !empty($_POST['skEstatusRevalidacion']) ? $_POST['skEstatusRevalidacion'] : '';
  					$this->solreva['skUsuarioTramitador'] = utf8_decode($_POST['skUsuarioTramitador']);
  						if(empty($_POST['skSolicitudRevalidacion'])){
 							if(parent::create_solreva()){
+							
+							
 								$this->data['response'] = true;
 								$this->data['message'] = 'Registro insertado con &eacute;xito.';
 								header('Content-Type: application/json');
@@ -219,6 +221,27 @@
 							}
 						}else{
 							if(parent::update_solreva()){
+							
+							if(isset($_POST['skRechazo'])) // En esta parte guardaremos todos los perfiles seleccionados para el nuevo usuario.
+									{
+										$count = count($_POST['skRechazo']);
+										 $bandera = 1;
+										 $valores = "";
+										foreach ($_POST['skRechazo'] as $rechazo)
+										{
+											if( $bandera == $count )
+											{
+												$valores .= "('".$this->solreva['skSolicitudRevalidacion']."' , '".$rechazo."')";
+											}
+											else
+											{
+												$valores .= "('".$this->solreva['skSolicitudRevalidacion']."' , '".$rechazo."'),";
+											}
+											$bandera++;
+										}
+										$rRespuesta = parent::create_solreva_rechazos($valores);
+									}
+							
 								$this->data['response'] = true;
 								$this->data['message'] = 'Registro actualizado con &eacute;xito.';
 								header('Content-Type: application/json');
@@ -236,6 +259,9 @@
 					if(isset($_GET['p1'])){
 					$this->solreva['skSolicitudRevalidacion'] = $_GET['p1'];
 					$this->data['datos'] = parent::read_solreva();
+					$this->data['rechazosSolicitud'] = parent::read_solreva_rechazos();
+					
+					
 					}
 					$this->load_view('solreva-form', $this->data);
 					return true;
