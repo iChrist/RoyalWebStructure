@@ -64,9 +64,18 @@
 
             }
             /* CATALOGO DE TIPOS DE DOCUMENTOS PARA SUBIR COMO ARTCHIVO */
-            public function read_equal_docTipo(){
-            	$sql="SELECT docTipo.* FROM cat_docTipo AS docTipo WHERE skStatus = 'AC'";
-            	//exit($sql);
+            public function count_docTipo(){
+                $sql = "SELECT COUNT(*) AS total FROM cat_docTipo AS docTipo WHERE 1=1 ";
+                if(!empty($this->recepcionDoc_docTipo['skDocTipo'])){
+                    $sql .=" AND docTipo.skDocTipo = '".$this->recepcionDoc_docTipo['skDocTipo']."'";
+                }
+                if(!empty($this->recepcionDoc_docTipo['sNombre'])){
+                    $sql .=" AND docTipo.sNombre like '%".$this->recepcionDoc_docTipo['sNombre']."%'";
+                }
+                if(!empty($this->recepcionDoc_docTipo['skStatus'])){
+                    $sql .=" AND docTipo.skStatus = '".$this->recepcionDoc_docTipo['skStatus']."'";
+                }
+                //exit($sql);
                 $result = $this->db->query($sql);
                 if($result){
                     if($result->num_rows > 0){
@@ -76,6 +85,65 @@
                     }
                 }
             }
+
+            public function read_like_docTipo(){
+                $sql="SELECT docTipo.*,st.sHtml AS htmlStatus FROM cat_docTipo AS docTipo INNER JOIN _status  st ON st.skStatus = docTipo.skStatus WHERE 1=1 ";
+                if(!empty($this->recepcionDoc_docTipo['skDocTipo'])){
+                    $sql .=" AND docTipo.skDocTipo like '".$this->recepcionDoc_docTipo['skDocTipo']."%'";
+                }
+                if(!empty($this->recepcionDoc_docTipo['sNombre'])){
+                    $sql .=" AND docTipo.sNombre like '".$this->recepcionDoc_docTipo['sNombre']."%'";
+                }
+                if(!empty($this->recepcionDoc_docTipo['skStatus'])){
+                    $sql .=" AND docTipo.skStatus = '".$this->recepcionDoc_docTipo['skStatus']."'";
+                }
+                if(is_int($this->recepcionDoc_docTipo['limit'])){
+                    if(is_int($this->recepcionDoc_docTipo['offset'])){
+                        $sql .= " LIMIT ".$this->recepcionDoc_docTipo['offset']." , ".$this->recepcionDoc_docTipo['limit'];
+                    }else{
+                        $sql .= " LIMIT ".$this->recepcionDoc_docTipo['limit'];
+                    }
+                }
+                //exit($sql);
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+
+            public function read_equal_docTipo(){
+            	$sql="SELECT docTipo.*,st.sHtml AS htmlStatus FROM cat_docTipo AS docTipo INNER JOIN _status  st ON st.skStatus = docTipo.skStatus WHERE 1=1 ";
+                if(!empty($this->recepcionDoc_docTipo['skDocTipo'])){
+                    $sql .=" AND docTipo.skDocTipo = '".$this->recepcionDoc_docTipo['skDocTipo']."'";
+                }
+                if(!empty($this->recepcionDoc_docTipo['sNombre'])){
+                    $sql .=" AND docTipo.sNombre = '".$this->recepcionDoc_docTipo['sNombre']."'";
+                }
+                if(!empty($this->recepcionDoc_docTipo['skStatus'])){
+                    $sql .=" AND docTipo.skStatus = '".$this->recepcionDoc_docTipo['skStatus']."'";
+                }
+                if(is_int($this->recepcionDoc_docTipo['limit'])){
+                    if(is_int($this->recepcionDoc_docTipo['offset'])){
+                        $sql .= " LIMIT ".$this->recepcionDoc_docTipo['offset']." , ".$this->recepcionDoc_docTipo['limit'];
+                    }else{
+                        $sql .= " LIMIT ".$this->recepcionDoc_docTipo['limit'];
+                    }
+                }
+            	exit($sql);
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+
             public function read_equal_recepcionDoc_docTipo(){
                 $sql="SELECT recepcionDoc_docTipo.* FROM rel_recepcionDoc_docTipo AS recepcionDoc_docTipo WHERE 1=1 ";
                 if(!empty($this->recepcionDoc_docTipo['skRecepcionDocumento'])){

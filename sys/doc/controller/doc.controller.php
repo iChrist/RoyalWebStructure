@@ -527,7 +527,125 @@
                     return true;
                 }
 					  
-					  
+            	// ARCHIVOS DE DOCUMENTACIÓN (RECEPCIÓN DE DOCUMENTOS) //
+            	public function arcdocu_index(){
+                    if(isset($_GET['axn'])){
+                        switch ($_GET['axn']) {
+                            case 'fetch_all':
+                                
+                                // PARAMETROS PARA FILTRADO //
+                                if(isset($_POST['skDocTipo'])){
+                                    $this->recepcionDoc_docTipo['skDocTipo'] = $_POST['skDocTipo'];
+                                }
+                                 if(isset($_POST['sNombre'])){
+                                    $this->recepcionDoc_docTipo['sNombre'] = $_POST['sNombre'];
+                                }
+                              
+                                if(isset($_POST['skStatus'])){
+                                    $this->recepcionDoc_docTipo['skStatus'] = $_POST['skStatus'];
+                                }
+
+                                // OBTENER REGISTROS //
+                                $total = parent::count_docTipo();
+                                $records = Core_Functions::table_ajax($total);
+                                if($records['recordsTotal'] === 0){
+                                    header('Content-Type: application/json');
+                                    echo json_encode($records);
+                                    return false;
+                                }
+
+                                $this->recepcionDoc_docTipo['limit'] = $records['limit'];
+                                $this->recepcionDoc_docTipo['offset'] = $records['offset'];
+                                $this->data['data'] = parent::read_like_docTipo();
+
+                                if(!$this->data['data']){
+                                    header('Content-Type: application/json');
+                                    echo json_encode($records);
+                                    return false;
+                                }
+
+                                while($row = $this->data['data']->fetch_assoc()){
+                                    $actions = $this->printModulesButtons(2,array($row['skDocTipo']));
+                                    array_push($records['data'], array(
+                                         utf8_encode($row['skDocTipo'])
+                                        ,utf8_encode($row['sNombre'])
+                                        ,utf8_encode($row['htmlStatus'])
+                                        , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
+                                    ));
+                                }
+
+                                header('Content-Type: application/json');
+                                echo json_encode($records);
+                                return true;
+
+                            break;
+                        }
+                        return true;
+                    }
+                    
+                    // INCLUYE UN MODELO DE OTRO MODULO //
+                    $this->load_model('cof','cof');
+                    $cof = new Cof_Model();
+                    $this->data['status'] = $cof->read_status();
+                     
+                    // RETORNA LA VISTA areas-index.php //
+                    $this->load_view('arcdocu-index', $this->data);
+                    return true;
+                }
+                
+				 public function arcdocu_form(){
+                    $this->data['message'] = '';
+                    $this->data['success'] = false;
+                    $this->data['error'] = false;
+                    $this->data['datos'] = false;
+                    if($_POST){
+                        
+                         
+                        $this->correspo['skCorresponsaliaViejo'] = $_POST['skCorresponsaliaViejo'];
+                        $this->correspo['skCorresponsalia'] = $_POST['skCorresponsalia'];
+                        $this->correspo['sNombre'] = htmlentities($_POST['sNombre'],ENT_QUOTES);
+                        $this->correspo['skStatus'] = htmlentities($_POST['skStatus'],ENT_QUOTES);
+                        
+                        
+                        if(empty($_POST['skCorresponsaliaViejo'])){
+                            if(parent::create_correspo()){
+                                $this->data['response'] = true;
+                                $this->data['message'] = 'Registro insertado con &eacute;xito.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return true;
+                            }else{
+                                $this->data['response'] = true;
+                                $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return false;
+                            }
+                        }else{
+                            if(parent::update_correspo()){
+                                $this->data['response'] = true;
+                                $this->data['message'] = 'Registro actualizado con &eacute;xito.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return true;
+                            }else{
+                                $this->data['response'] = true;
+                                $this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return false;
+                            }
+                        }
+                        
+                        
+                    }
+                    if(isset($_GET['p1'])){
+                        $this->correspo['skCorresponsalia'] = $_GET['p1'];
+                        $this->data['datos'] = parent::read_equal_correspo();
+                    }
+                    $this->load_view('arcdocu-form', $this->data);
+                    return true;
+                }
 
 				/*TERMINA MODULO CAPTURA DE DOCUMENTOS */
 	}
