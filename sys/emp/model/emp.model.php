@@ -195,9 +195,9 @@
                 }
                 
                 if(!empty($this->departamentos['skStatus'])){
-                    $sql .=" skStatus = '".$this->departamentos['skStatus']."' ,";
+                    $sql .=" skStatus = '".$this->departamentos['skStatus']."' ";
                 }
-                $sql .= " skDepartamento = '".$this->departamentos['skDepartamento']."' WHERE skDepartamento = '".$this->departamentos['skDepartamento']."' LIMIT 1";
+                $sql .= " WHERE skDepartamento = '".$this->departamentos['skDepartamento']."' LIMIT 1";
                 $result = $this->db->query($sql);
                 if($result){
                     return $this->departamentos['skDepartamento'];
