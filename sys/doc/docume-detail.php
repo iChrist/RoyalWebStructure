@@ -7,7 +7,7 @@
 print_r($result);
 echo "</pre>";
 */?>
-
+<!--<form id="_save" method="post" class="form-horizontal" role="form">!-->
 <div class="form-body">
   <div class="form-group">
     <label class="control-label col-md-2">Referencia</label>

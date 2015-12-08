@@ -7,14 +7,14 @@
 <form id="_save" method="post" class="form-horizontal" role="form"> 
  <input type="hidden" name="skTipoEmpresaViejo"  id="skTipoEmpresaViejo" value="<?php echo (isset($result['skTipoEmpresa'])) ? $result['skTipoEmpresa'] : '' ; ?>">
      <div class="form-body"> 
-       
+    
         <div class="form-group">
             <label class="control-label col-md-2">C&oacute;digo <span aria-required="true" class="required"> * </span>
             </label>
             <div class="col-md-4">
                 <div class="input-icon right">
                     <i class="fa"></i>
-                    <input type="text" name="skTipoEmpresa" maxlength="4" id="skTipoEmpresa" class="form-control" placeholder="C&oacute;digo" value="<?php echo (isset($result['skTipoEmpresa'])) ? utf8_encode($result['skTipoEmpresa']) : '' ; ?>" >
+                    <input type="text" name="skTipoEmpresa" maxlength="4" id="skTipoEmpresa" class="form-control" placeholder="C&oacute;digo" value="<?php echo (isset($result['skTipoEmpresa'])) ? utf8_encode($result['skTipoEmpresa']) : '' ; ?>" <?php if(isset($result['skTipoEmpresa'])){ ?>disabled="disabled"<?php }//ENDIF ?> >
                 </div>
             </div>
         </div>     

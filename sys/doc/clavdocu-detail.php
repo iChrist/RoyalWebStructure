@@ -4,7 +4,7 @@
         $result = $data['datos']->fetch_assoc();
     }
 ?>
-
+<form id="_save" method="post" class="form-horizontal" role="form">
     <div class="form-body">
         <div class="form-group">
             <label class=" col-md-2"><b>Clave documento</b></label>
