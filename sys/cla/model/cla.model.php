@@ -183,7 +183,7 @@
             }
             /* COMIENZA CLAMER */
             if(!empty($this->claMer['sFraccion'])){
-                $sql .=" AND claMer.sFraccion like '%".$this->claMer['sFraccion']."%'";
+                $sql .=" AND claMer.sFraccion like '".$this->claMer['sFraccion']."%'";
             }
             if(!empty($this->claMer['sDescripcion'])){
                 $sql .=" AND claMer.sDescripcion like '%".$this->claMer['sDescripcion']."%'";
@@ -192,7 +192,7 @@
                 $sql .=" AND claMer.sDescripcionIngles like '%".$this->claMer['sDescripcionIngles']."%'";
             }
             if(!empty($this->claMer['sNumeroParte'])){
-                $sql .=" AND claMer.sNumeroParte like '%".$this->claMer['sNumeroParte']."%'";
+                $sql .=" AND claMer.sNumeroParte like '".$this->claMer['sNumeroParte']."%'";
             }
             /* TERMINA CLAMER */
 

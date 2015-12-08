@@ -245,23 +245,31 @@
                          $this->departamentos['skStatus'] = htmlentities($_POST['skStatus'],ENT_QUOTES);
                         if(empty($_POST['skDepartamento'])){
                             if(parent::create_departamentos()){
-                                $this->data['success'] = true;
+                                $this->data['response'] = true;
                                 $this->data['message'] = 'Registro insertado con &eacute;xito.';
-                                $this->data['datos'] = parent::read_equal_departamentos();
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return true;
                             }else{
-                                $this->data['error'] = true;
+                                $this->data['response'] = false;
                                 $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
-                                $this->data['datos'] = $_POST;
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return false;
                             }
                         }else{
                             if(parent::update_departamentos()){
-                                $this->data['success'] = true;
+                                $this->data['response'] = true;
                                 $this->data['message'] = 'Registro actualizado con &eacute;xito.';
-                                $this->data['datos'] = parent::read_equal_departamentos();
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return true;
                             }else{
-                                $this->data['error'] = true;
+                                $this->data['response'] = false;
                                 $this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
-                                $this->data['datos'] = $_POST;
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return false;
                             }
                         }
                     }
