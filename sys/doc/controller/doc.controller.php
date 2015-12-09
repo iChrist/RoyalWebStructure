@@ -593,7 +593,7 @@
                     return true;
                 }
                 
-				 public function arcdocu_form(){
+                public function arcdocu_form(){
                     $this->data['message'] = '';
                     $this->data['success'] = false;
                     $this->data['error'] = false;
@@ -601,14 +601,14 @@
                     if($_POST){
                         
                          
-                        $this->correspo['skCorresponsaliaViejo'] = $_POST['skCorresponsaliaViejo'];
-                        $this->correspo['skCorresponsalia'] = $_POST['skCorresponsalia'];
-                        $this->correspo['sNombre'] = htmlentities($_POST['sNombre'],ENT_QUOTES);
-                        $this->correspo['skStatus'] = htmlentities($_POST['skStatus'],ENT_QUOTES);
+                        $this->recepcionDoc_docTipo['skDocTipoViejo'] = $_POST['skDocTipoViejo'];
+                        $this->recepcionDoc_docTipo['skDocTipo'] = isset($_POST['skDocTipo']) ? $_POST['skDocTipo'] : $_POST['skDocTipoViejo'];
+                        $this->recepcionDoc_docTipo['sNombre'] = htmlentities($_POST['sNombre'],ENT_QUOTES);
+                        $this->recepcionDoc_docTipo['skStatus'] = htmlentities($_POST['skStatus'],ENT_QUOTES);
                         
                         
-                        if(empty($_POST['skCorresponsaliaViejo'])){
-                            if(parent::create_correspo()){
+                        if(empty($_POST['skDocTipoViejo'])){
+                            if(parent::create_docTipo()){
                                 $this->data['response'] = true;
                                 $this->data['message'] = 'Registro insertado con &eacute;xito.';
                                 header('Content-Type: application/json');
@@ -622,7 +622,7 @@
                                 return false;
                             }
                         }else{
-                            if(parent::update_correspo()){
+                            if(parent::update_docTipo()){
                                 $this->data['response'] = true;
                                 $this->data['message'] = 'Registro actualizado con &eacute;xito.';
                                 header('Content-Type: application/json');
@@ -640,8 +640,8 @@
                         
                     }
                     if(isset($_GET['p1'])){
-                        $this->correspo['skCorresponsalia'] = $_GET['p1'];
-                        $this->data['datos'] = parent::read_equal_correspo();
+                        $this->recepcionDoc_docTipo['skDocTipo'] = $_GET['p1'];
+                        $this->data['datos'] = parent::read_equal_docTipo();
                     }
                     $this->load_view('arcdocu-form', $this->data);
                     return true;

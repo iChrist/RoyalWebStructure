@@ -5,7 +5,7 @@
     }
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data"> 
-    <input type="hidden" name="skDocTipoViejo"  id="skDocTipoViejo" value="<?php echo (isset($result['skDocTipo'])) ? $result['skDocTipo'] : '' ; ?>">
+    <input type="text" name="skDocTipoViejo"  id="skDocTipoViejo" value="<?php echo (isset($result['skDocTipo'])) ? $result['skDocTipo'] : '' ; ?>">
     <div class="form-body">
          <div class="form-group">
             <label class="control-label col-md-2">Clave archivo <span aria-required="true" class="required"> * </span>
@@ -13,7 +13,7 @@
             <div class="col-md-4">
                 <div class="input-icon right">
                     <i class="fa"></i>
-                    <input type="text" maxlength="4" name="skDocTipo" id="skDocTipo" class="form-control" placeholder="Clave archivo" value="<?php echo (isset($result['skDocTipo'])) ? utf8_encode($result['skDocTipo']) : '' ; ?>" >
+                    <input type="text" maxlength="4" name="skDocTipo" id="skDocTipo" class="form-control" placeholder="Clave archivo" value="<?php echo (isset($result['skDocTipo'])) ? utf8_encode($result['skDocTipo']) : '' ; ?>" <?php if(isset($result['skDocTipo'])){ ?>disabled="disabled"<?php }//ENDIF ?> >
                 </div>
             </div>
         </div>
@@ -54,7 +54,6 @@
     </div>
 </form>
 <script type="text/javascript">
-    var fraccion = 1;
     $(document).ready(function(){
         
          

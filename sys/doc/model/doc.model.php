@@ -133,7 +133,7 @@
                         $sql .= " LIMIT ".$this->recepcionDoc_docTipo['limit'];
                     }
                 }
-            	exit($sql);
+            	//exit($sql);
                 $result = $this->db->query($sql);
                 if($result){
                     if($result->num_rows > 0){
@@ -143,7 +143,36 @@
                     }
                 }
             }
-
+            
+            public function create_docTipo(){
+                $sql = "INSERT INTO cat_docTipo (skDocTipo,sNombre,skStatus) VALUES ('".$this->recepcionDoc_docTipo['skDocTipo']."','".$this->recepcionDoc_docTipo['sNombre']."','".$this->recepcionDoc_docTipo['skStatus']."')";
+                //exit($sql);
+                $result = $this->db->query($sql);
+                if($result){
+                    return $this->recepcionDoc_docTipo['skDocTipo'];
+                }else{
+                    return false;
+                }
+            }
+            
+            public function update_docTipo(){
+                $sql = "UPDATE cat_docTipo SET ";
+                if(!empty($this->recepcionDoc_docTipo['sNombre'])){
+                    $sql .=" sNombre = '".$this->recepcionDoc_docTipo['sNombre']."' ,";
+                }
+                if(!empty($this->recepcionDoc_docTipo['skStatus'])){
+                    $sql .=" skStatus = '".$this->recepcionDoc_docTipo['skStatus']."' ";
+                }
+                $sql .= " WHERE skDocTipo = '".$this->recepcionDoc_docTipo['skDocTipo']."' LIMIT 1";
+                //exit($sql);
+                $result = $this->db->query($sql);
+                if($result){
+                    return $this->recepcionDoc_docTipo['skDocTipo'];
+                }else{
+                    return false;
+                }
+            }
+            
             public function read_equal_recepcionDoc_docTipo(){
                 $sql="SELECT recepcionDoc_docTipo.* FROM rel_recepcionDoc_docTipo AS recepcionDoc_docTipo WHERE 1=1 ";
                 if(!empty($this->recepcionDoc_docTipo['skRecepcionDocumento'])){
