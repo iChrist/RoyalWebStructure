@@ -1,5 +1,5 @@
 # DEFAULT TIME ZONE #
-SetEnv TZ America/Los_Angeles
+SetEnv TZ America/Monterrey
 
 Options -Indexes
 Options +FollowSymLinks
