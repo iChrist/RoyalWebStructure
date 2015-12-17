@@ -34,10 +34,6 @@
         // IMPORTAR EXCEL //
         public function import_excel(&$data , &$dFechaImportacion){
             ini_set('memory_limit', '-1');
-            //echo date('H:i:s').'<hr>';
-            require_once(CORE_PATH."assets/PHPExcel/Classes/PHPExcel/IOFactory.php");
-            $objReader = PHPExcel_IOFactory::createReader('Excel2007');
-            $objPHPExcel = $objReader->load(SYS_PATH."/cla/files/ClasificacionMercancias.xlsx");
             
             $sReferencia = NULL;
             $sPedimento = NULL;
@@ -56,11 +52,6 @@
             $this->load_model('emp','emp');
             $emp = new Emp_Model();
             
-            //  Get worksheet dimensions
-            $sheet = $objPHPExcel->getSheet(0); 
-            $highestRow = $sheet->getHighestRow(); 
-            $highestColumn = $sheet->getHighestColumn();
-            //  Loop through each row of the worksheet in turn
             //exit('<pre>'.print_r($data,1).'</pre>');
             if(!count($data)){
                 return false;
@@ -70,7 +61,6 @@
             $cad  ="";
             $i=0;
             foreach($data AS $k => $v){
-                //var_dump($v['REFERENCIA']);
                 // VERIFICACMOS QUE VENGA REFERENCIA Y PEDIMENTO //
                     if(empty($v['REFERENCIA']) && empty($v['PEDIMENTO'])){
                             break;
@@ -90,19 +80,26 @@
                     }
                     
                 $this->cla['skEmpresa'] = $skEmpresa;
+                
                 if(!isset($v['REFERENCIA'])){
                     $v['REFERENCIA'] = "";
                 }
-                $this->cla['sReferencia'] = $v['REFERENCIA'];
+                $this->cla['sReferencia'] = trim($v['REFERENCIA']," ");
+                
                 if(!isset($v['PEDIMENTO'])){
                     $v['PEDIMENTO'] = "";
                 }
-                $this->cla['sPedimento'] = $v['PEDIMENTO'];
-                //$this->cla['dFechaPrevio'] = $v['F DE PREVIO '];
+                $this->cla['sPedimento'] = trim($v['PEDIMENTO']," ");
+
+                if(!isset($v['F DE PREVIO'])){
+                    $v['F DE PREVIO'] = NULL;
+                }
+                $this->cla['dFechaPrevio'] = trim($v['F DE PREVIO']," ");
+
                 if(!isset($v['FACTURA'])){
                     $v['FACTURA'] = "";
                 }
-                $this->cla['sFactura'] = $v['FACTURA'];
+                $this->cla['sFactura'] = trim($v['FACTURA']," ");
                 
                 // OBTIENE LA CLASIFICACIÓN //
                     if(
@@ -138,10 +135,10 @@
                         $this->claMer['skClasificacionMercancia'] = substr(md5(microtime()), 1, 32);
                         $this->claMer['skClasificacion'] = $skClasificacion;
                         
-                        if(!isset($v['FRACCION '])){
-                            $v['FRACCION '] = "N/A";
+                        if(!isset($v['FRACCION'])){
+                            $v['FRACCION'] = "N/A";
                         }
-                        $this->claMer['sFraccion'] = $v['FRACCION '];
+                        $this->claMer['sFraccion'] = trim($v['FRACCION']," ");
                         if(!isset($v['DESCRIPCION '])){
                             $v['DESCRIPCION '] = "";
                         }
@@ -149,17 +146,17 @@
                         if(!isset($v['DESCRIPCION'])){
                             $v['DESCRIPCION'] = "";
                         }
-                        $this->claMer['sDescripcion'] = utf8_decode($v['DESCRIPCION']);
+                        $this->claMer['sDescripcion'] = trim(utf8_decode($v['DESCRIPCION'])," ");
                         
                         if(!isset($v['INGLES'])){
                             $v['INGLES'] = "";
                         }
-                        $this->claMer['sDescripcionIngles'] = utf8_decode($v['INGLES']);
+                        $this->claMer['sDescripcionIngles'] = trim(utf8_decode($v['INGLES'])," ");
                         
                         if(!isset($v['MODELO'])){
                             $v['MODELO'] = "";
                         }
-                        $this->claMer['sNumeroParte'] = $v['MODELO'];
+                        $this->claMer['sNumeroParte'] = trim($v['MODELO']," ");
                         
                         $skClasificacionMercancia = $this->create_claMer();
                         if(!$skClasificacionMercancia){ 
@@ -171,7 +168,6 @@
                 
                 $i++;
             }
-            //echo $i.'<br>'.$cad;
             if(!$flag){
                 return array(
                 "response"=>false
@@ -182,8 +178,6 @@
                 "response"=>true
                 ,"message"=>"Importaci&oacute;n realizada con &eacute;xito"
             );
-            // Echo memory peak usage
-            //echo date('H:i:s') , " Peak memory usage: " , (memory_get_peak_usage(true) / 1024 / 1024) , " MB" , EOL;
         }
         
         /* COMIENZA MODULO clasifiación arancelaria */

@@ -112,7 +112,16 @@
             </div>
         </div>
         
-        <div class="clearfix"><h3 id="total"></h3></div>
+        <!-- INFORMACION DE CUANTOS REGISTROS SE VAN A PROCESAR !-->
+        <div class="clearfix"></div>
+        <div class="form-group">
+            <div class="col-md-2"></div>
+            <div class="col-md-10">
+                <h3 id="total"></h3>
+            </div>
+        </div>
+
+        <!--<div class="clearfix"><h3 id="total"></h3></div>!-->
         
         <div class="portlet">
             <div class="portlet-title">
