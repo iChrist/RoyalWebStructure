@@ -60,7 +60,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <div class="page-lock">
 	<div class="page-logo">
             <a href="<?php echo SYS_URL; ?>">
-                <img src="<?php echo SYS_URL; ?>core/assets/img/logo.png" alt="RoyalWeb" style="width:130px;height:100px;margin-left:60px;" />
+                <img src="<?php echo SYS_URL; ?>core/assets/img/logo.svg" alt="RoyalWeb" style="width:130px;height:100px;margin-left:60px;" />
             </a>
 	</div>
 	<div class="page-body">

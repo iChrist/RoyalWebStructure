@@ -13,12 +13,6 @@
             </div>
         </div>
 
-        <!--<div class="form-group">
-            <div class="col-md-4">
-                <button onclick="_save(this,'http://royalweb.com.mx/RoyalWebStructure/sys/cla/claara-fotos/numero-de-parte/');" class="btn btn-sm btn-default" type="button"><i class="fa fa-floppy-o"></i> Guardar</button>
-            </div>
-        </div>!-->
-
     </div>
 </form>
         <div class="portlet">
@@ -62,17 +56,6 @@
             <div class="col-md-4">
                 <select name="sNumeroParte" id="sNumeroParte" class="form-control form-filter input-sm" disabled>
                     <option value="">- N&uacute;mero de parte -</option>
-                <?php
-                    /*if($data['numerosParte']){
-                        while($row = $data['numerosParte']->fetch_assoc()){
-                ?>
-                    <option value="<?php echo $row['sNumeroParte']; ?>">
-                                <?php echo utf8_encode($row['sNumeroParte']); ?>
-                            </option>
-                <?php
-                        }//ENDIF
-                    }//ENDWHILE*/
-                ?>
                 </select>
             </div>
         </div>
@@ -87,14 +70,7 @@
     </div>
 </form>
 
-                <div class="row" id="imgClasificacion" style="padding:10px;">
-                    <!--<div class="col-xs-4 col-md-3">
-                        <a href="#" class="thumbnail">
-                            <img src="http://localhost/RoyalWebStructure/core/assets/img/logo.png" alt="GyA">
-                            <div class="caption"><center><p>FOTO X</p></center></div>
-                        </a>
-                    </div>!-->
-                </div>
+                <div class="row" id="imgClasificacion" style="padding:10px;"></div>
                 
             </div>
         </div>

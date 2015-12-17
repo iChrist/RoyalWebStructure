@@ -71,8 +71,9 @@
 	<div class="header-inner">
 		<!-- BEGIN LOGO -->
 		<div class="page-logo">
-            <a href="<?php echo SYS_URL; ?>">
-                <img src="<?php echo SYS_URL; ?>core/assets/img/RoyalWeb-White.png" alt="logo" style="width:110px;height:40px;margin:5px;"/>
+            <a href="<?php echo SYS_URL; ?>" style="text-decoration:none;margin-top:15px;font-weight:bold;color:#fff;">
+                <!--<img src="<?php echo SYS_URL; ?>core/assets/img/RoyalWeb-White.png" alt="logo" style="width:110px;height:40px;margin:5px;"/>!-->
+                <h4>GOMEZ Y ALVEZ</h4>
             </a>
         </div>
         <form class="search-form search-form-header" role="form" action="#">

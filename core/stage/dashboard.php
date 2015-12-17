@@ -21,7 +21,7 @@
 			
 				<div class="col-md-12">
 				<center>
-				<img src="<?php echo SYS_URL; ?>core/assets/img/logo.png" style="width:300px;height:200px;margin-top:40px;" />
+				<img src="<?php echo SYS_URL; ?>core/assets/img/logo.svg" style="width:300px;height:200px;margin-top:40px;" />
 				</center>
 				</div>
 			</div>
