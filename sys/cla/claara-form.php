@@ -96,6 +96,14 @@
             </div>
         </div>
         
+        <hr>
+        <div class="form-group">
+            <div class="col-md-2"></div>
+            <div class="col-md-10">
+                <h4><b>Nota:</b> Si lo prefieres, puedes subir un excel utilizando este template, da click <a href="<?php echo SYS_URL.SYS_PROJECT; ?>/cla/files/claara/tplClasificacionMercancias.xlsx" target="_blank">aqu&iacute;</a> para descargarlo.</h4>
+            </div>
+        </div>
+        
         <div class="form-group">
             <label class="control-label col-md-2">Archivo Excel
             </label>
@@ -331,30 +339,34 @@ function process_wb(wb) {
 	var output = "";
 	output = JSON.stringify(to_json(wb), 2, 2);
         var total = to_json(wb);
-        $("#total").html("Procesando " + total['Hoja1'].length + " Registros...");
-        $("#sJson").val(JSON.stringify(to_json(wb)));
-        $('.page-title-loading').css('display','inline');
-        $.ajax({
-            method: "POST",
-            url: "",
-            data: { 
-                axn: "json_excel",
-                sJson: $("#sJson").val()
-            }
-        })
-        .done(function( data ) {
-            if(data['response']){
-                toastr.success(data['message'], "Notificaci&oacute;n");
-                // AQUI SE HACE LA REDIRECCION
-                location.reload();
-            }else{
-                toastr.error(data['message'], "Notificaci&oacute;n");
-                setInterval(function(){ 
-                    obj.disabled = false;
-                }, 3000);
-            }
-            $('.page-title-loading').css('display','none');
-        });
+        if(total['Hoja1']){
+            $("#total").html("Procesando " + total['Hoja1'].length + " Registros...");
+            $("#sJson").val(JSON.stringify(to_json(wb)));
+            $('.page-title-loading').css('display','inline');
+            $.ajax({
+                method: "POST",
+                url: "",
+                data: { 
+                    axn: "json_excel",
+                    sJson: $("#sJson").val()
+                }
+            })
+            .done(function( data ) {
+                if(data['response']){
+                    toastr.success(data['message'], "Notificaci&oacute;n");
+                    // AQUI SE HACE LA REDIRECCION
+                    location.reload();
+                }else{
+                    toastr.error(data['message'], "Notificaci&oacute;n");
+                    setInterval(function(){ 
+                        obj.disabled = false;
+                    }, 3000);
+                }
+                $('.page-title-loading').css('display','none');
+            });
+        }else{
+            toastr.error("El template est&aacute; vacio, o está da&ntilde;ado.", "Notificaci&oacute;n");
+        }
         
         
 	/*if(out.innerText === undefined) out.textContent = output;
