@@ -3,6 +3,7 @@
     ini_set('display_errors', TRUE);
     ini_set('display_startup_errors', TRUE);
     ini_set('memory_limit', '-1');
+    ini_set('date.timezone','America/Mexico_City');
     define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
     session_start();
 // SYSTEM CONFIGURATION //
