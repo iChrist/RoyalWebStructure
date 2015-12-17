@@ -1,10 +1,13 @@
+# DEFAULT TIME ZONE #
+SetEnv TZ America/Los_Angeles
+
 Options -Indexes
 Options +FollowSymLinks
 RewriteEngine on
 ErrorDocument 404 /core/404.php
 ErrorDocument 500 /core/500.php
 
-#	RoyalWen Routes	#
+# RoyalWeb Routes #
 RewriteRule ^logout/$ core/logout.php [L,NC]
 RewriteRule ^([a-zA-Z0-9\-_.]+)/(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)(?:([a-zA-Z0-9\-_.]+/)?)$ core/stage/index.php?sysProject=$1&sysModule=$2&sysController=$3&sysName=$4&p1=$5&p2=$6&p3=$7&p4=$8&p5=$9 [L,NC,QSA]
 
