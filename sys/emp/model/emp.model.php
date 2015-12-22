@@ -10,6 +10,15 @@
                     ,'limit'        =>  ''
                     ,'offset'       =>  ''
                 );
+
+                public $promotores = array(
+                    'skPromotores'       =>  ''
+                    ,'sNombre'       =>  ''
+                    ,'sCorreo'       =>  ''
+                    ,'skStatus'     =>  ''
+                    ,'limit'        =>  ''
+                    ,'offset'       =>  ''
+                );
                 
                 public $departamentos = array(
                     'skDepartamento'       =>  ''
@@ -177,6 +186,121 @@
                 }
             }
             /* TERMINA MODULO areas */
+
+            /* COMIENZA MODULO promotores */
+            public function count_promotores(){
+                $sql = "SELECT COUNT(*) AS total FROM cat_promotores WHERE 1=1 ";
+                if(!empty($this->promotores['skPromotores'])){
+                    $sql .=" AND cat_promotores.skPromotores = '".$this->promotores['skPromotores']."'";
+                }
+                if(!empty($this->promotores['sNombre'])){
+                    $sql .=" AND cat_promotores.sNombre like '%".$this->promotores['sNombre']."%'";
+                }
+                if(!empty($this->promotores['sCorreo'])){
+                    $sql .=" AND cat_promotores.sCorreo like '%".$this->promotores['sCorreo']."%'";
+                }
+                if(!empty($this->promotores['skStatus'])){
+                    $sql .=" AND cat_promotores.skStatus like '%".$this->promotores['skStatus']."%'";
+                }
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+            public function read_equal_promotores(){
+                $sql = "SELECT cat_promotores.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_promotores INNER JOIN _status ON _status.skStatus = cat_promotores.skStatus WHERE 1=1 ";
+                if(!empty($this->promotores['skPromotores'])){
+                    $sql .=" AND cat_promotores.skPromotores = '".$this->promotores['skPromotores']."'";
+                }
+                if(!empty($this->promotores['sNombre'])){
+                    $sql .=" AND cat_promotores.sNombre = '".$this->promotores['sNombre']."'";
+                }
+                if(!empty($this->promotores['sCorreo'])){
+                    $sql .=" AND cat_promotores.sCorreo = '".$this->promotores['sCorreo']."'";
+                }
+                if(!empty($this->promotores['skStatus'])){
+                    $sql .=" AND cat_promotores.skStatus = '".$this->promotores['skStatus']."'";
+                }
+                if(is_int($this->promotores['limit'])){
+                    if(is_int($this->promotores['offset'])){
+                        $sql .= " LIMIT ".$this->promotores['offset']." , ".$this->promotores['limit'];
+                    }else{
+                        $sql .= " LIMIT ".$this->promotores['limit'];
+                    }
+                }
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+            public function read_like_promotores(){
+                $sql = "SELECT cat_promotores.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_promotores INNER JOIN _status ON _status.skStatus = cat_promotores.skStatus WHERE 1=1 ";
+                if(!empty($this->promotores['skPromotores'])){
+                    $sql .=" AND cat_promotores.skPromotores = '".$this->promotores['skPromotores']."'";
+                }
+                if(!empty($this->promotores['sNombre'])){
+                    $sql .=" AND cat_promotores.sNombre like '%".$this->promotores['sNombre']."%'";
+                }
+                if(!empty($this->promotores['sCorreo'])){
+                    $sql .=" AND cat_promotores.sCorreo like '%".$this->promotores['sCorreo']."%'";
+                }
+                if(!empty($this->promotores['skStatus'])){
+                    $sql .=" AND cat_promotores.skStatus like '%".$this->promotores['skStatus']."%'";
+                }
+                if(is_int($this->promotores['limit'])){
+                    if(is_int($this->promotores['offset'])){
+                        $sql .= " LIMIT ".$this->promotores['offset']." , ".$this->promotores['limit'];
+                    }else{
+                        $sql .= " LIMIT ".$this->promotores['limit'];
+                    }
+                }
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+            public function create_promotores(){
+                $sql = "INSERT INTO cat_promotores (skPromotores,sNombre,sCorreo,skStatus) VALUES ('".$this->promotores['skPromotores']."','".$this->promotores['sNombre']."','".$this->promotores['sCorreo']."','".$this->promotores['skStatus']."')";
+                $result = $this->db->query($sql);
+                if($result){
+                    return $this->promotores['skPromotores'];
+                }else{
+                    return false;
+                }
+            }
+            
+            public function update_promotores(){
+                $sql = "UPDATE cat_promotores SET ";
+                if(!empty($this->promotores['sNombre'])){
+                    $sql .=" sNombre = '".$this->promotores['sNombre']."' ,";
+                }
+                if(!empty($this->promotores['sCorreo'])){
+                    $sql .=" sCorreo = '".$this->promotores['sCorreo']."' ,";
+                }
+                if(!empty($this->promotores['skStatus'])){
+                    $sql .=" skStatus = '".$this->promotores['skStatus']."' ,";
+                }
+                $sql .= " skPromotores = '".$this->promotores['skPromotores']."' WHERE skPromotores = '".$this->promotores['skPromotores']."' LIMIT 1";
+                $result = $this->db->query($sql);
+                if($result){
+                    return $this->promotores['skPromotores'];
+                }else{
+                    return false;
+                }
+            }
+            /* TERMINA MODULO promotores */
             
             /*EMPIEZA MODULO DE DEPARTAMENTOS*/
             public function create_departamentos(){

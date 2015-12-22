@@ -165,6 +165,109 @@
                 }
                 /* TERMINA MODULO areas */
                 
+                /* COMIENZA MODULO promotores */
+                
+                public function promotores_index(){
+                    if(isset($_GET['axn'])){
+                        switch ($_GET['axn']) {
+                            case 'fetch_all':
+                                // PARAMETROS PARA FILTRADO //
+                                if(isset($_POST['sNombre'])){
+                                    $this->promotores['sNombre'] = $_POST['sNombre'];
+                                }
+                                if(isset($_POST['sCorreo'])){
+                                    $this->promotores['sCorreo'] = $_POST['sCorreo'];
+                                }
+                                if(isset($_POST['skStatus'])){
+                                    $this->promotores['skStatus'] = $_POST['skStatus'];
+                                }
+
+                                // OBTENER REGISTROS //
+                                $total = parent::count_promotores();
+                                $records = Core_Functions::table_ajax($total);
+                                if($records['recordsTotal'] === 0){
+                                    header('Content-Type: application/json');
+                                    echo json_encode($records);
+                                    return false;
+                                }
+
+                                $this->promotores['limit'] = $records['limit'];
+                                $this->promotores['offset'] = $records['offset'];
+                                $this->data['data'] = parent::read_like_promotores();
+
+                                if(!$this->data['data']){
+                                    header('Content-Type: application/json');
+                                    echo json_encode($records);
+                                    return false;
+                                }
+
+                                while($row = $this->data['data']->fetch_assoc()){
+                                    $actions = $this->printModulesButtons(2,array($row['skPromotores']));
+                                    array_push($records['data'], array(
+                                         utf8_encode($row['sNombre'])
+                                        ,utf8_encode($row['sCorreo'])
+                                        ,utf8_encode($row['htmlStatus'])
+                                        , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
+                                    ));
+                                }
+
+                                header('Content-Type: application/json');
+                                echo json_encode($records);
+                                return true;
+                                break;
+                        }
+                        return true;
+                    }
+                     
+                    // INCLUYE UN MODELO DE OTRO MODULO //
+                    $this->load_model('cof','cof');
+                    $cof = new Cof_Model();
+                    $this->data['status'] = $cof->read_status();
+
+                    // RETORNA LA VISTA areas-index.php //
+                    $this->load_view('promotores-index', $this->data);
+                    return true;
+                }
+
+                public function promotores_form(){
+                    $this->data['message'] = '';
+                    $this->data['response'] = true;
+                    $this->data['datos'] = false;
+                    if($_POST){
+                        //exit('</pre>'.print_r($_POST,1).'</pre>');
+                        $this->promotores['skPromotores'] = !empty($_POST['skPromotores']) ? $_POST['skPromotores'] : substr(md5(microtime()), 1, 32);
+                        $this->promotores['sNombre'] = utf8_decode($_POST['sNombre']);
+                        $this->promotores['sCorreo'] = utf8_decode($_POST['sCorreo']);
+                        $this->promotores['skStatus'] = utf8_decode($_POST['skStatus']);
+                        if(empty($_POST['skPromotores'])){
+                            if(!parent::create_promotores()){
+                                $this->data['response'] = false;
+                            }
+                        }else{
+                            if(!parent::update_promotores()){
+                                $this->data['response'] = false;
+                            }
+                        }
+                        // RETORNAMOS RESPUESTA //
+                        if($this->data['response']){
+                            $this->data['message'] = 'Registro guardado con &eacute;xito.';
+                            header('Content-Type: application/json');
+                            echo json_encode($this->data);
+                            return true;
+                        }else{
+                            $this->data['message'] = 'Hubo un error al intentar guardar el registro, intenta de nuevo.';
+                            header('Content-Type: application/json');
+                            echo json_encode($this->data);
+                            return false;
+                        }
+                    }
+                    if(isset($_GET['p1'])){
+                        $this->promotores['skPromotores'] = $_GET['p1'];
+                        $this->data['datos'] = parent::read_equal_promotores();
+                    }
+                    $this->load_view('promotores-form', $this->data);
+                    return true;
+                }
                 
                 /*EMPIEZA MODULO DE DEPARTAMENTOS*/
                 
