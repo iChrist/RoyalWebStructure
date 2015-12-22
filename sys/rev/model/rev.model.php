@@ -55,10 +55,12 @@
  				if(!empty($this->solreva['skUsuarioRevalidacion'])){
                     $sql .=" AND skEmpresa = '".$this->solreva['skUsuarioRevalidacion']."'";
                 }
-				
+				if(!empty($this->solreva['skEstatusRevalidacion'])){
+                    $sql .=" AND skEstatusRevalidacion = '".$this->solreva['skEstatusRevalidacion']."'";
+                }
 			 
 				if(!empty($this->solreva['skEstatusRevalidacion'])){
-                    $sql .=" AND skStatus = '".$this->solreva['skEstatusRevalidacion']."'";
+                    $sql .=" AND skEstatusRevalidacion = '".$this->solreva['skEstatusRevalidacion']."'";
                 }
  				//echo $sql;die();
                 $result = $this->db->query($sql);
@@ -76,7 +78,7 @@
 								us.sName AS Tramitador, 
 								usr.sName AS UsuarioEjecutivo, 
 								ce.sNombre AS EmpresaNaviera,
-								
+								cm.sNombre AS Cliente,
 								cs.sNombre AS Estatus,
 								cs.sIcono As Icono
  						FROM ope_solicitud_revalidacion sd 
@@ -84,6 +86,8 @@
  						INNER JOIN _users  us ON us.skUsers = sd.skUsuarioTramitador
  						INNER JOIN _users  usr ON usr.skUsers = sd.skUsuarioRevalidacion
  						INNER JOIN cat_estatus  cs ON cs.skEstatus = sd.skEstatusRevalidacion
+						LEFT  JOIN ope_recepciones_documentos opr ON opr.sReferencia = sd.sReferencia
+						LEFT JOIN cat_empresas cm ON cm.skEmpresa = opr.skEmpresa
  						WHERE 1=1 ";
                 if(!empty($this->solreva['skSolicitudRevalidacion'])){
                     $sql .=" AND sd.skSolicitudRevalidacion = '".$this->solreva['skSolicitudRevalidacion']."'";
@@ -100,7 +104,9 @@
 				if(!empty($this->solreva['sObservaciones'])){
                     $sql .=" AND sd.sObservaciones like '%".$this->solreva['sObservaciones']."%'";
                 }
-				
+				if(!empty($this->solreva['skEstatusRevalidacion'])){
+                    $sql .=" AND sd.skEstatusRevalidacion = '".$this->solreva['skEstatusRevalidacion']."'";
+                }
                 if(!empty($this->solreva['skUsuarioRevalidacion'])){
                     $sql .=" AND sd.skUsuarioRevalidacion like '%".$this->solreva['skUsuarioRevalidacion']."%'";
                 }

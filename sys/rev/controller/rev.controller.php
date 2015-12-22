@@ -41,8 +41,8 @@
 					if(isset($_POST['sObservaciones'])){
 						$this->solreva['sObservaciones'] = $_POST['sObservaciones'];
 					}
-					if(isset($_POST['skStatusRevalidacion'])){
-						$this->solreva['skStatusRevalidacion'] = $_POST['skStatusRevalidacion'];
+					if(isset($_POST['skEstatusRevalidacion'])){
+						$this->solreva['skEstatusRevalidacion'] = $_POST['skEstatusRevalidacion'];
 					}
 					if(isset($_POST['skUsuarioRevalidacion'])){
 						$this->solreva['skUsuarioRevalidacion'] = $_POST['skUsuarioRevalidacion'];
@@ -76,6 +76,7 @@
 							 ,utf8_encode($row['sReferencia'])
 							 ,($row{'dFechaRevalidacion'} ? date('d/m/Y H:s', strtotime($row{'dFechaRevalidacion'})): 'N/D')
 							 ,utf8_encode($row['UsuarioEjecutivo'])
+ 							,utf8_encode($row['Cliente'])
  							,utf8_encode($row['EmpresaNaviera'])
 							,utf8_encode($row['Tramitador'])
    							,utf8_encode($row['sObservaciones'])
@@ -112,6 +113,7 @@
 					$this->load_model('cof','cof');
 					$objEjecutivo = new Cof_Model();
 					$this->data['ejecutivo'] = $objEjecutivo->read_user();
+					$this->data['estatus'] = parent::read_estatus();
 					
 
 					// RETORNA LA VISTA areas-index.php //
