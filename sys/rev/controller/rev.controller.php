@@ -74,7 +74,7 @@
 						array_push($records['data'], array(
 							 utf8_encode($row['Icono'])
 							 ,utf8_encode($row['sReferencia'])
-							 ,utf8_encode($row['dFechaRevalidacion'])
+							 ,($row{'dFechaRevalidacion'} ? date('d/m/Y H:s', strtotime($row{'dFechaRevalidacion'})): 'N/D')
 							 ,utf8_encode($row['UsuarioEjecutivo'])
  							,utf8_encode($row['EmpresaNaviera'])
 							,utf8_encode($row['Tramitador'])
