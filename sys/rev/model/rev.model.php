@@ -11,8 +11,10 @@
                      ,'sObservaciones'     					=>  ''
                      ,'sDescripcion'    			  		=>  ''
                     ,'skEstatusRevalidacion'     			=>  ''
-                    ,'limit'        						=>  ''
-                    ,'offset'       						=>  ''
+                    ,'limit'        							=>  ''
+                    ,'offset'       							=>  ''
+                    ,'order_date_from'       				=>  ''
+					
                 );
                 public $rechazos = array(
                     'skRechazo'    							=>  ''
@@ -53,12 +55,15 @@
                     $sql .=" AND sObservaciones like '%".$this->solreva['sObservaciones']."%'";
                 }
  				if(!empty($this->solreva['skUsuarioRevalidacion'])){
-                    $sql .=" AND skEmpresa = '".$this->solreva['skUsuarioRevalidacion']."'";
+                    $sql .=" AND skUsuarioRevalidacion = '".$this->solreva['skUsuarioRevalidacion']."'";
                 }
 				if(!empty($this->solreva['skEstatusRevalidacion'])){
                     $sql .=" AND skEstatusRevalidacion = '".$this->solreva['skEstatusRevalidacion']."'";
                 }
-			 
+			 	if(!empty($this->solreva['order_date_from'])){
+ 					$Fecha = explode("/", $this->solreva['order_date_from']);
+                    $sql .=" AND dFechaRevalidacion like '%".$Fecha[2]."-".$Fecha[1]."-".$Fecha[0]."%'";
+                }
 				if(!empty($this->solreva['skEstatusRevalidacion'])){
                     $sql .=" AND skEstatusRevalidacion = '".$this->solreva['skEstatusRevalidacion']."'";
                 }
@@ -110,6 +115,10 @@
                 if(!empty($this->solreva['skUsuarioRevalidacion'])){
                     $sql .=" AND sd.skUsuarioRevalidacion like '%".$this->solreva['skUsuarioRevalidacion']."%'";
                 }
+				if(!empty($this->solreva['order_date_from'])){
+ 					$Fecha = explode("/", $this->solreva['order_date_from']);
+                    $sql .=" AND sd.dFechaRevalidacion like '%".$Fecha[2]."-".$Fecha[1]."-".$Fecha[0]."%'";
+                }
                 
                
                 if(is_int($this->solreva['limit'])){
@@ -119,6 +128,8 @@
                         $sql .= " LIMIT ".$this->solreva['limit'];
                     }
                 }
+			
+				
 				//echo $sql;die();
                 $result = $this->db->query($sql);
                 if($result){

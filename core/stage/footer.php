@@ -55,17 +55,18 @@
 <script src="<?php echo SYS_URL; ?>core/assets/plugins/jquery-easypiechart/jquery.easypiechart.min.js" type="text/javascript"></script>
 <script src="<?php echo SYS_URL; ?>core/assets/plugins/jquery.sparkline.min.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
+<!-- BEGIN AJAX TABLE SCRIPTS & PLUGINS -->
+<script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/select2/select2.min.js"></script>
+<script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
+<script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="<?php echo SYS_URL; ?>core/assets/lib/app.js" type="text/javascript"></script>
 <script src="<?php echo SYS_URL; ?>core/assets/lib/index.js" type="text/javascript"></script>
 <script src="<?php echo SYS_URL; ?>core/assets/lib/tasks.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 
-<!-- BEGIN AJAX TABLE SCRIPTS & PLUGINS -->
-<script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/select2/select2.min.js"></script>
-<script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
-<script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
 
 <!-- VALIDATION PLUGINS -->
 <script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/jquery-validation/js/jquery.validate.min.js"></script>

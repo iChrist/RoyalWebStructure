@@ -48,14 +48,21 @@ echo "</pre>";*/
                                 ?>
               </select></td>
             <td><input type="text" class="form-control form-filter input-sm" name="sReferencia" placeholder="Referencia"></td>
-            <td></td>
+            <td>
+                <div class="input-group input-group-sm date date-picker margin-bottom-5" data-date-format="dd/mm/yyyy">
+                 <input type="text" class="form-control form-filter" readonly name="order_date_from" placeholder="Fecha">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+                    </span>
+                </div>
+            </td>
             <td><select name="skUsuarioRevalidacion" class="form-control form-filter input-sm">
                 <option value="">- Ejecutivo -</option>
                 <?php
                                     if(isset($data['ejecutivo'])){
                                         while($row = $data['ejecutivo']->fetch_assoc()){
                                 ?>
-                <option value="<?php echo $row['skUsuarioRevalidacion']; ?>"> <?php echo utf8_encode($row['sName']); ?> </option>
+                <option value="<?php echo $row['skUsers']; ?>"> <?php echo utf8_encode($row['sName']); ?> </option>
                 <?php
                                         }//ENDIF
                                     }//ENDWHILE
@@ -110,6 +117,7 @@ echo "</pre>";*/
 <script type="text/javascript">
 $(document).ready(function(){       
    // init ajax table 
+   
    TableAjax.init('?axn=fetch_all');
 });
 </script>

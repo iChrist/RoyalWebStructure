@@ -47,7 +47,10 @@
 					if(isset($_POST['skUsuarioRevalidacion'])){
 						$this->solreva['skUsuarioRevalidacion'] = $_POST['skUsuarioRevalidacion'];
 					}
-					
+					if(isset($_POST['order_date_from'])){
+						$this->solreva['order_date_from'] = $_POST['order_date_from'];
+					}
+				
 					
 					
 					// OBTENER REGISTROS //
@@ -61,7 +64,7 @@
 					
 					$this->solreva['limit'] = $records['limit'];
 					$this->solreva['offset'] = $records['offset'];
-					$this->data['data'] = parent::read_solreva();
+ 					$this->data['data'] = parent::read_solreva();
 					
 					if(!$this->data['data']){
 						header('Content-Type: application/json');
