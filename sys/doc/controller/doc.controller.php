@@ -39,16 +39,16 @@
 						$this->recepciondocumentos['sObservaciones'] = $_POST['sObservaciones'];
 					}
                                         
-                                        if(isset($_POST['sNumContenedor'])){
+                    if(isset($_POST['sNumContenedor'])){
 						$this->recepciondocumentos['sNumContenedor'] = $_POST['sNumContenedor'];
 					}
-                                        if(isset($_POST['iBultos'])){
+                    if(isset($_POST['iBultos'])){
 						$this->recepciondocumentos['iBultos'] = $_POST['iBultos'];
 					}
-                                        if(isset($_POST['fPeso'])){
+                    if(isset($_POST['fPeso'])){
 						$this->recepciondocumentos['fPeso'] = $_POST['fPeso'];
 					}
-                                        if(isset($_POST['fVolumen'])){
+                    if(isset($_POST['fVolumen'])){
 						$this->recepciondocumentos['fVolumen'] = $_POST['fVolumen'];
 					}
 					
@@ -64,11 +64,12 @@
 					if(isset($_POST['skClaveDocumento'])){
 						$this->recepciondocumentos['skClaveDocumento'] = $_POST['skClaveDocumento'];
 					}
-					if(isset($_POST['skCorresponsalia'])){
-						$this->recepciondocumentos['skCorresponsalia'] = $_POST['skCorresponsalia'];
+
+					if(!empty($_POST['dRecepcion'])){
+						$this->recepciondocumentos['dRecepcion'] = date('Y-m-d',strtotime($_POST['dRecepcion']));
 					}
 
-					if(isset($_POST['dFechaCreacion'])){
+					if(!empty($_POST['dFechaCreacion'])){
 						$this->recepciondocumentos['dFechaCreacion'] = date('Y-m-d',strtotime($_POST['dFechaCreacion']));
 					}
 
@@ -103,10 +104,10 @@
 							,utf8_encode($row['TipoServicio'])
 							,utf8_encode($row['Empresa'])
 							,utf8_encode($row['ClaveDocumento'])
-							//,utf8_encode($row['Corresponsalia'])
 							,utf8_encode($row['sMercancia'])
 							,utf8_encode($row['sObservaciones'])
-							,date('d-m-Y',strtotime($row['dFechaCreacion']))
+							,date('d-m-Y',strtotime($row['dRecepcion'])).' '.$row['tRecepcion']
+							,date('d-m-Y H:i:s',strtotime($row['dFechaCreacion']))
  							,utf8_encode($row['htmlStatus'])
 							, !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
 						));
@@ -162,13 +163,13 @@
 					$this->recepciondocumentos['skTipoTramite'] = utf8_decode($_POST['skTipoTramite']);
 					$this->recepciondocumentos['skTipoServicio'] = utf8_decode($_POST['skTipoServicio']);
 					$this->recepciondocumentos['skClaveDocumento'] = utf8_decode($_POST['skClaveDocumento']);
-					$this->recepciondocumentos['skCorresponsalia'] = utf8_decode($_POST['skCorresponsalia']);
                                         
                     $this->recepciondocumentos['sNumContenedor'] = utf8_decode(!empty($_POST['sNumContenedor']) ? $_POST['sNumContenedor'] : '');
                     $this->recepciondocumentos['iBultos'] = utf8_decode(!empty($_POST['iBultos']) ? $_POST['iBultos'] : 0);
                     $this->recepciondocumentos['fPeso'] = utf8_decode(!empty($_POST['fPeso']) ? $_POST['fPeso'] : 0);
                     $this->recepciondocumentos['fVolumen'] = utf8_decode(!empty($_POST['fVolumen']) ? $_POST['fVolumen'] : 0);
 
+                    $this->recepciondocumentos['dRecepcion'] = utf8_decode(!empty($_POST['dRecepcion']) ? date('Y-m-d',strtotime($_POST['dRecepcion'])) : date('Y-m-d'));
                     $this->recepciondocumentos['tRecepcion'] = utf8_decode(!empty($_POST['tRecepcion']) ? $_POST['tRecepcion'] : date('H:i:s'));
 					
 						if(empty($_POST['skRecepcionDocumento'])){
@@ -251,7 +252,7 @@
 					$this->data['tipostramites'] = parent::read_tipos_tramites();
 					$this->data['tiposservicios'] = parent::read_tipos_servicios();
 					$this->data['clavedocumento'] = parent::read_clave_documento();
-					$this->data['corresponsalia'] = parent::read_corresponsalia();
+					//$this->data['corresponsalia'] = parent::read_corresponsalia();
 					$this->data['docTipo'] = parent::read_equal_docTipo();
 					if(isset($_GET['p1'])){
                                             $this->recepciondocumentos['skRecepcionDocumento'] = $_GET['p1'];

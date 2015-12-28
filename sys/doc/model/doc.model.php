@@ -13,6 +13,7 @@
                     ,'iBultos'=>0
                     ,'fPeso'=>0
                     ,'fVolumen'=>0
+                    ,'dRecepcion'=>''
                     ,'tRecepcion'=>''
                     ,'skStatus'     				=>  ''
                     ,'limit'        					=>  ''
@@ -255,14 +256,11 @@
 				if(!empty($this->recepciondocumentos['skClaveDocumento'])){
                     $sql .=" AND skClaveDocumento = '".$this->recepciondocumentos['skClaveDocumento']."'";
                 }
-				if(!empty($this->recepciondocumentos['skCorresponsalia'])){
-                    $sql .=" AND skCorresponsalia = '".$this->recepciondocumentos['skCorresponsalia']."'";
-                }
                 if(!empty($this->recepciondocumentos['dFechaCreacion'])){
                     $sql .=" AND DATE_FORMAT(dFechaCreacion,'%Y-%m-%d') = '".$this->recepciondocumentos['dFechaCreacion']."'";
                 }
-				if(!empty($this->recepciondocumentos['skStatus'])){
-                    $sql .=" AND skStatus = '".$this->recepciondocumentos['skStatus']."'";
+                if(!empty($this->recepciondocumentos['dRecepcion'])){
+                    $sql .=" AND DATE_FORMAT(dRecepcion,'%Y-%m-%d') = '".$this->recepciondocumentos['dRecepcion']."'";
                 }
 				if(!empty($this->recepciondocumentos['skStatus'])){
                     $sql .=" AND skStatus = '".$this->recepciondocumentos['skStatus']."'";
@@ -285,7 +283,6 @@
 								ctt.sNombre AS TipoTramite, 
 								cts.sNombre AS TipoServicio, 
 								ccd.sNombre AS ClaveDocumento, 
-								cc.sNombre AS Corresponsalia, 
 								st.sHtml AS htmlStatus 
 						FROM ope_recepciones_documentos rd 
 						INNER JOIN _status  st ON st.skStatus = rd.skStatus 
@@ -293,7 +290,6 @@
 						INNER JOIN cat_tipos_tramites  ctt ON ctt.skTipoTramite = rd.skTipoTramite 
 						INNER JOIN cat_tipos_servicios  cts ON cts.skTipoServicio = rd.skTipoServicio 
 						INNER JOIN cat_claves_documentos  ccd ON ccd.skClaveDocumento = rd.skClaveDocumento 
-						INNER JOIN cat_corresponsalias  cc ON cc.skCorresponsalia = rd.skCorresponsalia 
 						INNER JOIN _status ON _status.skStatus = rd.skStatus 
 						WHERE 1=1 ";
                 if(!empty($this->recepciondocumentos['skRecepcionDocumento'])){
@@ -327,11 +323,11 @@
                 if(!empty($this->recepciondocumentos['skClaveDocumento'])){
                     $sql .=" AND rd.skClaveDocumento like '%".$this->recepciondocumentos['skClaveDocumento']."%'";
                 }
-                if(!empty($this->recepciondocumentos['skCorresponsalia'])){
-                    $sql .=" AND rd.skCorresponsalia like '%".$this->recepciondocumentos['skCorresponsalia']."%'";
-                }
                 if(!empty($this->recepciondocumentos['dFechaCreacion'])){
                     $sql .=" AND DATE_FORMAT(rd.dFechaCreacion,'%Y-%m-%d') = '".$this->recepciondocumentos['dFechaCreacion']."'";
+                }
+                if(!empty($this->recepciondocumentos['dRecepcion'])){
+                    $sql .=" AND DATE_FORMAT(rd.dRecepcion,'%Y-%m-%d') = '".$this->recepciondocumentos['dRecepcion']."'";
                 }
                 if(is_int($this->recepciondocumentos['limit'])){
                     if(is_int($this->recepciondocumentos['offset'])){
@@ -353,30 +349,30 @@
             
             public function create_recepciondocumentos(){
  				$sql = "INSERT INTO ope_recepciones_documentos (skRecepcionDocumento,sReferencia,sPedimento,sMercancia,sObservaciones,sNumContenedor,iBultos,fPeso,fVolumen,skEmpresa,skTipoTramite,
-                                        skTipoServicio,skClaveDocumento,skCorresponsalia,tRecepcion,
-                                        skStatus,dFechaCreacion,skUsersCreacion,dFechaModificacion,skUsersModificacion) 
-                                        VALUES ('".$this->recepciondocumentos['skRecepcionDocumento']."',
-                                                '".$this->recepciondocumentos['sReferencia']."',
-                                                '".$this->recepciondocumentos['sPedimento']."',
-                                                '".$this->recepciondocumentos['sMercancia']."',
-                                                '".$this->recepciondocumentos['sObservaciones']."',
-                                                
-                                                '".$this->recepciondocumentos['sNumContenedor']."',
-                                                ".$this->recepciondocumentos['iBultos'].",
-                                                ".$this->recepciondocumentos['fPeso'].",
-                                                ".$this->recepciondocumentos['fVolumen'].",
+                        skTipoServicio,skClaveDocumento,dRecepcion,tRecepcion,
+                        skStatus,dFechaCreacion,skUsersCreacion,dFechaModificacion,skUsersModificacion) 
+                        VALUES ('".$this->recepciondocumentos['skRecepcionDocumento']."',
+                                '".$this->recepciondocumentos['sReferencia']."',
+                                '".$this->recepciondocumentos['sPedimento']."',
+                                '".$this->recepciondocumentos['sMercancia']."',
+                                '".$this->recepciondocumentos['sObservaciones']."',
+                                
+                                '".$this->recepciondocumentos['sNumContenedor']."',
+                                ".$this->recepciondocumentos['iBultos'].",
+                                ".$this->recepciondocumentos['fPeso'].",
+                                ".$this->recepciondocumentos['fVolumen'].",
 
-                                                '".$this->recepciondocumentos['skEmpresa']."',
-                                                '".$this->recepciondocumentos['skTipoTramite']."',
-                                                '".$this->recepciondocumentos['skTipoServicio']."',
-                                                '".$this->recepciondocumentos['skClaveDocumento']."',
-                                                '".$this->recepciondocumentos['skCorresponsalia']."',
-                                                '".$this->recepciondocumentos['tRecepcion']."',
-                                                'AC',
-                                                CURRENT_TIMESTAMP(),
-                                                '".$_SESSION['session']['skUsers']."',
-                                                CURRENT_TIMESTAMP(),
-                                                '".$_SESSION['session']['skUsers']."')";
+                                '".$this->recepciondocumentos['skEmpresa']."',
+                                '".$this->recepciondocumentos['skTipoTramite']."',
+                                '".$this->recepciondocumentos['skTipoServicio']."',
+                                '".$this->recepciondocumentos['skClaveDocumento']."',
+                                '".$this->recepciondocumentos['dRecepcion']."',
+                                '".$this->recepciondocumentos['tRecepcion']."',
+                                'AC',
+                                CURRENT_TIMESTAMP(),
+                                '".$_SESSION['session']['skUsers']."',
+                                CURRENT_TIMESTAMP(),
+                                '".$_SESSION['session']['skUsers']."')";
 				//echo $sql;die();
                 $result = $this->db->query($sql);
                 if($result){
@@ -409,6 +405,7 @@
                 $sql .=" fVolumen = ".$this->recepciondocumentos['fVolumen']." ,";
                 /* TERMINA TIPO DE SERVICIO */
                 
+                $sql .=" dRecepcion = '".$this->recepciondocumentos['dRecepcion']."' ,";
                 $sql .=" tRecepcion = '".$this->recepciondocumentos['tRecepcion']."' ,";
 
                 if(!empty($this->recepciondocumentos['skEmpresa'])){
@@ -423,11 +420,9 @@
 				if(!empty($this->recepciondocumentos['skClaveDocumento'])){
                     $sql .=" skClaveDocumento = '".$this->recepciondocumentos['skClaveDocumento']."' ,";
                 }
-				if(!empty($this->recepciondocumentos['skCorresponsalia'])){
-                    $sql .=" skCorresponsalia = '".$this->recepciondocumentos['skCorresponsalia']."' ,";
-                }
-                     $sql .=" dFechaModificacion = CURRENT_TIMESTAMP() ,";
-                    $sql .=" skUsersModificacion = '".$_SESSION['session']['skUsers']."'";
+                
+                $sql .=" dFechaModificacion = CURRENT_TIMESTAMP() ,";
+                $sql .=" skUsersModificacion = '".$_SESSION['session']['skUsers']."'";
                 $sql .= "  WHERE skRecepcionDocumento = '".$this->recepciondocumentos['skRecepcionDocumento']."' LIMIT 1";
 				//echo $sql;die();
                 $result = $this->db->query($sql);

@@ -176,7 +176,19 @@
     </div>
     
     <div class="form-group">
-        <label class="control-label col-md-2">Hora de recepci&oacute;n</label>
+      <label class="control-label col-md-2">Fecha de recepci&oacute;n <span aria-required="true" class="required"> * </span></label>
+      <div class="col-md-4">
+        <div data-date-start-date="+0d" data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
+          <input type="text" id="dRecepcion" name="dRecepcion" readonly="" class="form-control" value="<?php echo (isset($result['dRecepcion'])) ? utf8_encode($result['dRecepcion']) : date('d-m-Y') ; ?>">
+          <span class="input-group-btn">
+          <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-md-2">Hora de recepci&oacute;n <span aria-required="true" class="required"> * </span></label>
         <div class="col-md-4">
             <div class="input-group bootstrap-timepicker">
                 <input type="text" id="tRecepcion" name="tRecepcion" class="form-control timepicker-24" value="<?php echo (isset($result['tRecepcion'])) ? utf8_encode($result['tRecepcion']) : '' ; ?>">
@@ -313,6 +325,12 @@
                 },
                 fVolumen:{
                     required: true
+                },
+                dRecepcion:{
+                    required: true
+                },
+                tRecepcion:{
+                    required: true
                 }
             },
 
@@ -383,6 +401,12 @@ invalidHandler: function (event, validator) { //alerta de error de visualizació
                     required: "Campo obligatorio"
                 },
                 fVolumen:{
+                    required: "Campo obligatorio"
+                },
+                dRecepcion:{
+                    required: "Campo obligatorio"
+                },
+                tRecepcion:{
                     required: "Campo obligatorio"
                 }
             }
