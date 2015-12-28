@@ -528,6 +528,19 @@
                                     $this->empresas['sNombreCorto'] = $_POST['sNombreCorto'];
                                 }
                                
+                                if(isset($_POST['skCorresponsalia'])){
+                                    $this->empresas['skCorresponsalia'] = $_POST['skCorresponsalia'];
+                                }
+                                
+                                if(isset($_POST['skPromotor'])){
+                                    $this->empresas['skPromotor1'] = $_POST['skPromotor'];
+                                    $this->empresas['skPromotor2'] = $_POST['skPromotor'];
+                                }
+                                
+                                if(isset($_POST['skTipoEmpresa'])){
+                                    $this->tipoempresas['skTipoEmpresa'] = $_POST['skTipoEmpresa'];
+                                }
+                                
                                 if(isset($_POST['skStatus'])){
                                     $this->empresas['skStatus'] = $_POST['skStatus'];
                                 }
@@ -552,12 +565,17 @@
                                 }
                                  while($row = $this->data['data']->fetch_assoc()){
                                     $actions = $this->printModulesButtons(2,array($row['skEmpresa']));
+                                    $promotores="";
+                                    if(!empty($row['promotor1']) && !empty($row['promotor2'])){
+                                        $promotores = utf8_encode($row['promotor1'].' , '.$row['promotor2']);
+                                    }
                                     array_push($records['data'], array(
                                         utf8_encode($row['sRFC']),
                                         utf8_encode($row['sNombre']),
                                         utf8_encode($row['sNombreCorto']),
                                         utf8_encode($row['tipoEmpresa']),
-                                        utf8_encode($row['dFechaCreacion']),
+                                        utf8_encode($row['corresponsalia']),
+                                        $promotores,
                                         utf8_encode($row['htmlStatus']),
                                          !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.$actions['sHtml'].'</ul></div>' : ''
                                     ));
@@ -569,6 +587,16 @@
                         }
                         return true;
                     }
+                    
+                    // tiposEmpresas //
+                    $this->data['tiposEmpresas'] = parent::read_equal_tipoempresas();
+                    
+                    // Empresas de tipo Corresponsalias //
+                    $this->tipoempresas['skTipoEmpresa'] = 'CORR';
+                    $this->data['corresponsalias'] = parent::read_like_empresas();
+                    
+                    // Promotores //
+                    $this->data['promotores'] = parent::read_equal_promotores();
                     
                     // INCLUYE UN MODELO DE OTRO MODULO //
                     $this->load_model('cof','cof');
@@ -583,15 +611,21 @@
                
                 
                 public function empresas_form(){
-                  	$this->data['message'] = '';
+                    $this->data['message'] = '';
                     $this->data['response'] = true;
                     $this->data['datos'] = false;
                     $this->data['tiposEmpresas'] = parent::read_equal_tipoempresas();
                     $this->load_model('cof','cof');
+                    
+                    // Catalogo Status //
                     $cof = new Cof_Model();
                     $this->data['status'] = $cof->read_status();
+                    // Empresas de tipo Corresponsalias //
+                    $this->tipoempresas['skTipoEmpresa'] = 'CORR';
+                    $this->data['corresponsalias'] = parent::read_like_empresas();
+                    // Promotores //
+                    $this->data['promotores'] = parent::read_equal_promotores();
                     
-                      
                     	 if(isset($_POST['axn']))
                     	 {
                         	switch ($_POST['axn'])
@@ -620,11 +654,14 @@
                     
                          
                         $this->empresas['skEmpresa'] = !empty($_POST['skEmpresa']) ? $_POST['skEmpresa'] : substr(md5(microtime()), 1, 32);
-                        $this->empresas['skTipoEmpresa'] = htmlentities($_POST['skTipoEmpresa'],ENT_QUOTES);
+                        $this->tipoempresas['skTipoEmpresa'] = htmlentities($_POST['skTipoEmpresa'],ENT_QUOTES);
                         $this->empresas['skStatus'] = htmlentities($_POST['skStatus'],ENT_QUOTES);
-                        $this->empresas['sNombre'] = htmlentities($_POST['sNombre'],ENT_QUOTES);
-                        $this->empresas['sNombreCorto'] = htmlentities($_POST['sNombreCorto'],ENT_QUOTES);
-                        $this->empresas['sRFC'] = htmlentities($_POST['sRFC'],ENT_QUOTES);
+                        $this->empresas['sNombre'] = !empty($_POST['sNombre']) ? htmlentities($_POST['sNombre'],ENT_QUOTES) : "";
+                        $this->empresas['sNombreCorto'] = !empty($_POST['sNombreCorto']) ? htmlentities($_POST['sNombreCorto'],ENT_QUOTES) : "";
+                        $this->empresas['sRFC'] = !empty($_POST['sRFC']) ? htmlentities($_POST['sRFC'],ENT_QUOTES) : "";
+                        $this->empresas['skCorresponsalia'] = $_POST['skCorresponsalia'];
+                        $this->empresas['skPromotor1'] = $_POST['skPromotor1'];
+                        $this->empresas['skPromotor2'] = $_POST['skPromotor2'];
                         
                         if(empty($_POST['skEmpresa'])){
                             if(parent::create_empresas()){
@@ -663,6 +700,7 @@
                     if(isset($_GET['p1'])){
                         $this->empresas['skEmpresa'] = $_GET['p1'];
                         $this->data['datos'] = parent::read_equal_empresas();
+                        
                     }
                     $this->load_view('empresas-form', $this->data);
                     return true;

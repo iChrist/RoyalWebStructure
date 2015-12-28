@@ -66,7 +66,7 @@
                                 ?> 
                                 <div class="col-md-4">
                                 <select class="form-control"id="skTipoEmpresa" name="skTipoEmpresa">
-                                		<option value=""> Seleccionar...</option>
+                                		<option value="">- Seleccione -</option>
                                 	<?php  foreach ($data['tiposEmpresas'] as $profile)  {  ?>
                                 		<option value="<?php echo $profile['skTipoEmpresa']; ?>" 
                                 		<?php 
@@ -85,6 +85,81 @@
                         
                  
             </div>    
+         
+        <!-- CORRESPONSALES !-->
+        <div class="form-group skCorresponsalia" <?php if(isset($result['skTipoEmpresa']) && $result['skTipoEmpresa'] == 'CLIE'){ echo 'style="display:block;"';}else{ echo 'style="display:none;"'; }//ENDIF ?>>
+            <label class="control-label col-md-2">Corresponsalia <span aria-required="true" class="required"> * </span> </label>
+            <?php
+               if($data['corresponsalias']){
+            ?> 
+            <div class="col-md-4">
+                <select class="form-control skCorresponsalia" id="skCorresponsalia" name="skCorresponsalia">
+                    <option value="">- Seleccione Corresponsalia -</option>
+                    <?php  foreach ($data['corresponsalias'] as $corresponsalia)  {  ?>
+                        <option value="<?php echo $corresponsalia['skEmpresa']; ?>" 
+                    <?php 
+                        if(isset($result['skCorresponsalia'])){
+                            echo ($result['skCorresponsalia'] == $corresponsalia['skEmpresa'] ? 'selected="selected"' : '');
+                        }
+                    ?>
+                        ><?php echo $corresponsalia['sNombre']; ?></option>
+                    <?php }//ENDFOREACH ?>
+               </select>
+            </div>
+            <?php
+                }//ENDIF  
+            ?> 
+        </div>
+        <!-- PROMOTORES !-->
+        <div class="form-group skPromotor" <?php if(isset($result['skTipoEmpresa']) && $result['skTipoEmpresa'] == 'CLIE'){ echo 'style="display:block;"';}else{ echo 'style="display:none;"'; }//ENDIF ?>>
+            <label class="control-label col-md-2">Promotor 1 </label>
+            <?php
+               if($data['promotores']){
+            ?> 
+            <div class="col-md-4">
+                <select class="form-control"id="skPromotor1" name="skPromotor1">
+                    <option value="">- Seleccione Promotor -</option>
+                    <?php  foreach ($data['promotores'] as $promotor)  {  ?>
+                        <option value="<?php echo $promotor['skPromotores']; ?>" 
+                    <?php 
+                        if(isset($result['skPromotor1'])){
+                            echo ($result['skPromotor1'] == $promotor['skPromotores'] ? 'selected="selected"' : '');
+                        }
+                    ?>
+                        ><?php echo $promotor['sNombre']; ?></option>
+                    <?php }//ENDFOREACH ?>
+               </select>
+            </div>
+            <?php
+                }//ENDIF  
+            ?> 
+        </div>
+        <div class="form-group skPromotor" <?php if(isset($result['skTipoEmpresa']) && $result['skTipoEmpresa'] === 'CLIE'){ echo 'style="display:block;"';}else{ echo 'style="display:none;"'; }//ENDIF ?>>
+            <label class="control-label col-md-2">Promotor 2 </label>
+            <?php
+               if($data['promotores']){
+            ?> 
+            <div class="col-md-4">
+                <select class="form-control"id="skPromotor2" name="skPromotor2">
+                    <option value="">- Seleccione Promotor -</option>
+                    <?php  foreach ($data['promotores'] as $promotor)  {  ?>
+                        <option value="<?php echo $promotor['skPromotores']; ?>" 
+                    <?php 
+                        if(isset($result['skPromotor2'])){
+                            echo ($result['skPromotor2'] == $promotor['skPromotores'] ? 'selected="selected"' : '');
+                        }
+                    ?>
+                        ><?php echo $promotor['sNombre']; ?></option>
+                    <?php }//ENDFOREACH ?>
+               </select>
+            </div>
+            <?php
+                }//ENDIF  
+            ?> 
+        </div>
+         
+         
+         <!--
              <div class="form-group">
                 <label class="control-label col-md-2">Estatus <span aria-required="true" class="required"> * </span></label>
                                  <?php 
@@ -110,7 +185,31 @@
                                 }  ?>
                         
                  
-            </div>        
+            </div>
+         !-->
+            <!-- STATUS -->
+            <div class="form-group">
+                <label class="control-label col-md-2">Estatus <span aria-required="true" class="required"> * </span>
+                </label>
+                <div class="col-md-4">
+                    <div class="radio-list">
+                        <label>
+                            <div class="">
+                                <span>
+                                    <input type="radio" name="skStatus" value="AC" <?php echo (isset($result['skStatus']) && $result['skStatus'] == 'AC') ? 'checked' : '' ; ?> checked="checked"> Activo
+                                </span>
+                            </div>
+                        </label>
+                        <label>
+                            <div class="">
+                                <span>
+                                    <input type="radio" name="skStatus" value="IN" <?php echo (isset($result['skStatus']) && $result['skStatus'] == 'IN') ? 'checked' : '' ; ?>> Inactivo
+                                </span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
             
         
         </div>
@@ -121,23 +220,64 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-     if($("sRFC").length){	
+        /*
+         * Cuando sea una empresa de tipo cliente(clie) está puede tener 1 corresponsalia y 2 promotores.
+         */
+        $("#skTipoEmpresa").change(function(){
+           if($(this).val() == "CLIE"){
+                $(".skCorresponsalia").css("display","block");
+                $(".skPromotor").css("display","block");
+           }else{
+                $("#skCorresponsalia").val("");
+                $("#skPromotor1").val("");
+                $("#skPromotor2").val("");
+                $(".skCorresponsalia").css("display","none");
+                $(".skPromotor").css("display","none"); 
+           } 
+        });
+        /*
+         * Se valida que los promotores no se supliquen.
+         */
+        $("#skPromotor1").change(function(){ 
+            if($(this).val() != ""){
+                if($(this).val() == $("#skPromotor2").val()){
+                    toastr.error("No puede tener el mismo promotor 2 veces en el mismo registro.", "Notificaci&oacute;n");
+                    $(this).val("");
+                }
+            }
+        });
+        $("#skPromotor2").change(function(){ 
+            if($(this).val() != ""){
+                if($(this).val() == $("#skPromotor1").val()){
+                    toastr.error("No puede tener el mismo promotor 2 veces en el mismo registro.", "Notificaci&oacute;n");
+                    $(this).val("");
+                }
+            }
+        });
+        
+        /*
+         * Aquí se valida el RFC
+         */
+        /*if($("sRFC").length){	
 		     if($("sRFC").attr("value").match(/^[a-zA-Z]{3,4}(\d{6})((\D|\d){3})?$/)){
 			    alert("good");
 		    }else{
 			    alert("bad");
 			    
 		    }
-    }
-        /* VALIDATIONS */
+        }*/
+       
+        /*
+         * Aquí se valida el formulario.
+         */
         isValid = $("#_save").validate({
             errorElement: 'span', //default input error message container
             errorClass: 'help-block', // default input error message class
             focusInvalid: false, // do not focus the last invalid input
-            ignore: "",
+            ignore: ":hidden",
             rules:{
             	sRFC:{
-                    required: true,
+                    //required: true,
                      remote: {
                       url: "",
                       type: "post",
@@ -155,9 +295,11 @@
                 },
                 sNombre:{
                     required: true
-                },skStatus:{
+                },
+                skCorresponsalia:{
                     required: true
                 }
+                
                
             },
             invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar              
@@ -197,15 +339,17 @@
             },
             messages:{
             	sRFC:{
-                    required: "Campo obligatorio.",
-                     remote: "El RFC Ingresado ya Existe."
+                    //required: "Campo obligatorio.",
+                    remote: "El RFC Ingresado ya Existe."
                 },skTipoEmpresa:{
                     required: "Campo obligatorio."
                 },sNombre:{
                     required: "Campo obligatorio."
-                },skStatus:{
+                },
+                skCorresponsalia:{
                     required: "Campo obligatorio."
                 }
+                
             }
         });
     }); 

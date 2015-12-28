@@ -40,7 +40,10 @@
                     ,'sNombreCorto'       =>  ''
                     ,'sRFC'       =>  ''
                     ,'sNombre'       =>  ''
-                     ,'skStatus'     =>  ''
+                    ,'skCorresponsalia'       =>  ''
+                    ,'skPromotor1'       =>  ''
+                    ,'skPromotor2'       =>  ''
+                    ,'skStatus'     =>  ''
                     ,'limit'        =>  ''
                     ,'offset'       =>  ''
                 );
@@ -528,6 +531,12 @@
                 if(!empty($this->empresas['sRFC'])){
                     $sql .=" AND sRFC like '%".$this->empresas['sRFC']."%'";
                 }
+                if(!empty($this->empresas['skCorresponsalia'])){
+                    $sql .=" AND skCorresponsalia = '".$this->empresas['skCorresponsalia']."'";
+                }
+                if(!empty($this->empresas['skPromotor1'])){
+                    $sql .=" AND (skPromotor1 = '".$this->empresas['skPromotor1']."' OR skPromotor2 = '".$this->empresas['skPromotor2']."')";
+                }
                 if(!empty($this->empresas['skStatus'])){
                     $sql .=" AND cat_empresas.skStatus like '%".$this->empresas['skStatus']."%'";
                 }
@@ -555,6 +564,12 @@
                 if(!empty($this->empresas['sNombreCorto'])){
                     $sql .=" AND sNombreCorto = '".$this->empresas['sNombreCorto']."'";
                 }
+                if(!empty($this->empresas['skCorresponsalia'])){
+                    $sql .=" AND skCorresponsalia = '".$this->empresas['skCorresponsalia']."'";
+                }
+                if(!empty($this->empresas['skPromotor1'])){
+                    $sql .=" AND (cat_empresas.skPromotor1 = '".$this->empresas['skPromotor1']."' OR cat_empresas.skPromotor2 = '".$this->empresas['skPromotor2']."')";
+                }
                 if(!empty($this->empresas['skStatus'])){
                     $sql .=" AND cat_empresas.skStatus = '".$this->empresas['skStatus']."'";
                 }
@@ -578,14 +593,21 @@
             }
               public function read_like_empresas(){
                 $sql = "SELECT
-							ce.*,  st.sName AS STATUS,
-							 st.sHtml AS htmlStatus,
-							cte.sNombre AS tipoEmpresa
-						FROM
-							cat_empresas ce
-						LEFT JOIN _status st ON  st.skStatus = ce.skStatus
-						LEFT JOIN rel_cat_empresas_cat_tipos_empresas  rce ON rce.skEmpresa = ce.skEmpresa
-						LEFT JOIN cat_tipos_empresas cte ON cte.skTipoEmpresa = rce.skTipoEmpresa WHERE 1=1 ";
+                ce.*,  st.sName AS STATUS,
+                st.sHtml AS htmlStatus,
+                cte.sNombre AS tipoEmpresa,
+                catEmp.sNombre AS corresponsalia,
+                promo1.sNombre AS promotor1,
+                promo2.sNombre AS promotor2
+                FROM
+                cat_empresas ce
+                LEFT JOIN _status st ON  st.skStatus = ce.skStatus
+                LEFT JOIN cat_empresas catEmp ON  catEmp.skEmpresa = ce.skCorresponsalia
+                LEFT JOIN cat_promotores promo1 ON  promo1.skPromotores = ce.skPromotor1
+                LEFT JOIN cat_promotores promo2 ON  promo2.skPromotores = ce.skPromotor2
+                LEFT JOIN rel_cat_empresas_cat_tipos_empresas  rce ON rce.skEmpresa = ce.skEmpresa
+                LEFT JOIN cat_tipos_empresas cte ON cte.skTipoEmpresa = rce.skTipoEmpresa WHERE 1=1 ";
+                
                 if(!empty($this->empresas['skEmpresa'])){
                     $sql .=" AND ce.skEmpresa = '".$this->empresas['skEmpresa']."'";
                 }
@@ -598,13 +620,19 @@
                 if(!empty($this->empresas['sRFC'])){
                     $sql .=" AND ce.sRFC like '%".$this->empresas['sRFC']."%'";
                 }
-                 if(!empty($this->empresas['skStatus'])){
+                if(!empty($this->empresas['skCorresponsalia'])){
+                    $sql .=" AND ce.skCorresponsalia = '".$this->empresas['skCorresponsalia']."'";
+                }
+                if(!empty($this->empresas['skPromotor1'])){
+                    $sql .=" AND (ce.skPromotor1 = '".$this->empresas['skPromotor1']."' OR ce.skPromotor2 = '".$this->empresas['skPromotor2']."')";
+                }
+                if(!empty($this->empresas['skStatus'])){
                     $sql .=" AND ce.skStatus like '%".$this->empresas['skStatus']."%'";
                 }
-                 if(!empty($this->empresas['skTipoEmpresa'])){
-                    $sql .=" AND rce.skTipoEmpresa = '".$this->empresas['skTipoEmpresa']."'";
+                 if(!empty($this->tipoempresas['skTipoEmpresa'])){
+                    $sql .=" AND rce.skTipoEmpresa = '".$this->tipoempresas['skTipoEmpresa']."'";
                 }
-                 $sql .=" ORDER BY ce.sNombre ASC ";
+                $sql .=" ORDER BY ce.sNombre ASC ";
                 if(is_int($this->empresas['limit'])){
                     if(is_int($this->empresas['offset'])){
                         $sql .= " LIMIT ".$this->empresas['offset']." , ".$this->empresas['limit'];
@@ -612,7 +640,7 @@
                         $sql .= " LIMIT ".$this->empresas['limit'];
                     }
                 }
-               // echo $sql;
+                //echo $sql;
                 $result = $this->db->query($sql);
                 if($result){
                     if($result->num_rows > 0){
@@ -623,11 +651,11 @@
                 }
             }
               public function create_empresas(){
-                $sql = "INSERT INTO cat_empresas (skEmpresa,sNombre,sNombreCorto,sRFC,skStatus, dFechaCreacion) VALUES ('".$this->empresas['skEmpresa']."','".$this->empresas['sNombre']."','".$this->empresas['sNombreCorto']."','".$this->empresas['sRFC']."','".$this->empresas['skStatus']."', CURRENT_TIMESTAMP())";
+                $sql = "INSERT INTO cat_empresas (skEmpresa,sNombre,sNombreCorto,sRFC,skStatus, dFechaCreacion,skCorresponsalia,skPromotor1,skPromotor2) VALUES ('".$this->empresas['skEmpresa']."','".$this->empresas['sNombre']."','".$this->empresas['sNombreCorto']."','".$this->empresas['sRFC']."','".$this->empresas['skStatus']."', CURRENT_TIMESTAMP(),'".$this->empresas['skCorresponsalia']."','".$this->empresas['skPromotor1']."','".$this->empresas['skPromotor2']."')";
                 //echo $sql;
                 //die();
                 $result = $this->db->query($sql);
-                $sql="INSERT INTO rel_cat_empresas_cat_tipos_empresas(skEmpresa,skTipoEmpresa) VALUES('".$this->empresas['skEmpresa']."','".$this->empresas['skTipoEmpresa']."')";
+                $sql="INSERT INTO rel_cat_empresas_cat_tipos_empresas(skEmpresa,skTipoEmpresa) VALUES('".$this->empresas['skEmpresa']."','".$this->tipoempresas['skTipoEmpresa']."')";
                 $result = $this->db->query($sql);
                 if($result){
                     return $this->empresas['skEmpresa'];
@@ -638,23 +666,32 @@
             }
             
               public function update_empresas(){
-              	$sql="UPDATE rel_cat_empresas_cat_tipos_empresas SET skTipoEmpresa = '".$this->empresas['skTipoEmpresa']."' WHERE skEmpresa = '".$this->empresas['skEmpresa']."' ";
+              	$sql="UPDATE rel_cat_empresas_cat_tipos_empresas SET skTipoEmpresa = '".$this->tipoempresas['skTipoEmpresa']."' WHERE skEmpresa = '".$this->empresas['skEmpresa']."' ";
               	$this->db->query($sql);
                 $sql = "UPDATE cat_empresas  SET ";
-                if(!empty($this->empresas['sNombre'])){
+                if(!is_null($this->empresas['sNombre'])){
                     $sql .=" sNombre = '".$this->empresas['sNombre']."' ,";
                 }
-                 if(!empty($this->empresas['sNombreCorto'])){
+                if(!is_null($this->empresas['sNombreCorto'])){
                     $sql .=" sNombreCorto = '".$this->empresas['sNombreCorto']."' ,";
                 }
-                 if(!empty($this->empresas['sRFC'])){
+                if(!is_null($this->empresas['sRFC'])){
                     $sql .=" sRFC = '".$this->empresas['sRFC']."' ,";
                 }
-                
-                if(!empty($this->empresas['skStatus'])){
+                if(!is_null($this->empresas['skCorresponsalia'])){
+                    $sql .=" skCorresponsalia = '".$this->empresas['skCorresponsalia']."' ,";
+                }
+                if(!is_null($this->empresas['skPromotor1'])){
+                    $sql .=" skPromotor1 = '".$this->empresas['skPromotor1']."' ,";
+                }
+                if(!is_null($this->empresas['skPromotor2'])){
+                    $sql .=" skPromotor2 = '".$this->empresas['skPromotor2']."' ,";
+                }
+                if(!is_null($this->empresas['skStatus'])){
                     $sql .=" skStatus = '".$this->empresas['skStatus']."' ,";
                 }
                 $sql .= " skEmpresa = '".$this->empresas['skEmpresa']."' WHERE skEmpresa = '".$this->empresas['skEmpresa']."' LIMIT 1";
+                //echo $sql;
                 $result = $this->db->query($sql);
                 if($result){
                     return $this->empresas['skEmpresa'];
@@ -670,22 +707,28 @@
                 if(!empty($this->empresas['skEmpresaDistinta'])){
                     $sql .= " AND cat_empresas.skEmpresa <> '".$this->empresas['skEmpresaDistinta']."' ";
                 }
-				if(!empty($this->empresas['skEmpresa'])){
+                if(!empty($this->empresas['skEmpresa'])){
                     $sql .= " AND cat_empresas.skEmpresa ='".$this->empresas['skEmpresa']."' ";
                 }
-				if(!empty($this->empresas['sNombre'])){
+                if(!empty($this->empresas['sNombre'])){
                     $sql .= " AND cat_empresas.sNombre = '".$this->empresas['sNombre']."'";
                 }
                 if(!empty($this->empresas['sRFC'])){
                     $sql .= " AND cat_empresas.sRFC = '".$this->empresas['sRFC']."'";
                 }
-				if(!empty($this->empresas['sNombreCorto'])){
+                if(!empty($this->empresas['sNombreCorto'])){
                     $sql .= " AND cat_empresas.sNombreCorto = '".$this->empresas['sNombreCorto']."'";
                 }
-				if(!empty($this->empresas['skStatus'])){
+                if(!empty($this->empresas['skCorresponsalia'])){
+                    $sql .=" AND skCorresponsalia = '".$this->empresas['skCorresponsalia']."'";
+                }
+                if(!empty($this->empresas['skPromotor1'])){
+                    $sql .=" AND (cat_empresas.skPromotor1 = '".$this->empresas['skPromotor1']."' OR cat_empresas.skPromotor2 = '".$this->empresas['skPromotor2']."')";
+                }
+                if(!empty($this->empresas['skStatus'])){
                     $sql .= " AND cat_empresas.skStatus = '".$this->empresas['skStatus']."'";
                 }
-                 $sql .=" ORDER BY cat_empresas.sNombre ASC ";
+                $sql .=" ORDER BY cat_empresas.sNombre ASC ";
                 if(is_int($this->empresas['limit'])){
                     if(is_int($this->empresas['offset'])){
                         $sql .= " LIMIT ".$this->empresas['offset']." , ".$this->empresas['limit'];
@@ -693,7 +736,7 @@
                         $sql .= " LIMIT ".$this->empresas['limit'];
                     }
                 }
-				//echo "<br><br><br><br>".$sql;
+		//echo $sql;
                 $result = $this->db->query($sql);
                 if($result){
                     if($result->num_rows > 0){

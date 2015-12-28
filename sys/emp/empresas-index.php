@@ -25,7 +25,10 @@
                                Tipo de Empresa
                             </th>
                             <th width="25%">
-                                Fecha Creaci&oacute;n
+                                Corresponsalia
+                            </th>
+                            <th width="25%">
+                                Promotor 1
                             </th>
                             <th width="25%">
                                Estatus
@@ -45,10 +48,53 @@
                                 <input type="text" class="form-control form-filter input-sm" name="sNombreCorto" placeholder="Nombre Corto">
                             </td>
                             <td>
-                                <input type="text" class="form-control form-filter input-sm" name="skTipoEmpresa" placeholder="Tipo de Empresa">
+                                <!--<input type="text" class="form-control form-filter input-sm" name="skTipoEmpresa" placeholder="Tipo de Empresa">!-->
+                                <select name="skTipoEmpresa" class="form-control form-filter input-sm">
+                                    <option value="">- Tipo de Empresa -</option>
+                                <?php
+                                    if(isset($data['tiposEmpresas'])){
+                                        while($row = $data['tiposEmpresas']->fetch_assoc()){
+                                ?>
+                                            <option value="<?php echo $row['skTipoEmpresa']; ?>">
+                                                <?php echo $row['sNombre']; ?>
+                                            </option>
+                                <?php
+                                        }//ENDIF
+                                    }//ENDWHILE
+                                ?>
+                                </select>
                             </td>
                             <td>
-                                <input type="text" class="form-control form-filter input-sm" name="dFechaCreacion" placeholder="Fecha Creacion">
+                                <select name="skCorresponsalia" class="form-control form-filter input-sm">
+                                    <option value="">- Corresponsalia -</option>
+                                <?php
+                                    if(isset($data['corresponsalias'])){
+                                        while($row = $data['corresponsalias']->fetch_assoc()){
+                                ?>
+                                            <option value="<?php echo $row['skEmpresa']; ?>">
+                                                <?php echo $row['sNombre']; ?>
+                                            </option>
+                                <?php
+                                        }//ENDIF
+                                    }//ENDWHILE
+                                ?>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="skPromotor" class="form-control form-filter input-sm">
+                                    <option value="">- Promotor -</option>
+                                <?php
+                                    if(isset($data['promotores'])){
+                                        while($row = $data['promotores']->fetch_assoc()){
+                                ?>
+                                            <option value="<?php echo $row['skPromotores']; ?>">
+                                                <?php echo $row['sNombre']; ?>
+                                            </option>
+                                <?php
+                                        }//ENDIF
+                                    }//ENDWHILE
+                                ?>
+                                </select>
                             </td>
                             <td>
                                 <select name="skStatus" class="form-control form-filter input-sm">
