@@ -133,7 +133,7 @@
                                     if(isset($data['clavedocumento'])){
                                         while($rClaveDocumento = $data['clavedocumento']->fetch_assoc()){
                                 ?>
-          <option value="<?php echo $rClaveDocumento['skClaveDocumento']; ?>" <?php echo (isset($result['skClaveDocumento'])) ? ($result['skClaveDocumento'] == $rClaveDocumento['skClaveDocumento'] ? 'selected' : '' ) : '' ; ?> > <?php echo utf8_encode($rClaveDocumento['sNombre']); ?> </option>
+          <option value="<?php echo $rClaveDocumento['skClaveDocumento']; ?>" <?php echo (isset($result['skClaveDocumento'])) ? ($result['skClaveDocumento'] == $rClaveDocumento['skClaveDocumento'] ? 'selected' : '' ) : '' ; ?> > <?php echo utf8_encode($rClaveDocumento['skClaveDocumento']); ?> </option>
           <?php
                                         }//ENDIF
                                     }//ENDWHILE
@@ -141,7 +141,7 @@
         </select>
       </div>
     </div>
-    <div class="form-group">
+    <!--<div class="form-group">
       <label class="control-label col-md-2">Corresponsalía <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
         <select name="skCorresponsalia" id="skCorresponsalia" class="form-control form-filter input-sm">
@@ -157,7 +157,7 @@
                                 ?>
         </select>
       </div>
-    </div>
+    </div>!-->
     <div class="form-group">
       <label class="control-label col-md-2">Mercancía <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
@@ -179,7 +179,7 @@
         <label class="control-label col-md-2">Hora de recepci&oacute;n</label>
         <div class="col-md-4">
             <div class="input-group bootstrap-timepicker">
-                <input type="text" class="form-control time-picker">
+                <input type="text" id="tRecepcion" name="tRecepcion" class="form-control timepicker-24" value="<?php echo (isset($result['tRecepcion'])) ? utf8_encode($result['tRecepcion']) : '' ; ?>">
                 <span class="input-group-btn">
                     <button type="button" class="btn btn-default"><i class="fa fa-clock-o"></i></button>
                 </span>

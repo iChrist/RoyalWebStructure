@@ -67,10 +67,15 @@
 					if(isset($_POST['skCorresponsalia'])){
 						$this->recepciondocumentos['skCorresponsalia'] = $_POST['skCorresponsalia'];
 					}
+
+					if(isset($_POST['dFechaCreacion'])){
+						$this->recepciondocumentos['dFechaCreacion'] = date('Y-m-d',strtotime($_POST['dFechaCreacion']));
+					}
+
 					if(isset($_POST['skStatus'])){
 						$this->recepciondocumentos['skStatus'] = $_POST['skStatus'];
 					}
-					
+					//exit('<pre>'.print_r($this->recepciondocumentos,1).'</pre>');
 					// OBTENER REGISTROS //
 					$total = parent::count_recepciondocumentos();
 					$records = Core_Functions::table_ajax($total);
@@ -98,10 +103,10 @@
 							,utf8_encode($row['TipoServicio'])
 							,utf8_encode($row['Empresa'])
 							,utf8_encode($row['ClaveDocumento'])
-							,utf8_encode($row['Corresponsalia'])
+							//,utf8_encode($row['Corresponsalia'])
 							,utf8_encode($row['sMercancia'])
 							,utf8_encode($row['sObservaciones'])
-							,utf8_encode($row['dFechaCreacion'])
+							,date('d-m-Y',strtotime($row['dFechaCreacion']))
  							,utf8_encode($row['htmlStatus'])
 							, !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
 						));
@@ -159,10 +164,12 @@
 					$this->recepciondocumentos['skClaveDocumento'] = utf8_decode($_POST['skClaveDocumento']);
 					$this->recepciondocumentos['skCorresponsalia'] = utf8_decode($_POST['skCorresponsalia']);
                                         
-                                        $this->recepciondocumentos['sNumContenedor'] = utf8_decode(!empty($_POST['sNumContenedor']) ? $_POST['sNumContenedor'] : '');
-                                        $this->recepciondocumentos['iBultos'] = utf8_decode(!empty($_POST['iBultos']) ? $_POST['iBultos'] : 0);
-                                        $this->recepciondocumentos['fPeso'] = utf8_decode(!empty($_POST['fPeso']) ? $_POST['fPeso'] : 0);
-                                        $this->recepciondocumentos['fVolumen'] = utf8_decode(!empty($_POST['fVolumen']) ? $_POST['fVolumen'] : 0);
+                    $this->recepciondocumentos['sNumContenedor'] = utf8_decode(!empty($_POST['sNumContenedor']) ? $_POST['sNumContenedor'] : '');
+                    $this->recepciondocumentos['iBultos'] = utf8_decode(!empty($_POST['iBultos']) ? $_POST['iBultos'] : 0);
+                    $this->recepciondocumentos['fPeso'] = utf8_decode(!empty($_POST['fPeso']) ? $_POST['fPeso'] : 0);
+                    $this->recepciondocumentos['fVolumen'] = utf8_decode(!empty($_POST['fVolumen']) ? $_POST['fVolumen'] : 0);
+
+                    $this->recepciondocumentos['tRecepcion'] = utf8_decode(!empty($_POST['tRecepcion']) ? $_POST['tRecepcion'] : date('H:i:s'));
 					
 						if(empty($_POST['skRecepcionDocumento'])){
 							if(parent::create_recepciondocumentos()){

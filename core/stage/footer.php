@@ -216,9 +216,15 @@ jQuery(document).ready(function() {
     $('.date-picker').datepicker({
         autoclose: true
     });
-    $('.time-picker').timepicker({
-            autoclose: true
-        });
+    $('.timepicker-12').timepicker({
+        autoclose: true
+    });
+    $('.timepicker-24').timepicker({
+        autoclose: true,
+        minuteStep: 1,
+        showSeconds: true,
+        showMeridian: false
+    });
 });
 </script>
 <!-- END JAVASCRIPTS -->

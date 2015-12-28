@@ -13,6 +13,7 @@
                     ,'iBultos'=>0
                     ,'fPeso'=>0
                     ,'fVolumen'=>0
+                    ,'tRecepcion'=>''
                     ,'skStatus'     				=>  ''
                     ,'limit'        					=>  ''
                     ,'offset'       					=>  ''
@@ -257,13 +258,16 @@
 				if(!empty($this->recepciondocumentos['skCorresponsalia'])){
                     $sql .=" AND skCorresponsalia = '".$this->recepciondocumentos['skCorresponsalia']."'";
                 }
-				if(!empty($this->recepciondocumentos['skStatus'])){
-                    $sql .=" AND skStatus = '".$this->recepciondocumentos['skStatus']."'";
+                if(!empty($this->recepciondocumentos['dFechaCreacion'])){
+                    $sql .=" AND DATE_FORMAT(dFechaCreacion,'%Y-%m-%d') = '".$this->recepciondocumentos['dFechaCreacion']."'";
                 }
 				if(!empty($this->recepciondocumentos['skStatus'])){
                     $sql .=" AND skStatus = '".$this->recepciondocumentos['skStatus']."'";
                 }
- 				//echo $sql;die();
+				if(!empty($this->recepciondocumentos['skStatus'])){
+                    $sql .=" AND skStatus = '".$this->recepciondocumentos['skStatus']."'";
+                }
+ 				//echo $sql;
                 $result = $this->db->query($sql);
                 if($result){
                     if($result->num_rows > 0){
@@ -326,6 +330,9 @@
                 if(!empty($this->recepciondocumentos['skCorresponsalia'])){
                     $sql .=" AND rd.skCorresponsalia like '%".$this->recepciondocumentos['skCorresponsalia']."%'";
                 }
+                if(!empty($this->recepciondocumentos['dFechaCreacion'])){
+                    $sql .=" AND DATE_FORMAT(rd.dFechaCreacion,'%Y-%m-%d') = '".$this->recepciondocumentos['dFechaCreacion']."'";
+                }
                 if(is_int($this->recepciondocumentos['limit'])){
                     if(is_int($this->recepciondocumentos['offset'])){
                         $sql .= " LIMIT ".$this->recepciondocumentos['offset']." , ".$this->recepciondocumentos['limit'];
@@ -333,7 +340,7 @@
                         $sql .= " LIMIT ".$this->recepciondocumentos['limit'];
                     }
                 }
-				//echo $sql;die();
+				//echo $sql;
                 $result = $this->db->query($sql);
                 if($result){
                     if($result->num_rows > 0){
@@ -346,7 +353,7 @@
             
             public function create_recepciondocumentos(){
  				$sql = "INSERT INTO ope_recepciones_documentos (skRecepcionDocumento,sReferencia,sPedimento,sMercancia,sObservaciones,sNumContenedor,iBultos,fPeso,fVolumen,skEmpresa,skTipoTramite,
-                                        skTipoServicio,skClaveDocumento,skCorresponsalia,
+                                        skTipoServicio,skClaveDocumento,skCorresponsalia,tRecepcion,
                                         skStatus,dFechaCreacion,skUsersCreacion,dFechaModificacion,skUsersModificacion) 
                                         VALUES ('".$this->recepciondocumentos['skRecepcionDocumento']."',
                                                 '".$this->recepciondocumentos['sReferencia']."',
@@ -364,6 +371,7 @@
                                                 '".$this->recepciondocumentos['skTipoServicio']."',
                                                 '".$this->recepciondocumentos['skClaveDocumento']."',
                                                 '".$this->recepciondocumentos['skCorresponsalia']."',
+                                                '".$this->recepciondocumentos['tRecepcion']."',
                                                 'AC',
                                                 CURRENT_TIMESTAMP(),
                                                 '".$_SESSION['session']['skUsers']."',
@@ -401,6 +409,8 @@
                 $sql .=" fVolumen = ".$this->recepciondocumentos['fVolumen']." ,";
                 /* TERMINA TIPO DE SERVICIO */
                 
+                $sql .=" tRecepcion = '".$this->recepciondocumentos['tRecepcion']."' ,";
+
                 if(!empty($this->recepciondocumentos['skEmpresa'])){
                     $sql .=" skEmpresa = '".$this->recepciondocumentos['skEmpresa']."' ,";
                 }

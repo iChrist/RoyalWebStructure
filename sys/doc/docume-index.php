@@ -30,11 +30,11 @@ echo "</pre>";*/
             <th width="10%"> Tipo de Servicios </th>
             <th width="10%"> Empresa </th>
             <th width="10%"> Clave de Documento </th>
-            <th width="10%"> Corresponsalía </th>
+            <!--<th width="10%"> Corresponsalía </th>!-->
             <th width="10%"> Mercancía </th>
             <th width="10%"> Observaciones </th>
             
-            <th width="10%"> Fecha </th>
+            <th width="10%"> Fecha Creaci&oacute;n </th>
             <th width="10%"> Estatus </th>
             <th width="10%"> Acciones </th>
           </tr>
@@ -89,7 +89,7 @@ echo "</pre>";*/
                                     }//ENDWHILE
                                 ?>
               </select></td>
-            <td><select name="skCorresponsalia" class="form-control form-filter input-sm">
+            <!--<td><select name="skCorresponsalia" class="form-control form-filter input-sm">
                 <option value="">- Corresponsalía -</option>
                 <?php
                                     if(isset($data['corresponsalia'])){
@@ -100,11 +100,18 @@ echo "</pre>";*/
                                         }//ENDIF
                                     }//ENDWHILE
                                 ?>
-              </select></td>
+              </select></td>!-->
             <td><input type="text" class="form-control form-filter input-sm" name="sMercancia" placeholder="Mercancía"></td>
             <td><input type="text" class="form-control form-filter input-sm" name="sObservaciones" placeholder="Observaciones"></td>
             
-            <td></td>
+            <td>
+                <div class="input-group input-group-sm date date-picker margin-bottom-5" data-date-format="dd-mm-yyyy">
+                    <input type="text" class="form-control form-filter" readonly id="dFechaCreacion" name="dFechaCreacion" placeholder="Fecha Creaci&oacute;n">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+                    </span>
+                </div>
+            </td>
             <td><select name="skStatus" class="form-control form-filter input-sm">
                 <option value="">- Estatus -</option>
                 <?php
