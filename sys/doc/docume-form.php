@@ -176,8 +176,8 @@
     </div>
     
     <div class="form-group">
-        <label class="control-label col-md-3">Hora de recepci&oacute;n</label>
-        <div class="col-md-3">
+        <label class="control-label col-md-2">Hora de recepci&oacute;n</label>
+        <div class="col-md-4">
             <div class="input-group bootstrap-timepicker">
                 <input type="text" class="form-control time-picker">
                 <span class="input-group-btn">

@@ -50,6 +50,12 @@ Dropdown Menu
   border-radius: 4px !important;
   box-shadow: 2px 2px 6px rgba(102, 102, 102, 0.1);
   border-color: #eee;
+}
+
+.open > .dropdown-menu {
+  border-radius: 4px !important;
+  box-shadow: 2px 2px 6px rgba(102, 102, 102, 0.1);
+  border-color: #eee;
   left: inherit;
   right: 0;
 }
