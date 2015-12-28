@@ -60,6 +60,7 @@
 <script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
 <script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
 
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="<?php echo SYS_URL; ?>core/assets/lib/app.js" type="text/javascript"></script>
@@ -215,6 +216,9 @@ jQuery(document).ready(function() {
     $('.date-picker').datepicker({
         autoclose: true
     });
+    $('.time-picker').timepicker({
+            autoclose: true
+        });
 });
 </script>
 <!-- END JAVASCRIPTS -->

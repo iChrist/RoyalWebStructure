@@ -40,6 +40,7 @@
 <link href="<?php echo SYS_URL; ?>core/assets/plugins/select2/select2.css" rel="stylesheet" type="text/css"/>
 <link rel="stylesheet" type="text/css" href="<?php echo SYS_URL; ?>core/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css"/>
 <link rel="stylesheet" type="text/css" href="<?php echo SYS_URL; ?>core/assets/plugins/bootstrap-datepicker/css/datepicker.css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo SYS_URL; ?>core/assets/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css"/>
 <!-- END PAGE LEVEL PLUGIN STYLES -->
 <!-- BEGIN THEME STYLES -->
 <link href="<?php echo SYS_URL; ?>core/assets/css/style-conquer.css" rel="stylesheet" type="text/css"/>

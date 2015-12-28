@@ -175,6 +175,17 @@
       </div>
     </div>
     
+    <div class="form-group">
+        <label class="control-label col-md-3">Hora de recepci&oacute;n</label>
+        <div class="col-md-3">
+            <div class="input-group bootstrap-timepicker">
+                <input type="text" class="form-control time-picker">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default"><i class="fa fa-clock-o"></i></button>
+                </span>
+            </div>
+        </div>
+    </div>
     
     <!-- CARGAR DE rel_recepcionDoc_docTipo !-->
     <div class="form-group">
