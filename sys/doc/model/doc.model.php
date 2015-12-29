@@ -16,6 +16,10 @@
                     ,'dRecepcion'=>''
                     ,'tRecepcion'=>''
                     ,'skStatus'     				=>  ''
+                    
+                    ,'skCorresponsalia'=>''
+                    ,'skPromotor1'=>''
+                    ,'skPromotor2'=>''
                     ,'limit'        					=>  ''
                     ,'offset'       					=>  ''
                 );
@@ -277,21 +281,30 @@
             }
             
             public function read_recepciondocumentos(){
-                $sql = "	SELECT 	rd.*, 
-								st.sName AS status, 
-								ce.sNombre AS Empresa, 
-								ctt.sNombre AS TipoTramite, 
-								cts.sNombre AS TipoServicio, 
-								ccd.sNombre AS ClaveDocumento, 
-								st.sHtml AS htmlStatus 
-						FROM ope_recepciones_documentos rd 
-						INNER JOIN _status  st ON st.skStatus = rd.skStatus 
-						INNER JOIN cat_empresas  ce ON ce.skEmpresa = rd.skEmpresa 
-						INNER JOIN cat_tipos_tramites  ctt ON ctt.skTipoTramite = rd.skTipoTramite 
-						INNER JOIN cat_tipos_servicios  cts ON cts.skTipoServicio = rd.skTipoServicio 
-						INNER JOIN cat_claves_documentos  ccd ON ccd.skClaveDocumento = rd.skClaveDocumento 
-						INNER JOIN _status ON _status.skStatus = rd.skStatus 
-						WHERE 1=1 ";
+                $sql = "SELECT rd.*, 
+                            st.sName AS status, 
+                            ce.sNombre AS Empresa,
+                            ce.skCorresponsalia,
+                            (SELECT sNombre FROM cat_empresas WHERE cat_empresas.skEmpresa = ce.skCorresponsalia) AS corresponsalia,
+                            ctt.sNombre AS TipoTramite, 
+                            cts.sNombre AS TipoServicio, 
+                            ccd.sNombre AS ClaveDocumento,
+                            _users.sName AS autor,
+                            promotor1.sNombre AS promotor1, 
+                            promotor2. sNombre AS promotor2,
+                            st.sHtml AS htmlStatus 
+                FROM ope_recepciones_documentos rd 
+                INNER JOIN _status  st ON st.skStatus = rd.skStatus 
+                INNER JOIN cat_empresas  ce ON ce.skEmpresa = rd.skEmpresa
+
+                LEFT JOIN cat_promotores promotor1 ON promotor1.skPromotores  = ce.skPromotor1 
+                LEFT JOIN cat_promotores promotor2 ON promotor2.skPromotores  = ce.skPromotor2 
+                INNER JOIN cat_tipos_tramites  ctt ON ctt.skTipoTramite = rd.skTipoTramite 
+                INNER JOIN cat_tipos_servicios  cts ON cts.skTipoServicio = rd.skTipoServicio 
+                INNER JOIN cat_claves_documentos  ccd ON ccd.skClaveDocumento = rd.skClaveDocumento 
+                INNER JOIN _users ON _users.skUsers = rd.skUsersCreacion 
+                INNER JOIN _status ON _status.skStatus = rd.skStatus 
+                WHERE 1=1 ";
                 if(!empty($this->recepciondocumentos['skRecepcionDocumento'])){
                     $sql .=" AND rd.skRecepcionDocumento = '".$this->recepciondocumentos['skRecepcionDocumento']."'";
                 }
@@ -317,6 +330,9 @@
                 if(!empty($this->recepciondocumentos['skTipoTramite'])){
                     $sql .=" AND rd.skTipoTramite like '%".$this->recepciondocumentos['skTipoTramite']."%'";
                 }
+                if(!empty($this->recepciondocumentos['sNumContenedor'])){
+                    $sql .=" AND rd.sNumContenedor like '".$this->recepciondocumentos['sNumContenedor']."%'";
+                }
                 if(!empty($this->recepciondocumentos['skTipoServicio'])){
                     $sql .=" AND rd.skTipoServicio like '%".$this->recepciondocumentos['skTipoServicio']."%'";
                 }
@@ -329,6 +345,12 @@
                 if(!empty($this->recepciondocumentos['dRecepcion'])){
                     $sql .=" AND DATE_FORMAT(rd.dRecepcion,'%Y-%m-%d') = '".$this->recepciondocumentos['dRecepcion']."'";
                 }
+                if(!empty($this->recepciondocumentos['skCorresponsalia'])){
+                    $sql .=" AND ce.skCorresponsalia = '".$this->recepciondocumentos['skCorresponsalia']."'";
+                }
+                if(!empty($this->recepciondocumentos['skPromotor1'])){
+                    $sql .=" AND ce.skPromotor1 = '".$this->recepciondocumentos['skPromotor1']."' OR ce.skPromotor2 = '".$this->recepciondocumentos['skPromotor2']."'";
+                }
                 if(is_int($this->recepciondocumentos['limit'])){
                     if(is_int($this->recepciondocumentos['offset'])){
                         $sql .= " LIMIT ".$this->recepciondocumentos['offset']." , ".$this->recepciondocumentos['limit'];
@@ -336,7 +358,7 @@
                         $sql .= " LIMIT ".$this->recepciondocumentos['limit'];
                     }
                 }
-				//echo $sql;
+                //echo $sql;
                 $result = $this->db->query($sql);
                 if($result){
                     if($result->num_rows > 0){

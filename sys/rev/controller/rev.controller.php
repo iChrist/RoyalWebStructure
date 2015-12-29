@@ -47,12 +47,18 @@
 					if(isset($_POST['skUsuarioRevalidacion'])){
 						$this->solreva['skUsuarioRevalidacion'] = $_POST['skUsuarioRevalidacion'];
 					}
-					if(isset($_POST['order_date_from'])){
-						$this->solreva['order_date_from'] = $_POST['order_date_from'];
+					if(!empty($_POST['dFechaRevalidacion'])){
+						$this->solreva['dFechaRevalidacion'] = $_POST['dFechaRevalidacion'];
+					}
+                                        if(!empty($_POST['dFechaFin'])){
+						$this->solreva['dFechaFin'] = $_POST['dFechaFin'];
+					}
+                                        // CLIENTE //
+                                        if(isset($_POST['skEmpresa'])){
+                                            $this->solreva['skEmpresa'] = $_POST['skEmpresa'];
 					}
 				
-					
-					
+					//exit('<pre>'.print_r($this->solreva,1).'</pre>');
 					// OBTENER REGISTROS //
 					$total = parent::count_solreva();
 					$records = Core_Functions::table_ajax($total);
@@ -77,7 +83,7 @@
 						array_push($records['data'], array(
 							 utf8_encode($row['Icono'])
 							 ,utf8_encode($row['sReferencia'])
-							 ,($row{'dFechaRevalidacion'} ? date('d/m/Y H:s', strtotime($row{'dFechaRevalidacion'})): 'N/D')
+							 ,($row{'dFechaRevalidacion'} ? date('d/m/Y H:i:s', strtotime($row{'dFechaRevalidacion'})): 'N/D')
 							 ,utf8_encode($row['UsuarioEjecutivo'])
  							,utf8_encode($row['Cliente'])
  							,utf8_encode($row['EmpresaNaviera'])
@@ -98,8 +104,8 @@
 					
 					// INCLUYE UN MODELO DE OTRO MODULO //
 					$this->load_model('cof','cof');
-                    $cof = new Cof_Model();
-                    $this->data['status'] = $cof->read_status();
+                                        $cof = new Cof_Model();
+                                        $this->data['status'] = $cof->read_status();
 					
 /*					$this->data['empresa'] = Cof_Model::read_status();
 					$this->data['tipotramite'] = Cof_Model::read_status();
@@ -108,8 +114,10 @@
 */
 					$this->load_model('emp','emp');
 					$objEmpresa = new Emp_Model();
-					$objEmpresa->empresas['skTipoEmpresa'] = 'LINA';
+					$objEmpresa->tipoempresas['skTipoEmpresa'] = 'LINA';
 					$this->data['empresas'] = $objEmpresa->read_like_empresas();
+                                        $objEmpresa->tipoempresas['skTipoEmpresa'] = 'CLIE';
+					$this->data['clientes'] = $objEmpresa->read_like_empresas();
 					$this->load_model('cof','cof');
 					$objUsuarios = new Cof_Model();
 					$this->data['tramitadores'] = $objUsuarios->read_user();
@@ -134,7 +142,7 @@
 					
 					$this->load_model('emp','emp');
 					$objEmpresa = new Emp_Model();
-					$objEmpresa->empresas['skTipoEmpresa'] = 'LINA';
+					$objEmpresa->tipoempresas['skTipoEmpresa'] = 'LINA';
 					$this->data['empresas'] = $objEmpresa->read_like_empresas();
 					
 					$this->load_model('cof','cof');
@@ -142,7 +150,7 @@
 					$this->data['tramitadores'] = $objUsuarios->read_user();
 					
 					
-					$this->data['rechazos'] = parent::read_like_rechazos(); 
+					$this->data['rechazos'] = parent::read_like_rechazos();
 					if(isset($_POST['axn']))
                     	 {
                         	switch ($_POST['axn'])
@@ -209,7 +217,8 @@
  					$this->solreva['skEstatusRevalidacion'] =  !empty($_POST['skEstatusRevalidacion']) ? $_POST['skEstatusRevalidacion'] : '';
  					$this->solreva['skUsuarioTramitador'] = utf8_decode($_POST['skUsuarioTramitador']);
  						if(empty($_POST['skSolicitudRevalidacion'])){
-							if(parent::create_solreva()){
+							
+                                                    if(parent::create_solreva()){
 							
 							
 								$this->data['response'] = true;

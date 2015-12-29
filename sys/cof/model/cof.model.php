@@ -12,6 +12,7 @@
                     ,'sPassword'    		=>  ''
                     ,'skStatus'     		=>  ''
                     ,'dCreated'     		=>  ''
+                    ,'sGroup'=>''
                     ,'limit'        			=>  ''
                     ,'offset'       			=>  ''
                 );
@@ -60,8 +61,8 @@
             /**/
             public function create_Users(){
 
-			$sql = "INSERT INTO _users (skUsers,sName,sLastNamePaternal,sLastNameMaternal,sEmail,sUserName,sPassword,skStatus) 
-			VALUES ('".$this->users['skUsers']."','".$this->users['sName']."','".$this->users['sLastNamePaternal']."','".$this->users['sLastNameMaternal']."','".$this->users['sEmail']."','".$this->users['sUserName']."','".$this->users['sPassword']."','".$this->users['skStatus']."')";
+			$sql = "INSERT INTO _users (skUsers,sName,sLastNamePaternal,sLastNameMaternal,sEmail,sUserName,sPassword,skStatus,sGroup) 
+			VALUES ('".$this->users['skUsers']."','".$this->users['sName']."','".$this->users['sLastNamePaternal']."','".$this->users['sLastNameMaternal']."','".$this->users['sEmail']."','".$this->users['sUserName']."','".$this->users['sPassword']."','".$this->users['skStatus']."','".$this->users['sGroup']."')";
               //  echo "<br><br><br><br><br>".$sql;
                 $result = $this->db->query($sql);
                 if($result){
@@ -157,6 +158,7 @@
                     sLastNameMaternal='".$this->users['sLastNameMaternal']."', 
                     sEmail='".$this->users['sEmail']."', 
                     sUserName='".$this->users['sUserName']."', 
+                    sGroup='".$this->users['sGroup']."', 
                     skStatus='".$this->users['skStatus']."' 
                     WHERE skUsers = '".$this->users['skUsers']."'";
                 $result = $this->db->query($sql);

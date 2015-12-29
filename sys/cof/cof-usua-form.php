@@ -137,17 +137,26 @@
                 </div>
                 
             </div>
+            
+            <div class="clearfix"><hr/></div>
+            
+            <div class="form-group">
+                <label class="control-label col-md-2">Tipo de usuario <span aria-required="true" class="required"> * </span>
+                </label>
+                <div class="col-md-4">
+                    <label>
+                        <input type="checkbox" id="sGroup" name="sGroup" value="A" <?php echo (isset($result['sGroup']) && $result['sGroup'] == 'A') ? 'checked' : '' ; ?>  />
+                        Administrador    
+                    </label>
+                </div>
+            </div>
+            
         </div>
 </form>
 
 
 
-<div class="col-md-12">
-    <b>Nota:</b>
-    <span class="label label-md label-info">
-        Se enviar&aacute; correo electr&oacute;nico al usuario con una contrase&ntilde;a autogenerada para el acceso al sistema y posteriormente podr&aacute; cambiarla.
-    </span>
-</div>
+<div class="clearfix"></div>
 
 
 

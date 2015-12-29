@@ -131,6 +131,7 @@
 								$this->users['sEmail'] 				= (utf8_decode($_POST['sEmail']));
 								$this->users['sUserName']	 		= (utf8_decode($_POST['sUserName']));
 								$this->users['skStatus']				= (utf8_decode($_POST['skStatus']));
+                                                                $this->users['sGroup']				= utf8_decode(!empty($_POST['sGroup']) ? $_POST['sGroup'] : 'U');
 								
                         if($_POST['skUsers']){
 								if(parent::update_Users()){

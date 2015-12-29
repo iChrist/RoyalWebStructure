@@ -29,12 +29,15 @@ echo "</pre>";*/
             <th width="10%"> Tipo de Tramite </th>
             <th width="10%"> Tipo de Servicios </th>
             <th width="10%"> Empresa </th>
+            <th width="10%"> Corresponsalia </th>
+            <th width="10%"> Promotores </th>
             <th width="10%"> Clave de Documento </th>
             <!--<th width="10%"> Corresponsalía </th>!-->
             <th width="10%"> Mercancía </th>
             <th width="10%"> Observaciones </th>
             <th width="10%"> Fecha/Hora Receci&oacute;n </th>
             <th width="10%"> Fecha/Hora Creaci&oacute;n </th>
+            <th width="25%"> Autor </th>
             <th width="10%"> Estatus </th>
             <th width="10%"> Acciones </th>
           </tr>
@@ -53,7 +56,8 @@ echo "</pre>";*/
                                     }//ENDWHILE
                                 ?>
               </select></td>
-            <td><select name="skTipoServicio" class="form-control form-filter input-sm">
+            <td>
+                <select name="skTipoServicio" class="form-control form-filter input-sm">
                 <option value="">- Tipos de Servicios -</option>
                 <?php
                                     if(isset($data['tiposservicios'])){
@@ -64,19 +68,54 @@ echo "</pre>";*/
                                         }//ENDIF
                                     }//ENDWHILE
                                 ?>
-              </select></td>
-            <td><select name="skEmpresa" class="form-control form-filter input-sm">
+              </select>
+            <input type="text" class="form-control form-filter input-sm" name="sNumContenedor" placeholder="Contenedor">
+            </td>
+            <td>
+                <!-- CLIENTES !-->
+                <select name="skEmpresa" class="form-control form-filter input-sm">
                 <option value="">- Empresa -</option>
                 <?php
                                     if(isset($data['empresas'])){
                                         while($row = $data['empresas']->fetch_assoc()){
                                 ?>
-                <option value="<?php echo $row['skEmpresa']; ?>"> <?php echo utf8_encode($row['sNombre']." (".$row['sRFC'].")"); ?> </option>
+                <option value="<?php echo $row['skEmpresa']; ?>"> <?php echo utf8_encode($row['sNombre']); ?> </option>
                 <?php
                                         }//ENDIF
                                     }//ENDWHILE
                                 ?>
-              </select></td>
+              </select>
+            </td>
+            <td>
+              <!-- CORRESPONSALIA !-->
+              <select name="skCorresponsalia" class="form-control form-filter input-sm">
+                <option value="">- Corresponsalia -</option>
+                <?php
+                                    if(isset($data['corresponsalias'])){
+                                        while($row = $data['corresponsalias']->fetch_assoc()){
+                                ?>
+                <option value="<?php echo $row['skEmpresa']; ?>"> <?php echo utf8_encode($row['sNombre']); ?> </option>
+                <?php
+                                        }//ENDIF
+                                    }//ENDWHILE
+                                ?>
+              </select>
+            </td>
+            <td>
+              <!-- PROMOTORES !-->
+              <select name="skPromotores" class="form-control form-filter input-sm">
+                <option value="">- Promotor -</option>
+                <?php
+                                    if(isset($data['promotores'])){
+                                        while($row = $data['promotores']->fetch_assoc()){
+                                ?>
+                <option value="<?php echo $row['skPromotores']; ?>"> <?php echo utf8_encode($row['sNombre']); ?> </option>
+                <?php
+                                        }//ENDIF
+                                    }//ENDWHILE
+                                ?>
+              </select>
+            </td>
             <td><select name="skClaveDocumento" class="form-control form-filter input-sm">
                 <option value="">- Clave de Documento -</option>
                 <?php
@@ -120,6 +159,23 @@ echo "</pre>";*/
                         <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
                     </span>
                 </div>
+            </td>
+            
+            <td>
+                <select name="skUsers" class="form-control form-filter input-sm">
+                    <option value="">- Autor -</option>
+                <?php
+                    if(isset($data['usuarios'])){
+                        while($row = $data['usuarios']->fetch_assoc()){
+                ?>
+                            <option value="<?php echo $row['skUsers']; ?>">
+                                <?php echo utf8_encode($row['sName']); ?>
+                            </option>
+                <?php
+                        }//ENDIF
+                    }//ENDWHILE
+                ?>
+                </select>
             </td>
             <td><select name="skStatus" class="form-control form-filter input-sm">
                 <option value="">- Estatus -</option>

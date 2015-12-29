@@ -602,7 +602,7 @@
                 FROM
                 cat_empresas ce
                 LEFT JOIN _status st ON  st.skStatus = ce.skStatus
-                LEFT JOIN cat_empresas catEmp ON  catEmp.skEmpresa = ce.skCorresponsalia
+                LEFT JOIN cat_empresas catEmp ON  catEmp.skEmpresa = ce.skCorresponsalia 
                 LEFT JOIN cat_promotores promo1 ON  promo1.skPromotores = ce.skPromotor1
                 LEFT JOIN cat_promotores promo2 ON  promo2.skPromotores = ce.skPromotor2
                 LEFT JOIN rel_cat_empresas_cat_tipos_empresas  rce ON rce.skEmpresa = ce.skEmpresa

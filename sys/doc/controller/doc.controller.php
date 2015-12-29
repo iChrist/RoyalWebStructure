@@ -53,13 +53,23 @@
 					}
 					
 					if(isset($_POST['skEmpresa'])){
-						$this->recepciondocumentos['skEmpresa'] = $_POST['skEmpresa'];
+                                            $this->recepciondocumentos['skEmpresa'] = $_POST['skEmpresa'];
+					}
+                                        if(isset($_POST['skCorresponsalia'])){
+                                            $this->recepciondocumentos['skCorresponsalia'] = $_POST['skCorresponsalia'];
+					}
+                                        if(isset($_POST['skPromotores'])){
+                                            $this->recepciondocumentos['skPromotor1'] = $_POST['skPromotores'];
+                                            $this->recepciondocumentos['skPromotor2'] = $_POST['skPromotores'];
 					}
 					if(isset($_POST['skTipoTramite'])){
 						$this->recepciondocumentos['skTipoTramite'] = $_POST['skTipoTramite'];
 					}
 					if(isset($_POST['skTipoServicio'])){
 						$this->recepciondocumentos['skTipoServicio'] = $_POST['skTipoServicio'];
+					}
+                                        if(isset($_POST['sNumContenedor'])){
+						$this->recepciondocumentos['sNumContenedor'] = $_POST['sNumContenedor'];
 					}
 					if(isset($_POST['skClaveDocumento'])){
 						$this->recepciondocumentos['skClaveDocumento'] = $_POST['skClaveDocumento'];
@@ -101,14 +111,17 @@
 							 utf8_encode($row['sReferencia'])
 							,utf8_encode($row['sPedimento'])
 							,utf8_encode($row['TipoTramite'])
-							,utf8_encode($row['TipoServicio'])
+							,utf8_encode($row['TipoServicio'].'<br>'.$row['sNumContenedor'])
 							,utf8_encode($row['Empresa'])
+                                                        ,utf8_encode($row['corresponsalia'])
+                                                        ,utf8_encode($row['promotor1'].'<br>'.$row['promotor2'])
 							,utf8_encode($row['ClaveDocumento'])
 							,utf8_encode($row['sMercancia'])
 							,utf8_encode($row['sObservaciones'])
 							,date('d-m-Y',strtotime($row['dRecepcion'])).' '.$row['tRecepcion']
 							,date('d-m-Y H:i:s',strtotime($row['dFechaCreacion']))
- 							,utf8_encode($row['htmlStatus'])
+                                                        ,utf8_encode($row['autor'])
+                                                        ,utf8_encode($row['htmlStatus'])
 							, !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
 						));
 					}
@@ -123,8 +136,11 @@
 					
 					// INCLUYE UN MODELO DE OTRO MODULO //
 					$this->load_model('cof','cof');
-                    $cof = new Cof_Model();
-                    $this->data['status'] = $cof->read_status();
+                                        $cof = new Cof_Model();
+                                        $this->data['status'] = $cof->read_status();
+                                        
+                                        $cof->users['skStatus'] = 'AC';
+                                        $this->data['usuarios'] = $cof->read_user();
 					
 /*					$this->data['empresa'] = Cof_Model::read_status();
 					$this->data['tipotramite'] = Cof_Model::read_status();
@@ -133,7 +149,12 @@
 */
  					$this->load_model('emp','emp');
 					$objEmpresa = new Emp_Model();
-					$this->data['empresas'] = $objEmpresa->read_empresa();
+                                        $objEmpresa->tipoempresas['skStatus'] = 'AC';
+                                        $objEmpresa->tipoempresas['skTipoEmpresa'] = 'CLIE';
+					$this->data['empresas'] = $objEmpresa->read_like_empresas();
+                                        $objEmpresa->tipoempresas['skTipoEmpresa'] = 'CORR';
+                                        $this->data['corresponsalias'] = $objEmpresa->read_like_empresas();
+                                        $this->data['promotores'] = $objEmpresa->read_like_promotores();
 					$this->data['tipostramites'] = parent::read_tipos_tramites();
 					$this->data['tiposservicios'] = parent::read_tipos_servicios();
 					$this->data['clavedocumento'] = parent::read_clave_documento();
@@ -248,7 +269,9 @@
 					}
                                         $this->load_model('emp','emp');
 					$objEmpresa = new Emp_Model();
-					$this->data['empresas'] = $objEmpresa->read_empresa();
+                                        $objEmpresa->tipoempresas['skTipoEmpresa'] = 'CLIE';
+                                        $this->data['empresas'] = $objEmpresa->read_like_empresas();
+					//$this->data['empresas'] = $objEmpresa->read_empresa();
 					$this->data['tipostramites'] = parent::read_tipos_tramites();
 					$this->data['tiposservicios'] = parent::read_tipos_servicios();
 					$this->data['clavedocumento'] = parent::read_clave_documento();

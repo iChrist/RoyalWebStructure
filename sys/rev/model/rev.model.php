@@ -11,9 +11,12 @@
                      ,'sObservaciones'     					=>  ''
                      ,'sDescripcion'    			  		=>  ''
                     ,'skEstatusRevalidacion'     			=>  ''
+                    
+                    ,'skEmpresa'=>''
                     ,'limit'        							=>  ''
                     ,'offset'       							=>  ''
-                    ,'order_date_from'       				=>  ''
+                    ,'dFechaRevalidacion'       				=>  ''
+                    ,'dFechaFin'=>''
 					
                 );
                 public $rechazos = array(
@@ -115,11 +118,18 @@
                 if(!empty($this->solreva['skUsuarioRevalidacion'])){
                     $sql .=" AND sd.skUsuarioRevalidacion like '%".$this->solreva['skUsuarioRevalidacion']."%'";
                 }
-				if(!empty($this->solreva['order_date_from'])){
- 					$Fecha = explode("/", $this->solreva['order_date_from']);
-                    $sql .=" AND sd.dFechaRevalidacion like '%".$Fecha[2]."-".$Fecha[1]."-".$Fecha[0]."%'";
+                if(!empty($this->solreva['dFechaRevalidacion'])){
+                    if(!empty($this->solreva['dFechaFin'])){
+                        $sql .= " AND (DATE_FORMAT(sd.dFechaRevalidacion,'%Y-%m-%d') >= '".date('Y-m-d',  strtotime($this->solreva['dFechaRevalidacion']))."' AND DATE_FORMAT(sd.dFechaRevalidacion,'%Y-%m-%d') <= '".date('Y-m-d',  strtotime($this->solreva['dFechaFin']))."')";
+                    }else{
+                        //$Fecha = explode("/", $this->solreva['order_date_from']);
+                        //$sql .=" AND sd.dFechaRevalidacion like '%".$Fecha[2]."-".$Fecha[1]."-".$Fecha[0]."%'";
+                        $sql .=" AND DATE_FORMAT(sd.dFechaRevalidacion,'%Y-%m-%d') = '".date('Y-m-d',  strtotime($this->solreva['dFechaRevalidacion']))."'";
+                    }
                 }
-                
+                if(!empty($this->solreva['skEmpresa'])){
+                    $sql .=" AND cm.skEmpresa = '".$this->solreva['skEmpresa']."'";
+                }
                
                 if(is_int($this->solreva['limit'])){
                     if(is_int($this->solreva['offset'])){
@@ -128,9 +138,8 @@
                         $sql .= " LIMIT ".$this->solreva['limit'];
                     }
                 }
-			
 				
-				//echo $sql;die();
+                //echo $sql;die();
                 $result = $this->db->query($sql);
                 if($result){
                     if($result->num_rows > 0){
@@ -188,7 +197,6 @@
 								ctt.sNombre AS TipoTramite, 
 								cts.sNombre AS TipoServicio, 
 								ccd.sNombre AS ClaveDocumento, 
-								cc.sNombre AS Corresponsalia, 
 								st.sHtml  
 						FROM ope_recepciones_documentos rd 
 						INNER JOIN _status  st ON st.skStatus = rd.skStatus 
@@ -196,7 +204,6 @@
 						INNER JOIN cat_tipos_tramites  ctt ON ctt.skTipoTramite = rd.skTipoTramite 
 						INNER JOIN cat_tipos_servicios  cts ON cts.skTipoServicio = rd.skTipoServicio 
 						INNER JOIN cat_claves_documentos  ccd ON ccd.skClaveDocumento = rd.skClaveDocumento 
-						INNER JOIN cat_corresponsalias  cc ON cc.skCorresponsalia = rd.skCorresponsalia 
 						INNER JOIN _users us ON us.skUsers = rd.skUsersCreacion
 						INNER JOIN _status ON _status.skStatus = rd.skStatus 
 						WHERE 1=1 ";

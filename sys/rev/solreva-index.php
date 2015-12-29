@@ -26,7 +26,7 @@ echo "</pre>";*/
           <tr role="row" class="heading">
             <th width="10%" >E</th>
             <th width="10%"> Referencia </th>
-            <th width="10%"> Fecha </th>
+            <th width="10%"> Fecha Creaci&oacute;n</th>
             <th width="10%"> Ejecutivo </th>
             <th width="10%"> Cliente </th>
             <th width="10%"> Linea Naviera </th>
@@ -49,8 +49,14 @@ echo "</pre>";*/
               </select></td>
             <td><input type="text" class="form-control form-filter input-sm" name="sReferencia" placeholder="Referencia"></td>
             <td>
-                <div class="input-group input-group-sm date date-picker margin-bottom-5" data-date-format="dd/mm/yyyy">
-                 <input type="text" class="form-control form-filter" readonly name="order_date_from" placeholder="Fecha">
+                <div class="input-group input-group-sm date date-picker margin-bottom-5" data-date-format="dd-mm-yyyy">
+                    <input type="text" class="form-control form-filter" readonly name="dFechaRevalidacion" placeholder="Fecha Inicio">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+                    </span>
+                </div>
+                <div class="input-group input-group-sm date date-picker margin-bottom-5" data-date-format="dd-mm-yyyy">
+                    <input type="text" class="form-control form-filter" readonly name="dFechaFin" placeholder="Fecha Fin">
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
                     </span>
@@ -68,14 +74,27 @@ echo "</pre>";*/
                                     }//ENDWHILE
                                 ?>
               </select></td>
-              <td></td>
+              <td>
+                  <select name="skEmpresa" class="form-control form-filter input-sm">
+                <option value="">- Cliente -</option>
+                <?php
+                                    if(isset($data['clientes'])){
+                                        while($row = $data['clientes']->fetch_assoc()){
+                                ?>
+                <option value="<?php echo $row['skEmpresa']; ?>"> <?php echo utf8_encode($row['sNombre']); ?> </option>
+                <?php
+                                        }//ENDIF
+                                    }//ENDWHILE
+                                ?>
+              </select>
+              </td>
             <td><select name="skEmpresaNaviera" class="form-control form-filter input-sm">
                 <option value="">- Linea Naviera -</option>
                 <?php
                                     if(isset($data['empresas'])){
                                         while($row = $data['empresas']->fetch_assoc()){
                                 ?>
-                <option value="<?php echo $row['skEmpresa']; ?>"> <?php echo utf8_encode($row['sNombre']." (".$row['sRFC'].")"); ?> </option>
+                <option value="<?php echo $row['skEmpresa']; ?>"> <?php echo utf8_encode($row['sNombre']); ?> </option>
                 <?php
                                         }//ENDIF
                                     }//ENDWHILE
