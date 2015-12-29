@@ -24,7 +24,7 @@ echo "</pre>";*/
       <table class="table table-striped table-bordered table-hover" id="datatable_ajax">
         <thead>
           <tr role="row" class="heading">
-            <th width="10%" >E</th>
+              <th width="10%" >Estatus</th>
             <th width="10%"> Referencia </th>
             <th width="10%"> Fecha Creaci&oacute;n</th>
             <th width="10%"> Ejecutivo </th>
