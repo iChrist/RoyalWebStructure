@@ -115,7 +115,7 @@
 							,utf8_encode($row['Empresa'])
                                                         ,utf8_encode($row['corresponsalia'])
                                                         ,utf8_encode($row['promotor1'].'<br>'.$row['promotor2'])
-							,utf8_encode($row['ClaveDocumento'])
+							,utf8_encode($row['skClaveDocumento'])
 							,utf8_encode($row['sMercancia'])
 							,utf8_encode($row['sObservaciones'])
 							,date('d-m-Y',strtotime($row['dRecepcion'])).' '.$row['tRecepcion']

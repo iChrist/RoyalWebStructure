@@ -162,7 +162,7 @@
       <label class="control-label col-md-2">Fecha de recepci&oacute;n <span aria-required="true" class="required"> * </span></label>
       <div class="col-md-4">
         <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
-          <input type="text" id="dRecepcion" name="dRecepcion" readonly="" class="form-control" value="<?php echo (isset($result['dRecepcion'])) ? utf8_encode($result['dRecepcion']) : date('d-m-Y') ; ?>">
+          <input type="text" id="dRecepcion" name="dRecepcion" class="form-control" value="<?php echo (isset($result['dRecepcion'])) ?  utf8_encode(date('d-m-Y', strtotime($result['dRecepcion']))) : date('d-m-Y') ; ?>">
           <span class="input-group-btn">
           <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
           </span>

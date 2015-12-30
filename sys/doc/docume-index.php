@@ -123,7 +123,7 @@ echo "</pre>";*/
                                     if($data['clavedocumento']){
                                         while($row = $data['clavedocumento']->fetch_assoc()){
                                 ?>
-                <option value="<?php echo $row['skClaveDocumento']; ?>"> <?php echo utf8_encode($row['sNombre']); ?> </option>
+                <option value="<?php echo $row['skClaveDocumento']; ?>"> <?php echo utf8_encode($row['skClaveDocumento']); ?> </option>
                 <?php
                                         }//ENDIF
                                     }//ENDWHILE

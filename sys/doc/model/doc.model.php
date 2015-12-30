@@ -331,7 +331,7 @@
                     $sql .=" AND rd.skTipoTramite like '%".$this->recepciondocumentos['skTipoTramite']."%'";
                 }
                 if(!empty($this->recepciondocumentos['sNumContenedor'])){
-                    $sql .=" AND rd.sNumContenedor like '".$this->recepciondocumentos['sNumContenedor']."%'";
+                    $sql .=" AND rd.sNumContenedor like '%".$this->recepciondocumentos['sNumContenedor']."%'";
                 }
                 if(!empty($this->recepciondocumentos['skTipoServicio'])){
                     $sql .=" AND rd.skTipoServicio like '%".$this->recepciondocumentos['skTipoServicio']."%'";
