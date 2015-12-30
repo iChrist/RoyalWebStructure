@@ -3,7 +3,6 @@
     if($data['datos']){
         $result = $data['datos']->fetch_assoc();
     }
-	
 	$arrayRechazos = array();
 	if(isset($data['rechazosSolicitud'])){
   if($data['rechazosSolicitud'])
@@ -57,8 +56,13 @@ echo "</pre>";
         </select>
       </div>
     </div>  
-        <hr>
-    
+        
+    <?php
+        //skEstatusRevalidacion
+        $skEstatusRevalidacion = isset($result['skEstatusRevalidacion']) ? $result['skEstatusRevalidacion'] : '';
+        if($skEstatusRevalidacion == 'NU'){
+    ?> 
+    <hr>
       <div class="form-group">
       <label class="col-md-2">Tramitador <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
@@ -76,7 +80,11 @@ echo "</pre>";
         </select>
       </div>
     </div> 
-       <div id="dvEstatusNaviera" style="display:none">
+        
+    <?php
+        }elseif($skEstatusRevalidacion == 'PR' || $skEstatusRevalidacion == 'RV' || $skEstatusRevalidacion == 'RE'){
+    ?>    
+<div id="dvEstatusNaviera" style="display:none">
      <div class="form-group">
       <label class="col-md-2">Estatus Naviera <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-10">
@@ -130,10 +138,12 @@ echo "</pre>";
     
      </div>
       <!-- Cierra div dvEstatusNaviera-->
-      
+    <?php
+        }//ENDIF skEstatusRevalidacion
+    ?>  
       
     <div class="form-group">
-      <label class=" col-md-2">Observaciones <span aria-required="true" class="required"> * </span> </label>
+      <label class=" col-md-2">Observaciones </label>
       <div class="col-md-8">
         <div class="input-icon right"> <i class="fa"></i>
           <textarea rows="5"  name="sObservaciones" id="sObservaciones" class="form-control" placeholder="Observaciones"  ><?php echo (isset($result['sObservaciones'])) ? utf8_encode($result['sObservaciones']) : '' ; ?></textarea>
@@ -159,6 +169,22 @@ echo "</pre>";
 
 function lanzadera(){
  	if(document.getElementById("skSolicitudRevalidacion").value){
+            var skStatusRevalidacion = '<?php echo isset($result['skEstatusRevalidacion']) ? $result['skEstatusRevalidacion'] : ''; ?>';
+            switch(skStatusRevalidacion){
+                case 'PR':
+                break;
+                case 'TR':
+                    
+                break;
+                case 'RV':
+                    obtenerDatos();
+                    document.getElementById('dvEstatusNaviera').style.display ='block';
+                break;
+                case 'RE':
+                    obtenerDatos();
+                    document.getElementById('dvEstatusNaviera').style.display ='block';
+                break;
+            }
 		obtenerDatos();
 		document.getElementById('dvEstatusNaviera').style.display ='block';
 	}
@@ -191,13 +217,17 @@ function lanzadera(){
 function obtenerDatos(){
 	  $('.page-title-loading').css('display','inline');
 	 $.post("",{ axn : "obtenerDatos" , sReferencia : $("#sReferencia").val() }, function(data){
-	 
+             
+             //console.log(data);
                 //console.log(data.data[0][0]); 
               //  var cad="";
               //if(data['data']){
               //  if(data.data[0]){    
-                
-    	var	cad='<div class="form-group">'+
+        var cad = '';
+        if(!data.data[0]){
+            cad ='';
+        }else{        
+    	cad ='<div class="form-group">'+
      	'<label class="col-md-2">Cliente</label>'+
      	'<div class="col-md-4">'+
        	'<label id="lbCliente" class="control-label">'+data.data[0][0]+'</label>'+
@@ -217,10 +247,7 @@ function obtenerDatos(){
 	    '    <label id="lbMercancia" class="control-label ">'+data.data[0][3]+'</label>'+
 	    ' </div>'+
    ' </div>';
-   /*}else{
-	   cad+="";
-	   
-   }*/
+   }
                  $("#dvDatos").html(cad);
                /*$("#sNumeroParte").html(cad);
                $("#sNumeroParte").prop('disabled', false);*/
@@ -254,18 +281,17 @@ function obtenerDatos(){
                     }
                     
                 },
-
-				sObservaciones:{
-                    required: true
-                },
-				
+		
                 skEmpresaNaviera:{
                     required: true,
                      minlength: 1 
                 },
-				skUsuarioTramitador:{
+                skUsuarioTramitador:{
                     required: true
-                },
+                }
+                /*sObservaciones:{
+                    required: true
+                },*/
                 /*skEstatusRevalidacion:{
                     required: true
                 },*/
@@ -315,20 +341,20 @@ invalidHandler: function (event, validator) { //alerta de error de visualizació
                     required:"Ingresa una Referencia",
                        remote: "Esta referencia no Existe."
                 },
- 				Observaciones:{
-                    required: true
-                },
-                 skEmpresaNaviera:{
+                skEmpresaNaviera:{
                     required: "Selecciona una Línea Naviera",
-                    minlength: 1 ,
+                    minlength: 1
                 },
+                skUsuarioTramitador:{
+                    required: "Selecciona un Tramitador"
+                }
+                /*Observaciones:{
+                    required: true
+                },*/
                 /*skEstatusRevalidacion:{
                 	required: "Selecciona un Estatus",
                     required: true
-                },*/
-				skUsuarioTramitador:{
-                    required: "Selecciona un Tramitador"
-                }
+                }*/
             }
         });
     }); 

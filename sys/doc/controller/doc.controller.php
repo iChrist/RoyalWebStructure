@@ -98,6 +98,8 @@
 					
 					$this->recepciondocumentos['limit'] = $records['limit'];
 					$this->recepciondocumentos['offset'] = $records['offset'];
+                                        $this->recepciondocumentos['orderBy'] = 'rd.sPedimento';
+                                        $this->recepciondocumentos['sortBy'] = 'DESC';
 					$this->data['data'] = parent::read_recepciondocumentos();
 					
 					if(!$this->data['data']){
@@ -167,11 +169,18 @@
 					return true;
 					}
 					
-					public function docume_form(){
+                                    public function docume_form(){
 					$this->data['message'] = '';
 					$this->data['response'] = true;
 					$this->data['datos'] = false;
-					
+					// SACAMOS EL PEDIMENTO EN COLA //
+                                        $maxPedimento = parent::getMaxPedimento();
+                                        if($maxPedimento){
+                                            $this->data['maxPedimento'] = $maxPedimento['sPedimento'] + 1;
+                                        }else{
+                                            $this->data['maxPedimento'] = '';
+                                        }
+                                        
 					if($_POST){
 					//exit('</pre>'.print_r($_POST,1).'</pre>');
 					$this->recepciondocumentos['skRecepcionDocumento'] = !empty($_POST['skRecepcionDocumento']) ? $_POST['skRecepcionDocumento'] : substr(md5(microtime()), 1, 32);
@@ -194,6 +203,17 @@
                     $this->recepciondocumentos['tRecepcion'] = utf8_decode(!empty($_POST['tRecepcion']) ? $_POST['tRecepcion'] : date('H:i:s'));
 					
 						if(empty($_POST['skRecepcionDocumento'])){
+                                                        $maxPedimento = parent::getMaxPedimento();
+                                                        if($maxPedimento){
+                                                            if($maxPedimento['sPedimento'] == $this->recepciondocumentos['sPedimento']){
+                                                                $this->data['response'] = false;
+								$this->data['errorPedimento'] = false;
+                                                                $this->data['message'] = 'El pedimento '.$this->recepciondocumentos['sPedimento']." Ya ha sido utilizado, intenta con ".($maxPedimento['sPedimento'] + 1);
+								header('Content-Type: application/json');
+								echo json_encode($this->data);
+								return false;
+                                                            }
+                                                        }
 							if(parent::create_recepciondocumentos()){
                                                             //echo ('</pre>'.print_r($_FILES,1).'</pre>');
                                                             foreach($_FILES['skDocTipo'] AS $k=>$v){
@@ -271,12 +291,11 @@
 					$objEmpresa = new Emp_Model();
                                         $objEmpresa->tipoempresas['skTipoEmpresa'] = 'CLIE';
                                         $this->data['empresas'] = $objEmpresa->read_like_empresas();
-					//$this->data['empresas'] = $objEmpresa->read_empresa();
 					$this->data['tipostramites'] = parent::read_tipos_tramites();
 					$this->data['tiposservicios'] = parent::read_tipos_servicios();
 					$this->data['clavedocumento'] = parent::read_clave_documento();
-					//$this->data['corresponsalia'] = parent::read_corresponsalia();
 					$this->data['docTipo'] = parent::read_equal_docTipo();
+                                        
 					if(isset($_GET['p1'])){
                                             $this->recepciondocumentos['skRecepcionDocumento'] = $_GET['p1'];
                                             $this->recepcionDoc_docTipo['skRecepcionDocumento'] = $_GET['p1'];

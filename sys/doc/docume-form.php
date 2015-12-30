@@ -101,7 +101,7 @@
       <label class="control-label col-md-2">Pedimento <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
         <div class="input-icon right"> <i class="fa"></i>
-          <input type="text" name="sPedimento" id="sPedimento" class="form-control" placeholder="Pedimento" value="<?php echo (isset($result['sPedimento'])) ? utf8_encode($result['sPedimento']) : '' ; ?>" >
+          <input type="text" name="sPedimento" id="sPedimento" class="form-control" placeholder="Pedimento" value="<?php echo (isset($result['sPedimento'])) ? utf8_encode($result['sPedimento']) : $data['maxPedimento'] ; ?>" >
         </div>
       </div>
     </div>
@@ -225,7 +225,52 @@
   </table>
 </form>
 <script type="text/javascript">
-    var fraccion = 1;
+    function saveRecepcionDocumentos(obj,url){
+    obj.disabled = true;
+    if(!isValid.form()){
+        obj.disabled = false;
+        return false;
+    }
+    $('.alert-danger').hide();
+    $('.alert-success').show();
+    $('.page-title-loading').css('display','inline');
+    var formdata = false;
+    if (window.FormData) {
+        formdata = new FormData($("#_save")[0]);
+        //formdata.append("custom", "valor");
+    }
+    $.ajax({
+        type: "POST",
+        url: "",
+        data: formdata,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function(data){
+            if(data['response']){
+                toastr.success(data['message'], "Notificaci&oacute;n");
+                setInterval(function(){ 
+                    location.assign(url); 
+                }, 3000);
+            }else{
+                if(!data['errorPedimento']){
+                    $("#sReferencia").val("");
+                    $("#sPedimento").val(data['maxPedimento']);
+                    toastr.warning(data['message'], "Notificaci&oacute;n");
+                    setInterval(function(){ 
+                        obj.disabled = false;
+                    }, 5000);
+                }else{
+                    toastr.error(data['message'], "Notificaci&oacute;n");
+                    setInterval(function(){ 
+                        obj.disabled = false;
+                    }, 3000);
+                }
+            }
+            $('.page-title-loading').css('display','none');
+        }
+    });
+}
     $(document).ready(function(){
         /*
          * HABILITA EL CAMPO DE Núm. Contenedor

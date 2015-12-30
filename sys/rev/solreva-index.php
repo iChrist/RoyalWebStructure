@@ -107,7 +107,7 @@ echo "</pre>";*/
                                     if($data['tramitadores']){
                                         while($row = $data['tramitadores']->fetch_assoc()){
                                 ?>
-                <option value="<?php echo $row['skUsuarioTramitador']; ?>"> <?php echo utf8_encode($row['sName']); ?> </option>
+                <option value="<?php echo $row['skUsers']; ?>"> <?php echo utf8_encode($row['sName']); ?> </option>
                 <?php
                                         }//ENDIF
                                     }//ENDWHILE

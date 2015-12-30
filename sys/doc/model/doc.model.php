@@ -22,6 +22,8 @@
                     ,'skPromotor2'=>''
                     ,'limit'        					=>  ''
                     ,'offset'       					=>  ''
+                    ,'orderBy'       					=>  ''
+                    ,'sortBy'       					=>  'DESC'   
                 );
 
                  public $clavdocu = array(
@@ -227,9 +229,18 @@
                 	return false;
                 }
             }
-			 /* COMIENZA MODULO RECEPCION DE DOCUMENTOS JCBB*/
-            
-            public function count_recepciondocumentos(){
+        /* COMIENZA MODULO RECEPCION DE DOCUMENTOS JCBB*/
+        public function getMaxPedimento(){
+            $sql = "SELECT MAX(sPedimento) AS sPedimento FROM ope_recepciones_documentos WHERE skStatus = 'AC' ";
+            //exit($sql);
+            $result = $this->db->query($sql);
+            if($result){
+                return $result->fetch_assoc();
+            }else{
+                return false;
+            }
+        }
+        public function count_recepciondocumentos(){
                 $sql = "SELECT COUNT(*) AS total FROM ope_recepciones_documentos WHERE 1=1 ";
                 if(!empty($this->recepciondocumentos['skRecepcionDocumento'])){
                     $sql .=" AND skRecepcionDocumento = '".$this->recepciondocumentos['skRecepcionDocumento']."'";
@@ -350,6 +361,9 @@
                 }
                 if(!empty($this->recepciondocumentos['skPromotor1'])){
                     $sql .=" AND ce.skPromotor1 = '".$this->recepciondocumentos['skPromotor1']."' OR ce.skPromotor2 = '".$this->recepciondocumentos['skPromotor2']."'";
+                }
+                if(!empty($this->recepciondocumentos['orderBy'])){
+                    $sql .=" ORDER BY ".$this->recepciondocumentos['orderBy']." ".$this->recepciondocumentos['sortBy'];
                 }
                 if(is_int($this->recepciondocumentos['limit'])){
                     if(is_int($this->recepciondocumentos['offset'])){

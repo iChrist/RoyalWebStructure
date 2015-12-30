@@ -82,21 +82,21 @@
             }
             
             public function read_solreva(){
-                $sql = "	SELECT 	sd.*, 
-								us.sName AS Tramitador, 
-								usr.sName AS UsuarioEjecutivo, 
-								ce.sNombre AS EmpresaNaviera,
-								cm.sNombre AS Cliente,
-								cs.sNombre AS Estatus,
-								cs.sIcono As Icono
- 						FROM ope_solicitud_revalidacion sd 
- 						INNER JOIN cat_empresas  ce ON ce.skEmpresa = sd.skEmpresaNaviera 
- 						INNER JOIN _users  us ON us.skUsers = sd.skUsuarioTramitador
- 						INNER JOIN _users  usr ON usr.skUsers = sd.skUsuarioRevalidacion
- 						INNER JOIN cat_estatus  cs ON cs.skEstatus = sd.skEstatusRevalidacion
-						LEFT  JOIN ope_recepciones_documentos opr ON opr.sReferencia = sd.sReferencia
-						LEFT JOIN cat_empresas cm ON cm.skEmpresa = opr.skEmpresa
- 						WHERE 1=1 ";
+                $sql = "SELECT 	sd.*, 
+                us.sName AS Tramitador, 
+                usr.sName AS UsuarioEjecutivo, 
+                ce.sNombre AS EmpresaNaviera,
+                cm.sNombre AS Cliente,
+                cs.sNombre AS Estatus,
+                cs.sIcono As Icono
+                FROM ope_solicitud_revalidacion sd 
+                INNER JOIN cat_empresas  ce ON ce.skEmpresa = sd.skEmpresaNaviera 
+                LEFT JOIN _users  us ON us.skUsers = sd.skUsuarioTramitador
+                LEFT JOIN _users  usr ON usr.skUsers = sd.skUsuarioRevalidacion
+                INNER JOIN cat_estatus  cs ON cs.skEstatus = sd.skEstatusRevalidacion
+                LEFT  JOIN ope_recepciones_documentos opr ON opr.sReferencia = sd.sReferencia
+                LEFT JOIN cat_empresas cm ON cm.skEmpresa = opr.skEmpresa
+                WHERE 1=1 ";
                 if(!empty($this->solreva['skSolicitudRevalidacion'])){
                     $sql .=" AND sd.skSolicitudRevalidacion = '".$this->solreva['skSolicitudRevalidacion']."'";
                 }
@@ -106,7 +106,7 @@
                 if(!empty($this->solreva['skEmpresaNaviera'])){
                     $sql .=" AND sd.skEmpresaNaviera like '%".$this->solreva['skEmpresaNaviera']."%'";
                 }
-				if(!empty($this->solreva['skUsuarioTramitador'])){
+                if(!empty($this->solreva['skUsuarioTramitador'])){
                     $sql .=" AND sd.skUsuarioTramitador like '%".$this->solreva['skUsuarioTramitador']."%'";
                 }
 				if(!empty($this->solreva['sObservaciones'])){
@@ -158,7 +158,7 @@
   								'".$this->solreva['sObservaciones']."',
  								'".$this->solreva['skEmpresaNaviera']."',
 								'".$this->solreva['skUsuarioTramitador']."',
-								'PR',
+								'NU',
  								CURRENT_TIMESTAMP(),
 								'".$_SESSION['session']['skUsers']."')";
 				//echo $sql;die();
@@ -171,15 +171,24 @@
             }
              public function update_solreva(){
                 
-                $sql = "UPDATE ope_solicitud_revalidacion 
-				SET skEmpresaNaviera='".$this->solreva['skEmpresaNaviera']."', 
-                    skUsuarioTramitador='".$this->solreva['skUsuarioTramitador']."', 
-                    sObservaciones='".$this->solreva['sObservaciones']."', 
-                    skEstatusRevalidacion='".$this->solreva['skEstatusRevalidacion']."' 
-                    WHERE skSolicitudRevalidacion = '".$this->solreva['skSolicitudRevalidacion']."'";
+                $sql = "UPDATE ope_solicitud_revalidacion SET ";
+                
+                if(!is_null($this->solreva['skEmpresaNaviera'])){
+                    $sql.=" skEmpresaNaviera='".$this->solreva['skEmpresaNaviera']."', ";
+                }
+                if(!is_null($this->solreva['skUsuarioTramitador'])){
+                    $sql.=" skUsuarioTramitador='".$this->solreva['skUsuarioTramitador']."', ";
+                }
+                if(!is_null($this->solreva['sObservaciones'])){
+                    $sql.=" sObservaciones='".$this->solreva['sObservaciones']."', ";
+                }
+                if(!is_null($this->solreva['skEstatusRevalidacion'])){
+                    $sql.=" skEstatusRevalidacion='".$this->solreva['skEstatusRevalidacion']."', ";
+                }
+                $sql .= " skSolicitudRevalidacion = '".$this->solreva['skSolicitudRevalidacion']."' WHERE skSolicitudRevalidacion = '".$this->solreva['skSolicitudRevalidacion']."'";
+                //exit($sql);
                 $result = $this->db->query($sql);
-				//echo $sql;die();
-				$sql = "DELETE from rel_solicitud_revalidaciones_rechazos  WHERE skSolicitudRevalidacion = '".$this->solreva['skSolicitudRevalidacion']."'";
+                $sql = "DELETE from rel_solicitud_revalidaciones_rechazos  WHERE skSolicitudRevalidacion = '".$this->solreva['skSolicitudRevalidacion']."'";
                 $this->db->query($sql);
                 if($result){
                     return $this->solreva['skSolicitudRevalidacion'];

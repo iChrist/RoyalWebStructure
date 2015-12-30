@@ -134,10 +134,11 @@
 					
 					
 					
-					public function solreva_form(){ 
+                        public function solreva_form(){ 
 					$this->data['message'] = '';
 					$this->data['response'] = true;
 					$this->data['datos'] = false;
+                                        /*
 					$this->data['estatus'] = parent::read_estatus();
 					
 					$this->load_model('emp','emp');
@@ -149,8 +150,8 @@
 					$objUsuarios = new Cof_Model();
 					$this->data['tramitadores'] = $objUsuarios->read_user();
 					
-					
 					$this->data['rechazos'] = parent::read_like_rechazos();
+                                        */
 					if(isset($_POST['axn']))
                     	 {
                         	switch ($_POST['axn'])
@@ -215,7 +216,7 @@
   					$this->solreva['sObservaciones'] = utf8_decode($_POST['sObservaciones']);
  					$this->solreva['skEmpresaNaviera'] = utf8_decode($_POST['skEmpresaNaviera']);
  					$this->solreva['skEstatusRevalidacion'] =  !empty($_POST['skEstatusRevalidacion']) ? $_POST['skEstatusRevalidacion'] : '';
- 					$this->solreva['skUsuarioTramitador'] = utf8_decode($_POST['skUsuarioTramitador']);
+ 					$this->solreva['skUsuarioTramitador'] = utf8_decode(isset($_POST['skUsuarioTramitador']) ? $_POST['skUsuarioTramitador'] : '');
  						if(empty($_POST['skSolicitudRevalidacion'])){
 							
                                                     if(parent::create_solreva()){
@@ -270,19 +271,31 @@
 							}
 						}
 					}
+                                        
+                                        $this->data['estatus'] = parent::read_estatus();
+					
+					$this->load_model('emp','emp');
+					$objEmpresa = new Emp_Model();
+					$objEmpresa->tipoempresas['skTipoEmpresa'] = 'LINA';
+					$this->data['empresas'] = $objEmpresa->read_like_empresas();
+					
+					$this->load_model('cof','cof');
+					$objUsuarios = new Cof_Model();
+					$this->data['tramitadores'] = $objUsuarios->read_user();
+					
+					$this->data['rechazos'] = parent::read_like_rechazos();
+                                        
 					if(isset($_GET['p1'])){
-					$this->solreva['skSolicitudRevalidacion'] = $_GET['p1'];
-					$this->data['datos'] = parent::read_solreva();
-					$this->data['rechazosSolicitud'] = parent::read_solreva_rechazos();
-					
-					
+                                            $this->solreva['skSolicitudRevalidacion'] = $_GET['p1'];
+                                            $this->data['datos'] = parent::read_solreva();
+                                            $this->data['rechazosSolicitud'] = parent::read_solreva_rechazos();
 					}
 					$this->load_view('solreva-form', $this->data);
 					return true;
-					}
+                                    }
 					
 					
-					public function docume_detail(){
+                                    public function docume_detail(){
 					if(isset($_GET['p1'])){
 					$this->solreva['skSolicitudRevalidacion'] = $_GET['p1'];
 					$this->data['datos'] = parent::read_recepciondocumentos();
