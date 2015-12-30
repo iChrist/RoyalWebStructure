@@ -112,7 +112,7 @@
         <select name="skEmpresa" id="skEmpresa" class="form-control form-filter input-sm">
           <option value="">- Cliente -</option>
           <?php
-                                    if(isset($data['empresas'])){
+                                    if($data['empresas']){
                                         while($rEmpresa = $data['empresas']->fetch_assoc()){
                                 ?>
           <option value="<?php echo $rEmpresa['skEmpresa']; ?>" <?php echo (isset($result['skEmpresa'])) ? ($result['skEmpresa'] == $rEmpresa['skEmpresa'] ? 'selected' : '' ) : '' ; ?> > <?php echo utf8_encode($rEmpresa['sNombre']); ?> </option>
@@ -130,7 +130,7 @@
         <select name="skClaveDocumento" id="skClaveDocumento" class="form-control form-filter input-sm">
           <option value="">- Clave de Documento -</option>
           <?php
-                                    if(isset($data['clavedocumento'])){
+                                    if($data['clavedocumento']){
                                         while($rClaveDocumento = $data['clavedocumento']->fetch_assoc()){
                                 ?>
           <option value="<?php echo $rClaveDocumento['skClaveDocumento']; ?>" <?php echo (isset($result['skClaveDocumento'])) ? ($result['skClaveDocumento'] == $rClaveDocumento['skClaveDocumento'] ? 'selected' : '' ) : '' ; ?> > <?php echo utf8_encode($rClaveDocumento['skClaveDocumento']); ?> </option>
@@ -141,23 +141,6 @@
         </select>
       </div>
     </div>
-    <!--<div class="form-group">
-      <label class="control-label col-md-2">Corresponsalía <span aria-required="true" class="required"> * </span> </label>
-      <div class="col-md-4">
-        <select name="skCorresponsalia" id="skCorresponsalia" class="form-control form-filter input-sm">
-          <option value="">- Corresponsalía -</option>
-          <?php
-                                    if(isset($data['corresponsalia'])){
-                                        while($rCorresponsalia = $data['corresponsalia']->fetch_assoc()){
-                                ?>
-          <option value="<?php echo $rCorresponsalia['skCorresponsalia']; ?>" <?php echo (isset($result['skCorresponsalia'])) ? ($result['skCorresponsalia'] == $rCorresponsalia['skCorresponsalia'] ? 'selected' : '' ) : '' ; ?> >  <?php echo utf8_encode($rCorresponsalia['sNombre']); ?> </option>
-          <?php
-                                        }//ENDIF
-                                    }//ENDWHILE
-                                ?>
-        </select>
-      </div>
-    </div>!-->
     <div class="form-group">
       <label class="control-label col-md-2">Mercancía <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
@@ -201,10 +184,10 @@
     
     <!-- CARGAR DE rel_recepcionDoc_docTipo !-->
     <div class="form-group">
-      <label class="control-label col-lg-2 col-md-2 col-xs-2">Archivos <span aria-required="true" class="required"> * </span> </label>
+      <label class="control-label col-lg-2 col-md-2 col-xs-2">Archivos </label>
       <div class="col-lg-4 col-md-2 col-xs-2">
         <?php
-          if(isset($data['docTipo'])){
+          if($data['docTipo']){
             while($docTipo = $data['docTipo']->fetch_assoc()){
         ?>
             <label>

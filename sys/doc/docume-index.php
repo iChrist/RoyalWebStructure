@@ -47,7 +47,7 @@ echo "</pre>";*/
             <td><select name="skTipoTramite" class="form-control form-filter input-sm">
                 <option value="">- Tipos de Tramites -</option>
                 <?php
-                                    if(isset($data['tipostramites'])){
+                                    if($data['tipostramites']){
                                         while($row = $data['tipostramites']->fetch_assoc()){
                                 ?>
                 <option value="<?php echo $row['skTipoTramite']; ?>"> <?php echo utf8_encode($row['sNombre']); ?> </option>
@@ -60,7 +60,7 @@ echo "</pre>";*/
                 <select name="skTipoServicio" class="form-control form-filter input-sm">
                 <option value="">- Tipos de Servicios -</option>
                 <?php
-                                    if(isset($data['tiposservicios'])){
+                                    if($data['tiposservicios']){
                                         while($row = $data['tiposservicios']->fetch_assoc()){
                                 ?>
                 <option value="<?php echo $row['skTipoServicio']; ?>"> <?php echo utf8_encode($row['sNombre']); ?> </option>
@@ -76,7 +76,7 @@ echo "</pre>";*/
                 <select name="skEmpresa" class="form-control form-filter input-sm">
                 <option value="">- Empresa -</option>
                 <?php
-                                    if(isset($data['empresas'])){
+                                    if($data['empresas']){
                                         while($row = $data['empresas']->fetch_assoc()){
                                 ?>
                 <option value="<?php echo $row['skEmpresa']; ?>"> <?php echo utf8_encode($row['sNombre']); ?> </option>
@@ -91,7 +91,7 @@ echo "</pre>";*/
               <select name="skCorresponsalia" class="form-control form-filter input-sm">
                 <option value="">- Corresponsalia -</option>
                 <?php
-                                    if(isset($data['corresponsalias'])){
+                                    if($data['corresponsalias']){
                                         while($row = $data['corresponsalias']->fetch_assoc()){
                                 ?>
                 <option value="<?php echo $row['skEmpresa']; ?>"> <?php echo utf8_encode($row['sNombre']); ?> </option>
@@ -106,7 +106,7 @@ echo "</pre>";*/
               <select name="skPromotores" class="form-control form-filter input-sm">
                 <option value="">- Promotor -</option>
                 <?php
-                                    if(isset($data['promotores'])){
+                                    if($data['promotores']){
                                         while($row = $data['promotores']->fetch_assoc()){
                                 ?>
                 <option value="<?php echo $row['skPromotores']; ?>"> <?php echo utf8_encode($row['sNombre']); ?> </option>
@@ -116,10 +116,11 @@ echo "</pre>";*/
                                 ?>
               </select>
             </td>
-            <td><select name="skClaveDocumento" class="form-control form-filter input-sm">
+            <td>
+                <select name="skClaveDocumento" class="form-control form-filter input-sm">
                 <option value="">- Clave de Documento -</option>
                 <?php
-                                    if(isset($data['clavedocumento'])){
+                                    if($data['clavedocumento']){
                                         while($row = $data['clavedocumento']->fetch_assoc()){
                                 ?>
                 <option value="<?php echo $row['skClaveDocumento']; ?>"> <?php echo utf8_encode($row['sNombre']); ?> </option>
@@ -127,19 +128,8 @@ echo "</pre>";*/
                                         }//ENDIF
                                     }//ENDWHILE
                                 ?>
-              </select></td>
-            <!--<td><select name="skCorresponsalia" class="form-control form-filter input-sm">
-                <option value="">- Corresponsalía -</option>
-                <?php
-                                    if(isset($data['corresponsalia'])){
-                                        while($row = $data['corresponsalia']->fetch_assoc()){
-                                ?>
-                <option value="<?php echo $row['skCorresponsalia']; ?>"> <?php echo utf8_encode($row['sNombre']); ?> </option>
-                <?php
-                                        }//ENDIF
-                                    }//ENDWHILE
-                                ?>
-              </select></td>!-->
+              </select>
+          </td>
             <td><input type="text" class="form-control form-filter input-sm" name="sMercancia" placeholder="Mercancía"></td>
             <td><input type="text" class="form-control form-filter input-sm" name="sObservaciones" placeholder="Observaciones"></td>
             
@@ -165,7 +155,7 @@ echo "</pre>";*/
                 <select name="skUsers" class="form-control form-filter input-sm">
                     <option value="">- Autor -</option>
                 <?php
-                    if(isset($data['usuarios'])){
+                    if($data['usuarios']){
                         while($row = $data['usuarios']->fetch_assoc()){
                 ?>
                             <option value="<?php echo $row['skUsers']; ?>">
@@ -180,7 +170,7 @@ echo "</pre>";*/
             <td><select name="skStatus" class="form-control form-filter input-sm">
                 <option value="">- Estatus -</option>
                 <?php
-                                    if(isset($data['status'])){
+                                    if($data['status']){
                                         while($row = $data['status']->fetch_assoc()){
                                 ?>
                 <option value="<?php echo $row['skStatus']; ?>"> <?php echo $row['sName']; ?> </option>

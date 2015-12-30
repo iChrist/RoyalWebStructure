@@ -52,7 +52,7 @@
                                 <select name="skTipoEmpresa" class="form-control form-filter input-sm">
                                     <option value="">- Tipo de Empresa -</option>
                                 <?php
-                                    if(isset($data['tiposEmpresas'])){
+                                    if($data['tiposEmpresas']){
                                         while($row = $data['tiposEmpresas']->fetch_assoc()){
                                 ?>
                                             <option value="<?php echo $row['skTipoEmpresa']; ?>">
@@ -68,7 +68,7 @@
                                 <select name="skCorresponsalia" class="form-control form-filter input-sm">
                                     <option value="">- Corresponsalia -</option>
                                 <?php
-                                    if(isset($data['corresponsalias'])){
+                                    if($data['corresponsalias']){
                                         while($row = $data['corresponsalias']->fetch_assoc()){
                                 ?>
                                             <option value="<?php echo $row['skEmpresa']; ?>">
@@ -84,7 +84,7 @@
                                 <select name="skPromotor" class="form-control form-filter input-sm">
                                     <option value="">- Promotor -</option>
                                 <?php
-                                    if(isset($data['promotores'])){
+                                    if($data['promotores']){
                                         while($row = $data['promotores']->fetch_assoc()){
                                 ?>
                                             <option value="<?php echo $row['skPromotores']; ?>">
@@ -100,7 +100,7 @@
                                 <select name="skStatus" class="form-control form-filter input-sm">
                                     <option value="">- Estatus -</option>
                                 <?php
-                                    if(isset($data['status'])){
+                                    if($data['status']){
                                         while($row = $data['status']->fetch_assoc()){
                                 ?>
                                             <option value="<?php echo $row['skStatus']; ?>">

@@ -5,7 +5,7 @@
     }
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data"> 
-    <input type="text" name="skDocTipoViejo"  id="skDocTipoViejo" value="<?php echo (isset($result['skDocTipo'])) ? $result['skDocTipo'] : '' ; ?>">
+    <input type="hidden" name="skDocTipoViejo"  id="skDocTipoViejo" value="<?php echo (isset($result['skDocTipo'])) ? $result['skDocTipo'] : '' ; ?>">
     <div class="form-body">
          <div class="form-group">
             <label class="control-label col-md-2">Clave archivo <span aria-required="true" class="required"> * </span>

@@ -5,7 +5,8 @@
     }
 	
 	$arrayRechazos = array();
-	if(isset($data['rechazosSolicitud']))
+	if(isset($data['rechazosSolicitud'])){
+  if($data['rechazosSolicitud'])
     {
 		if($data['rechazosSolicitud']->num_rows > 0){
 			 while($row = $data['rechazosSolicitud']->fetch_assoc()){
@@ -13,6 +14,7 @@
 			 }
 		 }
     }
+  }
 /*echo "<pre>";
 print_r($data);
 echo "</pre>";
@@ -44,7 +46,7 @@ echo "</pre>";
         <select name="skEmpresaNaviera" id="skEmpresaNaviera" class="form-control form-filter input-sm">
           <option value="">- Línea Naviera -</option>
           <?php
-                                    if(isset($data['empresas'])){
+                                    if($data['empresas']){
                                         while($rEmpresa = $data['empresas']->fetch_assoc()){
                                 ?>
           <option value="<?php echo $rEmpresa['skEmpresa']; ?>" <?php echo (isset($result['skEmpresaNaviera'])) ? ($result['skEmpresaNaviera'] == $rEmpresa['skEmpresa'] ? 'selected="selected"' : '' ) : '' ; ?> > <?php echo utf8_encode($rEmpresa['sNombre']); ?> </option>
@@ -63,7 +65,7 @@ echo "</pre>";
         <select name="skUsuarioTramitador" id="skUsuarioTramitador" class="form-control form-filter input-sm">
           <option value="">- Tramitador -</option>
           <?php
-                                    if(isset($data['tramitadores'])){
+                                    if($data['tramitadores']){
                                         while($rTramitador = $data['tramitadores']->fetch_assoc()){
                                 ?>
           <option value="<?php echo $rTramitador['skUsers']; ?>" <?php echo (isset($result['skUsuarioTramitador'])) ? ($result['skUsuarioTramitador'] == $rTramitador['skUsers'] ? 'selected="selected"' : '' ) : '' ; ?> > <?php echo utf8_encode($rTramitador['sName']); ?> </option>

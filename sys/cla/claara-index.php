@@ -59,7 +59,7 @@
                                 <select name="skEmpresa" class="form-control form-filter input-sm">
                                     <option value="">- Cliente -</option>
                                 <?php
-                                    if(isset($data['empresas'])){
+                                    if($data['empresas']){
                                         while($row = $data['empresas']->fetch_assoc()){
                                 ?>
                                             <option value="<?php echo $row['skEmpresa']; ?>">
@@ -96,7 +96,7 @@
                                 <select name="skStatus" class="form-control form-filter input-sm">
                                     <option value="">- Estatus -</option>
                                 <?php
-                                    if(isset($data['status'])){
+                                    if($data['status']){
                                         while($row = $data['status']->fetch_assoc()){
                                 ?>
                                             <option value="<?php echo $row['skStatus']; ?>">
