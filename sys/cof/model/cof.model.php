@@ -320,9 +320,9 @@
            
            public function update_profile(){
 			 $sql = "	UPDATE _profiles 
-						SET sName='".$this->sName."', 
- 						skStatus='".$this->skStatus."' 
-						WHERE skProfiles = '".$this->skProfiles."' ";
+						SET sName='".$this->profiles['sName']."', 
+ 						skStatus='".$this->profiles['skStatus']."' 
+						WHERE skProfiles = '".$this->profiles['skProfiles']."' ";
 					//	echo $sql;
 						//die();
                 $result = $this->db->query($sql);

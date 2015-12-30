@@ -192,7 +192,7 @@
         ?>
             <label>
                 <?php 
-                    echo $docTipo['skDocTipo'];
+                    echo $docTipo['sNombre'];
                     $hidden = false;
                     if(array_key_exists($docTipo['skDocTipo'] , $filesDocTipo)){
                         $hidden = true;

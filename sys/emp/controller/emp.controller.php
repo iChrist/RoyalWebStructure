@@ -565,10 +565,7 @@
                                 }
                                  while($row = $this->data['data']->fetch_assoc()){
                                     $actions = $this->printModulesButtons(2,array($row['skEmpresa']));
-                                    $promotores="";
-                                    if(!empty($row['promotor1']) && !empty($row['promotor2'])){
-                                        $promotores = utf8_encode($row['promotor1'].' , '.$row['promotor2']);
-                                    }
+                                    $promotores= utf8_encode(!empty($row['promotor1']) ? $row['promotor1'] : '' ).'<br>'.utf8_encode(!empty($row['promotor2']) ? $row['promotor2'] : '' );
                                     array_push($records['data'], array(
                                         utf8_encode($row['sRFC']),
                                         utf8_encode($row['sNombre']),
