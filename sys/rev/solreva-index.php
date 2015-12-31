@@ -49,8 +49,13 @@ echo "</pre>";*/
               </select></td>
             <td><input type="text" class="form-control form-filter input-sm" name="sReferencia" placeholder="Referencia"></td>
             <td>
+                <select name="filtroFechas" class="form-control form-filter input-sm">
+                  <option value="Solicitud">Solicitud</option>
+                  <option value="Proceso">Proceso</option>
+                  <option value="Cierre">Cierre</option>
+                </select>
                 <div class="input-group input-group-sm date date-picker margin-bottom-5" data-date-format="dd-mm-yyyy">
-                    <input type="text" class="form-control form-filter" readonly name="dFechaRevalidacion" placeholder="Fecha Inicio">
+                    <input type="text" class="form-control form-filter" readonly name="dFechaInicio" placeholder="Fecha Inicio">
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
                     </span>

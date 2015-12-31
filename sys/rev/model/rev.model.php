@@ -11,16 +11,18 @@
                      ,'sObservaciones'     					=>  ''
                      ,'sDescripcion'    			  		=>  ''
                     ,'skEstatusRevalidacion'     			=>  ''
-                    
+                    ,'dFechaCreacion'                       =>  null
+                    ,'dFechaTramitador'                     =>  null
+                    ,'dFechaCierre'                         =>  null
+
                     ,'skEmpresa'=>''
                     
                     ,'limit'        							=>  ''
                     ,'offset'       							=>  ''
-                    ,'dFechaFin'=>''
 
-                    ,'dFechaCreacion'       				=>  null
-                    ,'dFechaTramitador'                     =>  null
-                    ,'dFechaCierre'                         =>  null
+                    ,'filtroFechas'                         =>  null
+                    ,'dFechaInicio'                         =>  null
+                    ,'dFechaFin'                            =>  null
                 );
                 public $rechazos = array(
                     'skRechazo'    							=>  ''
@@ -121,13 +123,37 @@
                 if(!empty($this->solreva['skUsuarioRevalidacion'])){
                     $sql .=" AND sd.skUsuarioRevalidacion like '%".$this->solreva['skUsuarioRevalidacion']."%'";
                 }
-                if(!empty($this->solreva['dFechaCierre'])){
-                    if(!empty($this->solreva['dFechaFin'])){
-                        $sql .= " AND (DATE_FORMAT(sd.dFechaCierre,'%Y-%m-%d') >= '".date('Y-m-d',  strtotime($this->solreva['dFechaCierre']))."' AND DATE_FORMAT(sd.dFechaCierre,'%Y-%m-%d') <= '".date('Y-m-d',  strtotime($this->solreva['dFechaFin']))."')";
+                if(!is_null($this->solreva['dFechaInicio'])){
+                    if(!is_null($this->solreva['dFechaFin'])){
+                        if(!is_null($this->solreva['filtroFechas'])){
+                            switch ($this->solreva['filtroFechas']) {
+                                case 'Solicitud':
+                                    $sql .= " AND (DATE_FORMAT(sd.dFechaCreacion,'%Y-%m-%d') >= '".date('Y-m-d',  strtotime($this->solreva['dFechaInicio']))."' AND DATE_FORMAT(sd.dFechaCreacion,'%Y-%m-%d') <= '".date('Y-m-d',  strtotime($this->solreva['dFechaFin']))."')";
+                                    break;
+                                case 'Proceso':
+                                    $sql .= " AND (DATE_FORMAT(sd.dFechaTramitador,'%Y-%m-%d') >= '".date('Y-m-d',  strtotime($this->solreva['dFechaInicio']))."' AND DATE_FORMAT(sd.dFechaTramitador,'%Y-%m-%d') <= '".date('Y-m-d',  strtotime($this->solreva['dFechaFin']))."')";
+                                    break;
+                                case 'Cierre':
+                                    $sql .= " AND (DATE_FORMAT(sd.dFechaCierre,'%Y-%m-%d') >= '".date('Y-m-d',  strtotime($this->solreva['dFechaInicio']))."' AND DATE_FORMAT(sd.dFechaCierre,'%Y-%m-%d') <= '".date('Y-m-d',  strtotime($this->solreva['dFechaFin']))."')";
+                                    break;
+                            }
+                        }
+                        //$sql .= " AND (DATE_FORMAT(sd.dFechaCierre,'%Y-%m-%d') >= '".date('Y-m-d',  strtotime($this->solreva['dFechaCierre']))."' AND DATE_FORMAT(sd.dFechaCierre,'%Y-%m-%d') <= '".date('Y-m-d',  strtotime($this->solreva['dFechaFin']))."')";
                     }else{
-                        //$Fecha = explode("/", $this->solreva['order_date_from']);
-                        //$sql .=" AND sd.dFechaCierre like '%".$Fecha[2]."-".$Fecha[1]."-".$Fecha[0]."%'";
-                        $sql .=" AND DATE_FORMAT(sd.dFechaCierre,'%Y-%m-%d') = '".date('Y-m-d',  strtotime($this->solreva['dFechaCierre']))."'";
+                        if(!is_null($this->solreva['filtroFechas'])){
+                            switch ($this->solreva['filtroFechas']) {
+                                case 'Solicitud':
+                                    $sql .=" AND DATE_FORMAT(sd.dFechaCreacion,'%Y-%m-%d') = '".date('Y-m-d',  strtotime($this->solreva['dFechaInicio']))."'";
+                                    break;
+                                case 'Proceso':
+                                    $sql .=" AND DATE_FORMAT(sd.dFechaTramitador,'%Y-%m-%d') = '".date('Y-m-d',  strtotime($this->solreva['dFechaInicio']))."'";
+                                    break;
+                                case 'Cierre':
+                                    $sql .=" AND DATE_FORMAT(sd.dFechaCierre,'%Y-%m-%d') = '".date('Y-m-d',  strtotime($this->solreva['dFechaInicio']))."'";
+                                    break;
+                            }
+                        }
+                        //$sql .=" AND DATE_FORMAT(sd.dFechaCierre,'%Y-%m-%d') = '".date('Y-m-d',  strtotime($this->solreva['dFechaCierre']))."'";
                     }
                 }
                 if(!empty($this->solreva['skEmpresa'])){

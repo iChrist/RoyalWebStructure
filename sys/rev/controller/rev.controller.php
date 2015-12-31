@@ -47,15 +47,19 @@
 					if(isset($_POST['skUsuarioRevalidacion'])){
 						$this->solreva['skUsuarioRevalidacion'] = $_POST['skUsuarioRevalidacion'];
 					}
-					if(!empty($_POST['dFechaCierre'])){
-						$this->solreva['dFechaCierre'] = $_POST['dFechaCierre'];
+
+					// FILTRO POR FECHAS
+					$this->solreva['filtroFechas'] = !empty($_POST['filtroFechas']) ? $_POST['filtroFechas'] : '';
+					
+					if(!empty($_POST['dFechaInicio'])){
+						$this->solreva['dFechaInicio'] = $_POST['dFechaInicio'];
 					}
                     if(!empty($_POST['dFechaFin'])){
 						$this->solreva['dFechaFin'] = $_POST['dFechaFin'];
 					}
-                                        // CLIENTE //
-                                        if(isset($_POST['skEmpresa'])){
-                                            $this->solreva['skEmpresa'] = $_POST['skEmpresa'];
+                    // CLIENTE //
+                    if(isset($_POST['skEmpresa'])){
+                    	$this->solreva['skEmpresa'] = $_POST['skEmpresa'];
 					}
 				
 					//exit('<pre>'.print_r($this->solreva,1).'</pre>');
