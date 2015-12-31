@@ -13,11 +13,14 @@
                     ,'skEstatusRevalidacion'     			=>  ''
                     
                     ,'skEmpresa'=>''
+                    
                     ,'limit'        							=>  ''
                     ,'offset'       							=>  ''
-                    ,'dFechaRevalidacion'       				=>  ''
                     ,'dFechaFin'=>''
-					
+
+                    ,'dFechaCreacion'       				=>  null
+                    ,'dFechaTramitador'                     =>  null
+                    ,'dFechaCierre'                         =>  null
                 );
                 public $rechazos = array(
                     'skRechazo'    							=>  ''
@@ -65,7 +68,7 @@
                 }
 			 	if(!empty($this->solreva['order_date_from'])){
  					$Fecha = explode("/", $this->solreva['order_date_from']);
-                    $sql .=" AND dFechaRevalidacion like '%".$Fecha[2]."-".$Fecha[1]."-".$Fecha[0]."%'";
+                    $sql .=" AND dFechaCierre like '%".$Fecha[2]."-".$Fecha[1]."-".$Fecha[0]."%'";
                 }
 				if(!empty($this->solreva['skEstatusRevalidacion'])){
                     $sql .=" AND skEstatusRevalidacion = '".$this->solreva['skEstatusRevalidacion']."'";
@@ -118,13 +121,13 @@
                 if(!empty($this->solreva['skUsuarioRevalidacion'])){
                     $sql .=" AND sd.skUsuarioRevalidacion like '%".$this->solreva['skUsuarioRevalidacion']."%'";
                 }
-                if(!empty($this->solreva['dFechaRevalidacion'])){
+                if(!empty($this->solreva['dFechaCierre'])){
                     if(!empty($this->solreva['dFechaFin'])){
-                        $sql .= " AND (DATE_FORMAT(sd.dFechaRevalidacion,'%Y-%m-%d') >= '".date('Y-m-d',  strtotime($this->solreva['dFechaRevalidacion']))."' AND DATE_FORMAT(sd.dFechaRevalidacion,'%Y-%m-%d') <= '".date('Y-m-d',  strtotime($this->solreva['dFechaFin']))."')";
+                        $sql .= " AND (DATE_FORMAT(sd.dFechaCierre,'%Y-%m-%d') >= '".date('Y-m-d',  strtotime($this->solreva['dFechaCierre']))."' AND DATE_FORMAT(sd.dFechaCierre,'%Y-%m-%d') <= '".date('Y-m-d',  strtotime($this->solreva['dFechaFin']))."')";
                     }else{
                         //$Fecha = explode("/", $this->solreva['order_date_from']);
-                        //$sql .=" AND sd.dFechaRevalidacion like '%".$Fecha[2]."-".$Fecha[1]."-".$Fecha[0]."%'";
-                        $sql .=" AND DATE_FORMAT(sd.dFechaRevalidacion,'%Y-%m-%d') = '".date('Y-m-d',  strtotime($this->solreva['dFechaRevalidacion']))."'";
+                        //$sql .=" AND sd.dFechaCierre like '%".$Fecha[2]."-".$Fecha[1]."-".$Fecha[0]."%'";
+                        $sql .=" AND DATE_FORMAT(sd.dFechaCierre,'%Y-%m-%d') = '".date('Y-m-d',  strtotime($this->solreva['dFechaCierre']))."'";
                     }
                 }
                 if(!empty($this->solreva['skEmpresa'])){
@@ -152,7 +155,7 @@
             
             public function create_solreva(){
  				$sql = "INSERT INTO ope_solicitud_revalidacion (	skSolicitudRevalidacion,sReferencia,sObservaciones,skEmpresaNaviera,
-																skUsuarioTramitador,skEstatusRevalidacion,dFechaRevalidacion,skUsuarioRevalidacion) 
+																skUsuarioTramitador,skEstatusRevalidacion,dFechaCreacion,skUsuarioRevalidacion) 
 						VALUES ('".$this->solreva['skSolicitudRevalidacion']."',
 								'".$this->solreva['sReferencia']."',
   								'".$this->solreva['sObservaciones']."',
@@ -178,6 +181,12 @@
                 }
                 if(!is_null($this->solreva['skUsuarioTramitador'])){
                     $sql.=" skUsuarioTramitador='".$this->solreva['skUsuarioTramitador']."', ";
+                }
+                if(!is_null($this->solreva['dFechaTramitador'])){
+                    $sql.=" dFechaTramitador=".$this->solreva['dFechaTramitador'].", ";
+                }
+                if(!is_null($this->solreva['dFechaCierre'])){
+                    $sql.=" dFechaCierre=".$this->solreva['dFechaCierre'].", ";
                 }
                 if(!is_null($this->solreva['sObservaciones'])){
                     $sql.=" sObservaciones='".$this->solreva['sObservaciones']."', ";

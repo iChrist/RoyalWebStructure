@@ -39,6 +39,7 @@ echo "</pre>";
          
      </div>
      
+
     <div class="form-group">
       <label class="col-md-2">Línea Naviera <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
@@ -63,7 +64,7 @@ echo "</pre>";
         if($skEstatusRevalidacion == 'NU'){
     ?> 
     <hr>
-    <input type="text" name="skEstatusRevalidacion" value="PR">
+    <input type="hidden" name="skEstatusRevalidacion" value="PR">
       <div class="form-group">
       <label class="col-md-2">Tramitador <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
@@ -86,21 +87,24 @@ echo "</pre>";
         }elseif($skEstatusRevalidacion == 'PR' || $skEstatusRevalidacion == 'RV' || $skEstatusRevalidacion == 'RE'){
     ?>    
 <div id="dvEstatusNaviera" style="display:none">
-     <div class="form-group">
+     
+
+    <div class="form-group">
       <label class="col-md-2">Estatus Naviera <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-10">
-        <!--<div class="radio-list">!-->
-          <?php while($rEstatus =  $data['estatus']->fetch_assoc()){?>
-          <!--<label class="col-md-3">!-->
-            <input type="radio" class="form-control form-filter tipoEstatus" tipo="<?php echo utf8_encode($rEstatus{'skEstatus'}); ?>" name="skEstatusRevalidacion" value="<?php echo $rEstatus{'skEstatus'}?>" <?php echo ((isset($result['skEstatusRevalidacion']) ? $result['skEstatusRevalidacion'] : "-") == $rEstatus{'skEstatus'} ? 'checked' : '' ? 'checked' : '' )?>  >
-            <?php echo utf8_encode($rEstatus{'sNombre'})?>
-          <!--</label>!-->
-          <?php }?>
-        <!--</div>!-->
+        <?php 
+          if($data['estatus']){
+            while($rEstatus =  $data['estatus']->fetch_assoc()){ 
+        ?>
+        <label><input type="radio" name="skEstatusRevalidacion" class="form-filter tipoEstatus" tipo="<?php echo utf8_encode($rEstatus{'skEstatus'}); ?>" value="<?php echo $rEstatus{'skEstatus'}?>" <?php echo ((isset($result['skEstatusRevalidacion']) ? $result['skEstatusRevalidacion'] : "-") == $rEstatus{'skEstatus'} ? 'checked' : '' ? 'checked' : '' ); ?>  ><?php echo utf8_encode($rEstatus['sNombre'])?></label>
+        <?php
+            }//ENDWHILE
+          }//ENDIF
+        ?>
       </div>
     </div>
      
-    
+       
     <div id="dvRechazos" style="display:none;">
     <hr>
      <div class="form-group">

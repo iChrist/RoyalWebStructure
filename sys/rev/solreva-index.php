@@ -26,7 +26,7 @@ echo "</pre>";*/
           <tr role="row" class="heading">
               <th width="10%" >Estatus</th>
             <th width="10%"> Referencia </th>
-            <th width="10%"> Fecha Creaci&oacute;n</th>
+            <th width="10%"> Fechas</th>
             <th width="10%"> Ejecutivo </th>
             <th width="10%"> Cliente </th>
             <th width="10%"> Linea Naviera </th>
