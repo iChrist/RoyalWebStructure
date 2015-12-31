@@ -50,7 +50,7 @@ echo "</pre>";*/
             <td><input type="text" class="form-control form-filter input-sm" name="sReferencia" placeholder="Referencia"></td>
             <td>
                 <select name="filtroFechas" class="form-control form-filter input-sm">
-                  <option value="Solicitud">Solicitud</option>
+                  <option value="Solicitud" selected="selected">Solicitud</option>
                   <option value="Proceso">Proceso</option>
                   <option value="Cierre">Cierre</option>
                 </select>

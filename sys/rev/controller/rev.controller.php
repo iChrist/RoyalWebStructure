@@ -49,7 +49,7 @@
 					}
 
 					// FILTRO POR FECHAS
-					$this->solreva['filtroFechas'] = !empty($_POST['filtroFechas']) ? $_POST['filtroFechas'] : '';
+					$this->solreva['filtroFechas'] = !empty($_POST['filtroFechas']) ? $_POST['filtroFechas'] : 'Solicitud';
 					
 					if(!empty($_POST['dFechaInicio'])){
 						$this->solreva['dFechaInicio'] = $_POST['dFechaInicio'];
