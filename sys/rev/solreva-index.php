@@ -55,13 +55,13 @@ echo "</pre>";*/
                   <option value="Cierre">Cierre</option>
                 </select>
                 <div class="input-group input-group-sm date date-picker margin-bottom-5" data-date-format="dd-mm-yyyy">
-                    <input type="text" class="form-control form-filter" readonly name="dFechaInicio" placeholder="Fecha Inicio">
+                    <input type="text" class="form-control form-filter" name="dFechaInicio" placeholder="Fecha Inicio">
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
                     </span>
                 </div>
                 <div class="input-group input-group-sm date date-picker margin-bottom-5" data-date-format="dd-mm-yyyy">
-                    <input type="text" class="form-control form-filter" readonly name="dFechaFin" placeholder="Fecha Fin">
+                    <input type="text" class="form-control form-filter" name="dFechaFin" placeholder="Fecha Fin">
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
                     </span>
