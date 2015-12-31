@@ -216,7 +216,8 @@
   					$this->solreva['sObservaciones'] = utf8_decode($_POST['sObservaciones']);
  					$this->solreva['skEmpresaNaviera'] = utf8_decode($_POST['skEmpresaNaviera']);
  					$this->solreva['skEstatusRevalidacion'] =  !empty($_POST['skEstatusRevalidacion']) ? $_POST['skEstatusRevalidacion'] : '';
- 					$this->solreva['skUsuarioTramitador'] = utf8_decode(isset($_POST['skUsuarioTramitador']) ? $_POST['skUsuarioTramitador'] : '');
+ 					$this->solreva['skUsuarioTramitador'] = isset($_POST['skUsuarioTramitador']) ? $_POST['skUsuarioTramitador'] : null;
+                                        //exit(var_dump($this->solreva['skUsuarioTramitador']));
  						if(empty($_POST['skSolicitudRevalidacion'])){
 							
                                                     if(parent::create_solreva()){

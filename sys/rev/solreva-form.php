@@ -63,6 +63,7 @@ echo "</pre>";
         if($skEstatusRevalidacion == 'NU'){
     ?> 
     <hr>
+    <input type="text" name="skEstatusRevalidacion" value="PR">
       <div class="form-group">
       <label class="col-md-2">Tramitador <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
@@ -88,17 +89,14 @@ echo "</pre>";
      <div class="form-group">
       <label class="col-md-2">Estatus Naviera <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-10">
-        <div class="radio-list">
-          <?php $i = 0?>
+        <!--<div class="radio-list">!-->
           <?php while($rEstatus =  $data['estatus']->fetch_assoc()){?>
-          <?php $i++;?>
-          <label class="col-md-2">
-           <span>
-            <input type="radio" class="tipoEstatus" tipo="<?php echo utf8_encode($rEstatus{'skEstatus'}); ?>" name="skEstatusRevalidacion" value="<?php echo $rEstatus{'skEstatus'}?>" <?php echo ((isset($result['skEstatusRevalidacion']) ? $result['skEstatusRevalidacion'] : "-") == $rEstatus{'skEstatus'} ? 'checked' : '' ? 'checked' : '' )?>  >
-            <?php echo utf8_encode($rEstatus{'sNombre'})?> </span> 
-          </label>
+          <!--<label class="col-md-3">!-->
+            <input type="radio" class="form-control form-filter tipoEstatus" tipo="<?php echo utf8_encode($rEstatus{'skEstatus'}); ?>" name="skEstatusRevalidacion" value="<?php echo $rEstatus{'skEstatus'}?>" <?php echo ((isset($result['skEstatusRevalidacion']) ? $result['skEstatusRevalidacion'] : "-") == $rEstatus{'skEstatus'} ? 'checked' : '' ? 'checked' : '' )?>  >
+            <?php echo utf8_encode($rEstatus{'sNombre'})?>
+          <!--</label>!-->
           <?php }?>
-        </div>
+        <!--</div>!-->
       </div>
     </div>
      
@@ -266,7 +264,7 @@ function obtenerDatos(){
             errorElement: 'span', //default input error message container
             errorClass: 'help-block', // default input error message class
             focusInvalid: false, // do not focus the last invalid input
-            ignore: "input[type='checkbox']:hidden",
+            ignore: ":hidden",
               rules:{
               sReferencia:{
                     required: true,
@@ -288,13 +286,14 @@ function obtenerDatos(){
                 },
                 skUsuarioTramitador:{
                     required: true
+                },
+                skEstatusRevalidacion:{
+                    required: true
                 }
                 /*sObservaciones:{
                     required: true
                 },*/
-                /*skEstatusRevalidacion:{
-                    required: true
-                },*/
+                /*
                 /* 'skRechazo[]':{
                     required: true,
                     minlength: 1
@@ -347,14 +346,16 @@ invalidHandler: function (event, validator) { //alerta de error de visualizació
                 },
                 skUsuarioTramitador:{
                     required: "Selecciona un Tramitador"
+                },
+                skEstatusRevalidacion:{
+                    required: "Selecciona un Estatus"
+                    /*required: function(){
+                        alert('HJKBSDKJHFGDS');
+                    }*/
                 }
                 /*Observaciones:{
                     required: true
                 },*/
-                /*skEstatusRevalidacion:{
-                	required: "Selecciona un Estatus",
-                    required: true
-                }*/
             }
         });
     }); 
