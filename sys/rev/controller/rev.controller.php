@@ -31,21 +31,23 @@
 					if(isset($_POST['skEmpresaNaviera'])){
 						$this->solreva['skEmpresaNaviera'] = $_POST['skEmpresaNaviera'];
 					}
+					if(isset($_POST['skUsuarioSolicitud'])){
+						$this->solreva['skUsuarioSolicitud'] = $_POST['skUsuarioSolicitud'];
+					}
+					if(isset($_POST['skUsuarioProceso'])){
+						$this->solreva['skUsuarioProceso'] = $_POST['skUsuarioProceso'];
+					}
+					if(isset($_POST['skUsuarioCierre'])){
+						$this->solreva['skUsuarioCierre'] = $_POST['skUsuarioCierre'];
+					}
 					if(isset($_POST['skUsuarioTramitador'])){
 						$this->solreva['skUsuarioTramitador'] = $_POST['skUsuarioTramitador'];
 					}
-					if(isset($_POST['skUsuarioRevalidacion'])){
-						$this->solreva['skUsuarioRevalidacion'] = $_POST['skUsuarioRevalidacion'];
-					}
-					
 					if(isset($_POST['sObservaciones'])){
 						$this->solreva['sObservaciones'] = $_POST['sObservaciones'];
 					}
 					if(isset($_POST['skEstatusRevalidacion'])){
 						$this->solreva['skEstatusRevalidacion'] = $_POST['skEstatusRevalidacion'];
-					}
-					if(isset($_POST['skUsuarioRevalidacion'])){
-						$this->solreva['skUsuarioRevalidacion'] = $_POST['skUsuarioRevalidacion'];
 					}
 
 					// FILTRO POR FECHAS
@@ -86,9 +88,9 @@
 						$actions = $this->printModulesButtons(2,array($row['skSolicitudRevalidacion']));
 						
 						$dFechaCreacion = !empty($row['dFechaCreacion']) ? date('d-m-Y H:i:s', strtotime($row['dFechaCreacion'])) : '-';
-						$dFechaTramitador = !empty($row['dFechaTramitador']) ? date('d-m-Y H:i:s', strtotime($row['dFechaTramitador'])) : '-';
+						$dFechaProceso = !empty($row['dFechaProceso']) ? date('d-m-Y H:i:s', strtotime($row['dFechaProceso'])) : '-';
 						$dFechaCierre = !empty($row['dFechaCierre']) ? date('d-m-Y H:i:s', strtotime($row['dFechaCierre'])) : '-';
-						$fechas = '<b>Solicitud:</b> '.$dFechaCreacion.'<br><b>Proceso:</b> '.$dFechaTramitador.'<br><b>Cierre:</b> '.$dFechaCierre;
+						$fechas = '<b>Solicitud:</b> '.$dFechaCreacion.'<br><b>Proceso:</b> '.$dFechaProceso.'<br><b>Cierre:</b> '.$dFechaCierre;
 						
 						array_push($records['data'], array(
 						 	 utf8_encode($row['Icono'])
@@ -227,10 +229,13 @@
  					$this->solreva['skEmpresaNaviera'] = utf8_decode($_POST['skEmpresaNaviera']);
  					$this->solreva['skEstatusRevalidacion'] =  !empty($_POST['skEstatusRevalidacion']) ? $_POST['skEstatusRevalidacion'] : '';
  					$this->solreva['skUsuarioTramitador'] = isset($_POST['skUsuarioTramitador']) ? $_POST['skUsuarioTramitador'] : null;
+ 					$this->solreva['skUsuarioProceso'] = $_SESSION['session']['skUsers'];
  					if($this->solreva['skEstatusRevalidacion'] == 'PR'){
- 						$this->solreva['dFechaTramitador'] = 'CURRENT_TIMESTAMP()';
+ 						$this->solreva['dFechaProceso'] = 'CURRENT_TIMESTAMP()';
+ 						$this->solreva['skUsuarioProceso'] = $_SESSION['session']['skUsers'];
  					}elseif($this->solreva['skEstatusRevalidacion'] == 'RV' || $this->solreva['skEstatusRevalidacion'] == 'RE'){
  						$this->solreva['dFechaCierre'] = 'CURRENT_TIMESTAMP()';
+ 						$this->solreva['skUsuarioCierre'] = $_SESSION['session']['skUsers'];
  					}
                     //exit(var_dump($this->solreva));
  						if(empty($_POST['skSolicitudRevalidacion'])){
