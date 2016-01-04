@@ -86,6 +86,7 @@ font-size: 12px;
     <td><strong>Servicio: </strong></td>
     <td><?php echo (isset($result['TipoServicio'])) ? utf8_encode($result['TipoServicio']) : ''; ?></td>
 </tr>
+<tr><td style="height:1px;"></td></tr>
 <?php 
     if($result['skTipoServicio'] == 'CONT'){ 
 ?>
@@ -93,6 +94,7 @@ font-size: 12px;
     <td><strong>N&uacute;mero de contenedor: </strong></td>
     <td><?php echo (isset($result['sNumContenedor'])) ? utf8_encode($result['sNumContenedor']) : ''; ?></td>
 </tr>
+<tr><td style="height:1px;"></td></tr>
 <?php 
     }elseif($result['skTipoServicio'] == 'CSUE'){
 ?>
@@ -100,18 +102,20 @@ font-size: 12px;
     <td><strong>Bultos: </strong></td>
     <td><?php echo (isset($result['iBultos'])) ? utf8_encode($result['iBultos']) : ''; ?></td>
 </tr>
+<tr><td style="height:1px;"></td></tr>
 <tr>
     <td><strong>Peso: </strong></td>
     <td><?php echo (isset($result['fPeso'])) ? utf8_encode($result['fPeso']) : ''; ?></td>
 </tr>
+<tr><td style="height:1px;"></td></tr>
 <tr>
     <td><strong>Volumen: </strong></td>
     <td><?php echo (isset($result['fVolumen'])) ? utf8_encode($result['fVolumen']) : ''; ?></td>
 </tr>
+<tr><td style="height:1px;"></td></tr>
 <?php 
     }//ENDIF
 ?>
-<tr><td style="height:1px;"></td></tr>
 <tr>
     <td><strong>Mercancia: </strong></td>
     <td><?php echo (isset($result['sMercancia'])) ? utf8_encode($result['sMercancia']) : ''; ?></td>
