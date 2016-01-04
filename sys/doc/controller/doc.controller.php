@@ -17,9 +17,9 @@
 					public function docume_index(){
 					if(isset($_GET['axn'])){
 					switch ($_GET['axn']) {
-					case 'pdf':
-					$this->recepciondocumentos_pdf();
-					break;
+                                        case 'pdf':
+                                            $this->recepciondocumentos_pdf();
+                                            break;
 					case 'fetch_all':
 					// PARAMETROS PARA FILTRADO //
 					if(isset($_POST['skRecepcionDocumento'])){
@@ -322,6 +322,19 @@
 					$this->load_view('docume-detail', $this->data);
 					return true;
 					}
+                                        
+                                        private function recepciondocumentos_pdf(){
+                                            if(isset($_GET['p1'])){
+                                                $this->recepciondocumentos['skRecepcionDocumento'] = $_GET['p1'];
+                                                $this->data['datos'] = parent::read_recepciondocumentos();
+                                            }
+                                            ob_start();
+                                            $this->load_view('docume-pdf', $this->data, FALSE, 'doc/pdf/');
+                                            $content = ob_get_clean();
+                                            $title = 'Recepci&oacute;n de documentos';
+                                            Core_Functions::pdf($content, $title, 'P', 'A4', 'es', true, 'UTF-8', array(3, 3, 3, 3));
+                                            return true;
+                                        }
 					
 					
 					 public function clavdocu_index(){
