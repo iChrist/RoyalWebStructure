@@ -66,28 +66,45 @@ echo "</pre>";
     <hr>
     <input type="hidden" name="skEstatusRevalidacion" value="PR">
       <div class="form-group">
-      <label class="col-md-2">Tramitador <span aria-required="true" class="required"> * </span> </label>
-      <div class="col-md-4">
-        <select name="skUsuarioTramitador" id="skUsuarioTramitador" class="form-control form-filter input-sm">
-          <option value="">- Tramitador -</option>
-          <?php
-                                    if($data['tramitadores']){
-                                        while($rTramitador = $data['tramitadores']->fetch_assoc()){
-                                ?>
-          <option value="<?php echo $rTramitador['skUsers']; ?>" <?php echo (isset($result['skUsuarioTramitador'])) ? ($result['skUsuarioTramitador'] == $rTramitador['skUsers'] ? 'selected="selected"' : '' ) : '' ; ?> > <?php echo utf8_encode($rTramitador['sName']); ?> </option>
-          <?php
-                                        }//ENDIF
-                                    }//ENDWHILE
-                                ?>
-        </select>
-      </div>
-    </div> 
+        <label class="col-md-2">Tramitador <span aria-required="true" class="required"> * </span> </label>
+        <div class="col-md-4">
+          <select name="skUsuarioTramitador" id="skUsuarioTramitador" class="form-control form-filter input-sm">
+            <option value="">- Tramitador -</option>
+            <?php
+                if($data['tramitadores']){
+                    while($rTramitador = $data['tramitadores']->fetch_assoc()){
+            ?>
+            <option value="<?php echo $rTramitador['skUsers']; ?>" <?php echo (isset($result['skUsuarioTramitador'])) ? ($result['skUsuarioTramitador'] == $rTramitador['skUsers'] ? 'selected="selected"' : '' ) : '' ; ?> > <?php echo utf8_encode($rTramitador['sName']); ?> </option>
+            <?php
+                    }//ENDIF
+                }//ENDWHILE
+            ?>
+          </select>
+        </div>
+      </div> 
         
     <?php
         }elseif($skEstatusRevalidacion == 'PR' || $skEstatusRevalidacion == 'RV' || $skEstatusRevalidacion == 'RE'){
     ?>    
 <div id="dvEstatusNaviera" style="display:none">
      
+     <div class="form-group">
+        <label class="col-md-2">Tramitador <span aria-required="true" class="required"> * </span> </label>
+        <div class="col-md-4">
+          <select name="skUsuarioTramitador" id="skUsuarioTramitador" class="form-control form-filter input-sm" disabled="disabled">
+            <option value="">- Tramitador -</option>
+            <?php
+                if($data['tramitadores']){
+                    while($rTramitador = $data['tramitadores']->fetch_assoc()){
+            ?>
+            <option value="<?php echo $rTramitador['skUsers']; ?>" <?php echo (isset($result['skUsuarioTramitador'])) ? ($result['skUsuarioTramitador'] == $rTramitador['skUsers'] ? 'selected="selected"' : '' ) : '' ; ?> > <?php echo utf8_encode($rTramitador['sName']); ?> </option>
+            <?php
+                    }//ENDIF
+                }//ENDWHILE
+            ?>
+          </select>
+        </div>
+      </div>
 
     <div class="form-group">
       <label class="col-md-2">Estatus Naviera <span aria-required="true" class="required"> * </span> </label>
