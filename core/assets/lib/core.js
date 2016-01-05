@@ -38,7 +38,15 @@ function _save(obj,url){
         }
     });
 }
-
+function _delete(obj,url){
+    var tr = $(obj).parent().parent().parent().parent().parent().clone();
+    $(tr[0]).children().last().remove();
+    var thead = $("#datatable_ajax").children().children().clone();
+    $(thead[0]).children().last().remove();
+    $("#_deleteModalRecord").html('<table class="table"><thead><tr role="row" class="heading">'+thead[0].innerHTML+'</tr></thead><tr>'+tr[0].innerHTML+'</tr></table>');
+    $("#_deleteModal").modal('toggle');
+    return false;
+}
 $(document).ready(function(){
     /* NOTIFICATIONS */
     toastr.options = {

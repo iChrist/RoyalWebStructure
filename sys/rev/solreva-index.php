@@ -12,7 +12,6 @@ echo "</pre>";*/
 
 //$_SESSION['session']['skUsers']
 ?>
-
 <div class="row">
   <div class="col-md-12">
     <div class="table-container">

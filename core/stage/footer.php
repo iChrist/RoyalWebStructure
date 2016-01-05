@@ -6,6 +6,33 @@
 
 
 
+<!-- COMIENZA VENTANA MODAL PARA ELIMINACIÓN !-->
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="_deleteModal">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="gridSystemModalLabel">Confirmar eliminaci&oacute;n de registro</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+            <center><h3>&iquest;Desea confirmar la eliminación del siguiente registro?</h3></center>
+            <div id="_deleteModalRecord"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary">Eliminar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- TERMINA VENTANA MODAL PARA ELIMINACIÓN !-->
+
+
+
+
+
 <!-- BEGIN FOOTER -->
 <div class="footer">
 	<div class="footer-inner">
