@@ -33,6 +33,42 @@ echo "</pre>";
         </div>
       </div>
     </div>
+
+    <div class="form-group">
+      <label class="col-md-2">BL <span aria-required="true" class="required"> * </span> </label>
+      <div class="col-md-4">
+        <div class="input-icon right"> <i class="fa"></i>
+          <input type="text" name="sBL" id="sBL" class="form-control" placeholder="BL" value="<?php echo (isset($result['sBL'])) ? utf8_encode($result['sBL']) : '' ; ?>" >
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-md-2">Fecha de Arribo de buque <span aria-required="true" class="required"> * </span></label>
+      <div class="col-md-4">
+        <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
+          <input type="text" id="dFechaArriboBuque" name="dFechaArriboBuque" class="form-control" value="<?php echo (isset($result['dFechaArriboBuque'])) ?  utf8_encode(date('d-m-Y', strtotime($result['dFechaArriboBuque']))) : date('d-m-Y') ; ?>">
+          <span class="input-group-btn">
+          <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-md-2">Prioridad <span aria-required="true" class="required"> * </span></label>
+      <div class="col-md-2">
+          <label>
+            <input type="radio" name="iPrioridad" value="0" checked>Normal
+          </label>
+      </div>
+      <div class="col-md-2">
+          <label>
+            <input type="radio" name="iPrioridad" value="1" <?php if(isset($result['iPrioridad']) && $result['iPrioridad'] == 1){ ?>checked="checked"<?php }//ENDIF ?>>Urgente
+          </label>
+      </div>
+    </div>
+
     <hr>
      <div id="dvDatos">
      
@@ -265,6 +301,21 @@ function obtenerDatos(){
 	    ' <div class="col-md-4">'+
 	    '    <label id="lbMercancia" class="control-label ">'+data.data[0][3]+'</label>'+
 	    ' </div>'+
+   ' </div>'+
+    '<div class="form-group">'+
+      '<label class="col-md-2">Datos del tipo de servicio</label>'+
+      '<div class="col-md-2">'+
+        '  <label class="control-label">Num. Contenedor: '+data.data[0][4]+'</label>'+
+       ' </div>'+
+      ' <div class="col-md-2">'+
+      '    <label class="control-label ">Bultos: '+data.data[0][5]+'</label>'+
+      ' </div>'+
+      ' <div class="col-md-2">'+
+      '    <label class="control-label ">Peso: '+data.data[0][6]+'</label>'+
+      ' </div>'+
+      ' <div class="col-md-2">'+
+      '    <label class="control-label ">Volumen: '+data.data[0][7]+'</label>'+
+      ' </div>'+
    ' </div>';
    }
                  $("#dvDatos").html(cad);

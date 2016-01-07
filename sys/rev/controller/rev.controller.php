@@ -203,6 +203,10 @@
 													 ,utf8_encode($row['TipoServicio'])
 						 							,utf8_encode($row['Ejecutivo'])
 													,utf8_encode($row['sMercancia'])
+													,utf8_encode($row['sNumContenedor'])
+													,utf8_encode($row['iBultos'])
+													,utf8_encode($row['fPeso'])
+													,utf8_encode($row['fVolumen'])
 												)
 												);
 											}
@@ -245,6 +249,9 @@
  					$this->solreva['skEmpresaNaviera'] = utf8_decode($_POST['skEmpresaNaviera']);
  					$this->solreva['skEstatusRevalidacion'] =  !empty($_POST['skEstatusRevalidacion']) ? $_POST['skEstatusRevalidacion'] : '';
  					$this->solreva['skUsuarioTramitador'] = isset($_POST['skUsuarioTramitador']) ? $_POST['skUsuarioTramitador'] : null;
+ 					$this->solreva['sBL'] = isset($_POST['sBL']) ? $_POST['sBL'] : null;
+ 					$this->solreva['iPrioridad'] = isset($_POST['iPrioridad']) ? $_POST['iPrioridad'] : null;
+ 					$this->solreva['dFechaArriboBuque'] = isset($_POST['dFechaArriboBuque']) ? date('Y-m-d',strtotime($_POST['dFechaArriboBuque'])) : null;
  					$this->solreva['skUsuarioProceso'] = $_SESSION['session']['skUsers'];
  					if($this->solreva['skEstatusRevalidacion'] == 'PR'){
  						$this->solreva['dFechaProceso'] = 'CURRENT_TIMESTAMP()';
