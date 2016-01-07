@@ -38,7 +38,10 @@ function _save(obj,url){
         }
     });
 }
+// DELETE DATA //
+var _deleteConfirmUrl = null;
 function _delete(obj,url){
+    _deleteConfirmUrl = url;
     var tr = $(obj).parent().parent().parent().parent().parent().clone();
     $(tr[0]).children().last().remove();
     var thead = $("#datatable_ajax").children().children().clone();
@@ -47,6 +50,35 @@ function _delete(obj,url){
     $("#_deleteModal").modal('toggle');
     return false;
 }
+function _deleteConfirm(){
+    $("#_deleteModal").modal('hide');
+    $('.page-title-loading').css('display','inline');
+    $.ajax({
+        type: "GET",
+        url: _deleteConfirmUrl,
+        data: "",
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function(data){
+            if(data['response']){
+                toastr.success(data['message'], "Notificaci&oacute;n");
+                setInterval(function(){ 
+                     location.reload(); 
+                }, 3000);
+            }else{
+                toastr.error(data['message'], "Notificaci&oacute;n");
+                setInterval(function(){ 
+                }, 3000);
+            }
+            $('.page-title-loading').css('display','none');
+            _deleteConfirmUrl = null;
+        }
+    });
+}
+function _deleteCancel(){
+    _deleteConfirmUrl = null;
+} 
 $(document).ready(function(){
     /* NOTIFICATIONS */
     toastr.options = {

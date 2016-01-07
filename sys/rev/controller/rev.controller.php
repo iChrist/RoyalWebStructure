@@ -20,6 +20,22 @@
 					case 'pdf':
 					$this->solicitudrevalidacion_pdf();
 					break;
+                                        case 'delete':
+                                            $this->data['message'] = 'Hubo un error al intentar eliminar el registro, intenta de nuevo.';
+                                            $this->data['response'] = false;
+                                            $this->data['datos'] = false;
+                                            if(isset($_GET['p1'])){
+                                                $this->solreva['skSolicitudRevalidacion'] = $_GET['p1'];
+                                                if($this->delete_solreva()){
+                                                    $this->data['response'] = true;
+                                                    $this->data['datos'] = true;
+                                                    $this->data['message'] = 'Registro eliminado con &eacute;xito.';
+                                                }
+                                            }
+                                            header('Content-Type: application/json');
+                                            echo json_encode($this->data);
+                                            return true;
+					break;
 					case 'fetch_all':
 					// PARAMETROS PARA FILTRADO //
 					if(isset($_POST['skSolicitudRevalidacion'])){

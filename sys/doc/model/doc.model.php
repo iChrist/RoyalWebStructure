@@ -468,7 +468,16 @@
                     return false;
                 }
             }
-			
+	    
+            public function delete_recepciondocumentos(){
+                $sql = "DELETE FROM ope_recepciones_documentos WHERE skRecepcionDocumento = '".$this->recepciondocumentos['skRecepcionDocumento']."' LIMIT 1";
+                $result = $this->db->query($sql);
+                if($result){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
 	
 			
 			public function read_tipos_tramites(){

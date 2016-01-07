@@ -240,6 +240,15 @@
                 }
             }
             
+            public function delete_solreva(){
+                $sql = "DELETE FROM ope_solicitud_revalidacion WHERE skSolicitudRevalidacion = '".$this->solreva['skSolicitudRevalidacion']."' LIMIT 1";
+                $result = $this->db->query($sql);
+                if($result){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
             
             public function read_referencia(){
 	            $sql = "	SELECT 	rd.*, 

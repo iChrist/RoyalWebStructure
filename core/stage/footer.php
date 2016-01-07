@@ -21,8 +21,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary">Eliminar</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" onclick="_deleteCancel();">Cancelar</button>
+        <button type="button" class="btn btn-primary" onclick="_deleteConfirm(_deleteConfirmUrl);">Eliminar</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
