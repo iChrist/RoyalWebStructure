@@ -18,7 +18,14 @@ echo "</pre>";*/
     <div class="table-container">
       <div class="table-actions-wrapper"> <span></span>
         <div class="table-group-actions pull-right"> <span></span> 
-          <!--<button type="button" class="btn btn-sm btn-default" id="enable_filter"><i class="fa fa-search"></i> Buscar</button>--> 
+            <!--<button type="button" class="btn btn-sm btn-default" id="enable_filter"><i class="fa fa-search"></i> Buscar</button>!-->
+            <div class="btn-group btn-group-md" role="group" aria-label="Acciones">
+            <?php
+                $buttons = $this->printModulesButtons(3);
+                //echo '<pre>'.print_r($buttons,1).'</pre>';
+                echo $buttons['sHtml'];
+            ?>
+            </div>
         </div>
       </div>
       <table class="table table-striped table-bordered table-hover" id="datatable_ajax">

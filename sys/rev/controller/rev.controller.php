@@ -337,7 +337,34 @@
 					$this->load_view('solreva-form', $this->data);
 					return true;
                                     }
-					
+				    
+                                    private function solicitudrevalidacion_pdf(){
+                                            if(isset($_GET['p1'])){
+                                                $this->solreva['skSolicitudRevalidacion'] = $_GET['p1'];
+                                                $solicitudRevalidacion = parent::read_solreva();
+                                                if($solicitudRevalidacion){
+                                                    $this->data['datos'] = $solicitudRevalidacion->fetch_assoc();
+                                                }
+                                                $rechazosSolicitud = parent::read_solreva_rechazos();
+                                                $this->data['rechazosSolicitud'] = array();
+                                                while($row = $rechazosSolicitud->fetch_assoc()){
+                                                    array_push($this->data['rechazosSolicitud'], array(
+                                                        'skRechazo'=>utf8_encode($row['skRechazo'])
+                                                    ));
+                                                }
+                                                $this->solreva['sReferencia'] = $this->data['datos']['sReferencia'];
+ 		                                $recepcionDocumentos = parent::read_referencia();
+                                                if($recepcionDocumentos){
+                                                    $this->data['recepcionDocumentos'] = $recepcionDocumentos->fetch_assoc();
+                                                }
+                                            }
+                                            ob_start();
+                                            $this->load_view('docume-pdf', $this->data, FALSE, 'rev/pdf/');
+                                            $content = ob_get_clean();
+                                            $title = 'Solicitud de revaldaci&oacute;n';
+                                            Core_Functions::pdf($content, $title, 'P', 'A4', 'es', true, 'UTF-8', array(3, 3, 3, 3));
+                                            return true;
+                                        }
 					
                                     public function docume_detail(){
 					if(isset($_GET['p1'])){
