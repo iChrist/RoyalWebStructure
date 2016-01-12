@@ -359,7 +359,7 @@
                                                 }
                                             }
                                             ob_start();
-                                            $this->load_view('docume-pdf', $this->data, FALSE, 'rev/pdf/');
+                                            $this->load_view('solreva-pdf', $this->data, FALSE, 'rev/pdf/');
                                             $content = ob_get_clean();
                                             $title = 'Solicitud de revaldaci&oacute;n';
                                             Core_Functions::pdf($content, $title, 'P', 'A4', 'es', true, 'UTF-8', array(3, 3, 3, 3));
