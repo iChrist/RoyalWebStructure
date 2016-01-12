@@ -44,7 +44,6 @@ font-size: 12px;
     </page_footer>
     <br>
 <!-- BODY PDF !-->
-<!--<span style="font-size: 16px; font-weight: bold;text-align:center;">Solicitud de revaldaci&oacute;n</span>!-->
 <br><br>
 <?php 
     //echo '<pre>'.print_r($result,1).'</pre>'; 
@@ -149,10 +148,8 @@ font-size: 12px;
         foreach($data['rechazos'] AS $k=>&$v){
             $check = '';
             if(in_array($v['skRechazo'], $data['rechazosSolicitud'])){
-                //$check = '<img src="'.SYS_URL.'core/assets/img/checkbox_checked.png" style="width:10px;height:10px;" alt="X"/>';
                 echo '<tr><td style="width:20%;">'.$v['sNombre'].'</td><td>'.$check.'</td></tr><tr><td style="height:10px;"></td></tr>';
             }
-            //echo '<tr><td style="width:20%;">'.$v['sNombre'].'</td><td>'.$check.'</td></tr><tr><td style="height:10px;"></td></tr>';
         }
         echo '</table>';
     }
