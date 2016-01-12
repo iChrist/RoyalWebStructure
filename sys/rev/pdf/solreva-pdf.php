@@ -141,6 +141,7 @@ font-size: 12px;
     <td><strong>Estatus naviera: </strong></td>
     <td><?php echo (isset($data['datos']['Estatus'])) ? utf8_encode($data['datos']['Estatus']) : ''; ?></td>
 </tr>
+<tr><td style="height:30px;"></td></tr>
 </table>
 <?php
     if(count($data['rechazosSolicitud']) > 0) {
@@ -148,10 +149,10 @@ font-size: 12px;
         foreach($data['rechazos'] AS $k=>&$v){
             $check = '';
             if(in_array($v['skRechazo'], $data['rechazosSolicitud'])){
-                $check = '<img src="'.SYS_URL.'core/assets/img/checkbox_checked.png" style="width:10px;height:10px;" alt="X"/>';
-                //$check = 'X';
+                //$check = '<img src="'.SYS_URL.'core/assets/img/checkbox_checked.png" style="width:10px;height:10px;" alt="X"/>';
+                echo '<tr><td style="width:20%;">'.$v['sNombre'].'</td><td>'.$check.'</td></tr><tr><td style="height:10px;"></td></tr>';
             }
-            echo '<tr><td style="width:20%;">'.$v['sNombre'].'</td><td>'.$check.'</td></tr><tr><td style="height:10px;"></td></tr>';
+            //echo '<tr><td style="width:20%;">'.$v['sNombre'].'</td><td>'.$check.'</td></tr><tr><td style="height:10px;"></td></tr>';
         }
         echo '</table>';
     }
