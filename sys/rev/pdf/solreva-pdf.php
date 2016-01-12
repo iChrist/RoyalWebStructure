@@ -146,9 +146,8 @@ font-size: 12px;
     if(count($data['rechazosSolicitud']) > 0) {
         echo '<table><tr><td style="width:20%;"><strong>MOTIVOS DE RECHAZO</strong></td></tr><tr><td style="height:5px;"></td></tr>';
         foreach($data['rechazos'] AS $k=>&$v){
-            $check = '';
             if(in_array($v['skRechazo'], $data['rechazosSolicitud'])){
-                echo '<tr><td style="width:20%;">'.$v['sNombre'].'</td><td>'.$check.'</td></tr><tr><td style="height:10px;"></td></tr>';
+                echo '<tr><td style="width:20%;">'.$v['sNombre'].'</td><td></td></tr><tr><td style="height:10px;"></td></tr>';
             }
         }
         echo '</table>';
