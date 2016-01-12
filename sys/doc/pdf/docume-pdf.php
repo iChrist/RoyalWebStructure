@@ -27,7 +27,7 @@ font-size: 12px;
         <table style="width: 100%;">
             <tr>
             	<td style="text-align: left; width: 70%">
-                    <!--<img src="<?php echo SYS_URL; ?>core/assets/img/logo.logo" style="width:170px;height:50px;" alt="RoyalWeb">!-->
+                    <img src="<?php echo SYS_URL; ?>core/assets/img/logo.png" style="width:170px;height:50px;" alt="RoyalWeb">
                     <span style="font-size: 12px; font-weight: bold;text-align:center;">Recepci&oacute;n de documentos</span>
 		</td>
                 <td style="text-align: right; width: 30%;"><?php echo date('d-m-Y H:i:s'); ?></td>
@@ -46,7 +46,6 @@ font-size: 12px;
     </page_footer>
     <br>
 <!-- BODY PDF !-->
-<span style="font-size: 16px; font-weight: bold;text-align:center;">Recepci&oacute;n de documentos</span>
 <br><br>
 <?php 
     //echo '<pre>'.print_r($result,1).'</pre>'; 
