@@ -25,7 +25,7 @@ font-size: 12px;
         <table style="width: 100%;">
             <tr>
             	<td style="text-align: left; width: 70%">
-                    <!--<img src="<?php echo SYS_URL; ?>core/assets/img/logo.png" style="width:170px;height:50px;" alt="RoyalWeb">!-->
+                    <img src="<?php echo SYS_URL; ?>core/assets/img/logo.png" style="width:170px;height:50px;" alt="RoyalWeb">
                     <span style="font-size: 12px; font-weight: bold;text-align:center;">Solicitud de revaldaci&oacute;n</span>
 		</td>
                 <td style="text-align: right; width: 30%;"><?php echo date('d-m-Y H:i:s'); ?></td>
@@ -55,17 +55,17 @@ font-size: 12px;
     <td><strong>Referencia: </strong></td>
     <td><?php echo (isset($data['datos']['sReferencia'])) ? utf8_encode($data['datos']['sReferencia']) : ''; ?></td>
 </tr>
-<tr><td style="height:1px;"></td></tr>
+<tr><td style="height:5px;"></td></tr>
 <tr>
     <td><strong>BL: </strong></td>
     <td><?php echo (isset($data['datos']['sBL'])) ? utf8_encode($data['datos']['sBL']) : ''; ?></td>
 </tr>
-<tr><td style="height:1px;"></td></tr>
+<tr><td style="height:5px;"></td></tr>
 <tr>
     <td><strong>Fecha de arribo de buque: </strong></td>
     <td><?php echo (isset($data['datos']['dFechaArriboBuque'])) ? utf8_encode(date('d-m-Y',strtotime($data['datos']['dFechaArriboBuque']))) : ''; ?></td>
 </tr>
-<tr><td style="height:1px;"></td></tr>
+<tr><td style="height:5px;"></td></tr>
 <tr>
     <td><strong>Prioridad: </strong></td>
     <td><?php echo (isset($data['datos']['iPrioridad']) && $data['datos']['iPrioridad'] == 1 ) ? 'Urgente': 'Normal';?></td>
@@ -120,7 +120,11 @@ font-size: 12px;
     <td><strong>Mercancia: </strong></td>
     <td><?php echo (isset($data['recepcionDocumentos']['sMercancia'])) ? utf8_encode($data['recepcionDocumentos']['sMercancia']) : ''; ?></td>
 </tr>
-
+<tr><td style="height:1px;"></td></tr>
+<tr>
+    <td><strong>Observaciones: </strong></td>
+    <td><?php echo (isset($data['datos']['sObservaciones'])) ? utf8_encode($data['datos']['sObservaciones']) : ''; ?></td>
+</tr>
 
 <tr><td style="height:30px;"></td></tr>
 <tr>
@@ -137,19 +141,20 @@ font-size: 12px;
     <td><strong>Estatus naviera: </strong></td>
     <td><?php echo (isset($data['datos']['Estatus'])) ? utf8_encode($data['datos']['Estatus']) : ''; ?></td>
 </tr>
-<tr><td style="height:1px;"></td></tr>
-<tr>
-    <td><strong>Rechazos: </strong></td>
-    <td><?php echo (isset($data['datos']['Estatus'])) ? utf8_encode($data['datos']['Estatus']) : ''; ?></td>
-</tr>
-<tr><td style="height:1px;"></td></tr>
-<tr>
-    <td><strong>Observaciones: </strong></td>
-    <td><?php echo (isset($data['datos']['sObservaciones'])) ? utf8_encode($data['datos']['sObservaciones']) : ''; ?></td>
-</tr>
-
-
 </table>
-
+<?php
+    if(count($data['rechazosSolicitud']) > 0) {
+        echo '<table><tr><td style="width:20%;"><strong>MOTIVOS DE RECHAZO</strong></td></tr><tr><td style="height:5px;"></td></tr>';
+        foreach($data['rechazos'] AS $k=>&$v){
+            $check = '';
+            if(in_array($v['skRechazo'], $data['rechazosSolicitud'])){
+                $check = '<img src="'.SYS_URL.'core/assets/img/checkbox_checked.png" style="width:10px;height:10px;" alt="X"/>';
+                //$check = 'X';
+            }
+            echo '<tr><td style="width:20%;">'.$v['sNombre'].'</td><td>'.$check.'</td></tr><tr><td style="height:10px;"></td></tr>';
+        }
+        echo '</table>';
+    }
+?>
 
 </page>

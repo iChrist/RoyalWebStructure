@@ -345,19 +345,26 @@
                                                 if($solicitudRevalidacion){
                                                     $this->data['datos'] = $solicitudRevalidacion->fetch_assoc();
                                                 }
+                                                $rechazos = parent::read_like_rechazos();
+                                                $this->data['rechazos'] = array();
+                                                while($row = $rechazos->fetch_assoc()){
+                                                    array_push($this->data['rechazos'], array(
+                                                        'skRechazo'=>utf8_encode($row['skRechazo'])
+                                                        ,'sNombre'=>utf8_encode($row['sNombre'])
+                                                    ));
+                                                }
                                                 $rechazosSolicitud = parent::read_solreva_rechazos();
                                                 $this->data['rechazosSolicitud'] = array();
                                                 while($row = $rechazosSolicitud->fetch_assoc()){
-                                                    array_push($this->data['rechazosSolicitud'], array(
-                                                        'skRechazo'=>utf8_encode($row['skRechazo'])
-                                                    ));
+                                                    array_push($this->data['rechazosSolicitud'], $row['skRechazo']);
                                                 }
                                                 $this->solreva['sReferencia'] = $this->data['datos']['sReferencia'];
- 		                                $recepcionDocumentos = parent::read_referencia();
+ 		                                		$recepcionDocumentos = parent::read_referencia();
                                                 if($recepcionDocumentos){
                                                     $this->data['recepcionDocumentos'] = $recepcionDocumentos->fetch_assoc();
                                                 }
                                             }
+                                            //exit('<pre>'.print_r($this->data,1));
                                             ob_start();
                                             $this->load_view('solreva-pdf', $this->data, FALSE, 'rev/pdf/');
                                             $content = ob_get_clean();
