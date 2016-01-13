@@ -252,7 +252,8 @@
  					$this->solreva['sBL'] = isset($_POST['sBL']) ? $_POST['sBL'] : null;
  					$this->solreva['iPrioridad'] = isset($_POST['iPrioridad']) ? $_POST['iPrioridad'] : null;
  					$this->solreva['dFechaArriboBuque'] = isset($_POST['dFechaArriboBuque']) ? date('Y-m-d',strtotime($_POST['dFechaArriboBuque'])) : null;
- 					$this->solreva['skUsuarioProceso'] = $_SESSION['session']['skUsers'];
+ 					$this->solreva['dEta'] = isset($_POST['dEta']) ? date('Y-m-d',strtotime($_POST['dEta'])) : null;
+                                        $this->solreva['skUsuarioProceso'] = $_SESSION['session']['skUsers'];
  					if($this->solreva['skEstatusRevalidacion'] == 'PR'){
  						$this->solreva['dFechaProceso'] = 'CURRENT_TIMESTAMP()';
  						$this->solreva['skUsuarioProceso'] = $_SESSION['session']['skUsers'];

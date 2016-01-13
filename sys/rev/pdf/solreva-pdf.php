@@ -61,6 +61,10 @@ font-size: 12px;
 </tr>
 <tr><td style="height:5px;"></td></tr>
 <tr>
+    <td><strong>ETA: </strong></td>
+    <td><?php echo (isset($data['datos']['dEta'])) ? utf8_encode(date('d-m-Y',strtotime($data['datos']['dEta']))) : ''; ?></td>
+</tr>
+<tr>
     <td><strong>Fecha de arribo de buque: </strong></td>
     <td><?php echo (isset($data['datos']['dFechaArriboBuque'])) ? utf8_encode(date('d-m-Y',strtotime($data['datos']['dFechaArriboBuque']))) : ''; ?></td>
 </tr>

@@ -26,7 +26,7 @@ echo "</pre>";
   <div class="form-body">
        
     <div class="form-group">
-      <label class="col-md-2">Referencia <span aria-required="true" class="required"> * </span> </label>
+      <label class="control-label col-md-2">Referencia <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
         <div class="input-icon right"> <i class="fa"></i>
           <input type="text" name="sReferencia" id="sReferencia" class="form-control" onChange="obtenerDatos();" placeholder="Referencia" value="<?php echo (isset($result['sReferencia'])) ? utf8_encode($result['sReferencia']) : '' ; ?>" >
@@ -35,16 +35,28 @@ echo "</pre>";
     </div>
 
     <div class="form-group">
-      <label class="col-md-2">BL <span aria-required="true" class="required"> * </span> </label>
+      <label class="control-label col-md-2">N&uacute;mero de BL <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
         <div class="input-icon right"> <i class="fa"></i>
           <input type="text" name="sBL" id="sBL" class="form-control" placeholder="BL" value="<?php echo (isset($result['sBL'])) ? utf8_encode($result['sBL']) : '' ; ?>" >
         </div>
       </div>
     </div>
-
+  
     <div class="form-group">
-      <label class="control-label col-md-2">Fecha de Arribo de buque <span aria-required="true" class="required"> * </span></label>
+      <label class="control-label col-md-2">ETA <span aria-required="true" class="required"> * </span></label>
+      <div class="col-md-4">
+        <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
+          <input type="text" id="dEta" name="dEta" class="form-control" value="<?php echo (isset($result['dEta'])) ?  utf8_encode(date('d-m-Y', strtotime($result['dEta']))) : date('d-m-Y') ; ?>">
+          <span class="input-group-btn">
+          <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+          </span>
+        </div>
+      </div>
+    </div>
+      
+    <div class="form-group">
+      <label class="control-label col-md-2">Fecha de Arribo de buque </label>
       <div class="col-md-4">
         <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
           <input type="text" id="dFechaArriboBuque" name="dFechaArriboBuque" class="form-control" value="<?php echo (isset($result['dFechaArriboBuque'])) ?  utf8_encode(date('d-m-Y', strtotime($result['dFechaArriboBuque']))) : date('d-m-Y') ; ?>">
@@ -361,6 +373,12 @@ function obtenerDatos(){
                 },
                 skEstatusRevalidacion:{
                     required: true
+                },
+                sBL:{
+                    required: true
+                },
+                dEta:{
+                    required: true
                 }
                 /*sObservaciones:{
                     required: true
@@ -410,7 +428,7 @@ invalidHandler: function (event, validator) { //alerta de error de visualizació
             messages:{
                 sReferencia:{
                     required:"Ingresa una Referencia",
-                       remote: "Esta referencia no Existe."
+                    remote: "Esta referencia no Existe."
                 },
                 skEmpresaNaviera:{
                     required: "Selecciona una Línea Naviera",
@@ -424,6 +442,12 @@ invalidHandler: function (event, validator) { //alerta de error de visualizació
                     /*required: function(){
                         alert('HJKBSDKJHFGDS');
                     }*/
+                },
+                sBL:{
+                    required: "Campo obligatorio"
+                },
+                dEta:{
+                    required: "Campo obligatorio"
                 }
                 /*Observaciones:{
                     required: true

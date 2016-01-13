@@ -20,6 +20,7 @@
                     ,'sBL'                                  =>  null
                     ,'iPrioridad'                           =>  null
                     ,'dFechaArriboBuque'                    =>  null
+                    ,'dEta'                                 =>  null
 
 
                     ,'skEmpresa'=>''
@@ -83,6 +84,9 @@
                 }
                 if(!empty($this->solreva['dFechaArriboBuque'])){
                     $sql .=" AND dFechaArriboBuque = '".$this->solreva['dFechaArriboBuque']."'";
+                }
+                if(!empty($this->solreva['dEta'])){
+                    $sql .=" AND dEta = '".$this->solreva['dEta']."'";
                 }
 			 	if(!is_null($this->solreva['dFechaInicio'])){
                     if(!is_null($this->solreva['dFechaFin'])){
@@ -175,6 +179,9 @@
                 if(!empty($this->solreva['dFechaArriboBuque'])){
                     $sql .=" AND sd.dFechaArriboBuque = '".$this->solreva['dFechaArriboBuque']."'";
                 }
+                if(!empty($this->solreva['dEta'])){
+                    $sql .=" AND sd.dEta = '".$this->solreva['dEta']."'";
+                }
                 if(!is_null($this->solreva['dFechaInicio'])){
                     if(!is_null($this->solreva['dFechaFin'])){
                         if(!is_null($this->solreva['filtroFechas'])){
@@ -231,7 +238,7 @@
             
             public function create_solreva(){
  				$sql = "INSERT INTO ope_solicitud_revalidacion (	skSolicitudRevalidacion,sReferencia,sObservaciones,skEmpresaNaviera,
-																skEstatusRevalidacion,dFechaCreacion,skUsuarioSolicitud,sBL,iPrioridad,dFechaArriboBuque) 
+																skEstatusRevalidacion,dFechaCreacion,skUsuarioSolicitud,sBL,iPrioridad,dFechaArriboBuque,dEta) 
 						VALUES ('".$this->solreva['skSolicitudRevalidacion']."',
 								'".$this->solreva['sReferencia']."',
   								'".$this->solreva['sObservaciones']."',
@@ -241,7 +248,8 @@
 								'".$_SESSION['session']['skUsers']."',
                                 '".$this->solreva['sBL']."',
                                 ".$this->solreva['iPrioridad'].",
-                                '".$this->solreva['dFechaArriboBuque']."')";
+                                '".$this->solreva['dFechaArriboBuque']."',
+                                '".$this->solreva['dEta']."')";
 				//echo $sql;die();
                 $result = $this->db->query($sql);
                 if($result){
@@ -286,6 +294,9 @@
                 }
                 if(!is_null($this->solreva['dFechaArriboBuque'])){
                     $sql.=" dFechaArriboBuque='".$this->solreva['dFechaArriboBuque']."', ";
+                }
+                if(!is_null($this->solreva['dEta'])){
+                    $sql.=" dEta='".$this->solreva['dEta']."', ";
                 }
                 $sql .= " skSolicitudRevalidacion = '".$this->solreva['skSolicitudRevalidacion']."' WHERE skSolicitudRevalidacion = '".$this->solreva['skSolicitudRevalidacion']."'";
                 //exit($sql);
