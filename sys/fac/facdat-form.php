@@ -187,23 +187,6 @@ function obtenerDatos(){
                       }
                     }
                     
-                },
-		
-                skEmpresaNaviera:{
-                    required: true,
-                     minlength: 1 
-                },
-                skUsuarioTramitador:{
-                    required: true
-                },
-                skEstatusRevalidacion:{
-                    required: true
-                },
-                sBL:{
-                    required: true
-                },
-                dEta:{
-                    required: true
                 }
             },
             invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar              
@@ -245,22 +228,6 @@ function obtenerDatos(){
                 sReferencia:{
                     required:"Campo obligatorio",
                     remote: "Esta referencia no Existe."
-                },
-                skEmpresaNaviera:{
-                    required: "Selecciona una Línea Naviera",
-                    minlength: 1
-                },
-                skUsuarioTramitador:{
-                    required: "Selecciona un Tramitador"
-                },
-                skEstatusRevalidacion:{
-                    required: "Selecciona un Estatus"
-                },
-                sBL:{
-                    required: "Campo obligatorio"
-                },
-                dEta:{
-                    required: "Campo obligatorio"
                 }
             }
         });

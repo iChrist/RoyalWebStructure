@@ -148,16 +148,15 @@
                         case "save":
                             $this->facdat['skFacturacion'] = !empty($_POST['skFacturacion']) ? $_POST['skFacturacion'] : substr(md5(microtime()), 1, 32);
                             $this->facdat['sReferencia'] = !empty($_POST['sReferencia']) ? $_POST['sReferencia'] : null;
-                            $this->facdat['dFechaFacturacion'] = !empty($_POST['dFechaFacturacion']) ? $_POST['dFechaFacturacion'] : null;
+                            $this->facdat['dFechaFacturacion'] = !empty($_POST['dFechaFacturacion']) ? date('Y-m-d',  strtotime($_POST['dFechaFacturacion'])) : null;
                             $this->facdat['sFolio'] = !empty($_POST['sFolio']) ? $_POST['sFolio'] : null;
-                            $this->facdat['fImporte'] = !empty($_POST['fImporte']) ? $_POST['fImporte'] : null;
-                            $this->facdat['fIva'] = !empty($_POST['fIva']) ? $_POST['fIva'] : null;
-                            $this->facdat['fTotalFacturado'] = !empty($_POST['fTotalFacturado']) ? $_POST['fTotalFacturado'] : null;
-                            $this->facdat['fGanancia'] = !empty($_POST['fGanancia']) ? $_POST['fGanancia'] : null;
-                            $this->facdat['fAA'] = !empty($_POST['fAA']) ? $_POST['fAA'] : null;
-                            $this->facdat['fPromotor1'] = !empty($_POST['fPromotor1']) ? $_POST['fPromotor1'] : null;
-                            $this->facdat['fPromotor2'] = !empty($_POST['fPromotor2']) ? $_POST['fPromotor2'] : null;
-                            $this->facdat['sReferencia'] = !empty($_POST['sReferencia']) ? $_POST['sReferencia'] : null;
+                            $this->facdat['fImporte'] = !empty($_POST['fImporte']) ? $_POST['fImporte'] : 0;
+                            $this->facdat['fIva'] = !empty($_POST['fIva']) ? $_POST['fIva'] : 0;
+                            $this->facdat['fTotalFacturado'] = !empty($_POST['fTotalFacturado']) ? $_POST['fTotalFacturado'] : 0;
+                            $this->facdat['fGanancia'] = !empty($_POST['fGanancia']) ? $_POST['fGanancia'] : 0;
+                            $this->facdat['fAA'] = !empty($_POST['fAA']) ? $_POST['fAA'] : 0;
+                            $this->facdat['fPromotor1'] = !empty($_POST['fPromotor1']) ? $_POST['fPromotor1'] : 0;
+                            $this->facdat['fPromotor2'] = !empty($_POST['fPromotor2']) ? $_POST['fPromotor2'] : 0;
                             // DEFAULT //
                             $this->data['message'] = 'Registro guardado con &eacute;xito.';
                             if(empty($_POST['skFacturacion'])){
