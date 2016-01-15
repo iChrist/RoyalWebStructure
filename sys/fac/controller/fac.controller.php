@@ -1,5 +1,5 @@
 <?php
-    require_once(SYS_PATH."rev/model/rev.model.php");
+    require_once(SYS_PATH."fac/model/fac.model.php");
     Class Fac_Controller Extends Fac_Model {
 
             // PRIVATE VARIABLES //
@@ -14,19 +14,19 @@
             }
 				/*COMIENZA MODULO DE RECEPCION DE DOCUMENTOS */
  
-            public function solreva_index(){
+            public function facdat_index(){
                 if(isset($_GET['axn'])){
                     switch ($_GET['axn']) {
                         case 'pdf':
-                            $this->solicitudrevalidacion_pdf();
+                            $this->facdat_pdf();
                             break;
                         case 'delete':
                             $this->data['message'] = 'Hubo un error al intentar eliminar el registro, intenta de nuevo.';
                             $this->data['response'] = false;
                             $this->data['datos'] = false;
                             if(isset($_GET['p1'])){
-                                $this->solreva['skSolicitudRevalidacion'] = $_GET['p1'];
-                                if($this->delete_solreva()){
+                                $this->facdat['skFacturacion'] = $_GET['p1'];
+                                if($this->delete_facdat()){
                                     $this->data['response'] = true;
                                     $this->data['datos'] = true;
                                     $this->data['message'] = 'Registro eliminado con &eacute;xito.';
@@ -38,54 +38,78 @@
                             break;
                         case 'fetch_all':
                             // PARAMETROS PARA FILTRADO //
-                            if(isset($_POST['skSolicitudRevalidacion'])){
-                                    $this->solreva['skSolicitudRevalidacion'] = $_POST['skSolicitudRevalidacion'];
+                            if(!empty($_POST['skFacturacion'])){
+                                $this->facdat['skFacturacion'] = $_POST['skFacturacion'];
                             }
-                            if(isset($_POST['sReferencia'])){
-                                    $this->solreva['sReferencia'] = $_POST['sReferencia'];
+                            if(!empty($_POST['sReferencia'])){
+                                $this->facdat['sReferencia'] = $_POST['sReferencia'];
                             }
-                            // FILTRO POR FECHAS
-                            $this->solreva['filtroFechas'] = !empty($_POST['filtroFechas']) ? $_POST['filtroFechas'] : 'Solicitud';
-
-                            if(!empty($_POST['dFechaInicio'])){
-                                $this->solreva['dFechaInicio'] = $_POST['dFechaInicio'];
+                            if(!empty($_POST['dFechaFacturacion'])){
+                                $this->facdat['dFechaFacturacion'] = date('Y-m-d',  strtotime($_POST['dFechaFacturacion']));
                             }
-                            if(!empty($_POST['dFechaFin'])){
-                                $this->solreva['dFechaFin'] = $_POST['dFechaFin'];
+                            if(!empty($_POST['sFolio'])){
+                                $this->facdat['sFolio'] = $_POST['sFolio'];
                             }
-                            // CLIENTE //
-                            if(isset($_POST['skEmpresa'])){
-                                $this->solreva['skEmpresa'] = $_POST['skEmpresa'];
+                            if(!empty($_POST['fImporte'])){
+                                $this->facdat['fImporte'] = $_POST['fImporte'];
                             }
-                            //exit('<pre>'.print_r($this->solreva,1).'</pre>');
+                            if(!empty($_POST['fIva'])){
+                                $this->facdat['fIva'] = $_POST['fIva'];
+                            }
+                            if(!empty($_POST['fTotalFacturado'])){
+                                $this->facdat['fTotalFacturado'] = $_POST['fTotalFacturado'];
+                            }
+                            if(!empty($_POST['fGanancia'])){
+                                $this->facdat['fGanancia'] = $_POST['fGanancia'];
+                            }
+                            if(!empty($_POST['fAA'])){
+                                $this->facdat['fAA'] = $_POST['fAA'];
+                            }
+                            if(!empty($_POST['fPromotor1'])){
+                                $this->facdat['fPromotor1'] = $_POST['fPromotor1'];
+                            }
+                            if(!empty($_POST['fPromotor2'])){
+                                $this->facdat['fPromotor2'] = $_POST['fPromotor2'];
+                            }
+                            if(!empty($_POST['skUserCreacion'])){
+                                $this->facdat['skUserCreacion'] = $_POST['skUserCreacion'];
+                            }
+                            if(!empty($_POST['dFechaCreacion'])){
+                                $this->facdat['dFechaCreacion'] = date('Y-m-d',  strtotime($_POST['dFechaCreacion']));
+                            }
+                            exit('<pre>'.print_r($this->facdat,1).'</pre>');
                             // OBTENER REGISTROS //
-                            $total = parent::count_solreva();
+                            $total = parent::count_facdat();
                             $records = Core_Functions::table_ajax($total);
                             if($records['recordsTotal'] === 0){
-                                    header('Content-Type: application/json');
-                                    echo json_encode($records);
-                                    return false;
+                                header('Content-Type: application/json');
+                                echo json_encode($records);
+                                return false;
                             }
-                            $this->solreva['limit'] = $records['limit'];
-                            $this->solreva['offset'] = $records['offset'];
-                            $this->data['data'] = parent::read_solreva();
-
+                            $this->facdat['limit'] = $records['limit'];
+                            $this->facdat['offset'] = $records['offset'];
+                            $this->data['data'] = parent::read_facdat();
                             if(!$this->data['data']){
                                 header('Content-Type: application/json');
                                 echo json_encode($records);
                                 return false;
                             }
                             while($row = $this->data['data']->fetch_assoc()){
-                                $actions = $this->printModulesButtons(2,array($row['skSolicitudRevalidacion']));
+                                $actions = $this->printModulesButtons(2,array($row['skFacturacion']),$row['skUserCreacion']);
                                 array_push($records['data'], array(
-                                         utf8_encode($row['Icono'])
-                                        ,utf8_encode($row['sReferencia'])
-                                        ,utf8_encode($row['UsuarioEjecutivo'])
-                                        ,utf8_encode($row['Cliente'])
-                                        ,utf8_encode($row['EmpresaNaviera'])
-                                        ,utf8_encode($row['Tramitador'])
-                                        ,utf8_encode($row['sObservaciones'])
-                                        , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
+                                     utf8_encode($row['sReferencia'])
+                                    ,utf8_encode($row['dFechaFacturacion'])
+                                    ,utf8_encode($row['sFolio'])
+                                    ,utf8_encode($row['fImporte'])
+                                    ,utf8_encode($row['fIva'])
+                                    ,utf8_encode($row['fTotalFacturado'])
+                                    ,utf8_encode($row['fGanancia'])
+                                    ,utf8_encode($row['fAA'])
+                                    ,utf8_encode($row['fPromotor1'])
+                                    ,utf8_encode($row['fPromotor2'])
+                                    ,utf8_encode($row['skUserCreacion'])
+                                    ,utf8_encode($row['dFechaCreacion'])
+                                   ,!empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
                                 ));
                             }
                             header('Content-Type: application/json');
@@ -103,53 +127,75 @@
 
                 $this->load_model('emp','emp');
                 $objEmpresa = new Emp_Model();
-                $objEmpresa->tipoempresas['skTipoEmpresa'] = 'LINA';
-                $this->data['empresas'] = $objEmpresa->read_like_empresas();
                 $objEmpresa->tipoempresas['skTipoEmpresa'] = 'CLIE';
                 $this->data['clientes'] = $objEmpresa->read_like_empresas();
-                $this->load_model('cof','cof');
-                $objUsuarios = new Cof_Model();
-                $this->data['tramitadores'] = $objUsuarios->read_user();
-                $this->load_model('cof','cof');
-                $objEjecutivo = new Cof_Model();
-                $this->data['ejecutivo'] = $objEjecutivo->read_user();
-                $this->data['estatus'] = parent::read_estatus();
 
-                // RETORNA LA VISTA areas-index.php //
-                $this->load_view('solreva-index', $this->data);
+                // RETORNA LA VISTA facdat-index.php //
+                $this->load_view('facdat-index', $this->data);
                 return true;
             }
             
-            public function solreva_form(){ 
+            public function facdat_form(){ 
                 $this->data['message'] = '';
                 $this->data['response'] = true;
                 $this->data['datos'] = false;
                 if($_POST){
+                    $_POST['axn'] = !empty($_POST['axn']) ? $_POST['axn'] : 'save';
                     switch ($_POST['axn']){           
                         case "obtenerDatos":
 		            return true;
                             break;
-                        case "create":
+                        case "save":
+                            $this->facdat['skFacturacion'] = !empty($_POST['skFacturacion']) ? $_POST['skFacturacion'] : substr(md5(microtime()), 1, 32);
+                            $this->facdat['sReferencia'] = !empty($_POST['sReferencia']) ? $_POST['sReferencia'] : null;
+                            $this->facdat['dFechaFacturacion'] = !empty($_POST['dFechaFacturacion']) ? $_POST['dFechaFacturacion'] : null;
+                            $this->facdat['sFolio'] = !empty($_POST['sFolio']) ? $_POST['sFolio'] : null;
+                            $this->facdat['fImporte'] = !empty($_POST['fImporte']) ? $_POST['fImporte'] : null;
+                            $this->facdat['fIva'] = !empty($_POST['fIva']) ? $_POST['fIva'] : null;
+                            $this->facdat['fTotalFacturado'] = !empty($_POST['fTotalFacturado']) ? $_POST['fTotalFacturado'] : null;
+                            $this->facdat['fGanancia'] = !empty($_POST['fGanancia']) ? $_POST['fGanancia'] : null;
+                            $this->facdat['fAA'] = !empty($_POST['fAA']) ? $_POST['fAA'] : null;
+                            $this->facdat['fPromotor1'] = !empty($_POST['fPromotor1']) ? $_POST['fPromotor1'] : null;
+                            $this->facdat['fPromotor2'] = !empty($_POST['fPromotor2']) ? $_POST['fPromotor2'] : null;
+                            $this->facdat['sReferencia'] = !empty($_POST['sReferencia']) ? $_POST['sReferencia'] : null;
+                            // DEFAULT //
+                            $this->data['message'] = 'Registro guardado con &eacute;xito.';
+                            if(empty($_POST['skFacturacion'])){
+                                // CREATE //
+                                if(!parent::create_facdat()){
+                                    $this->data['response'] = false;
+                                    $this->data['message'] = 'Hubo un error al intentar guardar el registro, intenta de nuevo.';
+                                }
+                            }else{
+                                // UPDATE //
+                                if(!parent::update_facdat()){
+                                    $this->data['response'] = false;
+                                    $this->data['message'] = 'Hubo un error al intentar guardar el registro, intenta de nuevo.';
+                                }
+                            }
+                            header('Content-Type: application/json');
+                            echo json_encode($this->data);
+                            return true;
                             break;
                     }
                 }
                 if(isset($_GET['p1'])){
-                    $this->solreva['skSolicitudRevalidacion'] = $_GET['p1'];
-                    $this->data['datos'] = parent::read_solreva();
-                    $this->data['rechazosSolicitud'] = parent::read_solreva_rechazos();
+                    $this->facdat['skFacturacion'] = $_GET['p1'];
+                    $this->data['datos'] = parent::read_facdat();
                 }
-                $this->load_view('solreva-form', $this->data);
+                $this->load_view('facdat-form', $this->data);
                 return true;
             }
             
-            private function solicitudrevalidacion_pdf(){
+            private function facdat_pdf(){
                 if(isset($_GET['p1'])){
-                    $this->solreva['skSolicitudRevalidacion'] = $_GET['p1'];
+                    $this->facdat['skFacturacion'] = $_GET['p1'];
+                    $this->data['datos'] = parent::read_facdat();
                 }
                 ob_start();
-                $this->load_view('solreva-pdf', $this->data, FALSE, 'rev/pdf/');
+                $this->load_view('facdat-pdf', $this->data, FALSE, 'facdat/pdf/');
                 $content = ob_get_clean();
-                $title = 'Solicitud de revaldaci&oacute;n';
+                $title = 'DATOS DE FACTURACI&Oacute;N';
                 Core_Functions::pdf($content, $title, 'P', 'A4', 'es', true, 'UTF-8', array(3, 3, 3, 3));
                 return true;
             }
