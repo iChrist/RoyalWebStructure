@@ -199,8 +199,8 @@
             }
             
             public function delete_facdat(){
-                $sql = "UPDATE ope_facturacion SET skStatus = 'DE' WHERE skFacturacion IN (".implode(',',$this->facdat['skFacturacion']).")";
-                exit($sql);
+                $sql = "UPDATE ope_facturacion SET skStatus = 'DE' WHERE skFacturacion = '".$this->facdat['skFacturacion']."'";
+                //exit($sql);
                 $result = $this->db->query($sql);
                 if($result){
                     return true;
