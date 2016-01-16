@@ -12,7 +12,7 @@
             <label class="control-label col-md-2">Referencia <span aria-required="true" class="required"> * </span> </label>
             <div class="col-md-4">
                 <div class="input-icon right"><i class="fa"></i>
-                    <input type="text" name="sReferencia" id="sReferencia" class="form-control" onChange="obtenerDatos();" placeholder="Referencia" value="<?php echo (isset($result['sReferencia'])) ? utf8_encode($result['sReferencia']) : '' ; ?>" >
+                    <input type="text" name="sReferencia" id="sReferencia" class="form-control" placeholder="Referencia" value="<?php echo (isset($result['sReferencia'])) ? utf8_encode($result['sReferencia']) : '' ; ?>" >
                 </div>
             </div>
         </div>

@@ -18,6 +18,9 @@
                 ,'skUserModificacion'=>null
                 ,'dFechaCreacion'=>null
                 ,'dFechaModificacion'=>null
+                ,'skStatus'=>null
+                
+                ,'skEmpresa'=>null
                 ,'limit'=>null
                 ,'offset'=>null
                 );
@@ -72,6 +75,13 @@
                 if(!is_null($this->facdat['dFechaCreacion'])){
                     $sql .=" AND facdat.dFechaCreacion = '".$this->facdat['dFechaCreacion']."'";
                 }
+                if(!is_null($this->facdat['skStatus'])){
+                    $sql .=" AND facdat.skStatus = '".$this->facdat['skStatus']."'";
+                }
+                
+                if(!is_null($this->facdat['skEmpresa'])){
+                    $sql .=" AND ce.skEmpresa = '".$this->facdat['skEmpresa']."'";
+                }
                 //exit($sql);
                 $result = $this->db->query($sql);
                 if($result){
@@ -85,9 +95,12 @@
             
             public function read_facdat(){
                 $sql = "SELECT 	facdat.*,
+                CONCAT(IF(usr.sName = null, '',usr.sName),' ',IF(usr.sLastNamePaternal = null, '',usr.sLastNamePaternal),' ',IF(usr.sLastNameMaternal = null, '',usr.sLastNameMaternal)) AS autor,
+                ce.sNombre AS cliente
                 FROM ope_facturacion AS facdat
                 INNER JOIN ope_recepciones_documentos AS rd ON rd.sReferencia = facdat.sReferencia
                 INNER JOIN _users AS usr ON usr.skUsers =  facdat.skUserCreacion
+                INNER JOIN cat_empresas ce ON ce.skEmpresa = rd.skEmpresa
                 WHERE 1=1 ";
                 if(!is_null($this->facdat['skFacturacion'])){
                     $sql .=" AND facdat.skFacturacion = '".$this->facdat['skFacturacion']."'";
@@ -127,6 +140,13 @@
                 }
                 if(!is_null($this->facdat['dFechaCreacion'])){
                     $sql .=" AND facdat.dFechaCreacion = '".$this->facdat['dFechaCreacion']."'";
+                }
+                if(!is_null($this->facdat['skStatus'])){
+                    $sql .=" AND facdat.skStatus = '".$this->facdat['skStatus']."'";
+                }
+                
+                if(!is_null($this->facdat['skEmpresa'])){
+                    $sql .=" AND ce.skEmpresa = '".$this->facdat['skEmpresa']."'";
                 }
                 //exit($sql);
                 $result = $this->db->query($sql);
@@ -180,7 +200,7 @@
             
             public function delete_facdat(){
                 $sql = "UPDATE ope_facturacion SET skStatus = 'DE' WHERE skFacturacion IN (".implode(',',$this->facdat['skFacturacion']).")";
-                //exit($sql);
+                exit($sql);
                 $result = $this->db->query($sql);
                 if($result){
                     return true;

@@ -26,6 +26,7 @@
                             $this->data['datos'] = false;
                             if(isset($_GET['p1'])){
                                 $this->facdat['skFacturacion'] = $_GET['p1'];
+                                exit('<pre>'.print_r($this->facdat,1).'</pre>');
                                 if($this->delete_facdat()){
                                     $this->data['response'] = true;
                                     $this->data['datos'] = true;
@@ -77,7 +78,12 @@
                             if(!empty($_POST['dFechaCreacion'])){
                                 $this->facdat['dFechaCreacion'] = date('Y-m-d',  strtotime($_POST['dFechaCreacion']));
                             }
-                            exit('<pre>'.print_r($this->facdat,1).'</pre>');
+                            $this->facdat['skStatus'] = 'AC';
+                                    
+                            if(!empty($_POST['skEmpresa'])){
+                                $this->facdat['skEmpresa'] = $_POST['skEmpresa'];
+                            }
+                            //exit('<pre>'.print_r($this->facdat,1).'</pre>');
                             // OBTENER REGISTROS //
                             $total = parent::count_facdat();
                             $records = Core_Functions::table_ajax($total);
@@ -98,6 +104,7 @@
                                 $actions = $this->printModulesButtons(2,array($row['skFacturacion']),$row['skUserCreacion']);
                                 array_push($records['data'], array(
                                      utf8_encode($row['sReferencia'])
+                                    ,utf8_encode($row['cliente'])
                                     ,utf8_encode($row['dFechaFacturacion'])
                                     ,utf8_encode($row['sFolio'])
                                     ,utf8_encode($row['fImporte'])
@@ -107,7 +114,7 @@
                                     ,utf8_encode($row['fAA'])
                                     ,utf8_encode($row['fPromotor1'])
                                     ,utf8_encode($row['fPromotor2'])
-                                    ,utf8_encode($row['skUserCreacion'])
+                                    ,utf8_encode($row['autor'])
                                     ,utf8_encode($row['dFechaCreacion'])
                                    ,!empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
                                 ));
@@ -123,12 +130,15 @@
                 // INCLUYE UN MODELO DE OTRO MODULO //
                 $this->load_model('cof','cof');
                 $cof = new Cof_Model();
-                $this->data['status'] = $cof->read_status();
+                $cof->users['status'] = $cof->read_status();
+                
+                $this->data['users'] = $cof->read_user();
 
                 $this->load_model('emp','emp');
                 $objEmpresa = new Emp_Model();
                 $objEmpresa->tipoempresas['skTipoEmpresa'] = 'CLIE';
                 $this->data['clientes'] = $objEmpresa->read_like_empresas();
+                
 
                 // RETORNA LA VISTA facdat-index.php //
                 $this->load_view('facdat-index', $this->data);

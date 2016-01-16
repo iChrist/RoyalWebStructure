@@ -11,6 +11,7 @@
                 <thead>
                     <tr role="row" class="heading">
                         <th width="10%">Referencia</th>
+                        <th width="10%">Cliente</th>
                         <th width="10%">Fecha facturaci&oacute;n</th>
                         <th width="10%">Folio</th>
                         <th width="10%">Importe</th>
@@ -27,6 +28,20 @@
                     <tr role="row" class="filter">
                         <td>
                             <input type="text" class="form-control form-filter input-sm" name="sReferencia" placeholder="Referencia">
+                        </td>
+                        <td>
+                            <select name="skEmpresa" class="form-control form-filter input-sm">
+                            <option value="">- Cliente -</option>
+                            <?php
+                                if($data['clientes']){
+                                    while($row = $data['clientes']->fetch_assoc()){
+                            ?>
+                            <option value="<?php echo $row['skEmpresa']; ?>"> <?php echo utf8_encode($row['sNombre']); ?> </option>
+                            <?php
+                                    }//ENDWHILE
+                                }//ENDIF
+                            ?>
+                            </select>
                         </td>
                         <td>
                             <div class="input-group input-group-sm date date-picker margin-bottom-5" data-date-format="dd-mm-yyyy">
@@ -64,15 +79,15 @@
                             <select name="skUserCreacion" class="form-control form-filter input-sm">
                             <option value="">- Autor -</option>
                             <?php
-                                if($data['clientes']){
-                                    while($row = $data['clientes']->fetch_assoc()){
+                                if($data['users']){
+                                    while($row = $data['users']->fetch_assoc()){
                             ?>
-                            <option value="<?php echo $row['skEmpresa']; ?>"> <?php echo utf8_encode($row['sNombre']); ?> </option>
+                            <option value="<?php echo $row['skUsers']; ?>"> <?php echo utf8_encode($row['sName']); ?> </option>
                             <?php
                                     }//ENDWHILE
                                 }//ENDIF
                             ?>
-                          </select>
+                            </select>
                         </td>
                         <td>
                             <div class="input-group input-group-sm date date-picker margin-bottom-5" data-date-format="dd-mm-yyyy">
