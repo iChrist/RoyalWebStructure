@@ -14,11 +14,15 @@
 		 }
     }
   }
-/*echo "<pre>";
-print_r($data);
-echo "</pre>";
-
-*/
+    $disabled="";
+    $result['skEstatusRevalidacion'] = isset($result['skEstatusRevalidacion']) ? $result['skEstatusRevalidacion'] : null;
+    if(!is_null($result['skEstatusRevalidacion'])){
+      $disabled="disabled";
+    }
+    $disabled_solicitud ="";
+    if(!is_null($result['skEstatusRevalidacion']) && ($result['skEstatusRevalidacion']=='RV' || $result['skEstatusRevalidacion']=='RE')){
+        $disabled_solicitud ="disabled";
+    }
 ?>
 
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
@@ -29,7 +33,7 @@ echo "</pre>";
       <label class="control-label col-md-2">Referencia <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
         <div class="input-icon right"> <i class="fa"></i>
-          <input type="text" name="sReferencia" id="sReferencia" class="form-control" onChange="obtenerDatos();" placeholder="Referencia" value="<?php echo (isset($result['sReferencia'])) ? utf8_encode($result['sReferencia']) : '' ; ?>" >
+          <input type="text" name="sReferencia" id="sReferencia" class="form-control" onChange="obtenerDatos();" placeholder="Referencia" value="<?php echo (isset($result['sReferencia'])) ? utf8_encode($result['sReferencia']) : '' ; ?>" <?php echo $disabled; ?>>
         </div>
       </div>
     </div>
@@ -38,7 +42,7 @@ echo "</pre>";
       <label class="control-label col-md-2">N&uacute;mero de BL <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
         <div class="input-icon right"> <i class="fa"></i>
-          <input type="text" name="sBL" id="sBL" class="form-control" placeholder="BL" value="<?php echo (isset($result['sBL'])) ? utf8_encode($result['sBL']) : '' ; ?>" >
+          <input type="text" name="sBL" id="sBL" class="form-control" placeholder="BL" value="<?php echo (isset($result['sBL'])) ? utf8_encode($result['sBL']) : '' ; ?>" <?php echo $disabled; ?>>
         </div>
       </div>
     </div>
@@ -47,7 +51,7 @@ echo "</pre>";
       <label class="control-label col-md-2">ETA <span aria-required="true" class="required"> * </span></label>
       <div class="col-md-4">
         <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
-          <input type="text" id="dEta" name="dEta" class="form-control" value="<?php echo (isset($result['dEta'])) ?  utf8_encode(date('d-m-Y', strtotime($result['dEta']))) : date('d-m-Y') ; ?>">
+          <input type="text" id="dEta" name="dEta" class="form-control" value="<?php echo (isset($result['dEta'])) ?  utf8_encode(date('d-m-Y', strtotime($result['dEta']))) : date('d-m-Y') ; ?>" <?php echo $disabled; ?>>
           <span class="input-group-btn">
           <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
           </span>
@@ -59,7 +63,7 @@ echo "</pre>";
       <label class="control-label col-md-2">Fecha de Arribo de buque </label>
       <div class="col-md-4">
         <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
-          <input type="text" id="dFechaArriboBuque" name="dFechaArriboBuque" class="form-control" value="<?php echo (isset($result['dFechaArriboBuque'])) ?  utf8_encode(date('d-m-Y', strtotime($result['dFechaArriboBuque']))) : date('d-m-Y') ; ?>">
+          <input type="text" id="dFechaArriboBuque" name="dFechaArriboBuque" class="form-control" value="<?php echo (isset($result['dFechaArriboBuque'])) ?  utf8_encode(date('d-m-Y', strtotime($result['dFechaArriboBuque']))) : date('d-m-Y') ; ?>" <?php echo $disabled; ?>>
           <span class="input-group-btn">
           <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
           </span>
@@ -71,12 +75,12 @@ echo "</pre>";
       <label class="control-label col-md-2">Prioridad <span aria-required="true" class="required"> * </span></label>
       <div class="col-md-2">
           <label>
-            <input type="radio" name="iPrioridad" value="0" checked>Normal
+            <input type="radio" name="iPrioridad" value="0" checked <?php echo $disabled; ?>>Normal
           </label>
       </div>
       <div class="col-md-2">
           <label>
-            <input type="radio" name="iPrioridad" value="1" <?php if(isset($result['iPrioridad']) && $result['iPrioridad'] == 1){ ?>checked="checked"<?php }//ENDIF ?>>Urgente
+            <input type="radio" name="iPrioridad" value="1" <?php if(isset($result['iPrioridad']) && $result['iPrioridad'] == 1){ ?>checked="checked"<?php }//ENDIF ?> <?php echo $disabled; ?>>Urgente
           </label>
       </div>
     </div>
@@ -91,7 +95,7 @@ echo "</pre>";
     <div class="form-group">
       <label class="col-md-2">Línea Naviera <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
-        <select name="skEmpresaNaviera" id="skEmpresaNaviera" class="form-control form-filter input-sm">
+        <select name="skEmpresaNaviera" id="skEmpresaNaviera" class="form-control form-filter input-sm" <?php echo $disabled; ?>>
           <option value="">- Línea Naviera -</option>
           <?php
                                     if($data['empresas']){
@@ -161,7 +165,7 @@ echo "</pre>";
           if($data['estatus']){
             while($rEstatus =  $data['estatus']->fetch_assoc()){ 
         ?>
-        <label><input type="radio" name="skEstatusRevalidacion" class="form-filter tipoEstatus" tipo="<?php echo utf8_encode($rEstatus{'skEstatus'}); ?>" value="<?php echo $rEstatus{'skEstatus'}?>" <?php echo ((isset($result['skEstatusRevalidacion']) ? $result['skEstatusRevalidacion'] : "-") == $rEstatus{'skEstatus'} ? 'checked' : '' ? 'checked' : '' ); ?>  ><?php echo utf8_encode($rEstatus['sNombre'])?></label>
+        <label><input type="radio" name="skEstatusRevalidacion" class="form-filter tipoEstatus" tipo="<?php echo utf8_encode($rEstatus{'skEstatus'}); ?>" value="<?php echo $rEstatus{'skEstatus'}?>" <?php echo ((isset($result['skEstatusRevalidacion']) ? $result['skEstatusRevalidacion'] : "-") == $rEstatus{'skEstatus'} ? 'checked' : '' ? 'checked' : '' ); ?> <?php echo $disabled_solicitud; ?> ><?php echo utf8_encode($rEstatus['sNombre'])?></label>
         <?php
             }//ENDWHILE
           }//ENDIF
@@ -186,7 +190,7 @@ echo "</pre>";
                                     {
                                     ?>
                                         <div class="col-md-6">
-                                               <label> <input type="checkbox" name="skRechazo[]" value="<?php echo $rechazo['skRechazo']; ?>" <?php  echo (in_array($rechazo['skRechazo'], $arrayRechazos) ? 'checked' : '') ?>   />
+                                               <label> <input type="checkbox" name="skRechazo[]" value="<?php echo $rechazo['skRechazo']; ?>" <?php  echo (in_array($rechazo['skRechazo'], $arrayRechazos) ? 'checked' : '') ?> <?php echo $disabled_solicitud; ?> />
                                                 <?php echo $rechazo['sNombre']; ?>    <br/>&nbsp;</label>
                                             
                                         </div>

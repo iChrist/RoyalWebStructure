@@ -15,6 +15,7 @@ echo "</pre>";*/
 
 <div class="row">
   <div class="col-md-12">
+      <form id="_formTableAjax" method="POST" action="?axn=fetch_all">
     <div class="table-container">
       <div class="table-actions-wrapper"> <span></span>
         <div class="table-group-actions pull-right"> <span></span> 
@@ -28,6 +29,7 @@ echo "</pre>";*/
             </div>
         </div>
       </div>
+        
       <table class="table table-striped table-bordered table-hover" id="datatable_ajax">
         <thead>
           <tr role="row" class="heading">
@@ -35,7 +37,7 @@ echo "</pre>";*/
             <th width="10%"> Pedimento </th>
             <th width="10%"> Tipo de Tramite </th>
             <th width="10%"> Tipo de Servicios </th>
-            <th width="10%"> Empresa </th>
+            <th width="10%"> Cliente </th>
             <th width="10%"> Corresponsalia </th>
             <th width="10%"> Promotores </th>
             <th width="10%"> Clave de Documento </th>
@@ -49,7 +51,9 @@ echo "</pre>";*/
             <th width="10%"> Acciones </th>
           </tr>
           <tr role="row" class="filter">
-            <td><input type="text" class="form-control form-filter input-sm" name="sReferencia" placeholder="Referencia"></td>
+            <td>
+                <input type="text" class="form-control form-filter input-sm" name="sReferencia" placeholder="Referencia">
+            </td>
             <td><input type="text" class="form-control form-filter input-sm" name="sPedimento" placeholder="Pedimentos"></td>
             <td><select name="skTipoTramite" class="form-control form-filter input-sm">
                 <option value="">- Tipos de Tramites -</option>
@@ -196,6 +200,7 @@ echo "</pre>";*/
         </tbody>
       </table>
     </div>
+  </form> <!-- FORMULARIO PARA BOTONES DE LA TABLA iPosition 3!-->
     <!--</div>!--> 
   </div>
   <!-- End: life time stats --> 

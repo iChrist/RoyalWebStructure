@@ -1,16 +1,6 @@
 <!-- BEGIN PAGE CONTENT-->
 <?php
-/*
-echo "<pre>";
-print_r($_SESSION);
-echo "</pre>";
-*/
 
-/*echo "<pre>";
-print_r($_SESSION);
-echo "</pre>";*/
-
-//$_SESSION['session']['skUsers']
 ?>
 <div class="row">
   <div class="col-md-12">

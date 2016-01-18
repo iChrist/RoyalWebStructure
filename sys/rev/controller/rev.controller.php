@@ -27,6 +27,7 @@
                                             if(isset($_GET['p1'])){
                                                 $this->solreva['skSolicitudRevalidacion'] = $_GET['p1'];
                                                 if($this->delete_solreva()){
+                                                    parent::delete_revalidacionesRechazos();
                                                     $this->data['response'] = true;
                                                     $this->data['datos'] = true;
                                                     $this->data['message'] = 'Registro eliminado con &eacute;xito.';
@@ -244,20 +245,19 @@
  					if($_POST){
 					//exit('</pre>'.print_r($_POST,1).'</pre>');
 					$this->solreva['skSolicitudRevalidacion'] = !empty($_POST['skSolicitudRevalidacion']) ? $_POST['skSolicitudRevalidacion'] : substr(md5(microtime()), 1, 32);
-					$this->solreva['sReferencia'] = utf8_decode($_POST['sReferencia']);
-  					$this->solreva['sObservaciones'] = utf8_decode($_POST['sObservaciones']);
- 					$this->solreva['skEmpresaNaviera'] = utf8_decode($_POST['skEmpresaNaviera']);
- 					$this->solreva['skEstatusRevalidacion'] =  !empty($_POST['skEstatusRevalidacion']) ? $_POST['skEstatusRevalidacion'] : '';
+					$this->solreva['sReferencia'] = isset($_POST['sReferencia']) ? utf8_decode($_POST['sReferencia']) : null;
+  					$this->solreva['sObservaciones'] = isset($_POST['sObservaciones']) ? utf8_decode($_POST['sObservaciones']) : null;
+ 					$this->solreva['skEmpresaNaviera'] = isset($_POST['skEmpresaNaviera']) ? utf8_decode($_POST['skEmpresaNaviera']) : null;
+ 					$this->solreva['skEstatusRevalidacion'] =  isset($_POST['skEstatusRevalidacion']) ? $_POST['skEstatusRevalidacion'] : null;
  					$this->solreva['skUsuarioTramitador'] = isset($_POST['skUsuarioTramitador']) ? $_POST['skUsuarioTramitador'] : null;
  					$this->solreva['sBL'] = isset($_POST['sBL']) ? $_POST['sBL'] : null;
  					$this->solreva['iPrioridad'] = isset($_POST['iPrioridad']) ? $_POST['iPrioridad'] : null;
  					$this->solreva['dFechaArriboBuque'] = isset($_POST['dFechaArriboBuque']) ? date('Y-m-d',strtotime($_POST['dFechaArriboBuque'])) : null;
  					$this->solreva['dEta'] = isset($_POST['dEta']) ? date('Y-m-d',strtotime($_POST['dEta'])) : null;
-                                        $this->solreva['skUsuarioProceso'] = $_SESSION['session']['skUsers'];
- 					if($this->solreva['skEstatusRevalidacion'] == 'PR'){
+                                        if(!is_null($this->solreva['skEstatusRevalidacion']) && $this->solreva['skEstatusRevalidacion'] == 'PR'){
  						$this->solreva['dFechaProceso'] = 'CURRENT_TIMESTAMP()';
  						$this->solreva['skUsuarioProceso'] = $_SESSION['session']['skUsers'];
- 					}elseif($this->solreva['skEstatusRevalidacion'] == 'RV' || $this->solreva['skEstatusRevalidacion'] == 'RE'){
+ 					}elseif(!is_null($this->solreva['skEstatusRevalidacion']) && ($this->solreva['skEstatusRevalidacion'] == 'RV' || $this->solreva['skEstatusRevalidacion'] == 'RE') ){
  						$this->solreva['dFechaCierre'] = 'CURRENT_TIMESTAMP()';
  						$this->solreva['skUsuarioCierre'] = $_SESSION['session']['skUsers'];
  					}
@@ -284,6 +284,7 @@
 							
 							if(isset($_POST['skRechazo'])) // En esta parte guardaremos todos los perfiles seleccionados para el nuevo usuario.
 									{
+                                                                        parent::delete_revalidacionesRechazos();
 										$count = count($_POST['skRechazo']);
 										 $bandera = 1;
 										 $valores = "";

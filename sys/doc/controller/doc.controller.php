@@ -103,6 +103,13 @@
 						$this->recepciondocumentos['skStatus'] = $_POST['skStatus'];
 					}
 					//exit('<pre>'.print_r($this->recepciondocumentos,1).'</pre>');
+                                        if(isset($_POST['exportExcel']) && $_POST['exportExcel'] == 1){
+                                            //exit('<pre>'.print_r($_POST,1).'</pre>');
+                                            $this->data['data'] = parent::read_recepciondocumentos();
+                                            $this->docume_excel();
+                                            return true;
+                                            exit;
+                                        }
 					// OBTENER REGISTROS //
 					$total = parent::count_recepciondocumentos();
 					$records = Core_Functions::table_ajax($total);
@@ -125,11 +132,17 @@
 					}
 					while($row = $this->data['data']->fetch_assoc()){
 						$actions = $this->printModulesButtons(2,array($row['skRecepcionDocumento']),$row['skUsersCreacion']);
-						array_push($records['data'], array(
+						$datosServicio = $row['TipoServicio'];
+                                                if($row['skTipoServicio'] == 'CONT'){
+                                                   $datosServicio .="<br>".$row['sNumContenedor'];
+                                                }elseif($row['skTipoServicio'] == 'CSUE'){
+                                                    $datosServicio .="<br>Bultos: ".$row['iBultos']."<br>Peso: ".$row['fPeso']."<br>Volumen: ".$row['fVolumen'];
+                                                }
+                                                array_push($records['data'], array(
 							 utf8_encode($row['sReferencia'])
 							,utf8_encode($row['sPedimento'])
 							,utf8_encode($row['TipoTramite'])
-							,utf8_encode($row['TipoServicio'].'<br>'.$row['sNumContenedor'])
+							,utf8_encode($datosServicio)
 							,utf8_encode($row['Empresa'])
                                                         ,utf8_encode($row['corresponsalia'])
                                                         ,utf8_encode($row['promotor1'].'<br>'.$row['promotor2'])
@@ -143,7 +156,6 @@
 							, !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
 						));
 					}
-					
 					header('Content-Type: application/json');
 					echo json_encode($records);
 					return true;
@@ -328,7 +340,65 @@
                                         $this->load_view('docume-form', $this->data);
                                         return true;
                                     }
-					
+				    
+        public function docume_excel(){
+            //echo date('H:i:s') . ' Current memory usage: ' . (memory_get_usage(true) / 1024 / 1024) . " MB <hr>" . PHP_EOL;
+            ini_set('memory_limit', '-1');
+            require_once(CORE_PATH."assets/PHPExcel/Classes/PHPExcel/IOFactory.php");
+            $objReader = PHPExcel_IOFactory::createReader('Excel2007');
+            $objPHPExcel = $objReader->load(SYS_PATH."doc/files/docume/tplRecepcionDocumentos.xlsx");
+            $i = 2;
+            $this->data['data'] = parent::read_recepciondocumentos();
+            while($row = $this->data['data']->fetch_assoc()){
+                $datosServicio = $row['TipoServicio'];
+                if($row['skTipoServicio'] == 'CONT'){
+                   $datosServicio .="\n".$row['sNumContenedor'];
+                }elseif($row['skTipoServicio'] == 'CSUE'){
+                    $datosServicio .="\nBultos: ".$row['iBultos']."\nPeso: ".$row['fPeso']."\nVolumen: ".$row['fVolumen'];
+                }
+                $promotores = $row['promotor1'];
+                if(!empty($row['promotor2'])){
+                    $promotores .= '\n'.$row['promotor2'];
+                }
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $i, utf8_encode($row['sReferencia']));
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $i, utf8_encode($row['sPedimento']));
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $i, utf8_encode($row['TipoTramite']));
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $i, utf8_encode($datosServicio));
+                $objPHPExcel->getActiveSheet()->getStyle('D'.$i)->getAlignment()->setWrapText(true);
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $i, utf8_encode($row['Empresa']));
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $i, utf8_encode($row['corresponsalia']));
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $i, utf8_encode($promotores));
+                $objPHPExcel->getActiveSheet()->getStyle('G'.$i)->getAlignment()->setWrapText(true);
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $i, utf8_encode($row['skClaveDocumento']));
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $i, utf8_encode($row['sMercancia']));
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(9, $i, utf8_encode($row['sObservaciones']));
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(10, $i, date('d-m-Y',strtotime($row['dRecepcion'])).' '.$row['tRecepcion']);
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(11, $i, date('d-m-Y H:i:s',strtotime($row['dFechaCreacion'])));
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(12, $i, utf8_encode($row['autor']));
+                $i++;
+            }
+            //exit('<pre>'.print_r($objPHPExcel,1).'<pre>');
+            // Redirect output to a client’s web browser (Excel2007)
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="RecepcionDocumentos.xlsx"');
+            header('Cache-Control: max-age=0');
+            // If you're serving to IE 9, then the following may be needed
+            header('Cache-Control: max-age=1');
+
+            // If you're serving to IE over SSL, then the following may be needed
+            header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+            header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+            header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+            header ('Pragma: public'); // HTTP/1.0
+            
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+            //$objWriter->save(SYS_PATH.'doc/files/docume/RecepcionDocumentos.xlsx');
+            $objWriter->save('php://output');
+
+
+            //exit('<pre>'.print_r($records,1).'</pre>');
+            exit;
+        }
 					
 					public function docume_detail(){
 					if(isset($_GET['p1'])){

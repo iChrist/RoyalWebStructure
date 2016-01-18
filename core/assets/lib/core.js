@@ -78,7 +78,17 @@ function _deleteConfirm(){
 }
 function _deleteCancel(){
     _deleteConfirmUrl = null;
-} 
+}
+// EXPORTAR A EXCEL index //
+function _exportExcel(){
+    $("#_formTableAjax").append('<input type="hidden" name="exportExcel" value="1" /> ');
+    return true;
+}
+// EXPORTAR A PDF index //
+function _exportPdf(){
+    $("#_formTableAjax").append('<input type="hidden" name="exportPdf" value="1" /> ');
+    return true;
+}
 $(document).ready(function(){
     /* NOTIFICATIONS */
     toastr.options = {

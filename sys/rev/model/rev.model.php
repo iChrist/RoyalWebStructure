@@ -301,8 +301,17 @@
                 $sql .= " skSolicitudRevalidacion = '".$this->solreva['skSolicitudRevalidacion']."' WHERE skSolicitudRevalidacion = '".$this->solreva['skSolicitudRevalidacion']."'";
                 //exit($sql);
                 $result = $this->db->query($sql);
+                /*$sql = "DELETE from rel_solicitud_revalidaciones_rechazos  WHERE skSolicitudRevalidacion = '".$this->solreva['skSolicitudRevalidacion']."'";
+                $this->db->query($sql);*/
+                if($result){
+                    return $this->solreva['skSolicitudRevalidacion'];
+                }else{
+                    return false;
+                }
+            }
+            public function delete_revalidacionesRechazos(){
                 $sql = "DELETE from rel_solicitud_revalidaciones_rechazos  WHERE skSolicitudRevalidacion = '".$this->solreva['skSolicitudRevalidacion']."'";
-                $this->db->query($sql);
+                $result = $this->db->query($sql);
                 if($result){
                     return $this->solreva['skSolicitudRevalidacion'];
                 }else{

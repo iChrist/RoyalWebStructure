@@ -10,7 +10,7 @@ var TableAjax = function () {
     var handleRecords = function (url) {
 
         var grid = new Datatable();
-
+        
         grid.init({
             src: $("#datatable_ajax"),
             onSuccess: function (grid) {
@@ -43,7 +43,7 @@ var TableAjax = function () {
                 },
                 "lengthMenu": [
                     [10, 20, 50, 100, 150, -1],
-                    [10, 20, 50, 100, 150, "All"] // change per page values here
+                    [10, 20, 50, 100, 150, "Todos"] // change per page values here
                 ],
                 "pageLength": 10, // default record count per page
                 "ajax": {
@@ -69,7 +69,7 @@ var TableAjax = function () {
                 App.alert({
                     type: 'danger',
                     icon: 'warning',
-                    message: 'Please select an action',
+                    message: 'Por favor seleccione una acci&oacute;n',
                     container: grid.getTableWrapper(),
                     place: 'prepend'
                 });
@@ -77,7 +77,7 @@ var TableAjax = function () {
                 App.alert({
                     type: 'danger',
                     icon: 'warning',
-                    message: 'No record selected',
+                    message: 'Ning&uacute;n registro seleccionado',
                     container: grid.getTableWrapper(),
                     place: 'prepend'
                 });

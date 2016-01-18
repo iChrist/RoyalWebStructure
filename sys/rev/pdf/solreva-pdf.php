@@ -73,6 +73,19 @@ font-size: 12px;
     <td><strong>Prioridad: </strong></td>
     <td><?php echo (isset($data['datos']['iPrioridad']) && $data['datos']['iPrioridad'] == 1 ) ? 'Urgente': 'Normal';?></td>
 </tr>
+<tr><td style="height:5px;"></td></tr>
+<tr>
+    <td><strong>Solicitud: </strong></td>
+    <td><?php echo !empty($data['datos']['dFechaCreacion']) ? date('d-m-Y H:i:s', strtotime($data['datos']['dFechaCreacion'])) : '-'; ?></td>
+</tr>
+<tr>
+    <td><strong>Proceso: </strong></td>
+    <td><?php echo !empty($data['datos']['dFechaProceso']) ? date('d-m-Y H:i:s', strtotime($data['datos']['dFechaProceso'])) : '-'; ?></td>
+</tr>
+<tr>
+    <td><strong>Cierre: </strong></td>
+    <td><?php echo !empty($data['datos']['dFechaCierre']) ? date('d-m-Y H:i:s', strtotime($data['datos']['dFechaCierre'])) : '-'; ?></td>
+</tr>
 
 <tr><td style="height:30px;"></td></tr>
 <tr>
