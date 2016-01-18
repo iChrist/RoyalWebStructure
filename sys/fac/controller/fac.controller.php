@@ -26,7 +26,6 @@
                             $this->data['datos'] = false;
                             if(isset($_GET['p1'])){
                                 $this->facdat['skFacturacion'] = $_GET['p1'];
-                                //exit('<pre>'.print_r($this->facdat['skFacturacion'],1).'</pre>');
                                 if($this->delete_facdat()){
                                     $this->data['response'] = true;
                                     $this->data['datos'] = true;
