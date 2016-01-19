@@ -211,6 +211,17 @@
                                         
 					if($_POST){
 					//exit('</pre>'.print_r($_POST,1).'</pre>');
+						if(empty($_POST['skRecepcionDocumento'])){
+							$this->recepciondocumentos['sPedimento'] = utf8_decode($_POST['sPedimento']);
+							if(parent::read_recepciondocumentos()){
+							 	$this->data['response'] = false;
+								$this->data['errorPedimento'] = false;
+                                $this->data['message'] = 'El pedimento '.$this->recepciondocumentos['sPedimento']." Ya ha sido utilizado, intenta con ".($maxPedimento['sPedimento'] + 1);
+								header('Content-Type: application/json');
+								echo json_encode($this->data);
+								return false;
+							}
+						}
 					$this->recepciondocumentos['skRecepcionDocumento'] = !empty($_POST['skRecepcionDocumento']) ? $_POST['skRecepcionDocumento'] : substr(md5(microtime()), 1, 32);
 					$this->recepciondocumentos['sReferencia'] = utf8_decode($_POST['sReferencia']);
 					$this->recepciondocumentos['sPedimento'] = utf8_decode($_POST['sPedimento']);
@@ -231,6 +242,8 @@
                     $this->recepciondocumentos['tRecepcion'] = utf8_decode(!empty($_POST['tRecepcion']) ? $_POST['tRecepcion'] : date('H:i:s'));
 					
 						if(empty($_POST['skRecepcionDocumento'])){
+								// SE UTILIZABA PARA VER SI YA EXISTIA EL PEDIMENTO PERO ES UN BUG //
+								/*
                                                         $maxPedimento = parent::getMaxPedimento();
                                                         if($maxPedimento){
                                                             if($maxPedimento['sPedimento'] == $this->recepciondocumentos['sPedimento']){
@@ -242,6 +255,7 @@
 								return false;
                                                             }
                                                         }
+                                                        */
 							if(parent::create_recepciondocumentos()){
                                                             //echo ('</pre>'.print_r($_FILES,1).'</pre>');
                                                             foreach($_FILES['skDocTipo'] AS $k=>$v){
