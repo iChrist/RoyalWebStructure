@@ -99,6 +99,10 @@
 						$this->recepciondocumentos['dFechaCreacion'] = date('Y-m-d',strtotime($_POST['dFechaCreacion']));
 					}
 
+					if(isset($_POST['skUsers'])){
+						$this->recepciondocumentos['skUsersCreacion'] = $_POST['skUsers'];
+					}
+					
 					if(isset($_POST['skStatus'])){
 						$this->recepciondocumentos['skStatus'] = $_POST['skStatus'];
 					}
