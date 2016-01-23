@@ -20,6 +20,9 @@
                     ,'skCorresponsalia'=>''
                     ,'skPromotor1'=>''
                     ,'skPromotor2'=>''
+
+                    ,'skUsersCreacion'=>''
+
                     ,'limit'        					=>  ''
                     ,'offset'       					=>  ''
                     ,'orderBy'       					=>  ''
@@ -241,44 +244,79 @@
             }
         }
         public function count_recepciondocumentos(){
-                $sql = "SELECT COUNT(*) AS total FROM ope_recepciones_documentos WHERE 1=1 ";
+                $sql = "SELECT COUNT(*) AS total 
+                FROM ope_recepciones_documentos rd 
+                INNER JOIN _status  st ON st.skStatus = rd.skStatus 
+                INNER JOIN cat_empresas  ce ON ce.skEmpresa = rd.skEmpresa
+
+                LEFT JOIN cat_promotores promotor1 ON promotor1.skPromotores  = ce.skPromotor1 
+                LEFT JOIN cat_promotores promotor2 ON promotor2.skPromotores  = ce.skPromotor2 
+                INNER JOIN cat_tipos_tramites  ctt ON ctt.skTipoTramite = rd.skTipoTramite 
+                INNER JOIN cat_tipos_servicios  cts ON cts.skTipoServicio = rd.skTipoServicio 
+                INNER JOIN cat_claves_documentos  ccd ON ccd.skClaveDocumento = rd.skClaveDocumento 
+                INNER JOIN _users ON _users.skUsers = rd.skUsersCreacion 
+                INNER JOIN _status ON _status.skStatus = rd.skStatus 
+                WHERE 1=1 ";
+                //$sql = "SELECT COUNT(*) AS total FROM ope_recepciones_documentos WHERE 1=1 ";
                 if(!empty($this->recepciondocumentos['skRecepcionDocumento'])){
-                    $sql .=" AND skRecepcionDocumento = '".$this->recepciondocumentos['skRecepcionDocumento']."'";
+                    $sql .=" AND rd.skRecepcionDocumento = '".$this->recepciondocumentos['skRecepcionDocumento']."'";
                 }
                 if(!empty($this->recepciondocumentos['sReferencia'])){
-                    $sql .=" AND sReferencia like '%".$this->recepciondocumentos['sReferencia']."%'";
+                    $sql .=" AND rd.sReferencia like '%".$this->recepciondocumentos['sReferencia']."%'";
                 }
                 if(!empty($this->recepciondocumentos['sPedimento'])){
-                    $sql .=" AND sPedimento like '%".$this->recepciondocumentos['sPedimento']."%'";
+                    $sql .=" AND rd.sPedimento like '%".$this->recepciondocumentos['sPedimento']."%'";
                 }
-				if(!empty($this->recepciondocumentos['sMercancia'])){
-                    $sql .=" AND sMercancia like '%".$this->recepciondocumentos['sMercancia']."%'";
+                if(!empty($this->recepciondocumentos['sMercancia'])){
+                    $sql .=" AND rd.sMercancia like '%".$this->recepciondocumentos['sMercancia']."%'";
                 }
-				if(!empty($this->recepciondocumentos['sObservaciones'])){
-                    $sql .=" AND sObservaciones like '%".$this->recepciondocumentos['sObservaciones']."%'";
+                if(!empty($this->recepciondocumentos['sObservaciones'])){
+                    $sql .=" AND rd.sObservaciones like '%".$this->recepciondocumentos['sObservaciones']."%'";
                 }
-				
-				if(!empty($this->recepciondocumentos['skEmpresa'])){
-                    $sql .=" AND skEmpresa = '".$this->recepciondocumentos['skEmpresa']."'";
+                if(!empty($this->recepciondocumentos['skUsersCreacion'])){
+                    $sql .=" AND rd.skUsersCreacion = '".$this->recepciondocumentos['skUsersCreacion']."'";
                 }
-				if(!empty($this->recepciondocumentos['skTipoTramite'])){
-                    $sql .=" AND skTipoTramite = '".$this->recepciondocumentos['skTipoTramite']."'";
+                
+                if(!empty($this->recepciondocumentos['skStatus'])){
+                    $sql .=" AND rd.skStatus like '%".$this->recepciondocumentos['skStatus']."%'";
                 }
-				if(!empty($this->recepciondocumentos['skTipoServicio'])){
-                    $sql .=" AND skTipoServicio = '".$this->recepciondocumentos['skTipoServicio']."'";
+                if(!empty($this->recepciondocumentos['skEmpresa'])){
+                    $sql .=" AND rd.skEmpresa like '%".$this->recepciondocumentos['skEmpresa']."%'";
                 }
-			 
-				if(!empty($this->recepciondocumentos['skClaveDocumento'])){
-                    $sql .=" AND skClaveDocumento = '".$this->recepciondocumentos['skClaveDocumento']."'";
+                if(!empty($this->recepciondocumentos['skTipoTramite'])){
+                    $sql .=" AND rd.skTipoTramite like '%".$this->recepciondocumentos['skTipoTramite']."%'";
+                }
+                if(!empty($this->recepciondocumentos['sNumContenedor'])){
+                    $sql .=" AND rd.sNumContenedor like '%".$this->recepciondocumentos['sNumContenedor']."%'";
+                }
+                if(!empty($this->recepciondocumentos['skTipoServicio'])){
+                    $sql .=" AND rd.skTipoServicio like '%".$this->recepciondocumentos['skTipoServicio']."%'";
+                }
+                if(!empty($this->recepciondocumentos['skClaveDocumento'])){
+                    $sql .=" AND rd.skClaveDocumento like '%".$this->recepciondocumentos['skClaveDocumento']."%'";
                 }
                 if(!empty($this->recepciondocumentos['dFechaCreacion'])){
-                    $sql .=" AND DATE_FORMAT(dFechaCreacion,'%Y-%m-%d') = '".$this->recepciondocumentos['dFechaCreacion']."'";
+                    $sql .=" AND DATE_FORMAT(rd.dFechaCreacion,'%Y-%m-%d') = '".$this->recepciondocumentos['dFechaCreacion']."'";
                 }
                 if(!empty($this->recepciondocumentos['dRecepcion'])){
-                    $sql .=" AND DATE_FORMAT(dRecepcion,'%Y-%m-%d') = '".$this->recepciondocumentos['dRecepcion']."'";
+                    $sql .=" AND DATE_FORMAT(rd.dRecepcion,'%Y-%m-%d') = '".$this->recepciondocumentos['dRecepcion']."'";
                 }
-				if(!empty($this->recepciondocumentos['skStatus'])){
-                    $sql .=" AND skStatus = '".$this->recepciondocumentos['skStatus']."'";
+                if(!empty($this->recepciondocumentos['skCorresponsalia'])){
+                    $sql .=" AND ce.skCorresponsalia = '".$this->recepciondocumentos['skCorresponsalia']."'";
+                }
+                if(!empty($this->recepciondocumentos['skPromotor1'])){
+                    $sql .=" AND ce.skPromotor1 = '".$this->recepciondocumentos['skPromotor1']."' OR ce.skPromotor2 = '".$this->recepciondocumentos['skPromotor2']."'";
+                }
+
+                if(!empty($this->recepciondocumentos['orderBy'])){
+                    $sql .=" ORDER BY ".$this->recepciondocumentos['orderBy']." ".$this->recepciondocumentos['sortBy'];
+                }
+                if(is_int($this->recepciondocumentos['limit'])){
+                    if(is_int($this->recepciondocumentos['offset'])){
+                        $sql .= " LIMIT ".$this->recepciondocumentos['offset']." , ".$this->recepciondocumentos['limit'];
+                    }else{
+                        $sql .= " LIMIT ".$this->recepciondocumentos['limit'];
+                    }
                 }
  				//echo $sql;
                 $result = $this->db->query($sql);
@@ -331,6 +369,9 @@
 				if(!empty($this->recepciondocumentos['sObservaciones'])){
                     $sql .=" AND rd.sObservaciones like '%".$this->recepciondocumentos['sObservaciones']."%'";
                 }
+                if(!empty($this->recepciondocumentos['skUsersCreacion'])){
+                    $sql .=" AND rd.skUsersCreacion = '".$this->recepciondocumentos['skUsersCreacion']."'";
+                }
 				
                 if(!empty($this->recepciondocumentos['skStatus'])){
                     $sql .=" AND rd.skStatus like '%".$this->recepciondocumentos['skStatus']."%'";
@@ -362,6 +403,7 @@
                 if(!empty($this->recepciondocumentos['skPromotor1'])){
                     $sql .=" AND ce.skPromotor1 = '".$this->recepciondocumentos['skPromotor1']."' OR ce.skPromotor2 = '".$this->recepciondocumentos['skPromotor2']."'";
                 }
+
                 if(!empty($this->recepciondocumentos['orderBy'])){
                     $sql .=" ORDER BY ".$this->recepciondocumentos['orderBy']." ".$this->recepciondocumentos['sortBy'];
                 }
