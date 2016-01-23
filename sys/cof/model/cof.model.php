@@ -226,13 +226,13 @@
             
             
            public function create_profile(){
-           				 $this->skProfiles = substr(md5(microtime()), 0, 32);
-                         $sql= "INSERT INTO _profiles (skProfiles,sName,skStatus) VALUES ('".$this->skProfiles."','".$this->sName."','".$this->skStatus."')";
+           				 //$this->skProfiles['skProfiles'] = substr(md5(microtime()), 0, 32);
+                         $sql= "INSERT INTO _profiles (skProfiles,sName,skStatus) VALUES ('".$this->profiles['skProfiles']."','".$this->profiles['sName']."','".$this->profiles['skStatus']."')";
                          //echo $sql;
                          //die();
 			$result = $this->db->query($sql);
 			if ($result) {
-				return $this->skProfiles;
+				return $this->profiles['skProfiles'];
 			}else{
 				return false;
 			}
