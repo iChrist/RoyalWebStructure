@@ -151,8 +151,84 @@
                 if($_POST){
                     $_POST['axn'] = !empty($_POST['axn']) ? $_POST['axn'] : 'save';
                     switch ($_POST['axn']){           
+                        case "getTarifa":
+                            $this->load_model('emp','emp');
+                            $emp = new Emp_Model();
+                            $emp->tarifas['skStatus'] = 'AC';
+                            $emp->tarifas['skEmpresa'] = $_POST['skEmpresa'];
+                            $empresaTarifa = $emp->read_tarifas();
+                            if(!$empresaTarifa){
+                                return false;
+                            }
+                            $this->data['data'] = array();
+                            while($row = $empresaTarifa->fetch_assoc()){
+                                $actions = $this->printModulesButtons(2,array($row['skTarifa']),$row['skUserCreacion']);
+                                $tarifa="";
+                                switch ($row['iTipoTarifa']) {
+                                    case 1:
+                                        $tarifa = " Por Monto Fijo";
+                                        break;
+                                    case 2:
+                                        $tarifa = "Por Porcentaje";
+                                        break;
+                                    case 3:
+                                        $tarifa = "Por Contenedor";
+                                        break;
+                                }
+                                array_push($this->data['data'], array(
+                                     "skTarifa" => utf8_encode($row['skTarifa'])
+                                    ,"cliente" => utf8_encode($row['cliente'])
+                                    ,"sTipoCambio" => utf8_encode($row['sTipoCambio'])
+                                    ,"iTipoTarifa" => utf8_encode($row['iTipoTarifa'])
+                                    ,"tarifa" => utf8_encode($tarifa)
+                                    ,"dFechaCreacion" => date('d-m-Y',  strtotime($row['dFechaCreacion']))
+                                    ,"fTarifa" => utf8_encode($row['fTarifa'])
+                                    ,"fAgenteAduanal" => utf8_encode($row['fAgenteAduanal'])
+                                    ,"fCorresponsal" => utf8_encode($row['fCorresponsal'])
+                                    ,"fPromotor1" => utf8_encode($row['fPromotor1'])
+                                    ,"fPromotor2" => utf8_encode($row['fPromotor2'])
+                                    ,"autor" => utf8_encode($row['autor'])
+                                ));
+                            }
+                            header('Content-Type: application/json');
+                            echo json_encode($this->data['data']);
+                            return true;
+                            break;
+                        case "validarReferencia":
+                            $this->solreva['sReferencia'] = $_POST['sReferencia'];
+                            $this->data['data']=parent::read_referencia();
+                            if(!$this->data['data']){
+                                echo 'false';
+                                return false;
+                            }
+                            echo 'true';
+                            return true;
+                            break;
                         case "obtenerDatos":
-		            return true;
+                            $this->solreva['sReferencia'] = $_POST['sReferencia'];
+                            $this->data['data']=parent::read_referencia();
+                            if(!$this->data['data']){
+                                $this->data['response'] = false;
+                                $this->data['datos'] = false;
+                                return false;
+                            }
+                            $result['data'] = array();
+                            while($row = $this->data['data']->fetch_assoc()){
+                               $result['data']= array(
+                                     "Empresa"=>utf8_encode($row['Empresa'])
+                                    ,"skEmpresa"=>utf8_encode($row['skEmpresa'])
+                                    ,"TipoServicio"=>utf8_encode($row['TipoServicio'])
+                                    ,"Ejecutivo"=>utf8_encode($row['Ejecutivo'])
+                                    ,"sMercancia"=>utf8_encode($row['sMercancia'])
+                                    ,"sNumContenedor"=>utf8_encode($row['sNumContenedor'])
+                                    ,"iBultos"=>utf8_encode($row['iBultos'])
+                                    ,"fPeso"=>utf8_encode($row['fPeso'])
+                                    ,"fVolumen"=>utf8_encode($row['fVolumen'])
+                                );
+                            }
+                            header('Content-Type: application/json');
+                            echo json_encode($result);
+                            return true;
                             break;
                         case "save":
                             $this->facdat['skFacturacion'] = !empty($_POST['skFacturacion']) ? $_POST['skFacturacion'] : substr(md5(microtime()), 1, 32);

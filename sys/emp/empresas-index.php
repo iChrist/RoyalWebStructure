@@ -56,7 +56,7 @@
                                         while($row = $data['tiposEmpresas']->fetch_assoc()){
                                 ?>
                                             <option value="<?php echo $row['skTipoEmpresa']; ?>">
-                                                <?php echo $row['sNombre']; ?>
+                                                <?php echo utf8_encode($row['sNombre']); ?>
                                             </option>
                                 <?php
                                         }//ENDIF
@@ -72,7 +72,7 @@
                                         while($row = $data['corresponsalias']->fetch_assoc()){
                                 ?>
                                             <option value="<?php echo $row['skEmpresa']; ?>">
-                                                <?php echo $row['sNombre']; ?>
+                                                <?php echo utf8_encode($row['sNombre']); ?>
                                             </option>
                                 <?php
                                         }//ENDIF
@@ -88,7 +88,7 @@
                                         while($row = $data['promotores']->fetch_assoc()){
                                 ?>
                                             <option value="<?php echo $row['skPromotores']; ?>">
-                                                <?php echo $row['sNombre']; ?>
+                                                <?php echo utf8_encode($row['sNombre']); ?>
                                             </option>
                                 <?php
                                         }//ENDIF

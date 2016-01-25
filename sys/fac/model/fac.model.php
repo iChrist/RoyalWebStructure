@@ -210,28 +210,27 @@
             }
             
             public function read_referencia(){
-	            $sql = "	SELECT 	rd.*, 
-								st.sName AS status,
-								us.sName AS Ejecutivo,
-								ce.sNombre AS Empresa, 
-								ctt.sNombre AS TipoTramite, 
-								cts.sNombre AS TipoServicio, 
-								ccd.sNombre AS ClaveDocumento, 
-								st.sHtml  
-						FROM ope_recepciones_documentos rd 
-						INNER JOIN _status  st ON st.skStatus = rd.skStatus 
-						INNER JOIN cat_empresas  ce ON ce.skEmpresa = rd.skEmpresa 
-						INNER JOIN cat_tipos_tramites  ctt ON ctt.skTipoTramite = rd.skTipoTramite 
-						INNER JOIN cat_tipos_servicios  cts ON cts.skTipoServicio = rd.skTipoServicio 
-						INNER JOIN cat_claves_documentos  ccd ON ccd.skClaveDocumento = rd.skClaveDocumento 
-						INNER JOIN _users us ON us.skUsers = rd.skUsersCreacion
-						INNER JOIN _status ON _status.skStatus = rd.skStatus 
-						WHERE 1=1 ";
-                
+                $sql = "SELECT 	rd.*, 
+                    st.sName AS status,
+                    us.sName AS Ejecutivo,
+                    ce.sNombre AS Empresa, 
+                    ctt.sNombre AS TipoTramite, 
+                    cts.sNombre AS TipoServicio, 
+                    ccd.sNombre AS ClaveDocumento, 
+                    st.sHtml  
+                    FROM ope_recepciones_documentos rd 
+                    INNER JOIN _status  st ON st.skStatus = rd.skStatus 
+                    INNER JOIN cat_empresas  ce ON ce.skEmpresa = rd.skEmpresa 
+                    INNER JOIN cat_tipos_tramites  ctt ON ctt.skTipoTramite = rd.skTipoTramite 
+                    INNER JOIN cat_tipos_servicios  cts ON cts.skTipoServicio = rd.skTipoServicio 
+                    INNER JOIN cat_claves_documentos  ccd ON ccd.skClaveDocumento = rd.skClaveDocumento 
+                    INNER JOIN _users us ON us.skUsers = rd.skUsersCreacion
+                    INNER JOIN _status ON _status.skStatus = rd.skStatus
+                    WHERE 1=1 ";
                 if(!empty($this->solreva['sReferencia'])){
                     $sql .=" AND rd.sReferencia = '".$this->solreva['sReferencia']."'";
                 }
-                //echo $sql;die();
+                //exit($sql);
                 $result = $this->db->query($sql);
                 if($result){
                     if($result->num_rows > 0){
@@ -239,9 +238,7 @@
                     }else{
                         return false;
                     }
-                }
-
-	            
+                }   
             }
  
 	}

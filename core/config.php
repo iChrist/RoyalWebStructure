@@ -48,4 +48,7 @@
     if(!isset($_SESSION['sysRequireView'])){
         $_SESSION['sysRequireView'] = TRUE;
     }
+// CUSTOM CONFIG //
+    define('TARIFA_PORCENTAJE_1', 0.0045);
+    define('TARIFA_PORCENTAJE_2', 0.00225);
 ?>

@@ -705,7 +705,216 @@
                 
                  /* TERMINA MODULO DE EMPRESAS */
                  
-                 
+                
+                // MODULO DE TARIFAS POR CLIENTE //
+                public function tarifas_index(){
+                    $this->data['message'] = '';
+                    $this->data['response'] = true;
+                    $this->data['datos'] = false;
+                    if(isset($_GET['axn'])){
+                        switch ($_GET['axn']) {
+                            case 'pdf':
+                                $this->tarifas_pdf();
+                                break;
+                            case 'delete':
+                                $this->data['message'] = 'Hubo un error al intentar eliminar el registro, intenta de nuevo.';
+                                $this->data['response'] = false;
+                                $this->data['datos'] = false;
+                                if(isset($_GET['p1'])){
+                                    $this->tarifas['skTarifa'] = $_GET['p1'];
+                                    if(parent::delete_tarifa()){
+                                        $this->data['response'] = true;
+                                        $this->data['datos'] = true;
+                                        $this->data['message'] = 'Registro eliminado con &eacute;xito.';
+                                    }
+                                }
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return true;
+                                break;
+                            case 'fetch_all':
+                                // PARAMETROS PARA FILTRADO //
+                                $this->tarifas['skStatus'] = !empty($_POST['skStatus']) ? ($_POST['skStatus'] != 'todos') ? $_POST['skStatus'] : null : 'AC';
+                                if(!empty($_POST['skTarifa'])){
+                                    $this->tarifas['skTarifa'] = $_POST['skTarifa'];
+                                }
+                                if(!empty($_POST['skEmpresa'])){
+                                    $this->tarifas['skEmpresa'] = $_POST['skEmpresa'];
+                                }
+                                if(!empty($_POST['sTipoCambio'])){
+                                    $this->tarifas['sTipoCambio'] = $_POST['sTipoCambio'];
+                                }
+                                if(!empty($_POST['iTipoTarifa'])){
+                                    $this->tarifas['iTipoTarifa'] = $_POST['iTipoTarifa'];
+                                }
+                                if(!empty($_POST['fTarifa'])){
+                                    $this->tarifas['fTarifa'] = $_POST['fTarifa'];
+                                }
+                                if(!empty($_POST['fAgenteAduanal'])){
+                                    $this->tarifas['fAgenteAduanal'] = $_POST['fAgenteAduanal'];
+                                }
+                                if(!empty($_POST['fCorresponsal'])){
+                                    $this->tarifas['fCorresponsal'] = $_POST['fCorresponsal'];
+                                }
+                                if(!empty($_POST['fPromotor1'])){
+                                    $this->tarifas['fPromotor1'] = $_POST['fPromotor1'];
+                                }
+                                if(!empty($_POST['fPromotor2'])){
+                                    $this->tarifas['fPromotor2'] = $_POST['fPromotor2'];
+                                }
+                                if(!empty($_POST['skUserCreacion'])){
+                                    $this->tarifas['skUserCreacion'] = $_POST['skUserCreacion'];
+                                }
+                                
+                                if(!empty($_POST['dFechaInicio'])){
+                                    $this->tarifas['dFechaInicio'] = $_POST['dFechaInicio'];
+                                }
+                                if(!empty($_POST['dFechaFin'])){
+                                    $this->tarifas['dFechaFin'] = $_POST['dFechaFin'];
+                                }
+                                //exit('<pre>'.print_r($this->tarifas,1).'</pre>');
+                                // OBTENER REGISTROS //
+                                $total = parent::count_tarifas();
+                                $records = Core_Functions::table_ajax($total);
+                                if($records['recordsTotal'] === 0){
+                                    header('Content-Type: application/json');
+                                    echo json_encode($records);
+                                    return false;
+                                }
+                                $this->tarifas['limit'] = $records['limit'];
+                                $this->tarifas['offset'] = $records['offset'];
+                                $this->data['data'] = parent::read_tarifas();
+                                if(!$this->data['data']){
+                                    header('Content-Type: application/json');
+                                    echo json_encode($records);
+                                    return false;
+                                }
+                                while($row = $this->data['data']->fetch_assoc()){
+                                    $actions = $this->printModulesButtons(2,array($row['skTarifa']),$row['skUserCreacion']);
+                                    $tarifa="";
+                                    switch ($row['iTipoTarifa']) {
+                                        case 1:
+                                            $tarifa = " Por Monto Fijo";
+                                            break;
+                                        case 2:
+                                            $tarifa = "Por Porcentaje";
+                                            break;
+                                        case 3:
+                                            $tarifa = "Por Contenedor";
+                                            break;
+                                    }
+                                    array_push($records['data'], array(
+                                         utf8_encode($row['cliente'])
+                                        ,utf8_encode($row['sTipoCambio'])
+                                        ,utf8_encode($tarifa)
+                                        ,date('d-m-Y',  strtotime($row['dFechaCreacion']))
+                                        ,utf8_encode($row['fTarifa'])
+                                        ,utf8_encode($row['fAgenteAduanal'])
+                                        ,utf8_encode($row['fCorresponsal'])
+                                        ,utf8_encode($row['fPromotor1'])
+                                        ,utf8_encode($row['fPromotor2'])
+                                        ,utf8_encode($row['autor'])
+                                        ,utf8_encode($row['htmlStatus'])
+                                       ,!empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
+                                    ));
+                                }
+                                header('Content-Type: application/json');
+                                echo json_encode($records);
+                                return true;
+                                break;
+                        }
+                        return true;
+                    }
+                    
+                    $this->load_model('emp','emp');
+                    $emp = new Emp_Model();
+                    $emp->tipoempresas['skTipoEmpresa'] = 'CLIE';
+                    $this->data['clientes'] = $emp->read_like_empresas();
+                    $emp->tipoempresas['skTipoEmpresa'] = 'CORR';
+                    $this->data['corresponsalias'] = $emp->read_like_empresas();
+                    $this->data['promotores'] = $emp->read_like_promotores();
+                    
+                    $this->load_model('cof','cof');
+                    $cof = new Cof_Model();
+                    $cof->users['skStatus'] = 'AC';
+                    $this->data['usuarios'] = $cof->read_user();
+                    
+                    $this->load_view('tarifas-index',$this->data);
+                    return true;
+                }
+                
+                public function tarifas_form(){
+                    $this->data['message'] = '';
+                    $this->data['response'] = true;
+                    $this->data['datos'] = false;
+                    if($_POST){
+                        $_POST['axn'] = !empty($_POST['axn']) ? $_POST['axn'] : 'save';
+                        switch ($_POST['axn']){           
+                            case "obtenerDatos":
+                                return true;
+                                break;
+                            case "save":
+                                $this->tarifas['skTarifa'] = !empty($_POST['skTarifa']) ? $_POST['skTarifa'] : substr(md5(microtime()), 1, 32);
+                                $this->tarifas['skEmpresa'] = !empty($_POST['skEmpresa']) ? $_POST['skEmpresa'] : null;
+                                $this->tarifas['sTipoCambio'] = !empty($_POST['sTipoCambio']) ? $_POST['sTipoCambio'] : null;
+                                $this->tarifas['iTipoTarifa'] = !empty($_POST['iTipoTarifa']) ? $_POST['iTipoTarifa'] : null;
+                                
+                                $this->tarifas['fAgenteAduanal'] = !empty($_POST['fAgenteAduanal']) ? $_POST['fAgenteAduanal'] : 'null';
+                                $this->tarifas['fCorresponsal'] = !empty($_POST['fCorresponsal']) ? $_POST['fCorresponsal'] : 'null';
+                                $this->tarifas['fPromotor1'] = !empty($_POST['fPromotor1']) ? $_POST['fPromotor1'] : 'null';
+                                $this->tarifas['fPromotor2'] = !empty($_POST['fPromotor2']) ? $_POST['fPromotor2'] : 'null';
+                                $this->tarifas['skStatus'] = 'AC';
+                                switch ($this->tarifas['iTipoTarifa']) {
+                                    case 1:
+                                        $this->tarifas['fTarifa'] = !empty($_POST['fTarifa']) ? $_POST['fTarifa'] : 'null';
+                                        break;
+                                    case 2:
+                                        $this->tarifas['fTarifa'] = !empty($_POST['fTarifaPropuesta']) ? $_POST['fTarifaPropuesta'] : 'null';
+                                        break;
+                                    case 3:
+                                        $this->tarifas['fTarifa'] = null;
+                                        break;
+                                }
+                                // DEFAULT //
+                                $this->data['message'] = 'Registro guardado con &eacute;xito.';
+                                parent::terminarVigencia_tarifa();
+                                if(!parent::create_tarifa()){
+                                    $this->data['response'] = false;
+                                    $this->data['message'] = 'Hubo un error al intentar guardar el registro, intenta de nuevo.';
+                                }
+                                /*if(empty($_POST['skTarifa'])){
+                                    // CREATE //
+                                    if(!parent::create_tarifa()){
+                                        $this->data['response'] = false;
+                                        $this->data['message'] = 'Hubo un error al intentar guardar el registro, intenta de nuevo.';
+                                    }
+                                }else{
+                                    // UPDATE //
+                                    if(!parent::update_tarifa()){
+                                        $this->data['response'] = false;
+                                        $this->data['message'] = 'Hubo un error al intentar guardar el registro, intenta de nuevo.';
+                                    }
+                                }*/
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return true;
+                                break;
+                        }
+                    }
+                    if(isset($_GET['p1'])){
+                        $this->tarifas['skTarifa'] = $_GET['p1'];
+                        $this->data['datos'] = parent::read_equal_tarifa();
+                        
+                    }
+                    // CLIENTES //
+                    $this->load_model('emp','emp');
+                    $emp = new Emp_Model();
+                    $emp->tipoempresas['skTipoEmpresa'] = 'CLIE';
+                    $this->data['clientes'] = $emp->read_like_empresas();
+                    
+                    $this->load_view('tarifas-form',$this->data);
+                    return true;
+                }
                  
                 
                 

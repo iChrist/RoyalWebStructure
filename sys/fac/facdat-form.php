@@ -6,6 +6,7 @@
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
     <input type="hidden" name="skFacturacion"  id="skFacturacion" value="<?php echo (isset($result['skFacturacion'])) ? $result['skFacturacion'] : '' ; ?>">
+    <input type="hidden" name="skTarifa"  id="skTarifa" value="">
     <div class="form-body">
         
         <div class="form-group">
@@ -20,6 +21,11 @@
         <div class="clearfix"></div>
         <hr>
         <div class="form-group" id="dvDatos"></div>
+        <hr>
+        <div class="form-group" id="tarifa">
+            <label class="col-md-3">Tipo Cambio: <span id="sTipoCambio"></span></label>
+            <label class="col-md-3">Tipo Tarifa: <span id="tipoTarifa"></span></label>
+        </div>
   
         <div class="form-group">
             <label class="control-label col-md-2">Fecha facturaci&oacute;n <span aria-required="true" class="required"> * </span></label>
@@ -110,83 +116,110 @@
 <div class="clearfix"></div>
 <script type="text/javascript">
 function obtenerDatos(){
-	  $('.page-title-loading').css('display','inline');
-	 $.post("",{ axn : "obtenerDatos" , sReferencia : $("#sReferencia").val() }, function(data){
-             
-             //console.log(data);
-                //console.log(data.data[0][0]); 
-              //  var cad="";
-              //if(data['data']){
-              //  if(data.data[0]){    
+    $('.page-title-loading').css('display','inline');
+        var response = true;
+        $.post("",{ axn : "obtenerDatos" , sReferencia : $("#sReferencia").val() }, function(data){ 
         var cad = '';
-        if(!data.data[0]){
-            cad ='';
-        }else{        
+        if(!data.data){
+            response = false;
+            var icon = $("#sReferencia").parent('.input-icon').children('i');
+            $("#sReferencia").closest('.form-group').removeClass('has-success').addClass('has-error');
+            icon.removeClass("fa-check").addClass("fa-warning");
+        }else{   
     	cad ='<div class="form-group">'+
      	'<label class="col-md-2">Cliente</label>'+
      	'<div class="col-md-4">'+
-       	'<label id="lbCliente" class="control-label">'+data.data[0][0]+'</label>'+
+       	'<label id="lbCliente" class="control-label">'+data.data.Empresa+'</label>'+
         '</div>'+
       	'<label class="control-label col-md-2">Tipo de Servicio</label>'+
 	     '<div class="col-md-4">'+
-	       ' <label id="lbServicio" class="control-label">'+data.data[0][1]+'</label>'+
+	       ' <label id="lbServicio" class="control-label">'+data.data.TipoServicio+'</label>'+
 	    ' </div>'+
    ' </div>'+
     '<div class="form-group">'+
      	'<label class="col-md-2">Ejecutivo</label>'+
      	'<div class="col-md-4">'+
-       	'	 <label id="lbEjecutivo" class="control-label">'+data.data[0][2]+'</label>'+
+       	'	 <label id="lbEjecutivo" class="control-label">'+data.data.Ejecutivo+'</label>'+
        ' </div>'+
       	'<label class="control-label col-md-2">Mercancia</label>'+
 	    ' <div class="col-md-4">'+
-	    '    <label id="lbMercancia" class="control-label ">'+data.data[0][3]+'</label>'+
+	    '    <label id="lbMercancia" class="control-label ">'+data.data.sMercancia+'</label>'+
 	    ' </div>'+
    ' </div>'+
     '<div class="form-group">'+
       '<label class="col-md-2">Datos del tipo de servicio</label>'+
       '<div class="col-md-2">'+
-        '  <label class="control-label">Num. Contenedor: '+data.data[0][4]+'</label>'+
+        '  <label class="control-label">Num. Contenedor: '+data.data.sNumContenedor+'</label>'+
        ' </div>'+
       ' <div class="col-md-2">'+
-      '    <label class="control-label ">Bultos: '+data.data[0][5]+'</label>'+
+      '    <label class="control-label ">Bultos: '+data.data.iBultos+'</label>'+
       ' </div>'+
       ' <div class="col-md-2">'+
-      '    <label class="control-label ">Peso: '+data.data[0][6]+'</label>'+
+      '    <label class="control-label ">Peso: '+data.data.fPeso+'</label>'+
       ' </div>'+
       ' <div class="col-md-2">'+
-      '    <label class="control-label ">Volumen: '+data.data[0][7]+'</label>'+
+      '    <label class="control-label ">Volumen: '+data.data.fVolumen+'</label>'+
       ' </div>'+
    ' </div>';
-   }
-                 $("#dvDatos").html(cad);
-               /*$("#sNumeroParte").html(cad);
-               $("#sNumeroParte").prop('disabled', false);*/
-               $('.page-title-loading').css('display','none');
+            $.post("",{ axn : "getTarifa" , skEmpresa : data.data.skEmpresa }, function(data){
+                if(data){
+                    console.log(data);
+                    $("#skTarifa").val(data[0]['skTarifa']);
+                    $("#sTipoCambio").html(data[0]['sTipoCambio']);
+                    $("#tipoTarifa").html(data[0]['tarifa']);
+                    switch(data[0]['iTipoTarifa']) {
+                        case "1": // Por Monto Fijo
+                            $("#fImporte").html(data[0]['fTarifa']);
+                            break;
+                        case "2": // Por Procentaje
+                            break;
+                        case "3": // Por Contenedor
+                            break;
+                    }
+                }
+                $('.page-title-loading').css('display','none');
             });
-          //  $('.page-title-loading').css('display','none');
-			}
+   }
+    $("#dvDatos").html(cad);
+    });
+    if(response){
+         return true;
+    }else{
+         return false;
+    }
+}
 
     $(document).ready(function(){
-        //obtenerDatos();
+        // VALIDADOR DE SUMA DE PORCENTAJE //
+        $.validator.addMethod(
+            "obtenerDatos", 
+            function(value, element) {
+                if(obtenerDatos()){
+                    return true;
+                }else{
+                    return false;
+                }
+            },
+            "La referencia no existe."
+        );
         /* VALIDATIONS */
         isValid = $("#_save").validate({
             errorElement: 'span', //default input error message container
             errorClass: 'help-block', // default input error message class
             focusInvalid: false, // do not focus the last invalid input
             ignore: ":hidden",
-              rules:{
-              sReferencia:{
+            rules:{
+                sReferencia:{
                     required: true,
-                     remote: {
-                      url: "",
-                      type: "post",
-                      data: {
-                        sReferencia: function (){return $( "#sReferencia" ).val();},
-                        axn: "validarReferencia",
-                        skSolicitudRevalidacion:  function (){return $( "#skFacturacion" ).val();}
-                      }
-                    }
-                    
+                    remote: {
+                        url: "",
+                        type: "post",
+                        data: {
+                            sReferencia: function (){return $( "#sReferencia" ).val();},
+                            axn: "validarReferencia"
+                        }
+                    },
+                    obtenerDatos: true
                 }
             },
             invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar              
@@ -227,7 +260,7 @@ function obtenerDatos(){
             messages:{
                 sReferencia:{
                     required:"Campo obligatorio",
-                    remote: "Esta referencia no Existe."
+                    remote: "La referencia no existe."
                 }
             }
         });

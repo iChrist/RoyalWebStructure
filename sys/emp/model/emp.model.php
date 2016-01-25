@@ -48,6 +48,29 @@
                     ,'offset'       =>  ''
                 );
                 
+                public $tarifas = array(
+                     'skTarifa'=>null
+                    ,'skEmpresa'=>null
+                    ,'sTipoCambio'=>null
+                    ,'iTipoTarifa'=>null
+                    ,'fTarifa'=>null
+                    ,'fAgenteAduanal'=>null
+                    ,'fCorresponsal'=>null
+                    ,'fPromotor1'=>null
+                    ,'fPromotor2'=>null
+                    ,'skUserCreacion'=>null
+                    ,'dFechaCreacion'=>null
+                    ,'skStatus'=>null
+                    // DATOS DE FILTRADO  //
+                    ,'dFechaInicio'=>null
+                    ,'dFechaFin'=>null
+                    ,'skPromotor'=>null
+                    ,'skCorresponsalia'=>null
+                    
+                    ,'limit'        =>  null
+                    ,'offset'       =>  null
+                );
+                
                     
             // PRIVATE VARIABLES //
                     private $data = array();
@@ -747,6 +770,200 @@
                 }
             }
               
-              
+            public function count_tarifas(){
+                $sql="SELECT COUNT(*) AS total
+                    FROM rel_empresas_tarifas AS tarifas
+                    INNER JOIN _users usr ON usr.skUsers = tarifas.skUserCreacion
+                    INNER JOIN cat_empresas ce ON ce.skEmpresa = tarifas.skEmpresa
+                    INNER JOIN cat_empresas corr ON corr.skEmpresa = ce.skCorresponsalia
+                    INNER JOIN cat_promotores pr1 ON pr1.skPromotores = ce.skPromotor1
+                    INNER JOIN cat_promotores pr2 ON pr2.skPromotores = ce.skPromotor2 
+                    INNER JOIN _status ON _status.skStatus = tarifas.skStatus
+                    WHERE 1=1 ";
+                if(!is_null($this->tarifas['skTarifa'])){
+                    $sql .=" AND tarifas.skTarifa = '".$this->tarifas['skTarifa']."'";
+                }
+                if(!is_null($this->tarifas['skEmpresa'])){
+                    $sql .=" AND tarifas.skEmpresa = '".$this->tarifas['skEmpresa']."'";
+                }
+                if(!is_null($this->tarifas['sTipoCambio'])){
+                    $sql .=" AND tarifas.sTipoCambio = '".$this->tarifas['sTipoCambio']."'";
+                }
+                if(!is_null($this->tarifas['iTipoTarifa'])){
+                    $sql .=" AND tarifas.iTipoTarifa = ".$this->tarifas['iTipoTarifa'];
+                }
+                if(!is_null($this->tarifas['fTarifa'])){
+                    $sql .=" AND tarifas.fTarifa = ".$this->tarifas['fTarifa'];
+                }
+                if(!is_null($this->tarifas['fAgenteAduanal'])){
+                    $sql .=" AND tarifas.fAgenteAduanal = ".$this->tarifas['fAgenteAduanal'];
+                }
+                if(!is_null($this->tarifas['fCorresponsal'])){
+                    $sql .=" AND tarifas.fCorresponsal = ".$this->tarifas['fCorresponsal'];
+                }
+                if(!is_null($this->tarifas['fPromotor1'])){
+                    $sql .=" AND tarifas.fPromotor1 = ".$this->tarifas['fPromotor1'];
+                }
+                if(!is_null($this->tarifas['fPromotor2'])){
+                    $sql .=" AND tarifas.fPromotor2 = ".$this->tarifas['fPromotor2'];
+                }
+                if(!is_null($this->tarifas['skUserCreacion'])){
+                    $sql .=" AND tarifas.skUserCreacion = '".$this->tarifas['skUserCreacion']."'";
+                }
+                if(!is_null($this->tarifas['skStatus'])){
+                    $sql .=" AND tarifas.skStatus = '".$this->tarifas['skStatus']."'";
+                }
+                // FILTRO POR RANGO DE FECHAS //
+                if(!is_null($this->tarifas['dFechaInicio'])){
+                    if(!is_null($this->tarifas['dFechaFin'])){
+                        $sql .= " AND (DATE_FORMAT(tarifas.dFechaCreacion,'%Y-%m-%d') >= '".date('Y-m-d',  strtotime($this->solreva['dFechaInicio']))."' AND DATE_FORMAT(tarifas.dFechaCreacion,'%Y-%m-%d') <= '".date('Y-m-d',  strtotime($this->solreva['dFechaFin']))."')";
+                    }else{
+                        $sql .= " AND (DATE_FORMAT(tarifas.dFechaCreacion,'%Y-%m-%d') = '".date('Y-m-d',  strtotime($this->solreva['dFechaInicio']))."' ";
+                    }
+                }
+                // FILTRO POR PROMOTOR //
+                if(!is_null($this->tarifas['skPromotor'])){
+                    $sql .=" AND (pr1.skPromotores = '".$this->tarifas['skPromotor']."' OR pr2.skPromotores = '".$this->tarifas['skPromotor']."')";
+                }
+                // FILTRO POR CORRESPONSAL //
+                if(!is_null($this->tarifas['skCorresponsalia'])){
+                    $sql .=" AND corr.skEmpresa = '".$this->tarifas['skCorresponsalia']."'";
+                }
+                if(is_int($this->tarifas['limit'])){
+                    if(is_int($this->tarifas['offset'])){
+                        $sql .= " LIMIT ".$this->tarifas['offset']." , ".$this->tarifas['limit'];
+                    }else{
+                        $sql .= " LIMIT ".$this->tarifas['limit'];
+                    }
+                }
+                //exit($sql);
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+            
+            public function read_tarifas(){
+                $sql="SELECT tarifas.*,
+                    ce.sNombre AS cliente,
+                    corr.sNombre AS corresponsal,
+                    pr1.sNombre AS promotor1,
+                    pr2.sNombre AS promotor2,
+                    usr.sName AS autor,
+                    _status.sHtml AS htmlStatus
+                    FROM rel_empresas_tarifas AS tarifas
+                    INNER JOIN _users usr ON usr.skUsers = tarifas.skUserCreacion
+                    INNER JOIN cat_empresas ce ON ce.skEmpresa = tarifas.skEmpresa
+                    INNER JOIN cat_empresas corr ON corr.skEmpresa = ce.skCorresponsalia
+                    INNER JOIN cat_promotores pr1 ON pr1.skPromotores = ce.skPromotor1
+                    INNER JOIN cat_promotores pr2 ON pr2.skPromotores = ce.skPromotor2 
+                    INNER JOIN _status ON _status.skStatus = tarifas.skStatus 
+                    WHERE 1=1 ";
+                if(!is_null($this->tarifas['skTarifa'])){
+                    $sql .=" AND tarifas.skTarifa = '".$this->tarifas['skTarifa']."'";
+                }
+                if(!is_null($this->tarifas['skEmpresa'])){
+                    $sql .=" AND tarifas.skEmpresa = '".$this->tarifas['skEmpresa']."'";
+                }
+                if(!is_null($this->tarifas['sTipoCambio'])){
+                    $sql .=" AND tarifas.sTipoCambio = '".$this->tarifas['sTipoCambio']."'";
+                }
+                if(!is_null($this->tarifas['iTipoTarifa'])){
+                    $sql .=" AND tarifas.iTipoTarifa = ".$this->tarifas['iTipoTarifa'];
+                }
+                if(!is_null($this->tarifas['fTarifa'])){
+                    $sql .=" AND tarifas.fTarifa = ".$this->tarifas['fTarifa'];
+                }
+                if(!is_null($this->tarifas['fAgenteAduanal'])){
+                    $sql .=" AND tarifas.fAgenteAduanal = ".$this->tarifas['fAgenteAduanal'];
+                }
+                if(!is_null($this->tarifas['fCorresponsal'])){
+                    $sql .=" AND tarifas.fCorresponsal = ".$this->tarifas['fCorresponsal'];
+                }
+                if(!is_null($this->tarifas['fPromotor1'])){
+                    $sql .=" AND tarifas.fPromotor1 = ".$this->tarifas['fPromotor1'];
+                }
+                if(!is_null($this->tarifas['fPromotor2'])){
+                    $sql .=" AND tarifas.fPromotor2 = ".$this->tarifas['fPromotor2'];
+                }
+                if(!is_null($this->tarifas['skUserCreacion'])){
+                    $sql .=" AND tarifas.skUserCreacion = '".$this->tarifas['skUserCreacion']."'";
+                }
+                if(!is_null($this->tarifas['skStatus'])){
+                    $sql .=" AND tarifas.skStatus = '".$this->tarifas['skStatus']."'";
+                }
+                // FILTRO POR RANGO DE FECHAS //
+                if(!is_null($this->tarifas['dFechaInicio'])){
+                    if(!is_null($this->tarifas['dFechaFin'])){
+                        $sql .= " AND (DATE_FORMAT(tarifas.dFechaCreacion,'%Y-%m-%d') >= '".date('Y-m-d',  strtotime($this->solreva['dFechaInicio']))."' AND DATE_FORMAT(tarifas.dFechaCreacion,'%Y-%m-%d') <= '".date('Y-m-d',  strtotime($this->solreva['dFechaFin']))."')";
+                    }else{
+                        $sql .= " AND (DATE_FORMAT(tarifas.dFechaCreacion,'%Y-%m-%d') = '".date('Y-m-d',  strtotime($this->solreva['dFechaInicio']))."' ";
+                    }
+                }
+                // FILTRO POR PROMOTOR //
+                if(!is_null($this->tarifas['skPromotor'])){
+                    $sql .=" AND (pr1.skPromotores = '".$this->tarifas['skPromotor']."' OR pr2.skPromotores = '".$this->tarifas['skPromotor']."')";
+                }
+                // FILTRO POR CORRESPONSAL //
+                if(!is_null($this->tarifas['skCorresponsalia'])){
+                    $sql .=" AND corr.skEmpresa = '".$this->tarifas['skCorresponsalia']."'";
+                }
+                if(is_int($this->tarifas['limit'])){
+                    if(is_int($this->tarifas['offset'])){
+                        $sql .= " LIMIT ".$this->tarifas['offset']." , ".$this->tarifas['limit'];
+                    }else{
+                        $sql .= " LIMIT ".$this->tarifas['limit'];
+                    }
+                }
+                //exit($sql);
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+            
+            public function create_tarifa(){
+                $sql="INSERT INTO rel_empresas_tarifas
+                    (skTarifa,skEmpresa,sTipoCambio,iTipoTarifa,fTarifa,fAgenteAduanal,fCorresponsal,fPromotor1,fPromotor2,skUserCreacion,dFechaCreacion,skStatus)
+                    VALUES (
+                    '".$this->tarifas['skTarifa']."'
+                    ,'".$this->tarifas['skEmpresa']."'
+                    ,'".$this->tarifas['sTipoCambio']."'
+                    ,".$this->tarifas['iTipoTarifa']."
+                    ,".$this->tarifas['fTarifa']."
+                    ,".$this->tarifas['fAgenteAduanal']."
+                    ,".$this->tarifas['fCorresponsal']."
+                    ,".$this->tarifas['fPromotor1']."
+                    ,".$this->tarifas['fPromotor2']."
+                    ,'".$_SESSION['session']['skUsers']."'
+                    ,CURRENT_TIMESTAMP()
+                    ,'".$this->tarifas['skStatus']."'
+                    )";
+                //exit($sql);
+                $result = $this->db->query($sql);
+                if($result){
+                    return $this->tarifas['skTarifa'];
+                }else{
+                    return false;
+                }
+            }
+            
+            public function terminarVigencia_tarifa(){
+                $sql="UPDATE rel_empresas_tarifas SET skStatus = 'IN' WHERE skEmpresa = '".$this->tarifas['skEmpresa']."'";
+                $result = $this->db->query($sql);
+                if($result){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
 	}
 ?>
