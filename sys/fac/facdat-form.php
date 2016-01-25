@@ -52,7 +52,7 @@
             <label class="control-label col-md-2">Importe <span aria-required="true" class="required"> * </span> </label>
             <div class="col-md-4">
                 <div class="input-icon right"><i class="fa"></i>
-                    <input type="text" name="fImporte" id="fImporte" class="form-control" placeholder="Importe" value="<?php echo (isset($result['fImporte'])) ? utf8_encode($result['fImporte']) : '' ; ?>" >
+                    <input type="text" name="fImporte" id="fImporte" class="form-control calcular" placeholder="Importe" value="<?php echo (isset($result['fImporte'])) ? utf8_encode($result['fImporte']) : '' ; ?>" >
                 </div>
             </div>
         </div>
@@ -70,51 +70,85 @@
             <label class="control-label col-md-2">Total Facturado<span aria-required="true" class="required"> * </span> </label>
             <div class="col-md-4">
                 <div class="input-icon right"><i class="fa"></i>
-                    <input type="text" name="fTotalFacturado" id="fTotalFacturado" class="form-control" placeholder="Total Facturado" value="<?php echo (isset($result['fTotalFacturado'])) ? utf8_encode($result['fTotalFacturado']) : '' ; ?>" >
+                    <input type="text" name="fTotalFacturado" id="fTotalFacturado" class="form-control" placeholder="Total Facturado" value="<?php echo (isset($result['fTotalFacturado'])) ? utf8_encode($result['fTotalFacturado']) : '' ; ?>" disabled>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="control-label col-md-2">Valor del Dolar $<span aria-required="true" class="required"> * </span> </label>
+            <div class="col-md-4">
+                <div class="input-icon right"> <i class="fa"></i>
+                    <input type="text" name="fValorDolar" id="fValorDolar" class="form-control" value="<?php echo (isset($result['fValorDolar'])) ? utf8_encode($result['fValorDolar']) : '' ; ?>">
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="control-label col-md-4 col-md-offset-2" id="procentaje" style="font-weight: bolder;">
+
+            </label>
+        </div>
+        
+        <div class="form-group">
+            <label class="control-label col-md-2">Agente Aduanal (AA) %<span aria-required="true" class="required"> * </span> </label>
+            <div class="col-md-4">
+                <div class="input-icon right"> <i class="fa"></i>
+                    <input type="text" name="fAgenteAduanal" id="fAgenteAduanal" class="form-control porcentajes calcular" value="<?php echo (isset($result['fAgenteAduanal'])) ? utf8_encode($result['fAgenteAduanal']) : '' ; ?>">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2"><span id="corresponsal"></span> (Corresponsal) %<span aria-required="true" class="required"> * </span> </label>
+            <div class="col-md-4">
+                <div class="input-icon right"> <i class="fa"></i>
+                    <input type="text" name="fCorresponsal" id="fCorresponsal" class="form-control porcentajes calcular" value="<?php echo (isset($result['fCorresponsal'])) ? utf8_encode($result['fCorresponsal']) : '' ; ?>">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2"><span id="promotor1"></span> (Promotor 1) %<span aria-required="true" class="required"> * </span> </label>
+            <div class="col-md-4">
+                <div class="input-icon right"> <i class="fa"></i>
+                    <input type="text" name="fPromotor1" id="fPromotor1" class="form-control porcentajes calcular" value="<?php echo (isset($result['fPromotor1'])) ? utf8_encode($result['fPromotor1']) : '' ; ?>">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2"><span id="promotor2"></span> (Promotor 2) %<span aria-required="true" class="required"> * </span> </label>
+            <div class="col-md-4">
+                <div class="input-icon right"> <i class="fa"></i>
+                    <input type="text" name="fPromotor2" id="fPromotor2" class="form-control porcentajes calcular" value="<?php echo (isset($result['fPromotor2'])) ? utf8_encode($result['fPromotor2']) : '' ; ?>">
                 </div>
             </div>
         </div>
                 
         <div class="form-group">
-            <label class="control-label col-md-2">Ganancia<span aria-required="true" class="required"> * </span> </label>
+            <label class="control-label col-md-2">Ganancia CG<span aria-required="true" class="required"> * </span> </label>
             <div class="col-md-4">
                 <div class="input-icon right"><i class="fa"></i>
-                    <input type="text" name="fGanancia" id="fGanancia" class="form-control" placeholder="Ganancia" value="<?php echo (isset($result['fGanancia'])) ? utf8_encode($result['fGanancia']) : '' ; ?>" >
+                    <input type="text" name="fGanancia" id="fGanancia" class="form-control" placeholder="Ganancia CG" value="<?php echo (isset($result['fGanancia'])) ? utf8_encode($result['fGanancia']) : '' ; ?>" disabled>
                 </div>
             </div>
         </div>
-                
-        <div class="form-group">
-            <label class="control-label col-md-2">AA<span aria-required="true" class="required"> * </span> </label>
-            <div class="col-md-4">
-                <div class="input-icon right"><i class="fa"></i>
-                    <input type="text" name="fAA" id="fAA" class="form-control" placeholder="AA" value="<?php echo (isset($result['fAA'])) ? utf8_encode($result['fAA']) : '' ; ?>" >
-                </div>
-            </div>
-        </div>
-                
-        <div class="form-group">
-            <label class="control-label col-md-2">Promotor 1<span aria-required="true" class="required"> * </span> </label>
-            <div class="col-md-4">
-                <div class="input-icon right"><i class="fa"></i>
-                    <input type="text" name="fPromotor1" id="fPromotor1" class="form-control" placeholder="Promotor 1" value="<?php echo (isset($result['fPromotor1'])) ? utf8_encode($result['fPromotor1']) : '' ; ?>" >
-                </div>
-            </div>
-        </div>
-                
-        <div class="form-group">
-            <label class="control-label col-md-2">Promotor 2<span aria-required="true" class="required"> * </span> </label>
-            <div class="col-md-4">
-                <div class="input-icon right"><i class="fa"></i>
-                    <input type="text" name="fPromotor2" id="fPromotor2" class="form-control" placeholder="Promotor 2" value="<?php echo (isset($result['fPromotor2'])) ? utf8_encode($result['fPromotor2']) : '' ; ?>" >
-                </div>
-            </div>
+        
+        <div class="form-group" id="tarifa">
+            
+            <label class="control-label col-md-2" style="font-weight: bold;">Ganacia Agente Aduanal: $<span id="AA"></span></label>
+            <label class="control-label col-md-2" style="font-weight: bold;">Ganancia (Corresponsal): $<span id="gananciaCorresponsal"></span></label>
+            <label class="control-label col-md-2" style="font-weight: bold;">Ganancia (Promotor 1): $<span id="gananciaPromotor1"></span></label>
+            <label class="control-label col-md-2" style="font-weight: bold;">Ganancia (Promotor 2): $<span id="gananciaPromotor2"></span></label>
+            <label class="control-label col-md-2" style="font-weight: bold;">Ganancia GC: $<span id="gananciagc"></span></label>
         </div>
         
     </div>
 </form>
 <div class="clearfix"></div>
 <script type="text/javascript">
+    var iTipoTarifa = 0;
 function obtenerDatos(){
     $('.page-title-loading').css('display','inline');
         var response = true;
@@ -167,9 +201,10 @@ function obtenerDatos(){
                     $("#skTarifa").val(data[0]['skTarifa']);
                     $("#sTipoCambio").html(data[0]['sTipoCambio']);
                     $("#tipoTarifa").html(data[0]['tarifa']);
-                    switch(data[0]['iTipoTarifa']) {
+                    iTipoTarifa = data[0]['iTipoTarifa'];
+                    switch(iTipoTarifa) {
                         case "1": // Por Monto Fijo
-                            $("#fImporte").html(data[0]['fTarifa']);
+                            $("#fImporte").val(data[0]['fTarifa']);
                             break;
                         case "2": // Por Procentaje
                             break;
@@ -190,7 +225,36 @@ function obtenerDatos(){
 }
 
     $(document).ready(function(){
-        // VALIDADOR DE SUMA DE PORCENTAJE //
+        $(".calcular").change(function(){
+            switch(iTipoTarifa) {
+                case "1": // Por Monto Fijo
+                    _fAgenteAduanal = parseFloat(($("#fAgenteAduanal").val()) ? $("#fAgenteAduanal").val() : 0)
+                    var fAgenteAduanal = ( (_fAgenteAduanal / 100) * (parseFloat($("#fImporte").val())) );
+                    $("#AA").html(fAgenteAduanal);
+                    
+                    _fCorresponsal = parseFloat(($("#fCorresponsal").val()) ? $("#fCorresponsal").val() : 0)
+                    var fCorresponsal = ( (_fCorresponsal / 100) * (parseFloat($("#fImporte").val())) );
+                    $("#gananciaCorresponsal").html(fCorresponsal);
+                    
+                    _fPromotor1 = parseFloat(($("#fPromotor1").val()) ? $("#fPromotor1").val() : 0)
+                    var fPromotor1 = ( (_fPromotor1 / 100) * (parseFloat($("#fImporte").val())) );
+                    $("#gananciaPromotor1").html(fPromotor1);
+                    
+                    _fPromotor2 = parseFloat(($("#fPromotor2").val()) ? $("#fPromotor2").val() : 0)
+                    var fPromotor2 = ( (_fPromotor2 / 100) * (parseFloat($("#fImporte").val())) );
+                    $("#gananciaPromotor2").html(fPromotor2);
+                    
+                    var gananciagc = parseFloat($("#fImporte").val()) - _fAgenteAduanal - _fCorresponsal - _fPromotor1 - _fPromotor2;
+                    $("#gananciagc").html(gananciagc);
+                    
+                    break;
+                case "2": // Por Procentaje
+                    break;
+                case "3": // Por Contenedor
+                    break;
+            }
+        });
+        // VALIDADOR PARA OBTENER DATOS POR REFERENCIA //
         $.validator.addMethod(
             "obtenerDatos", 
             function(value, element) {
@@ -201,6 +265,35 @@ function obtenerDatos(){
                 }
             },
             "La referencia no existe."
+        );
+        // VALIDADOR DE SUMA DE PORCENTAJE //
+        $.validator.addMethod(
+            "validarPorcentaje", 
+            function(value, element) {
+                porcentaje = 
+                      parseFloat(($("#fAgenteAduanal").val()) ? $("#fAgenteAduanal").val() : 0) 
+                    + parseFloat(($("#fCorresponsal").val()) ? $("#fCorresponsal").val() : 0)
+                    + parseFloat(($("#fPromotor1").val()) ? $("#fPromotor1").val() : 0)
+                    + parseFloat(($("#fPromotor2").val()) ? $("#fPromotor2").val() : 0);
+                $("#procentaje").html("Suma de porcentajes: "+porcentaje+"%");
+                if(porcentaje > 0 && porcentaje <= 100){
+                    $("#procentaje").css("color","green");
+                    $("#procentaje").html("Suma de porcentajes: "+porcentaje+"%");
+                    // SUCCESS INPUT //
+                    var icon = $(".porcentajes").parent('.input-icon').children('i');
+                    $(".porcentajes").closest('.form-group').removeClass('has-error').addClass('has-success');
+                    icon.removeClass("fa-warning").addClass("fa-check");
+                    return true;
+                }else{
+                    $("#procentaje").css("color","red");
+                    $("#procentaje").html("Suma de porcentajes: "+porcentaje+"%");
+                    var icon = $(".porcentajes").parent('.input-icon').children('i');
+                    $(".porcentajes").closest('.form-group').removeClass('has-success').addClass('has-error');
+                    icon.removeClass("fa-check").addClass("fa-warning");
+                    return false;
+                }
+            },
+            "La suma de los porcentajes debe ser menor o igual a 100%"
         );
         /* VALIDATIONS */
         isValid = $("#_save").validate({
@@ -220,6 +313,38 @@ function obtenerDatos(){
                         }
                     },
                     obtenerDatos: true
+                },
+                fIva: {
+                    required: true,
+                    number: true,
+                },
+                fValorDolar: {
+                    required: true,
+                    number: true,
+                },
+                fTotalFacturado: {
+                    required: true,
+                    number: true,
+                },
+                fAgenteAduanal:{
+                    required: true,
+                    number: true,
+                    validarPorcentaje: true
+                },
+                fCorresponsal:{
+                    required: true,
+                    number: true,
+                    validarPorcentaje: true
+                },
+                fPromotor1:{
+                    required: true,
+                    number: true,
+                    validarPorcentaje: true
+                },
+                fPromotor2:{
+                    required: true,
+                    number: true,
+                    validarPorcentaje: true
                 }
             },
             invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar              
@@ -261,6 +386,34 @@ function obtenerDatos(){
                 sReferencia:{
                     required:"Campo obligatorio",
                     remote: "La referencia no existe."
+                },
+                fIva:{
+                    required: "Campo obligatorio.",
+                    number: "Solo n&uacute;meros."
+                },
+                fValorDolar:{
+                    required: "Campo obligatorio.",
+                    number: "Solo n&uacute;meros."
+                },
+                fTotalFacturado:{
+                    required: "Campo obligatorio.",
+                    number: "Solo n&uacute;meros."
+                },
+                fAgenteAduanal:{
+                    required: "Campo obligatorio.",
+                    number: "Solo n&uacute;meros."
+                },
+                fCorresponsal:{
+                    required: "Campo obligatorio.",
+                    number: "Solo n&uacute;meros."
+                },
+                fPromotor1:{
+                    required: "Campo obligatorio.",
+                    number: "Solo n&uacute;meros."
+                },
+                fPromotor2:{
+                    required: "Campo obligatorio.",
+                    number: "Solo n&uacute;meros."
                 }
             }
         });
