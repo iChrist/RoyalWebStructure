@@ -91,6 +91,7 @@
 						return false;
 					}
 					
+					$this->solreva['orderBy'] = 'opr.sPedimento DESC , sd.dFechaCreacion DESC';
 					$this->solreva['limit'] = $records['limit'];
 					$this->solreva['offset'] = $records['offset'];
  					$this->data['data'] = parent::read_solreva();

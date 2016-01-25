@@ -25,6 +25,8 @@
 
                     ,'skEmpresa'=>''
                     
+                    ,'orderBy'=>null
+                    ,'groupBy'=>null
                     ,'limit'        							=>  ''
                     ,'offset'       							=>  ''
 
@@ -216,7 +218,9 @@
                 if(!empty($this->solreva['skEmpresa'])){
                     $sql .=" AND cm.skEmpresa = '".$this->solreva['skEmpresa']."'";
                 }
-               
+                if(!is_null($this->solreva['orderBy'])){
+                    $sql .=" ORDER BY ".$this->solreva['orderBy'];
+                }
                 if(is_int($this->solreva['limit'])){
                     if(is_int($this->solreva['offset'])){
                         $sql .= " LIMIT ".$this->solreva['offset']." , ".$this->solreva['limit'];
@@ -224,8 +228,7 @@
                         $sql .= " LIMIT ".$this->solreva['limit'];
                     }
                 }
-				
-                //echo $sql;die();
+				//exit($sql);
                 $result = $this->db->query($sql);
                 if($result){
                     if($result->num_rows > 0){
