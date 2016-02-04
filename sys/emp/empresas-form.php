@@ -26,7 +26,7 @@
      <div class="form-body"> 
     <input type="hidden" name="skEmpresa"  id="skEmpresa" value="<?php echo (isset($result['skEmpresa'])) ? $result['skEmpresa'] : '' ; ?>">
         <div class="form-group">
-            <label class="control-label col-md-2">RFC <span aria-required="true" class="required"> * </span>
+            <label class="control-label col-md-2">RFC
             </label>
             <div class="col-md-4">
                 <div class="input-icon right">
@@ -278,7 +278,7 @@
             rules:{
             	sRFC:{
                     //required: true,
-                     remote: {
+                    /*remote: {
                       url: "",
                       type: "post",
                       data: {
@@ -286,7 +286,7 @@
                         axn: "validarRFC",
                         skEmpresa:  function (){return $( "#skEmpresa" ).val();}
                       }
-                    }
+                    }*/
                     
                 },
                
@@ -340,7 +340,7 @@
             messages:{
             	sRFC:{
                     //required: "Campo obligatorio.",
-                    remote: "El RFC Ingresado ya Existe."
+                    //remote: "El RFC Ingresado ya Existe."
                 },skTipoEmpresa:{
                     required: "Campo obligatorio."
                 },sNombre:{

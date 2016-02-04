@@ -573,10 +573,13 @@
                 }
             }
               public function read_equal_empresas(){
-                $sql = "SELECT cat_empresas.*,rel_cat_empresas_cat_tipos_empresas.skTipoEmpresa, _status.sName AS status, _status.sHtml AS htmlStatus 
-                	FROM cat_empresas 
+                $sql = "SELECT cat_empresas.*,rel_cat_empresas_cat_tipos_empresas.skTipoEmpresa, _status.sName AS status, _status.sHtml AS htmlStatus, 
+                	promo1.sNombre AS promotor1, promo2.sNombre AS promotor2
+                        FROM cat_empresas 
                 	INNER JOIN _status ON _status.skStatus = cat_empresas.skStatus 
                 	LEFT JOIN rel_cat_empresas_cat_tipos_empresas ON rel_cat_empresas_cat_tipos_empresas.skEmpresa = cat_empresas.skEmpresa 
+                        LEFT JOIN cat_promotores promo1 ON promo1.skPromotores =  cat_empresas.skPromotor1
+                        LEFT JOIN cat_promotores promo2 ON promo2.skPromotores =  cat_empresas.skPromotor2
                 	WHERE 1=1 ";
                 if(!empty($this->empresas['skEmpresa'])){
                     $sql .=" AND cat_empresas.skEmpresa = '".$this->empresas['skEmpresa']."'";

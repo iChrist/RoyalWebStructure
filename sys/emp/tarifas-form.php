@@ -62,31 +62,34 @@
         
         <hr>
         
-        <!-- COMIENZA LA TARIFA POR MONTO FIJO !-->
+        <!-- COMIENZA LA TARIFA PORCENTAJE | MONTO FIJO !-->
         <div id="tarifaMontoFijo" style="display:block;">
             <div class="form-group">
                 <label class="control-label col-md-2">Tarifa<span aria-required="true" class="required"> * </span> </label>
-                <div class="col-md-4">
+                <div class="col-md-2">
                     <div class="input-icon right"> <i class="fa"></i>
                         <input type="text" name="fTarifa" id="fTarifa" class="form-control" value="<?php echo (isset($result['fTarifa'])) ? utf8_encode($result['fTarifa']) : '' ; ?>">
                     </div>
                 </div>
             </div>
         </div>
-        <!-- TERMINA LA TARIFA POR MONTO FIJO !-->
         
-        <!-- COMIENZA LA TARIFA POR PORCENTAJE !-->
         <div id="tarifaPorcentaje" style="display:none;">
             <div class="form-group">
                 <label class="control-label col-md-2">Tarifa <span aria-required="true" class="required"> * </span></label>
                 <div class="col-md-2">
+                    <div class="input-icon right"> <i class="fa"></i>
+                        <input type="number" name="fTarifaPropuesta" class="form-control inpTarifaPorcentaje" value="<?php echo (isset($result['fTarifaPropuesta'])) ? utf8_encode($result['fTarifaPropuesta']) : '' ; ?>">
+                    </div>
+                </div>
+                <div class="col-md-2">
                     <label>
-                      <input type="radio" name="fTarifaPropuesta" value="<?php echo TARIFA_PORCENTAJE_1; ?>" checked><?php echo TARIFA_PORCENTAJE_1; ?>
+                      <input type="radio" name="fTarifaPropuesta" class="radTarifaPorcentaje" value="<?php echo TARIFA_PORCENTAJE_1; ?>" <?php if(isset($result['fTarifaPropuesta']) && $result['fTarifaPropuesta'] == TARIFA_PORCENTAJE_1){ ?>checked="checked"<?php }//ENDIF ?>><?php echo TARIFA_PORCENTAJE_1; ?>
                     </label>
                 </div>
                 <div class="col-md-2">
                     <label>
-                      <input type="radio" name="fTarifaPropuesta" value="<?php echo TARIFA_PORCENTAJE_2; ?>" <?php if(isset($result['fTarifaPropuesta']) && $result['fTarifaPropuesta'] == TARIFA_PORCENTAJE_2){ ?>checked="checked"<?php }//ENDIF ?>><?php echo TARIFA_PORCENTAJE_2 ?>
+                      <input type="radio" name="fTarifaPropuesta" class="radTarifaPorcentaje" value="<?php echo TARIFA_PORCENTAJE_2; ?>" <?php if(isset($result['fTarifaPropuesta']) && $result['fTarifaPropuesta'] == TARIFA_PORCENTAJE_2){ ?>checked="checked"<?php }//ENDIF ?>><?php echo TARIFA_PORCENTAJE_2 ?>
                     </label>
                 </div>
             </div>
@@ -97,43 +100,84 @@
                 </label>
             </div>
             
+            <!-- Porcentajes | Monto Fijo !-->
             <div class="form-group">
                 <label class="control-label col-md-2">Agente Aduanal (AA) %<span aria-required="true" class="required"> * </span> </label>
-                <div class="col-md-4">
+                <div class="col-md-2">
                     <div class="input-icon right"> <i class="fa"></i>
-                        <input type="text" name="fAgenteAduanal" id="fAgenteAduanal" class="form-control porcentajes" value="<?php echo (isset($result['fAgenteAduanal'])) ? utf8_encode($result['fAgenteAduanal']) : '' ; ?>">
+                        <input type="number" name="fAgenteAduanal" id="fAgenteAduanal" class="form-control porcentajes" value="<?php echo (isset($result['fAgenteAduanal'])) ? utf8_encode($result['fAgenteAduanal']) : '' ; ?>">
                     </div>
+                </div>
+                <div class="col-md-2">
+                    <label>
+                      <input type="radio" name="tipoTarifaAA" value="0" checked>Porcentaje
+                    </label>
+                </div>
+                <div class="col-md-2">
+                    <label>
+                      <input type="radio" name="tipoTarifaAA" value="1" <?php if(isset($result['tipoTarifaAA']) && $result['tipoTarifaAA'] == 1){ ?>checked="checked"<?php }//ENDIF ?>>Monto Fijo
+                    </label>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="control-label col-md-2"><span id="corresponsal"></span> (Corresponsal) %<span aria-required="true" class="required"> * </span> </label>
-                <div class="col-md-4">
+                <div class="col-md-2">
                     <div class="input-icon right"> <i class="fa"></i>
-                        <input type="text" name="fCorresponsal" id="fCorresponsal" class="form-control porcentajes" value="<?php echo (isset($result['fCorresponsal'])) ? utf8_encode($result['fCorresponsal']) : '' ; ?>">
+                        <input type="number" name="fCorresponsal" id="fCorresponsal" class="form-control porcentajes" value="<?php echo (isset($result['fCorresponsal'])) ? utf8_encode($result['fCorresponsal']) : '' ; ?>">
                     </div>
+                </div>
+                <div class="col-md-2">
+                    <label>
+                      <input type="radio" name="tipoTarifaCorresponsal" value="0" checked>Porcentaje
+                    </label>
+                </div>
+                <div class="col-md-2">
+                    <label>
+                      <input type="radio" name="tipoTarifaCorresponsal" value="1" <?php if(isset($result['tipoTarifaCorresponsal']) && $result['tipoTarifaCorresponsal'] == 1){ ?>checked="checked"<?php }//ENDIF ?>>Monto Fijo
+                    </label>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="control-label col-md-2"><span id="promotor1"></span> (Promotor 1) %<span aria-required="true" class="required"> * </span> </label>
-                <div class="col-md-4">
+                <div class="col-md-2">
                     <div class="input-icon right"> <i class="fa"></i>
-                        <input type="text" name="fPromotor1" id="fPromotor1" class="form-control porcentajes" value="<?php echo (isset($result['fPromotor1'])) ? utf8_encode($result['fPromotor1']) : '' ; ?>">
+                        <input type="number" name="fPromotor1" id="fPromotor1" class="form-control porcentajes" value="<?php echo (isset($result['fPromotor1'])) ? utf8_encode($result['fPromotor1']) : '' ; ?>">
                     </div>
+                </div>
+                <div class="col-md-2">
+                    <label>
+                      <input type="radio" name="tipoTarifaPromotor1" value="0" checked>Porcentaje
+                    </label>
+                </div>
+                <div class="col-md-2">
+                    <label>
+                      <input type="radio" name="tipoTarifaPromotor1" value="1" <?php if(isset($result['tipoTarifaPromotor1']) && $result['tipoTarifaPromotor1'] == 1){ ?>checked="checked"<?php }//ENDIF ?>>Monto Fijo
+                    </label>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="control-label col-md-2"><span id="promotor2"></span> (Promotor 2) %<span aria-required="true" class="required"> * </span> </label>
-                <div class="col-md-4">
+                <div class="col-md-2">
                     <div class="input-icon right"> <i class="fa"></i>
-                        <input type="text" name="fPromotor2" id="fPromotor2" class="form-control porcentajes" value="<?php echo (isset($result['fPromotor2'])) ? utf8_encode($result['fPromotor2']) : '' ; ?>">
+                        <input type="number" name="fPromotor2" id="fPromotor2" class="form-control porcentajes" value="<?php echo (isset($result['fPromotor2'])) ? utf8_encode($result['fPromotor2']) : '' ; ?>">
                     </div>
+                </div>
+                <div class="col-md-2">
+                    <label>
+                      <input type="radio" name="tipoTarifaPromotor2" value="0" checked>Porcentaje
+                    </label>
+                </div>
+                <div class="col-md-2">
+                    <label>
+                      <input type="radio" name="tipoTarifaPromotor2" value="1" <?php if(isset($result['tipoTarifaPromotor2']) && $result['tipoTarifaPromotor2'] == 1){ ?>checked="checked"<?php }//ENDIF ?>>Monto Fijo
+                    </label>
                 </div>
             </div>
         </div>
-        <!-- TERMINA LA TARIFA POR PORCENTAJE !-->
+        <!-- TERMINA LA TARIFA PORCENTAJE | MONTO FIJO !-->
             
     </div>
 </form>
@@ -141,6 +185,18 @@
 <script type="text/javascript">
     var porcentaje = 0;
     $(document).ready(function(){
+        $("#skEmpresa").change(function(){
+            if($(this).val() != ""){
+                $.post('',{axn:'getCliente',skEmpresa:$(this).val()},function(data){
+                    console.log(data);
+                });
+            }
+        });
+        $(".inpTarifaPorcentaje").change(function(){
+           if($(this).val().length > 0){
+               $("input[name='fTarifaPropuesta']").prop( "checked", false );
+           } 
+        });
         $('input[type=radio][name=iTipoTarifa]').change(function() {
             var iTipoTarifa = $(this).val();
             switch(iTipoTarifa) {

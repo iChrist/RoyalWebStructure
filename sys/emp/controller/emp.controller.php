@@ -625,7 +625,7 @@
                     
                     	 if(isset($_POST['axn']))
                     	 {
-                        	switch ($_POST['axn'])
+                        	/*switch ($_POST['axn'])
 		                        {
 		                            case "validarRFC":
 		                                // echo 'false'; -> Email no encontrado 
@@ -645,7 +645,7 @@
 		                            break;
 		                            
 		                            
-		                        }
+		                        }*/
 		                   }
                     if($_POST){
                     
@@ -850,7 +850,12 @@
                     if($_POST){
                         $_POST['axn'] = !empty($_POST['axn']) ? $_POST['axn'] : 'save';
                         switch ($_POST['axn']){           
-                            case "obtenerDatos":
+                            case "getCliente":
+                                $this->empresas['skEmpresa'] = $_POST['skEmpresa'];
+                                $result = parent::read_equal_empresas();
+                                while($row = $result->fetch_assoc()){
+                                    exit('<pre>'.print_r($row,1).'</pre>');
+                                }
                                 return true;
                                 break;
                             case "save":
