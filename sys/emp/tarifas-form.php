@@ -63,18 +63,8 @@
         <hr>
         
         <!-- COMIENZA LA TARIFA PORCENTAJE | MONTO FIJO !-->
-        <div id="tarifaMontoFijo" style="display:block;">
-            <div class="form-group">
-                <label class="control-label col-md-2">Tarifa<span aria-required="true" class="required"> * </span> </label>
-                <div class="col-md-2">
-                    <div class="input-icon right"> <i class="fa"></i>
-                        <input type="text" name="fTarifa" id="fTarifa" class="form-control" value="<?php echo (isset($result['fTarifa'])) ? utf8_encode($result['fTarifa']) : '' ; ?>">
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div id="tarifaPorcentaje" style="display:none;">
+        <div id="tarifaPorcentajeMontoFijo" style="display:block;">
+            
             <div class="form-group">
                 <label class="control-label col-md-2">Tarifa <span aria-required="true" class="required"> * </span></label>
                 <div class="col-md-2">
@@ -82,15 +72,17 @@
                         <input type="number" name="fTarifaPropuesta" class="form-control inpTarifaPorcentaje" value="<?php echo (isset($result['fTarifaPropuesta'])) ? utf8_encode($result['fTarifaPropuesta']) : '' ; ?>">
                     </div>
                 </div>
-                <div class="col-md-2">
-                    <label>
-                      <input type="radio" name="fTarifaPropuesta" class="radTarifaPorcentaje" value="<?php echo TARIFA_PORCENTAJE_1; ?>" <?php if(isset($result['fTarifaPropuesta']) && $result['fTarifaPropuesta'] == TARIFA_PORCENTAJE_1){ ?>checked="checked"<?php }//ENDIF ?>><?php echo TARIFA_PORCENTAJE_1; ?>
-                    </label>
-                </div>
-                <div class="col-md-2">
-                    <label>
-                      <input type="radio" name="fTarifaPropuesta" class="radTarifaPorcentaje" value="<?php echo TARIFA_PORCENTAJE_2; ?>" <?php if(isset($result['fTarifaPropuesta']) && $result['fTarifaPropuesta'] == TARIFA_PORCENTAJE_2){ ?>checked="checked"<?php }//ENDIF ?>><?php echo TARIFA_PORCENTAJE_2 ?>
-                    </label>
+                <div id="tarifaPorcentaje" style="display:none;">
+                    <div class="col-md-2">
+                        <label>
+                          <input type="radio" name="fTarifaPropuesta" class="radTarifaPorcentaje" value="<?php echo TARIFA_PORCENTAJE_1; ?>" <?php if(isset($result['fTarifaPropuesta']) && $result['fTarifaPropuesta'] == TARIFA_PORCENTAJE_1){ ?>checked="checked"<?php }//ENDIF ?>><?php echo TARIFA_PORCENTAJE_1; ?>
+                        </label>
+                    </div>
+                    <div class="col-md-2">
+                        <label>
+                          <input type="radio" name="fTarifaPropuesta" class="radTarifaPorcentaje" value="<?php echo TARIFA_PORCENTAJE_2; ?>" <?php if(isset($result['fTarifaPropuesta']) && $result['fTarifaPropuesta'] == TARIFA_PORCENTAJE_2){ ?>checked="checked"<?php }//ENDIF ?>><?php echo TARIFA_PORCENTAJE_2 ?>
+                        </label>
+                    </div>
                 </div>
             </div>
             
@@ -100,7 +92,7 @@
                 </label>
             </div>
             
-            <!-- Porcentajes | Monto Fijo !-->
+            
             <div class="form-group">
                 <label class="control-label col-md-2">Agente Aduanal (AA) %<span aria-required="true" class="required"> * </span> </label>
                 <div class="col-md-2">
@@ -188,7 +180,9 @@
         $("#skEmpresa").change(function(){
             if($(this).val() != ""){
                 $.post('',{axn:'getCliente',skEmpresa:$(this).val()},function(data){
-                    console.log(data);
+                    $("#corresponsal").html(data[0]['corresponsal']);
+                    $("#promotor1").html(data[0]['promotor1']);
+                    $("#promotor2").html(data[0]['promotor2']);
                 });
             }
         });
@@ -201,16 +195,15 @@
             var iTipoTarifa = $(this).val();
             switch(iTipoTarifa) {
                 case "1":
-                    $("#tarifaMontoFijo").css("display","block");
+                    $("#tarifaPorcentajeMontoFijo").css("display","block");
                     $("#tarifaPorcentaje").css("display","none");
                     break;
                 case "2":
-                    $("#tarifaMontoFijo").css("display","none");
+                    $("#tarifaPorcentajeMontoFijo").css("display","block");
                     $("#tarifaPorcentaje").css("display","block");
                     break;
                 case "3":
-                    $("#tarifaMontoFijo").css("display","none");
-                    $("#tarifaPorcentaje").css("display","none");
+                    $("#tarifaPorcentajeMontoFijo").css("display","none");
                     break;
             }
         });

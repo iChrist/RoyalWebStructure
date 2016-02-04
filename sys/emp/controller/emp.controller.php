@@ -853,9 +853,19 @@
                             case "getCliente":
                                 $this->empresas['skEmpresa'] = $_POST['skEmpresa'];
                                 $result = parent::read_equal_empresas();
-                                while($row = $result->fetch_assoc()){
-                                    exit('<pre>'.print_r($row,1).'</pre>');
+                                $records = array();
+                                if($result){
+                                    while($row = $result->fetch_assoc()){
+                                        array_push($records, array(
+                                            'corresponsal' => utf8_encode($row['corresponsal'])
+                                            ,'promotor1' => utf8_encode($row['promotor1'])
+                                            ,'promotor2' => utf8_encode($row['promotor2'])
+                                        ));
+                                        //exit('<pre>'.print_r($row,1).'</pre>');
+                                    }
                                 }
+                                header('Content-Type: application/json');
+                                echo json_encode($records);
                                 return true;
                                 break;
                             case "save":
