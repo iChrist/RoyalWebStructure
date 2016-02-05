@@ -170,6 +170,46 @@
             </div>
         </div>
         <!-- TERMINA LA TARIFA PORCENTAJE | MONTO FIJO !-->
+        
+        <!-- COMIENZA TARIFA POR CONTENEDOR !-->
+        <div id="tarifaPorContenedor" style="display: none;">
+            <div class="form-group">
+                <label class="control-label col-md-2">Tipo <span aria-required="true" class="required"> * </span></label>
+                <div class="col-md-2">
+                    <label>
+                      <input type="radio" name="tipoContenedor" value="1" checked>Por Rango
+                    </label>
+                </div>
+                <div class="col-md-2">
+                    <label>
+                      <input type="radio" name="tipoContenedor" value="2" <?php if(isset($result['fTarifaPropuesta']) && $result['fTarifaPropuesta'] == 'USD'){ ?>checked="checked"<?php }//ENDIF ?>>Por Precio de Contenedor
+                    </label>
+                </div>
+            </div>
+            <div id="rangos" style="display: block;">
+                <div class="form-group">
+                    <label class="control-label col-md-1">DE <span aria-required="true" class="required"> * </span></label>
+                    <div class="col-md-2">
+                        <div class="input-icon right"> <i class="fa"></i>
+                            <input type="number" name="fTarifaPropuesta" class="form-control inpTarifaPorcentaje" value="<?php echo (isset($result['fTarifaPropuesta'])) ? utf8_encode($result['fTarifaPropuesta']) : '' ; ?>">
+                        </div>
+                    </div>
+                    <label class="control-label col-md-1">HASTA <span aria-required="true" class="required"> * </span></label>
+                    <div class="col-md-2">
+                        <div class="input-icon right"> <i class="fa"></i>
+                            <input type="number" name="fTarifaPropuesta" class="form-control inpTarifaPorcentaje" value="<?php echo (isset($result['fTarifaPropuesta'])) ? utf8_encode($result['fTarifaPropuesta']) : '' ; ?>">
+                        </div>
+                    </div>
+                    <a href="javascript:void(0);" id="addRank" class="btn btn-default btn-sm">
+                        <i class="fa fa-plus-circle"></i> Agregar
+                    </a>
+                </div>
+            </div>
+            <div id="precioContenedor" style="display: none;">
+                
+            </div>
+        </div>
+        <!-- TERMINA TARIFA POR CONTENEDOR !-->
             
     </div>
 </form>
@@ -204,8 +244,31 @@
                     break;
                 case "3":
                     $("#tarifaPorcentajeMontoFijo").css("display","none");
+                    $("#tarifaPorContenedor").css("display","block");
                     break;
             }
+        });
+        $('input[type=radio][name=tipoContenedor]').change(function() {
+            var tipo = $(this).val();
+            switch(tipo) {
+                case "1":
+                    $("#rangos").css("display","block");
+                    $("#precioContenedor").css("display","none");
+                    break;
+                case "2":
+                    $("#precioContenedor").css("display","block");
+                    $("#rangos").css("display","none");
+                    break;
+            }
+        });
+        // AGREGAR UN RANGO MAS PARA LA TARIFA DE TIPO CONTENEDOR POR RANGO //
+        $("#addRank").click(function(){
+            var cad = '<div class="form-group"><label class="control-label col-md-1">DE <span aria-required="true" class="required"> * </span></label><div class="col-md-2"><div class="input-icon right"> <i class="fa"></i><input type="number" name="fTarifaPropuesta" class="form-control inpTarifaPorcentaje" value=""></div></div><label class="control-label col-md-1">HASTA <span aria-required="true" class="required"> * </span></label><div class="col-md-2"><div class="input-icon right"> <i class="fa"></i><input type="number" name="fTarifaPropuesta" class="form-control inpTarifaPorcentaje" value=""></div></div><a href="javascript:void(0);" class="btn btn-default btn-sm delRank"><i class="fa fa-trash-o"></i> Eliminar</a></div>';
+           $(cad).appendTo("#rangos"); 
+        });
+        // REMUEVE UN RANGO DE LA TARIFA DE TIPO CONTENEDOR POR RANGO //
+        $("body").delegate(".delRank","click",function(){
+            $(this).parent().remove();
         });
         // VALIDADOR DE SUMA DE PORCENTAJE //
         $.validator.addMethod(
