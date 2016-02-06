@@ -35,7 +35,7 @@
             </div>
             <div class="col-md-2">
                 <label>
-                  <input type="radio" name="sTipoCambio" value="USD" <?php if(isset($result['fTarifaPropuesta']) && $result['fTarifaPropuesta'] == 'USD'){ ?>checked="checked"<?php }//ENDIF ?>>Dolares (USD)
+                  <input type="radio" name="sTipoCambio" value="USD" <?php if(isset($result['sTipoCambio']) && $result['sTipoCambio'] == 'USD'){ ?>checked="checked"<?php }//ENDIF ?>>Dolares (USD)
                 </label>
             </div>
         </div>
@@ -62,25 +62,89 @@
         
         <hr>
         
-        <!-- COMIENZA LA TARIFA PORCENTAJE | MONTO FIJO !-->
-        <div id="tarifaPorcentajeMontoFijo" style="display:block;">
-            
+        
+        
+        
+        <!-- COMIENZA TARIFA POR CONTENEDOR !-->
+        <div id="tarifaPorContenedor" style="display: none;">
             <div class="form-group">
+                <label class="control-label col-md-2">Tipo <span aria-required="true" class="required"> * </span></label>
+                <div class="col-md-3">
+                    <label>
+                      <input type="radio" name="tipoTarifaContenedor" value="1" checked>Por Rango
+                    </label>
+                </div>
+                <div class="col-md-3">
+                    <label>
+                      <input type="radio" name="tipoTarifaContenedor" value="2" <?php if(isset($result['fTarifaPropuesta']) && $result['fTarifaPropuesta'] == 'USD'){ ?>checked="checked"<?php }//ENDIF ?>>Por Precio de Contenedor
+                    </label>
+                </div>
+            </div>
+            <div id="rangos" style="display: block;">
+                <div class="form-group">
+                    <label class="control-label col-md-1">DE <span aria-required="true" class="required"> * </span></label>
+                    <div class="col-md-2">
+                        <div class="input-icon right"> <i class="fa"></i>
+                            <input type="number" name="rango1[]" class="form-control inpRango" disabled="disabled" value="<?php echo (isset($result['fTarifaPropuesta'])) ? utf8_encode($result['fTarifaPropuesta']) : '' ; ?>">
+                        </div>
+                    </div>
+                    <label class="control-label col-md-1">HASTA <span aria-required="true" class="required"> * </span></label>
+                    <div class="col-md-2">
+                        <div class="input-icon right"> <i class="fa"></i>
+                            <input type="number" name="rango2[]" class="form-control inpRango" disabled="disabled" value="<?php echo (isset($result['fTarifaPropuesta'])) ? utf8_encode($result['fTarifaPropuesta']) : '' ; ?>">
+                        </div>
+                    </div>
+                    <label class="control-label col-md-1">$ <span aria-required="true" class="required"> * </span></label>
+                    <div class="col-md-2">
+                        <div class="input-icon right"> <i class="fa"></i>
+                            <input type="number" name="tarifa[]" class="form-control inpRango" disabled="disabled" value="<?php echo (isset($result['fTarifaPropuesta'])) ? utf8_encode($result['fTarifaPropuesta']) : '' ; ?>">
+                        </div>
+                    </div>
+                    <a href="javascript:void(0);" id="addRank" class="btn btn-default btn-sm">
+                        <i class="fa fa-plus-circle"></i> Agregar
+                    </a>
+                </div>
+            </div>
+            <div id="precioContenedor" style="display: none;">
+                <div class="form-group">
+                    <label class="control-label col-md-2">Tarifa <span aria-required="true" class="required"> * </span></label>
+                    <div class="col-md-2">
+                        <div class="input-icon right"> <i class="fa"></i>
+                            <input type="number" name="fTarifaPropuesta" class="form-control inpfTarifaPropuesta" value="<?php echo (isset($result['fTarifaPropuesta'])) ? utf8_encode($result['fTarifaPropuesta']) : '' ; ?>" disabled="disabled">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- TERMINA TARIFA POR CONTENEDOR !-->
+        
+        
+        
+        
+        <!-- COMIENZA LA TARIFA PORCENTAJE | MONTO FIJO !-->
+        <div class="tarifaPorcentajeMontoFijo" style="display:block;">
+            
+            <div class="form-group" id="tarifaPorcentajeMontoFijo">
                 <label class="control-label col-md-2">Tarifa <span aria-required="true" class="required"> * </span></label>
                 <div class="col-md-2">
                     <div class="input-icon right"> <i class="fa"></i>
-                        <input type="number" name="fTarifaPropuesta" class="form-control inpTarifaPorcentaje" value="<?php echo (isset($result['fTarifaPropuesta'])) ? utf8_encode($result['fTarifaPropuesta']) : '' ; ?>">
+                        <input type="number" name="fTarifaPropuesta" id="fTarifa" class="form-control input_tarifaPorcentajeMontoFijo" value="<?php echo (isset($result['fTarifaPropuesta'])) ? utf8_encode($result['fTarifaPropuesta']) : '' ; ?>">
                     </div>
                 </div>
                 <div id="tarifaPorcentaje" style="display:none;">
                     <div class="col-md-2">
                         <label>
-                          <input type="radio" name="fTarifaPropuesta" class="radTarifaPorcentaje" value="<?php echo TARIFA_PORCENTAJE_1; ?>" <?php if(isset($result['fTarifaPropuesta']) && $result['fTarifaPropuesta'] == TARIFA_PORCENTAJE_1){ ?>checked="checked"<?php }//ENDIF ?>><?php echo TARIFA_PORCENTAJE_1; ?>
+                            <input type="radio" name="fTarifaPropuesta" id="procentajePersonal" class="radTarifaPorcentaje input_tarifaPorcentajeMontoFijo" value="0" checked="checked"> Personalizada
                         </label>
                     </div>
                     <div class="col-md-2">
                         <label>
-                          <input type="radio" name="fTarifaPropuesta" class="radTarifaPorcentaje" value="<?php echo TARIFA_PORCENTAJE_2; ?>" <?php if(isset($result['fTarifaPropuesta']) && $result['fTarifaPropuesta'] == TARIFA_PORCENTAJE_2){ ?>checked="checked"<?php }//ENDIF ?>><?php echo TARIFA_PORCENTAJE_2 ?>
+                          <input type="radio" name="fTarifaPropuesta" class="radTarifaPorcentaje input_tarifaPorcentajeMontoFijo" value="<?php echo TARIFA_PORCENTAJE_1; ?>" <?php if(isset($result['fTarifaPropuesta']) && $result['fTarifaPropuesta'] == TARIFA_PORCENTAJE_1){ ?>checked="checked"<?php }//ENDIF ?>><?php echo TARIFA_PORCENTAJE_1; ?>
+                        </label>
+                    </div>
+                    <div class="col-md-2">
+                        <label>
+                          <input type="radio" name="fTarifaPropuesta" class="radTarifaPorcentaje input_tarifaPorcentajeMontoFijo" value="<?php echo TARIFA_PORCENTAJE_2; ?>" <?php if(isset($result['fTarifaPropuesta']) && $result['fTarifaPropuesta'] == TARIFA_PORCENTAJE_2){ ?>checked="checked"<?php }//ENDIF ?>><?php echo TARIFA_PORCENTAJE_2 ?>
                         </label>
                     </div>
                 </div>
@@ -97,17 +161,17 @@
                 <label class="control-label col-md-2">Agente Aduanal (AA) %<span aria-required="true" class="required"> * </span> </label>
                 <div class="col-md-2">
                     <div class="input-icon right"> <i class="fa"></i>
-                        <input type="number" name="fAgenteAduanal" id="fAgenteAduanal" class="form-control porcentajes" value="<?php echo (isset($result['fAgenteAduanal'])) ? utf8_encode($result['fAgenteAduanal']) : '' ; ?>">
+                        <input type="number" name="fAgenteAduanal" id="fAgenteAduanal" class="form-control porcentajes input_tarifaPorcentajeMontoFijo" value="<?php echo (isset($result['fAgenteAduanal'])) ? utf8_encode($result['fAgenteAduanal']) : '' ; ?>">
                     </div>
                 </div>
                 <div class="col-md-2">
                     <label>
-                      <input type="radio" name="tipoTarifaAA" value="0" checked>Porcentaje
+                      <input type="radio" name="tipoTarifaAA" value="0" class="input_tarifaPorcentajeMontoFijo" checked>Porcentaje
                     </label>
                 </div>
                 <div class="col-md-2">
                     <label>
-                      <input type="radio" name="tipoTarifaAA" value="1" <?php if(isset($result['tipoTarifaAA']) && $result['tipoTarifaAA'] == 1){ ?>checked="checked"<?php }//ENDIF ?>>Monto Fijo
+                      <input type="radio" name="tipoTarifaAA" value="1" class="input_tarifaPorcentajeMontoFijo" <?php if(isset($result['tipoTarifaAA']) && $result['tipoTarifaAA'] == 1){ ?>checked="checked"<?php }//ENDIF ?>>Monto Fijo
                     </label>
                 </div>
             </div>
@@ -116,36 +180,36 @@
                 <label class="control-label col-md-2"><span id="corresponsal"></span> (Corresponsal) %<span aria-required="true" class="required"> * </span> </label>
                 <div class="col-md-2">
                     <div class="input-icon right"> <i class="fa"></i>
-                        <input type="number" name="fCorresponsal" id="fCorresponsal" class="form-control porcentajes" value="<?php echo (isset($result['fCorresponsal'])) ? utf8_encode($result['fCorresponsal']) : '' ; ?>">
+                        <input type="number" name="fCorresponsal" id="fCorresponsal" class="form-control porcentajes input_tarifaPorcentajeMontoFijo" value="<?php echo (isset($result['fCorresponsal'])) ? utf8_encode($result['fCorresponsal']) : '' ; ?>">
                     </div>
                 </div>
                 <div class="col-md-2">
                     <label>
-                      <input type="radio" name="tipoTarifaCorresponsal" value="0" checked>Porcentaje
+                      <input type="radio" name="tipoTarifaCorresponsal" value="0" class="input_tarifaPorcentajeMontoFijo" checked>Porcentaje
                     </label>
                 </div>
                 <div class="col-md-2">
                     <label>
-                      <input type="radio" name="tipoTarifaCorresponsal" value="1" <?php if(isset($result['tipoTarifaCorresponsal']) && $result['tipoTarifaCorresponsal'] == 1){ ?>checked="checked"<?php }//ENDIF ?>>Monto Fijo
+                      <input type="radio" name="tipoTarifaCorresponsal" value="1" class="input_tarifaPorcentajeMontoFijo" <?php if(isset($result['tipoTarifaCorresponsal']) && $result['tipoTarifaCorresponsal'] == 1){ ?>checked="checked"<?php }//ENDIF ?>>Monto Fijo
                     </label>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-2"><span id="promotor1"></span> (Promotor 1) %<span aria-required="true" class="required"> * </span> </label>
+                <label class="control-label col-md-2"><span class="promotor1"></span> (Promotor 1) %<span aria-required="true" class="required"> * </span> </label>
                 <div class="col-md-2">
                     <div class="input-icon right"> <i class="fa"></i>
-                        <input type="number" name="fPromotor1" id="fPromotor1" class="form-control porcentajes" value="<?php echo (isset($result['fPromotor1'])) ? utf8_encode($result['fPromotor1']) : '' ; ?>">
+                        <input type="number" name="fPromotor1" id="fPromotor1" class="form-control porcentajes input_tarifaPorcentajeMontoFijo" value="<?php echo (isset($result['fPromotor1'])) ? utf8_encode($result['fPromotor1']) : '' ; ?>">
                     </div>
                 </div>
                 <div class="col-md-2">
                     <label>
-                      <input type="radio" name="tipoTarifaPromotor1" value="0" checked>Porcentaje
+                      <input type="radio" name="tipoTarifaPromotor1" value="0" class="input_tarifaPorcentajeMontoFijo" checked>Porcentaje
                     </label>
                 </div>
                 <div class="col-md-2">
                     <label>
-                      <input type="radio" name="tipoTarifaPromotor1" value="1" <?php if(isset($result['tipoTarifaPromotor1']) && $result['tipoTarifaPromotor1'] == 1){ ?>checked="checked"<?php }//ENDIF ?>>Monto Fijo
+                      <input type="radio" name="tipoTarifaPromotor1" value="1" class="input_tarifaPorcentajeMontoFijo" <?php if(isset($result['tipoTarifaPromotor1']) && $result['tipoTarifaPromotor1'] == 1){ ?>checked="checked"<?php }//ENDIF ?>>Monto Fijo
                     </label>
                 </div>
             </div>
@@ -154,62 +218,23 @@
                 <label class="control-label col-md-2"><span id="promotor2"></span> (Promotor 2) %<span aria-required="true" class="required"> * </span> </label>
                 <div class="col-md-2">
                     <div class="input-icon right"> <i class="fa"></i>
-                        <input type="number" name="fPromotor2" id="fPromotor2" class="form-control porcentajes" value="<?php echo (isset($result['fPromotor2'])) ? utf8_encode($result['fPromotor2']) : '' ; ?>">
+                        <input type="number" name="fPromotor2" id="fPromotor2" class="form-control porcentajes input_tarifaPorcentajeMontoFijo" value="<?php echo (isset($result['fPromotor2'])) ? utf8_encode($result['fPromotor2']) : '' ; ?>">
                     </div>
                 </div>
                 <div class="col-md-2">
                     <label>
-                      <input type="radio" name="tipoTarifaPromotor2" value="0" checked>Porcentaje
+                      <input type="radio" name="tipoTarifaPromotor2" value="0" class="input_tarifaPorcentajeMontoFijo" checked>Porcentaje
                     </label>
                 </div>
                 <div class="col-md-2">
                     <label>
-                      <input type="radio" name="tipoTarifaPromotor2" value="1" <?php if(isset($result['tipoTarifaPromotor2']) && $result['tipoTarifaPromotor2'] == 1){ ?>checked="checked"<?php }//ENDIF ?>>Monto Fijo
+                      <input type="radio" name="tipoTarifaPromotor2" value="1" class="input_tarifaPorcentajeMontoFijo" <?php if(isset($result['tipoTarifaPromotor2']) && $result['tipoTarifaPromotor2'] == 1){ ?>checked="checked"<?php }//ENDIF ?>>Monto Fijo
                     </label>
                 </div>
             </div>
         </div>
         <!-- TERMINA LA TARIFA PORCENTAJE | MONTO FIJO !-->
         
-        <!-- COMIENZA TARIFA POR CONTENEDOR !-->
-        <div id="tarifaPorContenedor" style="display: none;">
-            <div class="form-group">
-                <label class="control-label col-md-2">Tipo <span aria-required="true" class="required"> * </span></label>
-                <div class="col-md-2">
-                    <label>
-                      <input type="radio" name="tipoContenedor" value="1" checked>Por Rango
-                    </label>
-                </div>
-                <div class="col-md-2">
-                    <label>
-                      <input type="radio" name="tipoContenedor" value="2" <?php if(isset($result['fTarifaPropuesta']) && $result['fTarifaPropuesta'] == 'USD'){ ?>checked="checked"<?php }//ENDIF ?>>Por Precio de Contenedor
-                    </label>
-                </div>
-            </div>
-            <div id="rangos" style="display: block;">
-                <div class="form-group">
-                    <label class="control-label col-md-1">DE <span aria-required="true" class="required"> * </span></label>
-                    <div class="col-md-2">
-                        <div class="input-icon right"> <i class="fa"></i>
-                            <input type="number" name="fTarifaPropuesta" class="form-control inpTarifaPorcentaje" value="<?php echo (isset($result['fTarifaPropuesta'])) ? utf8_encode($result['fTarifaPropuesta']) : '' ; ?>">
-                        </div>
-                    </div>
-                    <label class="control-label col-md-1">HASTA <span aria-required="true" class="required"> * </span></label>
-                    <div class="col-md-2">
-                        <div class="input-icon right"> <i class="fa"></i>
-                            <input type="number" name="fTarifaPropuesta" class="form-control inpTarifaPorcentaje" value="<?php echo (isset($result['fTarifaPropuesta'])) ? utf8_encode($result['fTarifaPropuesta']) : '' ; ?>">
-                        </div>
-                    </div>
-                    <a href="javascript:void(0);" id="addRank" class="btn btn-default btn-sm">
-                        <i class="fa fa-plus-circle"></i> Agregar
-                    </a>
-                </div>
-            </div>
-            <div id="precioContenedor" style="display: none;">
-                
-            </div>
-        </div>
-        <!-- TERMINA TARIFA POR CONTENEDOR !-->
             
     </div>
 </form>
@@ -226,52 +251,77 @@
                 });
             }
         });
-        $(".inpTarifaPorcentaje").change(function(){
-           if($(this).val().length > 0){
-               $("input[name='fTarifaPropuesta']").prop( "checked", false );
-           } 
-        });
         $('input[type=radio][name=iTipoTarifa]').change(function() {
             var iTipoTarifa = $(this).val();
             switch(iTipoTarifa) {
                 case "1":
-                    $("#tarifaPorcentajeMontoFijo").css("display","block");
+                    $(".tarifaPorcentajeMontoFijo").css("display","block");
+                    $(".input_tarifaPorcentajeMontoFijo").attr("disabled",false);
                     $("#tarifaPorcentaje").css("display","none");
+                    $("#tarifaPorContenedor").css("display","none");
+                    $('.inpRango').attr("disabled",true);
                     break;
                 case "2":
-                    $("#tarifaPorcentajeMontoFijo").css("display","block");
+                    $(".tarifaPorcentajeMontoFijo").css("display","block");
+                    $(".input_tarifaPorcentajeMontoFijo").attr("disabled",false);
                     $("#tarifaPorcentaje").css("display","block");
+                    $("#tarifaPorContenedor").css("display","none");
+                    $('.inpRango').attr("disabled",true);
+                    $("#fTarifa").attr("disabled",false);
+                    $("#fTarifa").css("display","block");
                     break;
                 case "3":
+                    // REPARTO DE TARIFA //
+                    $(".tarifaPorcentajeMontoFijo").css("display","block");
+                    $(".input_tarifaPorcentajeMontoFijo").attr("disabled",false);
                     $("#tarifaPorcentajeMontoFijo").css("display","none");
+                    $("#fTarifa").attr("disabled",true);
+                    $("#tarifaPorcentaje").css("display","none");
                     $("#tarifaPorContenedor").css("display","block");
+                    $('.inpRango').attr("disabled",false);
                     break;
             }
         });
-        $('input[type=radio][name=tipoContenedor]').change(function() {
+        $("#fTarifa").change(function(){
+            if(parseFloat($(this).val())){
+                $("#procentajePersonal").val($(this).val());
+            }
+        });
+        $('input[type=radio][name=tipoTarifaContenedor]').change(function() {
             var tipo = $(this).val();
             switch(tipo) {
                 case "1":
                     $("#rangos").css("display","block");
+                    $('.inpRango').attr("disabled",false);
                     $("#precioContenedor").css("display","none");
+                    $(".inpfTarifaPropuesta").attr("disabled",true);
+                    // REPARTO DE TARIFA //
+                    $(".tarifaPorcentajeMontoFijo").css("display","block");
+                    $(".input_tarifaPorcentajeMontoFijo").attr("disabled",false);
+                    $("#tarifaPorcentajeMontoFijo").css("display","none");
+                    $("#fTarifa").attr("disabled",true);
                     break;
                 case "2":
+                    $(".tarifaPorcentajeMontoFijo").css("display","none");
+                    $(".input_tarifaPorcentajeMontoFijo").attr("disabled",true);
                     $("#precioContenedor").css("display","block");
                     $("#rangos").css("display","none");
+                    $('.inpRango').attr("disabled",true);
+                    $(".inpfTarifaPropuesta").attr("disabled",false);
                     break;
             }
         });
         // AGREGAR UN RANGO MAS PARA LA TARIFA DE TIPO CONTENEDOR POR RANGO //
         $("#addRank").click(function(){
-            var cad = '<div class="form-group"><label class="control-label col-md-1">DE <span aria-required="true" class="required"> * </span></label><div class="col-md-2"><div class="input-icon right"> <i class="fa"></i><input type="number" name="fTarifaPropuesta" class="form-control inpTarifaPorcentaje" value=""></div></div><label class="control-label col-md-1">HASTA <span aria-required="true" class="required"> * </span></label><div class="col-md-2"><div class="input-icon right"> <i class="fa"></i><input type="number" name="fTarifaPropuesta" class="form-control inpTarifaPorcentaje" value=""></div></div><a href="javascript:void(0);" class="btn btn-default btn-sm delRank"><i class="fa fa-trash-o"></i> Eliminar</a></div>';
-           $(cad).appendTo("#rangos"); 
+            var cad = '<div class="form-group"><label class="control-label col-md-1">DE <span aria-required="true" class="required"> * </span></label><div class="col-md-2"><div class="input-icon right"> <i class="fa"></i><input type="number" name="rango1[]" class="form-control inpRango" value=""></div></div><label class="control-label col-md-1">HASTA <span aria-required="true" class="required"> * </span></label><div class="col-md-2"><div class="input-icon right"> <i class="fa"></i><input type="number" name="rango2[]" class="form-control inpRango" value=""></div></div><label class="control-label col-md-1">$ <span aria-required="true" class="required"> * </span></label><div class="col-md-2"><div class="input-icon right"> <i class="fa"></i><input type="number" name="tarifa[]" class="form-control inpRango" value=""></div></div><a href="javascript:void(0);" class="btn btn-default btn-sm delRank"><i class="fa fa-trash-o"></i> Eliminar</a></div>';
+            $(cad).appendTo("#rangos");
         });
         // REMUEVE UN RANGO DE LA TARIFA DE TIPO CONTENEDOR POR RANGO //
         $("body").delegate(".delRank","click",function(){
             $(this).parent().remove();
         });
         // VALIDADOR DE SUMA DE PORCENTAJE //
-        $.validator.addMethod(
+        /*$.validator.addMethod(
             "validarPorcentaje", 
             function(value, element) {
                 porcentaje = 
@@ -298,7 +348,7 @@
                 }
             },
             "La suma de los porcentajes debe ser menor o igual a 100%"
-        );
+        );*/
         /* VALIDATIONS */
         isValid = $("#_save").validate({
             errorElement: 'span', //default input error message container
@@ -316,22 +366,22 @@
                 fAgenteAduanal:{
                     required: true,
                     number: true,
-                    validarPorcentaje: true
+                    //validarPorcentaje: true
                 },
                 fCorresponsal:{
                     required: true,
                     number: true,
-                    validarPorcentaje: true
+                    //validarPorcentaje: true
                 },
                 fPromotor1:{
                     required: true,
                     number: true,
-                    validarPorcentaje: true
+                    //validarPorcentaje: true
                 },
                 fPromotor2:{
                     required: true,
                     number: true,
-                    validarPorcentaje: true
+                    //validarPorcentaje: true
                 }
             },
             invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar              

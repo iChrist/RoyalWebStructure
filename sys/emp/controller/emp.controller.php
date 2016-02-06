@@ -869,6 +869,7 @@
                                 return true;
                                 break;
                             case "save":
+                                exit(print_r($_POST));
                                 $this->tarifas['skTarifa'] = !empty($_POST['skTarifa']) ? $_POST['skTarifa'] : substr(md5(microtime()), 1, 32);
                                 $this->tarifas['skEmpresa'] = !empty($_POST['skEmpresa']) ? $_POST['skEmpresa'] : null;
                                 $this->tarifas['sTipoCambio'] = !empty($_POST['sTipoCambio']) ? $_POST['sTipoCambio'] : null;
