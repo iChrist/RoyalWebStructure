@@ -869,18 +869,80 @@
                                 return true;
                                 break;
                             case "save":
-                                exit(print_r($_POST));
+                                //exit(print_r($_POST));                              
+                                
                                 $this->tarifas['skTarifa'] = !empty($_POST['skTarifa']) ? $_POST['skTarifa'] : substr(md5(microtime()), 1, 32);
                                 $this->tarifas['skEmpresa'] = !empty($_POST['skEmpresa']) ? $_POST['skEmpresa'] : null;
                                 $this->tarifas['sTipoCambio'] = !empty($_POST['sTipoCambio']) ? $_POST['sTipoCambio'] : null;
                                 $this->tarifas['iTipoTarifa'] = !empty($_POST['iTipoTarifa']) ? $_POST['iTipoTarifa'] : null;
                                 
-                                $this->tarifas['fAgenteAduanal'] = !empty($_POST['fAgenteAduanal']) ? $_POST['fAgenteAduanal'] : 'null';
-                                $this->tarifas['fCorresponsal'] = !empty($_POST['fCorresponsal']) ? $_POST['fCorresponsal'] : 'null';
-                                $this->tarifas['fPromotor1'] = !empty($_POST['fPromotor1']) ? $_POST['fPromotor1'] : 'null';
-                                $this->tarifas['fPromotor2'] = !empty($_POST['fPromotor2']) ? $_POST['fPromotor2'] : 'null';
                                 $this->tarifas['skStatus'] = 'AC';
-                                switch ($this->tarifas['iTipoTarifa']) {
+                                
+                                switch ($this->tarifas['iTipoTarifa']){
+                                    case 1:
+                                        $this->tarifas['fTarifa'] = !empty($_POST['fTarifaPropuesta_1']) ? $_POST['fTarifaPropuesta_1'] : 'null';
+                                        $this->tarifas['fAgenteAduanal'] = !empty($_POST['fAgenteAduanal_1']) ? $_POST['fAgenteAduanal_1'] : 'null';
+                                        $this->tarifas['fCorresponsal'] = !empty($_POST['fCorresponsal_1']) ? $_POST['fCorresponsal_1'] : 'null';
+                                        $this->tarifas['fPromotor1'] = !empty($_POST['fPromotor1_1']) ? $_POST['fPromotor1_1'] : 'null';
+                                        $this->tarifas['fPromotor2'] = !empty($_POST['fPromotor2_1']) ? $_POST['fPromotor2_1'] : 'null';
+                                        
+                                        $this->tarifas['iTipoCalculoAA'] = !empty($_POST['tipoCalculoAA_1']) ? $_POST['tipoCalculoAA_1'] : 'null';
+                                        $this->tarifas['iTipoCalculoCorresponsal'] = !empty($_POST['tipoCalculoCorresponsal_1']) ? $_POST['tipoCalculoCorresponsal_1'] : 'null';
+                                        $this->tarifas['iTipoCalculoPromotor1'] = !empty($_POST['tipoCalculoPromotor1_1']) ? $_POST['tipoCalculoPromotor1_1'] : 'null';
+                                        $this->tarifas['iTipoCalculoPromotor2'] = !empty($_POST['tipoCalculoPromotor2_1']) ? $_POST['tipoCalculoPromotor2_1'] : 'null';
+                                        break;
+                                    case 2:
+                                        $this->tarifas['fTarifa'] = !empty($_POST['fTarifaPropuesta_2']) ? $_POST['fTarifaPropuesta_2'] : 'null';
+                                        $this->tarifas['fAgenteAduanal'] = !empty($_POST['fAgenteAduanal_2']) ? $_POST['fAgenteAduanal_2'] : 'null';
+                                        $this->tarifas['fCorresponsal'] = !empty($_POST['fCorresponsal_2']) ? $_POST['fCorresponsal_2'] : 'null';
+                                        $this->tarifas['fPromotor1'] = !empty($_POST['fPromotor1_2']) ? $_POST['fPromotor1_2'] : 'null';
+                                        $this->tarifas['fPromotor2'] = !empty($_POST['fPromotor2_2']) ? $_POST['fPromotor2_2'] : 'null';
+                                        
+                                        $this->tarifas['iTipoCalculoAA'] = !empty($_POST['tipoCalculoAA_2']) ? $_POST['tipoCalculoAA_2'] : 'null';
+                                        $this->tarifas['iTipoCalculoCorresponsal'] = !empty($_POST['tipoCalculoCorresponsal_2']) ? $_POST['tipoCalculoCorresponsal_2'] : 'null';
+                                        $this->tarifas['iTipoCalculoPromotor1'] = !empty($_POST['tipoCalculoPromotor1_2']) ? $_POST['tipoCalculoPromotor1_2'] : 'null';
+                                        $this->tarifas['iTipoCalculoPromotor2'] = !empty($_POST['tipoCalculoPromotor2_2']) ? $_POST['tipoCalculoPromotor2_2'] : 'null';
+                                        break;
+                                    case 3:
+                                        if($_POST['tipoTarifaContenedor_3'] == 1){
+                                            $this->tarifas['fTarifa'] = 'null';
+                                            $this->tarifas['fAgenteAduanal'] = !empty($_POST['fAgenteAduanal_3']) ? $_POST['fAgenteAduanal_3'] : 'null';
+                                            $this->tarifas['fCorresponsal'] = !empty($_POST['fCorresponsal_3']) ? $_POST['fCorresponsal_3'] : 'null';
+                                            $this->tarifas['fPromotor1'] = !empty($_POST['fPromotor1_3']) ? $_POST['fPromotor1_3'] : 'null';
+                                            $this->tarifas['fPromotor2'] = !empty($_POST['fPromotor2_3']) ? $_POST['fPromotor2_3'] : 'null';
+                                            
+                                            $this->tarifas['iTipoCalculoAA'] = !empty($_POST['tipoCalculoAA_3']) ? $_POST['tipoCalculoAA_3'] : 'null';
+                                            $this->tarifas['iTipoCalculoCorresponsal'] = !empty($_POST['tipoCalculoCorresponsal_3']) ? $_POST['tipoCalculoCorresponsal_3'] : 'null';
+                                            $this->tarifas['iTipoCalculoPromotor1'] = !empty($_POST['tipoCalculoPromotor1_3']) ? $_POST['tipoCalculoPromotor1_3'] : 'null';
+                                            $this->tarifas['iTipoCalculoPromotor2'] = !empty($_POST['tipoCalculoPromotor2_3']) ? $_POST['tipoCalculoPromotor2_3'] : 'null';
+                                            
+                                            for($i=0;$i<count($_POST['rango1_3']);$i++){
+                                                $this->tarifaRango['iRango1'] = $_POST['rango1_3'][$i];
+                                                $this->tarifaRango['iRango2'] = $_POST['rango2_3'][$i];
+                                                $this->tarifaRango['fTarifa'] = $_POST['tarifa_3'][$i];
+                                                // AQUI GUARDAMOS LOS RANGOS //
+                                                parent::create_Rank();
+                                            }
+                                            //exit(print_r($this->tarifaRango));
+                                        }elseif($_POST['tipoTarifaContenedor_3'] == 2){
+                                            $this->tarifas['fTarifa'] = !empty($_POST['fTarifaPropuesta_3']) ? $_POST['fTarifaPropuesta_3'] : 'null';
+                                            $this->tarifas['fAgenteAduanal'] = !empty($_POST['fAgenteAduanal_3']) ? $_POST['fAgenteAduanal_3'] : 'null';
+                                            $this->tarifas['fCorresponsal'] = !empty($_POST['fCorresponsal_3']) ? $_POST['fCorresponsal_3'] : 'null';
+                                            $this->tarifas['fPromotor1'] = !empty($_POST['fPromotor1_3']) ? $_POST['fPromotor1_3'] : 'null';
+                                            $this->tarifas['fPromotor2'] = !empty($_POST['fPromotor2_3']) ? $_POST['fPromotor2_3'] : 'null';
+                                            
+                                            $this->tarifas['iTipoCalculoAA'] = !empty($_POST['tipoCalculoAA_3']) ? $_POST['tipoCalculoAA_3'] : 'null';
+                                            $this->tarifas['iTipoCalculoCorresponsal'] = !empty($_POST['tipoCalculoCorresponsal_3']) ? $_POST['tipoCalculoCorresponsal_3'] : 'null';
+                                            $this->tarifas['iTipoCalculoPromotor1'] = !empty($_POST['tipoCalculoPromotor1_3']) ? $_POST['tipoCalculoPromotor1_3'] : 'null';
+                                            $this->tarifas['iTipoCalculoPromotor2'] = !empty($_POST['tipoCalculoPromotor2_3']) ? $_POST['tipoCalculoPromotor2_3'] : 'null';
+                                        }
+                                        break;
+                                    default :
+                                        break;
+                                }
+                                
+                                //exit(print_r($_POST)); 
+                                /*switch ($this->tarifas['iTipoTarifa']) {
                                     case 1:
                                         $this->tarifas['fTarifa'] = !empty($_POST['fTarifa']) ? $_POST['fTarifa'] : 'null';
                                         break;
@@ -890,7 +952,7 @@
                                     case 3:
                                         $this->tarifas['fTarifa'] = null;
                                         break;
-                                }
+                                }*/
                                 // DEFAULT //
                                 $this->data['message'] = 'Registro guardado con &eacute;xito.';
                                 parent::terminarVigencia_tarifa();

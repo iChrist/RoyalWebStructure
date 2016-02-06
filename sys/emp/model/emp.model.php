@@ -55,9 +55,13 @@
                     ,'iTipoTarifa'=>null
                     ,'fTarifa'=>null
                     ,'fAgenteAduanal'=>null
+                    ,'iTipoCalculoAA'=>null
                     ,'fCorresponsal'=>null
+                    ,'iTipoCalculoCorresponsal'=>null
                     ,'fPromotor1'=>null
+                    ,'iTipoCalculoPromotor1'=>null
                     ,'fPromotor2'=>null
+                    ,'iTipoCalculoPromotor2'=>null
                     ,'skUserCreacion'=>null
                     ,'dFechaCreacion'=>null
                     ,'skStatus'=>null
@@ -69,6 +73,14 @@
                     
                     ,'limit'        =>  null
                     ,'offset'       =>  null
+                );
+                
+                public $tarifaRango = array(
+                     'skRango'=>null
+                    ,'skTarifa'=>null
+                    ,'iRango1'=>null
+                    ,'iRango2'=>null
+                    ,'fTarifa'=>null
                 );
                 
                     
@@ -933,10 +945,10 @@
                     }
                 }
             }
-            
+
             public function create_tarifa(){
                 $sql="INSERT INTO rel_empresas_tarifas
-                    (skTarifa,skEmpresa,sTipoCambio,iTipoTarifa,fTarifa,fAgenteAduanal,fCorresponsal,fPromotor1,fPromotor2,skUserCreacion,dFechaCreacion,skStatus)
+                    (skTarifa,skEmpresa,sTipoCambio,iTipoTarifa,fTarifa,fAgenteAduanal,iTipoCalculoAA,fCorresponsal,iTipoCalculoCorresponsal,fPromotor1,iTipoCalculoPromotor1,fPromotor2,iTipoCalculoPromotor2,skUserCreacion,dFechaCreacion,skStatus)
                     VALUES (
                     '".$this->tarifas['skTarifa']."'
                     ,'".$this->tarifas['skEmpresa']."'
@@ -944,9 +956,13 @@
                     ,".$this->tarifas['iTipoTarifa']."
                     ,".$this->tarifas['fTarifa']."
                     ,".$this->tarifas['fAgenteAduanal']."
+                    ,".$this->tarifas['iTipoCalculoAA']."
                     ,".$this->tarifas['fCorresponsal']."
+                    ,".$this->tarifas['iTipoCalculoCorresponsal']."
                     ,".$this->tarifas['fPromotor1']."
+                    ,".$this->tarifas['iTipoCalculoPromotor1']."
                     ,".$this->tarifas['fPromotor2']."
+                    ,".$this->tarifas['iTipoCalculoPromotor2']."
                     ,'".$_SESSION['session']['skUsers']."'
                     ,CURRENT_TIMESTAMP()
                     ,'".$this->tarifas['skStatus']."'
@@ -965,6 +981,17 @@
                 $result = $this->db->query($sql);
                 if($result){
                     return true;
+                }else{
+                    return false;
+                }
+            }
+            
+            public function create_Rank(){
+                $sql = "INSERT INTO rel_tarifas_rangos (skTarifa,iRango1,iRango2,fTarifa) VALUES ('".$this->tarifas['skTarifa']."',".$this->tarifaRango['iRango1'].",".$this->tarifaRango['iRango2'].",".$this->tarifaRango['fTarifa'].")";
+                //exit($sql);
+                $result = $this->db->query($sql);
+                if($result){
+                    return $this->tarifas['skTarifa'];
                 }else{
                     return false;
                 }
