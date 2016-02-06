@@ -886,10 +886,10 @@
                                         $this->tarifas['fPromotor1'] = !empty($_POST['fPromotor1_1']) ? $_POST['fPromotor1_1'] : 'null';
                                         $this->tarifas['fPromotor2'] = !empty($_POST['fPromotor2_1']) ? $_POST['fPromotor2_1'] : 'null';
                                         
-                                        $this->tarifas['iTipoCalculoAA'] = !empty($_POST['tipoCalculoAA_1']) ? $_POST['tipoCalculoAA_1'] : 'null';
-                                        $this->tarifas['iTipoCalculoCorresponsal'] = !empty($_POST['tipoCalculoCorresponsal_1']) ? $_POST['tipoCalculoCorresponsal_1'] : 'null';
-                                        $this->tarifas['iTipoCalculoPromotor1'] = !empty($_POST['tipoCalculoPromotor1_1']) ? $_POST['tipoCalculoPromotor1_1'] : 'null';
-                                        $this->tarifas['iTipoCalculoPromotor2'] = !empty($_POST['tipoCalculoPromotor2_1']) ? $_POST['tipoCalculoPromotor2_1'] : 'null';
+                                        $this->tarifas['iTipoCalculoAA'] = !empty($_POST['tipoCalculoAA_1']) ? $_POST['tipoCalculoAA_1'] : 0;
+                                        $this->tarifas['iTipoCalculoCorresponsal'] = !empty($_POST['tipoCalculoCorresponsal_1']) ? $_POST['tipoCalculoCorresponsal_1'] : 0;
+                                        $this->tarifas['iTipoCalculoPromotor1'] = !empty($_POST['tipoCalculoPromotor1_1']) ? $_POST['tipoCalculoPromotor1_1'] : 0;
+                                        $this->tarifas['iTipoCalculoPromotor2'] = !empty($_POST['tipoCalculoPromotor2_1']) ? $_POST['tipoCalculoPromotor2_1'] : 0;
                                         break;
                                     case 2:
                                         $this->tarifas['fTarifa'] = !empty($_POST['fTarifaPropuesta_2']) ? $_POST['fTarifaPropuesta_2'] : 'null';
@@ -898,10 +898,10 @@
                                         $this->tarifas['fPromotor1'] = !empty($_POST['fPromotor1_2']) ? $_POST['fPromotor1_2'] : 'null';
                                         $this->tarifas['fPromotor2'] = !empty($_POST['fPromotor2_2']) ? $_POST['fPromotor2_2'] : 'null';
                                         
-                                        $this->tarifas['iTipoCalculoAA'] = !empty($_POST['tipoCalculoAA_2']) ? $_POST['tipoCalculoAA_2'] : 'null';
-                                        $this->tarifas['iTipoCalculoCorresponsal'] = !empty($_POST['tipoCalculoCorresponsal_2']) ? $_POST['tipoCalculoCorresponsal_2'] : 'null';
-                                        $this->tarifas['iTipoCalculoPromotor1'] = !empty($_POST['tipoCalculoPromotor1_2']) ? $_POST['tipoCalculoPromotor1_2'] : 'null';
-                                        $this->tarifas['iTipoCalculoPromotor2'] = !empty($_POST['tipoCalculoPromotor2_2']) ? $_POST['tipoCalculoPromotor2_2'] : 'null';
+                                        $this->tarifas['iTipoCalculoAA'] = !empty($_POST['tipoCalculoAA_2']) ? $_POST['tipoCalculoAA_2'] : 0;
+                                        $this->tarifas['iTipoCalculoCorresponsal'] = !empty($_POST['tipoCalculoCorresponsal_2']) ? $_POST['tipoCalculoCorresponsal_2'] : 0;
+                                        $this->tarifas['iTipoCalculoPromotor1'] = !empty($_POST['tipoCalculoPromotor1_2']) ? $_POST['tipoCalculoPromotor1_2'] : 0;
+                                        $this->tarifas['iTipoCalculoPromotor2'] = !empty($_POST['tipoCalculoPromotor2_2']) ? $_POST['tipoCalculoPromotor2_2'] : 0;
                                         break;
                                     case 3:
                                         if($_POST['tipoTarifaContenedor_3'] == 1){
@@ -911,10 +911,10 @@
                                             $this->tarifas['fPromotor1'] = !empty($_POST['fPromotor1_3']) ? $_POST['fPromotor1_3'] : 'null';
                                             $this->tarifas['fPromotor2'] = !empty($_POST['fPromotor2_3']) ? $_POST['fPromotor2_3'] : 'null';
                                             
-                                            $this->tarifas['iTipoCalculoAA'] = !empty($_POST['tipoCalculoAA_3']) ? $_POST['tipoCalculoAA_3'] : 'null';
-                                            $this->tarifas['iTipoCalculoCorresponsal'] = !empty($_POST['tipoCalculoCorresponsal_3']) ? $_POST['tipoCalculoCorresponsal_3'] : 'null';
-                                            $this->tarifas['iTipoCalculoPromotor1'] = !empty($_POST['tipoCalculoPromotor1_3']) ? $_POST['tipoCalculoPromotor1_3'] : 'null';
-                                            $this->tarifas['iTipoCalculoPromotor2'] = !empty($_POST['tipoCalculoPromotor2_3']) ? $_POST['tipoCalculoPromotor2_3'] : 'null';
+                                            $this->tarifas['iTipoCalculoAA'] = !empty($_POST['tipoCalculoAA_3']) ? $_POST['tipoCalculoAA_3'] : 0;
+                                            $this->tarifas['iTipoCalculoCorresponsal'] = !empty($_POST['tipoCalculoCorresponsal_3']) ? $_POST['tipoCalculoCorresponsal_3'] : 0;
+                                            $this->tarifas['iTipoCalculoPromotor1'] = !empty($_POST['tipoCalculoPromotor1_3']) ? $_POST['tipoCalculoPromotor1_3'] : 0;
+                                            $this->tarifas['iTipoCalculoPromotor2'] = !empty($_POST['tipoCalculoPromotor2_3']) ? $_POST['tipoCalculoPromotor2_3'] : 0;
                                             
                                             for($i=0;$i<count($_POST['rango1_3']);$i++){
                                                 $this->tarifaRango['iRango1'] = $_POST['rango1_3'][$i];
