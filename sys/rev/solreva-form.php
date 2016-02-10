@@ -343,9 +343,11 @@ function obtenerDatos(){
       '    <label class="control-label ">Volumen: '+data.data[0][7]+'</label>'+
       ' </div>'+
    ' </div>';
-   
-            $("input[name=sBlMaster]").val(data.data[0][8]);
-            $("input[name=sBlHouse]").val(data.data[0][9]);
+            
+            if($("input[name=sBlMaster]").val().length == 0){
+                $("input[name=sBlMaster]").val(data.data[0][8]);
+                $("input[name=sBlHouse]").val(data.data[0][9]);
+            }
    }
                  $("#dvDatos").html(cad);
                /*$("#sNumeroParte").html(cad);

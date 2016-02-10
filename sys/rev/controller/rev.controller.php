@@ -210,8 +210,8 @@
 													,utf8_encode($row['iBultos'])
 													,utf8_encode($row['fPeso'])
 													,utf8_encode($row['fVolumen'])
-                                                                                                        ,utf8_encode($row['sBlMaster'])
-                                                                                                        ,utf8_encode($row['sBlHouse'])
+                                                                                                        ,!empty($row['sBlMaster']) ? utf8_encode($row['sBlMaster']) : ''
+                                                                                                        ,!empty($row['sBlHouse']) ? utf8_encode($row['sBlHouse']) : ''
 												)
 												);
 											}
