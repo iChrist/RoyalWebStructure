@@ -35,6 +35,8 @@ echo "</pre>";*/
           <tr role="row" class="heading">
             <th width="10%"> Referencia </th>
             <th width="10%"> Pedimento </th>
+            <th width="10%"> BL Master </th>
+            <th width="10%"> BL House </th>
             <th width="10%"> Tipo de Tramite </th>
             <th width="10%"> Tipo de Servicios </th>
             <th width="10%"> Cliente </th>
@@ -55,6 +57,8 @@ echo "</pre>";*/
                 <input type="text" class="form-control form-filter input-sm" name="sReferencia" placeholder="Referencia">
             </td>
             <td><input type="text" class="form-control form-filter input-sm" name="sPedimento" placeholder="Pedimentos"></td>
+            <td><input type="text" class="form-control form-filter input-sm" name="sBlMaster" placeholder="BL Master"></td>
+            <td><input type="text" class="form-control form-filter input-sm" name="sBlHouse" placeholder="BL House"></td>
             <td><select name="skTipoTramite" class="form-control form-filter input-sm">
                 <option value="">- Tipos de Tramites -</option>
                 <?php

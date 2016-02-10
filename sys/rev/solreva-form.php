@@ -37,16 +37,26 @@
         </div>
       </div>
     </div>
-
+      
+      
     <div class="form-group">
-      <label class="control-label col-md-2">N&uacute;mero de BL <span aria-required="true" class="required"> * </span> </label>
+      <label class="control-label col-md-2">BL Master</label>
       <div class="col-md-4">
         <div class="input-icon right"> <i class="fa"></i>
-          <input type="text" name="sBL" id="sBL" class="form-control" placeholder="BL" value="<?php echo (isset($result['sBL'])) ? utf8_encode($result['sBL']) : '' ; ?>" <?php echo $disabled; ?>>
+          <input type="text" name="sBlMaster" id="sBlMaster" class="form-control" placeholder="BL Master" value="<?php echo (isset($result['sBlMaster'])) ? utf8_encode($result['sBlMaster']) : '' ; ?>" <?php echo $disabled; ?>>
         </div>
       </div>
     </div>
-  
+    
+    <div class="form-group">
+      <label class="control-label col-md-2">BL House</label>
+      <div class="col-md-4">
+        <div class="input-icon right"> <i class="fa"></i>
+          <input type="text" name="sBlHouse" id="sBlHouse" class="form-control" placeholder="BL House" value="<?php echo (isset($result['sBlHouse'])) ? utf8_encode($result['sBlHouse']) : '' ; ?>" <?php echo $disabled; ?>>
+        </div>
+      </div>
+    </div>
+    
     <div class="form-group">
       <label class="control-label col-md-2">ETA <span aria-required="true" class="required"> * </span></label>
       <div class="col-md-4">
@@ -333,6 +343,9 @@ function obtenerDatos(){
       '    <label class="control-label ">Volumen: '+data.data[0][7]+'</label>'+
       ' </div>'+
    ' </div>';
+   
+            $("input[name=sBlMaster]").val(data.data[0][8]);
+            $("input[name=sBlHouse]").val(data.data[0][9]);
    }
                  $("#dvDatos").html(cad);
                /*$("#sNumeroParte").html(cad);

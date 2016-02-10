@@ -5,6 +5,8 @@
                 public $recepciondocumentos = array(
                     'skRecepcionDocumento'    		=>  ''
                     ,'sReferencia'     				=>  ''
+                    ,'sBlMaster'     				=>  ''
+                    ,'sBlHouse'     				=>  ''
                     ,'sPedimento'     				=>  ''
                     ,'sMercancia'     				=>  ''
                     ,'sObservaciones'     				=>  ''
@@ -292,6 +294,12 @@
                 if(!empty($this->recepciondocumentos['skTipoServicio'])){
                     $sql .=" AND rd.skTipoServicio like '%".$this->recepciondocumentos['skTipoServicio']."%'";
                 }
+                if(!empty($this->recepciondocumentos['sBlMaster'])){
+                    $sql .=" AND rd.sBlMaster like '%".$this->recepciondocumentos['sBlMaster']."%'";
+                }
+                if(!empty($this->recepciondocumentos['sBlHouse'])){
+                    $sql .=" AND rd.sBlHouse like '%".$this->recepciondocumentos['sBlHouse']."%'";
+                }
                 if(!empty($this->recepciondocumentos['skClaveDocumento'])){
                     $sql .=" AND rd.skClaveDocumento like '%".$this->recepciondocumentos['skClaveDocumento']."%'";
                 }
@@ -382,6 +390,12 @@
                 if(!empty($this->recepciondocumentos['skTipoTramite'])){
                     $sql .=" AND rd.skTipoTramite like '%".$this->recepciondocumentos['skTipoTramite']."%'";
                 }
+                if(!empty($this->recepciondocumentos['sBlMaster'])){
+                    $sql .=" AND rd.sBlMaster like '%".$this->recepciondocumentos['sBlMaster']."%'";
+                }
+                if(!empty($this->recepciondocumentos['sBlHouse'])){
+                    $sql .=" AND rd.sBlHouse like '%".$this->recepciondocumentos['sBlHouse']."%'";
+                }
                 if(!empty($this->recepciondocumentos['sNumContenedor'])){
                     $sql .=" AND rd.sNumContenedor like '%".$this->recepciondocumentos['sNumContenedor']."%'";
                 }
@@ -426,12 +440,14 @@
             }
             
             public function create_recepciondocumentos(){
- 				$sql = "INSERT INTO ope_recepciones_documentos (skRecepcionDocumento,sReferencia,sPedimento,sMercancia,sObservaciones,sNumContenedor,iBultos,fPeso,fVolumen,skEmpresa,skTipoTramite,
+ 				$sql = "INSERT INTO ope_recepciones_documentos (skRecepcionDocumento,sReferencia,sPedimento,sBlMaster,sBlHouse,sMercancia,sObservaciones,sNumContenedor,iBultos,fPeso,fVolumen,skEmpresa,skTipoTramite,
                         skTipoServicio,skClaveDocumento,dRecepcion,tRecepcion,
                         skStatus,dFechaCreacion,skUsersCreacion,dFechaModificacion,skUsersModificacion) 
                         VALUES ('".$this->recepciondocumentos['skRecepcionDocumento']."',
                                 '".$this->recepciondocumentos['sReferencia']."',
                                 '".$this->recepciondocumentos['sPedimento']."',
+                                '".$this->recepciondocumentos['sBlMaster']."',
+                                '".$this->recepciondocumentos['sBlHouse']."',
                                 '".$this->recepciondocumentos['sMercancia']."',
                                 '".$this->recepciondocumentos['sObservaciones']."',
                                 
@@ -468,6 +484,12 @@
                 }
                 if(!empty($this->recepciondocumentos['sPedimento'])){
                     $sql .=" sPedimento = '".$this->recepciondocumentos['sPedimento']."' ,";
+                }
+                if(!empty($this->recepciondocumentos['sBlMaster'])){
+                    $sql .=" sBlMaster = '".$this->recepciondocumentos['sBlMaster']."' ,";
+                }
+                if(!empty($this->recepciondocumentos['sBlHouse'])){
+                    $sql .=" sBlHouse = '".$this->recepciondocumentos['sBlHouse']."' ,";
                 }
 				if(!empty($this->recepciondocumentos['sMercancia'])){
                     $sql .=" sMercancia = '".$this->recepciondocumentos['sMercancia']."' ,";

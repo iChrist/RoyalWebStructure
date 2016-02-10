@@ -56,8 +56,13 @@ font-size: 12px;
 </tr>
 <tr><td style="height:5px;"></td></tr>
 <tr>
-    <td><strong>BL: </strong></td>
-    <td><?php echo (isset($data['datos']['sBL'])) ? utf8_encode($data['datos']['sBL']) : ''; ?></td>
+    <td><strong>BL Master: </strong></td>
+    <td><?php echo (isset($data['datos']['sBlMaster'])) ? utf8_encode($data['datos']['sBlMaster']) : ''; ?></td>
+</tr>
+<tr><td style="height:5px;"></td></tr>
+<tr>
+    <td><strong>BL House: </strong></td>
+    <td><?php echo (isset($data['datos']['sBlHouse'])) ? utf8_encode($data['datos']['sBlHouse']) : ''; ?></td>
 </tr>
 <tr><td style="height:5px;"></td></tr>
 <tr>
@@ -92,7 +97,10 @@ font-size: 12px;
     <td><strong>Cliente:</strong></td>
     <td><?php echo (isset($data['recepcionDocumentos']['Empresa'])) ? utf8_encode($data['recepcionDocumentos']['Empresa']) : ''; ?></td>
 </tr>
-<tr><td style="height:1px;"></td></tr>
+<tr>
+    <td><strong>Ejecutivo:</strong></td>
+    <td><?php echo (isset($data['datos']['UsuarioEjecutivo'])) ? utf8_encode($data['datos']['UsuarioEjecutivo']) : ''; ?></td>
+</tr>
 <tr>
     <td><strong>Tramite: </strong></td>
     <td><?php echo (isset($data['recepcionDocumentos']['TipoTramite'])) ? utf8_encode($data['recepcionDocumentos']['TipoTramite']) : ''; ?></td>

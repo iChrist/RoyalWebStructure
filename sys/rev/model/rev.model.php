@@ -17,7 +17,8 @@
                     ,'skUsuarioProceso'                     =>  null
                     ,'skUsuarioCierre'                      =>  null
 
-                    ,'sBL'                                  =>  null
+                    ,'sBlMaster'                                  =>  null
+                    ,'sBlHouse'                                  =>  null
                     ,'iPrioridad'                           =>  null
                     ,'dFechaArriboBuque'                    =>  null
                     ,'dEta'                                 =>  null
@@ -78,8 +79,11 @@
 				if(!empty($this->solreva['skEstatusRevalidacion'])){
                     $sql .=" AND skEstatusRevalidacion = '".$this->solreva['skEstatusRevalidacion']."'";
                 }
-                if(!empty($this->solreva['sBL'])){
-                    $sql .=" AND sBL = '".$this->solreva['sBL']."'";
+                if(!empty($this->solreva['sBlMaster'])){
+                    $sql .=" AND sBlMaster = '".$this->solreva['sBlMaster']."'";
+                }
+                if(!empty($this->solreva['sBlHouse'])){
+                    $sql .=" AND sBlHouse = '".$this->solreva['sBlHouse']."'";
                 }
                 if(!empty($this->solreva['iPrioridad'])){
                     $sql .=" AND iPrioridad = ".$this->solreva['iPrioridad'];
@@ -172,8 +176,11 @@
                 if(!empty($this->solreva['skUsuarioSolicitud'])){
                     $sql .=" AND sd.skUsuarioSolicitud = '".$this->solreva['skUsuarioSolicitud']."'";
                 }
-                if(!empty($this->solreva['sBL'])){
-                    $sql .=" AND sd.sBL = '".$this->solreva['sBL']."'";
+                if(!empty($this->solreva['sBlMaster'])){
+                    $sql .=" AND sd.sBlMaster = '".$this->solreva['sBlMaster']."'";
+                }
+                if(!empty($this->solreva['sBlHouse'])){
+                    $sql .=" AND sd.sBlHouse = '".$this->solreva['sBlHouse']."'";
                 }
                 if(!empty($this->solreva['iPrioridad'])){
                     $sql .=" AND sd.iPrioridad = ".$this->solreva['iPrioridad'];
@@ -241,7 +248,7 @@
             
             public function create_solreva(){
  				$sql = "INSERT INTO ope_solicitud_revalidacion (	skSolicitudRevalidacion,sReferencia,sObservaciones,skEmpresaNaviera,
-																skEstatusRevalidacion,dFechaCreacion,skUsuarioSolicitud,sBL,iPrioridad,dFechaArriboBuque,dEta) 
+																skEstatusRevalidacion,dFechaCreacion,skUsuarioSolicitud,sBlMaster,sBlHouse,iPrioridad,dFechaArriboBuque,dEta) 
 						VALUES ('".$this->solreva['skSolicitudRevalidacion']."',
 								'".$this->solreva['sReferencia']."',
   								'".$this->solreva['sObservaciones']."',
@@ -249,7 +256,8 @@
 								'NU',
  								CURRENT_TIMESTAMP(),
 								'".$_SESSION['session']['skUsers']."',
-                                '".$this->solreva['sBL']."',
+                                '".$this->solreva['sBlMaster']."',
+                                '".$this->solreva['sBlHouse']."',
                                 ".$this->solreva['iPrioridad'].",
                                 '".$this->solreva['dFechaArriboBuque']."',
                                 '".$this->solreva['dEta']."')";
@@ -289,8 +297,11 @@
                 if(!is_null($this->solreva['skUsuarioCierre'])){
                     $sql.=" skUsuarioCierre='".$this->solreva['skUsuarioCierre']."', ";
                 }
-                if(!is_null($this->solreva['sBL'])){
-                    $sql.=" sBL='".$this->solreva['sBL']."', ";
+                if(!is_null($this->solreva['sBlMaster'])){
+                    $sql.=" sBlMaster='".$this->solreva['sBlMaster']."', ";
+                }
+                if(!is_null($this->solreva['sBlHouse'])){
+                    $sql.=" sBlHouse='".$this->solreva['sBlHouse']."', ";
                 }
                 if(!is_null($this->solreva['iPrioridad'])){
                     $sql.=" iPrioridad='".$this->solreva['iPrioridad']."', ";

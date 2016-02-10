@@ -210,6 +210,8 @@
 													,utf8_encode($row['iBultos'])
 													,utf8_encode($row['fPeso'])
 													,utf8_encode($row['fVolumen'])
+                                                                                                        ,utf8_encode($row['sBlMaster'])
+                                                                                                        ,utf8_encode($row['sBlHouse'])
 												)
 												);
 											}
@@ -252,7 +254,8 @@
  					$this->solreva['skEmpresaNaviera'] = isset($_POST['skEmpresaNaviera']) ? utf8_decode($_POST['skEmpresaNaviera']) : null;
  					$this->solreva['skEstatusRevalidacion'] =  isset($_POST['skEstatusRevalidacion']) ? $_POST['skEstatusRevalidacion'] : null;
  					$this->solreva['skUsuarioTramitador'] = isset($_POST['skUsuarioTramitador']) ? $_POST['skUsuarioTramitador'] : null;
- 					$this->solreva['sBL'] = isset($_POST['sBL']) ? $_POST['sBL'] : null;
+ 					$this->solreva['sBlMaster'] = isset($_POST['sBlMaster']) ? $_POST['sBlMaster'] : null;
+                                        $this->solreva['sBlHouse'] = isset($_POST['sBlHouse']) ? $_POST['sBlHouse'] : null;
  					$this->solreva['iPrioridad'] = isset($_POST['iPrioridad']) ? $_POST['iPrioridad'] : null;
  					$this->solreva['dFechaArriboBuque'] = isset($_POST['dFechaArriboBuque']) ? date('Y-m-d',strtotime($_POST['dFechaArriboBuque'])) : null;
  					$this->solreva['dEta'] = isset($_POST['dEta']) ? date('Y-m-d',strtotime($_POST['dEta'])) : null;

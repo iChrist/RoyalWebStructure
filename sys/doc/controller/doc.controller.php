@@ -81,6 +81,12 @@
 					if(isset($_POST['skTipoTramite'])){
 						$this->recepciondocumentos['skTipoTramite'] = $_POST['skTipoTramite'];
 					}
+                                        if(isset($_POST['sBlMaster'])){
+						$this->recepciondocumentos['sBlMaster'] = $_POST['sBlMaster'];
+					}
+                                        if(isset($_POST['sBlHouse'])){
+						$this->recepciondocumentos['sBlHouse'] = $_POST['sBlHouse'];
+					}
 					if(isset($_POST['skTipoServicio'])){
 						$this->recepciondocumentos['skTipoServicio'] = $_POST['skTipoServicio'];
 					}
@@ -145,7 +151,9 @@
                                                 array_push($records['data'], array(
 							 utf8_encode($row['sReferencia'])
 							,utf8_encode($row['sPedimento'])
-							,utf8_encode($row['TipoTramite'])
+							,utf8_encode($row['sBlMaster'])
+                                                        ,utf8_encode($row['sBlHouse'])
+                                                        ,utf8_encode($row['TipoTramite'])
 							,utf8_encode($datosServicio)
 							,utf8_encode($row['Empresa'])
                                                         ,utf8_encode($row['corresponsalia'])
@@ -229,6 +237,8 @@
 					$this->recepciondocumentos['skRecepcionDocumento'] = !empty($_POST['skRecepcionDocumento']) ? $_POST['skRecepcionDocumento'] : substr(md5(microtime()), 1, 32);
 					$this->recepciondocumentos['sReferencia'] = utf8_decode($_POST['sReferencia']);
 					$this->recepciondocumentos['sPedimento'] = utf8_decode($_POST['sPedimento']);
+                                        $this->recepciondocumentos['sBlMaster'] = !empty($_POST['sBlMaster']) ? utf8_decode($_POST['sBlMaster']) : '';
+                                        $this->recepciondocumentos['sBlHouse'] = !empty($_POST['sBlHouse']) ? utf8_decode($_POST['sBlHouse']) : '';;
 					$this->recepciondocumentos['sMercancia'] = utf8_decode($_POST['sMercancia']);
 					$this->recepciondocumentos['sObservaciones'] = utf8_decode($_POST['sObservaciones']);
 					
@@ -380,19 +390,21 @@
                 }
                 $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $i, utf8_encode($row['sReferencia']));
                 $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $i, utf8_encode($row['sPedimento']));
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $i, utf8_encode($row['TipoTramite']));
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $i, utf8_encode($datosServicio));
-                $objPHPExcel->getActiveSheet()->getStyle('D'.$i)->getAlignment()->setWrapText(true);
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $i, utf8_encode($row['Empresa']));
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $i, utf8_encode($row['corresponsalia']));
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $i, utf8_encode($promotores));
-                $objPHPExcel->getActiveSheet()->getStyle('G'.$i)->getAlignment()->setWrapText(true);
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $i, utf8_encode($row['skClaveDocumento']));
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $i, utf8_encode($row['sMercancia']));
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(9, $i, utf8_encode($row['sObservaciones']));
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(10, $i, date('d-m-Y',strtotime($row['dRecepcion'])).' '.$row['tRecepcion']);
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(11, $i, date('d-m-Y H:i:s',strtotime($row['dFechaCreacion'])));
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(12, $i, utf8_encode($row['autor']));
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $i, utf8_encode($row['sBlMaster']));
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $i, utf8_encode($row['sBlHouse']));
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $i, utf8_encode($row['TipoTramite']));
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $i, utf8_encode($datosServicio));
+                $objPHPExcel->getActiveSheet()->getStyle('F'.$i)->getAlignment()->setWrapText(true);
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $i, utf8_encode($row['Empresa']));
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $i, utf8_encode($row['corresponsalia']));
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $i, utf8_encode($promotores));
+                $objPHPExcel->getActiveSheet()->getStyle('I'.$i)->getAlignment()->setWrapText(true);
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(9, $i, utf8_encode($row['skClaveDocumento']));
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(10, $i, utf8_encode($row['sMercancia']));
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(11, $i, utf8_encode($row['sObservaciones']));
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(12, $i, date('d-m-Y',strtotime($row['dRecepcion'])).' '.$row['tRecepcion']);
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(13, $i, date('d-m-Y H:i:s',strtotime($row['dFechaCreacion'])));
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(14, $i, utf8_encode($row['autor']));
                 $i++;
             }
             //exit('<pre>'.print_r($objPHPExcel,1).'<pre>');

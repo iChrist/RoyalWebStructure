@@ -105,6 +105,24 @@
         </div>
       </div>
     </div>
+    
+    <div class="form-group">
+      <label class="control-label col-md-2">BL Master</label>
+      <div class="col-md-4">
+        <div class="input-icon right"> <i class="fa"></i>
+          <input type="text" name="sBlMaster" id="sBlMaster" class="form-control" placeholder="BL Master" value="<?php echo (isset($result['sBlMaster'])) ? utf8_encode($result['sBlMaster']) : '' ; ?>" >
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label class="control-label col-md-2">BL House</label>
+      <div class="col-md-4">
+        <div class="input-icon right"> <i class="fa"></i>
+          <input type="text" name="sBlHouse" id="sBlHouse" class="form-control" placeholder="BL House" value="<?php echo (isset($result['sBlHouse'])) ? utf8_encode($result['sBlHouse']) : '' ; ?>" >
+        </div>
+      </div>
+    </div>
      
     <div class="form-group">
       <label class="control-label col-md-2">Cliente <span aria-required="true" class="required"> * </span> </label>

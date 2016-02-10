@@ -310,6 +310,7 @@
                 '".$this->claExcel['dFechaPrevio']."',
                 '".$this->claExcel['sFactura']."'
                 );";
+                exit($sql);
                 $result = $this->db->query($sql);
                 if($result){
                     return $sql;

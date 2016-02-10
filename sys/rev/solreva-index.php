@@ -56,7 +56,7 @@
                     </span>
                 </div>
             </td>
-            <td><select name="skUsuarioRevalidacion" class="form-control form-filter input-sm">
+            <td><select name="skUsuarioSolicitud" class="form-control form-filter input-sm">
                 <option value="">- Ejecutivo -</option>
                 <?php
                                     if($data['ejecutivo']){

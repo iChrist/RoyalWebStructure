@@ -367,7 +367,7 @@
                     $dFechaImportacion = date('Y-m-d H:i:s');
                     ini_set('memory_limit', '-1');
                     $data = json_decode($_POST['sJson'],1);
-                    $response = $this->import_excel($data['Hoja1'],$dFechaImportacion);
+                    $response = $this->import_excel($data[key($data)],$dFechaImportacion);
                     if($response['response']){
                         $this->data['response'] = $response['response'];
                         $this->data['message'] = $response['message'];

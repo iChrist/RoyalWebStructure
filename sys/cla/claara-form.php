@@ -348,8 +348,9 @@ function process_wb(wb) {
 	var output = "";
 	output = JSON.stringify(to_json(wb), 2, 2);
         var total = to_json(wb);
-        if(total['Hoja1']){
-            $("#total").html("Procesando " + total['Hoja1'].length + " Registros...");
+        console.log(Object.keys(total));
+        if(total[Object.keys(total)]){
+            $("#total").html("Procesando " + total[Object.keys(total)].length + " Registros...");
             $("#sJson").val(JSON.stringify(to_json(wb)));
             $('.page-title-loading').css('display','inline');
             $.ajax({
