@@ -5,8 +5,7 @@
     }
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
-    <input type="hidden" name="skFacturacion"  id="skFacturacion" value="<?php echo (isset($result['skFacturacion'])) ? $result['skFacturacion'] : '' ; ?>">
-    <input type="hidden" name="skTarifa"  id="skTarifa" value="">
+    <input type="hidden" name="skProforma"  id="skProforma" value="<?php echo (isset($result['skProforma'])) ? $result['skProforma'] : '' ; ?>">
     <div class="form-body">
         
         <div class="form-group">
@@ -23,7 +22,7 @@
         <div class="form-group" id="dvDatos"></div>
         <hr>
         <div class="form-group">
-            <label class=" col-md-2">Observaciones </label>
+            <label class="control-label col-md-2">Observaciones <span aria-required="true" class="required"> * </span> </label>
             <div class="col-md-8">
                 <div class="input-icon right"> <i class="fa"></i>
                     <textarea rows="5"  name="sObservaciones" id="sObservaciones" class="form-control" placeholder="Observaciones"  ><?php echo (isset($result['sObservaciones'])) ? utf8_encode($result['sObservaciones']) : '' ; ?></textarea>
@@ -141,35 +140,7 @@ function obtenerDatos(){
             },
             "La referencia no existe."
         );
-        // VALIDADOR DE SUMA DE PORCENTAJE //
-        $.validator.addMethod(
-            "validarPorcentaje", 
-            function(value, element) {
-                porcentaje = 
-                      parseFloat(($("#fAgenteAduanal").val()) ? $("#fAgenteAduanal").val() : 0) 
-                    + parseFloat(($("#fCorresponsal").val()) ? $("#fCorresponsal").val() : 0)
-                    + parseFloat(($("#fPromotor1").val()) ? $("#fPromotor1").val() : 0)
-                    + parseFloat(($("#fPromotor2").val()) ? $("#fPromotor2").val() : 0);
-                $("#procentaje").html("Suma de porcentajes: "+porcentaje+"%");
-                if(porcentaje > 0 && porcentaje <= 100){
-                    $("#procentaje").css("color","green");
-                    $("#procentaje").html("Suma de porcentajes: "+porcentaje+"%");
-                    // SUCCESS INPUT //
-                    var icon = $(".porcentajes").parent('.input-icon').children('i');
-                    $(".porcentajes").closest('.form-group').removeClass('has-error').addClass('has-success');
-                    icon.removeClass("fa-warning").addClass("fa-check");
-                    return true;
-                }else{
-                    $("#procentaje").css("color","red");
-                    $("#procentaje").html("Suma de porcentajes: "+porcentaje+"%");
-                    var icon = $(".porcentajes").parent('.input-icon').children('i');
-                    $(".porcentajes").closest('.form-group').removeClass('has-success').addClass('has-error');
-                    icon.removeClass("fa-check").addClass("fa-warning");
-                    return false;
-                }
-            },
-            "La suma de los porcentajes debe ser menor o igual a 100%"
-        );
+        
         /* VALIDATIONS */
         isValid = $("#_save").validate({
             errorElement: 'span', //default input error message container
@@ -189,37 +160,8 @@ function obtenerDatos(){
                     },
                     obtenerDatos: true
                 },
-                fIva: {
+                sObservaciones:{
                     required: true,
-                    number: true,
-                },
-                fValorDolar: {
-                    required: true,
-                    number: true,
-                },
-                fTotalFacturado: {
-                    required: true,
-                    number: true,
-                },
-                fAgenteAduanal:{
-                    required: true,
-                    number: true,
-                    validarPorcentaje: true
-                },
-                fCorresponsal:{
-                    required: true,
-                    number: true,
-                    validarPorcentaje: true
-                },
-                fPromotor1:{
-                    required: true,
-                    number: true,
-                    validarPorcentaje: true
-                },
-                fPromotor2:{
-                    required: true,
-                    number: true,
-                    validarPorcentaje: true
                 }
             },
             invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar              
@@ -262,33 +204,8 @@ function obtenerDatos(){
                     required:"Campo obligatorio",
                     remote: "La referencia no existe."
                 },
-                fIva:{
-                    required: "Campo obligatorio.",
-                    number: "Solo n&uacute;meros."
-                },
-                fValorDolar:{
-                    required: "Campo obligatorio.",
-                    number: "Solo n&uacute;meros."
-                },
-                fTotalFacturado:{
-                    required: "Campo obligatorio.",
-                    number: "Solo n&uacute;meros."
-                },
-                fAgenteAduanal:{
-                    required: "Campo obligatorio.",
-                    number: "Solo n&uacute;meros."
-                },
-                fCorresponsal:{
-                    required: "Campo obligatorio.",
-                    number: "Solo n&uacute;meros."
-                },
-                fPromotor1:{
-                    required: "Campo obligatorio.",
-                    number: "Solo n&uacute;meros."
-                },
-                fPromotor2:{
-                    required: "Campo obligatorio.",
-                    number: "Solo n&uacute;meros."
+                sObservaciones:{
+                    required: "Campo obligatorio."
                 }
             }
         });

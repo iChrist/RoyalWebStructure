@@ -161,7 +161,7 @@
                         case "save":
                             $this->pro['skProforma'] = !empty($_POST['skProforma']) ? $_POST['skProforma'] : substr(md5(microtime()), 1, 32);
                             $this->pro['sReferencia'] = !empty($_POST['sReferencia']) ? $_POST['sReferencia'] : null;
-                            $this->pro['sObservaciones'] = !empty($_POST['sObservaciones']) ? date('Y-m-d',  strtotime($_POST['sObservaciones'])) : null;
+                            $this->pro['sObservaciones'] = !empty($_POST['sObservaciones']) ? $_POST['sObservaciones'] : null;
                             // DEFAULT //
                             $this->data['message'] = 'Registro guardado con &eacute;xito.';
                             if(empty($_POST['skProforma'])){
