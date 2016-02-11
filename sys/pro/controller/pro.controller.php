@@ -42,10 +42,10 @@
                                 $this->pro['skProforma'] = $_POST['skProforma'];
                             }
                             if(!empty($_POST['sReferencia'])){
-                                $this->pro['sReferencia'] = $_POST['sReferencia'];
+                                $this->pro['sReferencia'] = utf8_decode($_POST['sReferencia']);
                             }
                             if(!empty($_POST['sObservaciones'])){
-                                $this->pro['sObservaciones'] = $_POST['sObservaciones'];
+                                $this->pro['sObservaciones'] = utf8_decode($_POST['sObservaciones']);
                             }
                             if(!empty($_POST['skUserCreacion'])){
                                 $this->pro['skUserCreacion'] = $_POST['skUserCreacion'];
@@ -160,8 +160,8 @@
                             break;
                         case "save":
                             $this->pro['skProforma'] = !empty($_POST['skProforma']) ? $_POST['skProforma'] : substr(md5(microtime()), 1, 32);
-                            $this->pro['sReferencia'] = !empty($_POST['sReferencia']) ? $_POST['sReferencia'] : null;
-                            $this->pro['sObservaciones'] = !empty($_POST['sObservaciones']) ? $_POST['sObservaciones'] : null;
+                            $this->pro['sReferencia'] = !empty($_POST['sReferencia']) ? utf8_decode($_POST['sReferencia']) : null;
+                            $this->pro['sObservaciones'] = !empty($_POST['sObservaciones']) ? utf8_decode($_POST['sObservaciones']) : null;
                             // DEFAULT //
                             $this->data['message'] = 'Registro guardado con &eacute;xito.';
                             if(empty($_POST['skProforma'])){

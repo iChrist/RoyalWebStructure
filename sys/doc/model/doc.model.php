@@ -467,7 +467,7 @@
                                 '".$_SESSION['session']['skUsers']."',
                                 CURRENT_TIMESTAMP(),
                                 '".$_SESSION['session']['skUsers']."')";
-				//echo $sql;die();
+				//exit($sql);
                 $result = $this->db->query($sql);
                 if($result){
                     return $this->recepciondocumentos['skRecepcionDocumento'];

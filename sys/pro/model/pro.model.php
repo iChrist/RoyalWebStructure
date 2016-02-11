@@ -80,7 +80,7 @@
             public function read_pro(){
                 //CONCAT(IF(usr.sName = null, '',usr.sName),' ',IF(usr.sLastNamePaternal = null, '',usr.sLastNamePaternal),' ',IF(usr.sLastNameMaternal = null, '',usr.sLastNameMaternal)) AS autor,
                 $sql = "SELECT 	pro.*, ce.sNombre AS cliente,
-                _users.sName AS autor,
+                usr.sName AS autor,
                 _status.sHtml AS htmlStatus
                 FROM ope_proforma AS pro
                 INNER JOIN ope_recepciones_documentos AS rd ON rd.sReferencia = pro.sReferencia

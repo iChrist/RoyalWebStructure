@@ -235,26 +235,26 @@
 							}
 						}
 					$this->recepciondocumentos['skRecepcionDocumento'] = !empty($_POST['skRecepcionDocumento']) ? $_POST['skRecepcionDocumento'] : substr(md5(microtime()), 1, 32);
-					$this->recepciondocumentos['sReferencia'] = utf8_decode($_POST['sReferencia']);
-					$this->recepciondocumentos['sPedimento'] = utf8_decode($_POST['sPedimento']);
-                                        $this->recepciondocumentos['sBlMaster'] = !empty($_POST['sBlMaster']) ? utf8_decode($_POST['sBlMaster']) : '';
-                                        $this->recepciondocumentos['sBlHouse'] = !empty($_POST['sBlHouse']) ? utf8_decode($_POST['sBlHouse']) : '';;
-					$this->recepciondocumentos['sMercancia'] = utf8_decode($_POST['sMercancia']);
-					$this->recepciondocumentos['sObservaciones'] = utf8_decode($_POST['sObservaciones']);
+					$this->recepciondocumentos['sReferencia'] = addslashes(utf8_decode($_POST['sReferencia']));
+					$this->recepciondocumentos['sPedimento'] = addslashes(utf8_decode($_POST['sPedimento']));
+                    $this->recepciondocumentos['sBlMaster'] = !empty($_POST['sBlMaster']) ? addslashes(utf8_decode($_POST['sBlMaster'])) : '';
+                    $this->recepciondocumentos['sBlHouse'] = !empty($_POST['sBlHouse']) ? addslashes(utf8_decode($_POST['sBlHouse'])) : '';;
+					$this->recepciondocumentos['sMercancia'] = addslashes(utf8_decode($_POST['sMercancia']));
+					$this->recepciondocumentos['sObservaciones'] = addslashes(utf8_decode($_POST['sObservaciones']));
 					
 					$this->recepciondocumentos['skEmpresa'] = utf8_decode($_POST['skEmpresa']);
 					$this->recepciondocumentos['skTipoTramite'] = utf8_decode($_POST['skTipoTramite']);
 					$this->recepciondocumentos['skTipoServicio'] = utf8_decode($_POST['skTipoServicio']);
 					$this->recepciondocumentos['skClaveDocumento'] = utf8_decode($_POST['skClaveDocumento']);
                                         
-                    $this->recepciondocumentos['sNumContenedor'] = utf8_decode(!empty($_POST['sNumContenedor']) ? $_POST['sNumContenedor'] : '');
+                    $this->recepciondocumentos['sNumContenedor'] = utf8_decode(!empty($_POST['sNumContenedor']) ? addslashes($_POST['sNumContenedor']) : '');
                     $this->recepciondocumentos['iBultos'] = utf8_decode(!empty($_POST['iBultos']) ? $_POST['iBultos'] : 0);
                     $this->recepciondocumentos['fPeso'] = utf8_decode(!empty($_POST['fPeso']) ? $_POST['fPeso'] : 0);
                     $this->recepciondocumentos['fVolumen'] = utf8_decode(!empty($_POST['fVolumen']) ? $_POST['fVolumen'] : 0);
 
                     $this->recepciondocumentos['dRecepcion'] = utf8_decode(!empty($_POST['dRecepcion']) ? date('Y-m-d',strtotime($_POST['dRecepcion'])) : date('Y-m-d'));
                     $this->recepciondocumentos['tRecepcion'] = utf8_decode(!empty($_POST['tRecepcion']) ? $_POST['tRecepcion'] : date('H:i:s'));
-					
+					//exit('<pre>'.print_r($this->recepciondocumentos,1));
 						if(empty($_POST['skRecepcionDocumento'])){
 								// SE UTILIZABA PARA VER SI YA EXISTIA EL PEDIMENTO PERO ES UN BUG //
 								/*

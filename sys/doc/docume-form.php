@@ -56,7 +56,7 @@
             <label class="control-label col-md-2">N&uacute;m. Contenedor <span aria-required="true" class="required"> * </span> </label>
             <div class="col-md-4">
                 <div class="input-icon right"> <i class="fa"></i>
-                    <input type="text" name="sNumContenedor" id="sNumContenedor" class="form-control contenedor" placeholder="N&uacute;m. Contenedor" value="<?php echo (isset($result['sNumContenedor'])) ? utf8_encode($result['sNumContenedor']) : '' ; ?>" >
+                    <input type="text" name="sNumContenedor" id="sNumContenedor" class="form-control contenedor" placeholder="N&uacute;m. Contenedor" value="<?php echo (isset($result['sNumContenedor'])) ? htmlentities(utf8_encode($result['sNumContenedor'])) : '' ; ?>" >
                 </div>
             </div>
         </div>
@@ -93,7 +93,7 @@
       <label class="control-label col-md-2">Referencia <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
         <div class="input-icon right"> <i class="fa"></i>
-          <input type="text" name="sReferencia" id="sReferencia" class="form-control" placeholder="Referencia" value="<?php echo (isset($result['sReferencia'])) ? utf8_encode($result['sReferencia']) : '' ; ?>" >
+          <input type="text" name="sReferencia" id="sReferencia" class="form-control" placeholder="Referencia" value="<?php echo (isset($result['sReferencia'])) ? htmlentities(utf8_encode($result['sReferencia'])) : '' ; ?>" >
         </div>
       </div>
     </div>
@@ -101,7 +101,7 @@
       <label class="control-label col-md-2">Pedimento <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
         <div class="input-icon right"> <i class="fa"></i>
-          <input type="text" name="sPedimento" id="sPedimento" class="form-control" placeholder="Pedimento" value="<?php echo (isset($result['sPedimento'])) ? utf8_encode($result['sPedimento']) : $data['maxPedimento'] ; ?>" >
+          <input type="text" name="sPedimento" id="sPedimento" class="form-control" placeholder="Pedimento" value="<?php echo (isset($result['sPedimento'])) ? htmlentities(utf8_encode($result['sPedimento'])) : $data['maxPedimento'] ; ?>" >
         </div>
       </div>
     </div>
@@ -110,7 +110,7 @@
       <label class="control-label col-md-2">BL Master</label>
       <div class="col-md-4">
         <div class="input-icon right"> <i class="fa"></i>
-          <input type="text" name="sBlMaster" id="sBlMaster" class="form-control" placeholder="BL Master" value="<?php echo (isset($result['sBlMaster'])) ? utf8_encode($result['sBlMaster']) : '' ; ?>" >
+          <input type="text" name="sBlMaster" id="sBlMaster" class="form-control" placeholder="BL Master" value="<?php echo (isset($result['sBlMaster'])) ? htmlentities(utf8_encode($result['sBlMaster'])) : '' ; ?>" >
         </div>
       </div>
     </div>
@@ -119,7 +119,7 @@
       <label class="control-label col-md-2">BL House</label>
       <div class="col-md-4">
         <div class="input-icon right"> <i class="fa"></i>
-          <input type="text" name="sBlHouse" id="sBlHouse" class="form-control" placeholder="BL House" value="<?php echo (isset($result['sBlHouse'])) ? utf8_encode($result['sBlHouse']) : '' ; ?>" >
+          <input type="text" name="sBlHouse" id="sBlHouse" class="form-control" placeholder="BL House" value="<?php echo (isset($result['sBlHouse'])) ? htmlentities(utf8_encode($result['sBlHouse'])) : '' ; ?>" >
         </div>
       </div>
     </div>
@@ -163,7 +163,7 @@
       <label class="control-label col-md-2">Mercancía <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
         <div class="input-icon right"> <i class="fa"></i>
-          <input type="text" name="sMercancia" id="sMercancia" class="form-control" placeholder="Mercancía" value="<?php echo (isset($result['sMercancia'])) ? utf8_encode($result['sMercancia']) : '' ; ?>" >
+          <input type="text" name="sMercancia" id="sMercancia" class="form-control" placeholder="Mercancía" value="<?php echo (isset($result['sMercancia'])) ? htmlentities(utf8_encode($result['sMercancia'])) : '' ; ?>" >
         </div>
       </div>
     </div>
@@ -171,7 +171,7 @@
       <label class="control-label col-md-2">Observaciones <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
         <div class="input-icon right"> <i class="fa"></i>
-          <input type="text" name="sObservaciones" id="sObservaciones" class="form-control" placeholder="Observaciones" value="<?php echo (isset($result['sObservaciones'])) ? utf8_encode($result['sObservaciones']) : '' ; ?>" >
+          <input type="text" name="sObservaciones" id="sObservaciones" class="form-control" placeholder="Observaciones" value="<?php echo (isset($result['sObservaciones'])) ? htmlentities(utf8_encode($result['sObservaciones'])) : '' ; ?>" >
         </div>
       </div>
     </div>
