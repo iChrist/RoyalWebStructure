@@ -261,7 +261,7 @@
                                 ".$this->solreva['iPrioridad'].",
                                 '".$this->solreva['dFechaArriboBuque']."',
                                 '".$this->solreva['dEta']."')";
-				//echo $sql;die();
+				//exit($sql);
                 $result = $this->db->query($sql);
                 if($result){
                     return $this->solreva['skSolicitudRevalidacion'];

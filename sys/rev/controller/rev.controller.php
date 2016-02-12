@@ -43,7 +43,7 @@
 						$this->solreva['skSolicitudRevalidacion'] = $_POST['skSolicitudRevalidacion'];
 					}
 					if(isset($_POST['sReferencia'])){
-						$this->solreva['sReferencia'] = $_POST['sReferencia'];
+						$this->solreva['sReferencia'] = addslashes(utf8_decode($_POST['sReferencia']));
 					}
 					if(isset($_POST['skEmpresaNaviera'])){
 						$this->solreva['skEmpresaNaviera'] = $_POST['skEmpresaNaviera'];
@@ -61,7 +61,7 @@
 						$this->solreva['skUsuarioTramitador'] = $_POST['skUsuarioTramitador'];
 					}
 					if(isset($_POST['sObservaciones'])){
-						$this->solreva['sObservaciones'] = $_POST['sObservaciones'];
+						$this->solreva['sObservaciones'] = addslashes(utf8_decode($_POST['sObservaciones']));
 					}
 					if(isset($_POST['skEstatusRevalidacion'])){
 						$this->solreva['skEstatusRevalidacion'] = $_POST['skEstatusRevalidacion'];
@@ -249,13 +249,13 @@
  					if($_POST){
 					//exit('</pre>'.print_r($_POST,1).'</pre>');
 					$this->solreva['skSolicitudRevalidacion'] = !empty($_POST['skSolicitudRevalidacion']) ? $_POST['skSolicitudRevalidacion'] : substr(md5(microtime()), 1, 32);
-					$this->solreva['sReferencia'] = isset($_POST['sReferencia']) ? utf8_decode($_POST['sReferencia']) : null;
-  					$this->solreva['sObservaciones'] = isset($_POST['sObservaciones']) ? utf8_decode($_POST['sObservaciones']) : null;
+					$this->solreva['sReferencia'] = isset($_POST['sReferencia']) ? addslashes(utf8_decode($_POST['sReferencia'])) : null;
+  					$this->solreva['sObservaciones'] = isset($_POST['sObservaciones']) ? addslashes(utf8_decode($_POST['sObservaciones'])) : null;
  					$this->solreva['skEmpresaNaviera'] = isset($_POST['skEmpresaNaviera']) ? utf8_decode($_POST['skEmpresaNaviera']) : null;
  					$this->solreva['skEstatusRevalidacion'] =  isset($_POST['skEstatusRevalidacion']) ? $_POST['skEstatusRevalidacion'] : null;
  					$this->solreva['skUsuarioTramitador'] = isset($_POST['skUsuarioTramitador']) ? $_POST['skUsuarioTramitador'] : null;
- 					$this->solreva['sBlMaster'] = isset($_POST['sBlMaster']) ? $_POST['sBlMaster'] : null;
-                                        $this->solreva['sBlHouse'] = isset($_POST['sBlHouse']) ? $_POST['sBlHouse'] : null;
+ 					$this->solreva['sBlMaster'] = isset($_POST['sBlMaster']) ? addslashes(utf8_decode($_POST['sBlMaster'])) : null;
+                    $this->solreva['sBlHouse'] = isset($_POST['sBlHouse']) ? addslashes(utf8_decode($_POST['sBlHouse'])) : null;
  					$this->solreva['iPrioridad'] = isset($_POST['iPrioridad']) ? $_POST['iPrioridad'] : null;
  					$this->solreva['dFechaArriboBuque'] = isset($_POST['dFechaArriboBuque']) ? date('Y-m-d',strtotime($_POST['dFechaArriboBuque'])) : null;
  					$this->solreva['dEta'] = isset($_POST['dEta']) ? date('Y-m-d',strtotime($_POST['dEta'])) : null;
@@ -266,7 +266,7 @@
  						$this->solreva['dFechaCierre'] = 'CURRENT_TIMESTAMP()';
  						$this->solreva['skUsuarioCierre'] = $_SESSION['session']['skUsers'];
  					}
-                    //exit(var_dump($this->solreva));
+                    //exit('<pre>'.print_r($this->solreva,1));
  						if(empty($_POST['skSolicitudRevalidacion'])){
 							
                                                     if(parent::create_solreva()){
