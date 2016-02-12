@@ -33,7 +33,7 @@
       <label class="control-label col-md-2">Referencia <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
         <div class="input-icon right"> <i class="fa"></i>
-          <input type="text" name="sReferencia" id="sReferencia" class="form-control" onChange="obtenerDatos();" placeholder="Referencia" value="<?php echo (isset($result['sReferencia'])) ? utf8_encode($result['sReferencia']) : '' ; ?>" <?php echo $disabled; ?>>
+          <input type="text" name="sReferencia" id="sReferencia" class="form-control" onChange="obtenerDatos();" placeholder="Referencia" value="<?php echo (isset($result['sReferencia'])) ? htmlentities(utf8_encode($result['sReferencia'])) : '' ; ?>" <?php echo $disabled; ?>>
         </div>
       </div>
     </div>
@@ -43,7 +43,7 @@
       <label class="control-label col-md-2">BL Master</label>
       <div class="col-md-4">
         <div class="input-icon right"> <i class="fa"></i>
-          <input type="text" name="sBlMaster" id="sBlMaster" class="form-control" placeholder="BL Master" value="<?php echo (isset($result['sBlMaster'])) ? utf8_encode($result['sBlMaster']) : '' ; ?>" <?php echo $disabled; ?>>
+          <input type="text" name="sBlMaster" id="sBlMaster" class="form-control" placeholder="BL Master" value="<?php echo (isset($result['sBlMaster'])) ? htmlentities(utf8_encode($result['sBlMaster'])) : '' ; ?>" <?php echo $disabled; ?>>
         </div>
       </div>
     </div>
@@ -52,7 +52,7 @@
       <label class="control-label col-md-2">BL House</label>
       <div class="col-md-4">
         <div class="input-icon right"> <i class="fa"></i>
-          <input type="text" name="sBlHouse" id="sBlHouse" class="form-control" placeholder="BL House" value="<?php echo (isset($result['sBlHouse'])) ? utf8_encode($result['sBlHouse']) : '' ; ?>" <?php echo $disabled; ?>>
+          <input type="text" name="sBlHouse" id="sBlHouse" class="form-control" placeholder="BL House" value="<?php echo (isset($result['sBlHouse'])) ? htmlentities(utf8_encode($result['sBlHouse'])) : '' ; ?>" <?php echo $disabled; ?>>
         </div>
       </div>
     </div>
@@ -227,7 +227,7 @@
       <label class=" col-md-2">Observaciones </label>
       <div class="col-md-8">
         <div class="input-icon right"> <i class="fa"></i>
-          <textarea rows="5"  name="sObservaciones" id="sObservaciones" class="form-control" placeholder="Observaciones"  ><?php echo (isset($result['sObservaciones'])) ? utf8_encode($result['sObservaciones']) : '' ; ?></textarea>
+          <textarea rows="5"  name="sObservaciones" id="sObservaciones" class="form-control" placeholder="Observaciones"  ><?php echo (isset($result['sObservaciones'])) ? htmlentities(utf8_encode($result['sObservaciones'])) : '' ; ?></textarea>
         </div>
       </div>
     </div>
