@@ -158,6 +158,7 @@
                             return true;
                             break;
                         case "save":
+                            //exit(print_r($_POST,1));
                             $this->glo['skGlosa'] = !empty($_POST['skGlosa']) ? $_POST['skGlosa'] : substr(md5(microtime()), 1, 32);
                             $this->glo['sReferencia'] = !empty($_POST['sReferencia']) ? addslashes(utf8_decode($_POST['sReferencia'])) : null;
                             $this->glo['sObservacionesPedimento'] = !empty($_POST['sObservacionesPedimento']) ? addslashes(utf8_decode($_POST['sObservacionesPedimento'])) : null;
@@ -168,12 +169,48 @@
                                 if(!parent::create_glo()){
                                     $this->data['response'] = false;
                                     $this->data['message'] = 'Hubo un error al intentar guardar el registro, intenta de nuevo.';
+                                }else{
+                                    $this->gloDocGlo['skGlosa'] = $this->glo['skGlosa'];
+                                    // DOCUMENTOS FALTANTES PARA GLOSA (gloDocGlo) //
+                                    parent::delete_gloDocGlo();
+                                    if(!empty($_POST['docGlo'])){
+                                        foreach($_POST['docGlo'] AS $k=>$v){
+                                            $this->gloDocGlo['skDocGlosa'] = $v;
+                                            parent::create_gloDocGlo();
+                                        }
+                                    }
+                                    // OBSERVACIONES A NIVEL PARTIDA (gloPart) //
+                                    parent::delete_gloPart();
+                                    if(!empty($_POST['gloPart'])){
+                                        foreach($_POST['gloPart'] AS $k=>$v){
+                                            $this->gloPart['skDocGlosa'] = $v;
+                                            parent::create_gloPart();
+                                        }
+                                    }
                                 }
                             }else{
                                 // UPDATE //
                                 if(!parent::update_glo()){
                                     $this->data['response'] = false;
                                     $this->data['message'] = 'Hubo un error al intentar guardar el registro, intenta de nuevo.';
+                                }else{
+                                    $this->gloDocGlo['skGlosa'] = $this->glo['skGlosa'];
+                                    // DOCUMENTOS FALTANTES PARA GLOSA (gloDocGlo) //
+                                    parent::delete_gloDocGlo();
+                                    if(!empty($_POST['docGlo'])){
+                                        foreach($_POST['docGlo'] AS $k=>$v){
+                                            $this->gloDocGlo['skDocGlosa'] = $v;
+                                            parent::create_gloDocGlo();
+                                        }
+                                    }
+                                    // OBSERVACIONES A NIVEL PARTIDA (gloPart) //
+                                    parent::delete_gloPart();
+                                    if(!empty($_POST['gloPart'])){
+                                        foreach($_POST['gloPart'] AS $k=>$v){
+                                            $this->gloPart['skDocGlosa'] = $v;
+                                            parent::create_gloPart();
+                                        }
+                                    }
                                 }
                             }
                             header('Content-Type: application/json');
@@ -215,8 +252,8 @@
                     }
                 }
                 $this->data['docGlo'] = $r_docGlo;
-                exit('<pre>'.print_r($this->data['docGlo'],1));
-
+                //exit('<pre>'.print_r($this->data['docGlo'],1));
+                
                 if(isset($_GET['p1'])){
                     $this->glo['skGlosa'] = $_GET['p1'];
                     $this->data['datos'] = parent::read_glo();
@@ -224,7 +261,7 @@
                 $this->load_view('glo-form', $this->data);
                 return true;
             }
-            
+                        
             private function glo_pdf(){
                 if(isset($_GET['p1'])){
                     $this->glo['skGlosa'] = $_GET['p1'];

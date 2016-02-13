@@ -5,7 +5,7 @@
     }
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
-    <input type="hidden" name="skProforma"  id="skProforma" value="<?php echo (isset($result['skProforma'])) ? $result['skProforma'] : '' ; ?>">
+    <input type="hidden" name="skGlosa"  id="skGlosa" value="<?php echo (isset($result['skProforma'])) ? $result['skProforma'] : '' ; ?>">
     <div class="form-body">
         
         <div class="form-group">
@@ -21,24 +21,38 @@
         <hr>
         <div class="form-group" id="dvDatos"></div>
         <hr>
-
-        <div class="form-group">
-            <label class="control-label col-md-2">Documentos Faltantes</label>
-            <div class="col-md-10">
+        
+        <h4>Documentos <em>(Seleccione los documentos faltantes)</em></h4>
+            <div class="col-md-12">
                 <?php
                     if($data['docGlo']){
-                    while($docGlo = $data['docGlo']->fetch_assoc()){
+                        foreach($data['docGlo'] AS $k=>$v){
                 ?>
-                <div class="col-md-2">
-                    <input type="checkbox" name="docGlo[]" value="<?php echo htmlentities(utf8_encode($docGlo['skDocGlosa'])); ?>"> <?php echo htmlentities(utf8_encode($docGlo['sNombre'])); ?>
+                <div class="col-md-6">
+                    <?php if(count($v['children']) > 0){ ?>
+                    <fieldset>
+                    <legend>
+                    <?php }//ENDIF ?>
+                        <div class="col-md-6">
+                            <input type="checkbox" name="docGlo[]" value="<?php echo $v['skDocGlosa']; ?>"> <?php echo htmlentities($v['sNombre']); ?>
+                        </div>
+                    <?php if(count($v['children']) > 0){ ?>
+                    </legend>
+                    <div class="clearfix"></div><br>
+                    <?php foreach($v['children'] AS $key=>$val){ ?>
+                            <div class="col-md-6">    
+                                <input type="checkbox" parent="<?php echo $v['skDocGlosa']; ?>" name="docGlo[]" value="<?php echo $val['skDocGlosa']; ?>"> <?php echo htmlentities($val['sNombre']); ?>
+                            </div>
+                    <?php }//ENDFOREACH ?>
+                    </fieldset>
+                    <?php }//ENDIF ?>
                 </div>
                 <?php
-                        }//ENDWHILE
+                        }//ENDFOREACH
                     }//ENDIF
                 ?>
             </div>
-        </div>
-
+        <div class="clearfix"></div><br>
         <div class="form-group">
             <label class="control-label col-md-2">Observaciones del Pedimento <span aria-required="true" class="required"> * </span> </label>
             <div class="col-md-8">
