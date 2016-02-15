@@ -5,7 +5,7 @@
     }
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
-    <input type="hidden" name="skGlosa"  id="skGlosa" value="<?php echo (isset($result['skProforma'])) ? $result['skProforma'] : '' ; ?>">
+    <input type="hidden" name="skGlosa"  id="skGlosa" value="<?php echo (isset($result['skGlosa'])) ? $result['skGlosa'] : '' ; ?>">
     <div class="form-body">
         
         <div class="form-group">
@@ -61,10 +61,64 @@
                 </div>
             </div>
         </div>
+        <div class="clearfix"></div><br>
+        <hr>
+        <h4></h4>
+        
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-reorder"></i>OBSERVACIONES POR PARTIDA
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="add-secuencias"><i class="fa fa-plus"></i> Agregar</a>    
+                    <a class="collapse" href="javascript:;"></a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+            	 <table class="table table-bordered" id="observacionesSecuencias">
+                    <tr>
+                        <td>
+                            <table class="table table-bordered">
+                                <tr >
+                                    <th nowrap><center>Secuencia</center></th>
+                                    <td>
+                                        <input type="text" name="gloPart[]" class="form-control" placeholder="Numero de Secuencia">
+                                        <input type="text" name="skClasificacionMercancia[]">
+                                        
+                                    </td>
+                                    <td rowspan="2">DATOS IMPORTANTES</td>
+                                     <td  rowspan="2" align="center"><a href="javascript:;" class="btn btn-default delete-secuencias"><i class="fa fa-trash-o"></i></a></td>
+                                    
+                                </tr>
+                                <tr>
+                                    <th nowrap><center>Observaciones</center></th>
+                                    <td>
+                                        <textarea name="sObservacionesPartida[]" class="form-control" placeholder="Observaciones"></textarea>
+                                    </td>
+                                   
+                                     
+                                   
+                                 </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        
+         
+        
     </div>
 </form>
 <div class="clearfix"></div>
 <script type="text/javascript">
+/*if(document.getElementById(("sReferencia").value)){
+	setTimeout(function(){ obtenerDatos(); }, 3000);
+	}*/
+
+
 function obtenerDatos(){
     $('.page-title-loading').css('display','inline');
         var response = true;
@@ -131,7 +185,18 @@ function obtenerDatos(){
 }
 
     $(document).ready(function(){
-        
+        /* AGREGAR SECUENCIA */
+        $('body').delegate('.add-secuencias', 'click', function(){
+            var html_Secuencia = '<tr><td><table class="table table-bordered"><tr><th nowrap><center>Secuencia</center></th><td><input type="text" name="gloPart[]" class="form-control" placeholder="Numero de Secuencia"><input type="text" name="skClasificacionMercancia[]"></td><td rowspan="2">DATOS IMPORTANTES</td><td  rowspan="2" align="center"><a href="javascript:;" class="btn btn-default delete-secuencias"><i class="fa fa-trash-o"></i></a></td></tr><tr><th nowrap><center>Observaciones</center></th><td><textarea name="sObservacionesPartida[]" class="form-control" placeholder="Observaciones"></textarea></td></tr></table></td></tr>';
+            $("#observacionesSecuencias").append(html_Secuencia);
+        });
+        /* ELIMINAR SECUENCIA */
+        $('body').delegate('.delete-secuencias','click',function(){  
+            console.log($(this).parent().parent().parent().parent().parent().parent());
+            $(this).parent().parent().parent().parent().parent().parent().remove();
+        });
+		
+		
         // VALIDADOR PARA OBTENER DATOS POR REFERENCIA //
         $.validator.addMethod(
             "obtenerDatos", 
