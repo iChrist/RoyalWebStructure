@@ -146,6 +146,7 @@
                     VALUES ( '".$this->gloPart['skGlosa']."',
                     '".$this->gloPart['skClasificacionMercancia']."',
                     '".$this->gloPart['sObservacionesPartida']."')";
+				 //	echo $sql;
                 //exit($sql);
                 $result = $this->db->query($sql);
                 if($result){

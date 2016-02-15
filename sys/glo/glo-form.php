@@ -65,7 +65,7 @@
         <hr>
         <h4></h4>
         
-        <input type="text" name="skClasificacionMercancia">
+        <input type="hidden" name="skClasificacionMercancia">
         
         <div class="portlet">
             <div class="portlet-title">
@@ -78,11 +78,45 @@
                 </div>
             </div>
             <div class="portlet-body form">
+          <?php 
+		  if($data['gloPart']){
+				foreach($data['gloPart'] AS $k=>$v){
+				?>
+					<table class="table table-bordered" id="observacionesSecuencias">
+                    <tr>
+                        <td>
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th nowrap><center>Secuencia</center></th>
+                                    <td>
+                                        <input type="text" name="gloPart[]" class="form-control" placeholder="Numero de Secuencia" onchange="getSecuenciaPartida(this);"> 
+                                    </td>
+                                    <td rowspan="2"></td>
+                                    <td  rowspan="2" align="center"><a href="javascript:;" class="btn btn-default delete-secuencias"><i class="fa fa-trash-o"></i></a></td>
+                                    
+                                </tr>
+                                <tr>
+                                    <th nowrap><center>Observaciones</center></th>
+                                    
+                                    <td>
+                                        <textarea name="sObservacionesPartida[]" class="form-control" placeholder="Observaciones"><?php echo $v['sObservacionesPartida']; ?></textarea>
+                                    </td>
+                                   
+                                     
+                                   
+                                 </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+			<?php	}
+		  }else{
+		  ?> 
             	 <table class="table table-bordered" id="observacionesSecuencias">
                     <tr>
                         <td>
                             <table class="table table-bordered">
-                                <tr >
+                                <tr>
                                     <th nowrap><center>Secuencia</center></th>
                                     <td>
                                         <input type="text" name="gloPart[]" class="form-control" placeholder="Numero de Secuencia" onchange="getSecuenciaPartida(this);"> 
@@ -105,6 +139,8 @@
                         </td>
                     </tr>
                 </table>
+                
+                <?php } ?>
             </div>
         </div>
         

@@ -208,9 +208,9 @@
 									$this->gloPart['skGlosa'] = $this->glo['skGlosa'];
                                     // OBSERVACIONES A NIVEL PARTIDA (gloPart) //
                                     parent::delete_gloPart();
-                                    if(!empty($_POST['gloPart'])){
-                                        foreach($_POST['gloPart'] AS $k=>$v){
-                                            $this->gloPart['skClasificacionMercancia'] = $v['skClasificacionMercancia'];
+                                    if(!empty($_POST['sObservacionesPartida'])){
+                                        foreach($_POST['sObservacionesPartida'] AS $k=>$v){
+                                            $this->gloPart['skClasificacionMercancia'] =  !empty($_POST['skClasificacionMercancia']) ? $_POST['skClasificacionMercancia'] : null;
                                             $this->gloPart['sObservacionesPartida'] = $v['sObservacionesPartida'];
                                             parent::create_gloPart();
                                         }
@@ -236,10 +236,10 @@
 									$this->gloPart['skGlosa'] = $this->glo['skGlosa'];
                                     // OBSERVACIONES A NIVEL PARTIDA (gloPart) //
                                     parent::delete_gloPart();
-                                    if(!empty($_POST['gloPart'])){
-                                        foreach($_POST['gloPart'] AS $k=>$v){
-                                              $this->gloPart['skClasificacionMercancia'] = $v['skClasificacionMercancia'];
-                                            $this->gloPart['sObservacionesPartida'] = $v['sObservacionesPartida'];
+                                    if(!empty($_POST['sObservacionesPartida'])){
+                                        foreach($_POST['c'] AS $k=>$v){
+                                            $this->gloPart['skClasificacionMercancia'] =  (!empty($_POST['skClasificacionMercancia']) ? $_POST['skClasificacionMercancia'] : null);
+                                            $this->gloPart['sObservacionesPartida'] = $v;
                                             parent::create_gloPart();
                                         }
                                     }
@@ -284,6 +284,24 @@
                     }
                 }
                 $this->data['docGlo'] = $r_docGlo;
+				
+				$this->gloPart['skGlosa'] = $_GET['p1'];
+				$gloPart = parent::read_gloPart();
+                $r_gloPart = array();
+                if($gloPart){
+                    $i = 0;
+                    while($r = $gloPart->fetch_assoc()){
+                        $r_gloPart[$i] = array(
+                             "skGlosa"=>utf8_encode($r['skGlosa'])
+                            ,"skClasificacionMercancia"=>utf8_encode($r['skClasificacionMercancia'])
+                            ,"sObservacionesPartida"=>utf8_encode($r['sObservacionesPartida'])
+                         );
+ 
+                        $i++;
+                    }
+                }
+                $this->data['gloPart'] = $r_gloPart;
+				
                 //exit('<pre>'.print_r($this->data['docGlo'],1));
                 
                 if(isset($_GET['p1'])){
