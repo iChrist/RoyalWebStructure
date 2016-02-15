@@ -67,7 +67,7 @@
                     }
                 // VERIFICAMOS SI EXISTE EMPRESA O LA CREAMOS //
                     if($sEmpresa != trim(utf8_decode($v['CLIENTE'])," ")){
-                        $cliente = trim(utf8_decode($v['CLIENTE'])," ");
+                        $cliente = addslashes(trim(utf8_decode($v['CLIENTE'])," "));
                         $empresa = $this->exist_empresa(new Emp_Model() , $cliente);
                         if(!$empresa){ 
                             $flag = false;
@@ -84,22 +84,22 @@
                 if(!isset($v['REFERENCIA'])){
                     $v['REFERENCIA'] = "";
                 }
-                $this->cla['sReferencia'] = trim($v['REFERENCIA']," ");
+                $this->cla['sReferencia'] = addslashes(trim($v['REFERENCIA']," "));
                 
                 if(!isset($v['PEDIMENTO'])){
                     $v['PEDIMENTO'] = "";
                 }
-                $this->cla['sPedimento'] = trim($v['PEDIMENTO']," ");
+                $this->cla['sPedimento'] = addslashes(trim($v['PEDIMENTO']," "));
 
                 if(!isset($v['F DE PREVIO'])){
                     $v['F DE PREVIO'] = NULL;
                 }
-                $this->cla['dFechaPrevio'] = trim($v['F DE PREVIO']," ");
-
+                $this->cla['dFechaPrevio'] = addslashes(trim($v['F DE PREVIO']," "));
+                $this->cla['dFechaPrevio'] =  NULL;
                 if(!isset($v['FACTURA'])){
                     $v['FACTURA'] = "";
                 }
-                $this->cla['sFactura'] = trim($v['FACTURA']," ");
+                $this->cla['sFactura'] = addslashes(trim($v['FACTURA']," "));
                 
                 // OBTIENE LA CLASIFICACIÓN //
                     if(
@@ -115,19 +115,20 @@
                             $skClasificacion = $this->create_cla();
                             if(!$skClasificacion){ 
                                 $flag = false;
-                                $message = "Hubo un error al registar la clasificaci&oacute;n.";
+                                $message = "La referencia: ".$this->cla['sRefenrencia']." con pedimento: ".$this->cla['sPedimento']." y empresa: ".$this->cla['sReferencia']." Est&aacute; duplicada con una empresa diferente.";
+                                //$message = "Hubo un error al registar la clasificaci&oacute;n.";
                                 //echo ' BREAK CLASIFICACION ';
                                 break;
                             }
                             $this->cla['skClasificacion'] = $skClasificacion;
-                            $sReferencia = trim($v['REFERENCIA']," ");
-                            $sPedimento = trim($v['PEDIMENTO']," ");
+                            $sReferencia = addslashes(trim($v['REFERENCIA']," "));
+                            $sPedimento = addslashes(trim($v['PEDIMENTO']," "));
                         }else{
                             $rCla = $cla->fetch_row();
                             $this->cla['skClasificacion'] = $rCla[0];
                             $skClasificacion = $rCla[0];
-                            $sReferencia = trim($v['REFERENCIA']," ");
-                            $sPedimento = trim($v['PEDIMENTO']," ");
+                            $sReferencia = addslashes(trim($v['REFERENCIA']," "));
+                            $sPedimento = addslashes(trim($v['PEDIMENTO']," "));
                         }
                     }
                     
@@ -138,30 +139,33 @@
                         if(!isset($v['FRACCION'])){
                             $v['FRACCION'] = "N/A";
                         }
-                        $this->claMer['sFraccion'] = trim($v['FRACCION']," ");
-                        if(!isset($v['DESCRIPCION '])){
-                            $v['DESCRIPCION '] = "";
-                        }
-                        
+                        $this->claMer['sFraccion'] = addslashes(trim($v['FRACCION']," "));
+     
                         if(!isset($v['DESCRIPCION'])){
                             $v['DESCRIPCION'] = "";
                         }
-                        $this->claMer['sDescripcion'] = trim(utf8_decode($v['DESCRIPCION'])," ");
+                        $this->claMer['sDescripcion'] = addslashes(trim(utf8_decode($v['DESCRIPCION'])," "));
                         
                         if(!isset($v['INGLES'])){
                             $v['INGLES'] = "";
                         }
-                        $this->claMer['sDescripcionIngles'] = trim(utf8_decode($v['INGLES'])," ");
+                        $this->claMer['sDescripcionIngles'] = addslashes(trim(utf8_decode($v['INGLES'])," "));
                         
                         if(!isset($v['MODELO'])){
                             $v['MODELO'] = "";
                         }
-                        $this->claMer['sNumeroParte'] = trim($v['MODELO']," ");
+                        $this->claMer['sNumeroParte'] = addslashes(trim($v['MODELO']," "));
                         
+                        $getSecuencia = $this->getSecuencia();
+                        $this->claMer['iSecuencia'] = 1;
+                        if($getSecuencia){
+                            $r = $getSecuencia->fetch_row();
+                            $this->claMer['iSecuencia'] = !is_null($r[0]) ? ($r[0]+1) : 1;
+                        }
                         $skClasificacionMercancia = $this->create_claMer();
                         if(!$skClasificacionMercancia){ 
                             $flag = false;
-                            $message = "Hubo un error al registar la mercancia.";
+                            $message = "Hubo un error al registar la fraccion ".$this->claMer['sFraccion']." con numero de parte: ".$this->claMer['sNumeroParte']." , referencia: ".$this->cla['sReferencia']." y pedimento: ".$this->cla['sPedimento'];
                             //echo ' BREAK CLASIFICACION MERCANCIA ';
                             break;
                         }
@@ -376,7 +380,7 @@
                         return true;
                     }else{
                         $this->cla['dFechaImportacion'] = $dFechaImportacion;
-                        $this->detele_cla();
+                        //c$this->detele_cla();
                         $this->data['response'] = $response['response'];
                         $this->data['message'] = $response['message'];
                         header('Content-Type: application/json');
