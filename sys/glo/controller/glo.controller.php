@@ -184,8 +184,8 @@
                                     parent::delete_gloPart();
                                     if(!empty($_POST['gloPart'])){
                                         foreach($_POST['gloPart'] AS $k=>$v){
-                                            $this->gloPart['skClasificacionMercancia'] = $v;
-                                            $this->gloPart['sObservacionesPartida'] = $v;
+                                            $this->gloPart['skClasificacionMercancia'] = $v['skClasificacionMercancia'];
+                                            $this->gloPart['sObservacionesPartida'] = $v['sObservacionesPartida'];
                                             parent::create_gloPart();
                                         }
                                     }
@@ -212,8 +212,8 @@
                                     parent::delete_gloPart();
                                     if(!empty($_POST['gloPart'])){
                                         foreach($_POST['gloPart'] AS $k=>$v){
-                                            $this->gloPart['skClasificacionMercancia'] = $v;
-                                            $this->gloPart['sObservacionesPartida'] = $v;
+                                              $this->gloPart['skClasificacionMercancia'] = $v['skClasificacionMercancia'];
+                                            $this->gloPart['sObservacionesPartida'] = $v['sObservacionesPartida'];
                                             parent::create_gloPart();
                                         }
                                     }

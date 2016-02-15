@@ -114,6 +114,11 @@
 </form>
 <div class="clearfix"></div>
 <script type="text/javascript">
+/*if(document.getElementById(("sReferencia").value)){
+	setTimeout(function(){ obtenerDatos(); }, 3000);
+	}*/
+
+
 function obtenerDatos(){
     $('.page-title-loading').css('display','inline');
         var response = true;
