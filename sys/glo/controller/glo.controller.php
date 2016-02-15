@@ -129,6 +129,32 @@
                             echo 'true';
                             return true;
                             break;
+                        case "getSecuencia":
+                            $this->load_model('cla','cla');  
+                            $cla = new Cla_Model();
+                            $cla->cla['sReferencia'] = $_POST['sReferencia'];
+                            $cla->claMer['iSecuencia'] = $_POST['iSecuencia'];
+                            $this->data['data'] = $cla->read_like_claMer();
+                            if(!$this->data['data']){
+                                $this->data['response'] = false;
+                                $this->data['datos'] = false;
+                                return false;
+                            }
+                            $result = array();
+                            while($row = $this->data['data']->fetch_assoc()){
+                               $result = array(
+                                     "skClasificacion"=>utf8_encode($row['skClasificacion'])
+                                    ,"sFraccion"=>utf8_encode($row['sFraccion'])
+                                    ,"sDescripcion"=>utf8_encode($row['sDescripcion'])
+                                    ,"sDescripcionIngles"=>utf8_encode($row['sDescripcionIngles'])
+                                    ,"sNumeroParte"=>utf8_encode($row['sNumeroParte'])
+                                    ,"iSecuencia"=>utf8_encode($row['iSecuencia'])
+                                );
+                            }
+                            header('Content-Type: application/json');
+                            echo json_encode($result);
+                            return true;
+                            break;
                         case "obtenerDatos":
                             $this->solreva['sReferencia'] = $_POST['sReferencia'];
                             $this->data['data']=parent::read_referencia();

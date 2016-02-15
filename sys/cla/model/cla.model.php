@@ -243,9 +243,6 @@
             if(!empty($this->cla['skStatus'])){
                 $sql .=" AND cla.skStatus like '%".$this->cla['skStatus']."%'";
             }
-            if(!empty($this->cla['iSecuencia'])){
-                $sql .=" AND cla.iSecuencia = ".$this->cla['iSecuencia']." ";
-            }
             
             if(!empty($this->cla['orderBy'])){
                 $sql .=" ORDER BY ".$this->cla['orderBy'];
@@ -408,6 +405,9 @@
             if(!empty($this->claMer['skStatus'])){
                 $sql .=" AND claMer.skStatus like '%".$this->claMer['skStatus']."%'";
             }
+            if(!empty($this->claMer['iSecuencia'])){
+                $sql .=" AND claMer.iSecuencia = '".$this->claMer['iSecuencia']."'";
+            }
             
             // FILTRADO PÒR sReferencia //
             if(!empty($this->cla['sReferencia'])){
@@ -425,7 +425,7 @@
                     $sql .= " LIMIT ".$this->claMer['limit'];
                 }
             }
-            //echo $sql;
+            //exit($sql);
             $result = $this->db->query($sql);
             if($result){
                 if($result->num_rows > 0){

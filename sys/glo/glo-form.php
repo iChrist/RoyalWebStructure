@@ -65,6 +65,8 @@
         <hr>
         <h4></h4>
         
+        <input type="text" name="skClasificacionMercancia">
+        
         <div class="portlet">
             <div class="portlet-title">
                 <div class="caption">
@@ -83,16 +85,15 @@
                                 <tr >
                                     <th nowrap><center>Secuencia</center></th>
                                     <td>
-                                        <input type="text" name="gloPart[]" class="form-control" placeholder="Numero de Secuencia">
-                                        <input type="text" name="skClasificacionMercancia[]">
-                                        
+                                        <input type="text" name="gloPart[]" class="form-control" placeholder="Numero de Secuencia" onchange="getSecuenciaPartida(this);"> 
                                     </td>
-                                    <td rowspan="2">DATOS IMPORTANTES</td>
-                                     <td  rowspan="2" align="center"><a href="javascript:;" class="btn btn-default delete-secuencias"><i class="fa fa-trash-o"></i></a></td>
+                                    <td rowspan="2"></td>
+                                    <td  rowspan="2" align="center"><a href="javascript:;" class="btn btn-default delete-secuencias"><i class="fa fa-trash-o"></i></a></td>
                                     
                                 </tr>
                                 <tr>
                                     <th nowrap><center>Observaciones</center></th>
+                                    
                                     <td>
                                         <textarea name="sObservacionesPartida[]" class="form-control" placeholder="Observaciones"></textarea>
                                     </td>
@@ -185,15 +186,33 @@ function obtenerDatos(){
     }
 }
 
+// DATOS DE LA SECUENCIA (PARTIDA) //
+    function getSecuenciaPartida(obj){
+        $('.page-title-loading').css('display','block');
+        $.post("",{axn : "getSecuencia", sReferencia : $("input[name=sReferencia]").val(), iSecuencia : obj.value},function(data){
+            if(data){
+                var cad = '<p>Fracci&oacute;n: '+data.sFraccion+'</p><p>N&uacute;mero de parte: '+data.sNumeroParte+'</p><p>Descripci&oacute;n: '+data.sDescripcion+'</p><p>Ingl&eacute;s: '+data.sDescripcionIngles+'</p>';
+                $('input[name=skClasificacionMercancia]').val(data.skClasificacion);
+                $(obj).parent().next('td').html(cad);
+            }else{
+            toastr.error("No se encuentra esa secuencia de la partida en la referencia "+ $("input[name=sReferencia]").val() , "Notificaci&oacute;n");
+                setInterval(function(){ 
+                    obj.disabled = false;
+                }, 3000);
+            }
+            $('.page-title-loading').css('display','none');
+        });
+    }
+        
     $(document).ready(function(){
+        
         /* AGREGAR SECUENCIA */
         $('body').delegate('.add-secuencias', 'click', function(){
-            var html_Secuencia = '<tr><td><table class="table table-bordered"><tr><th nowrap><center>Secuencia</center></th><td><input type="text" name="gloPart[]" class="form-control" placeholder="Numero de Secuencia"><input type="text" name="skClasificacionMercancia[]"></td><td rowspan="2">DATOS IMPORTANTES</td><td  rowspan="2" align="center"><a href="javascript:;" class="btn btn-default delete-secuencias"><i class="fa fa-trash-o"></i></a></td></tr><tr><th nowrap><center>Observaciones</center></th><td><textarea name="sObservacionesPartida[]" class="form-control" placeholder="Observaciones"></textarea></td></tr></table></td></tr>';
+            var html_Secuencia = '<tr><td><table class="table table-bordered"><tr><th nowrap><center>Secuencia</center></th><td><input type="text" name="gloPart[]" class="form-control" placeholder="Numero de Secuencia" onchange="getSecuenciaPartida(this);"></td><td rowspan="2">DATOS IMPORTANTES</td><td  rowspan="2" align="center"><a href="javascript:;" class="btn btn-default delete-secuencias"><i class="fa fa-trash-o"></i></a></td></tr><tr><th nowrap><center>Observaciones</center></th><td><textarea name="sObservacionesPartida[]" class="form-control" placeholder="Observaciones"></textarea></td></tr></table></td></tr>';
             $("#observacionesSecuencias").append(html_Secuencia);
         });
         /* ELIMINAR SECUENCIA */
         $('body').delegate('.delete-secuencias','click',function(){  
-            console.log($(this).parent().parent().parent().parent().parent().parent());
             $(this).parent().parent().parent().parent().parent().parent().remove();
         });
 		
