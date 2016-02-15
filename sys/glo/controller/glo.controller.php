@@ -163,8 +163,8 @@
                             $this->glo['sReferencia'] = !empty($_POST['sReferencia']) ? addslashes(utf8_decode($_POST['sReferencia'])) : null;
                             $this->glo['sObservacionesPedimento'] = !empty($_POST['sObservacionesPedimento']) ? addslashes(utf8_decode($_POST['sObservacionesPedimento'])) : null;
                             // DEFAULT //
-                            $this->data['message'] = 'Registro guardado con &eacute;xito.';
                             if(empty($_POST['skGlosa'])){
+								$this->data['message'] = 'Registro guardado con &eacute;xito.';
                                 // CREATE //
                                 if(!parent::create_glo()){
                                     $this->data['response'] = false;
@@ -179,17 +179,21 @@
                                             parent::create_gloDocGlo();
                                         }
                                     }
+									$this->gloPart['skGlosa'] = $this->glo['skGlosa'];
                                     // OBSERVACIONES A NIVEL PARTIDA (gloPart) //
                                     parent::delete_gloPart();
                                     if(!empty($_POST['gloPart'])){
                                         foreach($_POST['gloPart'] AS $k=>$v){
-                                            $this->gloPart['skDocGlosa'] = $v;
+                                            $this->gloPart['skClasificacionMercancia'] = $v;
+                                            $this->gloPart['sObservacionesPartida'] = $v;
                                             parent::create_gloPart();
                                         }
                                     }
                                 }
                             }else{
                                 // UPDATE //
+                            $this->data['message'] = 'Registro Actualizado con &eacute;xito.';
+							
                                 if(!parent::update_glo()){
                                     $this->data['response'] = false;
                                     $this->data['message'] = 'Hubo un error al intentar guardar el registro, intenta de nuevo.';
@@ -203,11 +207,13 @@
                                             parent::create_gloDocGlo();
                                         }
                                     }
+									$this->gloPart['skGlosa'] = $this->glo['skGlosa'];
                                     // OBSERVACIONES A NIVEL PARTIDA (gloPart) //
                                     parent::delete_gloPart();
                                     if(!empty($_POST['gloPart'])){
                                         foreach($_POST['gloPart'] AS $k=>$v){
-                                            $this->gloPart['skDocGlosa'] = $v;
+                                            $this->gloPart['skClasificacionMercancia'] = $v;
+                                            $this->gloPart['sObservacionesPartida'] = $v;
                                             parent::create_gloPart();
                                         }
                                     }
