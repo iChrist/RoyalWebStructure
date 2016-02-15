@@ -116,6 +116,7 @@
 <script type="text/javascript">
 /*if(document.getElementById(("sReferencia").value)){
 	setTimeout(function(){ obtenerDatos(); }, 3000);
+	
 	}*/
 
 
