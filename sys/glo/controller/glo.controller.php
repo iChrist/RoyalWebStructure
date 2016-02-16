@@ -244,14 +244,18 @@
                                     $this->gloPart['skClasificacionMercancia'] =  !empty($_POST['skClasificacionMercancia']) ? $_POST['skClasificacionMercancia'] : null;
                                     // OBSERVACIONES A NIVEL PARTIDA (gloPart) //
                                     parent::delete_gloPart();
+									print_r($_POST['sObservacionesPartida']);
                                     if(!empty($_POST['sObservacionesPartida'])){
+										$cont = 0;
                                         foreach($_POST['sObservacionesPartida'] AS $k=>$v){
-                                              $this->gloPart['sObservacionesPartida'] = addslashes(utf8_decode(trim($v['sObservacionesPartida']," ")));
-                                            //$this->gloPart['iSecuencia'] = addslashes(utf8_decode(trim($v['gloPart']," ")));
-                                            if(!empty($this->gloPart['sObservacionesPartida'])){
+                                              $this->gloPart['sObservacionesPartida'] = addslashes(utf8_decode(trim($v," ")));
+                                              $this->gloPart['iSecuencia'] = addslashes(utf8_decode(trim($_POST['gloPart'][$cont]," ")));
+                                             if(!empty($this->gloPart['sObservacionesPartida'])){
                                                 parent::create_gloPart();
                                             }
+											$cont++;
                                         }
+										
                                     }
                                 }
                             }
@@ -267,6 +271,7 @@
                 $this->docGlo['orderBy'] = 'docGlo.iPosition';
                 $this->docGlo['sortBy'] = 'ASC';
                 $docGlo = parent::read_docGlo();
+								
                 $r_docGlo = array();
                 if($docGlo){
                     $i = 0;
@@ -313,8 +318,24 @@
                 }
                 $this->data['gloPart'] = $r_gloPart;
 				
-                //exit('<pre>'.print_r($this->data['docGlo'],1));
-                
+				
+				$this->gloDocGlo['skGlosa'] = $_GET['p1'];
+				$gloDocGlo = parent::read_gloDocGlo();
+                $r_gloDocGlo= array();
+                if($gloDocGlo){
+                    $i = 0;
+                    while($r = $gloDocGlo->fetch_assoc()){
+                        $r_gloDocGlo[$i] = array(
+                             "skGlosa"=>utf8_encode($r['skGlosa'])
+                            ,"skDocGlosa"=>utf8_encode($r['skDocGlosa'])
+                          );
+ 
+                        $i++;
+                    }
+                }
+                $this->data['gloDocGlo'] = $r_gloDocGlo;
+				
+                 
                 if(isset($_GET['p1'])){
                     $this->glo['skGlosa'] = $_GET['p1'];
                     $this->data['datos'] = parent::read_glo();

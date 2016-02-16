@@ -147,7 +147,7 @@
                     '".$this->gloPart['skClasificacionMercancia']."',
                     '".$this->gloPart['iSecuencia']."',
                     '".$this->gloPart['sObservacionesPartida']."')";
-				echo $sql;
+				//echo $sql;
                 //exit($sql);
                 $result = $this->db->query($sql);
                 if($result){
@@ -370,6 +370,7 @@
                     INNER JOIN _status ON _status.skStatus = rd.skStatus
                     INNER JOIN cat_clasificacion cla ON cla.sReferencia = rd.sReferencia
                     WHERE 1=1 ";
+					
                 if(!empty($this->solreva['sReferencia'])){
                     $sql .=" AND rd.sReferencia = '".$this->solreva['sReferencia']."'";
                 }

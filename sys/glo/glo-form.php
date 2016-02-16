@@ -3,6 +3,7 @@
     if($data['datos']){
         $result = $data['datos']->fetch_assoc();
     }
+	
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
     <input type="hidden" name="skGlosa"  id="skGlosa" value="<?php echo (isset($result['skGlosa'])) ? $result['skGlosa'] : '' ; ?>">
@@ -24,21 +25,41 @@
         
         <h4>Documentos <em>(Seleccione los documentos faltantes)</em></h4>
             <div class="col-md-12">
+            <?php 
+			
+			$sDocumentos= array();
+			if($data['gloDocGlo']){
+				foreach($data['gloDocGlo'] AS $k=>$v){
+					$sDocumentos[$v['skDocGlosa']] = $v['skDocGlosa'];
+				}
+				/*echo "<PRE>";
+				print_r($sDocumentos);
+				echo "</PRE>";
+				*/
+			}
+			
+			?> 
+            
                 <?php
                     if($data['docGlo']){
+						
                         foreach($data['docGlo'] AS $k=>$v){
                 ?>
                 <div class="col-md-6">
                     <?php if(count($v['children']) > 0){ ?>
                     <fieldset>
-                    <legend>
-                    <?php }//ENDIF ?>
-                        <div class="col-md-6">
-                            <input type="checkbox" name="docGlo[]" value="<?php echo $v['skDocGlosa']; ?>"> <?php echo htmlentities($v['sNombre']); ?>
-                        </div>
-                    <?php if(count($v['children']) > 0){ ?>
-                    </legend>
-                    <div class="clearfix"></div><br>
+                     <?php }//ENDIF ?>
+                             <input type="checkbox" name="docGlo[]" value="<?php echo $v['skDocGlosa']; ?>" 
+							 <?php echo  (isset($sDocumentos[$v['skDocGlosa']]) ? 'checked="checked"' : '')?> > 
+                             <?php if(count($v['children']) > 0){ ?>
+                            <strong>
+                           <?php } ?>
+							<?php echo htmlentities($v['sNombre']); ?>
+                            <?php if(count($v['children']) > 0){ ?>
+                            </strong>
+                           <?php } ?>
+                     <?php if(count($v['children']) > 0){ ?>
+                     <div class="clearfix"></div><br>
                     <?php foreach($v['children'] AS $key=>$val){ ?>
                             <div class="col-md-6">    
                                 <input type="checkbox" parent="<?php echo $v['skDocGlosa']; ?>" name="docGlo[]" value="<?php echo $val['skDocGlosa']; ?>"> <?php echo htmlentities($val['sNombre']); ?>
@@ -65,7 +86,7 @@
         <hr>
         <h4></h4>
         
-        <input type="hidden" name="skClasificacionMercancia">
+        <input type="hidden" name="skClasificacionMercancia" >
         
         <div class="portlet">
             <div class="portlet-title">
@@ -151,11 +172,12 @@
 </form>
 <div class="clearfix"></div>
 <script type="text/javascript">
-/*if(document.getElementById(("sReferencia").value)){
-	setTimeout(function(){ obtenerDatos(); }, 3000);
+ 	setTimeout(function(){ 
+	obtenerDatos(); 
+	getSecuenciaPartida();
+	}, 3000);
 	
-	}*/
-
+ 
 
 function obtenerDatos(){
     $('.page-title-loading').css('display','inline');
@@ -211,8 +233,7 @@ function obtenerDatos(){
       '    <label class="control-label ">BL House: '+data.data.sBlHouse+'</label>'+
       ' </div>'+
    ' </div>';
-   
-        $('input[name=skClasificacionMercancia]').val(data.data.skClasificacion);
+         $('input[name=skClasificacionMercancia]').val(data.data.skClasificacion);
    }
     $("#dvDatos").html(cad);
     $('.page-title-loading').css('display','none');
@@ -243,7 +264,7 @@ function obtenerDatos(){
     }
         
     $(document).ready(function(){
-        
+      
         /* AGREGAR SECUENCIA */
         $('body').delegate('.add-secuencias', 'click', function(){
             var html_Secuencia = '<tr><td><table class="table table-bordered"><tr><th nowrap><center>Secuencia</center></th><td><input type="text" name="gloPart[]" class="form-control" placeholder="Numero de Secuencia" onchange="getSecuenciaPartida(this);"></td><td rowspan="2">DATOS IMPORTANTES</td><td  rowspan="2" align="center"><a href="javascript:;" class="btn btn-default delete-secuencias"><i class="fa fa-trash-o"></i></a></td></tr><tr><th nowrap><center>Observaciones</center></th><td><textarea name="sObservacionesPartida[]" class="form-control" placeholder="Observaciones"></textarea></td></tr></table></td></tr>';
