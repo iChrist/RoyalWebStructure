@@ -89,7 +89,7 @@
                                 <tr>
                                     <th nowrap><center>Secuencia</center></th>
                                     <td>
-                                        <input type="text" name="gloPart[]" class="form-control" placeholder="Numero de Secuencia" onchange="getSecuenciaPartida(this);"> 
+                                        <input type="text" name="gloPart[]" class="form-control" placeholder="Numero de Secuencia" onchange="getSecuenciaPartida(this);" value="<?php echo $v['iSecuencia']; ?>"> 
                                     </td>
                                     <td rowspan="2"></td>
                                     <td  rowspan="2" align="center"><a href="javascript:;" class="btn btn-default delete-secuencias"><i class="fa fa-trash-o"></i></a></td>
