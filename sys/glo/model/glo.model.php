@@ -326,9 +326,9 @@
                     $sql.=" sReferencia = '".$this->glo['sReferencia']."', ";
                 }
                 if(!is_null($this->glo['sObservacionesPedimento'])){
-                    $sql.=" skUserCreacion = sObservacionesPedimento = '".$this->glo['sObservacionesPedimento']."', ";
+                    $sql.=" sObservacionesPedimento = '".$this->glo['sObservacionesPedimento']."', ";
                 }
-                $sql .= " skUserCreacion = '".$_SESSION['session']['skUsers']."' , dFechaModificacion = CURRENT_TIMESTAMP() WHERE skGlosa = '".$this->glo['skGlosa']."'";
+                $sql .= " skUserModificacion = '".$_SESSION['session']['skUsers']."' , dFechaModificacion = CURRENT_TIMESTAMP() WHERE skGlosa = '".$this->glo['skGlosa']."'";
                 //exit($sql);
                 $result = $this->db->query($sql);
                 if($result){
@@ -357,7 +357,8 @@
                     ctt.sNombre AS TipoTramite, 
                     cts.sNombre AS TipoServicio, 
                     ccd.sNombre AS ClaveDocumento, 
-                    st.sHtml  
+                    st.sHtml,
+                    cla.skClasificacion
                     FROM ope_recepciones_documentos rd 
                     INNER JOIN _status  st ON st.skStatus = rd.skStatus 
                     INNER JOIN cat_empresas  ce ON ce.skEmpresa = rd.skEmpresa 
@@ -366,6 +367,7 @@
                     INNER JOIN cat_claves_documentos  ccd ON ccd.skClaveDocumento = rd.skClaveDocumento 
                     INNER JOIN _users us ON us.skUsers = rd.skUsersCreacion
                     INNER JOIN _status ON _status.skStatus = rd.skStatus
+                    INNER JOIN cat_clasificacion cla ON cla.sReferencia = rd.sReferencia
                     WHERE 1=1 ";
                 if(!empty($this->solreva['sReferencia'])){
                     $sql .=" AND rd.sReferencia = '".$this->solreva['sReferencia']."'";

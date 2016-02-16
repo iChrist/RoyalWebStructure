@@ -211,6 +211,8 @@ function obtenerDatos(){
       '    <label class="control-label ">BL House: '+data.data.sBlHouse+'</label>'+
       ' </div>'+
    ' </div>';
+   
+        $('input[name=skClasificacionMercancia]').val(data.data.skClasificacion);
    }
     $("#dvDatos").html(cad);
     $('.page-title-loading').css('display','none');
@@ -228,7 +230,7 @@ function obtenerDatos(){
         $.post("",{axn : "getSecuencia", sReferencia : $("input[name=sReferencia]").val(), iSecuencia : obj.value},function(data){
             if(data){
                 var cad = '<p>Fracci&oacute;n: '+data.sFraccion+'</p><p>N&uacute;mero de parte: '+data.sNumeroParte+'</p><p>Descripci&oacute;n: '+data.sDescripcion+'</p><p>Ingl&eacute;s: '+data.sDescripcionIngles+'</p>';
-                $('input[name=skClasificacionMercancia]').val(data.skClasificacion);
+                //$('input[name=skClasificacionMercancia]').val(data.skClasificacion);
                 $(obj).parent().next('td').html(cad);
             }else{
             toastr.error("No se encuentra esa secuencia de la partida en la referencia "+ $("input[name=sReferencia]").val() , "Notificaci&oacute;n");
@@ -263,7 +265,7 @@ function obtenerDatos(){
                     return false;
                 }
             },
-            "La referencia no existe."
+            "La referencia no existe o aun no tiene la etapa de clasifiaci&oacute;n."
         );
         
         /* VALIDATIONS */
@@ -327,7 +329,7 @@ function obtenerDatos(){
             messages:{
                 sReferencia:{
                     required:"Campo obligatorio",
-                    remote: "La referencia no existe."
+                    remote: "La referencia no existe o aun no tiene la etapa de clasifiaci&oacute;n."
                 },
                 sObservacionesPedimento:{
                     required: "Campo obligatorio."
