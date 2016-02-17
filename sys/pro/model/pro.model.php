@@ -155,7 +155,7 @@
                     $sql.=" sReferencia = '".$this->pro['sReferencia']."', ";
                 }
                 if(!is_null($this->pro['sObservaciones'])){
-                    $sql.=" skUserCreacion = sObservaciones = '".$this->pro['sObservaciones']."', ";
+                    $sql.=" sObservaciones = '".$this->pro['sObservaciones']."', ";
                 }
                 $sql .= " skUserCreacion = '".$_SESSION['session']['skUsers']."' , dFechaModificacion = CURRENT_TIMESTAMP() WHERE skProforma = '".$this->pro['skProforma']."'";
                 //exit($sql);
