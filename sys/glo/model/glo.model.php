@@ -25,6 +25,7 @@
                 ,'skClasificacionMercancia'=>null
                 ,'sObservacionesPartida'=>null
                 ,'iSecuencia'=>null
+                ,'sSecuenciaNumeroParte'=>null
                 ,'limit'=>null
                 ,'offset'=>null
                 ,'orderBy'=>null
@@ -142,12 +143,13 @@
 
             public function create_gloPart(){
                 $sql = "INSERT INTO rel_glosa_partidas 
-                    (skGlosa,skClasificacionMercancia,iSecuencia,sObservacionesPartida)
+                    (skGlosa,skClasificacionMercancia,iSecuencia,sSecuenciaNumeroParte,sObservacionesPartida)
                     VALUES ( '".$this->gloPart['skGlosa']."',
                     '".$this->gloPart['skClasificacionMercancia']."',
-                    '".$this->gloPart['iSecuencia']."',
+                    ".$this->gloPart['iSecuencia'].",
+                    '".$this->gloPart['sSecuenciaNumeroParte']."',
                     '".$this->gloPart['sObservacionesPartida']."')";
-				//echo $sql;
+                //echo $sql."  ";
                 //exit($sql);
                 $result = $this->db->query($sql);
                 if($result){

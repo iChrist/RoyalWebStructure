@@ -25,20 +25,15 @@
         
         <h4>Documentos <em>(Seleccione los documentos faltantes)</em></h4>
             <div class="col-md-12">
-            <?php 
-			
-			$sDocumentos= array();
-			if($data['gloDocGlo']){
-				foreach($data['gloDocGlo'] AS $k=>$v){
-					$sDocumentos[$v['skDocGlosa']] = $v['skDocGlosa'];
-				}
-				/*echo "<PRE>";
-				print_r($sDocumentos);
-				echo "</PRE>";
-				*/
-			}
-			
-			?> 
+            <?php	
+                $sDocumentos= array();
+                if($data['gloDocGlo']){
+                    foreach($data['gloDocGlo'] AS $k=>$v){
+                        $sDocumentos[$v['skDocGlosa']] = $v['skDocGlosa'];
+                    }
+                    //echo "<pre>".print_r($sDocumentos,1)."</PRE>";
+                }
+            ?> 
             
                 <?php
                     if($data['docGlo']){
@@ -62,7 +57,9 @@
                      <div class="clearfix"></div><br>
                     <?php foreach($v['children'] AS $key=>$val){ ?>
                             <div class="col-md-6">    
-                                <input type="checkbox" parent="<?php echo $v['skDocGlosa']; ?>" name="docGlo[]" value="<?php echo $val['skDocGlosa']; ?>"> <?php echo htmlentities($val['sNombre']); ?>
+                                <input type="checkbox" parent="<?php echo $v['skDocGlosa']; ?>" name="docGlo[]" value="<?php echo $val['skDocGlosa']; ?>"
+                                    <?php echo  (isset($sDocumentos[$val['skDocGlosa']]) ? 'checked="checked"' : '')?> > 
+                                    <?php echo htmlentities($val['sNombre']); ?>
                             </div>
                     <?php }//ENDFOREACH ?>
                     </fieldset>
@@ -110,16 +107,21 @@
                                 <tr>
                                     <th nowrap><center>Secuencia</center></th>
                                     <td>
-                                        <input type="text" name="gloPart[]" class="form-control" placeholder="Numero de Secuencia" onchange="getSecuenciaPartida(this);" value="<?php echo $v['iSecuencia']; ?>"> 
+                                        <input type="number" name="iSecuencia[]" class="form-control" placeholder="Secuencia Pedimento" value="<?php echo $v['iSecuencia']; ?>"> 
                                     </td>
-                                    <td rowspan="2"></td>
-                                    <td  rowspan="2" align="center"><a href="javascript:;" class="btn btn-default delete-secuencias"><i class="fa fa-trash-o"></i></a></td>
-                                    
+                                    <td>
+                                        <input type="text" name="sSecuenciaNumeroParte[]" class="form-control" placeholder="Secuencia Partida" value="<?php echo $v['sSecuenciaNumeroParte']; ?>"> 
+                                    </td>
+                                    <td  rowspan="2" align="center">
+                                        <a href="javascript:;" class="btn btn-default delete-secuencias">
+                                            <i class="fa fa-trash-o"></i>
+                                        </a>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th nowrap><center>Observaciones</center></th>
                                     
-                                    <td>
+                                    <td colspan="2">
                                         <textarea name="sObservacionesPartida[]" class="form-control" placeholder="Observaciones"><?php echo $v['sObservacionesPartida']; ?></textarea>
                                     </td>
                                    
@@ -140,16 +142,22 @@
                                 <tr>
                                     <th nowrap><center>Secuencia</center></th>
                                     <td>
-                                        <input type="text" name="gloPart[]" class="form-control" placeholder="Numero de Secuencia" onchange="getSecuenciaPartida(this);"> 
+                                        <input type="number" name="iSecuencia[]" class="form-control" placeholder="Secuencia Pedimento"> 
                                     </td>
-                                    <td rowspan="2"></td>
-                                    <td  rowspan="2" align="center"><a href="javascript:;" class="btn btn-default delete-secuencias"><i class="fa fa-trash-o"></i></a></td>
+                                    <td>
+                                        <input type="text" name="sSecuenciaNumeroParte[]" class="form-control" placeholder="Secuencia Partida" value=""> 
+                                    </td>
+                                    <td  rowspan="2" align="center">
+                                        <a href="javascript:;" class="btn btn-default delete-secuencias">
+                                            <i class="fa fa-trash-o"></i>
+                                        </a>
+                                    </td>
                                     
                                 </tr>
                                 <tr>
                                     <th nowrap><center>Observaciones</center></th>
                                     
-                                    <td>
+                                    <td colspan="2">
                                         <textarea name="sObservacionesPartida[]" class="form-control" placeholder="Observaciones"></textarea>
                                     </td>
                                    
@@ -173,8 +181,8 @@
 <div class="clearfix"></div>
 <script type="text/javascript">
  	setTimeout(function(){ 
-	obtenerDatos(); 
-	getSecuenciaPartida();
+	//obtenerDatos(); 
+	//getSecuenciaPartida();
 	}, 3000);
 	
  
@@ -246,7 +254,7 @@ function obtenerDatos(){
 }
 
 // DATOS DE LA SECUENCIA (PARTIDA) //
-    function getSecuenciaPartida(obj){
+    /*function getSecuenciaPartida(obj){
         $('.page-title-loading').css('display','block');
         $.post("",{axn : "getSecuencia", sReferencia : $("input[name=sReferencia]").val(), iSecuencia : obj.value},function(data){
             if(data){
@@ -261,13 +269,13 @@ function obtenerDatos(){
             }
             $('.page-title-loading').css('display','none');
         });
-    }
+    }*/
         
     $(document).ready(function(){
       
         /* AGREGAR SECUENCIA */
         $('body').delegate('.add-secuencias', 'click', function(){
-            var html_Secuencia = '<tr><td><table class="table table-bordered"><tr><th nowrap><center>Secuencia</center></th><td><input type="text" name="gloPart[]" class="form-control" placeholder="Numero de Secuencia" onchange="getSecuenciaPartida(this);"></td><td rowspan="2">DATOS IMPORTANTES</td><td  rowspan="2" align="center"><a href="javascript:;" class="btn btn-default delete-secuencias"><i class="fa fa-trash-o"></i></a></td></tr><tr><th nowrap><center>Observaciones</center></th><td><textarea name="sObservacionesPartida[]" class="form-control" placeholder="Observaciones"></textarea></td></tr></table></td></tr>';
+            var html_Secuencia = '<tr><td><table class="table table-bordered"><tr><th nowrap><center>Secuencia</center></th><td><input type="text" name="iSecuencia[]" class="form-control" placeholder="Secuencia Pedimento"></td><td><input type="text" name="sSecuenciaNumeroParte[]" class="form-control" placeholder="Secuencia Partida" value=""></td><td rowspan="2" align="center"><a href="javascript:;" class="btn btn-default delete-secuencias"><i class="fa fa-trash-o"></i></a></td></tr><tr><th nowrap><center>Observaciones</center></th><td colspan="2"><textarea name="sObservacionesPartida[]" class="form-control" placeholder="Observaciones"></textarea></td></tr></table></td></tr>';
             $("#observacionesSecuencias").append(html_Secuencia);
         });
         /* ELIMINAR SECUENCIA */
