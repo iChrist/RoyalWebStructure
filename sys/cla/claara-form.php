@@ -116,7 +116,7 @@
         <div class="clearfix"></div>
         <div class="form-group">
             <div class="col-md-2"></div>
-            <div class="col-md-10">
+            <div class="col-md-10 error-import">
                 <h3 id="total"></h3>
             </div>
         </div>
@@ -365,12 +365,13 @@ function process_wb(wb) {
                 if(data['response']){
                     toastr.success(data['message'], "Notificaci&oacute;n");
                     // AQUI SE HACE LA REDIRECCION
-                    location.reload();
-                }else{
-                    toastr.error(data['message'], "Notificaci&oacute;n");
                     setInterval(function(){ 
                         obj.disabled = false;
+                        location.reload();
                     }, 3000);
+                }else{
+                    toastr.error(data['message'], "Notificaci&oacute;n");
+                    $("<p>"+data['message']+"</p>").appendTo(".error-import");
                 }
                 $('.page-title-loading').css('display','none');
             });

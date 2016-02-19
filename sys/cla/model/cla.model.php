@@ -47,6 +47,7 @@
             ,'dFechaModificacion' => NULL
             ,'skUsersModificacion' => NULL
             ,'iSecuencia'=>NULL
+            ,'dFechaImportacion'=>NULL
             
             ,'limit'        =>  NULL
             ,'offset'       =>  NULL
@@ -344,8 +345,6 @@
             if($result){
                 return $this->cla['skClasificacion'];
             }else{
-                var_dump($result);
-                echo "  ".$sql."  ";
                 return false;
             }
         }
@@ -369,11 +368,12 @@
             }
         }
         
-        public function detele_cla(){
-            $sql = "DELETE FROM cat_clasificacion WHERE dFechaImportacion = '".$this->cla['dFechaImportacion']."';";
+        public function delete_cla(){
+            $sql = "DELETE FROM cat_clasificacion WHERE dFechaImportacion = '".$this->cla['dFechaImportacion']."'";
+            //exit($sql);
             $result = $this->db->query($sql);
             if($result){
-                return $this->cla['skClasificacion'];
+                return true;
             }else{
                 return false;
             }
@@ -480,7 +480,7 @@
         
         public function create_claMer(){
             $sql = "INSERT INTO cat_clasificacionMercancia 
-            (skClasificacionMercancia,skClasificacion,sFraccion,sDescripcion,sDescripcionIngles,sNumeroParte,skStatus,dFechaCreacion,skUsersCreacion,iSecuencia) 
+            (skClasificacionMercancia,skClasificacion,sFraccion,sDescripcion,sDescripcionIngles,sNumeroParte,skStatus,dFechaCreacion,skUsersCreacion,iSecuencia,dFechaImportacion) 
             VALUES 
             ('".$this->claMer['skClasificacionMercancia']."',
             '".$this->claMer['skClasificacion']."',
@@ -491,15 +491,15 @@
             '".$this->claMer['skStatus']."',
              CURRENT_TIMESTAMP,
             '".$this->claMer['skUsersCreacion']."',
-            ".$this->claMer['iSecuencia']."
+            '".$this->claMer['iSecuencia']."',
+            '".$this->claMer['dFechaImportacion']."'
             );";
             //exit($sql);
             $result = $this->db->query($sql);
             if($result){
                 return $this->claMer['skClasificacionMercancia'];
             }else{
-                var_dump($result);
-                echo "  ".$sql."  ";
+                //echo "  ".$sql."  ";
                 return false;
             }
         }
@@ -522,7 +522,7 @@
             }
         }
         
-        public function delete_claMer(){
+        /*public function delete_claMer(){
             $sql = "UPDATE cat_clasificacionMercancia SET "
                 . "skStatus = '".$this->claMer['skStatus']."',"
                 . "dFechaModificacion = '".$this->claMer['dFechaModificacion']."',"
@@ -531,6 +531,17 @@
             $result = $this->db->query($sql);
             if($result){
                 return $this->cla['skClasificacion'];
+            }else{
+                return false;
+            }
+        }*/
+        
+        public function delete_claMer(){
+            $sql = "DELETE FROM cat_clasificacionMercancia WHERE dFechaImportacion = '".$this->claMer['dFechaImportacion']."'";
+            //exit($sql);
+            $result = $this->db->query($sql);
+            if($result){
+                return true;
             }else{
                 return false;
             }
