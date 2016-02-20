@@ -174,8 +174,13 @@
 <script type="text/javascript">
  	setTimeout(function(){ 
 	obtenerDatos(); 
-	getSecuenciaPartida();
-	}, 3000);
+	$('input[name^="gloPart"]').each(function() {
+   // alert($(this).val());
+	getSecuenciaPartida2($(this).val());
+	});
+	 
+ 	}, 3000);
+	
 	
  
 
@@ -262,6 +267,8 @@ function obtenerDatos(){
             $('.page-title-loading').css('display','none');
         });
     }
+	
+ 
         
     $(document).ready(function(){
       
