@@ -47,6 +47,7 @@
             
             $this->claMer['skStatus'] = 'AC';
             $this->claMer['skUsersCreacion'] = $_SESSION['session']['skUsers'];
+            $this->claMer['dFechaImportacion'] = $dFechaImportacion;
                
             // CARGAMOS EL MODELO DE EMPRESAS //
             $this->load_model('emp','emp');
@@ -59,11 +60,12 @@
             $flag = true;
             $message = false;
             $cad  ="";
-            $i=0;
+            $i = 0;
+            $lineaExcel = 2;
             foreach($data AS $k => $v){
                 // VERIFICACMOS QUE VENGA REFERENCIA Y PEDIMENTO //
                     if(empty($v['REFERENCIA']) && empty($v['PEDIMENTO'])){
-                            break;
+                        continue;
                     }
                 // VERIFICAMOS SI EXISTE EMPRESA O LA CREAMOS //
                     if($sEmpresa != trim(utf8_decode($v['CLIENTE'])," ")){
@@ -72,7 +74,8 @@
                         if(!$empresa){ 
                             $flag = false;
                             $message = "No est&aacute; registrado el cliente: '".$cliente."' en el sistema.";
-                            //echo ' BREAK EMPRESA ';
+                            $this->delete_cla();
+                            $this->delete_claMer();
                             break;
                         }
                         $skEmpresa = $empresa[0];
@@ -115,9 +118,9 @@
                             $skClasificacion = $this->create_cla();
                             if(!$skClasificacion){ 
                                 $flag = false;
-                                $message = "La referencia: ".$this->cla['sRefenrencia']." con pedimento: ".$this->cla['sPedimento']." y empresa: ".$this->cla['sReferencia']." Est&aacute; duplicada con una empresa diferente.";
-                                //$message = "Hubo un error al registar la clasificaci&oacute;n.";
-                                //echo ' BREAK CLASIFICACION ';
+                                $message = "La referencia: ".$this->cla['sReferencia']." con pedimento: ".$this->cla['sPedimento']." y empresa: ".$sEmpresa." ; Est&aacute duplicada con una empresa diferente. (Linea del Excel ".$lineaExcel.")";
+                                $this->delete_cla();
+                                $this->delete_claMer();
                                 break;
                             }
                             $this->cla['skClasificacion'] = $skClasificacion;
@@ -131,7 +134,6 @@
                             $sPedimento = addslashes(trim($v['PEDIMENTO']," "));
                         }
                     }
-                    
                 // AGREGAMOS LAS FRACCIONES //
                         $this->claMer['skClasificacionMercancia'] = substr(md5(microtime()), 1, 32);
                         $this->claMer['skClasificacion'] = $skClasificacion;
@@ -156,21 +158,28 @@
                         }
                         $this->claMer['sNumeroParte'] = addslashes(trim($v['MODELO']," "));
                         
-                        $getSecuencia = $this->getSecuencia();
+                        if(!isset($v['CONSECUTIVO'])){
+                            $v['CONSECUTIVO'] = "";
+                        }
+                        $this->claMer['iSecuencia'] = addslashes(trim($v['CONSECUTIVO']," "));
+                                
+                        /*$getSecuencia = $this->getSecuencia();
                         $this->claMer['iSecuencia'] = 1;
                         if($getSecuencia){
                             $r = $getSecuencia->fetch_row();
                             $this->claMer['iSecuencia'] = !is_null($r[0]) ? ($r[0]+1) : 1;
-                        }
+                        }*/
                         $skClasificacionMercancia = $this->create_claMer();
                         if(!$skClasificacionMercancia){ 
                             $flag = false;
                             $message = "Hubo un error al registar la fraccion ".$this->claMer['sFraccion']." con numero de parte: ".$this->claMer['sNumeroParte']." , referencia: ".$this->cla['sReferencia']." y pedimento: ".$this->cla['sPedimento'];
-                            //echo ' BREAK CLASIFICACION MERCANCIA ';
+                            $this->delete_cla();
+                            $this->delete_claMer();
                             break;
                         }
                 
                 $i++;
+                $lineaExcel++;
             }
             if(!$flag){
                 return array(
@@ -380,7 +389,6 @@
                         return true;
                     }else{
                         $this->cla['dFechaImportacion'] = $dFechaImportacion;
-                        //c$this->detele_cla();
                         $this->data['response'] = $response['response'];
                         $this->data['message'] = $response['message'];
                         header('Content-Type: application/json');
@@ -430,6 +438,7 @@
                 $this->cla['dFechaCreacion'] = 'CURRENT_TIMESTAMP';
                 $this->cla['skUsersCreacion'] = $_SESSION['session']['skUsers'];
                 $this->cla['dFechaImportacion'] = date('Y-m-d H:i:s');
+                $this->claMer['dFechaImportacion'] = date('Y-m-d H:i:s');
                 
                 
                 $this->claMer['skStatus'] = !empty($_POST['skStatus']) ? utf8_decode($_POST['skStatus']) : 'IN' ;
@@ -441,7 +450,8 @@
                 if(empty($_POST['skClasificacion'])){
                     $skClasificacion = $this->create_cla();
                     if(!$skClasificacion){
-                        $this->detele_cla();
+                        $this->delete_cla();
+                        $this->delete_claMer();
                         $this->data['response'] = false;
                         $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
                         header('Content-Type: application/json');
@@ -458,7 +468,8 @@
                             $this->claMer['sDescripcionIngles'] = isset($_POST['sDescripcionIngles'][$i]) ? $_POST['sDescripcionIngles'][$i] : NULL;
                             $skClasificacionMercancia = $this->create_claMer();
                             if(!$skClasificacionMercancia){
-                                $this->detele_cla();
+                                $this->delete_cla();
+                                $this->delete_claMer();
                                 $this->data['response'] = false;
                                 $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
                                 header('Content-Type: application/json');
@@ -473,7 +484,8 @@
                     $this->cla['skUsersModificacion'] = $_SESSION['session']['skUsers'];
                     $skClasificacion = $this->update_cla();
                     if(!$skClasificacion){
-                        $this->detele_cla();
+                        $this->delete_cla();
+                        $this->delete_claMer();
                         $this->data['response'] = false;
                         $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
                         header('Content-Type: application/json');
@@ -495,7 +507,8 @@
                             if($this->claMer['skClasificacionMercancia']){
                                 $skClasificacionMercancia = $this->update_claMer();
                                 if(!$skClasificacionMercancia){
-                                    $this->detele_cla();
+                                    $this->delete_cla();
+                                    $this->delete_claMer();
                                     $this->data['response'] = false;
                                     $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
                                     header('Content-Type: application/json');
@@ -507,7 +520,8 @@
                                 $this->claMer['skClasificacionMercancia'] = substr(md5(microtime()), 1, 32);
                                 $skClasificacionMercancia = $this->create_claMer();
                                 if(!$skClasificacionMercancia){
-                                    $this->detele_cla();
+                                    $this->delete_cla();
+                                    $this->delete_claMer();
                                     $this->data['response'] = false;
                                     $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
                                     header('Content-Type: application/json');

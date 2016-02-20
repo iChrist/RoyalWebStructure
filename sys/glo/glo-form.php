@@ -3,12 +3,12 @@
     if($data['datos']){
         $result = $data['datos']->fetch_assoc();
     }
-	
+
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
     <input type="hidden" name="skGlosa"  id="skGlosa" value="<?php echo (isset($result['skGlosa'])) ? $result['skGlosa'] : '' ; ?>">
     <div class="form-body">
-        
+
         <div class="form-group">
             <label class="control-label col-md-2">Referencia <span aria-required="true" class="required"> * </span> </label>
             <div class="col-md-4">
@@ -17,40 +17,35 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="clearfix"></div>
         <hr>
         <div class="form-group" id="dvDatos"></div>
         <hr>
-        
+
         <h4>Documentos <em>(Seleccione los documentos faltantes)</em></h4>
             <div class="col-md-12">
-            <?php 
-			
-			$sDocumentos= array();
-			if($data['gloDocGlo']){
-				foreach($data['gloDocGlo'] AS $k=>$v){
-					$sDocumentos[$v['skDocGlosa']] = $v['skDocGlosa'];
-				}
-				/*echo "<PRE>";
-				print_r($sDocumentos);
-				echo "</PRE>";
-				*/
-			}
-			
-			?> 
-            
+            <?php
+                $sDocumentos= array();
+                if($data['gloDocGlo']){
+                    foreach($data['gloDocGlo'] AS $k=>$v){
+                        $sDocumentos[$v['skDocGlosa']] = $v['skDocGlosa'];
+                    }
+                    //echo "<pre>".print_r($sDocumentos,1)."</PRE>";
+                }
+            ?>
+
                 <?php
                     if($data['docGlo']){
-						
+
                         foreach($data['docGlo'] AS $k=>$v){
                 ?>
                 <div class="col-md-6">
                     <?php if(count($v['children']) > 0){ ?>
                     <fieldset>
                      <?php }//ENDIF ?>
-                             <input type="checkbox" name="docGlo[]" value="<?php echo $v['skDocGlosa']; ?>" 
-							 <?php echo  (isset($sDocumentos[$v['skDocGlosa']]) ? 'checked="checked"' : '')?> > 
+                             <input type="checkbox" name="docGlo[]" value="<?php echo $v['skDocGlosa']; ?>"
+							 <?php echo  (isset($sDocumentos[$v['skDocGlosa']]) ? 'checked="checked"' : '')?> >
                              <?php if(count($v['children']) > 0){ ?>
                             <strong>
                            <?php } ?>
@@ -61,8 +56,10 @@
                      <?php if(count($v['children']) > 0){ ?>
                      <div class="clearfix"></div><br>
                     <?php foreach($v['children'] AS $key=>$val){ ?>
-                            <div class="col-md-6">    
-                                <input type="checkbox" parent="<?php echo $v['skDocGlosa']; ?>" name="docGlo[]" value="<?php echo $val['skDocGlosa']; ?>"> <?php echo htmlentities($val['sNombre']); ?>
+                            <div class="col-md-6">
+                                <input type="checkbox" parent="<?php echo $v['skDocGlosa']; ?>" name="docGlo[]" value="<?php echo $val['skDocGlosa']; ?>"
+                                    <?php echo  (isset($sDocumentos[$val['skDocGlosa']]) ? 'checked="checked"' : '')?> >
+                                    <?php echo htmlentities($val['sNombre']); ?>
                             </div>
                     <?php }//ENDFOREACH ?>
                     </fieldset>
@@ -85,21 +82,21 @@
         <div class="clearfix"></div><br>
         <hr>
         <h4></h4>
-        
+
         <input type="hidden" name="skClasificacionMercancia" >
-        
+
         <div class="portlet">
             <div class="portlet-title">
                 <div class="caption">
                     <i class="fa fa-reorder"></i>OBSERVACIONES POR PARTIDA
                 </div>
                 <div class="tools">
-                    <a href="javascript:;" class="add-secuencias"><i class="fa fa-plus"></i> Agregar</a>    
+                    <a href="javascript:;" class="add-secuencias"><i class="fa fa-plus"></i> Agregar</a>
                     <a class="collapse" href="javascript:;"></a>
                 </div>
             </div>
             <div class="portlet-body form">
-          <?php 
+          <?php
 		  if($data['gloPart']){
 				foreach($data['gloPart'] AS $k=>$v){
 				?>
@@ -110,21 +107,26 @@
                                 <tr>
                                     <th nowrap><center>Secuencia</center></th>
                                     <td>
-                                        <input type="text" name="gloPart[]" class="form-control" placeholder="Numero de Secuencia" onchange="getSecuenciaPartida(this);" value="<?php echo $v['iSecuencia']; ?>"> 
+                                        <input type="number" name="iSecuencia[]" class="form-control" placeholder="Secuencia Pedimento" value="<?php echo $v['iSecuencia']; ?>">
                                     </td>
-                                    <td rowspan="2"></td>
-                                    <td  rowspan="2" align="center"><a href="javascript:;" class="btn btn-default delete-secuencias"><i class="fa fa-trash-o"></i></a></td>
-                                    
+                                    <td>
+                                        <input type="text" name="sSecuenciaNumeroParte[]" class="form-control" placeholder="Secuencia Partida" value="<?php echo $v['sSecuenciaNumeroParte']; ?>">
+                                    </td>
+                                    <td  rowspan="2" align="center">
+                                        <a href="javascript:;" class="btn btn-default delete-secuencias">
+                                            <i class="fa fa-trash-o"></i>
+                                        </a>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th nowrap><center>Observaciones</center></th>
-                                    
-                                    <td>
+
+                                    <td colspan="2">
                                         <textarea name="sObservacionesPartida[]" class="form-control" placeholder="Observaciones"><?php echo $v['sObservacionesPartida']; ?></textarea>
                                     </td>
-                                   
-                                     
-                                   
+
+
+
                                  </tr>
                             </table>
                         </td>
@@ -132,7 +134,7 @@
                 </table>
 			<?php	}
 		  }else{
-		  ?> 
+		  ?>
             	 <table class="table table-bordered" id="observacionesSecuencias">
                     <tr>
                         <td>
@@ -140,61 +142,66 @@
                                 <tr>
                                     <th nowrap><center>Secuencia</center></th>
                                     <td>
-                                        <input type="text" name="gloPart[]" class="form-control" placeholder="Numero de Secuencia" onchange="getSecuenciaPartida(this);"> 
+                                        <input type="number" name="iSecuencia[]" class="form-control" placeholder="Secuencia Pedimento">
                                     </td>
-                                    <td rowspan="2"></td>
-                                    <td  rowspan="2" align="center"><a href="javascript:;" class="btn btn-default delete-secuencias"><i class="fa fa-trash-o"></i></a></td>
-                                    
+                                    <td>
+                                        <input type="text" name="sSecuenciaNumeroParte[]" class="form-control" placeholder="Secuencia Partida" value="">
+                                    </td>
+                                    <td  rowspan="2" align="center">
+                                        <a href="javascript:;" class="btn btn-default delete-secuencias">
+                                            <i class="fa fa-trash-o"></i>
+                                        </a>
+                                    </td>
+
                                 </tr>
                                 <tr>
                                     <th nowrap><center>Observaciones</center></th>
-                                    
-                                    <td>
+
+                                    <td colspan="2">
                                         <textarea name="sObservacionesPartida[]" class="form-control" placeholder="Observaciones"></textarea>
                                     </td>
-                                   
-                                     
-                                   
+
+
+
                                  </tr>
                             </table>
                         </td>
                     </tr>
                 </table>
-                
+
                 <?php } ?>
             </div>
         </div>
-        
-        
-         
-        
+
+
+
+
     </div>
 </form>
 <div class="clearfix"></div>
 <script type="text/javascript">
- 	setTimeout(function(){ 
-	obtenerDatos(); 
+ 	setTimeout(function(){
+	obtenerDatos();
 	$('input[name^="gloPart"]').each(function() {
    // alert($(this).val());
 	getSecuenciaPartida2($(this).val());
 	});
-	 
+
  	}, 3000);
-	
-	
- 
+
+
 
 function obtenerDatos(){
     $('.page-title-loading').css('display','inline');
         var response = true;
-        $.post("",{ axn : "obtenerDatos" , sReferencia : $("#sReferencia").val() }, function(data){ 
+        $.post("",{ axn : "obtenerDatos" , sReferencia : $("#sReferencia").val() }, function(data){
         var cad = '';
         if(!data.data){
             response = false;
             var icon = $("#sReferencia").parent('.input-icon').children('i');
             $("#sReferencia").closest('.form-group').removeClass('has-success').addClass('has-error');
             icon.removeClass("fa-check").addClass("fa-warning");
-        }else{   
+        }else{
     	cad ='<div class="form-group">'+
      	'<label class="col-md-2">Cliente</label>'+
      	'<div class="col-md-4">'+
@@ -251,7 +258,7 @@ function obtenerDatos(){
 }
 
 // DATOS DE LA SECUENCIA (PARTIDA) //
-    function getSecuenciaPartida(obj){
+    /*function getSecuenciaPartida(obj){
         $('.page-title-loading').css('display','block');
         $.post("",{axn : "getSecuencia", sReferencia : $("input[name=sReferencia]").val(), iSecuencia : obj.value},function(data){
             if(data){
@@ -260,32 +267,33 @@ function obtenerDatos(){
                 $(obj).parent().next('td').html(cad);
             }else{
             toastr.error("No se encuentra esa secuencia de la partida en la referencia "+ $("input[name=sReferencia]").val() , "Notificaci&oacute;n");
-                setInterval(function(){ 
+                setInterval(function(){
                     obj.disabled = false;
                 }, 3000);
             }
             $('.page-title-loading').css('display','none');
         });
     }
-	
- 
-        
+
+
+     }*/
+
     $(document).ready(function(){
-      
+
         /* AGREGAR SECUENCIA */
         $('body').delegate('.add-secuencias', 'click', function(){
-            var html_Secuencia = '<tr><td><table class="table table-bordered"><tr><th nowrap><center>Secuencia</center></th><td><input type="text" name="gloPart[]" class="form-control" placeholder="Numero de Secuencia" onchange="getSecuenciaPartida(this);"></td><td rowspan="2">DATOS IMPORTANTES</td><td  rowspan="2" align="center"><a href="javascript:;" class="btn btn-default delete-secuencias"><i class="fa fa-trash-o"></i></a></td></tr><tr><th nowrap><center>Observaciones</center></th><td><textarea name="sObservacionesPartida[]" class="form-control" placeholder="Observaciones"></textarea></td></tr></table></td></tr>';
+            var html_Secuencia = '<tr><td><table class="table table-bordered"><tr><th nowrap><center>Secuencia</center></th><td><input type="text" name="iSecuencia[]" class="form-control" placeholder="Secuencia Pedimento"></td><td><input type="text" name="sSecuenciaNumeroParte[]" class="form-control" placeholder="Secuencia Partida" value=""></td><td rowspan="2" align="center"><a href="javascript:;" class="btn btn-default delete-secuencias"><i class="fa fa-trash-o"></i></a></td></tr><tr><th nowrap><center>Observaciones</center></th><td colspan="2"><textarea name="sObservacionesPartida[]" class="form-control" placeholder="Observaciones"></textarea></td></tr></table></td></tr>';
             $("#observacionesSecuencias").append(html_Secuencia);
         });
         /* ELIMINAR SECUENCIA */
-        $('body').delegate('.delete-secuencias','click',function(){  
+        $('body').delegate('.delete-secuencias','click',function(){
             $(this).parent().parent().parent().parent().parent().parent().remove();
         });
-		
-		
+
+
         // VALIDADOR PARA OBTENER DATOS POR REFERENCIA //
         $.validator.addMethod(
-            "obtenerDatos", 
+            "obtenerDatos",
             function(value, element) {
                 if(obtenerDatos()){
                     return true;
@@ -295,7 +303,7 @@ function obtenerDatos(){
             },
             "La referencia no existe o aun no tiene la etapa de clasifiaci&oacute;n."
         );
-        
+
         /* VALIDATIONS */
         isValid = $("#_save").validate({
             errorElement: 'span', //default input error message container
@@ -319,26 +327,26 @@ function obtenerDatos(){
                     required: true,
                 }
             },
-            invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar              
+            invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar
                 $('.alert-success').hide();
                 $('.alert-danger').show();
                 App.scrollTo($('.alert-danger'), -200);
             },
             errorPlacement: function (error, element) { // hacer la colocación de error para cada tipo de entrada
                 var icon = $(element).parent('.input-icon').children('i');
-                icon.removeClass('fa-check').addClass("fa-warning");  
+                icon.removeClass('fa-check').addClass("fa-warning");
                 icon.attr("data-original-title", $('.alert-danger').text()).tooltip({'container': 'body'});
                 if (element.parent(".input-group").size() > 0) {
                     error.insertAfter(element.parent(".input-group"));
-                } else if (element.attr("data-error-container")) { 
+                } else if (element.attr("data-error-container")) {
                     error.appendTo(element.attr("data-error-container"));
-                } else if (element.parents('.radio-list').size() > 0) { 
+                } else if (element.parents('.radio-list').size() > 0) {
                     error.appendTo(element.parents('.radio-list').attr("data-error-container"));
-                } else if (element.parents('.radio-inline').size() > 0) { 
+                } else if (element.parents('.radio-inline').size() > 0) {
                     error.appendTo(element.parents('.radio-inline').attr("data-error-container"));
                 } else if (element.parents('.checkbox-list').size() > 0) {
                     error.appendTo(element.parents('.checkbox-list').attr("data-error-container"));
-                } else if (element.parents('.checkbox-inline').size() > 0) { 
+                } else if (element.parents('.checkbox-inline').size() > 0) {
                     error.appendTo(element.parents('.checkbox-inline').attr("data-error-container"));
                 } else {
                     error.insertAfter(element); // Para otros insumos, sólo realizar comportamiento predeterminado (llamar messages)
@@ -364,5 +372,5 @@ function obtenerDatos(){
                 }
             }
         });
-    }); 
+    });
 </script>
