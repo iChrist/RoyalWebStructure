@@ -205,9 +205,13 @@
 
             /* COMIENZA ope_glosa => glo */
             public function count_glo(){
-                $sql = "SELECT COUNT(*) AS total FROM ope_glosa AS glo 
-                INNER JOIN ope_recepciones_documentos rd ON rd.sReferencia = glo.sReferencia 
-                INNER JOIN cat_empresas ce ON ce.skEmpresa = rd.skEmpresa WHERE 1=1 ";
+                $sql = "SELECT COUNT(*) AS total
+                FROM ope_glosa AS glo
+                INNER JOIN ope_recepciones_documentos AS rd ON rd.sReferencia = glo.sReferencia
+                INNER JOIN cat_empresas ce ON ce.skEmpresa = rd.skEmpresa
+                INNER JOIN _users AS usr ON usr.skUsers =  glo.skUserCreacion
+                INNER JOIN _status ON _status.skStatus = glo.skStatus
+                WHERE 1=1 ";
                 if(!is_null($this->glo['skGlosa'])){
                     $sql .=" AND glo.skGlosa = '".$this->glo['skGlosa']."'";
                 }
@@ -229,17 +233,6 @@
 
                 if(!is_null($this->glo['skEmpresa'])){
                     $sql .=" AND ce.skEmpresa = '".$this->glo['skEmpresa']."'";
-                }
-
-                if(!is_null($this->glo['orderBy'])){
-                    $sql .=" ORDER BY ".$this->glo['orderBy']." ".$this->glo['sortBy'];
-                }
-                if(is_int($this->glo['limit'])){
-                    if(is_int($this->glo['offset'])){
-                        $sql .= " LIMIT ".$this->glo['offset']." , ".$this->glo['limit'];
-                    }else{
-                        $sql .= " LIMIT ".$this->glo['limit'];
-                    }
                 }
                 //exit($sql);
                 $result = $this->db->query($sql);

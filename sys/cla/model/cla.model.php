@@ -132,7 +132,11 @@
         /* COMIENZA CLASIFICACIÓN DE MERCANCIAS */
         
         public function count_cla(){
-            $sql = "SELECT COUNT(*) AS total FROM cat_clasificacion AS cla WHERE 1=1 ";
+            $sql = "SELECT COUNT(*) AS total FROM cat_clasificacion AS cla "
+                . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
+                . "INNER JOIN cat_empresas AS emp ON emp.skEmpresa = cla.skEmpresa "
+                . "INNER JOIN cat_clasificacionMercancia AS claMer ON claMer.skClasificacion = cla.skClasificacion "
+                . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE 1=1 ";
             if(!empty($this->cla['skEmpresa'])){
                 $sql .=" AND skEmpresa like '%".$this->cla['skEmpresa']."%'";
             }
