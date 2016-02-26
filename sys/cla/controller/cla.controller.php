@@ -194,6 +194,10 @@
         }
         
         /* COMIENZA MODULO clasifiación arancelaria */
+        public function clara_index(){
+            $this->claara_index();
+        }
+        
         public function claara_index(){
             ini_set('memory_limit', '-1');
             //exit('<pre>'.print_r($_GET,1).'</pre>');
@@ -359,6 +363,10 @@
             // RETORNA LA VISTA >numPar-index.php //
             $this->load_view('claara-index', $this->data);
             return true;
+        }
+        
+        public function clara_form(){
+            $this->claara_form();
         }
         
         public function claara_form(){
