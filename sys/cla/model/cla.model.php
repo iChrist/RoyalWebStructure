@@ -29,6 +29,7 @@
             ,'skUsersModificacion' => NULL
             ,'dFechaImportacion' => NULL
             
+            ,'year'=>NULL
             ,'limit'        =>  NULL
             ,'offset'       =>  NULL
             ,'orderBy' => NULL
@@ -137,24 +138,30 @@
                 . "INNER JOIN cat_empresas AS emp ON emp.skEmpresa = cla.skEmpresa "
                 . "INNER JOIN cat_clasificacionMercancia AS claMer ON claMer.skClasificacion = cla.skClasificacion "
                 . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE 1=1 ";
+            if(!empty($this->cla['year'])){
+                $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') = '".$this->cla['year']."'";
+            }else{
+                $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') < '".date('Y')."'";
+            }
             if(!empty($this->cla['skEmpresa'])){
-                $sql .=" AND skEmpresa like '%".$this->cla['skEmpresa']."%'";
+                $sql .=" AND cla.skEmpresa like '%".$this->cla['skEmpresa']."%'";
             }
             if(!empty($this->cla['sReferencia'])){
-                $sql .=" AND sReferencia like '%".$this->cla['sReferencia']."%'";
+                $sql .=" AND cla.sReferencia like '%".$this->cla['sReferencia']."%'";
             }
             if(!empty($this->cla['sPedimento'])){
-                $sql .=" AND sPedimento like '%".$this->cla['sPedimento']."%'";
+                $sql .=" AND cla.sPedimento like '%".$this->cla['sPedimento']."%'";
             }
             if(!empty($this->cla['dFechaPrevio'])){
-                $sql .=" AND dFechaPrevio like '%".$this->cla['dFechaPrevio']."%'";
+                $sql .=" AND cla.dFechaPrevio like '%".$this->cla['dFechaPrevio']."%'";
             }
             if(!empty($this->cla['sfactura'])){
-                $sql .=" AND sfactura like '%".$this->cla['sfactura']."%'";
+                $sql .=" AND cla.sfactura like '%".$this->cla['sfactura']."%'";
             }
             if(!empty($this->cla['skStatus'])){
                 $sql .=" AND cla.skStatus like '%".$this->cla['skStatus']."%'";
             }
+            //exit($sql);
             $result = $this->db->query($sql);
             if($result){
                 if($result->num_rows > 0){
@@ -165,12 +172,103 @@
             }
         }
 // FILTRADO PARA LA CLASIFICACIÓN ARANCELARIA //
+        public function count_cla_referencias_pendientes(){
+            $sql = "SELECT COUNT(*) AS total FROM cat_clasificacion AS cla "
+                . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
+                . "INNER JOIN cat_empresas AS emp ON emp.skEmpresa = cla.skEmpresa "
+                . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE cla.valido = 0 ";
+            if(!empty($this->cla['year'])){
+                $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') = '".$this->cla['year']."'";
+            }else{
+                $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') < '".date('Y')."'";
+            }
+            if(!empty($this->cla['skEmpresa'])){
+                $sql .=" AND cla.skEmpresa like '%".$this->cla['skEmpresa']."%'";
+            }
+            if(!empty($this->cla['sReferencia'])){
+                $sql .=" AND cla.sReferencia like '%".$this->cla['sReferencia']."%'";
+            }
+            if(!empty($this->cla['sPedimento'])){
+                $sql .=" AND cla.sPedimento like '%".$this->cla['sPedimento']."%'";
+            }
+            
+            if(!empty($this->cla['orderBy'])){
+                $sql .=" ORDER BY ".$this->cla['orderBy'];
+            }
+            if(is_int($this->cla['limit'])){
+                if(is_int($this->cla['offset'])){
+                    $sql .= " LIMIT ".$this->cla['offset']." , ".$this->cla['limit'];
+                }else{
+                    $sql .= " LIMIT ".$this->cla['limit'];
+                }
+            }
+            //exit($sql);
+            $result = $this->db->query($sql);
+            if($result){
+                if($result->num_rows > 0){
+                    return $result;
+                }else{
+                    return false;
+                }
+            }
+        }
+        
+        public function read_cla_referencias_pendientes(){
+            $sql="SELECT COUNT(*) AS totalFracciones, cla.skClasificacion, cla.sReferencia, cla.sPedimento, cla.skUsersCreacion, u.sName AS autor, emp.sNombre AS empresa, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
+                . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
+                . "INNER JOIN cat_empresas AS emp ON emp.skEmpresa = cla.skEmpresa "
+                . "INNER JOIN cat_clasificacionMercancia AS claMer ON claMer.skClasificacion = cla.skClasificacion "
+                . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE cla.valido = 0 ";
+            if(!empty($this->cla['year'])){
+                $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') = '".$this->cla['year']."'";
+            }else{
+                $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') < '".date('Y')."'";
+            }
+            if(!empty($this->cla['skEmpresa'])){
+                $sql .=" AND cla.skEmpresa like '%".$this->cla['skEmpresa']."%'";
+            }
+            if(!empty($this->cla['sReferencia'])){
+                $sql .=" AND cla.sReferencia like '%".$this->cla['sReferencia']."%'";
+            }
+            if(!empty($this->cla['sPedimento'])){
+                $sql .=" AND cla.sPedimento like '%".$this->cla['sPedimento']."%'";
+            }
+            
+            // AGRUPAMOS LA CLASIFICACION PARA EL CONTEO DE FRACCIONES //
+            $sql .=" GROUP BY cla.skClasificacion ";
+            
+            if(!empty($this->cla['orderBy'])){
+                $sql .=" ORDER BY ".$this->cla['orderBy'];
+            }
+            if(is_int($this->cla['limit'])){
+                if(is_int($this->cla['offset'])){
+                    $sql .= " LIMIT ".$this->cla['offset']." , ".$this->cla['limit'];
+                }else{
+                    $sql .= " LIMIT ".$this->cla['limit'];
+                }
+            }
+            //exit($sql);
+            $result = $this->db->query($sql);
+            if($result){
+                if($result->num_rows > 0){
+                    return $result;
+                }else{
+                    return false;
+                }
+            }
+        }
+        
         public function read_filter_cla(){
             $sql = "SELECT cla.*, claMer.sFraccion, claMer.sDescripcion, claMer.sDescripcionIngles, claMer.sNumeroParte, emp.sNombre AS empresa, CONCAT(u.sName,' ',u.sLastNamePaternal,' ',u.sLastNameMaternal) AS usersCreacion, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
                 . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
                 . "INNER JOIN cat_empresas AS emp ON emp.skEmpresa = cla.skEmpresa "
                 . "INNER JOIN cat_clasificacionMercancia AS claMer ON claMer.skClasificacion = cla.skClasificacion "
                 . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE 1=1 ";
+            if(!empty($this->cla['year'])){
+                $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') = '".$this->cla['year']."'";
+            }else{
+                $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') < '".date('Y')."'";
+            }
             if(!empty($this->cla['skEmpresa'])){
                 $sql .=" AND cla.skEmpresa like '%".$this->cla['skEmpresa']."%'";
             }
@@ -230,6 +328,11 @@
                 . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
                 . "INNER JOIN cat_empresas AS emp ON emp.skEmpresa = cla.skEmpresa "
                 . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE 1=1 ";
+            if(!empty($this->cla['year'])){
+                $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') = '".$this->cla['year']."'";
+            }else{
+                $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') < '".date('Y')."'";
+            }
             if(!empty($this->cla['skEmpresa'])){
                 $sql .=" AND cla.skEmpresa like '%".$this->cla['skEmpresa']."%'";
             }
@@ -292,7 +395,7 @@
         }
         
         public function get_cla(){
-            $sql = "SELECT skClasificacion FROM cat_clasificacion WHERE "
+            $sql = "SELECT skClasificacion,dFechaImportacion FROM cat_clasificacion WHERE "
                 . " (sReferencia = '".$this->cla['sReferencia']."' "
                 . " OR sPedimento = '".$this->cla['sPedimento']."') "
                 . " AND (skEmpresa = '".$this->cla['skEmpresa']."') ";

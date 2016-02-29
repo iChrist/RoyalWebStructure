@@ -127,9 +127,18 @@
                             $sReferencia = addslashes(trim($v['REFERENCIA']," "));
                             $sPedimento = addslashes(trim($v['PEDIMENTO']," "));
                         }else{
-                            $rCla = $cla->fetch_row();
-                            $this->cla['skClasificacion'] = $rCla[0];
-                            $skClasificacion = $rCla[0];
+                            $rCla = $cla->fetch_assoc();
+                            if($rCla['dFechaImportacion'] != $dFechaImportacion){
+                                $flag = false;
+                                $message = "La referencia: ".$this->cla['sReferencia']." con pedimento: ".$this->cla['sPedimento']." y empresa: ".$sEmpresa." ; Ya ha sido importada anteriormente.";
+                                $this->cla['dFechaImportacion'] = $dFechaImportacion;
+                                $this->claMer['dFechaImportacion'] = $dFechaImportacion;
+                                $this->delete_cla();
+                                $this->delete_claMer();
+                                break; 
+                            }
+                            $this->cla['skClasificacion'] = $rCla['skClasificacion'];
+                            $skClasificacion = $rCla['skClasificacion'];
                             $sReferencia = addslashes(trim($v['REFERENCIA']," "));
                             $sPedimento = addslashes(trim($v['PEDIMENTO']," "));
                         }
@@ -194,11 +203,102 @@
         }
         
         /* COMIENZA MODULO clasifiación arancelaria */
-        public function clara_index(){
-            $this->claara_index();
+        public function claara_validar(){
+            $year = date('Y');
+            if(isset($_GET['axn'])){
+                switch ($_GET['axn']) {
+                    case 'fetch_all':
+                        // PARAMETROS PARA FILTRADO //
+                        $this->cla['orderBy'] = "sPedimento";
+                        $this->cla['year'] = $year;
+                        
+                        if(isset($_POST['sReferencia'])){
+                            $this->cla['sReferencia'] = $_POST['sReferencia'];
+                        }
+                        if(isset($_POST['sPedimento'])){
+                            $this->cla['sPedimento'] = $_POST['sPedimento'];
+                        }
+                        if(isset($_POST['skEmpresa'])){
+                            $this->cla['skEmpresa'] = $_POST['skEmpresa'];
+                        }
+                        if(isset($_POST['skCreador'])){
+                            $this->cla['skCreador'] = $_POST['skCreador'];
+                        }
+                        if(isset($_POST['skStatus'])){
+                            $this->cla['skStatus'] = $_POST['skStatus'];
+                        }
+                        
+                        // OBTENER REGISTROS //
+                        $total = parent::count_cla_referencias_pendientes();
+                        $records = Core_Functions::table_ajax($total);
+                        if($records['recordsTotal'] === 0){
+                            header('Content-Type: application/json');
+                            echo json_encode($records);
+                            return false;
+                        }
+                        
+                        $this->cla['limit'] = $records['limit'];
+                        $this->cla['offset'] = $records['offset'];
+                        $this->data['data'] = parent::read_cla_referencias_pendientes();
+                        
+                        if(!$this->data['data']){
+                            header('Content-Type: application/json');
+                            echo json_encode($records);
+                            return false;
+                        }
+                        //exit('<pre>'.print_r($records['data'],1).'</pre>');
+                        $i = 0;
+                        while($row = $this->data['data']->fetch_assoc()){
+                                $actions = $this->printModulesButtons(2,array($row['skClasificacion']));
+                                $records['data'][$i] = array(
+                                 utf8_encode($row['sReferencia']) // REFERENCIA
+                                ,utf8_encode($row['sPedimento']) // PEDIMENTO
+                                ,utf8_encode($row['empresa']) // EMPRESA (CLIENTE)
+                                ,utf8_encode($row['totalFracciones']) // total de fracciones
+                                ,utf8_encode($row['autor']) // usersCreacion
+                                
+                                ,utf8_encode($row['htmlStatus']) // STATUS
+                                , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
+                                
+                                );
+                                
+                             $i++;   
+                        }
+                        header('Content-Type: application/json');
+                        echo json_encode($records);
+                        return true;
+                        break;
+                }
+                return true;
+            }
+            // INCLUYE EL MODELO DEL MODULO cof //
+            $this->load_model('cof','cof');
+            $cof = new Cof_Model();
+            $this->data['status'] = $cof->read_status();
+            
+            // LISTAR TODOS LOS USUARIOS
+            $this->data['users'] = $cof->read_user();
+            
+            // INCLUYE EL MODELO DEL MODULO emp //
+            $this->load_model('emp','emp');
+            $emp = new Emp_Model();
+            $this->data['empresas'] = $emp->read_equal_empresas();
+            
+            // RETORNA LA VISTA >numPar-index.php //
+            $this->load_view('claara-validar', $this->data);
+            return true;
         }
         
-        public function claara_index(){
+        public function clara_index(){
+            $this->claara_index(false);
+        }
+        
+        public function claara_index($year = true){
+            if($year){ 
+                $year = date('Y');
+            }else{
+                $year = NULL;
+            }
             ini_set('memory_limit', '-1');
             //exit('<pre>'.print_r($_GET,1).'</pre>');
             if(isset($_GET['axn'])){
@@ -212,6 +312,7 @@
                     case 'fetch_all':
                         // PARAMETROS PARA FILTRADO //
                         $this->cla['orderBy'] = "sPedimento";
+                        $this->cla['year'] = $year;
                         
                         if(isset($_POST['sReferencia'])){
                             $this->cla['sReferencia'] = $_POST['sReferencia'];
@@ -258,7 +359,6 @@
                         
                         $this->cla['limit'] = $records['limit'];
                         $this->cla['offset'] = $records['offset'];
-                        //$this->data['data'] = parent::read_like_cla();
                         $this->data['data'] = parent::read_filter_cla();
                         
                         if(!$this->data['data']){

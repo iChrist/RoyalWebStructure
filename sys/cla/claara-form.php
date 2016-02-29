@@ -371,7 +371,7 @@ function process_wb(wb) {
                     }, 3000);
                 }else{
                     toastr.error(data['message'], "Notificaci&oacute;n");
-                    $("<p>"+data['message']+"</p>").appendTo(".error-import");
+                    $("<p style='color:red;font-weight:bold;'>"+data['message']+"</p>").appendTo(".error-import");
                 }
                 $('.page-title-loading').css('display','none');
             });
