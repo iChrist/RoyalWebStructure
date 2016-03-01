@@ -30,6 +30,30 @@
 <!-- TERMINA VENTANA MODAL PARA ELIMINACIÓN !-->
 
 
+<!-- COMIENZA VENTANA MODAL PARA ELIMINACIÓN !-->
+<div class="modal fade _default-modal" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title _default-modal-title" id="gridSystemModalLabel"></h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+            <div class="_default-modal-content"></div>
+            <div class="_default-modal-record"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default _default-modal-cancel" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary _default-modal-ok">Aceptar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- TERMINA VENTANA MODAL PARA ELIMINACIÓN !-->
+
+
 
 
 

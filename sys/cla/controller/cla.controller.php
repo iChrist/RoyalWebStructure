@@ -207,6 +207,23 @@
             $year = date('Y');
             if(isset($_GET['axn'])){
                 switch ($_GET['axn']) {
+                    case 'validar':
+                        if(isset($_GET['p1'])){
+                            $this->cla['skClasificacion'] = $_GET['p1'];
+                            if(!$this->claara_validar()){
+                                $this->data['response'] = false;
+                                $this->data['message'] = 'Hubo un error al intentar validar la primera clasifiaci&oacute;n, intenta de nuevo.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return false;
+                            }
+                            $this->data['response'] = true;
+                            $this->data['message'] = 'Se ha validado la primera clasificaci&oacute;n.';
+                            header('Content-Type: application/json');
+                            echo json_encode($this->data);
+                            return true;
+                        }
+                        break;
                     case 'fetch_all':
                         // PARAMETROS PARA FILTRADO //
                         $this->cla['orderBy'] = "sPedimento";
@@ -305,6 +322,9 @@
                 switch ($_GET['axn']) {
                     case 'excel':
                         $this->claara_excel();
+                        break;
+                    case 'pdf':
+                        $this->claara_pdf();
                         break;
                     case 'pdf':
                         $this->claara_pdf();

@@ -394,6 +394,17 @@
             }
         }
         
+        public function claara_validar(){
+            $sql = "UPDATE cat_clasificacion SET valido = 1 WHERE skClasificacion = '".$this->cla['skClasificacion']."'";
+            exit($sql);
+            $result = $this->db->query($sql);
+            if($result){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        
         public function get_cla(){
             $sql = "SELECT skClasificacion,dFechaImportacion FROM cat_clasificacion WHERE "
                 . " (sReferencia = '".$this->cla['sReferencia']."' "

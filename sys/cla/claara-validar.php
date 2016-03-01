@@ -97,7 +97,54 @@
 </div>
 <div class="clearfix"></div>
 <script type="text/javascript">
+    // DELETE DATA //
+    var validarUrl = null;
+    var valido
+    function validarClasificacion(obj,url){
+        validarUrl = url;
+        var tr = $(obj).parent().parent().parent().parent().clone();
+        //console.log(tr);
+        $(tr[0]).children().last().remove();
+        var thead = $("#datatable_ajax").children().children().clone();
+        $(thead[0]).children().last().remove();
+        $("._default-modal-title").html('Primera Clasifiaci&oacute;n');
+        $("._default-modal-content").html('<center><h3>&iquest;Desea validar o rechazar el siguiente registro?</h3></center>');
+        $("._default-modal-record").html('<table class="table"><thead><tr role="row" class="heading">'+thead[0].innerHTML+'</tr></thead><tr>'+tr[0].innerHTML+'</tr></table>');
+        $("._default-modal-cancel").html('Rechazar');
+        $("._default-modal-ok").html('Validar');
+        $("._default-modal").modal('toggle');
+        return false;
+    }
+    function sayHello(){
+        alert("1");
+    } 
 $(document).ready(function(){
    TableAjax.init('?axn=fetch_all');
+   $("._default-modal-ok").click(function(){
+       $("._default-modal").modal('hide');
+        $('.page-title-loading').css('display','inline');
+        $.ajax({
+            type: "GET",
+            url: validarUrl,
+            data: "",
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function(data){
+                if(data['response']){
+                    toastr.success(data['message'], "Notificaci&oacute;n");
+                    setInterval(function(){ 
+                         location.reload(); 
+                    }, 3000);
+                }else{
+                    toastr.error(data['message'], "Notificaci&oacute;n");
+                    setInterval(function(){ 
+                    }, 3000);
+                }
+                $('.page-title-loading').css('display','none');
+                validarUrl = null;
+            }
+        });
+   });
 });
 </script>
