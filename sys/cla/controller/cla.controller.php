@@ -210,7 +210,7 @@
                     case 'validar':
                         if(isset($_GET['p1'])){
                             $this->cla['skClasificacion'] = $_GET['p1'];
-                            if(!$this->claara_validar()){
+                            if(!$this->validarPrimeraClasifiacion()){
                                 $this->data['response'] = false;
                                 $this->data['message'] = 'Hubo un error al intentar validar la primera clasifiaci&oacute;n, intenta de nuevo.';
                                 header('Content-Type: application/json');
@@ -223,11 +223,14 @@
                             echo json_encode($this->data);
                             return true;
                         }
+                        exit("AQUI ANDA");
+                        return true;
                         break;
                     case 'fetch_all':
                         // PARAMETROS PARA FILTRADO //
                         $this->cla['orderBy'] = "sPedimento";
                         $this->cla['year'] = $year;
+                        $this->cla['valido']  = 0;
                         
                         if(isset($_POST['sReferencia'])){
                             $this->cla['sReferencia'] = $_POST['sReferencia'];

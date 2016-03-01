@@ -137,7 +137,7 @@
                 . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
                 . "INNER JOIN cat_empresas AS emp ON emp.skEmpresa = cla.skEmpresa "
                 . "INNER JOIN cat_clasificacionMercancia AS claMer ON claMer.skClasificacion = cla.skClasificacion "
-                . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE 1=1 ";
+                . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE cla.valido = 1 ";
             if(!empty($this->cla['year'])){
                 $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') = '".$this->cla['year']."'";
             }else{
@@ -263,7 +263,7 @@
                 . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
                 . "INNER JOIN cat_empresas AS emp ON emp.skEmpresa = cla.skEmpresa "
                 . "INNER JOIN cat_clasificacionMercancia AS claMer ON claMer.skClasificacion = cla.skClasificacion "
-                . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE 1=1 ";
+                . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE cla.valido = 1 ";
             if(!empty($this->cla['year'])){
                 $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') = '".$this->cla['year']."'";
             }else{
@@ -394,9 +394,9 @@
             }
         }
         
-        public function claara_validar(){
+        public function validarPrimeraClasifiacion(){
             $sql = "UPDATE cat_clasificacion SET valido = 1 WHERE skClasificacion = '".$this->cla['skClasificacion']."'";
-            exit($sql);
+            //exit($sql);
             $result = $this->db->query($sql);
             if($result){
                 return true;
