@@ -1,11 +1,17 @@
 <!-- BEGIN PAGE CONTENT-->
 <div class="row">
     <div class="col-md-12">
+        <form id="_formTableAjax" method="POST" action="?axn=fetch_all">
                 <div class="table-container">
                     <div class="table-actions-wrapper">
                         <span></span>
-                        <div class="table-group-actions pull-right">
-                            <span></span>
+                        <div class="table-group-actions pull-right"><span></span>
+                            <div class="btn-group btn-group-md" role="group" aria-label="Acciones">
+                            <?php
+                                $buttons = $this->printModulesButtons(3);
+                                echo $buttons['sHtml'];
+                            ?>
+                            </div>
                         </div>
                     </div>
                         <table class="table table-striped table-bordered table-hover" id="datatable_ajax">
@@ -90,6 +96,7 @@
                         </tbody>
                         </table>
                 </div>
+            </form> <!-- FORMULARIO PARA BOTONES DE LA TABLA iPosition 3!-->
             <!--</div>!-->
         </div>
         <!-- End: life time stats -->

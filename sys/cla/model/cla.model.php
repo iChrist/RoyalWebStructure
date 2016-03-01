@@ -28,6 +28,7 @@
             ,'dFechaModificacion' => NULL
             ,'skUsersModificacion' => NULL
             ,'dFechaImportacion' => NULL
+            ,'valido' => NULL
             
             ,'year'=>NULL
             ,'limit'        =>  NULL
@@ -263,11 +264,14 @@
                 . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
                 . "INNER JOIN cat_empresas AS emp ON emp.skEmpresa = cla.skEmpresa "
                 . "INNER JOIN cat_clasificacionMercancia AS claMer ON claMer.skClasificacion = cla.skClasificacion "
-                . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE cla.valido = 1 ";
+                . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE 1=1 ";
             if(!empty($this->cla['year'])){
                 $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') = '".$this->cla['year']."'";
             }else{
                 $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') < '".date('Y')."'";
+            }
+            if(!empty($this->cla['valido'])){
+                $sql .=" AND cla.valido = ".$this->cla['valido'];
             }
             if(!empty($this->cla['skEmpresa'])){
                 $sql .=" AND cla.skEmpresa like '%".$this->cla['skEmpresa']."%'";
@@ -312,7 +316,7 @@
                     $sql .= " LIMIT ".$this->cla['limit'];
                 }
             }
-            //echo $sql;
+            //exit($sql);
             $result = $this->db->query($sql);
             if($result){
                 if($result->num_rows > 0){
@@ -487,7 +491,13 @@
         }
         
         public function delete_cla(){
-            $sql = "DELETE FROM cat_clasificacion WHERE dFechaImportacion = '".$this->cla['dFechaImportacion']."'";
+            $sql = "DELETE FROM cat_clasificacion WHERE 1=1 ";
+            if(!empty($this->cla['skClasificacion'])){
+                $sql.=" AND skClasificacion = '".$this->cla['skClasificacion']."' ";
+            }
+            if(!empty($this->cla['dFechaImportacion'])){
+                $sql.=" AND dFechaImportacion = '".$this->cla['dFechaImportacion']."' ";
+            }
             //exit($sql);
             $result = $this->db->query($sql);
             if($result){

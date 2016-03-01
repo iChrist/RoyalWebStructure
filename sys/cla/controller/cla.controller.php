@@ -223,7 +223,22 @@
                             echo json_encode($this->data);
                             return true;
                         }
-                        exit("AQUI ANDA");
+                        return true;
+                        break;
+                    case 'delete':
+                        $this->data['message'] = 'Hubo un error al intentar eliminar el registro, intenta de nuevo.';
+                        $this->data['response'] = false;
+                        $this->data['datos'] = false;
+                        if(isset($_GET['p1'])){
+                            $this->cla['skClasificacion'] = $_GET['p1'];
+                            if($this->delete_cla()){
+                                $this->data['response'] = true;
+                                $this->data['datos'] = true;
+                                $this->data['message'] = 'Registro eliminado con &eacute;xito.';
+                            }
+                        }
+                        header('Content-Type: application/json');
+                        echo json_encode($this->data);
                         return true;
                         break;
                     case 'fetch_all':
@@ -247,7 +262,13 @@
                         if(isset($_POST['skStatus'])){
                             $this->cla['skStatus'] = $_POST['skStatus'];
                         }
-                        
+                        // EXPORTACIÓN A EXCEL //
+                        if(isset($_POST['exportExcel']) && $_POST['exportExcel'] == 1){
+                            $this->data['data'] = parent::read_filter_cla();
+                            $this->claara_excel();
+                            return true;
+                            exit;
+                        }
                         // OBTENER REGISTROS //
                         $total = parent::count_cla_referencias_pendientes();
                         $records = Core_Functions::table_ajax($total);
@@ -371,6 +392,14 @@
                             $this->cla['skStatus'] = $_POST['skStatus'];
                         }
                         
+                        // EXPORTACIÓN A EXCEL //
+                        if(isset($_POST['exportExcel']) && $_POST['exportExcel'] == 1){
+                            $this->cla['valido'] = 1;
+                            $this->data['data'] = parent::read_filter_cla();
+                            $this->claara_excel();
+                            return true;
+                            exit;
+                        }
                         // OBTENER REGISTROS //
                         $total = parent::count_cla();
                         $records = Core_Functions::table_ajax($total);
@@ -1021,12 +1050,14 @@
         }
         
         public function claara_excel(){
+            //exit('<pre>'.print_r($_POST,1));
+            //exit('<pre>'.print_r($this->data['data'],1));
             //echo date('H:i:s') . ' Current memory usage: ' . (memory_get_usage(true) / 1024 / 1024) . " MB <hr>" . PHP_EOL;
-            ini_set('memory_limit', '-1');
+            /*ini_set('memory_limit', '-1');
             if(isset($_GET['p1'])){
                 $this->cla['skClasificacion'] = $_GET['p1'];
             }
-            $this->data['data'] = parent::read_equal_cla();           
+            $this->data['data'] = parent::read_equal_cla();*/           
             if(!$this->data['data']){
                 return false;
             }
@@ -1035,31 +1066,25 @@
             $objPHPExcel = $objReader->load(SYS_PATH."cla/files/claara/tplClasificacionMercancias.xlsx");
             $i = 2;
             while($row = $this->data['data']->fetch_assoc()){
-                $this->claMer['skClasificacion'] = $row['skClasificacion'];
-                /*if(
-                       isset($_POST['sFraccion'])
-                    || isset($_POST['sNumeroParte'])
-                ){
-                   $this->claMer['skClasificacion'] = NULL; 
-                }*/
+                /*$this->claMer['skClasificacion'] = $row['skClasificacion'];
                 $this->claMer['skStatus'] = 'AC';
                 $claMer = $this->read_like_claMer();
                 if(!$claMer){
                     break;
-                }
-                while($rClaMer = $claMer->fetch_assoc()){
+                }*/
+                //while($rClaMer = $claMer->fetch_assoc()){
                     $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $i, utf8_encode($row['sReferencia']));
                     $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $i, utf8_encode($row['sPedimento']));
                     $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $i, utf8_encode($row['empresa']));
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $i, utf8_encode($rClaMer['sFraccion']));
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $i, utf8_encode($rClaMer['sDescripcion']));
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $i, utf8_encode($rClaMer['sDescripcionIngles']));
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $i, utf8_encode($rClaMer['sNumeroParte']));
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $i, utf8_encode($row['sFraccion']));
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $i, utf8_encode($row['sDescripcion']));
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $i, utf8_encode($row['sDescripcionIngles']));
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $i, utf8_encode($row['sNumeroParte']));
                     $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $i, utf8_encode($row['dFechaPrevio']));
                     $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $i, utf8_encode($row['sFactura']));
                     $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(9, $i, utf8_encode($row['usersCreacion']));
                     $i++;   
-                }
+                //}
             }
 
             // Redirect output to a client’s web browser (Excel2007)
