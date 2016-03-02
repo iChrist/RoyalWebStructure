@@ -17,7 +17,7 @@
             $emp->empresas['sNombre'] = $sNombre;
             $empresa = $emp->read_like_empresas();
             if(!$empresa){
-                $emp->empresas['skEmpresa'] = substr(md5(microtime()), 1, 32);
+                /*$emp->empresas['skEmpresa'] = substr(md5(microtime()), 1, 32);
                 $emp->empresas['skTipoEmpresa'] = 'N/A';
                 $emp->empresas['skStatus'] = 'AC';
                 $skEmpresa = $emp->create_empresas();
@@ -25,6 +25,7 @@
                     return false;
                 }
                 return array($skEmpresa,$sNombre);
+                return true;*/
                 return false;
             }else{
                 $rEmpresa = $empresa->fetch_row();
