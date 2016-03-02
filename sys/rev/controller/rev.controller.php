@@ -66,6 +66,9 @@
 					if(isset($_POST['skEstatusRevalidacion'])){
 						$this->solreva['skEstatusRevalidacion'] = $_POST['skEstatusRevalidacion'];
 					}
+                                        if(isset($_POST['iPrioridad'])){
+                                            $this->solreva['iPrioridad'] = $_POST['iPrioridad'];
+					}
 
 					// FILTRO POR FECHAS
 					$this->solreva['filtroFechas'] = !empty($_POST['filtroFechas']) ? $_POST['filtroFechas'] : 'Solicitud';
@@ -113,6 +116,7 @@
 						
 						array_push($records['data'], array(
 						 	 utf8_encode($row['Icono'])
+                                                        ,($row['iPrioridad'] == 0) ? 'Normal' : 'Urgente'
 						 	,utf8_encode($row['sReferencia'])
 						 	,$fechas
 						 	,utf8_encode($row['UsuarioEjecutivo'])

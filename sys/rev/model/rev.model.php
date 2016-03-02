@@ -85,8 +85,10 @@
                 if(!empty($this->solreva['sBlHouse'])){
                     $sql .=" AND sBlHouse = '".$this->solreva['sBlHouse']."'";
                 }
-                if(!empty($this->solreva['iPrioridad'])){
-                    $sql .=" AND iPrioridad = ".$this->solreva['iPrioridad'];
+                if(!is_null($this->solreva['iPrioridad'])){
+                    if($this->solreva['iPrioridad'] != ""){
+                        $sql .=" AND iPrioridad = ".$this->solreva['iPrioridad'];
+                    }
                 }
                 if(!empty($this->solreva['dFechaArriboBuque'])){
                     $sql .=" AND dFechaArriboBuque = '".$this->solreva['dFechaArriboBuque']."'";
@@ -128,7 +130,7 @@
 				if(!empty($this->solreva['skEstatusRevalidacion'])){
                     $sql .=" AND skEstatusRevalidacion = '".$this->solreva['skEstatusRevalidacion']."'";
                 }
- 				//echo $sql;die();
+ 		//exit($sql);
                 $result = $this->db->query($sql);
                 if($result){
                     if($result->num_rows > 0){
@@ -182,8 +184,10 @@
                 if(!empty($this->solreva['sBlHouse'])){
                     $sql .=" AND sd.sBlHouse = '".$this->solreva['sBlHouse']."'";
                 }
-                if(!empty($this->solreva['iPrioridad'])){
-                    $sql .=" AND sd.iPrioridad = ".$this->solreva['iPrioridad'];
+                if(!is_null($this->solreva['iPrioridad'])){
+                    if($this->solreva['iPrioridad'] != ""){
+                        $sql .=" AND sd.iPrioridad = ".$this->solreva['iPrioridad'];
+                    }
                 }
                 if(!empty($this->solreva['dFechaArriboBuque'])){
                     $sql .=" AND sd.dFechaArriboBuque = '".$this->solreva['dFechaArriboBuque']."'";

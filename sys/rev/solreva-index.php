@@ -13,7 +13,8 @@
       <table class="table table-striped table-bordered table-hover" id="datatable_ajax">
         <thead>
           <tr role="row" class="heading">
-              <th width="10%" >Estatus</th>
+            <th width="10%" >Estatus</th>
+            <th width="5%"> Prioridad </th>
             <th width="10%"> Referencia </th>
             <th width="10%"> Fechas</th>
             <th width="10%"> Ejecutivo </th>
@@ -36,6 +37,13 @@
                                     }//ENDWHILE
                                 ?>
               </select></td>
+              <td>
+                  <select name="iPrioridad" class="form-control form-filter input-sm">
+                      <option value="">- Prioridad -</option>
+                      <option value="0">Normal</option>
+                      <option value="1">Urgente</option>
+                  </select>
+              </td>
             <td><input type="text" class="form-control form-filter input-sm" name="sReferencia" placeholder="Referencia"></td>
             <td>
                 <select name="filtroFechas" class="form-control form-filter input-sm">
