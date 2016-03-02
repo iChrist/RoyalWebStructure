@@ -1054,6 +1054,7 @@
             }
             $this->data['data'] = parent::read_equal_cla();*/           
             if(!$this->data['data']){
+                 header('Location: '.$_SERVER['HTTP_REFERER']); 
                 return false;
             }
             require_once(CORE_PATH."assets/PHPExcel/Classes/PHPExcel/IOFactory.php");
