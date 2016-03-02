@@ -138,11 +138,14 @@
                 . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
                 . "INNER JOIN cat_empresas AS emp ON emp.skEmpresa = cla.skEmpresa "
                 . "INNER JOIN cat_clasificacionMercancia AS claMer ON claMer.skClasificacion = cla.skClasificacion "
-                . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE cla.valido = 1 ";
+                . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE 1=1 ";
             if(!empty($this->cla['year'])){
                 $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') = '".$this->cla['year']."'";
             }else{
                 $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') < '".date('Y')."'";
+            }
+            if(!empty($this->cla['valido'])){
+                $sql .=" AND cla.valido = ".$this->cla['valido'];
             }
             if(!empty($this->cla['skEmpresa'])){
                 $sql .=" AND cla.skEmpresa like '%".$this->cla['skEmpresa']."%'";

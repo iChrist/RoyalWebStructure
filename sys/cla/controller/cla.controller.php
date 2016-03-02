@@ -344,12 +344,6 @@
             //exit('<pre>'.print_r($_GET,1).'</pre>');
             if(isset($_GET['axn'])){
                 switch ($_GET['axn']) {
-                    case 'excel':
-                        $this->claara_excel();
-                        break;
-                    case 'pdf':
-                        $this->claara_pdf();
-                        break;
                     case 'pdf':
                         $this->claara_pdf();
                         break;
@@ -357,6 +351,7 @@
                         // PARAMETROS PARA FILTRADO //
                         $this->cla['orderBy'] = "sPedimento";
                         $this->cla['year'] = $year;
+                        $this->cla['valido'] = 1;
                         
                         if(isset($_POST['sReferencia'])){
                             $this->cla['sReferencia'] = $_POST['sReferencia'];
@@ -394,7 +389,6 @@
                         
                         // EXPORTACIÓN A EXCEL //
                         if(isset($_POST['exportExcel']) && $_POST['exportExcel'] == 1){
-                            $this->cla['valido'] = 1;
                             $this->data['data'] = parent::read_filter_cla();
                             $this->claara_excel();
                             return true;
