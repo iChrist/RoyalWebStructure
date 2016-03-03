@@ -209,6 +209,24 @@
             if(isset($_GET['axn'])){
                 switch ($_GET['axn']) {
                     case 'validar':
+                        $dFechaImportacion = date('Y-m-d H:i:s');
+                        ini_set('memory_limit', '-1');
+                        $data = json_decode($_GET['sJson'],1);
+                        $response = $this->import_excel($data[key($data)],$dFechaImportacion);
+                        if($response['response']){
+                            $this->data['response'] = $response['response'];
+                            $this->data['message'] = $response['message'];
+                            header('Content-Type: application/json');
+                            echo json_encode($this->data);
+                            return true;
+                        }else{
+                            $this->cla['dFechaImportacion'] = $dFechaImportacion;
+                            $this->data['response'] = $response['response'];
+                            $this->data['message'] = $response['message'];
+                            header('Content-Type: application/json');
+                            echo json_encode($this->data);
+                            return false;
+                        }
                         if(isset($_GET['p1'])){
                             $this->cla['skClasificacion'] = $_GET['p1'];
                             if(!$this->validarPrimeraClasifiacion()){

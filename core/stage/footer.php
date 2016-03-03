@@ -44,7 +44,7 @@
             <div class="_default-modal-record"></div>
         </div>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer _default-modal-buttons">
         <button type="button" class="btn btn-default _default-modal-cancel" data-dismiss="modal">Cancelar</button>
         <button type="button" class="btn btn-primary _default-modal-ok">Aceptar</button>
       </div>

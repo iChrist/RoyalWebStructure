@@ -103,7 +103,221 @@
     </div>
 </div>
 <div class="clearfix"></div>
+
+
+<div class="modal fade _validar-modal" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title _validar-modal-title" id="gridSystemModalLabel">Primera Clasifiaci&oacute;n</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+            <form id="formValidarClasificacion" class="form-horizontal" role="form" enctype="multipart/form-data"><input type="text" id="sJson" name="sJson"/><input type="file" name="xlfile" id="xlf"/><div class="col-md-10 error-import"><h3 id="total"></h3></div>
+                <div class="_validar-modal-content">
+                    <center>
+                        <h3>&iquest;Desea validar o rechazar el siguiente registro?</h3>
+                    </center>
+                </div>
+                <div class="_validar-modal-record">
+
+                </div>
+            </form>
+        </div>
+      </div>
+      <div class="modal-footer _validar-modal-buttons">
+        <button type="button" class="btn btn-default _validar-modal-cancel" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary _validar-modal-ok">Validar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<!-- SCRIPT FOR SHEETS JS !-->
+<!-- uncomment the next line here and in xlsxworker.js for encoding support -->
+<!--<script src="<?php echo SYS_URL ?>core/assets/sheetjs/dist/cpexcel.js"></script>-->
+<script src="<?php echo SYS_URL ?>core/assets/sheetjs/shim.js"></script>
+<script src="<?php echo SYS_URL ?>core/assets/sheetjs/jszip.js"></script>
+<script src="<?php echo SYS_URL ?>core/assets/sheetjs/xlsx.js"></script>
+<!-- uncomment the next line here and in xlsxworker.js for ODS support -->
+<script src="<?php echo SYS_URL ?>core/assets/sheetjs/dist/ods.js"></script>
 <script type="text/javascript">
+var X = XLSX;
+var XW = {
+	/* worker message */
+	msg: 'xlsx',
+	/* worker scripts */
+	rABS: '<?php echo SYS_URL ?>core/assets/sheetjs/xlsxworker2.js',
+	norABS: '<?php echo SYS_URL ?>core/assets/sheetjs/xlsxworker1.js',
+	noxfer: '<?php echo SYS_URL ?>core/assets/sheetjs/xlsxworker.js'
+};
+
+var rABS = typeof FileReader !== "undefined" && typeof FileReader.prototype !== "undefined" && typeof FileReader.prototype.readAsBinaryString !== "undefined";
+var use_worker = typeof Worker !== 'undefined';
+var transferable = use_worker;
+var wtf_mode = false;
+
+function fixdata(data) {
+	var o = "", l = 0, w = 10240;
+	for(; l<data.byteLength/w; ++l) o+=String.fromCharCode.apply(null,new Uint8Array(data.slice(l*w,l*w+w)));
+	o+=String.fromCharCode.apply(null, new Uint8Array(data.slice(l*w)));
+	return o;
+}
+
+function ab2str(data) {
+	var o = "", l = 0, w = 10240;
+	for(; l<data.byteLength/w; ++l) o+=String.fromCharCode.apply(null,new Uint16Array(data.slice(l*w,l*w+w)));
+	o+=String.fromCharCode.apply(null, new Uint16Array(data.slice(l*w)));
+	return o;
+}
+
+function s2ab(s) {
+	var b = new ArrayBuffer(s.length*2), v = new Uint16Array(b);
+	for (var i=0; i != s.length; ++i) v[i] = s.charCodeAt(i);
+	return [v, b];
+}
+
+function xw_noxfer(data, cb) {
+	var worker = new Worker(XW.noxfer);
+	worker.onmessage = function(e) {
+		switch(e.data.t) {
+			case 'ready': break;
+			case 'e': console.error(e.data.d); break;
+			case XW.msg: cb(JSON.parse(e.data.d)); break;
+		}
+	};
+	var arr = rABS ? data : btoa(fixdata(data));
+	worker.postMessage({d:arr,b:rABS});
+}
+
+function xw_xfer(data, cb) {
+	var worker = new Worker(rABS ? XW.rABS : XW.norABS);
+	worker.onmessage = function(e) {
+		switch(e.data.t) {
+			case 'ready': break;
+			case 'e': console.error(e.data.d); break;
+			default: xx=ab2str(e.data).replace(/\n/g,"\\n").replace(/\r/g,"\\r"); console.log("done"); cb(JSON.parse(xx)); break;
+		}
+	};
+	if(rABS) {
+		var val = s2ab(data);
+		worker.postMessage(val[1], [val[1]]);
+	} else {
+		worker.postMessage(data, [data]);
+	}
+}
+
+function xw(data, cb) {
+	if(transferable) xw_xfer(data, cb);
+	else xw_noxfer(data, cb);
+}
+
+function to_json(workbook) {
+	var result = {};
+	workbook.SheetNames.forEach(function(sheetName) {
+		var roa = X.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+		if(roa.length > 0){
+			result[sheetName] = roa;
+		}
+	});
+	return result;
+}
+    
+var xlf = document.getElementById('xlf');
+function handleFile(e) {
+	var files = e.target.files;
+	var f = files[0];
+	{
+		var reader = new FileReader();
+		var name = f.name;
+		reader.onload = function(e) {
+			if(typeof console !== 'undefined') console.log("onload", new Date(), rABS, use_worker);
+			var data = e.target.result;
+			if(use_worker) {
+				xw(data, process_wb);
+			} else {
+				var wb;
+				if(rABS) {
+					wb = X.read(data, {type: 'binary'});
+				} else {
+				var arr = fixdata(data);
+					wb = X.read(btoa(arr), {type: 'base64'});
+				}
+				process_wb(wb);
+			}
+		};
+		if(rABS) reader.readAsBinaryString(f);
+		else reader.readAsArrayBuffer(f);
+	}
+}
+
+if(xlf.addEventListener) xlf.addEventListener('change', handleFile, false);
+
+function process_wb(wb) {
+	var output = "";
+	output = JSON.stringify(to_json(wb), 2, 2);
+        var total = to_json(wb);
+        console.log(Object.keys(total));
+        if(total[Object.keys(total)]){
+            $("#total").html("Procesando " + total[Object.keys(total)].length + " Registros...");
+            $("#sJson").val(JSON.stringify(to_json(wb)));
+            $('.page-title-loading').css('display','inline');
+            /*$.ajax({
+                //type: "GET",
+                method: "GET",
+                url: validarUrl,
+                data: { 
+                    axn: "json_excel",
+                    sJson: $("#sJson").val()
+                }
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(data){
+                    if(data['response']){
+                        toastr.success(data['message'], "Notificaci&oacute;n");
+                        setInterval(function(){ 
+                             location.reload(); 
+                        }, 3000);
+                    }else{
+                        toastr.error(data['message'], "Notificaci&oacute;n");
+                        setInterval(function(){ 
+                        }, 3000);
+                    }
+                    $('.page-title-loading').css('display','none');
+                    validarUrl = null;
+                }
+            });*/
+            $.ajax({
+                //type: "GET",
+                method: "GET",
+                url: validarUrl,
+                data: { 
+                    sJson: $("#sJson").val()
+                }
+            })
+            .done(function( data ) {
+                if(data['response']){
+                    toastr.success(data['message'], "Notificaci&oacute;n");
+                    // AQUI SE HACE LA REDIRECCION
+                    setInterval(function(){ 
+                        obj.disabled = false;
+                        location.reload();
+                    }, 3000);
+                }else{
+                    toastr.error(data['message'], "Notificaci&oacute;n");
+                    $("<p style='color:red;font-weight:bold;'>"+data['message']+"</p>").appendTo(".error-import");
+                }
+                $('.page-title-loading').css('display','none');
+            });
+        }else{
+            toastr.error("El template est&aacute; vacio, o está da&ntilde;ado.", "Notificaci&oacute;n");
+        }
+        
+}
+    
     // DELETE DATA //
     var validarUrl = null;
     var valido
@@ -114,26 +328,24 @@
         $(tr[0]).children().last().remove();
         var thead = $("#datatable_ajax").children().children().clone();
         $(thead[0]).children().last().remove();
-        $("._default-modal-title").html('Primera Clasifiaci&oacute;n');
-        $("._default-modal-content").html('<center><h3>&iquest;Desea validar o rechazar el siguiente registro?</h3></center>');
-        $("._default-modal-record").html('<table class="table"><thead><tr role="row" class="heading">'+thead[0].innerHTML+'</tr></thead><tr>'+tr[0].innerHTML+'</tr></table>');
-        $("._default-modal-cancel").html('Rechazar');
-        $("._default-modal-ok").html('Validar');
-        $("._default-modal").modal('toggle');
+        $("._validar-modal-record").html('<table class="table"><thead><tr role="row" class="heading">'+thead[0].innerHTML+'</tr></thead><tr>'+tr[0].innerHTML+'</tr></table>');
+        $("._validar-modal").modal('toggle');
         return false;
     }
-    function sayHello(){
-        alert("1");
-    } 
 $(document).ready(function(){
    TableAjax.init('?axn=fetch_all');
    $("._default-modal-ok").click(function(){
        $("._default-modal").modal('hide');
         $('.page-title-loading').css('display','inline');
+        console.log($("#formValidarClasificacion"));
+        var formdata = false;
+        if (window.FormData) {
+            formdata = new FormData($("#formValidarClasificacion")[0]);
+        }
         $.ajax({
             type: "GET",
             url: validarUrl,
-            data: "",
+            data: formdata,
             cache: false,
             contentType: false,
             processData: false,
