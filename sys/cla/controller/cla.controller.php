@@ -33,7 +33,7 @@
             }
         }
         // IMPORTAR EXCEL //
-        public function import_excel(&$data , &$dFechaImportacion){
+        public function import_excel(&$data , &$dFechaImportacion , $validar = 0){
             ini_set('memory_limit', '-1');
             
             $sReferencia = NULL;
@@ -209,10 +209,11 @@
             if(isset($_GET['axn'])){
                 switch ($_GET['axn']) {
                     case 'validar':
+                        exit('<pre>'.print_r($_GET,1));
                         $dFechaImportacion = date('Y-m-d H:i:s');
                         ini_set('memory_limit', '-1');
                         $data = json_decode($_GET['sJson'],1);
-                        $response = $this->import_excel($data[key($data)],$dFechaImportacion);
+                        $response = $this->import_excel($data[key($data)],$dFechaImportacion,1);
                         if($response['response']){
                             $this->data['response'] = $response['response'];
                             $this->data['message'] = $response['message'];
@@ -553,7 +554,7 @@
                     $dFechaImportacion = date('Y-m-d H:i:s');
                     ini_set('memory_limit', '-1');
                     $data = json_decode($_POST['sJson'],1);
-                    $response = $this->import_excel($data[key($data)],$dFechaImportacion);
+                    $response = $this->import_excel($data[key($data)],$dFechaImportacion,0);
                     if($response['response']){
                         $this->data['response'] = $response['response'];
                         $this->data['message'] = $response['message'];
