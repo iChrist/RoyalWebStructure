@@ -115,8 +115,6 @@
       <div class="modal-body">
         <div class="row">
             <form id="formValidarClasificacion" class="form-horizontal" role="form" enctype="multipart/form-data">
-                <input type="hidden" id="sJson" name="sJson"/><input type="file" name="xlfile" id="xlf"/>
-                <div class="col-md-10 error-import"><p id="total"></p></div>
                 <div class="_validar-modal-content">
                     <center>
                         <h3>&iquest;Desea validar o rechazar el siguiente registro?</h3>
@@ -125,6 +123,11 @@
                 <div class="_validar-modal-record">
 
                 </div>
+                
+                <input type="hidden" id="sJson" name="sJson"/>
+                <input type="file" name="xlfile" id="xlf"/>
+                <div class="col-md-10 error-import"><h4 id="total"></h4></div>
+                <div class="clearfix"></div>
             </form>
         </div>
       </div>
@@ -263,7 +266,7 @@ function process_wb(wb) {
         var total = to_json(wb);
         console.log(Object.keys(total));
         if(total[Object.keys(total)]){
-            $("#total").html("Procesando " + total[Object.keys(total)].length + " Registros...");
+            $("#total").html("Se procesar&aacute;n " + total[Object.keys(total)].length + " Registros...");
             $("#sJson").val(JSON.stringify(to_json(wb)));
             $("._validar-modal-ok").prop("disabled",false);
             //$('.page-title-loading').css('display','inline');
