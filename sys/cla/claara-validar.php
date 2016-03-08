@@ -128,7 +128,7 @@
       </div>
       <div class="modal-footer _validar-modal-buttons">
         <button type="button" class="btn btn-default _validar-modal-cancel" data-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary _validar-modal-ok">Validar</button>
+        <button type="button" class="btn btn-primary _validar-modal-ok" disabled="disabled">Validar</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -263,7 +263,8 @@ function process_wb(wb) {
         if(total[Object.keys(total)]){
             $("#total").html("Procesando " + total[Object.keys(total)].length + " Registros...");
             $("#sJson").val(JSON.stringify(to_json(wb)));
-            $('.page-title-loading').css('display','inline');
+            $("._validar-modal-ok").prop("disabled",false);
+            //$('.page-title-loading').css('display','inline');
             /*$.ajax({
                 //type: "GET",
                 method: "GET",
@@ -290,7 +291,7 @@ function process_wb(wb) {
                     validarUrl = null;
                 }
             });*/
-            $.ajax({
+            /*$.ajax({
                 //type: "GET",
                 method: "GET",
                 url: validarUrl,
@@ -311,7 +312,7 @@ function process_wb(wb) {
                     $("<p style='color:red;font-weight:bold;'>"+data['message']+"</p>").appendTo(".error-import");
                 }
                 $('.page-title-loading').css('display','none');
-            });
+            });*/
         }else{
             toastr.error("El template est&aacute; vacio, o está da&ntilde;ado.", "Notificaci&oacute;n");
         }
@@ -334,8 +335,8 @@ function process_wb(wb) {
     }
 $(document).ready(function(){
    TableAjax.init('?axn=fetch_all');
-   $("._default-modal-ok").click(function(){
-       $("._default-modal").modal('hide');
+   $("._validar-modal-ok").click(function(){
+       $("._validar-modal").modal('hide');
         $('.page-title-loading').css('display','inline');
         console.log($("#formValidarClasificacion"));
         var formdata = false;
@@ -343,7 +344,7 @@ $(document).ready(function(){
             formdata = new FormData($("#formValidarClasificacion")[0]);
         }
         $.ajax({
-            type: "GET",
+            type: "POST",
             url: validarUrl,
             data: formdata,
             cache: false,

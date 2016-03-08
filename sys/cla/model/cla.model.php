@@ -452,7 +452,7 @@
         
         public function create_cla(){
             $sql = "INSERT INTO cat_clasificacion 
-            (skClasificacion,skEmpresa,sReferencia,sPedimento,dFechaPrevio,sFactura,skStatus,dFechaCreacion,skUsersCreacion,dFechaImportacion) 
+            (skClasificacion,skEmpresa,sReferencia,sPedimento,dFechaPrevio,sFactura,skStatus,dFechaCreacion,skUsersCreacion,dFechaImportacion,valido) 
             VALUES 
             ('".$this->cla['skClasificacion']."',
             '".$this->cla['skEmpresa']."',
@@ -463,7 +463,8 @@
             '".$this->cla['skStatus']."',
              CURRENT_TIMESTAMP,
             '".$this->cla['skUsersCreacion']."',
-            '".$this->cla['dFechaImportacion']."'
+            '".$this->cla['dFechaImportacion']."',
+            ".$this->cla['valido']."
             );";
             //exit($sql);
             $result = $this->db->query($sql);

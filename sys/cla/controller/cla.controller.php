@@ -36,6 +36,11 @@
         public function import_excel(&$data , &$dFechaImportacion , $validar = 0){
             ini_set('memory_limit', '-1');
             
+            if($validar == 1){
+                $this->cla['skClasificacion'] = $_GET['p1'];
+                $this->delete_cla();
+            }
+            
             $sReferencia = NULL;
             $sPedimento = NULL;
             $sEmpresa = NULL;
@@ -43,6 +48,7 @@
             $skClasificacion = NULL;
             
             $this->cla['dFechaImportacion'] = $dFechaImportacion;
+            $this->cla['valido'] = $validar;
             $this->cla['skStatus'] = 'AC';
             $this->cla['skUsersCreacion'] = $_SESSION['session']['skUsers'];
             
@@ -208,43 +214,6 @@
             $year = date('Y');
             if(isset($_GET['axn'])){
                 switch ($_GET['axn']) {
-                    case 'validar':
-                        exit('<pre>'.print_r($_GET,1));
-                        $dFechaImportacion = date('Y-m-d H:i:s');
-                        ini_set('memory_limit', '-1');
-                        $data = json_decode($_GET['sJson'],1);
-                        $response = $this->import_excel($data[key($data)],$dFechaImportacion,1);
-                        if($response['response']){
-                            $this->data['response'] = $response['response'];
-                            $this->data['message'] = $response['message'];
-                            header('Content-Type: application/json');
-                            echo json_encode($this->data);
-                            return true;
-                        }else{
-                            $this->cla['dFechaImportacion'] = $dFechaImportacion;
-                            $this->data['response'] = $response['response'];
-                            $this->data['message'] = $response['message'];
-                            header('Content-Type: application/json');
-                            echo json_encode($this->data);
-                            return false;
-                        }
-                        if(isset($_GET['p1'])){
-                            $this->cla['skClasificacion'] = $_GET['p1'];
-                            if(!$this->validarPrimeraClasifiacion()){
-                                $this->data['response'] = false;
-                                $this->data['message'] = 'Hubo un error al intentar validar la primera clasifiaci&oacute;n, intenta de nuevo.';
-                                header('Content-Type: application/json');
-                                echo json_encode($this->data);
-                                return false;
-                            }
-                            $this->data['response'] = true;
-                            $this->data['message'] = 'Se ha validado la primera clasificaci&oacute;n.';
-                            header('Content-Type: application/json');
-                            echo json_encode($this->data);
-                            return true;
-                        }
-                        return true;
-                        break;
                     case 'delete':
                         $this->data['message'] = 'Hubo un error al intentar eliminar el registro, intenta de nuevo.';
                         $this->data['response'] = false;
@@ -329,6 +298,43 @@
                         echo json_encode($records);
                         return true;
                         break;
+                }
+                if($_POST){
+                    //exit('<pre>'.print_r($_GET,1).'</pre><br><hr><pre>'.print_r($_POST,1).'</pre>');
+                    ini_set('memory_limit', '-1');
+                    $dFechaImportacion = date('Y-m-d H:i:s');
+                    $data = json_decode($_POST['sJson'],1);
+                    $response = $this->import_excel($data[key($data)],$dFechaImportacion,1);
+                    if($response['response']){
+                        $this->data['response'] = $response['response'];
+                        $this->data['message'] = $response['message'];
+                        header('Content-Type: application/json');
+                        echo json_encode($this->data);
+                        return true;
+                    }else{
+                        $this->cla['dFechaImportacion'] = $dFechaImportacion;
+                        $this->data['response'] = $response['response'];
+                        $this->data['message'] = $response['message'];
+                        header('Content-Type: application/json');
+                        echo json_encode($this->data);
+                        return false;
+                    }
+                    /*if(isset($_GET['p1'])){
+                        $this->cla['skClasificacion'] = $_GET['p1'];
+                        if(!$this->validarPrimeraClasifiacion()){
+                            $this->data['response'] = false;
+                            $this->data['message'] = 'Hubo un error al intentar validar la primera clasifiaci&oacute;n, intenta de nuevo.';
+                            header('Content-Type: application/json');
+                            echo json_encode($this->data);
+                            return false;
+                        }
+                        $this->data['response'] = true;
+                        $this->data['message'] = 'Se ha validado la primera clasificaci&oacute;n.';
+                        header('Content-Type: application/json');
+                        echo json_encode($this->data);
+                        return true;
+                    }*/
+                    return true;
                 }
                 return true;
             }
