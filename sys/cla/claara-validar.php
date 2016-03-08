@@ -114,7 +114,9 @@
       </div>
       <div class="modal-body">
         <div class="row">
-            <form id="formValidarClasificacion" class="form-horizontal" role="form" enctype="multipart/form-data"><input type="text" id="sJson" name="sJson"/><input type="file" name="xlfile" id="xlf"/><div class="col-md-10 error-import"><h3 id="total"></h3></div>
+            <form id="formValidarClasificacion" class="form-horizontal" role="form" enctype="multipart/form-data">
+                <input type="hidden" id="sJson" name="sJson"/><input type="file" name="xlfile" id="xlf"/>
+                <div class="col-md-10 error-import"><p id="total"></p></div>
                 <div class="_validar-modal-content">
                     <center>
                         <h3>&iquest;Desea validar o rechazar el siguiente registro?</h3>
