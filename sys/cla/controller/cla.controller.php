@@ -33,13 +33,8 @@
             }
         }
         // IMPORTAR EXCEL //
-        public function import_excel(&$data , &$dFechaImportacion , $validar = 0){
+        public function import_excel(&$data , &$dFechaImportacion , $validar = 0, $skClasificacion = false){
             ini_set('memory_limit', '-1');
-            
-            if($validar == 1){
-                $this->cla['skClasificacion'] = $_GET['p1'];
-                $this->delete_cla();
-            }
             
             $sReferencia = NULL;
             $sPedimento = NULL;
@@ -47,14 +42,13 @@
             $skEmpresa = NULL;
             $skClasificacion = NULL;
             
-            $this->cla['dFechaImportacion'] = $dFechaImportacion;
             $this->cla['valido'] = $validar;
             $this->cla['skStatus'] = 'AC';
             $this->cla['skUsersCreacion'] = $_SESSION['session']['skUsers'];
             
             $this->claMer['skStatus'] = 'AC';
             $this->claMer['skUsersCreacion'] = $_SESSION['session']['skUsers'];
-            $this->claMer['dFechaImportacion'] = $dFechaImportacion;
+            
                
             // CARGAMOS EL MODELO DE EMPRESAS //
             $this->load_model('emp','emp');
@@ -69,11 +63,37 @@
             $cad  ="";
             $i = 0;
             $lineaExcel = 2;
+            $checkValidacion = $validar;
             foreach($data AS $k => $v){
                 // VERIFICACMOS QUE VENGA REFERENCIA Y PEDIMENTO //
                     if(empty($v['REFERENCIA']) && empty($v['PEDIMENTO'])){
                         continue;
                     }
+                    if($checkValidacion == 1){
+                        $this->cla['skClasificacion'] = $_GET['p1'];
+                        $this->cla['valido'] = 0;
+                        $this->cla['year'] = DATE('Y');
+                        $this->cla['limit'] = 1;
+                        $result = $this->read_filter_cla();
+                        if(!$result){
+                            $flag = false;
+                            $message = "Hubo un error al intentar validar la referencia.";
+                            break;
+                        }
+                        $rCla = $result->fetch_assoc();
+                        $this->cla['sReferencia'] = addslashes(trim($v['REFERENCIA']," "));
+                        $this->cla['sPedimento'] = addslashes(trim($v['PEDIMENTO']," "));
+                        if($rCla['sReferencia'] != $this->cla['sReferencia'] && $rCla['sPedimento'] != $this->cla['sPedimento']){
+                            $flag = false;
+                            $message = "No coincide la referencia '".$this->cla['sReferencia']."' del archivo con la que se desea validar '".$rCla['sReferencia']."'";
+                            break;
+                        }
+                        $this->delete_cla();
+                        $this->cla['valido'] = $validar;
+                        $checkValidacion = 0;
+                    }
+                    $this->cla['dFechaImportacion'] = $dFechaImportacion;
+                    $this->claMer['dFechaImportacion'] = $dFechaImportacion;
                 // VERIFICAMOS SI EXISTE EMPRESA O LA CREAMOS //
                     if($sEmpresa != trim(utf8_decode($v['CLIENTE'])," ")){
                         $cliente = addslashes(trim(utf8_decode($v['CLIENTE'])," "));
@@ -304,7 +324,7 @@
                     ini_set('memory_limit', '-1');
                     $dFechaImportacion = date('Y-m-d H:i:s');
                     $data = json_decode($_POST['sJson'],1);
-                    $response = $this->import_excel($data[key($data)],$dFechaImportacion,1);
+                    $response = $this->import_excel($data[key($data)],$dFechaImportacion,1,$_GET['p1']);
                     if($response['response']){
                         $this->data['response'] = $response['response'];
                         $this->data['message'] = $response['message'];
@@ -560,7 +580,7 @@
                     $dFechaImportacion = date('Y-m-d H:i:s');
                     ini_set('memory_limit', '-1');
                     $data = json_decode($_POST['sJson'],1);
-                    $response = $this->import_excel($data[key($data)],$dFechaImportacion,0);
+                    $response = $this->import_excel($data[key($data)],$dFechaImportacion);
                     if($response['response']){
                         $this->data['response'] = $response['response'];
                         $this->data['message'] = $response['message'];

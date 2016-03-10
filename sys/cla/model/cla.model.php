@@ -276,6 +276,9 @@
             if(!empty($this->cla['valido'])){
                 $sql .=" AND cla.valido = ".$this->cla['valido'];
             }
+            if(!empty($this->cla['skClasificacion'])){
+                $sql .=" AND cla.skClasificacion = '".$this->cla['skClasificacion']."'";
+            }
             if(!empty($this->cla['skEmpresa'])){
                 $sql .=" AND cla.skEmpresa like '%".$this->cla['skEmpresa']."%'";
             }

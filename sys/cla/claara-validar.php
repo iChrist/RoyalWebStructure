@@ -269,55 +269,6 @@ function process_wb(wb) {
             $("#total").html("Se procesar&aacute;n " + total[Object.keys(total)].length + " Registros...");
             $("#sJson").val(JSON.stringify(to_json(wb)));
             $("._validar-modal-ok").prop("disabled",false);
-            //$('.page-title-loading').css('display','inline');
-            /*$.ajax({
-                //type: "GET",
-                method: "GET",
-                url: validarUrl,
-                data: { 
-                    axn: "json_excel",
-                    sJson: $("#sJson").val()
-                }
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function(data){
-                    if(data['response']){
-                        toastr.success(data['message'], "Notificaci&oacute;n");
-                        setInterval(function(){ 
-                             location.reload(); 
-                        }, 3000);
-                    }else{
-                        toastr.error(data['message'], "Notificaci&oacute;n");
-                        setInterval(function(){ 
-                        }, 3000);
-                    }
-                    $('.page-title-loading').css('display','none');
-                    validarUrl = null;
-                }
-            });*/
-            /*$.ajax({
-                //type: "GET",
-                method: "GET",
-                url: validarUrl,
-                data: { 
-                    sJson: $("#sJson").val()
-                }
-            })
-            .done(function( data ) {
-                if(data['response']){
-                    toastr.success(data['message'], "Notificaci&oacute;n");
-                    // AQUI SE HACE LA REDIRECCION
-                    setInterval(function(){ 
-                        obj.disabled = false;
-                        location.reload();
-                    }, 3000);
-                }else{
-                    toastr.error(data['message'], "Notificaci&oacute;n");
-                    $("<p style='color:red;font-weight:bold;'>"+data['message']+"</p>").appendTo(".error-import");
-                }
-                $('.page-title-loading').css('display','none');
-            });*/
         }else{
             toastr.error("El template est&aacute; vacio, o está da&ntilde;ado.", "Notificaci&oacute;n");
         }
@@ -326,9 +277,9 @@ function process_wb(wb) {
     
     // DELETE DATA //
     var validarUrl = null;
-    var valido
     function validarClasificacion(obj,url){
         validarUrl = url;
+        console.info(validarUrl);
         var tr = $(obj).parent().parent().parent().parent().clone();
         //console.log(tr);
         $(tr[0]).children().last().remove();
@@ -341,9 +292,8 @@ function process_wb(wb) {
 $(document).ready(function(){
    TableAjax.init('?axn=fetch_all');
    $("._validar-modal-ok").click(function(){
-       $("._validar-modal").modal('hide');
+        $("._validar-modal").modal('hide');
         $('.page-title-loading').css('display','inline');
-        console.log($("#formValidarClasificacion"));
         var formdata = false;
         if (window.FormData) {
             formdata = new FormData($("#formValidarClasificacion")[0]);
@@ -356,6 +306,11 @@ $(document).ready(function(){
             contentType: false,
             processData: false,
             success: function(data){
+                validarUrl = null;
+                $("._validar-modal-ok").prop("disabled",true);
+                $("#xlf").val("");
+                $("#total").html("");
+                $("#sJson").val("");
                 if(data['response']){
                     toastr.success(data['message'], "Notificaci&oacute;n");
                     setInterval(function(){ 
@@ -364,7 +319,7 @@ $(document).ready(function(){
                 }else{
                     toastr.error(data['message'], "Notificaci&oacute;n");
                     setInterval(function(){ 
-                    }, 3000);
+                    }, 9000);
                 }
                 $('.page-title-loading').css('display','none');
                 validarUrl = null;
