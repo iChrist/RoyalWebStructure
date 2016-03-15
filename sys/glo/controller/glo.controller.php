@@ -185,7 +185,7 @@
                             return true;
                             break;
                         case "save":
-                            //exit(print_r($_POST,1));
+                            exit(print_r($_POST,1));
                             $this->glo['skGlosa'] = !empty($_POST['skGlosa']) ? $_POST['skGlosa'] : substr(md5(microtime()), 1, 32);
                             $this->glo['sReferencia'] = !empty($_POST['sReferencia']) ? addslashes(utf8_decode($_POST['sReferencia'])) : null;
                             $this->glo['sObservacionesPedimento'] = !empty($_POST['sObservacionesPedimento']) ? addslashes(utf8_decode($_POST['sObservacionesPedimento'])) : null;
