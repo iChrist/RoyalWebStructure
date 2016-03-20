@@ -1,13 +1,13 @@
 <?php
         Class Core_Model Extends Core_Functions {
-		
+
 		// PUBLIC VARIABLES //
                 public $skModule;
                 public $tCodPrimerHijo;
                 public $sParentModule;
-                public $sModule;    
+                public $sModule;
                 public $sTitle;
-                
+
                 // PROTECTED VARIABLES //
 			protected $db;
 
@@ -22,9 +22,9 @@
 				die();
 			}
 			$this->_get_params();
-			
+
 			$this->require_view(TRUE);
-			
+
 		}
 
 		public function __destruct(){
@@ -32,18 +32,18 @@
                         $this->db->close();
                     }
 		}
-                
+
                 protected function reconnect(){
                     mysqli_next_result($this->db);
                     $this->db->close();
                     $this->db = mysqli_connect(HOST_DB, USER_DB, PASSWORD_DB, DATABASE_DB);
                 }
-                
+
 		public function index(){
                     //echo "<hr><pre>".print_r($_GET,1)."</pre><hr>";
                     $this->load_controller($_GET["sysModule"] , $_GET["sysFunction"]);
 		}
-                
+
 
 		private function _get_params(){
                     $_GET["sysModule"] = !empty($_GET["sysModule"]) ? str_replace("/","",$_GET["sysModule"]) : NULL;
@@ -61,21 +61,21 @@
                     $_GET["p3"] = !empty($_GET["p3"]) ? str_replace("/","",$_GET["p3"]) : NULL;
                     $_GET["p4"] = !empty($_GET["p4"]) ? str_replace("/","",$_GET["p4"]) : NULL;
                     $_GET["p5"] = !empty($_GET["p5"]) ? str_replace("/","",$_GET["p5"]) : NULL;
-                    
+
                     $select = " SELECT DISTINCT".
                            " ss.skModule AS skModule,ss.sModule, ss.sParentModule, ss.iPosition, ss.sTitle,".
                            " sh.skModule AS tCodPrimerHijo, sh.sTitle AS tTituloPrimerHijo".
                            " FROM _modules ss".
                            " LEFT JOIN _modules sh ON sh.sParentModule = ss.skModule".
                            " WHERE ss.skModule='".$_GET["sysController"]."' AND ss.skStatus='AC'".
-                           " ORDER BY ss.iPosition ASC, sh.iPosition LIMIT 1"; 
+                           " ORDER BY ss.iPosition ASC, sh.iPosition LIMIT 1";
                     $result = $this->db->query($select);
                     $rSeccion = $result->fetch_assoc();
                     mysqli_free_result($result);
                     $this->skModule =$rSeccion{'skModule'};
                     $this->tCodPrimerHijo =$rSeccion{'tCodPrimerHijo'};
                     $this->sParentModule = $rSeccion{'sParentModule'};
-                    $this->sModule =$rSeccion['sModule'];    
+                    $this->sModule =$rSeccion['sModule'];
                     $this->sTitle = $rSeccion['sTitle'];
 		}
 
@@ -107,7 +107,7 @@
                                 require_once(CORE_PATH.'stage/dashboard.php');
                                 require_once(CORE_PATH.'stage/footer.php');
                             }else{
-                               require_once(CORE_PATH.'profile.php');  
+                               require_once(CORE_PATH.'profile.php');
                             }
                         }else{
                             require_once(CORE_PATH."login.php");
@@ -115,7 +115,7 @@
                     }else{
                         if((isset($_SESSION['session']['skUsers'])) && (!empty($_SESSION['session']['skUsers']))){
                             if((isset($_SESSION['session']['skProfile'])) && (!empty($_SESSION['session']['skProfile']))){
-                            
+
                                 // VERIFICA SI EXISTE EL DIRECTORIO DEL MÓDULO.
                                 if(is_dir(SYS_PATH.$sysModule."/")){
                                     // VERIFICA SI EXISTE EL CONTROLADOR DEL MÓDULO.
@@ -167,7 +167,7 @@
                                     die();
                                 }
                             }else{
-                               require_once(CORE_PATH.'profile.php'); 
+                               require_once(CORE_PATH.'profile.php');
                             }
                         }else{
                             require_once(CORE_PATH.'login.php');
@@ -209,7 +209,7 @@
 		protected function is_view_required(){
 			return $_SESSION["sysRequireView"];
 		}
-                
+
                 protected function getModulesButtons(){
                     $sql = "CALL test('".$_GET['sysController']."','".$_SESSION['session']['skProfile']."','".$_SESSION['session']['sGroup']."');";
                     $result = $this->db->query($sql);
@@ -220,13 +220,13 @@
                             ,'sParentModule' => $row['sParentModule']
                             ,'sModuleRedirect' => SYS_URL.SYS_PROJECT.$row['sModuleRedirect']
                             ,'skButtons' => $row['skButtons']
-                            ,'sHtml' => 
+                            ,'sHtml' =>
                                 str_replace(
                                     '{{sModuleRedirect}}',
                                     SYS_URL.SYS_PROJECT.$row['sModuleRedirect'],
                                     str_replace(
-                                    '{{url}}', 
-                                    SYS_URL.SYS_PROJECT.$row['sUrl'], 
+                                    '{{url}}',
+                                    SYS_URL.SYS_PROJECT.$row['sUrl'],
                                     htmlentities($row['sHtml'],ENT_QUOTES)
                                     )
                                 )
@@ -242,7 +242,7 @@
                     mysqli_next_result($this->db);
                     return $data;
                 }
-                
+
                 protected function printModulesButtons($iPlace = 1,$replace = array(), $ownerId = false){
                     $_secutiry['_users_profiles'] = $this->getUsersProfiles();
                     $_secutiry['_modules_profiles_permissions'] = $this->getModulesProfilesPermissions();
@@ -275,7 +275,7 @@
                                             if($v['skPermissions'] != 'R' && $ownerId != false){
                                                 if($ownerId === $_SESSION['session']['skUsers']){
                                                     $sHtml .= html_entity_decode($v['sHtml'],ENT_QUOTES);
-                                                    $sScript .= html_entity_decode($v['sScript'],ENT_QUOTES); 
+                                                    $sScript .= html_entity_decode($v['sScript'],ENT_QUOTES);
                                                 }
                                             }else{
                                                 $sHtml .= html_entity_decode($v['sHtml'],ENT_QUOTES);
@@ -289,7 +289,7 @@
                     }
                     return array('sHtml' => $sHtml, 'sScript' => $sScript);
                 }
-                
+
                 protected function verify_access($skPermissions = NULL, $ownerId = false){
                     $_secutiry['_modules_profiles_permissions'] = $this->getModulesProfilesPermissions();
                     if(!$this->is_ajax()){
@@ -332,7 +332,7 @@
                                         $this->_error($text,500);
                                         die();
                                         return false;
-                                    }  
+                                    }
                                 }else{
                                     return true;
                                 }
@@ -344,8 +344,8 @@
                                 return false;
                             }
                         }
-                        
-                        
+
+
                     }else{
                         if($_SESSION['session']['sGroup'] === 'A'){
                             return true;
@@ -353,10 +353,10 @@
                             if(!empty($_secutiry['_modules_profiles_permissions'])){
                                 if($skPermissions != NULL){
                                     if(array_key_exists($skPermissions , $_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$_SESSION['session']['skProfile']])){
-                                        return true; 
+                                        return true;
                                     }else{
                                         return false;
-                                    }  
+                                    }
                                 }else{
                                     return true;
                                 }
@@ -366,7 +366,7 @@
                         }
                     }
                 }
-                
+
                 public function is_ajax(){
                     $headers = getallheaders();
                     if(isset($headers['X-Requested-With'])){
@@ -379,7 +379,7 @@
                         return false;
                     }
                 }
-                
+
                 protected function getUsersProfiles(){
                     $sql = "SELECT up.skProfiles, p.sName FROM _users_profiles AS up
                         INNER JOIN _profiles AS p ON p.skProfiles = up.skProfiles
@@ -395,7 +395,7 @@
                     mysqli_free_result($result);
                     return $data;
                 }
-                
+
                 protected function getModulesProfilesPermissions(){
                     $sql = "CALL stpGetModulesProfilesPermissions('".$_GET['sysController']."','".$_SESSION['session']['skUsers']."', '".$_SESSION['session']['skProfile']."');";
                     $result = $this->db->query($sql);
@@ -408,45 +408,45 @@
                     mysqli_next_result($this->db);
                     return $data;
                 }
-                
+
 		public function _error(&$text, $error = 404){
                     require_once(CORE_PATH.$error.'.php');
                     exit;
 		}
-		
-		
+
+
 		public function breadcrumb(){
 				$sql = "CALL stpConsultarBreadcrumb('".($_GET["sysController"] !='index' ? $_GET["sysController"] : 'sys')."',0); ";
-				
-					$result = $this->db->query($sql);	
+
+					$result = $this->db->query($sql);
 					$html="";
 					while($row= $result->fetch_assoc()){
-					
+
 							$html.='<li>
 						<i class="fa fa-home"></i>';
 						$tArchivo=SYS_PATH.$row['sModule'].'/'.$row['skModule'].'.php';
 						//echo $tArchivo."<br>";
 						 if((!file_exists($tArchivo))){
 							$html.='<span class="disabled-link" >'.utf8_encode($row['sTitle']).'</span>';
-							
+
 						}else{
  						$html.='<a  href="'.SYS_URL.'sys/'.$row['sModule'].'/'.$row['skModule'].'/'.$row['sName'].'/">'.utf8_encode($row['sTitle']).'</a>';
  						}
-						
-						
-						
+
+
+
 						$html.='<i class="fa fa-angle-right"></i>
 					</li>';
 							//$html.= $row['sPkModule']."<br>";
-		
-		
+
+
 					}
 					echo  $html;
 					//return $result;
-			
+
 		}
 		public function GetMenu($sMenu){
-		
+
  						  $sql = " SELECT DISTINCT ss.skModule AS skModule,
 						 	ss.iPosition AS iPosition,
 							ss.sParentModule AS sParentModule,
@@ -459,12 +459,12 @@
 						  "	LEFT JOIN _modules_icons mi ON mi.skModule = ss.sKmodule  ".
 						//  (isset($_SESSION['sesionServicios']) ? " AND ss.bPublico=0" : " OR ss.bPublico=1").
 						  " LEFT JOIN _modules_profiles_permissions ssp ON ssp.skProfiles = '".$_SESSION['session']['skProfile']."' AND ssp.sKmodule=ss.sKmodule ".
- 						  " WHERE ". 
+ 						  " WHERE ".
  						  " ss.skStatus='AC' ".
 						  " AND mm.skMenu = '".$sMenu."'  ".
  						   (isset($_SESSION['session']) ? " AND (su.sGroup='A' OR ssp.skModule IS NOT NULL)" : "").
 						 // (isset($_SESSION['session']) ? " AND ss.bPublico=0 AND (su.tCodGrupo='A' OR ssp.tCodSeccion IS NOT NULL)" : " AND ss.bPublico=1").
- 						  " ORDER BY ss.iPosition ASC";	
+ 						  " ORDER BY ss.iPosition ASC";
 						  //echo $sql;
 						   $result = $this->db->query($sql);
 						   	$data = array();
@@ -481,10 +481,10 @@
 		                    mysqli_free_result($result);
 		                    //mysqli_next_result($this->db);
 		                    return $data;
- 						 
+
                       }
             public function GetSubMenuModuls($sSeccionParent){
-		
+
  						  $sql = " SELECT DISTINCT ss.skModule AS skModule,
 						 	ss.iPosition AS iPosition,
 							ss.sParentModule AS sParentModule,
@@ -499,18 +499,18 @@
  						  " LEFT JOIN _modules_caracteristic mm ON mm.skModule = ss.sKmodule  ".
 						//  (isset($_SESSION['sesionServicios']) ? " AND ss.bPublico=0" : " OR ss.bPublico=1").
 						  " LEFT JOIN _modules_profiles_permissions ssp ON ssp.skProfiles = '".$_SESSION['session']['skProfile']."' AND ssp.sKmodule=ss.sKmodule ".
- 						  " WHERE  ss.sParentModule = '".$sSeccionParent."' AND". 
+ 						  " WHERE  ss.sParentModule = '".$sSeccionParent."' AND".
  						  " ss.skStatus='AC'  AND mm.skCaracteristic IS NULL ".
   						   (isset($_SESSION['session']) ? " AND (su.sGroup='A' OR ssp.skModule IS NOT NULL)" : "").
 						 // (isset($_SESSION['session']) ? " AND ss.bPublico=0 AND (su.tCodGrupo='A' OR ssp.tCodSeccion IS NOT NULL)" : " AND ss.bPublico=1").
- 						  " ORDER BY ss.iPosition ASC";	
+ 						  " ORDER BY ss.iPosition ASC";
 						  //echo $sql;
 						   $result = $this->db->query($sql);
  						   $row_cnt = $result->num_rows;
 						   $data = array();
 						   	if($row_cnt){
-						   	
-						   	
+
+
 						  	  while($row = $result->fetch_assoc()){
 		                          array_push($data, array(
 		                            'skModule'    			=>  $row['skModule'],
@@ -524,13 +524,13 @@
 		                    }
 		                    mysqli_free_result($result);
 		                    //mysqli_next_result($this->db);
-		                    
+
 		                          return $data;
 		                    }else{
 			                    //return 0;
 		                    }
-		              
- 						 
+
+
                       }
 
 	}
