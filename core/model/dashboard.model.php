@@ -98,7 +98,7 @@
                 </div>
                 <div class="details">
                   <div class="title">
-                     <a href="/RoyalWebStructure/sys/rev/solreva-index/solicitud-de-revalidacion/">Revalidaciones</a>
+                     <a href="/RoyalWebStructure/sys/rev/solreva-index/solicitud-de-revalidacion/">Solicitudes <br >de Revalidaci&oacute;n</a>
                   </div>
 
 
