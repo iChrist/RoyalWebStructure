@@ -105,9 +105,58 @@
                 </div>
               </div>
             </div>';
+          }
+          public function numRefeano(){
+            $sql="SELECT count(*) AS Refe
+                  FROM ope_recepciones_documentos
+                  WHERE dFechaCreacion < '2016-01-01 00:00:00'";
+                  //echo $sql;
+                  $result = $this->db->query("$sql");
+                  $rano15 = $result->fetch_assoc();
 
+                  $sql="SELECT count(*) AS Refe
+                        FROM ope_recepciones_documentos
+                        WHERE dFechaCreacion > '2016-01-01 00:00:00'";
+                         $result = $this->db->query("$sql");
+                        $rano16 = $result->fetch_assoc();
+                  //mysqli_free_result($result);
 
+                  echo "['Año', 'Referencia' ],
+                  ['2015', ".$rano15['Refe']."],
+                  ['2016', ".$rano16['Refe']."]";
+          }
+          public function numRefeMes(){
+            $sql="SELECT count(*) AS Refe
+                  FROM ope_recepciones_documentos
+                  WHERE dFechaCreacion  BETWEEN '2016-01-01 00:00:00' AND '2016-02-01 00:00:00'  ";
+                  //echo $sql;
+                  $result = $this->db->query("$sql");
+                  $ranoEne = $result->fetch_assoc();
 
+                  $sql="SELECT count(*) AS Refe
+                  FROM ope_recepciones_documentos
+                  WHERE dFechaCreacion BETWEEN '2016-02-01 00:00:00' AND '2016-03-01 00:00:00' ";
+                  $result = $this->db->query("$sql");
+                  $ranoFeb = $result->fetch_assoc();
+
+                  $sql="SELECT count(*) AS Refe
+                  FROM ope_recepciones_documentos
+                  WHERE dFechaCreacion BETWEEN '2016-03-01 00:00:00' AND '2016-04-01 00:00:00' ";
+                  $result = $this->db->query("$sql");
+                  $ranoMar = $result->fetch_assoc();
+
+                  $sql="SELECT count(*) AS Refe
+                  FROM ope_recepciones_documentos
+                  WHERE dFechaCreacion BETWEEN '2016-04-01 00:00:00' AND '2016-05-01 00:00:00' ";
+                  $result = $this->db->query("$sql");
+                  $ranoAbr = $result->fetch_assoc();
+                  //mysqli_free_result($result);
+
+                  echo "['Mes', 'Referencia' ],
+                  ['Enero', ".$ranoEne['Refe']."],
+                  ['Febrero', ".$ranoFeb['Refe']."],
+                  ['Marzo', ".$ranoMar['Refe']."],
+                  ['Abril', ".$ranoAbr['Refe']."]";
           }
 	}
 ?>

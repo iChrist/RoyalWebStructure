@@ -49,6 +49,7 @@ global $dash;
 							<div id="chart_div"></div>
 							<div id="columnchart_material1" ></div>
 
+
 						</div>
 					</div>
 
@@ -87,9 +88,10 @@ global $dash;
 						google.charts.setOnLoadCallback(drawChart);
 						function drawChart() {
 							var data = google.visualization.arrayToDataTable([
-								['Año', 'Referencia' ],
+							/*	['Año', 'Referencia' ],
 								['2015', 330],
-								['2016', 560]
+								['2016', 560]*/
+								<?php  $dash->numRefeano();?>
 							]);
 
 							var options = {
@@ -107,13 +109,14 @@ global $dash;
 
 						function drawChart1() {
 							var data = google.visualization.arrayToDataTable([
-								['Año', 'Referencia' ],
+								/*['Mes', 'Referencia' ],
 								['Enero', 120],
 								['Febrero', 240],
 								['Marzo', 200],
 								['Abril', 0],
 								['Mayo', 0],
-								['Junio', 0]
+								['Junio', 0]*/
+								<?php   $dash->numRefeMes();?>
  							]);
 
 							var options = {
