@@ -1,6 +1,7 @@
-<?php 
-    global $core;
-?>  
+<?php
+global $core;
+global $dash;
+?>
     <!DOCTYPE html>
     <!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
     <!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
@@ -109,7 +110,7 @@
 					<li>
 						<a href="extra_profile.html"><i class="fa fa-user"></i> Mi perfil</a>
 					</li>
-					 
+
 					<li class="divider">
 					</li>
 					<li>
@@ -150,7 +151,7 @@
 						</div>
 					</form>
 				</li>
-					
+
 				<?php
  				$sMenu="LAT";
  				//print_r($core->GetMenu($sMenu));
@@ -170,20 +171,20 @@
 			 				 echo '<li>
 									<a href="javascript:;">
 									<i class="'.$datos[$j]['sIcons'].'"></i>
-									'.utf8_encode($datos[$j]['sTitle']).' 
+									'.utf8_encode($datos[$j]['sTitle']).'
 									'.(count($datModul)!=0 ? "<span class=\"arrow \"></span>" : "").'
 									';
-									 
+
 									echo '</a>';
 									 echo'<ul class="sub-menu">';
 									 for($k=0;$k<count($datModul);$k++) {
-									 
+
  									echo '	<li >
 											<a  href="'.SYS_URL."sys/".$datModul[$k]['sModule']."/".$datModul[$k]['skModule']."/".$datModul[$k]['sName']."/".'"> '.utf8_encode($datModul[$k]['sTitle']).'</a>
 										</li>
 										 ';
-										
-									
+
+
 
 									 }
 									echo '</ul>	</li>';
@@ -191,10 +192,10 @@
  					echo '</ul>';
  					 }
  					echo '</li>';
- 					}				 
-				 				
+ 					}
+
 				?>
-				
+
 			</ul>
 								<!-- END SIDEBAR MENU -->
 		</div>
@@ -203,8 +204,8 @@
 	<!-- BEGIN CONTENT -->
 	<div class="page-content-wrapper">
 		<div class="page-content">
-			 
-			<?php 
+
+			<?php
                             require_once(CORE_PATH.'stage/breadcrumb.php');
                         ?>
 			<!-- END PAGE HEADER-->

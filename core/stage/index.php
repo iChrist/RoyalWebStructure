@@ -4,6 +4,10 @@
     //require_once(CORE_PATH."assets/PHPExcel/Classes/PHPExcel/IOFactory.php");
     require_once(CORE_PATH."model/core.functions.php");
     require_once(CORE_PATH."model/core.model.php");
-    $core = new Core_Model(); 
+    require_once(CORE_PATH."model/dashboard.model.php");
+    $dash = new darshboard_model();
+    $core = new Core_Model();
     $core->index();
+
+
 ?>

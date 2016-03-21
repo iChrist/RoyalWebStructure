@@ -2,7 +2,7 @@
    </div>
    <!-- END CONTENT -->
 </div>
-<!-- END CONTAINER -->    
+<!-- END CONTAINER -->
 
 
 
@@ -263,7 +263,7 @@ jQuery(document).ready(function() {
    Tasks.initDashboardWidget();
    UIToastr.init();
    //FormFileUpload.init();
-   
+
     $('.date-picker').datepicker({
         autoclose: true
     });

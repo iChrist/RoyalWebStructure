@@ -6,9 +6,9 @@ var Charts = function () {
         init: function () {
 
             App.addResponsiveHandler(function () {
-                 Charts.initPieCharts(); 
+                 index.initPieCharts(); 
             });
-            
+
         },
 
         initCharts: function () {
@@ -390,7 +390,7 @@ var Charts = function () {
                     },
                     yaxis: {
                         min: 0,
-                        max: 100,                        
+                        max: 100,
                         tickColor: "#eee",
                         tickFormatter: function (v) {
                             return v + "%";
@@ -438,7 +438,7 @@ var Charts = function () {
                     steps = false;
 
                 function plotWithOptions() {
-                    $.plot($("#chart_5"), 
+                    $.plot($("#chart_5"),
 
                         [{
                             label: "sales",
@@ -485,9 +485,9 @@ var Charts = function () {
                                 borderColor: "#eee",
                                 borderWidth: 1
                             }
-                        }                       
+                        }
                     );
-                }   
+                }
 
                 $(".stackControls input").click(function (e) {
                     e.preventDefault();
@@ -518,22 +518,22 @@ var Charts = function () {
 
             // bar chart:
             var data = GenerateSeries(0);
-     
+
             function GenerateSeries(added){
                 var data = [];
                 var start = 100 + added;
                 var end = 200 + added;
-         
-                for(i=1;i<=20;i++){        
-                    var d = Math.floor(Math.random() * (end - start + 1) + start);        
+
+                for(i=1;i<=20;i++){
+                    var d = Math.floor(Math.random() * (end - start + 1) + start);
                     data.push([i, d]);
                     start++;
                     end++;
                 }
-         
+
                 return data;
             }
-         
+
             var options = {
                     series:{
                         bars:{show: true}
@@ -543,7 +543,7 @@ var Charts = function () {
                                     lineWidth: 0, // in pixels
                                     shadowSize: 0,
                                     align: 'left'
-                    },            
+                    },
 
                     grid:{
                          tickColor: "#eee",
@@ -551,7 +551,7 @@ var Charts = function () {
                                 borderWidth: 1
                     }
             };
- 
+
             $.plot($("#chart_1_1"),
              [{
                 data: data,
@@ -567,7 +567,7 @@ var Charts = function () {
             var data1 = [
                 [10, 10], [20, 20], [30, 30], [40, 40], [50, 50]
             ];
-         
+
             var options = {
                     series:{
                         bars:{show: true}
@@ -585,8 +585,8 @@ var Charts = function () {
                                 borderWidth: 1
                     }
             };
-         
-            $.plot($("#chart_1_2"), [data1], options);  
+
+            $.plot($("#chart_1_2"), [data1], options);
         },
 
         initPieCharts: function () {
@@ -594,7 +594,7 @@ var Charts = function () {
             var data = [];
             var series = Math.floor(Math.random() * 10) + 1;
             series = series < 5 ? 5 : series;
-            
+
             for (var i = 0; i < series; i++) {
                 data[i] = {
                     label: "Series" + (i + 1),
@@ -842,7 +842,7 @@ var Charts = function () {
             }
 
         }
-        
+
     };
 
 }();
