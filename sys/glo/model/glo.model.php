@@ -31,6 +31,13 @@
                 ,'orderBy'=>null
                 ,'sortBy'=>'DESC'
             );
+            
+            // PARA LA SECUENCIA DE FRACCION DE LA SECUENCIA DE PARTIDA A NIVEL PEDIMENTO (rel_glosa_partidas_secuencia) //
+            public $gloPartSec = array(
+                'ikGlosaPartidasSecuencia'=>null
+                ,'ikGlosaPartidas'=>null
+                ,'sSecuencia'=>null
+            );
 
             public $gloDocGlo = array(
                 'skGlosa'=>null
@@ -149,16 +156,49 @@
                     ".$this->gloPart['iSecuencia'].",
                     '".$this->gloPart['sSecuenciaNumeroParte']."',
                     '".$this->gloPart['sObservacionesPartida']."')";
-                //echo $sql."  ";
                 //exit($sql);
                 $result = $this->db->query($sql);
                 if($result){
-                    return $this->gloPart['skGlosa'];
+                    return $this->db->insert_id;
                 }else{
                     return false;
                 }
             }
             /* TERMINA rel_glosa_partidas => gloPart */
+            
+            /* COMIENZA rel_glosa_partidas_secuencia => gloPartSec */
+            public function create_gloPartSec(){
+                $sql = "INSERT INTO rel_glosa_partidas_secuencia 
+                    (ikGlosaPartidas,sSecuencia)
+                    VALUES ( ".$this->gloPartSec['ikGlosaPartidas'].",
+                    '".$this->gloPartSec['sSecuencia']."')";
+                //exit($sql);
+                $result = $this->db->query($sql);
+                if($result){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+            
+            public function read_gloPartSec(){
+                $sql="SELECT gloPartSec.* FROM rel_glosa_partidas_secuencia AS gloPartSec WHERE ikGlosaPartidas = ".$this->gloPartSec['ikGlosaPartidas']." ORDER BY gloPartSec.ikGlosaPartidas ASC, gloPartSec.ikGlosaPartidasSecuencia ASC";
+                /*if(!is_null($this->gloPartSec['ikGlosaPartidas'])){
+                    $sql .=" AND gloPartSec.ikGlosaPartidas = '".$this->gloPartSec['ikGlosaPartidas']."'";
+                }*/
+                //exit($sql);
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+            
+            /* TERMINA rel_glosa_partidas_secuencia => gloPartSec */
+            
 
             /* COMIENZA rel_glosa_docGlosa => gloDocGlo */
             public function read_gloDocGlo(){
@@ -335,7 +375,8 @@
             }
             
             public function delete_glo(){
-                $sql = "UPDATE ope_glosa SET skStatus = 'DE' WHERE skGlosa = '".$this->glo['skGlosa']."'";
+                //$sql = "UPDATE ope_glosa SET skStatus = 'DE' WHERE skGlosa = '".$this->glo['skGlosa']."'";
+                $sql = "DELETE FROM ope_glosa WHERE skGlosa = '".$this->glo['skGlosa']."'";
                 //exit($sql);
                 $result = $this->db->query($sql);
                 if($result){

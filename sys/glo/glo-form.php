@@ -1,3 +1,8 @@
+<style>
+    .select2-container{
+        display : inherit !important;
+    }
+</style>
 <?php
     $result = array();
     if($data['datos']){
@@ -15,24 +20,6 @@
                 <div class="input-icon right"><i class="fa"></i>
                     <input type="text" name="sReferencia" id="sReferencia" class="form-control" placeholder="Referencia" value="<?php echo (isset($result['sReferencia'])) ? htmlentities(utf8_encode($result['sReferencia'])) : '' ; ?>" >
                 </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-3">Tags Support List</label>
-            <div class="col-md-4">
-                <select data-tags="true" name="secPartPed[0][]" class="form-control select2 secPartPed" data-placeholder="Secuencia de partida del pedimento" data-allow-clear="true" multiple="multiple">
-                    <option value="asdfg" selected="selected">asdfg</option>
-                    <option value="2342" selected="selected">2342</option>
-                    <option value="eeg" selected="selected">eeg</option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-3">Tags Support List</label>
-            <div class="col-md-4">
-                <select data-tags="true" name="secPartPed[1][]" class="form-control select2 secPartPed" data-placeholder="Secuencia de partida del pedimento" data-allow-clear="true" multiple="multiple">
-                    <option value="003" selected="selected">003</option>
-                </select>
             </div>
         </div>
         <div class="clearfix"></div>
@@ -115,6 +102,7 @@
             <div class="portlet-body form">
           <?php
 		  if($data['gloPart']){
+                                $sSecuenciaNumeroParte = 0;
 				foreach($data['gloPart'] AS $k=>$v){
 				?>
 					<table class="table table-bordered" id="observacionesSecuencias">
@@ -124,10 +112,21 @@
                                 <tr>
                                     <th nowrap><center>Secuencia</center></th>
                                     <td>
-                                        <input type="number" name="iSecuencia[]" class="form-control" placeholder="Secuencia Pedimento" value="<?php echo $v['iSecuencia']; ?>">
+                                        <input type="text" name="iSecuencia[]" class="form-control" placeholder="Secuencia Pedimento" value="<?php echo $v['iSecuencia']; ?>">
                                     </td>
                                     <td>
-                                        <input type="text" name="sSecuenciaNumeroParte[]" class="form-control" placeholder="Secuencia Partida" value="<?php echo $v['sSecuenciaNumeroParte']; ?>">
+                                        <!--<input type="text" name="sSecuenciaNumeroParte[]" class="form-control" placeholder="Secuencia Partida" value="<?php echo $v['sSecuenciaNumeroParte']; ?>">!-->
+                                        <select data-tags="true" name="secPartPed[<?php echo $sSecuenciaNumeroParte; ?>][]" class="form-control select2 secPartPed" data-placeholder="Secuencia de partida del pedimento" data-allow-clear="true" multiple="multiple">
+                                        <?php
+                                            if(count($v['gloPartSec']) > 0){
+                                                foreach($v['gloPartSec'] AS $key => $val){
+                                        ?>
+                                            <option value="<?php echo $val['sSecuencia']; ?>" selected="selected"><?php echo $val['sSecuencia']; ?></option>
+                                        <?php
+                                                }//ENDFOREACH
+                                            }//ENDIF
+                                        ?>    
+                                        </select>
                                     </td>
                                     <td  rowspan="2" align="center">
                                         <a href="javascript:;" class="btn btn-default delete-secuencias">
@@ -149,7 +148,9 @@
                         </td>
                     </tr>
                 </table>
-			<?php	}
+			<?php	
+                        $sSecuenciaNumeroParte++;
+                        }//ENDFOREACH
 		  }else{
 		  ?>
             	 <table class="table table-bordered" id="observacionesSecuencias">
@@ -159,10 +160,11 @@
                                 <tr>
                                     <th nowrap><center>Secuencia</center></th>
                                     <td>
-                                        <input type="number" name="iSecuencia[]" class="form-control" placeholder="Secuencia Pedimento">
+                                        <input type="text" name="iSecuencia[]" class="form-control" placeholder="Secuencia Pedimento">
                                     </td>
                                     <td>
-                                        <input type="text" name="sSecuenciaNumeroParte[]" class="form-control" placeholder="Secuencia Partida" value="">
+                                        <!--<input type="text" name="sSecuenciaNumeroParte[]" class="form-control" placeholder="Secuencia Partida" value="">!-->
+                                        <select data-tags="true" name="secPartPed[0][]" class="form-control select2 secPartPed" data-placeholder="Secuencia de partida del pedimento" data-allow-clear="true" multiple="multiple"></select>
                                     </td>
                                     <td  rowspan="2" align="center">
                                         <a href="javascript:;" class="btn btn-default delete-secuencias">
@@ -294,7 +296,7 @@ function obtenerDatos(){
 
 
      }*/
-    var sSecuenciaNumeroParte = 0;
+    var sSecuenciaNumeroParte = <?php echo isset($sSecuenciaNumeroParte) ? $sSecuenciaNumeroParte : 0; ?>;
     $(document).ready(function(){
         
         $(".secPartPed").select2({
@@ -305,8 +307,10 @@ function obtenerDatos(){
         
         /* AGREGAR SECUENCIA */
         $('body').delegate('.add-secuencias', 'click', function(){
-            //var html_Secuencia = '<tr><td><table class="table table-bordered"><tr><th nowrap><center>Secuencia</center></th><td><input type="text" name="iSecuencia[]" class="form-control" placeholder="Secuencia Pedimento"></td><td><input type="text" name="sSecuenciaNumeroParte[]" class="form-control" placeholder="Secuencia Partida" value=""></td><td rowspan="2" align="center"><a href="javascript:;" class="btn btn-default delete-secuencias"><i class="fa fa-trash-o"></i></a></td></tr><tr><th nowrap><center>Observaciones</center></th><td colspan="2"><textarea name="sObservacionesPartida[]" class="form-control" placeholder="Observaciones"></textarea></td></tr></table></td></tr>';
-            var html_Secuencia = '<tr><td><table class="table table-bordered"><tr><th nowrap><center>Secuencia</center></th><td><input type="text" name="iSecuencia[]" class="col-xs-6" placeholder="Secuencia Pedimento"></td><td><select data-tags="true" name="sSecuenciaNumeroParte['+sSecuenciaNumeroParte+'][]" class="form-control select2 col-md-12 secPartPed" data-placeholder="Secuencia de partida del pedimento" data-allow-clear="true" multiple="multiple"></select></td><td rowspan="2" align="center"><a href="javascript:;" class="btn btn-default delete-secuencias"><i class="fa fa-trash-o"></i></a></td></tr><tr><th nowrap><center>Observaciones</center></th><td colspan="2"><textarea name="sObservacionesPartida[]" class="form-control" placeholder="Observaciones"></textarea></td></tr></table></td></tr>';
+            sSecuenciaNumeroParte++;
+            var html_Secuencia = '<tr><td><table class="table table-bordered"><tr><th nowrap><center>Secuencia</center></th><td><input type="text" name="iSecuencia[]" class="form-control" placeholder="Secuencia Pedimento"></td><td><input type="text" name="sSecuenciaNumeroParte[]" class="form-control" placeholder="Secuencia Partida" value=""></td><td rowspan="2" align="center"><a href="javascript:;" class="btn btn-default delete-secuencias"><i class="fa fa-trash-o"></i></a></td></tr><tr><th nowrap><center>Observaciones</center></th><td colspan="2"><textarea name="sObservacionesPartida[]" class="form-control" placeholder="Observaciones"></textarea></td></tr></table></td></tr>';
+            var html_Secuencia = '<tr><td><table class="table table-bordered"><tr><th nowrap><center>Secuencia</center></th><td><input type="text" name="iSecuencia[]" class="form-control" placeholder="Secuencia Pedimento"></td><td><select data-tags="true" name="secPartPed['+sSecuenciaNumeroParte+'][]" class="form-control select2 secPartPed" data-placeholder="Secuencia de partida del pedimento" data-allow-clear="true" multiple="multiple"></select></td><td rowspan="2" align="center"><a href="javascript:;" class="btn btn-default delete-secuencias"><i class="fa fa-trash-o"></i></a></td></tr><tr><th nowrap><center>Observaciones</center></th><td colspan="2"><textarea name="sObservacionesPartida[]" class="form-control" placeholder="Observaciones"></textarea></td></tr></table></td></tr>';
+            //var html_Secuencia = '<tr><td><table class="table table-bordered"><tr><th nowrap><center>Secuencia</center></th><td><input type="text" name="iSecuencia[]" class="col-md-12 col-xs-12" placeholder="Secuencia Pedimento"></td><td><select data-tags="true" name="sSecuenciaNumeroParte['+sSecuenciaNumeroParte+'][]" class="form-control select2 secPartPed" data-placeholder="Secuencia de partida del pedimento" data-allow-clear="true" multiple="multiple"></select></td><td rowspan="2" align="center"><a href="javascript:;" class="btn btn-default delete-secuencias"><i class="fa fa-trash-o"></i></a></td></tr><tr><th nowrap><center>Observaciones</center></th><td colspan="2"><textarea name="sObservacionesPartida[]" class="form-control" placeholder="Observaciones"></textarea></td></tr></table></td></tr>';
             $("#observacionesSecuencias").append(html_Secuencia);
             $(".secPartPed").select2({
                 tags: true,

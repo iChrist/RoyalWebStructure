@@ -92,5 +92,58 @@ Class Core_Functions {
         header("Content-Type: image/jpg");
         echo $imagick->getImageBlob();
     }
+    
+    /**
+    * exportExcel
+    *
+    * @param	array		$data - array data
+    * @return	file            xlsx file
+    */
+    function exportExcel(&$data,$fileName){
+        if(count($data)>0){
+            require_once(CORE_PATH."assets/PHPExcel/Classes/PHPExcel/IOFactory.php");
+            $objReader = PHPExcel_IOFactory::createReader('Excel2007');
+            $objPHPExcel = $objReader->load(CORE_PATH."assets/templates/tplExcel.xlsx");
+            $row=1;
+            foreach($data AS $k=>$v){
+                $column=0;
+                if($row==1){
+                    $titles = array_keys($v);
+                    foreach($titles AS $key=>$val){
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($column, $row, $val);
+                        $column++;
+                    }
+                    $column=0;
+                    $row++;
+                }
+                foreach($v AS $key=>$val){
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($column, $row, $val);
+                    $column++;
+                }
+                $row++;
+            }//ENDFOREACH
+            
+            // Redirect output to a client’s web browser (Excel2007)
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="'.$fileName.'.xlsx"');
+            header('Cache-Control: max-age=0');
+            // If you're serving to IE 9, then the following may be needed
+            header('Cache-Control: max-age=1');
+
+            // If you're serving to IE over SSL, then the following may be needed
+            header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+            header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+            header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+            header ('Pragma: public'); // HTTP/1.0
+
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+            //$objWriter->save(SYS_PATH.'cla/files/claara/Reporte.xlsx');
+            $objWriter->save('php://output');
+            exit;
+        }else{
+            header('Location: '.$_SERVER['HTTP_REFERER']); 
+            return false; 
+        }
+    }
 }
 ?>
