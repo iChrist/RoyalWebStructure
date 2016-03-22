@@ -37,7 +37,29 @@
             </div>
         </div>
 <hr>
-
+<div class="form-group">
+    <label class="control-label col-md-2">Tipo de Tr&aacute;mite <span aria-required="true" class="required"> * </span>
+    </label>
+    <div class="col-md-4">
+        <div class="checkbox-list">
+            <label>
+                <div class="">
+                    <span>
+                        <input type="checkbox" name="skTipoTramite" value="IMPO" <?php echo (isset($result['skTipoTramite']) && $result['skTipoTramite'] == 'IMPO') ? 'checked' : '' ; ?> > Importacion
+                    </span>
+                </div>
+            </label>
+            <label>
+                <div class="">
+                    <span>
+                        <input type="checkbox" name="skTipoTramite" value="EXPO" <?php echo (isset($result['skTipoTramite']) && $result['skTipoTramite'] == 'EXPO') ? 'checked' : '' ; ?>> Exportacion
+                    </span>
+                </div>
+            </label>
+        </div>
+    </div>
+</div>
+<hr>
         <div class="form-group">
             <label class="control-label col-md-2">Estatus <span aria-required="true" class="required"> * </span>
             </label>
