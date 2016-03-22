@@ -22,7 +22,23 @@
 		 }
     }
 ?>
-<form id="_save" method="post" class="form-horizontal" role="form"> 
+<!--<form id="_save" method="post" class="form-horizontal" role="form">
+<div class="col-lg-12 col-md-12 col-xs-12">
+<!-- BEGIN TAB -->
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="#tab_datosGenerales" data-toggle="tab">Datos Generales</a>
+        </li>
+        <li class="inactive">
+            <a href="#tab_servicios" data-toggle="tab">Servicios</a>
+        </li>
+    </ul>
+<form id="_save" method="post" class="form-horizontal" role="form">
+    <div class="tab-content">
+        <div class="tab-pane fade active in" id="tab_datosGenerales">
+            
+            <!-- FORMULARIO DE DATOS GENERALES DE EMPRESAS !-->
+             
      <div class="form-body"> 
     <input type="hidden" name="skEmpresa"  id="skEmpresa" value="<?php echo (isset($result['skEmpresa'])) ? $result['skEmpresa'] : '' ; ?>">
         <div class="form-group">
@@ -50,7 +66,7 @@
             <label class="control-label col-md-2">Nombre Corto 
             </label>
             <div class="col-md-4">
-                <div class="input-icon right">
+                <div class="input-icon">
                     <i class="fa"></i>
                     <input type="text" name="sNombreCorto" id="sNombreCorto" class="form-control" placeholder="Nombre Corto" value="<?php echo (isset($result['sNombreCorto'])) ? utf8_encode($result['sNombreCorto']) : '' ; ?>" >
                 </div>
@@ -214,12 +230,228 @@
         
         </div>
             
-    </div>
-</form>
+    <!--</div>!-->
+            <!-- TEMRINA FORMULARIO DE DATOS GENERALES DE EMPRESAS !-->
+            
+            
+        </div>
+        <div class="tab-pane fade" id="tab_servicios">
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="control-label col-md-2">Agregar Servicio</label>
+                    <div class="col-md-10">
+                    <table class="table table-hover table-bordered" id="_add_multiple_rows">
+                    <thead>
+                        <tr>
+                            <th class="middle"><center><i class="fa fa-cog"></i></center></th>
+                            <th nowrap>Tipo tramite</th>
+                            <th nowrap>Servicio</th>
+                            <th nowrap>Divisa</th>
+                            <th nowrap>Precio unitario</th>
+                            <th class="middle"><a href="javascript:;" class="btn btn-default _add_multiple_rows_add_row"><i class="fa fa-plus-square"></i></a></th>
+                        </tr>
+                    </thead>
+                    <tbody id="_add_multiple_tr">
+                        <?php
+                            //if($data['tiposTramites']){
+                                //while($row = $data['tiposTramites']->fetch_assoc()){
+                        ?>
+                        <tr>
+                            <td class="middle"><a href="javascript:;" class="btn btn-default _add_multiple_rows_delete_row"><i class="fa fa-trash-o"></i></a></td>
+                            <td class="middle">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div class="radio-list">
+                                            <div class="form-group">
+                                            <?php
+                                                if($data['tiposTramites']){
+                                                    while($rTipoTramite =  $data['tiposTramites']->fetch_assoc()){
+                                                        $i++;
+                                            ?>
+                                            <label class="radio">
+                                                <input type="radio" name="skTipoTramite[0][]" class="skTipoTramite" value="<?php echo utf8_encode($rTipoTramite['skTipoTramite']); ?>"><?php echo utf8_encode($rTipoTramite['sNombre']); ?>
+                                            </label>
+                                            <?php 
+                                                    }//ENDWHILE 
+                                                }//ENDIF
+                                            ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="middle">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <select class="form-control skConcepto" name="skConcepto[]">
+                                            <option value="">-Servicios-</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="middle">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <select class="form-control skDivisa" name="skDivisa[]">
+                                            <option value="">-Divisas-</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </td>
+                            <td colspan="2" class="middle">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div class="input-icon">
+                                            <i class="fa fa-money"></i>
+                                            <input type="text" name="fPrecioUnitario[]" placeholder="Precio Unitario" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <?php
+                                //}//ENDWHILE
+                            //}//ENDIF
+                        ?>
+                    </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div></form>
+<!-- END TAB -->
+</div>
+    <!--</form>!-->                              
+
 <div class="clearfix"></div>
 
 <script type="text/javascript">
+    var serviciosExpo = null;
+    var serviciosImpo = null;
+    var serviciosTipoEmpresa = null;
+    var cat_divisas = null;
+    var cat_tipos_tramites = null;
+    function obtenerTiposTramites(){
+        if(cat_tipos_tramites != null){
+            return cat_tipos_tramites;
+        }
+        $.ajax({
+            method: "POST",
+            url: "",
+            cache: false,
+            async: false,
+            data: { 
+                axn : "obtenerTiposTramites"
+            }
+        })
+        .done(function( data ) {
+            if(data['response']){
+                toastr.success(data['message'], "Notificaci&oacute;n");
+                cat_tipos_tramites = data.datos;
+            }else{
+                toastr.error(data['message'], "Notificaci&oacute;n");
+            }
+        });
+        return cat_tipos_tramites;
+    }
+    function obtenerDivisas(){
+        if(cat_divisas != null){
+            return cat_divisas;
+        }
+        $.ajax({
+            method: "POST",
+            url: "",
+            cache: false,
+            async: false,
+            data: { 
+                axn : "obtenerDivisas"
+            }
+        })
+        .done(function( data ) {
+            if(data['response']){
+                toastr.success(data['message'], "Notificaci&oacute;n");
+                cat_divisas = data.datos;
+            }else{
+                toastr.error(data['message'], "Notificaci&oacute;n");
+            }
+        });
+        return cat_divisas;
+    }
+    function obtenerServicios(skTipoTramite , skTipoEmpresa){
+        $('.page-title-loading').css('display','inline');
+        obtenerTiposTramites();
+        obtenerDivisas();
+        if(skTipoTramite == 'EXPO' && serviciosTipoEmpresa == skTipoEmpresa && serviciosExpo != null){
+            $('.page-title-loading').css('display','none');
+            return serviciosExpo;
+        }else if(skTipoTramite == 'IMPO' && serviciosTipoEmpresa == skTipoEmpresa && serviciosImpo != null){
+            $('.page-title-loading').css('display','none');
+            return serviciosImpo;
+        }
+        $.ajax({
+            method: "POST",
+            url: "",
+            cache: false,
+            async: false,
+            data: { 
+                axn : "obtenerServicios",
+                skTipoTramite : skTipoTramite,
+                skTipoEmpresa : skTipoEmpresa
+            }
+        })
+        .done(function( data ) {
+            if(data['response']){
+                toastr.success(data['message'], "Notificaci&oacute;n");
+                if(skTipoTramite == 'EXPO'){
+                    serviciosExpo = data.datos;
+                }else if(skTipoTramite == 'IMPO'){
+                    serviciosImpo = data.datos;
+                }
+            }else{
+                toastr.error(data['message'], "Notificaci&oacute;n");
+            }
+        });
+        $('.page-title-loading').css('display','none');
+        serviciosTipoEmpresa = skTipoEmpresa;
+        if(skTipoTramite == 'EXPO'){
+            return serviciosExpo;
+        }else if(skTipoTramite == 'IMPO'){
+            return serviciosImpo;
+        }
+    }
     $(document).ready(function(){
+        // SELECCIÓN DE TIPO DE TRAMITE //
+        $('body').delegate('.skTipoTramite', 'change', function(){
+            servicios = obtenerServicios($(this).val() , $("#skTipoEmpresa").val());
+            var tr = $(this).closest('tr');
+            // Servicios (Conceptos) //
+            var conceptos = '<option value="">-Servicios-</option>';
+            $.each(servicios,function(k,v){
+                conceptos += '<option value="'+v.skConcepto+'">'+v.concepto+'</option>';
+            });
+            $(tr).find('select[name^="skConcepto"]').html(conceptos);
+            // Divisas //
+            var divisas = '<option value="">-Divisas-</option>';
+            $.each(cat_divisas,function(k,v){
+                divisas += '<option value="'+v.skDivisa+'">'+v.sName+'</option>';
+            });
+            $(tr).find('select[name^="skDivisa"]').html(divisas);
+            // Precio Unitario del Servicio //
+            $(tr).find('input[name^="fPrecioUnitario"]').val("");
+        });
+        // SELECCIÓN DE CONCEPTO //
+        $('body').delegate('.skConcepto', 'change', function(){
+            var skConcepto = $(this).val();
+            var tr = $(this).closest('tr');
+            if(typeof servicios[skConcepto] != "undefined") {
+                $(tr).find('select[name^="skDivisa"]').val(servicios[skConcepto].skDivisa);
+                $(tr).find('input[name^="fPrecioUnitario"]').val(servicios[skConcepto].fPrecioUnitario);
+            }else{
+                $(tr).find('select[name^="skDivisa"]').val("");
+                $(tr).find('input[name^="fPrecioUnitario"]').val("");
+            }
+        });
         /*
          * Cuando sea una empresa de tipo cliente(clie) está puede tener 1 corresponsalia y 2 promotores.
          */
@@ -273,8 +505,8 @@
         isValid = $("#_save").validate({
             errorElement: 'span', //default input error message container
             errorClass: 'help-block', // default input error message class
-            focusInvalid: false, // do not focus the last invalid input
-            ignore: ":hidden",
+            focusInvalid: true, // do not focus the last invalid input
+            ignore: "",
             rules:{
             	sRFC:{
                     //required: true,
@@ -298,8 +530,19 @@
                 },
                 skCorresponsalia:{
                     required: true
+                },
+                "skTipoTramite[]":{
+                    required: true
+                },
+                "skConcepto[]":{
+                    required: true
+                },
+                "skDivisa[]":{
+                    required: true
+                },
+                "fPrecioUnitario[]":{
+                    required: true
                 }
-                
                
             },
             invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar              
@@ -348,9 +591,44 @@
                 },
                 skCorresponsalia:{
                     required: "Campo obligatorio."
+                },
+                "skTipoTramite[]":{
+                    required: "Campo obligatorio."
+                },
+                "skConcepto[]":{
+                    required: "Campo obligatorio."
+                },
+                "skDivisa[]":{
+                    required: "Campo obligatorio."
+                },
+                "fPrecioUnitario[]":{
+                    required: "Campo obligatorio."
                 }
                 
             }
+        });
+        //
+        function _add_multiple_rows_add_row(html){
+            $("#_add_multiple_tr").append(html);
+        }
+        function _add_multiple_rows_delete_row(obj){
+            $(obj).parent().parent().remove();
+        }
+        $('body').delegate('._add_multiple_rows_add_row', 'click', function(){
+            // Tipos Tramites (EXPO , IMPO) //
+            obtenerTiposTramites();
+            var tipoTramites = '<div class="form-group">';
+            var time = new Date().getTime();
+            $.each(cat_tipos_tramites,function(k,v){
+                tipoTramites += '<label class="radio"><input type="radio" name="skTipoTramite['+time+'][]" class="skTipoTramite" value="'+v.skTipoTramite+'">'+v.sNombre+'</label>';
+            });
+            tipoTramites += '</div>';
+            var html = '<tr> <td class="middle"><a href="javascript:;" class="btn btn-default _add_multiple_rows_delete_row"><i class="fa fa-trash-o"></i></a></td><td class="middle"> <div class="form-group"> <div class="col-md-12 "><div class="radio-list">'+tipoTramites+'</div></div></div></td><td class="middle"> <div class="form-group"> <div class="col-md-12"> <select class="form-control skConcepto" name="skConcepto[]"> <option value="">-Servicios-</option> </select> </div></div></td><td class="middle"> <div class="form-group"> <div class="col-md-12"> <select class="form-control skDivisa" name="skDivisa[]"> <option value="">-Divisas-</option> </select> </div></div></td><td colspan="2" class="middle"> <div class="form-group"> <div class="col-md-12"> <div class="input-icon"> <i class="fa fa-money"></i> <input type="text" name="fPrecioUnitario[]" placeholder="Precio Unitario" class="form-control"> </div></div></div></td></tr>';
+            _add_multiple_rows_add_row(html);
+        });
+        //
+        $('body').delegate('._add_multiple_rows_delete_row','click',function(){  
+            _add_multiple_rows_delete_row(this);
         });
     }); 
 </script>

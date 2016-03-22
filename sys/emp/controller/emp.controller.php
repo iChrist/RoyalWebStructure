@@ -611,45 +611,95 @@
                     $this->data['message'] = '';
                     $this->data['response'] = true;
                     $this->data['datos'] = false;
-                    $this->data['tiposEmpresas'] = parent::read_equal_tipoempresas();
-                    $this->load_model('cof','cof');
                     
-                    // Catalogo Status //
-                    $cof = new Cof_Model();
-                    $this->data['status'] = $cof->read_status();
-                    // Empresas de tipo Corresponsalias //
-                    $this->tipoempresas['skTipoEmpresa'] = 'CORR';
-                    $this->data['corresponsalias'] = parent::read_like_empresas();
-                    // Promotores //
-                    $this->data['promotores'] = parent::read_equal_promotores();
-                    
-                    	 if(isset($_POST['axn']))
-                    	 {
-                        	/*switch ($_POST['axn'])
-		                        {
-		                            case "validarRFC":
-		                                // echo 'false'; -> Email no encontrado 
-		                                // echo 'true';  -> Email encontrado
-										
-		                                $this->empresas['sRFC'] = htmlentities(($_POST['sRFC']));
-										$this->empresas['skEmpresaDistinta'] = (($_POST['skEmpresa']));
-		                                if(parent::read_empresa())
-		                                {
-		                                    echo 'false';
-		                                }
-		                                else
-		                                {
-		                                    echo 'true';
-		                                }
-		                                exit;
-		                            break;
-		                            
-		                            
-		                        }*/
-		                   }
+                    if(isset($_POST['axn'])){
+                        switch ($_POST['axn']){
+                            case "obtenerServicios":
+                                $this->data['message'] = 'Servicios cargados correctamente.';
+                                $this->data['response'] = true;
+                                $this->data['datos'] = array();
+                                $this->conTipEmp['skTipoEmpresa'] = isset($_POST['skTipoEmpresa']) ? $_POST['skTipoEmpresa'] : null;
+                                $this->conTipEmp['skTipoTramite'] = isset($_POST['skTipoTramite']) ? $_POST['skTipoTramite'] : null;
+                                $result = parent::read_conceptos_tipos_empresas();
+                                if(!$result){
+                                    $this->data['message'] = 'Hubo un error al cargar los servicios.';
+                                    $this->data['response'] = false;
+                                    header('Content-Type: application/json');
+                                    echo json_encode($this->data);
+                                    return false;
+                                }
+                                while($row = $result->fetch_assoc()){
+                                    $this->data['datos'][$row['skConcepto']] = array(
+                                        'skConcepto'=>utf8_encode($row['skConcepto'])
+                                        ,'concepto'=>utf8_encode($row['concepto'])
+                                        ,'skDivisa'=>utf8_encode($row['skDivisa'])
+                                        ,'divisa'=>utf8_encode($row['divisa'])
+                                        ,'skTipoTramite'=>utf8_encode($row['skTipoTramite'])
+                                        ,'tramite'=>utf8_encode($row['tramite'])
+                                        ,'fPrecioUnitario'=>utf8_encode($row['fPrecioUnitario'])
+                                        ,'skTipoEmpresa'=>utf8_encode($row['skTipoEmpresa'])
+                                        ,'tipoEmpresa'=>utf8_encode($row['tipoEmpresa'])
+                                    );
+                                }
+                                //exit('<pre>'.print_r($this->data,1));
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return true;
+                            break;
+                            case "obtenerDivisas":
+                                $this->data['message'] = 'Divisas cargadas correctamente.';
+                                $this->data['response'] = true;
+                                $this->data['datos'] = array();
+                                $result = parent::read_cat_divisas();
+                                if(!$result){
+                                    $this->data['message'] = 'Hubo un error al cargar las divisas.';
+                                    $this->data['response'] = false;
+                                    header('Content-Type: application/json');
+                                    echo json_encode($this->data);
+                                    return false;
+                                }
+                                while($row = $result->fetch_assoc()){
+                                    $this->data['datos'][$row['skDivisa']] = array(
+                                        'skDivisa'=>utf8_encode($row['skDivisa'])
+                                        ,'sName'=>utf8_encode($row['sName'])
+                                        ,'skStatus'=>utf8_encode($row['skStatus'])
+                                    );
+                                }
+                                //exit('<pre>'.print_r($this->data,1));
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return true;
+                            break;
+                            case "obtenerTiposTramites":
+                                $this->data['message'] = 'Tipos de tramite cargados correctamente.';
+                                $this->data['response'] = true;
+                                $this->data['datos'] = array();
+                                $result = parent::read_cat_tipos_tramites();
+                                if(!$result){
+                                    $this->data['message'] = 'Hubo un error al cargar los tipo de tramite.';
+                                    $this->data['response'] = false;
+                                    header('Content-Type: application/json');
+                                    echo json_encode($this->data);
+                                    return false;
+                                }
+                                while($row = $result->fetch_assoc()){
+                                    $this->data['datos'][$row['skTipoTramite']] = array(
+                                        'skTipoTramite'=>utf8_encode($row['skTipoTramite'])
+                                        ,'sNombre'=>utf8_encode($row['sNombre'])
+                                        ,'skStatus'=>utf8_encode($row['skStatus'])
+                                    );
+                                }
+                                //exit('<pre>'.print_r($this->data,1));
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return true;
+                            break;
+                        }
+                        return true;
+                   }
                     if($_POST){
                     
-                         
+                        exit('</pre>'.print_r($_POST,1).'</pre>');
                         $this->empresas['skEmpresa'] = !empty($_POST['skEmpresa']) ? $_POST['skEmpresa'] : substr(md5(microtime()), 1, 32);
                         $this->tipoempresas['skTipoEmpresa'] = htmlentities($_POST['skTipoEmpresa'],ENT_QUOTES);
                         $this->empresas['skStatus'] = htmlentities($_POST['skStatus'],ENT_QUOTES);
@@ -694,10 +744,24 @@
                             }
                         }
                     }
+                    
+                    $this->data['tiposEmpresas'] = parent::read_equal_tipoempresas();
+                    $this->load_model('cof','cof');
+                    
+                    // Catalogo Status //
+                    $cof = new Cof_Model();
+                    $this->data['status'] = $cof->read_status();
+                    // Empresas de tipo Corresponsalias //
+                    $this->tipoempresas['skTipoEmpresa'] = 'CORR';
+                    $this->data['corresponsalias'] = parent::read_like_empresas();
+                    // Promotores //
+                    $this->data['promotores'] = parent::read_equal_promotores();
+                    // TIPOS DE TRAMITES //
+                    $this->data['tiposTramites'] = parent::read_tipos_tramites();
+                    
                     if(isset($_GET['p1'])){
                         $this->empresas['skEmpresa'] = $_GET['p1'];
                         $this->data['datos'] = parent::read_equal_empresas();
-                        
                     }
                     $this->load_view('empresas-form', $this->data);
                     return true;

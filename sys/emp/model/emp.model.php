@@ -47,7 +47,10 @@
                     ,'limit'        =>  ''
                     ,'offset'       =>  ''
                 );
-                
+                public $conTipEmp = array(
+                    'skTipoEmpresa'=>null
+                    ,'skTipoTramite'=>null
+                );
                 public $tarifas = array(
                      'skTarifa'=>null
                     ,'skEmpresa'=>null
@@ -785,7 +788,77 @@
                     }
                 }
             }
-              
+            // OBTENER LOS TIPOS DE TRAMITE (IMPO,EXPO) //
+            public function read_tipos_tramites(){
+                $sql="SELECT tipTra.* FROM cat_tipos_tramites AS tipTra WHERE skStatus = 'AC' ORDER BY tipTra.sNombre ASC ";
+                //exit($sql);
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+            public function read_conceptos_tipos_empresas(){
+                $sql="SELECT 
+                con.skConcepto ,con.sNombre AS concepto
+                ,di.skDivisa ,di.sName AS divisa
+                ,tra.skTipoTramite ,tra.sNombre AS tramite
+                ,conTar.fPrecioUnitario
+                ,conTipEmp.skTipoEmpresa
+                ,tipEmp.sNombre AS tipoEmpresa
+                FROM
+                rel_cat_conceptos_tipos_empresas AS conTipEmp
+                INNER JOIN cat_conceptos AS con ON con.skConcepto = conTipEmp.skConcepto
+                INNER JOIN rel_cat_conceptos_tarifas AS conTar ON conTar.skConcepto = con.skConcepto
+                INNER JOIN cat_divisas AS di ON di.skDivisa = conTar.skDivisa
+                INNER JOIN rel_cat_conceptos_tipos_tramites AS conTra ON conTra.skConcepto = con.skConcepto
+                INNER JOIN cat_tipos_tramites AS tra ON tra.skTipoTramite = conTra.skTipoTramite
+                INNER JOIN cat_tipos_empresas AS tipEmp ON tipEmp.skTipoEmpresa = conTipEmp.skTipoEmpresa WHERE con.skStatus = 'AC' ";
+                if(!is_null($this->conTipEmp['skTipoEmpresa'])){
+                    $sql .=" AND conTipEmp.skTipoEmpresa = '".$this->conTipEmp['skTipoEmpresa']."'";
+                }
+                if(!is_null($this->conTipEmp['skTipoTramite'])){
+                    $sql .=" AND tra.skTipoTramite = '".$this->conTipEmp['skTipoTramite']."'";
+                }
+                //exit($sql);
+                $result = $this->db->query($sql);
+                if(!$result){
+                    return false;
+                }
+                return $result;
+            }
+            // READ DIVISAS //
+            public function read_cat_divisas(){
+                $sql="SELECT 
+                divi.*
+                FROM
+                cat_divisas AS divi
+                WHERE divi.skStatus = 'AC' ";
+                //exit($sql);
+                $result = $this->db->query($sql);
+                if(!$result){
+                    return false;
+                }
+                return $result;
+            }
+            // READ tiposTramites //
+            function read_cat_tipos_tramites(){
+                $sql="SELECT 
+                tipTra.*
+                FROM
+                cat_tipos_tramites AS tipTra
+                WHERE tipTra.skStatus = 'AC' ORDER BY sNombre ASC ";
+                //exit($sql);
+                $result = $this->db->query($sql);
+                if(!$result){
+                    return false;
+                }
+                return $result;
+            }
+            
             public function count_tarifas(){
                 $sql="SELECT COUNT(*) AS total
                     FROM rel_empresas_tarifas AS tarifas

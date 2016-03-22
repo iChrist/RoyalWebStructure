@@ -28,3 +28,9 @@ tr.gray{
     opacity: 0;
     filter: alpha(opacity=0);
 }
+
+/* MULTIPLE ROWS TABLE */
+#_add_multiple_rows th.middle , #_add_multiple_rows td.middle {
+    text-align:center !important;
+    vertical-align:middle !important;
+}

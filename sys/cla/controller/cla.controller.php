@@ -319,42 +319,28 @@
                         return true;
                         break;
                 }
-                if($_POST){
-                    //exit('<pre>'.print_r($_GET,1).'</pre><br><hr><pre>'.print_r($_POST,1).'</pre>');
-                    ini_set('memory_limit', '-1');
-                    $dFechaImportacion = date('Y-m-d H:i:s');
-                    $data = json_decode($_POST['sJson'],1);
-                    $response = $this->import_excel($data[key($data)],$dFechaImportacion,1,$_GET['p1']);
-                    if($response['response']){
-                        $this->data['response'] = $response['response'];
-                        $this->data['message'] = $response['message'];
-                        header('Content-Type: application/json');
-                        echo json_encode($this->data);
-                        return true;
-                    }else{
-                        $this->cla['dFechaImportacion'] = $dFechaImportacion;
-                        $this->data['response'] = $response['response'];
-                        $this->data['message'] = $response['message'];
-                        header('Content-Type: application/json');
-                        echo json_encode($this->data);
-                        return false;
-                    }
-                    /*if(isset($_GET['p1'])){
-                        $this->cla['skClasificacion'] = $_GET['p1'];
-                        if(!$this->validarPrimeraClasifiacion()){
-                            $this->data['response'] = false;
-                            $this->data['message'] = 'Hubo un error al intentar validar la primera clasifiaci&oacute;n, intenta de nuevo.';
-                            header('Content-Type: application/json');
-                            echo json_encode($this->data);
-                            return false;
-                        }
-                        $this->data['response'] = true;
-                        $this->data['message'] = 'Se ha validado la primera clasificaci&oacute;n.';
-                        header('Content-Type: application/json');
-                        echo json_encode($this->data);
-                        return true;
-                    }*/
+                return true;
+            }
+            // Validación de la 1ra Clasificación //
+            if($_POST){
+                //exit('<pre>'.print_r($_POST,1));
+                ini_set('memory_limit', '-1');
+                $dFechaImportacion = date('Y-m-d H:i:s');
+                $data = json_decode($_POST['sJson'],1);
+                $response = $this->import_excel($data[key($data)],$dFechaImportacion,1);
+                if($response['response']){
+                    $this->data['response'] = $response['response'];
+                    $this->data['message'] = $response['message'];
+                    header('Content-Type: application/json');
+                    echo json_encode($this->data);
                     return true;
+                }else{
+                    $this->cla['dFechaImportacion'] = $dFechaImportacion;
+                    $this->data['response'] = $response['response'];
+                    $this->data['message'] = $response['message'];
+                    header('Content-Type: application/json');
+                    echo json_encode($this->data);
+                    return false;
                 }
                 return true;
             }
