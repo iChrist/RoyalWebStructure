@@ -51,6 +51,16 @@
                     'skTipoEmpresa'=>null
                     ,'skTipoTramite'=>null
                 );
+                public $empTarCon = array(
+                    'skEmpresaTarifaConcepto'=>null
+                    ,'skEmpresa'=>null
+                    ,'skTipoTramite'=>null
+                    ,'skConcepto'=>null
+                    ,'skDivisa'=>null
+                    ,'fPrecioUnitario'=>null
+                    ,'skUserCreacion'=>null
+                    ,'dFechaCreacion'=>null
+                );
                 public $tarifas = array(
                      'skTarifa'=>null
                     ,'skEmpresa'=>null
@@ -801,6 +811,18 @@
                     }
                 }
             }
+            public function getConceptosEmpresa(){
+                $sql = "SELECT * FROM rel_cat_empresas_tarifas_conceptos AS empTarCon WHERE empTarCon.skEmpresa = '".$this->empresas['skEmpresa']."' ";
+                //exit($sql);
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
             public function read_conceptos_tipos_empresas(){
                 $sql="SELECT 
                 con.skConcepto ,con.sNombre AS concepto
@@ -823,6 +845,7 @@
                 if(!is_null($this->conTipEmp['skTipoTramite'])){
                     $sql .=" AND tra.skTipoTramite = '".$this->conTipEmp['skTipoTramite']."'";
                 }
+                $sql .= " ORDER BY con.sNombre ASC ";
                 //exit($sql);
                 $result = $this->db->query($sql);
                 if(!$result){
@@ -836,7 +859,7 @@
                 divi.*
                 FROM
                 cat_divisas AS divi
-                WHERE divi.skStatus = 'AC' ";
+                WHERE divi.skStatus = 'AC' ORDER BY divi.sName ASC ";
                 //exit($sql);
                 $result = $this->db->query($sql);
                 if(!$result){
@@ -850,7 +873,7 @@
                 tipTra.*
                 FROM
                 cat_tipos_tramites AS tipTra
-                WHERE tipTra.skStatus = 'AC' ORDER BY sNombre ASC ";
+                WHERE tipTra.skStatus = 'AC' ORDER BY tipTra.sNombre ASC ";
                 //exit($sql);
                 $result = $this->db->query($sql);
                 if(!$result){
@@ -858,7 +881,47 @@
                 }
                 return $result;
             }
-            
+            // CREATE rel_cat_empresas_tarifas_conceptos (empTarCon) //
+            function create_empTarCon(){
+                $sql = "INSERT INTO rel_cat_empresas_tarifas_conceptos
+                    (
+                        skEmpresaTarifaConcepto
+                        ,skEmpresa
+                        ,skTipoTramite
+                        ,skConcepto
+                        ,skDivisa
+                        ,fPrecioUnitario
+                        ,skUserCreacion
+                        ,dFechaCreacion
+                    ) VALUES(
+                        '".$this->empTarCon['skEmpresaTarifaConcepto']."',
+                        '".$this->empTarCon['skEmpresa']."',
+                        '".$this->empTarCon['skTipoTramite']."',
+                        '".$this->empTarCon['skConcepto']."',
+                        '".$this->empTarCon['skDivisa']."',
+                        '".$this->empTarCon['fPrecioUnitario']."',
+                        '".$_SESSION['session']['skUsers']."',
+                        CURRENT_TIMESTAMP()
+
+                    )";
+                //exit($sql);
+                $result = $this->db->query($sql);
+                if($result){
+                    return $this->empTarCon['skEmpresaTarifaConcepto'];
+                }else{
+                    return false;
+                }
+            }
+            function delete_empTarCon(){
+                $sql = "DELETE FROM rel_cat_empresas_tarifas_conceptos WHERE skEmpresa = '".$this->empTarCon['skEmpresa']."' ";
+                //exit($sql);
+                $result = $this->db->query($sql);
+                if($result){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
             public function count_tarifas(){
                 $sql="SELECT COUNT(*) AS total
                     FROM rel_empresas_tarifas AS tarifas

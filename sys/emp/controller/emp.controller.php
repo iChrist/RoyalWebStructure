@@ -699,7 +699,8 @@
                    }
                     if($_POST){
                     
-                        exit('</pre>'.print_r($_POST,1).'</pre>');
+                        //exit('</pre>'.print_r($_POST,1).'</pre>');
+                        
                         $this->empresas['skEmpresa'] = !empty($_POST['skEmpresa']) ? $_POST['skEmpresa'] : substr(md5(microtime()), 1, 32);
                         $this->tipoempresas['skTipoEmpresa'] = htmlentities($_POST['skTipoEmpresa'],ENT_QUOTES);
                         $this->empresas['skStatus'] = htmlentities($_POST['skStatus'],ENT_QUOTES);
@@ -712,6 +713,21 @@
                         
                         if(empty($_POST['skEmpresa'])){
                             if(parent::create_empresas()){
+                                if(isset($_POST['skTipoTramite'])){
+                                    if(is_array($_POST['skTipoTramite'])){
+                                        $skTipoTramite = array_keys($_POST['skTipoTramite']);
+                                        $this->empTarCon['skEmpresa'] = $this->empresas['skEmpresa'];
+                                        parent::delete_empTarCon();
+                                        for($i=0; $i < count($_POST['skConcepto']); $i++){
+                                            $this->empTarCon['skEmpresaTarifaConcepto'] = substr(md5(microtime()), 1, 32);
+                                            $this->empTarCon['skTipoTramite'] = $_POST['skTipoTramite'][$skTipoTramite[$i]];
+                                            $this->empTarCon['skConcepto'] = $_POST['skConcepto'][$i];
+                                            $this->empTarCon['skDivisa'] = $_POST['skDivisa'][$i];
+                                            $this->empTarCon['fPrecioUnitario'] = $_POST['fPrecioUnitario'][$i];
+                                            parent::create_empTarCon();
+                                        }
+                                    }
+                                }
                             	$this->data['response'] = true;
                                 $this->data['message'] = 'Registro insertado con &eacute;xito.';
                                 header('Content-Type: application/json');
@@ -728,7 +744,22 @@
                             }
                         }else{
                             if(parent::update_empresas()){
-                            	 $this->data['response'] = true;
+                                if(isset($_POST['skTipoTramite'])){
+                                    if(is_array($_POST['skTipoTramite'])){
+                                        $skTipoTramite = array_keys($_POST['skTipoTramite']);
+                                        $this->empTarCon['skEmpresa'] = $this->empresas['skEmpresa'];
+                                        parent::delete_empTarCon();
+                                        for($i=0; $i < count($_POST['skConcepto']); $i++){
+                                            $this->empTarCon['skEmpresaTarifaConcepto'] = substr(md5(microtime()), 1, 32);
+                                            $this->empTarCon['skTipoTramite'] = $_POST['skTipoTramite'][$skTipoTramite[$i]];
+                                            $this->empTarCon['skConcepto'] = $_POST['skConcepto'][$i];
+                                            $this->empTarCon['skDivisa'] = $_POST['skDivisa'][$i];
+                                            $this->empTarCon['fPrecioUnitario'] = $_POST['fPrecioUnitario'][$i];
+                                            parent::create_empTarCon();
+                                        }
+                                    }
+                                }
+                                $this->data['response'] = true;
                                 $this->data['message'] = 'Registro actualizado con &eacute;xito.';
                                 header('Content-Type: application/json');
                                 echo json_encode($this->data);
@@ -758,10 +789,11 @@
                     $this->data['promotores'] = parent::read_equal_promotores();
                     // TIPOS DE TRAMITES //
                     $this->data['tiposTramites'] = parent::read_tipos_tramites();
-                    
+                    $this->data['conceptosEmpresa'] = false;
                     if(isset($_GET['p1'])){
                         $this->empresas['skEmpresa'] = $_GET['p1'];
                         $this->data['datos'] = parent::read_equal_empresas();
+                        $this->data['conceptosEmpresa'] = parent::getConceptosEmpresa();;
                     }
                     $this->load_view('empresas-form', $this->data);
                     return true;

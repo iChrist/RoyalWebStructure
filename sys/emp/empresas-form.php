@@ -22,7 +22,7 @@
 		 }
     }
 ?>
-<!--<form id="_save" method="post" class="form-horizontal" role="form">
+<form id="_save" method="post" class="form-horizontal" role="form">
 <div class="col-lg-12 col-md-12 col-xs-12">
 <!-- BEGIN TAB -->
     <ul class="nav nav-tabs">
@@ -33,7 +33,7 @@
             <a href="#tab_servicios" data-toggle="tab">Servicios</a>
         </li>
     </ul>
-<form id="_save" method="post" class="form-horizontal" role="form">
+<!--<form id="_save" method="post" class="form-horizontal" role="form">!-->
     <div class="tab-content">
         <div class="tab-pane fade active in" id="tab_datosGenerales">
             
@@ -253,8 +253,8 @@
                     </thead>
                     <tbody id="_add_multiple_tr">
                         <?php
-                            //if($data['tiposTramites']){
-                                //while($row = $data['tiposTramites']->fetch_assoc()){
+                            if($data['conceptosEmpresa']){
+                                while($row = $data['conceptosEmpresa']->fetch_assoc()){
                         ?>
                         <tr>
                             <td class="middle"><a href="javascript:;" class="btn btn-default _add_multiple_rows_delete_row"><i class="fa fa-trash-o"></i></a></td>
@@ -269,7 +269,7 @@
                                                         $i++;
                                             ?>
                                             <label class="radio">
-                                                <input type="radio" name="skTipoTramite[0][]" class="skTipoTramite" value="<?php echo utf8_encode($rTipoTramite['skTipoTramite']); ?>"><?php echo utf8_encode($rTipoTramite['sNombre']); ?>
+                                                <input type="radio" name="skTipoTramite[<?php echo time(); ?>]" class="skTipoTramite" value="<?php echo utf8_encode($rTipoTramite['skTipoTramite']); ?>" <?php ($rTipoTramite['skTipoTramite'] == $row['skTipoTramite']) ? "checked": ""; ?> ><?php echo utf8_encode($rTipoTramite['sNombre']); ?>
                                             </label>
                                             <?php 
                                                     }//ENDWHILE 
@@ -303,15 +303,15 @@
                                     <div class="col-md-12">
                                         <div class="input-icon">
                                             <i class="fa fa-money"></i>
-                                            <input type="text" name="fPrecioUnitario[]" placeholder="Precio Unitario" class="form-control">
+                                            <input type="text" name="fPrecioUnitario[]" placeholder="Precio Unitario" class="form-control" value="<?php echo $row['fPrecioUnitario']; ?>">
                                         </div>
                                     </div>
                                 </div>
                             </td>
                         </tr>
                         <?php
-                                //}//ENDWHILE
-                            //}//ENDIF
+                                }//ENDWHILE
+                            }//ENDIF
                         ?>
                     </tbody>
                     </table>
@@ -319,10 +319,11 @@
                 </div>
             </div> 
         </div>
-    </div></form>
+    </div>
+<!--</form>!-->
 <!-- END TAB -->
 </div>
-    <!--</form>!-->                              
+   </form>                           
 
 <div class="clearfix"></div>
 
@@ -508,9 +509,9 @@
             focusInvalid: true, // do not focus the last invalid input
             ignore: "",
             rules:{
-            	sRFC:{
-                    //required: true,
-                    /*remote: {
+            	/*sRFC:{
+                    required: true,
+                    remote: {
                       url: "",
                       type: "post",
                       data: {
@@ -518,9 +519,9 @@
                         axn: "validarRFC",
                         skEmpresa:  function (){return $( "#skEmpresa" ).val();}
                       }
-                    }*/
+                    }
                     
-                },
+                },*/
                
                 skTipoEmpresa:{
                     required: true
@@ -529,9 +530,14 @@
                     required: true
                 },
                 skCorresponsalia:{
-                    required: true
+                    required: function(){
+                        if($("#skTipoEmpresa").val() != "CLIE"){
+                            return false;
+                        }
+                        return true;
+                    }
                 },
-                "skTipoTramite[]":{
+                /*"skTipoTramite[]":{
                     required: true
                 },
                 "skConcepto[]":{
@@ -542,7 +548,7 @@
                 },
                 "fPrecioUnitario[]":{
                     required: true
-                }
+                }*/
                
             },
             invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar              
@@ -581,18 +587,20 @@
                 icon.removeClass("fa-warning").addClass("fa-check");
             },
             messages:{
-            	sRFC:{
-                    //required: "Campo obligatorio.",
-                    //remote: "El RFC Ingresado ya Existe."
-                },skTipoEmpresa:{
+            	/*sRFC:{
+                    required: "Campo obligatorio.",
+                    remote: "El RFC Ingresado ya Existe."
+                },*/
+                skTipoEmpresa:{
                     required: "Campo obligatorio."
-                },sNombre:{
+                },
+                sNombre:{
                     required: "Campo obligatorio."
                 },
                 skCorresponsalia:{
                     required: "Campo obligatorio."
                 },
-                "skTipoTramite[]":{
+                /*"skTipoTramite[]":{
                     required: "Campo obligatorio."
                 },
                 "skConcepto[]":{
@@ -603,7 +611,7 @@
                 },
                 "fPrecioUnitario[]":{
                     required: "Campo obligatorio."
-                }
+                }*/
                 
             }
         });
@@ -620,7 +628,7 @@
             var tipoTramites = '<div class="form-group">';
             var time = new Date().getTime();
             $.each(cat_tipos_tramites,function(k,v){
-                tipoTramites += '<label class="radio"><input type="radio" name="skTipoTramite['+time+'][]" class="skTipoTramite" value="'+v.skTipoTramite+'">'+v.sNombre+'</label>';
+                tipoTramites += '<label class="radio"><input type="radio" name="skTipoTramite['+time+']" class="skTipoTramite" value="'+v.skTipoTramite+'">'+v.sNombre+'</label>';
             });
             tipoTramites += '</div>';
             var html = '<tr> <td class="middle"><a href="javascript:;" class="btn btn-default _add_multiple_rows_delete_row"><i class="fa fa-trash-o"></i></a></td><td class="middle"> <div class="form-group"> <div class="col-md-12 "><div class="radio-list">'+tipoTramites+'</div></div></div></td><td class="middle"> <div class="form-group"> <div class="col-md-12"> <select class="form-control skConcepto" name="skConcepto[]"> <option value="">-Servicios-</option> </select> </div></div></td><td class="middle"> <div class="form-group"> <div class="col-md-12"> <select class="form-control skDivisa" name="skDivisa[]"> <option value="">-Divisas-</option> </select> </div></div></td><td colspan="2" class="middle"> <div class="form-group"> <div class="col-md-12"> <div class="input-icon"> <i class="fa fa-money"></i> <input type="text" name="fPrecioUnitario[]" placeholder="Precio Unitario" class="form-control"> </div></div></div></td></tr>';
