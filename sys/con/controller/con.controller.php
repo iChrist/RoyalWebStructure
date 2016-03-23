@@ -99,10 +99,54 @@
               $this->conceptos['skConcepto'] = !empty($_POST['skConcepto']) ? $_POST['skConcepto'] : substr(md5(microtime()), 1, 32);
 							$this->conceptos['sNombre'] = utf8_decode($_POST['sNombre']);
 							$this->conceptos['sNombreCorto'] = utf8_decode($_POST['sNombreCorto']);
-              $this->conceptos['sDescripcion'] = utf8_decode($_POST['sDescripcion']);
+							$this->conceptos['sDescripcion'] = utf8_decode($_POST['sDescripcion']);
+							$this->conceptos['fPrecioUnitario'] = utf8_decode($_POST['fPrecioUnitario']);
+							$this->conceptos['skDivisa'] = utf8_decode($_POST['skDivisa']);
               $this->conceptos['skStatus'] = utf8_decode($_POST['skStatus']);
               if(empty($_POST['skConcepto'])){
                   if(parent::create_conceptos()){
+
+
+									if(isset($_POST['skTipoTramite'])) // En esta parte guardaremos todos los tipos de tramite seleccionados para el nuevo concepto.
+									{
+										$count = count($_POST['skTipoTramite']);
+										$bandera = 1;
+										$valores = "";
+										foreach ($_POST['skTipoTramite'] as $tramite)
+										{
+											if( $bandera == $count )
+											{
+												$valores .= "('".$this->conceptos['skConcepto']."' , '".$tramite."')";
+											}
+											else
+											{
+												$valores .= "('".$this->conceptos['skConcepto']."' , '".$tramite."'),";
+											}
+											$bandera++;
+										}
+										$rRespuesta = parent::create_tramite_concepto($valores);
+									}
+
+									if(isset($_POST['skTipoEmpresa'])) // En esta parte guardaremos todos los tipos de empresa seleccionados para el nuevo concepto.
+									{
+										$count = count($_POST['skTipoEmpresa']);
+										$bandera = 1;
+										$valores = "";
+										foreach ($_POST['skTipoEmpresa'] as $empresa)
+										{
+											if( $bandera == $count )
+											{
+												$valores .= "('".$this->conceptos['skConcepto']."' , '".$empresa."')";
+											}
+											else
+											{
+												$valores .= "('".$this->conceptos['skConcepto']."' , '".$empresa."'),";
+											}
+											$bandera++;
+										}
+										$rRespuesta = parent::create_empresas_concepto($valores);
+									}
+
                       $this->data['response'] = true;
                       $this->data['message'] = 'Registro insertado con &eacute;xito.';
                       header('Content-Type: application/json');
@@ -117,6 +161,47 @@
                   }
               }else{
                   if(parent::update_conceptos()){
+
+
+									if(isset($_POST['skTipoTramite'])) // En esta parte guardaremos todos los tipos de tramite seleccionados para el nuevo concepto.
+									{
+										$count = count($_POST['skTipoTramite']);
+										$bandera = 1;
+										$valores = "";
+										foreach ($_POST['skTipoTramite'] as $tramite)
+										{
+											if( $bandera == $count )
+											{
+												$valores .= "('".$this->conceptos['skConcepto']."' , '".$tramite."')";
+											}
+											else
+											{
+												$valores .= "('".$this->conceptos['skConcepto']."' , '".$tramite."'),";
+											}
+											$bandera++;
+										}
+										$rRespuesta = parent::create_tramite_concepto($valores);
+									}
+
+									if(isset($_POST['skTipoEmpresa'])) // En esta parte guardaremos todos los tipos de empresa seleccionados para el nuevo concepto.
+									{
+										$count = count($_POST['skTipoEmpresa']);
+										$bandera = 1;
+										$valores = "";
+										foreach ($_POST['skTipoEmpresa'] as $empresa)
+										{
+											if( $bandera == $count )
+											{
+												$valores .= "('".$this->conceptos['skConcepto']."' , '".$empresa."')";
+											}
+											else
+											{
+												$valores .= "('".$this->conceptos['skConcepto']."' , '".$empresa."'),";
+											}
+											$bandera++;
+										}
+										$rRespuesta = parent::create_empresas_concepto($valores);
+									}
                       $this->data['response'] = true;
                       $this->data['message'] = 'Registro actualizado con &eacute;xito.';
                       header('Content-Type: application/json');
@@ -133,7 +218,9 @@
           }
           if(isset($_GET['p1'])){
               $this->conceptos['skConcepto'] = $_GET['p1'];
-              $this->data['datos'] = parent::read_equal_conceptos();
+							$this->data['datos'] = parent::read_equal_conceptos();
+							$this->data['tramitesconceptos'] = parent::read_tramites_conceptos();
+							$this->data['empresasconceptos'] = parent::read_empresas_conceptos();
           }
           $this->load_view('conceptos-form', $this->data);
           return true;

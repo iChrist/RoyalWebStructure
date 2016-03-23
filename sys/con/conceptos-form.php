@@ -3,6 +3,24 @@
     if($data['datos']){
         $result = $data['datos']->fetch_assoc();
     }
+    $arrayTramitesConceptos = array();
+  	if(isset($data['tramitesconceptos']))
+      {
+  		if($data['tramitesconceptos']->num_rows > 0){
+  			 while($row = $data['tramitesconceptos']->fetch_assoc()){
+  				$arrayTramitesConceptos[] = $row{'skTipoTramite'};
+  			 }
+  		 }
+      }
+      $arrayEmpresasConceptos = array();
+    	if(isset($data['empresasconceptos']))
+        {
+    		if($data['empresasconceptos']->num_rows > 0){
+    			 while($row = $data['empresasconceptos']->fetch_assoc()){
+    				$arrayEmpresasConceptos[] = $row{'skTipoEmpresa'};
+    			 }
+    		 }
+        }
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
     <input type="hidden" name="skConcepto"  id="skConcepto" value="<?php echo (isset($result['skConcepto'])) ? $result['skConcepto'] : '' ; ?>">
@@ -45,17 +63,69 @@
             <label>
                 <div class="">
                     <span>
-                        <input type="checkbox" name="skTipoTramite" value="IMPO" <?php echo (isset($result['skTipoTramite']) && $result['skTipoTramite'] == 'IMPO') ? 'checked' : '' ; ?> > Importacion
+                        <input type="checkbox" name="skTipoTramite[]" value="IMPO" <?php echo (in_array("IMPO", $arrayTramitesConceptos) ? 'checked' : '')?>  > Importacion
                     </span>
                 </div>
             </label>
             <label>
                 <div class="">
                     <span>
-                        <input type="checkbox" name="skTipoTramite" value="EXPO" <?php echo (isset($result['skTipoTramite']) && $result['skTipoTramite'] == 'EXPO') ? 'checked' : '' ; ?>> Exportacion
+                        <input type="checkbox" name="skTipoTramite[]" value="EXPO" <?php echo (in_array("EXPO", $arrayTramitesConceptos) ? 'checked' : '')?>> Exportacion
                     </span>
                 </div>
             </label>
+        </div>
+    </div>
+</div>
+<hr>
+<div class="form-group">
+    <label class="control-label col-md-2">Tipo de Empresa<span aria-required="true" class="required"> * </span>
+    </label>
+    <div class="col-md-4">
+        <div class="checkbox-list">
+            <label>
+                <div class="">
+                    <span>
+                        <input type="checkbox" name="skTipoEmpresa[]" value="LINA" <?php echo (in_array("LINA", $arrayEmpresasConceptos) ? 'checked' : '')?>  > L&iacute;nea Naviera
+                    </span>
+                </div>
+            </label>
+            <label>
+                <div class="">
+                    <span>
+                        <input type="checkbox" name="skTipoEmpresa[]" value="RECI" <?php echo (in_array("RECI", $arrayEmpresasConceptos) ? 'checked' : '')?>> Recinto
+                    </span>
+                </div>
+            </label>
+            <label>
+                <div class="">
+                    <span>
+                        <input type="checkbox" name="skTipoEmpresa[]" value="CORR" <?php echo (in_array("CORR", $arrayEmpresasConceptos) ? 'checked' : '')?>> Corresponsal
+                    </span>
+                </div>
+            </label>
+
+        </div>
+    </div>
+</div>
+<hr>
+<div class="form-group">
+    <label class="control-label col-md-2">Divisa <span aria-required="true" class="required"> * </span>
+    </label>
+    <div class="col-md-4">
+      <select class="form-control"id="skDivisa" name="skDivisa">
+          <option value="">- Seleccione -</option>
+          <option value="USD" <?php echo (isset($result['skDivisa']) &&  $result['skDivisa'] =='USD' ? "selected" : ''); ?>> Dolar Estadounidense</option>
+          <option value="MXN" <?php echo (isset($result['skDivisa']) &&  $result['skDivisa'] =='MXN' ? "selected" : ''); ?>> Peso Mexicano</option>
+
+      </select>
+    </div>
+    <label class="control-label col-md-2">Precio Unitario <span aria-required="true" class="required"> * </span>
+    </label>
+    <div class="col-md-4">
+        <div class="input-icon right">
+            <i class="fa"></i>
+            <input type="text" name="fPrecioUnitario" id="fPrecioUnitario" class="form-control" placeholder="Precio Unitario" value="<?php echo (isset($result['fPrecioUnitario'])) ? utf8_encode($result['fPrecioUnitario']) : '' ; ?>">
         </div>
     </div>
 </div>

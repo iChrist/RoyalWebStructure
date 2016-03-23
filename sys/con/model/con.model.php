@@ -7,7 +7,11 @@
                     ,'sNombre'     		 	=>  ''
 										,'sNombreCorto'     =>  ''
 										,'sDescripcion'     =>  ''
-                    ,'skStatus'     		=>  ''
+										,'skStatus'     		=>  ''
+										,'skTipoTramite'    =>  ''
+										,'skTipoEmpresa'    =>  ''
+										,'skDivisa'    			=>  ''
+										,'fPrecioUnitario'  =>  ''
                     ,'limit'        		=>  ''
                     ,'offset'       		=>  ''
                 );
@@ -59,6 +63,8 @@
                     }
                 }
             }
+
+
 
             public function read_equal_conceptos(){
                 $sql = "SELECT cat_conceptos.*, _status.sName AS status, _status.sHtml AS htmlStatus
@@ -127,7 +133,7 @@
             }
 
             public function create_conceptos(){
-                $sql = "INSERT INTO cat_conceptos (skConcepto,sNombre,sNombreCorto,sDescripcion,skStatus) VALUES ('".$this->conceptos['skConcepto']."','".$this->conceptos['sNombre']."','".$this->conceptos['sNombreCorto']."','".$this->conceptos['sDescripcion']."','".$this->conceptos['skStatus']."')";
+                $sql = "INSERT INTO cat_conceptos (skConcepto,sNombre,sNombreCorto,sDescripcion,skDivisa,fPrecioUnitario,skStatus) VALUES ('".$this->conceptos['skConcepto']."','".$this->conceptos['sNombre']."','".$this->conceptos['sNombreCorto']."','".$this->conceptos['sDescripcion']."','".$this->conceptos['skDivisa']."','".$this->conceptos['fPrecioUnitario']."','".$this->conceptos['skStatus']."')";
                 $result = $this->db->query($sql);
                 if($result){
                     return $this->conceptos['cat_conceptos'];
@@ -147,11 +153,22 @@
 								if(!empty($this->conceptos['sDescripcion'])){
                     $sql .=" sDescripcion = '".$this->conceptos['sDescripcion']."' ,";
                 }
+								if(!empty($this->conceptos['fPrecioUnitario'])){
+                    $sql .=" fPrecioUnitario = '".$this->conceptos['fPrecioUnitario']."' ,";
+                }
+								if(!empty($this->conceptos['skDivisa'])){
+                    $sql .=" skDivisa = '".$this->conceptos['skDivisa']."' ,";
+                }
                 if(!empty($this->conceptos['skStatus'])){
                     $sql .=" skStatus = '".$this->conceptos['skStatus']."' ,";
                 }
                 $sql .= " skConcepto = '".$this->conceptos['skConcepto']."' WHERE skConcepto = '".$this->conceptos['skConcepto']."' LIMIT 1";
                 $result = $this->db->query($sql);
+
+								$sql = "DELETE FROM rel_cat_conceptos_tipos_tramites  WHERE skConcepto = '".$this->conceptos['skConcepto']."'";
+								$this->db->query($sql);
+								$sql = "DELETE FROM rel_cat_conceptos_tipos_empresas  WHERE skConcepto = '".$this->conceptos['skConcepto']."'";
+								$this->db->query($sql);
                 if($result){
                     return $this->conceptos['skConcepto'];
                 }else{
@@ -169,6 +186,36 @@
                         return false;
                     }
                 }
+            }
+						public function create_tramite_concepto($valores) {
+										 $sql = "INSERT INTO rel_cat_conceptos_tipos_tramites (skConcepto, skTipoTramite ) VALUES ".$valores."";
+										 //echo  $sql."<br><br><br>";die();
+										$result = $this->db->query($sql);
+										 if($result){
+												 return true;
+										 }else{
+												 return false;
+										 }
+						}
+						public function create_empresas_concepto($valores) {
+										 $sql = "INSERT INTO rel_cat_conceptos_tipos_empresas (skConcepto, skTipoEmpresa ) VALUES ".$valores."";
+										 //echo  $sql."<br><br><br>";die();
+										$result = $this->db->query($sql);
+										 if($result){
+												 return true;
+										 }else{
+												 return false;
+										 }
+						}
+						public function read_tramites_conceptos(){
+							$sql = "SELECT * FROM rel_cat_conceptos_tipos_tramites  WHERE 1=1 AND skConcepto = '".$this->conceptos['skConcepto']."' ";
+					    $result = $this->db->query($sql);
+          		return $result;
+            }
+						public function read_empresas_conceptos(){
+							$sql = "SELECT * FROM rel_cat_conceptos_tipos_empresas  WHERE 1=1 AND skConcepto = '".$this->conceptos['skConcepto']."' ";
+					    $result = $this->db->query($sql);
+          		return $result;
             }
             /* TERMINA MODULO Conceptos */
 
