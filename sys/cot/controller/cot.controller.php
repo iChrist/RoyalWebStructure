@@ -1,6 +1,6 @@
 <?php
     require_once(SYS_PATH."coti/model/coti.model.php");
-    Class Coti_Controller Extends Coti_Model {
+    Class Cot_Controller Extends Cot_Model {
 
             // PRIVATE VARIABLES //
                 private $data = array();
@@ -14,7 +14,7 @@
             }
 				/*COMIENZA MODULO DE RECEPCION DE DOCUMENTOS */
  
-            public function coti_index(){
+            public function cot_index(){
                 if(isset($_GET['axn'])){
                     switch ($_GET['axn']) {
                         default:
@@ -28,7 +28,7 @@
                 return true;
             }
             
-            public function coti_form(){ 
+            public function cot_form(){ 
                 $this->data['message'] = '';
                 $this->data['response'] = true;
                 $this->data['datos'] = false;
@@ -106,7 +106,7 @@
                 return true;
             }
             
-            private function pro_pdf(){
+            private function cot_pdf(){
                 if(isset($_GET['p1'])){
                     $this->pro['skProforma'] = $_GET['p1'];
                     $this->data['datos'] = parent::read_pro();

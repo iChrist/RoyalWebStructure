@@ -1,5 +1,5 @@
 <?php
-	Class Coti_Model Extends Core_Model {
+	Class Cot_Model Extends Core_Model {
                 
             // PUBLIC VARIABLES //
             
