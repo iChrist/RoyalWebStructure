@@ -107,7 +107,7 @@
                   if(parent::create_conceptos()){
 
 
-									if(isset($_POST['skTipoTramite'])) // En esta parte guardaremos todos los tipos de tramite seleccionados para el nuevo concepto.
+								if(isset($_POST['skTipoTramite'])) // En esta parte guardaremos todos los tipos de tramite seleccionados para el nuevo concepto.
 									{
 										$count = count($_POST['skTipoTramite']);
 										$bandera = 1;

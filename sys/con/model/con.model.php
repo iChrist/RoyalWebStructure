@@ -6,6 +6,7 @@
                     'skConcepto'       	=>  ''
                     ,'sNombre'     		 	=>  ''
 										,'sNombreCorto'     =>  ''
+										,'dFechaCreacion'     =>  ''
 										,'sDescripcion'     =>  ''
 										,'skStatus'     		=>  ''
 										,'skTipoTramite'    =>  ''
@@ -133,10 +134,12 @@
             }
 
             public function create_conceptos(){
-                $sql = "INSERT INTO cat_conceptos (skConcepto,sNombre,sNombreCorto,sDescripcion,skDivisa,fPrecioUnitario,skStatus) VALUES ('".$this->conceptos['skConcepto']."','".$this->conceptos['sNombre']."','".$this->conceptos['sNombreCorto']."','".$this->conceptos['sDescripcion']."','".$this->conceptos['skDivisa']."','".$this->conceptos['fPrecioUnitario']."','".$this->conceptos['skStatus']."')";
-                $result = $this->db->query($sql);
+                $sql = "INSERT INTO cat_conceptos (skConcepto,sNombre,sNombreCorto,sDescripcion,skDivisa,fPrecioUnitario,skStatus,dFechaCreacion)
+								VALUES ('".$this->conceptos['skConcepto']."','".$this->conceptos['sNombre']."','".$this->conceptos['sNombreCorto']."','".$this->conceptos['sDescripcion']."','".$this->conceptos['skDivisa']."','".$this->conceptos['fPrecioUnitario']."','".$this->conceptos['skStatus']."',CURRENT_TIMESTAMP)";
+								//	echo  $sql;
+							  $result = $this->db->query($sql);
                 if($result){
-                    return $this->conceptos['cat_conceptos'];
+                    return $this->conceptos['skConcepto'];
                 }else{
                     return false;
                 }
@@ -189,7 +192,7 @@
             }
 						public function create_tramite_concepto($valores) {
 										 $sql = "INSERT INTO rel_cat_conceptos_tipos_tramites (skConcepto, skTipoTramite ) VALUES ".$valores."";
-										 //echo  $sql."<br><br><br>";die();
+								//	echo  $sql;
 										$result = $this->db->query($sql);
 										 if($result){
 												 return true;

@@ -104,6 +104,20 @@
                     </span>
                 </div>
             </label>
+            <label>
+                <div class="">
+                    <span>
+                        <input type="checkbox" name="skTipoEmpresa[]" value="DEAD" <?php echo (in_array("DEAD", $arrayEmpresasConceptos) ? 'checked' : '')?>> Despacho Aduanal
+                    </span>
+                </div>
+            </label>
+            <label>
+                <div class="">
+                    <span>
+                        <input type="checkbox" name="skTipoEmpresa[]" value="PEDI" <?php echo (in_array("PEDI", $arrayEmpresasConceptos) ? 'checked' : '')?>> Pedimento
+                    </span>
+                </div>
+            </label>
 
         </div>
     </div>
