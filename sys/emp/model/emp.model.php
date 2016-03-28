@@ -812,7 +812,9 @@
                 }
             }
             public function getConceptosEmpresa(){
-                $sql = "SELECT * FROM rel_cat_empresas_tarifas_conceptos AS empTarCon WHERE empTarCon.skEmpresa = '".$this->empresas['skEmpresa']."' ";
+                $sql = "SELECT * ,con.skDivisa ,con.fPrecioUnitario FROM rel_cat_empresas_tarifas_conceptos AS empTarCon  "
+                        . " INNER JOIN cat_conceptos con ON con.skConcepto = empTarCon.skConcepto WHERE empTarCon.skEmpresa = '".$this->empresas['skEmpresa']."' ";
+                
                 //exit($sql);
                 $result = $this->db->query($sql);
                 if($result){
@@ -828,14 +830,13 @@
                 con.skConcepto ,con.sNombre AS concepto
                 ,di.skDivisa ,di.sName AS divisa
                 ,tra.skTipoTramite ,tra.sNombre AS tramite
-                ,conTar.fPrecioUnitario
+                ,con.fPrecioUnitario
                 ,conTipEmp.skTipoEmpresa
                 ,tipEmp.sNombre AS tipoEmpresa
                 FROM
                 rel_cat_conceptos_tipos_empresas AS conTipEmp
                 INNER JOIN cat_conceptos AS con ON con.skConcepto = conTipEmp.skConcepto
-                INNER JOIN rel_cat_conceptos_tarifas AS conTar ON conTar.skConcepto = con.skConcepto
-                INNER JOIN cat_divisas AS di ON di.skDivisa = conTar.skDivisa
+                INNER JOIN cat_divisas AS di ON di.skDivisa = con.skDivisa
                 INNER JOIN rel_cat_conceptos_tipos_tramites AS conTra ON conTra.skConcepto = con.skConcepto
                 INNER JOIN cat_tipos_tramites AS tra ON tra.skTipoTramite = conTra.skTipoTramite
                 INNER JOIN cat_tipos_empresas AS tipEmp ON tipEmp.skTipoEmpresa = conTipEmp.skTipoEmpresa WHERE con.skStatus = 'AC' ";

@@ -254,29 +254,37 @@
                     <tbody id="_add_multiple_tr">
                         <?php
                             if($data['conceptosEmpresa']){
+                                $i = 0;
+                                $divisas = $this->read_cat_divisas();
                                 while($row = $data['conceptosEmpresa']->fetch_assoc()){
+                                    $i++;
                         ?>
                         <tr>
                             <td class="middle"><a href="javascript:;" class="btn btn-default _add_multiple_rows_delete_row"><i class="fa fa-trash-o"></i></a></td>
                             <td class="middle">
                                 <div class="form-group">
                                     <div class="col-md-12">
-                                        <div class="radio-list">
                                             <div class="form-group">
                                             <?php
                                                 if($data['tiposTramites']){
-                                                    while($rTipoTramite =  $data['tiposTramites']->fetch_assoc()){
-                                                        $i++;
+                                                    foreach($data['tiposTramites'] AS $rTipoTramite){
+                                                        $this->conTipEmp['skTipoEmpresa'] = isset($row['skTipoEmpresa']) ? $row['skTipoEmpresa'] : null;
+                                                        $this->conTipEmp['skTipoTramite'] = isset($row['skTipoTramite']) ? $row['skTipoTramite'] : null;
+                                                        $conceptos = $this->read_conceptos_tipos_empresas();
                                             ?>
-                                            <label class="radio">
-                                                <input type="radio" name="skTipoTramite[<?php echo time(); ?>]" class="skTipoTramite" value="<?php echo utf8_encode($rTipoTramite['skTipoTramite']); ?>" <?php ($rTipoTramite['skTipoTramite'] == $row['skTipoTramite']) ? "checked": ""; ?> ><?php echo utf8_encode($rTipoTramite['sNombre']); ?>
-                                            </label>
+                                                <!--<div class="radio">
+                                                    <label>!-->
+                                                <input type="radio" name="skTipoTramite[<?php echo $i; ?>]"  class="skTipoTramite" value="<?php echo utf8_encode($rTipoTramite['skTipoTramite']); ?>" <?php ($rTipoTramite['skTipoTramite'] == $row['skTipoTramite']) ? 'checked': ''; ?> checked><?php echo utf8_encode($rTipoTramite['sNombre']); ?>
+                                                    <!--</label>
+                                                </div>!-->
+                                                
+                                                <div class="clearfix"></div>
                                             <?php 
-                                                    }//ENDWHILE 
+                                                    
+                                                    }//ENDFOREACH
                                                 }//ENDIF
                                             ?>
                                             </div>
-                                        </div>
                                     </div>
                                 </div>
                             </td>
@@ -285,6 +293,16 @@
                                     <div class="col-md-12">
                                         <select class="form-control skConcepto" name="skConcepto[]">
                                             <option value="">-Servicios-</option>
+                                            <?php 
+                                                if($conceptos){
+                                                    while($rConcepto = $conceptos->fetch_assoc()){
+                                                        
+                                            ?>
+                                                        <option value="<?php echo $rConcepto['skConcepto']; ?>" <?php echo ($rConcepto['skConcepto']==$row['skConcepto']) ? 'selected="selected"': ''; ?>><?php echo $rConcepto['concepto']; ?></option>
+                                            <?php
+                                                    }//ENDWHILE
+                                                }//ENDIF
+                                            ?>
                                         </select>
                                     </div>
                                 </div>
@@ -294,6 +312,16 @@
                                     <div class="col-md-12">
                                         <select class="form-control skDivisa" name="skDivisa[]">
                                             <option value="">-Divisas-</option>
+                                            <?php 
+                                                if($divisas){
+                                                    while($rDivisa = $divisas->fetch_assoc()){
+                                            ?>
+                                                        <option value="<?php echo $rDivisa['skDivisa']; ?>" <?php echo ($rDivisa['skDivisa']==$row['skDivisa']) ? 'selected="selected"': ''; ?>><?php echo $rDivisa['sName']; ?></option>
+                                            <?php
+                                                    }//ENDWHILE
+                                                    $divisas->data_seek(0);
+                                                }//ENDIF
+                                            ?>
                                         </select>
                                     </div>
                                 </div>
@@ -445,12 +473,14 @@
         $('body').delegate('.skConcepto', 'change', function(){
             var skConcepto = $(this).val();
             var tr = $(this).closest('tr');
+            if(typeof servicios != "undefined") {
             if(typeof servicios[skConcepto] != "undefined") {
                 $(tr).find('select[name^="skDivisa"]').val(servicios[skConcepto].skDivisa);
                 $(tr).find('input[name^="fPrecioUnitario"]').val(servicios[skConcepto].fPrecioUnitario);
             }else{
                 $(tr).find('select[name^="skDivisa"]').val("");
                 $(tr).find('input[name^="fPrecioUnitario"]').val("");
+            }
             }
         });
         /*

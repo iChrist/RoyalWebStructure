@@ -789,11 +789,18 @@
                     $this->data['promotores'] = parent::read_equal_promotores();
                     // TIPOS DE TRAMITES //
                     $this->data['tiposTramites'] = parent::read_tipos_tramites();
+                    if($this->data['tiposTramites']){
+                        $records = array();
+                        while($rTipoTramite =  $this->data['tiposTramites']->fetch_assoc()){
+                            array_push($records,$rTipoTramite);
+                        }
+                        $this->data['tiposTramites'] = $records;
+                    }
                     $this->data['conceptosEmpresa'] = false;
                     if(isset($_GET['p1'])){
                         $this->empresas['skEmpresa'] = $_GET['p1'];
                         $this->data['datos'] = parent::read_equal_empresas();
-                        $this->data['conceptosEmpresa'] = parent::getConceptosEmpresa();;
+                        $this->data['conceptosEmpresa'] = parent::getConceptosEmpresa();
                     }
                     $this->load_view('empresas-form', $this->data);
                     return true;
