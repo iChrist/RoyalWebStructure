@@ -26,7 +26,15 @@
         <hr>
         <div class="form-group" id="dvDatos"></div>
         <hr>
+<?php 
+$disabled="";
+if(isset($result['skGlosa'])){
+if(isset($result['iStatus']) && $result['iStatus'] == 2){
+    $disabled="disabled";
+    $disabled="";
+}
 
+?>
         <h4>Documentos <em>(Seleccione los documentos faltantes)</em></h4>
             <div class="col-md-12">
             <?php
@@ -49,7 +57,7 @@
                     <fieldset>
                      <?php }//ENDIF ?>
                              <input type="checkbox" name="docGlo[]" value="<?php echo $v['skDocGlosa']; ?>"
-							 <?php echo  (isset($sDocumentos[$v['skDocGlosa']]) ? 'checked="checked"' : '')?> >
+							 <?php echo  (isset($sDocumentos[$v['skDocGlosa']]) ? 'checked="checked"' : '')?>  <?php echo $disabled; ?>  >
                              <?php if(count($v['children']) > 0){ ?>
                             <strong>
                            <?php } ?>
@@ -62,7 +70,7 @@
                     <?php foreach($v['children'] AS $key=>$val){ ?>
                             <div class="col-md-6">
                                 <input type="checkbox" parent="<?php echo $v['skDocGlosa']; ?>" name="docGlo[]" value="<?php echo $val['skDocGlosa']; ?>"
-                                    <?php echo  (isset($sDocumentos[$val['skDocGlosa']]) ? 'checked="checked"' : '')?> >
+                                    <?php echo  (isset($sDocumentos[$val['skDocGlosa']]) ? 'checked="checked"' : '')?>  <?php echo $disabled; ?>  >
                                     <?php echo htmlentities($val['sNombre']); ?>
                             </div>
                     <?php }//ENDFOREACH ?>
@@ -79,7 +87,7 @@
             <label class="control-label col-md-2">Observaciones del Pedimento <span aria-required="true" class="required"> * </span> </label>
             <div class="col-md-8">
                 <div class="input-icon right"> <i class="fa"></i>
-                    <textarea rows="5"  name="sObservacionesPedimento" id="sObservacionesPedimento" class="form-control" placeholder="Observaciones del Pedimento"  ><?php echo (isset($result['sObservacionesPedimento'])) ? htmlentities(utf8_encode($result['sObservacionesPedimento'])) : '' ; ?></textarea>
+                    <textarea rows="5"  name="sObservacionesPedimento" id="sObservacionesPedimento" class="form-control" placeholder="Observaciones del Pedimento" <?php echo $disabled; ?> > <?php echo (isset($result['sObservacionesPedimento'])) ? htmlentities(utf8_encode($result['sObservacionesPedimento'])) : '' ; ?></textarea>
                 </div>
             </div>
         </div>
@@ -192,22 +200,25 @@
             </div>
         </div>
 
-
+<?php
+}//ENDIF (iStatus==2)
+?>
 
 
     </div>
 </form>
 <div class="clearfix"></div>
 <script type="text/javascript">
+    /*
  	setTimeout(function(){
+   
 	obtenerDatos();
 	$('input[name^="gloPart"]').each(function() {
-   // alert($(this).val());
 	getSecuenciaPartida2($(this).val());
 	});
 
  	}, 3000);
-
+*/
 
 
 function obtenerDatos(){
@@ -298,7 +309,9 @@ function obtenerDatos(){
      }*/
     var sSecuenciaNumeroParte = <?php echo isset($sSecuenciaNumeroParte) ? $sSecuenciaNumeroParte : 0; ?>;
     $(document).ready(function(){
-        
+        if($("#sReferencia").val() != ''){
+            obtenerDatos();
+        }
         $(".secPartPed").select2({
             tags: true,
             allowClear: true,

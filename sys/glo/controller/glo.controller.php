@@ -77,7 +77,7 @@
                                 return false;
                             }
                             while($row = $this->data['data']->fetch_assoc()){
-                                $actions = $this->printModulesButtons(2,array($row['skGlosa']),$row['skUserCreacion']);
+                                $actions = $this->printModulesButtons(2,array($row['skGlosa']));
                                 array_push($records['data'], array(
                                      utf8_encode($row['sReferencia'])
                                     ,utf8_encode($row['cliente'])

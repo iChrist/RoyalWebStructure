@@ -261,30 +261,30 @@
                         ?>
                         <tr>
                             <td class="middle"><a href="javascript:;" class="btn btn-default _add_multiple_rows_delete_row"><i class="fa fa-trash-o"></i></a></td>
-                            <td class="middle">
+                            <td>
                                 <div class="form-group">
-                                    <div class="col-md-12">
-                                            <div class="form-group">
+                                    <div class="col-md-10">
                                             <?php
                                                 if($data['tiposTramites']){
                                                     foreach($data['tiposTramites'] AS $rTipoTramite){
-                                                        $this->conTipEmp['skTipoEmpresa'] = isset($row['skTipoEmpresa']) ? $row['skTipoEmpresa'] : null;
+                                                        $this->conTipEmp['skTipoEmpresa'] = isset($result['skTipoEmpresa']) ? $result['skTipoEmpresa'] : null;
                                                         $this->conTipEmp['skTipoTramite'] = isset($row['skTipoTramite']) ? $row['skTipoTramite'] : null;
                                                         $conceptos = $this->read_conceptos_tipos_empresas();
                                             ?>
-                                                <!--<div class="radio">
-                                                    <label>!-->
-                                                <input type="radio" name="skTipoTramite[<?php echo $i; ?>]"  class="skTipoTramite" value="<?php echo utf8_encode($rTipoTramite['skTipoTramite']); ?>" <?php ($rTipoTramite['skTipoTramite'] == $row['skTipoTramite']) ? 'checked': ''; ?> checked><?php echo utf8_encode($rTipoTramite['sNombre']); ?>
-                                                    <!--</label>
-                                                </div>!-->
-                                                
-                                                <div class="clearfix"></div>
+                                            <div class="radio">
+                                                    <label>
+                                                        <input type="radio" name="skTipoTramite[<?php echo $i; ?>]"  class="skTipoTramite" value="<?php echo utf8_encode($rTipoTramite['skTipoTramite']); ?>" <?php echo ($rTipoTramite['skTipoTramite'] == $row['skTipoTramite']) ? 'checked="checked"': ''; ?> >
+                                                        <?php echo utf8_encode($rTipoTramite['sNombre']); ?>
+                                                    </label>
+                                                    
+                                                </div>
+                                                <br><br>
                                             <?php 
                                                     
                                                     }//ENDFOREACH
                                                 }//ENDIF
                                             ?>
-                                            </div>
+                                
                                     </div>
                                 </div>
                             </td>
@@ -298,7 +298,7 @@
                                                     while($rConcepto = $conceptos->fetch_assoc()){
                                                         
                                             ?>
-                                                        <option value="<?php echo $rConcepto['skConcepto']; ?>" <?php echo ($rConcepto['skConcepto']==$row['skConcepto']) ? 'selected="selected"': ''; ?>><?php echo $rConcepto['concepto']; ?></option>
+                                                        <option value="<?php echo $rConcepto['skConcepto']; ?>" <?php echo ($rConcepto['skConcepto']==$row['skConcepto']) ? 'selected="selected"': ''; ?>><?php echo utf8_encode($rConcepto['concepto']); ?></option>
                                             <?php
                                                     }//ENDWHILE
                                                 }//ENDIF
@@ -316,7 +316,7 @@
                                                 if($divisas){
                                                     while($rDivisa = $divisas->fetch_assoc()){
                                             ?>
-                                                        <option value="<?php echo $rDivisa['skDivisa']; ?>" <?php echo ($rDivisa['skDivisa']==$row['skDivisa']) ? 'selected="selected"': ''; ?>><?php echo $rDivisa['sName']; ?></option>
+                                                        <option value="<?php echo $rDivisa['skDivisa']; ?>" <?php echo ($rDivisa['skDivisa']==$row['skDivisa']) ? 'selected="selected"': ''; ?>><?php echo utf8_encode($rDivisa['sName']); ?></option>
                                             <?php
                                                     }//ENDWHILE
                                                     $divisas->data_seek(0);
@@ -469,18 +469,20 @@
             // Precio Unitario del Servicio //
             $(tr).find('input[name^="fPrecioUnitario"]').val("");
         });
+        
         // SELECCIÓN DE CONCEPTO //
         $('body').delegate('.skConcepto', 'change', function(){
             var skConcepto = $(this).val();
             var tr = $(this).closest('tr');
-            if(typeof servicios != "undefined") {
+            if(typeof servicios == "undefined"){
+                servicios = obtenerServicios( $(tr).find("input[type='radio'].skTipoTramite:checked").val() , $("#skTipoEmpresa").val());
+            }
             if(typeof servicios[skConcepto] != "undefined") {
                 $(tr).find('select[name^="skDivisa"]').val(servicios[skConcepto].skDivisa);
                 $(tr).find('input[name^="fPrecioUnitario"]').val(servicios[skConcepto].fPrecioUnitario);
             }else{
                 $(tr).find('select[name^="skDivisa"]').val("");
                 $(tr).find('input[name^="fPrecioUnitario"]').val("");
-            }
             }
         });
         /*
@@ -661,7 +663,7 @@
                 tipoTramites += '<label class="radio"><input type="radio" name="skTipoTramite['+time+']" class="skTipoTramite" value="'+v.skTipoTramite+'">'+v.sNombre+'</label>';
             });
             tipoTramites += '</div>';
-            var html = '<tr> <td class="middle"><a href="javascript:;" class="btn btn-default _add_multiple_rows_delete_row"><i class="fa fa-trash-o"></i></a></td><td class="middle"> <div class="form-group"> <div class="col-md-12 "><div class="radio-list">'+tipoTramites+'</div></div></div></td><td class="middle"> <div class="form-group"> <div class="col-md-12"> <select class="form-control skConcepto" name="skConcepto[]"> <option value="">-Servicios-</option> </select> </div></div></td><td class="middle"> <div class="form-group"> <div class="col-md-12"> <select class="form-control skDivisa" name="skDivisa[]"> <option value="">-Divisas-</option> </select> </div></div></td><td colspan="2" class="middle"> <div class="form-group"> <div class="col-md-12"> <div class="input-icon"> <i class="fa fa-money"></i> <input type="text" name="fPrecioUnitario[]" placeholder="Precio Unitario" class="form-control"> </div></div></div></td></tr>';
+            var html = '<tr> <td class="middle"><a href="javascript:;" class="btn btn-default _add_multiple_rows_delete_row"><i class="fa fa-trash-o"></i></a></td><td> <div class="form-group"> <div class="col-md-12 ">'+tipoTramites+'</div></div></td><td class="middle"> <div class="form-group"> <div class="col-md-12"> <select class="form-control skConcepto" name="skConcepto[]"> <option value="">-Servicios-</option> </select> </div></div></td><td class="middle"> <div class="form-group"> <div class="col-md-12"> <select class="form-control skDivisa" name="skDivisa[]"> <option value="">-Divisas-</option> </select> </div></div></td><td colspan="2" class="middle"> <div class="form-group"> <div class="col-md-12"> <div class="input-icon"> <i class="fa fa-money"></i> <input type="text" name="fPrecioUnitario[]" placeholder="Precio Unitario" class="form-control"> </div></div></div></td></tr>';
             _add_multiple_rows_add_row(html);
         });
         //

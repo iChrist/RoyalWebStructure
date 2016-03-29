@@ -812,8 +812,7 @@
                 }
             }
             public function getConceptosEmpresa(){
-                $sql = "SELECT * ,con.skDivisa ,con.fPrecioUnitario FROM rel_cat_empresas_tarifas_conceptos AS empTarCon  "
-                        . " INNER JOIN cat_conceptos con ON con.skConcepto = empTarCon.skConcepto WHERE empTarCon.skEmpresa = '".$this->empresas['skEmpresa']."' ";
+                $sql = "SELECT empTarCon.* FROM rel_cat_empresas_tarifas_conceptos AS empTarCon WHERE empTarCon.skEmpresa = '".$this->empresas['skEmpresa']."' ";
                 
                 //exit($sql);
                 $result = $this->db->query($sql);
