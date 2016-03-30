@@ -33,26 +33,29 @@
             }
         }
         // IMPORTAR EXCEL //
-        public function import_excel(&$data , &$dFechaImportacion , $validar = 0, $skClasificacion = false){
+        public function import_excel(&$data , &$dFechaImportacion, $validar = 0){
             ini_set('memory_limit', '-1');
             
-            $sReferencia = NULL;
-            $sPedimento = NULL;
-            $sEmpresa = NULL;
-            $skEmpresa = NULL;
             $skClasificacion = NULL;
-            
             $this->cla['valido'] = $validar;
+            $this->cla['dFechaImportacion'] = $dFechaImportacion;
+            $this->claMer['dFechaImportacion'] = $dFechaImportacion;
             $this->cla['skStatus'] = 'AC';
-            $this->cla['skUsersCreacion'] = $_SESSION['session']['skUsers'];
-            
             $this->claMer['skStatus'] = 'AC';
-            $this->claMer['skUsersCreacion'] = $_SESSION['session']['skUsers'];
             
-               
-            // CARGAMOS EL MODELO DE EMPRESAS //
-            $this->load_model('emp','emp');
-            $emp = new Emp_Model();
+            if($validar==0){
+                $dFechaCreacion = date('Y-m-d H:i:s');
+                $this->cla['skUsersCreacion'] = $_SESSION['session']['skUsers'];
+                $this->cla['dFechaCreacion'] = $dFechaCreacion;
+                $this->claMer['skUsersCreacion'] = $_SESSION['session']['skUsers'];
+                $this->claMer['dFechaCreacion'] = $dFechaCreacion;
+            }else{
+                $dFechaModificacion = date('Y-m-d H:i:s');
+                $this->cla['skUsersModificacion'] = $_SESSION['session']['skUsers'];
+                $this->cla['skUsersCreacion'] = $dFechaModificacion;
+                $this->claMer['skUsersModificacion'] = $_SESSION['session']['skUsers'];
+                $this->claMer['skUsersModificacion'] = $dFechaModificacion;
+            }
             
             //exit('<pre>'.print_r($data,1).'</pre>');
             if(!count($data)){
@@ -60,114 +63,62 @@
             }
             $flag = true;
             $message = false;
-            $cad  ="";
-            $i = 0;
             $lineaExcel = 2;
-            $checkValidacion = $validar;
             foreach($data AS $k => $v){
                 // VERIFICACMOS QUE VENGA REFERENCIA Y PEDIMENTO //
-                    if(empty($v['REFERENCIA']) && empty($v['PEDIMENTO'])){
-                        continue;
-                    }
-                    if($checkValidacion == 1){
-                        $this->cla['skClasificacion'] = $_GET['p1'];
-                        $this->cla['valido'] = 0;
-                        $this->cla['year'] = DATE('Y');
-                        $this->cla['limit'] = 1;
-                        $result = $this->read_filter_cla();
-                        if(!$result){
-                            $flag = false;
-                            $message = "Hubo un error al intentar validar la referencia.";
-                            break;
-                        }
-                        $rCla = $result->fetch_assoc();
-                        $this->cla['sReferencia'] = addslashes(trim($v['REFERENCIA']," "));
-                        $this->cla['sPedimento'] = addslashes(trim($v['PEDIMENTO']," "));
-                        if($rCla['sReferencia'] != $this->cla['sReferencia'] && $rCla['sPedimento'] != $this->cla['sPedimento']){
-                            $flag = false;
-                            $message = "No coincide la referencia '".$this->cla['sReferencia']."' del archivo con la que se desea validar '".$rCla['sReferencia']."'";
-                            break;
-                        }
-                        $this->delete_cla();
-                        $this->cla['valido'] = $validar;
-                        $checkValidacion = 0;
-                    }
-                    $this->cla['dFechaImportacion'] = $dFechaImportacion;
-                    $this->claMer['dFechaImportacion'] = $dFechaImportacion;
-                // VERIFICAMOS SI EXISTE EMPRESA O LA CREAMOS //
-                    if($sEmpresa != trim(utf8_decode($v['CLIENTE'])," ")){
-                        $cliente = addslashes(trim(utf8_decode($v['CLIENTE'])," "));
-                        $empresa = $this->exist_empresa(new Emp_Model() , $cliente);
-                        if(!$empresa){ 
-                            $flag = false;
-                            $message = "No est&aacute; registrado el cliente: '".$cliente."' en el sistema.";
-                            $this->delete_cla();
-                            $this->delete_claMer();
-                            break;
-                        }
-                        $skEmpresa = $empresa[0];
-                        $sEmpresa = $empresa[1];
+                    if(empty($v['REFERENCIA']) && $lineaExcel==2){
+                        $flag = false;
+                        $message = "Hubo un error al intentar realizar la importaci&oacute;n.";
+                        break;
                     }
                     
-                $this->cla['skEmpresa'] = $skEmpresa;
-                
-                if(!isset($v['REFERENCIA'])){
-                    $v['REFERENCIA'] = "";
-                }
-                $this->cla['sReferencia'] = addslashes(trim($v['REFERENCIA']," "));
-                
-                if(!isset($v['PEDIMENTO'])){
-                    $v['PEDIMENTO'] = "";
-                }
-                $this->cla['sPedimento'] = addslashes(trim($v['PEDIMENTO']," "));
-
                 if(!isset($v['F DE PREVIO'])){
                     $v['F DE PREVIO'] = NULL;
                 }
                 $this->cla['dFechaPrevio'] = addslashes(trim($v['F DE PREVIO']," "));
-                $this->cla['dFechaPrevio'] =  NULL;
+                $this->cla['dFechaPrevio'] =  '';
                 if(!isset($v['FACTURA'])){
                     $v['FACTURA'] = "";
                 }
                 $this->cla['sFactura'] = addslashes(trim($v['FACTURA']," "));
                 
-                // OBTIENE LA CLASIFICACIÓN //
-                    if(
-                        $sReferencia === trim($v['REFERENCIA']," ")
-                        && $sPedimento === trim($v['PEDIMENTO']," ")
-                        && $sEmpresa === trim(utf8_decode($v['CLIENTE'])," ")
-                    ){
-                        $this->cla['skClasificacion'] = $skClasificacion;
-                    }else{
-                        $cla = $this->get_cla();
-                        if(!$cla){
-                            $this->cla['skClasificacion'] = substr(md5(microtime()), 1, 32);
-                            $skClasificacion = $this->create_cla();
-                            if(!$skClasificacion){ 
-                                $flag = false;
-                                $message = "La referencia: ".$this->cla['sReferencia']." con pedimento: ".$this->cla['sPedimento']." y empresa: ".$sEmpresa." ; Est&aacute duplicada con una empresa diferente. (Linea del Excel ".$lineaExcel.")";
-                                $this->delete_cla();
-                                $this->delete_claMer();
-                                break;
-                            }
-                            $this->cla['skClasificacion'] = $skClasificacion;
-                            $sReferencia = addslashes(trim($v['REFERENCIA']," "));
-                            $sPedimento = addslashes(trim($v['PEDIMENTO']," "));
-                        }else{
-                            $rCla = $cla->fetch_assoc();
-                            if($rCla['dFechaImportacion'] != $dFechaImportacion){
-                                $flag = false;
-                                $message = "La referencia: ".$this->cla['sReferencia']." con pedimento: ".$this->cla['sPedimento']." y empresa: ".$sEmpresa." ; Ya ha sido importada anteriormente.";
-                                $this->cla['dFechaImportacion'] = $dFechaImportacion;
-                                $this->claMer['dFechaImportacion'] = $dFechaImportacion;
-                                $this->delete_cla();
-                                $this->delete_claMer();
-                                break; 
-                            }
-                            $this->cla['skClasificacion'] = $rCla['skClasificacion'];
-                            $skClasificacion = $rCla['skClasificacion'];
-                            $sReferencia = addslashes(trim($v['REFERENCIA']," "));
-                            $sPedimento = addslashes(trim($v['PEDIMENTO']," "));
+                // SE CREA LA PRIMERA CLASIFICACION //
+                    if($validar == 0 && $lineaExcel==2){
+                        $this->cla['skClasificacion'] = substr(md5(microtime()), 1, 32);
+                        if(!isset($v['REFERENCIA'])){
+                            $v['REFERENCIA'] = "";
+                        }
+                        $this->cla['sReferencia'] = addslashes(trim($v['REFERENCIA']," "));
+                        $skClasificacion = $this->create_cla();
+                        if(!$skClasificacion){ 
+                            $flag = false;
+                            $message = "Hubo un error al registrar la primera clasificaci&oacute;n con la referencia: ".$this->cla['sReferencia'];
+                            break;
+                        }
+                    }else if($validar == 1 && $lineaExcel==2){
+                        // SE BUSCA LA REFERENCIA PARA SU VALIDACION //
+                        $this->cla['sReferencia'] = addslashes(trim($v['REFERENCIA']," "));
+                        $result = $this->get_cla();
+                        if(!$result){
+                            $flag = false;
+                            $message = "Hubo un error al intentar validar la referencia: ".$this->cla['sReferencia'];
+                            break;
+                        }
+                        $rCla = $result->fetch_assoc();
+                        //exit('<pre>'.print_r($rCla,1).'</pre>');
+                        $this->delete_cla();
+                        $this->cla['skClasificacion'] = $rCla['skClasificacion'];
+                        $this->cla['skUsersCreacion'] = $rCla['skUsersCreacion'];
+                        $this->cla['dFechaCreacion'] = $rCla['dFechaCreacion'];
+                        $this->cla['dFechaModificacion'] = $dFechaImportacion;
+                        $this->claMer['skUsersCreacion'] = $rCla['skUsersCreacion'];
+                        $this->claMer['dFechaCreacion'] = $rCla['dFechaCreacion'];
+                        $this->claMer['dFechaModificacion'] = $dFechaImportacion;
+                        $skClasificacion = $this->create_cla();
+                        if(!$skClasificacion){ 
+                            $flag = false;
+                            $message = "Hubo un error al al intentar validar la referencia: ".$this->cla['sReferencia'];
+                            break;
                         }
                     }
                 // AGREGAMOS LAS FRACCIONES //
@@ -175,7 +126,7 @@
                         $this->claMer['skClasificacion'] = $skClasificacion;
                         
                         if(!isset($v['FRACCION'])){
-                            $v['FRACCION'] = "N/A";
+                            $v['FRACCION'] = "";
                         }
                         $this->claMer['sFraccion'] = addslashes(trim($v['FRACCION']," "));
      
@@ -197,24 +148,17 @@
                         if(!isset($v['CONSECUTIVO'])){
                             $v['CONSECUTIVO'] = "";
                         }
-                        $this->claMer['iSecuencia'] = addslashes(trim($v['CONSECUTIVO']," "));
-                                
-                        /*$getSecuencia = $this->getSecuencia();
-                        $this->claMer['iSecuencia'] = 1;
-                        if($getSecuencia){
-                            $r = $getSecuencia->fetch_row();
-                            $this->claMer['iSecuencia'] = !is_null($r[0]) ? ($r[0]+1) : 1;
-                        }*/
+                        $this->claMer['iSecuencia'] = $lineaExcel - 1;
+                             
                         $skClasificacionMercancia = $this->create_claMer();
                         if(!$skClasificacionMercancia){ 
                             $flag = false;
-                            $message = "Hubo un error al registar la fraccion ".$this->claMer['sFraccion']." con numero de parte: ".$this->claMer['sNumeroParte']." , referencia: ".$this->cla['sReferencia']." y pedimento: ".$this->cla['sPedimento'];
+                            $message = "Hubo un error al registar la fraccion ".$this->claMer['sFraccion']." con numero de parte: ".$this->claMer['sNumeroParte']." en la referencia: ".$this->cla['sReferencia'];
                             $this->delete_cla();
                             $this->delete_claMer();
                             break;
                         }
                 
-                $i++;
                 $lineaExcel++;
             }
             if(!$flag){
@@ -252,7 +196,7 @@
                         break;
                     case 'fetch_all':
                         // PARAMETROS PARA FILTRADO //
-                        $this->cla['orderBy'] = "sPedimento";
+                        $this->cla['orderBy'] = "cla.dFechaCreacion";
                         $this->cla['year'] = $year;
                         $this->cla['valido']  = 0;
                         
@@ -302,8 +246,8 @@
                                 $actions = $this->printModulesButtons(2,array($row['skClasificacion']));
                                 $records['data'][$i] = array(
                                  utf8_encode($row['sReferencia']) // REFERENCIA
-                                ,utf8_encode($row['sPedimento']) // PEDIMENTO
-                                ,utf8_encode($row['empresa']) // EMPRESA (CLIENTE)
+                                ,'' //utf8_encode($row['sPedimento']) // PEDIMENTO
+                                ,'' //utf8_encode($row['empresa']) // EMPRESA (CLIENTE)
                                 ,utf8_encode($row['totalFracciones']) // total de fracciones
                                 ,utf8_encode($row['autor']) // usersCreacion
                                 

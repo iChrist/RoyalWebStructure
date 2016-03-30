@@ -31,7 +31,7 @@ $disabled="";
 if(isset($result['skGlosa'])){
 if(isset($result['iStatus']) && $result['iStatus'] == 2){
     $disabled="disabled";
-    $disabled="";
+    //$disabled="";
 }
 
 ?>

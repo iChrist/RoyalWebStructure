@@ -17,9 +17,7 @@
         );
         public $cla = array(
              'skClasificacion' => NULL
-            ,'skEmpresa' => NULL
             ,'sReferencia' => NULL
-            ,'sPedimento' => NULL
             ,'dFechaPrevio' => NULL
             ,'sFactura' => NULL
             ,'skStatus' => NULL
@@ -30,6 +28,8 @@
             ,'dFechaImportacion' => NULL
             ,'valido' => NULL
             
+            ,'skEmpresa' => NULL
+            ,'sPedimento' => NULL
             ,'year'=>NULL
             ,'limit'        =>  NULL
             ,'offset'       =>  NULL
@@ -179,7 +179,6 @@
         public function count_cla_referencias_pendientes(){
             $sql = "SELECT COUNT(*) AS total FROM cat_clasificacion AS cla "
                 . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
-                . "INNER JOIN cat_empresas AS emp ON emp.skEmpresa = cla.skEmpresa "
                 . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE cla.valido = 0 ";
             if(!empty($this->cla['year'])){
                 $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') = '".$this->cla['year']."'";
@@ -218,9 +217,8 @@
         }
         
         public function read_cla_referencias_pendientes(){
-            $sql="SELECT COUNT(*) AS totalFracciones, cla.skClasificacion, cla.sReferencia, cla.sPedimento, cla.skUsersCreacion, u.sName AS autor, emp.sNombre AS empresa, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
+            $sql="SELECT COUNT(*) AS totalFracciones, cla.skClasificacion, cla.sReferencia, cla.skUsersCreacion, u.sName AS autor, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
                 . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
-                . "INNER JOIN cat_empresas AS emp ON emp.skEmpresa = cla.skEmpresa "
                 . "INNER JOIN cat_clasificacionMercancia AS claMer ON claMer.skClasificacion = cla.skClasificacion "
                 . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE cla.valido = 0 ";
             if(!empty($this->cla['year'])){
@@ -265,7 +263,6 @@
         public function read_filter_cla(){
             $sql = "SELECT cla.*, claMer.sFraccion, claMer.sDescripcion, claMer.sDescripcionIngles, claMer.sNumeroParte, emp.sNombre AS empresa, CONCAT(u.sName,' ',u.sLastNamePaternal,' ',u.sLastNameMaternal) AS usersCreacion, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
                 . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
-                . "INNER JOIN cat_empresas AS emp ON emp.skEmpresa = cla.skEmpresa "
                 . "INNER JOIN cat_clasificacionMercancia AS claMer ON claMer.skClasificacion = cla.skClasificacion "
                 . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE 1=1 ";
             if(!empty($this->cla['year'])){
@@ -416,10 +413,7 @@
         }
         
         public function get_cla(){
-            $sql = "SELECT skClasificacion,dFechaImportacion FROM cat_clasificacion WHERE "
-                . " (sReferencia = '".$this->cla['sReferencia']."' "
-                . " OR sPedimento = '".$this->cla['sPedimento']."') "
-                . " AND (skEmpresa = '".$this->cla['skEmpresa']."') ";
+            $sql = "SELECT cla.* FROM cat_clasificacion cla WHERE cla.sReferencia = '".$this->cla['sReferencia']."'";
             //exit($sql);
             $result = $this->db->query($sql);
             if($result){
@@ -432,11 +426,9 @@
         }
         public function create_claExcel(){
             $sql = "INSERT INTO cat_claExcel 
-                (sReferencia,sPedimento,skEmpresa,sFraccion,sDescripcion,sDescripcionIngles,sNumeroParte,dFechaPrevio,sFactura)VALUES
+                (sReferencia,sFraccion,sDescripcion,sDescripcionIngles,sNumeroParte,dFechaPrevio,sFactura)VALUES
                 (
                 '".$this->claExcel['sReferencia']."',
-                '".$this->claExcel['sPedimento']."',
-                '".$this->claExcel['skEmpresa']."',
                 '".$this->claExcel['sFraccion']."',
                 '".$this->claExcel['sDescripcion']."',
                 '".$this->claExcel['sDescripcionIngles']."',
@@ -455,17 +447,17 @@
         
         public function create_cla(){
             $sql = "INSERT INTO cat_clasificacion 
-            (skClasificacion,skEmpresa,sReferencia,sPedimento,dFechaPrevio,sFactura,skStatus,dFechaCreacion,skUsersCreacion,dFechaImportacion,valido) 
+            (skClasificacion,sReferencia,dFechaPrevio,sFactura,skStatus,dFechaCreacion,skUsersCreacion,dFechaModificacion,skUsersModificacion,dFechaImportacion,valido) 
             VALUES 
             ('".$this->cla['skClasificacion']."',
-            '".$this->cla['skEmpresa']."',
             '".$this->cla['sReferencia']."',
-            '".$this->cla['sPedimento']."',
             '".$this->cla['dFechaPrevio']."',
             '".$this->cla['sFactura']."',
             '".$this->cla['skStatus']."',
-             CURRENT_TIMESTAMP,
+            '".$this->cla['dFechaCreacion']."',
             '".$this->cla['skUsersCreacion']."',
+            '".$this->cla['dFechaModificacion']."',
+            '".$this->cla['skUsersModificacion']."',
             '".$this->cla['dFechaImportacion']."',
             ".$this->cla['valido']."
             );";
@@ -480,9 +472,7 @@
         
         public function update_cla(){
             $sql = "UPDATE cat_clasificacion SET "
-                . "skEmpresa = '".$this->cla['skEmpresa']."',"
                 . "sReferencia = '".$this->cla['sReferencia']."',"
-                . "sPedimento = '".$this->cla['sPedimento']."',"
                 . "dFechaPrevio = '".$this->cla['dFechaPrevio']."',"
                 . "sFactura = '".$this->cla['sFactura']."',"
                 . "skStatus = '".$this->cla['skStatus']."',"
@@ -499,12 +489,15 @@
         
         public function delete_cla(){
             $sql = "DELETE FROM cat_clasificacion WHERE 1=1 ";
+            if(!empty($this->cla['sReferencia'])){
+                $sql.=" AND sReferencia = '".$this->cla['sReferencia']."' ";
+            }
             if(!empty($this->cla['skClasificacion'])){
                 $sql.=" AND skClasificacion = '".$this->cla['skClasificacion']."' ";
             }
-            if(!empty($this->cla['dFechaImportacion'])){
+            /*if(!empty($this->cla['dFechaImportacion'])){
                 $sql.=" AND dFechaImportacion = '".$this->cla['dFechaImportacion']."' ";
-            }
+            }*/
             //exit($sql);
             $result = $this->db->query($sql);
             if($result){
@@ -615,7 +608,7 @@
         
         public function create_claMer(){
             $sql = "INSERT INTO cat_clasificacionMercancia 
-            (skClasificacionMercancia,skClasificacion,sFraccion,sDescripcion,sDescripcionIngles,sNumeroParte,skStatus,dFechaCreacion,skUsersCreacion,iSecuencia,dFechaImportacion) 
+            (skClasificacionMercancia,skClasificacion,sFraccion,sDescripcion,sDescripcionIngles,sNumeroParte,skStatus,dFechaCreacion,skUsersCreacion,dFechaModificacion,skUsersModificacion,iSecuencia,dFechaImportacion) 
             VALUES 
             ('".$this->claMer['skClasificacionMercancia']."',
             '".$this->claMer['skClasificacion']."',
@@ -624,8 +617,10 @@
             '".$this->claMer['sDescripcionIngles']."',
             '".$this->claMer['sNumeroParte']."',
             '".$this->claMer['skStatus']."',
-             CURRENT_TIMESTAMP,
+            '".$this->claMer['dFechaCreacion']."',
             '".$this->claMer['skUsersCreacion']."',
+            '".$this->claMer['dFechaModificacion']."',
+            '".$this->claMer['skUsersModificacion']."',
             '".$this->claMer['iSecuencia']."',
             '".$this->claMer['dFechaImportacion']."'
             );";
@@ -657,22 +652,14 @@
             }
         }
         
-        /*public function delete_claMer(){
-            $sql = "UPDATE cat_clasificacionMercancia SET "
-                . "skStatus = '".$this->claMer['skStatus']."',"
-                . "dFechaModificacion = '".$this->claMer['dFechaModificacion']."',"
-                . "skUsersModificacion = '".$this->claMer['skUsersModificacion']."'"
-                . " WHERE skClasificacion = '".$this->claMer['skClasificacion']."';";
-            $result = $this->db->query($sql);
-            if($result){
-                return $this->cla['skClasificacion'];
-            }else{
-                return false;
-            }
-        }*/
-        
         public function delete_claMer(){
-            $sql = "DELETE FROM cat_clasificacionMercancia WHERE dFechaImportacion = '".$this->claMer['dFechaImportacion']."'";
+            $sql = "DELETE FROM cat_clasificacionMercancia WHERE 1=1 ";
+            if(!empty($this->claMer['skClasificacion'])){
+                $sql.=" AND skClasificacion = '".$this->claMer['skClasificacion']."' ";
+            }
+            if(!empty($this->claMer['dFechaImportacion'])){
+                $sql.=" AND dFechaImportacion = '".$this->claMer['dFechaImportacion']."' ";
+            }
             //exit($sql);
             $result = $this->db->query($sql);
             if($result){
