@@ -136,7 +136,6 @@
         public function count_cla(){
             $sql = "SELECT COUNT(*) AS total FROM cat_clasificacion AS cla "
                 . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
-                . "INNER JOIN cat_empresas AS emp ON emp.skEmpresa = cla.skEmpresa "
                 . "INNER JOIN cat_clasificacionMercancia AS claMer ON claMer.skClasificacion = cla.skClasificacion "
                 . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE 1=1 ";
             if(!empty($this->cla['year'])){
@@ -261,7 +260,7 @@
         }
         
         public function read_filter_cla(){
-            $sql = "SELECT cla.*, claMer.sFraccion, claMer.sDescripcion, claMer.sDescripcionIngles, claMer.sNumeroParte, emp.sNombre AS empresa, CONCAT(u.sName,' ',u.sLastNamePaternal,' ',u.sLastNameMaternal) AS usersCreacion, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
+            $sql = "SELECT cla.*, claMer.sFraccion, claMer.sDescripcion, claMer.sDescripcionIngles, claMer.sNumeroParte, CONCAT(u.sName,' ',u.sLastNamePaternal,' ',u.sLastNameMaternal) AS usersCreacion, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
                 . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
                 . "INNER JOIN cat_clasificacionMercancia AS claMer ON claMer.skClasificacion = cla.skClasificacion "
                 . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE 1=1 ";

@@ -325,7 +325,7 @@
                         break;
                     case 'fetch_all':
                         // PARAMETROS PARA FILTRADO //
-                        $this->cla['orderBy'] = "sPedimento";
+                        $this->cla['orderBy'] = "cla.dFechaCreacion DESC";
                         $this->cla['year'] = $year;
                         $this->cla['valido'] = 1;
                         
@@ -394,8 +394,8 @@
                                 $actions = $this->printModulesButtons(2,array($row['skClasificacion']));
                                 $records['data'][$i] = array(
                                  utf8_encode($row['sReferencia']) // REFERENCIA
-                                ,utf8_encode($row['sPedimento']) // PEDIMENTO
-                                ,utf8_encode($row['empresa']) // EMPRESA (CLIENTE)
+                                ,''//utf8_encode($row['sPedimento']) // PEDIMENTO
+                                ,''//utf8_encode($row['empresa']) // EMPRESA (CLIENTE)
                                 
                                 ,utf8_encode($row['sFraccion']) // FRACCIÓN
                                 ,utf8_encode($row['sDescripcion']) // DESCRIPCIÓN
