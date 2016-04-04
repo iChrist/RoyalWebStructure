@@ -135,6 +135,8 @@
         
         public function count_cla(){
             $sql = "SELECT COUNT(*) AS total FROM cat_clasificacion AS cla "
+                . "INNER JOIN ope_recepciones_documentos rd ON rd.sReferencia = cla.sReferencia "
+                . "INNER JOIN cat_empresas emp ON emp.skEmpresa = rd.skEmpresa "
                 . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
                 . "INNER JOIN cat_clasificacionMercancia AS claMer ON claMer.skClasificacion = cla.skClasificacion "
                 . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE 1=1 ";
@@ -147,13 +149,13 @@
                 $sql .=" AND cla.valido = ".$this->cla['valido'];
             }
             if(!empty($this->cla['skEmpresa'])){
-                $sql .=" AND cla.skEmpresa like '%".$this->cla['skEmpresa']."%'";
+                $sql .=" AND emp.skEmpresa like '%".$this->cla['skEmpresa']."%'";
             }
             if(!empty($this->cla['sReferencia'])){
                 $sql .=" AND cla.sReferencia like '%".$this->cla['sReferencia']."%'";
             }
             if(!empty($this->cla['sPedimento'])){
-                $sql .=" AND cla.sPedimento like '%".$this->cla['sPedimento']."%'";
+                $sql .=" AND rd.sPedimento like '%".$this->cla['sPedimento']."%'";
             }
             if(!empty($this->cla['dFechaPrevio'])){
                 $sql .=" AND cla.dFechaPrevio like '%".$this->cla['dFechaPrevio']."%'";
@@ -177,21 +179,26 @@
 // FILTRADO PARA LA CLASIFICACIÓN ARANCELARIA //
         public function count_cla_referencias_pendientes(){
             $sql = "SELECT COUNT(*) AS total FROM cat_clasificacion AS cla "
+                . "INNER JOIN ope_recepciones_documentos rd ON rd.sReferencia = cla.sReferencia "
+                . "INNER JOIN cat_empresas emp ON emp.skEmpresa = rd.skEmpresa "
                 . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
-                . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE cla.valido = 0 ";
+                . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE 1=1 ";
             if(!empty($this->cla['year'])){
                 $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') = '".$this->cla['year']."'";
             }else{
                 $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') < '".date('Y')."'";
             }
+            if(!empty($this->cla['valido'])){
+                $sql .=" AND cla.valido = ".$this->cla['valido'];
+            }
             if(!empty($this->cla['skEmpresa'])){
-                $sql .=" AND cla.skEmpresa like '%".$this->cla['skEmpresa']."%'";
+                $sql .=" AND emp.skEmpresa like '%".$this->cla['skEmpresa']."%'";
             }
             if(!empty($this->cla['sReferencia'])){
                 $sql .=" AND cla.sReferencia like '%".$this->cla['sReferencia']."%'";
             }
             if(!empty($this->cla['sPedimento'])){
-                $sql .=" AND cla.sPedimento like '%".$this->cla['sPedimento']."%'";
+                $sql .=" AND rd.sPedimento like '%".$this->cla['sPedimento']."%'";
             }
             
             if(!empty($this->cla['orderBy'])){
@@ -216,23 +223,28 @@
         }
         
         public function read_cla_referencias_pendientes(){
-            $sql="SELECT COUNT(*) AS totalFracciones, cla.skClasificacion, cla.sReferencia, cla.skUsersCreacion, u.sName AS autor, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
+            $sql="SELECT COUNT(*) AS totalFracciones, cla.skClasificacion, cla.sReferencia, cla.valido, cla.skUsersCreacion, rd.sPedimento, emp.sNombre AS empresa, u.sName AS autor, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
+                . "INNER JOIN ope_recepciones_documentos rd ON rd.sReferencia = cla.sReferencia "
+                . "INNER JOIN cat_empresas emp ON emp.skEmpresa = rd.skEmpresa "
                 . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
                 . "INNER JOIN cat_clasificacionMercancia AS claMer ON claMer.skClasificacion = cla.skClasificacion "
-                . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE cla.valido = 0 ";
+                . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE 1=1 ";
             if(!empty($this->cla['year'])){
                 $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') = '".$this->cla['year']."'";
             }else{
                 $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') < '".date('Y')."'";
             }
+            if($this->cla['valido'] === 0 || $this->cla['valido'] === 1){
+                $sql .=" AND cla.valido = ".$this->cla['valido'];
+            }
             if(!empty($this->cla['skEmpresa'])){
-                $sql .=" AND cla.skEmpresa like '%".$this->cla['skEmpresa']."%'";
+                $sql .=" AND emp.skEmpresa like '%".$this->cla['skEmpresa']."%'";
             }
             if(!empty($this->cla['sReferencia'])){
                 $sql .=" AND cla.sReferencia like '%".$this->cla['sReferencia']."%'";
             }
             if(!empty($this->cla['sPedimento'])){
-                $sql .=" AND cla.sPedimento like '%".$this->cla['sPedimento']."%'";
+                $sql .=" AND rd.sPedimento like '%".$this->cla['sPedimento']."%'";
             }
             
             // AGRUPAMOS LA CLASIFICACION PARA EL CONTEO DE FRACCIONES //
@@ -260,13 +272,15 @@
         }
         
         public function read_filter_cla(){
-            $sql = "SELECT cla.*, claMer.sFraccion, claMer.sDescripcion, claMer.sDescripcionIngles, claMer.sNumeroParte, CONCAT(u.sName,' ',u.sLastNamePaternal,' ',u.sLastNameMaternal) AS usersCreacion, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
+            $sql = "SELECT cla.*, rd.sPedimento, emp.sNombre AS empresa, claMer.sFraccion, claMer.sDescripcion, claMer.sDescripcionIngles, claMer.sNumeroParte, claMer.iSecuencia, CONCAT(u.sName,' ',u.sLastNamePaternal,' ',u.sLastNameMaternal) AS usersCreacion, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
+                . "INNER JOIN ope_recepciones_documentos rd ON rd.sReferencia = cla.sReferencia "
+                . "INNER JOIN cat_empresas emp ON emp.skEmpresa = rd.skEmpresa "
                 . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
                 . "INNER JOIN cat_clasificacionMercancia AS claMer ON claMer.skClasificacion = cla.skClasificacion "
                 . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE 1=1 ";
             if(!empty($this->cla['year'])){
                 $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') = '".$this->cla['year']."'";
-            }else{
+            }else if($this->cla['year'] != null){
                 $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') < '".date('Y')."'";
             }
             if(!empty($this->cla['valido'])){
@@ -276,13 +290,13 @@
                 $sql .=" AND cla.skClasificacion = '".$this->cla['skClasificacion']."'";
             }
             if(!empty($this->cla['skEmpresa'])){
-                $sql .=" AND cla.skEmpresa like '%".$this->cla['skEmpresa']."%'";
+                $sql .=" AND emp.skEmpresa like '%".$this->cla['skEmpresa']."%'";
             }
             if(!empty($this->cla['sReferencia'])){
                 $sql .=" AND cla.sReferencia like '%".$this->cla['sReferencia']."%'";
             }
             if(!empty($this->cla['sPedimento'])){
-                $sql .=" AND cla.sPedimento like '%".$this->cla['sPedimento']."%'";
+                $sql .=" AND rd.sPedimento like '%".$this->cla['sPedimento']."%'";
             }
             if(!empty($this->cla['dFechaPrevio'])){
                 $sql .=" AND cla.dFechaPrevio like '%".$this->cla['dFechaPrevio']."%'";

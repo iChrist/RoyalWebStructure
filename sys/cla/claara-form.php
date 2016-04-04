@@ -4,111 +4,19 @@
     }
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data"> 
-    <input type="hidden" name="skClasificacion"  id="skClasificacion" value="<?php echo (isset($data['data']['clasificacion']['skClasificacion'])) ? $data['data']['clasificacion']['skClasificacion'] : '' ; ?>">
-    <input type="hidden" id="sJson" />
+    
     <div class="form-body">
+        <input type="hidden" id="sJson" />
+        
         <div class="form-group">
-            <label class="control-label col-md-2">Referencia <span aria-required="true" class="required"> * </span>
+            <label class="control-label col-md-2">Archivo
             </label>
             <div class="col-md-4">
-                <div class="input-icon right">
-                    <i class="fa"></i>
-                    <input type="text" name="sReferencia" id="sReferencia" class="form-control" placeholder="Referencia" value="<?php echo (isset($data['data']['clasificacion']['sReferencia'])) ? $data['data']['clasificacion']['sReferencia'] : '' ; ?>" >
-                </div>
-            </div>
-        </div>
-        
-        <div class="form-group">
-            <label class="control-label col-md-2">Pedimento <span aria-required="true" class="required"> * </span>
-            </label>
-            <div class="col-md-4">
-                <div class="input-icon right">
-                    <i class="fa"></i>
-                    <input type="text" name="sPedimento" id="sPedimento" class="form-control" placeholder="Pedimento" value="<?php echo (isset($data['data']['clasificacion']['sPedimento'])) ? $data['data']['clasificacion']['sPedimento'] : '' ; ?>" >
-                </div>
-            </div>
-        </div>
-        
-        <div class="form-group">
-            <label class="control-label col-md-2">Cliente <span aria-required="true" class="required"> * </span>
-            </label>
-            <div class="col-md-4">
-                <select name="skEmpresa" class="form-control form-filter input-sm">
-                    <option value="">- Cliente -</option>
-                <?php
-                    if($data['empresas']){
-                        while($row = $data['empresas']->fetch_assoc()){
-                ?>
-                    <option value="<?php echo $row['skEmpresa']; ?>" <?php if(isset($data['data']['clasificacion']['skEmpresa'])){if($data['data']['clasificacion']['skEmpresa']==$row['skEmpresa']){ echo 'selected';}} ?>>
-                                <?php echo utf8_encode($row['sNombre']); ?>
-                            </option>
-                <?php
-                        }//ENDIF
-                    }//ENDWHILE
-                ?>
-                </select>
-            </div>
-        </div>
-        
-        <div class="form-group">
-            <label class="control-label col-md-2">Factura <span aria-required="true" class="required"> * </span>
-            </label>
-            <div class="col-md-4">
-                <div class="input-icon right">
-                    <i class="fa"></i>
-                    <input type="text" name="sFactura" id="sFactura" class="form-control" placeholder="Factura" value="<?php echo (isset($data['data']['clasificacion']['sFactura'])) ? $data['data']['clasificacion']['sFactura'] : '' ; ?>" >
-                </div>
-            </div>
-        </div>
-        
-        <div class="form-group">
-            <label class="control-label col-md-2">Fecha de previo </label>
-            <div class="col-md-4">
-                <div data-date-format="dd-mm-yyyy" class="input-group date date-picker">
-                    <input type="text" name="dFechaPrevio" id="dFechaPrevio" class="form-control" readonly="" value="<?php echo (isset($data['data']['clasificacion']['dFechaPrevio'])) ? $data['data']['clasificacion']['dFechaPrevio'] : '' ; ?>">
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
-                    </span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="form-group">
-            <label class="control-label col-md-2">Estatus <span aria-required="true" class="required"> * </span>
-            </label>
-            <div class="col-md-4">
-                <div class="radio-list">
-                    <label>
-                        <div class="">
-                            <span>
-                                <input type="radio" name="skStatus" value="AC" <?php echo (isset($data['data']['clasificacion']['skStatus']) && $data['data']['clasificacion']['skStatus'] == 'AC') ? 'checked' : '' ; ?> checked="checked"> Activo
-                            </span>
-                        </div>
-                    </label>
-                    <label>
-                        <div class="">
-                            <span>
-                                <input type="radio" name="skStatus" value="IN" <?php echo (isset($data['data']['clasificacion']['skStatus']) && $data['data']['clasificacion']['skStatus'] == 'IN') ? 'checked' : '' ; ?>> Inactivo
-                            </span>
-                        </div>
-                    </label>
-                </div>
-            </div>
-        </div>
-        
-        <hr>
-        <div class="form-group">
-            <div class="col-md-2"></div>
-            <div class="col-md-10">
-                <h4><b>Nota:</b> Si lo prefieres, puedes subir un excel utilizando este template, da click <a href="<?php echo SYS_URL.SYS_PROJECT; ?>/cla/files/claara/tplClasificacionMercancias.xlsx" target="_blank">aqu&iacute;</a> para descargarlo.</h4>
-            </div>
-        </div>
-        
-        <div class="form-group">
-            <label class="control-label col-md-2">Archivo Excel
-            </label>
-            <div class="col-md-4">
-                <input type="file" name="xlfile" id="xlf" />
+                <span class="btn btn-default fileinput-button">
+                    <i class="fa fa-file-excel-o"></i>
+                    <span> Seleccionar Excel</span>
+                    <input type="file" name="xlfile" id="xlf" />
+                </span>
             </div>
         </div>
         
@@ -120,106 +28,15 @@
                 <h3 id="total"></h3>
             </div>
         </div>
-
-        <!--<div class="clearfix"><h3 id="total"></h3></div>!-->
         
-        <div class="portlet">
-            <div class="portlet-title">
-                <div class="caption">
-                    <i class="fa fa-reorder"></i>Clasificaci&oacute;n de mercancias
-                </div>
-                <div class="tools">
-                    <a href="javascript:;" class="add-fraccion"><i class="fa fa-plus"></i> Agregar</a>    
-                    <a class="collapse" href="javascript:;"></a>
-                </div>
+        <div class="form-group">
+            <div class="col-md-2"></div>
+            <div class="col-md-10">
+                <h4><b>Nota:</b> Da click <a href="<?php echo SYS_URL.SYS_PROJECT; ?>/cla/files/claara/tplClasificacionMercancias.xlsx" target="_blank" style="font-weight: bolder;color:red;font-size: 22px;">aqu&iacute;</a> para descargar el template.</h4>
             </div>
-        <div class="portlet-body form">
-        <div class="table-responsive">
-            <!--<table class="table table-bordered" id="fraccionesArancelarias">!-->
-                <?php
-                    if(isset($data['data']['clasificacion']['mercancias'])){
-                ?>
-                    <table class="table table-bordered" id="fraccionesArancelarias">
-                <?php
-                        foreach($data['data']['clasificacion']['mercancias'] AS $val){
-                ?>
-                    <tr>
-                        <td>
-                            <table class="table table-bordered">
-                                <tr class="gray">
-                                    <th><center>Fracci&oacute;n arancelaria</center></th>
-                                    <td>
-                                        <input type="hidden" name="skClasificacionMercancia[]" value="<?php echo $val['skClasificacionMercancia']; ?>">
-                                        <input type="text" name="sFraccion[]" class="form-control" placeholder="Fracci&oacute;n arancelaria" value="<?php echo $val['sFraccion']; ?>">
-                                    </td>
-                                    <th><center>N&uacute;mero de parte</center></th>
-                                    <td>
-                                        <input type="text" name="sNumeroParte[]" class="form-control" placeholder="N&uacute;mero de parte" value="<?php echo $val['sNumeroParte']; ?>">
-                                    </td>
-                                    <td align="center"><a href="javascript:;" class="btn btn-default delete-fraccion"><i class="fa fa-trash-o"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <th colspan="2"><center>Descripci&oacute;n</center></th>
-                                    <th colspan="2"><center>Descripci&oacute;n ingl&eacute;s</center></th>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-                                        <textarea name="sDescripcion[]" class="form-control" placeholder="Descripci&oacute;n en espa&ntilde;ol"><?php echo $val['sDescripcion']; ?></textarea>
-                                    </td>
-                                    <td colspan="2">
-                                        <textarea name="sDescripcionIngles[]" class="form-control" placeholder="Descripci&oacute;n en ingl&eacute;s"><?php echo $val['sDescripcionIngles']; ?></textarea>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                <?php
-                        }//ENDFOREACH
-                ?>
-                    </table>
-                <?php
-                    }else{
-                ?>
-                
-                
-                <table class="table table-bordered" id="fraccionesArancelarias">
-                    <tr>
-                        <td>
-                            <table class="table table-bordered">
-                                <tr class="gray">
-                                    <th><center>Fracci&oacute;n arancelaria</center></th>
-                                    <td>
-                                        <input type="text" name="sFraccion[]" class="form-control" placeholder="Fracci&oacute;n arancelaria">
-                                    </td>
-                                    <th><center>N&uacute;mero de parte</center></th>
-                                    <td>
-                                        <input type="text" name="sNumeroParte[]" class="form-control" placeholder="N&uacute;mero de parte">
-                                    </td>
-                                    <td align="center"><a href="javascript:;" class="btn btn-default delete-fraccion"><i class="fa fa-trash-o"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <th colspan="2"><center>Descripci&oacute;n</center></th>
-                                    <th colspan="2"><center>Descripci&oacute;n ingl&eacute;s</center></th>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-                                        <textarea name="sDescripcion[]" class="form-control" placeholder="Descripci&oacute;n en espa&ntilde;ol"></textarea>
-                                    </td>
-                                    <td colspan="2">
-                                        <textarea name="sDescripcionIngles[]" class="form-control" placeholder="Descripci&oacute;n en ingl&eacute;s"></textarea>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-                <?php
-                    }//ENDIF
-                ?>
-            <!--</table>!-->
         </div>
-        </div>
-        </div>
+        
+        
     </div>
 </form>
 <div class="clearfix"></div>
@@ -366,7 +183,7 @@ function process_wb(wb) {
                     toastr.success(data['message'], "Notificaci&oacute;n");
                     // AQUI SE HACE LA REDIRECCION
                     setInterval(function(){ 
-                        obj.disabled = false;
+                        //obj.disabled = false;
                         location.reload();
                     }, 3000);
                 }else{

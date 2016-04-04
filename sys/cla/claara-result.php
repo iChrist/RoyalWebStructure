@@ -20,7 +20,7 @@
                             <th width="10%">
                                 Acciones
                             </th>
-                            <th width="5%">
+                            <th width="15%">
                                 Estatus
                             </th>
                             <th width="25%">
@@ -50,7 +50,11 @@
                                 </div>
                             </td>
                             <td>
-                                
+                                <select name="valido" class="form-control form-filter input-sm">
+                                    <option>-Estatus-</option>
+                                    <option value="0">Pendiente</option>
+                                    <option value="1">Valido</option>
+                                </select>
                             </td>
                             <td>
                                 <input type="text" class="form-control form-filter input-sm" name="sReferencia" placeholder="Referencia">
@@ -131,19 +135,7 @@
                 </div>
                 
                 <input type="hidden" id="sJson" name="sJson"/>
-                
-                <div class="form-group">
-                    <label class="control-label col-md-2">Archivo
-                    </label>
-                    <div class="col-md-4">
-                        <span class="btn btn-default fileinput-button">
-                            <i class="fa fa-file-excel-o"></i>
-                            <span> Seleccionar Excel</span>
-                            <input type="file" name="xlfile" id="xlf" />
-                        </span>
-                    </div>
-                </div>
-                
+                <input type="file" name="xlfile" id="xlf"/>
                 <div class="col-md-10 error-import"><h4 id="total"></h4></div>
                 <div class="clearfix"></div>
             </form>
@@ -297,10 +289,12 @@ function process_wb(wb) {
     var validarUrl = null;
     function validarClasificacion(obj,url){
         validarUrl = url;
+        console.info(validarUrl);
         var tr = $(obj).parent().parent().parent().parent().clone();
-        $(tr[0]).find('td')[0].remove();
+        //console.log(tr);
+        $(tr[0]).children().last().remove();
         var thead = $("#datatable_ajax").children().children().clone();
-        $(thead[0]).children()[0].remove();
+        $(thead[0]).children().last().remove();
         $("._validar-modal-record").html('<table class="table"><thead><tr role="row" class="heading">'+thead[0].innerHTML+'</tr></thead><tr>'+tr[0].innerHTML+'</tr></table>');
         $("._validar-modal").modal('toggle');
         return false;

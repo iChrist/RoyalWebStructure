@@ -172,9 +172,15 @@
                 ,"message"=>"Importaci&oacute;n realizada con &eacute;xito"
             );
         }
-        
         /* COMIENZA MODULO clasifiación arancelaria */
-        public function claara_validar(){
+        
+        // MUESTRA EL RESULTADO DE TODAS LAS PRIMERAS CLASIFICACIONES //
+        public function claara_result(){
+            $this->claara_validar(true);
+        }
+        
+        // MUESTRA LAS PRIMERAS CLASIFICACIONES AUN NO VALIDADAS //
+        public function claara_validar($valido = false){
             $year = date('Y');
             if(isset($_GET['axn'])){
                 switch ($_GET['axn']) {
@@ -198,7 +204,11 @@
                         // PARAMETROS PARA FILTRADO //
                         $this->cla['orderBy'] = "cla.dFechaCreacion";
                         $this->cla['year'] = $year;
-                        $this->cla['valido']  = 0;
+                        
+                        $this->cla['valido']  = ($valido) ? null : 0;
+                        if(isset($_POST['valido'])){
+                            $this->cla['valido'] = $_POST['valido'];
+                        }
                         
                         if(isset($_POST['sReferencia'])){
                             $this->cla['sReferencia'] = $_POST['sReferencia'];
@@ -245,14 +255,15 @@
                         while($row = $this->data['data']->fetch_assoc()){
                                 $actions = $this->printModulesButtons(2,array($row['skClasificacion']));
                                 $records['data'][$i] = array(
-                                 utf8_encode($row['sReferencia']) // REFERENCIA
-                                ,'' //utf8_encode($row['sPedimento']) // PEDIMENTO
-                                ,'' //utf8_encode($row['empresa']) // EMPRESA (CLIENTE)
+                                !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
+                                ,($row['valido']==0) ? '<center><i class="fa fa-ban"></i></center>' : '<center><i class="fa fa-check"></i></center>'
+                                ,utf8_encode($row['sReferencia']) // REFERENCIA
+                                ,utf8_encode($row['sPedimento']) // PEDIMENTO
+                                ,utf8_encode($row['empresa']) // EMPRESA (CLIENTE)
                                 ,utf8_encode($row['totalFracciones']) // total de fracciones
                                 ,utf8_encode($row['autor']) // usersCreacion
                                 
                                 ,utf8_encode($row['htmlStatus']) // STATUS
-                                , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
                                 
                                 );
                                 
@@ -301,8 +312,13 @@
             $emp = new Emp_Model();
             $this->data['empresas'] = $emp->read_equal_empresas();
             
-            // RETORNA LA VISTA >numPar-index.php //
-            $this->load_view('claara-validar', $this->data);
+            if($valido){
+                // RETORNA LA VISTA >claara_result.php //
+                $this->load_view('claara-result', $this->data);
+            }else{
+                // RETORNA LA VISTA >claara_validar.php //
+                $this->load_view('claara-validar', $this->data);
+            }
             return true;
         }
         
@@ -325,9 +341,13 @@
                         break;
                     case 'fetch_all':
                         // PARAMETROS PARA FILTRADO //
-                        $this->cla['orderBy'] = "cla.dFechaCreacion DESC";
+                        $this->cla['orderBy'] = "cla.sReferencia DESC , cla.dFechaCreacion DESC , claMer.iSecuencia ASC";
                         $this->cla['year'] = $year;
-                        $this->cla['valido'] = 1;
+                        //$this->cla['valido'] = 1;
+                        
+                        if(isset($_GET['p1'])){
+                            $this->cla['skClasificacion'] = $_GET['p1'];
+                        }
                         
                         if(isset($_POST['sReferencia'])){
                             $this->cla['sReferencia'] = $_POST['sReferencia'];
@@ -393,9 +413,10 @@
                         while($row = $this->data['data']->fetch_assoc()){
                                 $actions = $this->printModulesButtons(2,array($row['skClasificacion']));
                                 $records['data'][$i] = array(
-                                 utf8_encode($row['sReferencia']) // REFERENCIA
-                                ,''//utf8_encode($row['sPedimento']) // PEDIMENTO
-                                ,''//utf8_encode($row['empresa']) // EMPRESA (CLIENTE)
+                                ''
+                                ,utf8_encode($row['sReferencia']) // REFERENCIA
+                                ,utf8_encode($row['sPedimento']) // PEDIMENTO
+                                ,utf8_encode($row['empresa']) // EMPRESA (CLIENTE)
                                 
                                 ,utf8_encode($row['sFraccion']) // FRACCIÓN
                                 ,utf8_encode($row['sDescripcion']) // DESCRIPCIÓN
@@ -407,60 +428,11 @@
                                 ,utf8_encode($row['usersCreacion']) // usersCreacion
                                 
                                 ,utf8_encode($row['htmlStatus']) // STATUS
-                                , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
                                 
                                 );
                                 
                              $i++;   
                         }
-
-
-                        /*$i = 0;
-                        while($row = $this->data['data']->fetch_assoc()){
-                            $actions = $this->printModulesButtons(2,array($row['skClasificacion']));
-                            $this->claMer['skClasificacion'] = $row['skClasificacion'];
-                            if(
-                                   isset($_POST['sFraccion'])
-                                || isset($_POST['sDescripcion'])
-                                || isset($_POST['sDescripcionIngles'])
-                                || isset($_POST['sNumeroParte'])
-                            ){
-                               $this->claMer['skClasificacion'] = NULL; 
-                            }
-                            $this->claMer['skStatus'] = 'AC';
-                            $this->claMer['limit'] = $records['limit'];
-                            $this->claMer['offset'] = $records['offset'];
-                            //$claMer = $this->read_equal_claMer();
-                            $claMer = $this->read_like_claMer();
-                            if(!$claMer){
-                                $records = array();
-                                break;
-                            }
-                            while($rClaMer = $claMer->fetch_assoc()){
-                                
-                                $records['data'][$i] = array(
-                                 utf8_encode($row['sReferencia']) // REFERENCIA
-                                ,utf8_encode($row['sPedimento']) // PEDIMENTO
-                                ,utf8_encode($row['empresa']) // EMPRESA (CLIENTE)
-                                
-                                ,utf8_encode($rClaMer['sFraccion']) // FRACCIÓN
-                                ,utf8_encode($rClaMer['sDescripcion']) // DESCRIPCIÓN
-                                ,utf8_encode($rClaMer['sDescripcionIngles']) // DESCIPCIÓN INGLÉS
-                                ,utf8_encode($rClaMer['sNumeroParte']) // NUMERO DE PARTE (MODELO)
-                                
-                                ,utf8_encode($row['dFechaPrevio']) // FECHA PREVIO
-                                ,utf8_encode($row['sFactura']) // FACTURA
-                                ,utf8_encode($row['usersCreacion']) // usersCreacion
-                                
-                                ,utf8_encode($row['htmlStatus']) // STATUS
-                                , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
-                                
-                                );
-                                
-                             $i++;   
-                            }
-                        }*/
-                        //exit('<pre>'.print_r($records,1).'</pre>');
                         header('Content-Type: application/json');
                         echo json_encode($records);
                         return true;
@@ -674,10 +646,11 @@
             if(isset($_GET['p1'])){
                 // OBTENER NUMERO DE PARTE //
                 $this->cla['skClasificacion'] = $_GET['p1'];
-                $data = parent::read_equal_cla();
+                $data = parent::read_filter_cla();
                 if(!$data){
                     return false;
                 }
+                //exit('<pre>'.print_r($data,1).'</pre>');
                 $i = 0;
                 $records = array();
                 while($row = $data->fetch_assoc()){
@@ -1034,7 +1007,7 @@
             }
             require_once(CORE_PATH."assets/PHPExcel/Classes/PHPExcel/IOFactory.php");
             $objReader = PHPExcel_IOFactory::createReader('Excel2007');
-            $objPHPExcel = $objReader->load(SYS_PATH."cla/files/claara/tplClasificacionMercancias.xlsx");
+            $objPHPExcel = $objReader->load(SYS_PATH."cla/files/claara/tplClasificacionMercanciasExport.xlsx");
             $i = 2;
             while($row = $this->data['data']->fetch_assoc()){
                 /*$this->claMer['skClasificacion'] = $row['skClasificacion'];
@@ -1053,7 +1026,8 @@
                     $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $i, utf8_encode($row['sNumeroParte']));
                     $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $i, utf8_encode($row['dFechaPrevio']));
                     $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $i, utf8_encode($row['sFactura']));
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(9, $i, utf8_encode($row['usersCreacion']));
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(9, $i, utf8_encode($row['iSecuencia']));
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(10, $i, utf8_encode($row['usersCreacion']));
                     $i++;   
                 //}
             }
