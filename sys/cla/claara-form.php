@@ -182,8 +182,7 @@ function process_wb(wb) {
                 if(data['response']){
                     toastr.success(data['message'], "Notificaci&oacute;n");
                     // AQUI SE HACE LA REDIRECCION
-                    setInterval(function(){ 
-                        //obj.disabled = false;
+                    setInterval(function(){
                         location.reload();
                     }, 3000);
                 }else{

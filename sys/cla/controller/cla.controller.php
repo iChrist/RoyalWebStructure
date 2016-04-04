@@ -202,7 +202,7 @@
                         break;
                     case 'fetch_all':
                         // PARAMETROS PARA FILTRADO //
-                        $this->cla['orderBy'] = "cla.dFechaCreacion";
+                        $this->cla['orderBy'] = "cla.dFechaCreacion DESC";
                         $this->cla['year'] = $year;
                         
                         $this->cla['valido']  = ($valido) ? null : 0;
@@ -227,11 +227,13 @@
                         }
                         // EXPORTACIÓN A EXCEL //
                         if(isset($_POST['exportExcel']) && $_POST['exportExcel'] == 1){
+                            $this->cla['orderBy'] = "cla.dFechaCreacion DESC , cla.sReferencia DESC, claMer.iSecuencia ASC";
                             $this->data['data'] = parent::read_filter_cla();
                             $this->claara_excel();
                             return true;
                             exit;
                         }
+                        //exit('<pre>'.print_r($_POST,1).'</pre>');
                         // OBTENER REGISTROS //
                         $total = parent::count_cla_referencias_pendientes();
                         $records = Core_Functions::table_ajax($total);
@@ -261,7 +263,8 @@
                                 ,utf8_encode($row['sPedimento']) // PEDIMENTO
                                 ,utf8_encode($row['empresa']) // EMPRESA (CLIENTE)
                                 ,utf8_encode($row['totalFracciones']) // total de fracciones
-                                ,utf8_encode($row['autor']) // usersCreacion
+                                ,utf8_encode($row['ejecutivo']) // skUsersCreacion
+                                ,utf8_encode($row['clasificador']) // skUsersModificacion
                                 
                                 ,utf8_encode($row['htmlStatus']) // STATUS
                                 
@@ -425,7 +428,8 @@
                                 
                                 ,utf8_encode($row['dFechaPrevio']) // FECHA PREVIO
                                 ,utf8_encode($row['sFactura']) // FACTURA
-                                ,utf8_encode($row['usersCreacion']) // usersCreacion
+                                ,utf8_encode($row['ejecutivo']) // skUsersCreacion
+                                ,utf8_encode($row['clasificador']) // skUsersModificacion
                                 
                                 ,utf8_encode($row['htmlStatus']) // STATUS
                                 
@@ -519,14 +523,7 @@
                 }
             }
 
-            /*if(isset($_GET['p2'])){
-                $imagePath = isset($_GET['url']) ? $_GET['url'] : FALSE;
-                $width = isset($_GET['width']) ? $_GET['width'] : 100;
-                $height = isset($_GET['height']) ? $_GET['height'] : 100;	
-                $imagePath = 'http://vision7.com.mx/admin/files/banner/1737876976dannycapdam.jpg';
-                Core_Functions::thumbnailImage($imagePath,$width,$height);
-                return true;
-            }*/
+            
 
             if($_POST){
                 //exit('<pre>'.print_r($_POST,1).'</pre>');
@@ -664,8 +661,10 @@
                         ,'skStatus' => $row['skStatus']
                         ,'dFechaCreacion' => $row['dFechaCreacion']
                         ,'skUsersCreacion' => $row['skUsersCreacion']
+                        ,'ejecutivo' => $row['ejecutivo']
                         ,'dFechaModificacion' => $row['dFechaModificacion']
                         ,'skUsersModificacion' => $row['skUsersModificacion']
+                        ,'clasificador' => $row['clasificador']
                         ,'dFechaImportacion' => $row['dFechaImportacion']
                     );
                     $this->claMer['skClasificacion'] = $row['skClasificacion'];
@@ -868,63 +867,6 @@
                         )
                     );
                 }
-				//$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/';				
-				//$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/F1/';
-				//$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/F1/P1/';
-				/*if(isset($path)){
-					// FOREACH //
-					$this->data['datos'] = array();				
-					foreach(glob($path.'*') as $file){ //var_dump($file);	
-                                            if(!empty($_POST['sFraccion']) && !empty($_POST['sNumeroParte'])){
-                                                $pathImg = explode($_GET['sysProject'],$file);
-                                                $file = SYS_URL.SYS_PROJECT.$pathImg[1];
-                                                array_push($this->data['datos'], array(
-                                                    "sFraccion"=> isset($_POST['sFraccion']) ? $_POST['sFraccion'] : "",
-                                                    "sNumeroParte"=> isset($_POST['sNumeroParte']) ? $_POST['sNumeroParte'] : "",
-                                                    "sArchivo"=>$file
-                                                    )
-                                                );
-                                            }else{
-                                                foreach(glob($file.'/'.'*') as $filename){//echo $filename.' ==> ';
-                                                    if(is_dir($filename)){
-                                                            //echo $filename.' ==> ';
-                                                            foreach(glob($filename.'/'.'*') as $filename2){ 
-                                                                    //echo $filename2.' -- >';
-                                                                    $pathImg = explode($_GET['sysProject'],$filename2);
-                                                                    $filename2 = SYS_URL.$_GET['sysProject'].$pathImg[1];
-                                                                    $filename2 = SYS_URL.SYS_PROJECT.'/'.$_GET['sysModule'].'/claara-fotos/fotografias/?axn=getFoto&url='.SYS_URL.SYS_PROJECT.$pathImg[1];
-                                                                    $filename2 = SYS_URL.SYS_PROJECT.$pathImg[1];
-                                                                    //echo $pathImg[1].' -- >';
-                                                                    $fra_NumPar = explode('/cla/files/claara/files/',$pathImg[1]);
-                                                                    $fra_NumPar = explode('/',$fra_NumPar[1]);
-                                                                    //echo $fra_NumPar[0];
-                                                                    array_push($this->data['datos'], array(
-                                                                        "sFraccion"=> $fra_NumPar[0],
-                                                                        "sNumeroParte"=> $fra_NumPar[1],
-                                                                        "sArchivo"=>$filename2
-                                                                        )
-                                                                    );			
-                                                            }					
-                                                    }else{
-                                                            $pathImg = explode($_GET['sysProject'],$filename);
-                                                            $filename = SYS_URL.$_GET['sysProject'].$pathImg[1];
-                                                            $filename = SYS_URL.SYS_PROJECT.'/'.$_GET['sysModule'].'/claara-fotos/fotografias/?axn=getFoto&url='.SYS_URL.SYS_PROJECT.$pathImg[1];
-                                                            $filename = SYS_URL.SYS_PROJECT.$pathImg[1];
-                                                            //echo basename($filename) . "  --> ";
-                                                            $fra_NumPar = explode('/cla/files/claara/files/',$pathImg[1]);
-                                                            $fra_NumPar = explode('/',$fra_NumPar[1]);
-                                                            //echo $fra_NumPar[0];
-                                                            array_push($this->data['datos'], array(
-                                                                "sFraccion"=> $fra_NumPar[0],
-                                                                "sNumeroParte"=> $fra_NumPar[1],
-                                                                "sArchivo"=>$filename
-                                                                )
-                                                            );					
-                                                    }
-                                                }//endforeach
-                                            }
-                                        }
-				}*/
 				if(!$this->data['datos']){
 					$this->data['message'] = 'No hay fotografias para este registro.';
 					$this->data['response'] = false;
@@ -1027,7 +969,8 @@
                     $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $i, utf8_encode($row['dFechaPrevio']));
                     $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $i, utf8_encode($row['sFactura']));
                     $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(9, $i, utf8_encode($row['iSecuencia']));
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(10, $i, utf8_encode($row['usersCreacion']));
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(10, $i, utf8_encode($row['ejecutivo']));
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(11, $i, utf8_encode($row['clasificador']));
                     $i++;   
                 //}
             }

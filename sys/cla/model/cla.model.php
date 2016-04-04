@@ -145,7 +145,7 @@
             }else{
                 $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') < '".date('Y')."'";
             }
-            if(!empty($this->cla['valido'])){
+            if($this->cla['valido'] === 0 || $this->cla['valido'] === 1){
                 $sql .=" AND cla.valido = ".$this->cla['valido'];
             }
             if(!empty($this->cla['skEmpresa'])){
@@ -188,7 +188,7 @@
             }else{
                 $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') < '".date('Y')."'";
             }
-            if(!empty($this->cla['valido'])){
+            if($this->cla['valido'] === 0 || $this->cla['valido'] === 1){
                 $sql .=" AND cla.valido = ".$this->cla['valido'];
             }
             if(!empty($this->cla['skEmpresa'])){
@@ -223,12 +223,13 @@
         }
         
         public function read_cla_referencias_pendientes(){
-            $sql="SELECT COUNT(*) AS totalFracciones, cla.skClasificacion, cla.sReferencia, cla.valido, cla.skUsersCreacion, rd.sPedimento, emp.sNombre AS empresa, u.sName AS autor, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
+            $sql="SELECT COUNT(*) AS totalFracciones, cla.skClasificacion, cla.sReferencia, cla.valido, cla.skUsersCreacion, rd.sPedimento, emp.sNombre AS empresa, CONCAT(u.sName,' ',u.sLastNamePaternal,' ',u.sLastNameMaternal) AS ejecutivo, CONCAT(usr.sName,' ',usr.sLastNamePaternal,' ',usr.sLastNameMaternal) AS clasificador, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
                 . "INNER JOIN ope_recepciones_documentos rd ON rd.sReferencia = cla.sReferencia "
                 . "INNER JOIN cat_empresas emp ON emp.skEmpresa = rd.skEmpresa "
                 . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
                 . "INNER JOIN cat_clasificacionMercancia AS claMer ON claMer.skClasificacion = cla.skClasificacion "
-                . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE 1=1 ";
+                . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion "
+                . "LEFT JOIN _users AS usr ON usr.skUsers = cla.skUsersModificacion WHERE 1=1 ";
             if(!empty($this->cla['year'])){
                 $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') = '".$this->cla['year']."'";
             }else{
@@ -272,18 +273,19 @@
         }
         
         public function read_filter_cla(){
-            $sql = "SELECT cla.*, rd.sPedimento, emp.sNombre AS empresa, claMer.sFraccion, claMer.sDescripcion, claMer.sDescripcionIngles, claMer.sNumeroParte, claMer.iSecuencia, CONCAT(u.sName,' ',u.sLastNamePaternal,' ',u.sLastNameMaternal) AS usersCreacion, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
+            $sql = "SELECT cla.*, rd.sPedimento, emp.sNombre AS empresa, claMer.sFraccion, claMer.sDescripcion, claMer.sDescripcionIngles, claMer.sNumeroParte, claMer.iSecuencia, CONCAT(u.sName,' ',u.sLastNamePaternal,' ',u.sLastNameMaternal) AS ejecutivo, CONCAT(usr.sName,' ',usr.sLastNamePaternal,' ',usr.sLastNameMaternal) AS clasificador, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
                 . "INNER JOIN ope_recepciones_documentos rd ON rd.sReferencia = cla.sReferencia "
                 . "INNER JOIN cat_empresas emp ON emp.skEmpresa = rd.skEmpresa "
                 . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
                 . "INNER JOIN cat_clasificacionMercancia AS claMer ON claMer.skClasificacion = cla.skClasificacion "
-                . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE 1=1 ";
+                . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion "
+                . "LEFT JOIN _users AS usr ON usr.skUsers = cla.skUsersModificacion WHERE 1=1 ";
             if(!empty($this->cla['year'])){
                 $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') = '".$this->cla['year']."'";
             }else if($this->cla['year'] != null){
                 $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') < '".date('Y')."'";
             }
-            if(!empty($this->cla['valido'])){
+            if($this->cla['valido'] === 0 || $this->cla['valido'] === 1){
                 $sql .=" AND cla.valido = ".$this->cla['valido'];
             }
             if(!empty($this->cla['skClasificacion'])){

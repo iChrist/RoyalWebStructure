@@ -57,7 +57,7 @@ Dropdown Menu
   box-shadow: 2px 2px 6px rgba(102, 102, 102, 0.1);
   border-color: #eee;
   left: inherit;
-  right: 0;
+  /*right: 0;*/
 }
 
 /* custom dropdown conetnt */

@@ -107,12 +107,14 @@ global $dash;
 				<i class="fa fa-angle-down"></i>
 				</a>
 				<ul class="dropdown-menu">
-					<li>
+					<!--
+                                        <li>
 						<a href="extra_profile.html"><i class="fa fa-user"></i> Mi perfil</a>
 					</li>
-
+                                        
 					<li class="divider">
 					</li>
+                                        !-->
 					<li>
 						<a href="<?php echo SYS_URL; ?>logout/"><i class="fa fa-key"></i>Cerrar sesion </a>
 					</li>

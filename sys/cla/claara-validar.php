@@ -33,10 +33,13 @@
                                 Cliente
                             </th>
                             <th width="5%">
-                                Total Fracciones
+                                Fracciones
                             </th>
                             <th width="25%">
                                 Ejecutivo
+                            </th>
+                            <th width="25%">
+                                Clasificador
                             </th>
                             <th width="25%">
                                 Estatus
@@ -78,7 +81,10 @@
                                 
                             </td>
                             <td>
-                                <input type="text" class="form-control form-filter input-sm" name="skCreador" placeholder="Autor">
+                                <input type="text" class="form-control form-filter input-sm" name="skUsersCreacion" placeholder="Ejecutivo">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control form-filter input-sm" name="skUsersModificacion" placeholder="Clasificador">
                             </td>
                             <td>
                                 <select name="skStatus" class="form-control form-filter input-sm">

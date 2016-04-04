@@ -17,7 +17,7 @@
                         <table class="table table-striped table-bordered table-hover" id="datatable_ajax">
                         <thead>
                         <tr role="row" class="heading">
-                            <th width="5%">
+                            <th width="10%">
                                 Buscar
                             </th>
                             <th width="25%">
@@ -49,6 +49,9 @@
                             </th>
                             <th width="25%">
                                 Ejecutivo
+                            </th>
+                            <th width="25%">
+                                Clasificador
                             </th>
                             <th width="25%">
                                 Estatus
@@ -102,7 +105,10 @@
                                 <input type="text" class="form-control form-filter input-sm" name="sFactura" placeholder="Factura">
                             </td>
                             <td>
-                                <input type="text" class="form-control form-filter input-sm" name="skCreador" placeholder="Autor">
+                                <input type="text" class="form-control form-filter input-sm" name="skUsersCreacion" placeholder="Ejecutivo">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control form-filter input-sm" name="skUsersModificacion" placeholder="Clasificador">
                             </td>
                             <td>
                                 <select name="skStatus" class="form-control form-filter input-sm">
