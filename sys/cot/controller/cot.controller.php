@@ -86,6 +86,13 @@
                                 !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
                                 ,utf8_encode($row['skReferencia'])
                                 ,utf8_encode($row['sPedimento'])
+                                ,utf8_encode($row['EmpresaImportador'])
+                                ,utf8_encode($row['EmpresaRecinto'])
+                                ,utf8_encode($row['EmpresaNaviera'])
+                                ,utf8_encode($row['TipoServicio'])
+                                ,utf8_encode($row['TipoCobro'])
+                                ,utf8_encode($row['TipoTramite'])
+                                ,utf8_encode($row['TipoTranporte'])
                                 ,utf8_encode($row['htmlStatus'])
 
                             ));

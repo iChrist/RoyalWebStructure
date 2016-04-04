@@ -13,6 +13,13 @@
                       <th width="10%">Acciones</th>
                       <th width="10%">Referencia</th>
                       <th width="10%">Pedimento</th>
+                      <th width="10%">Importador</th>
+                      <th width="10%">Recinto</th>
+                      <th width="10%">Naviera</th>
+                      <th width="10%">Tipo de Servicio</th>
+                      <th width="10%">Tipo de Cobro</th>
+                      <th width="10%">Tipo de Tramite</th>
+                      <th width="10%">Tipo de Transporte</th>
 
                     </tr>
                     <tr role="row" class="filter">
@@ -26,8 +33,15 @@
                             <input type="text" class="form-control form-filter input-sm" name="skReferencia" placeholder="Referencia">
                         </td>
                         <td>
-                            <input type="text" class="form-control form-filter input-sm" name="sPedimento" placeholder="sPedimento">
+                            <input type="text" class="form-control form-filter input-sm" name="sPedimento" placeholder="Pedimento">
                         </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                         <!--<td>
                             <select name="skEmpresa" class="form-control form-filter input-sm">
                             <option value="">- Cliente -</option>
