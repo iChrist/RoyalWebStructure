@@ -250,7 +250,8 @@
                 FROM ope_glosa AS glo
                 INNER JOIN ope_recepciones_documentos AS rd ON rd.sReferencia = glo.sReferencia
                 INNER JOIN cat_empresas ce ON ce.skEmpresa = rd.skEmpresa
-                INNER JOIN _users AS usr ON usr.skUsers =  glo.skUserCreacion
+                INNER JOIN _users AS u ON u.skUsers =  glo.skUserCreacion
+                LEFT JOIN _users AS usr ON usr.skUsers =  glo.skUserModificacion
                 INNER JOIN _status ON _status.skStatus = glo.skStatus
                 WHERE 1=1 ";
                 if(!is_null($this->glo['skGlosa'])){
@@ -265,8 +266,14 @@
                 if(!is_null($this->glo['skUserCreacion'])){
                     $sql .=" AND glo.skUserCreacion = '".$this->glo['skUserCreacion']."'";
                 }
+                if(!is_null($this->glo['skUserModificacion'])){
+                    $sql .=" AND glo.skUserModificacion = '".$this->glo['skUserModificacion']."'";
+                }
                 if(!is_null($this->glo['dFechaCreacion'])){
-                    $sql .=" AND glo.dFechaCreacion = '".$this->glo['dFechaCreacion']."'";
+                    $sql .=" AND DATE_FORMAT(glo.dFechaCreacion,'%Y-%m-%d') = '".$this->glo['dFechaCreacion']."'";
+                }
+                if(!is_null($this->glo['dFechaModificacion'])){
+                    $sql .=" AND DATE_FORMAT(glo.dFechaModificacion,'%Y-%m-%d') = '".$this->glo['dFechaModificacion']."'";
                 }
                 if(!is_null($this->glo['skStatus'])){
                     $sql .=" AND glo.skStatus = '".$this->glo['skStatus']."'";
@@ -295,7 +302,7 @@
                 INNER JOIN ope_recepciones_documentos AS rd ON rd.sReferencia = glo.sReferencia
                 INNER JOIN cat_empresas ce ON ce.skEmpresa = rd.skEmpresa
                 INNER JOIN _users AS u ON u.skUsers =  glo.skUserCreacion
-                INNER JOIN _users AS usr ON usr.skUsers =  glo.skUserModificacion
+                LEFT JOIN _users AS usr ON usr.skUsers =  glo.skUserModificacion
                 INNER JOIN _status ON _status.skStatus = glo.skStatus
                 WHERE 1=1 ";
                 if(!is_null($this->glo['skGlosa'])){
