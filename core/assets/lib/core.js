@@ -25,8 +25,9 @@ function _save(obj,url){
         success: function(data){
             if(data['response']){
                 toastr.success(data['message'], "Notificaci&oacute;n");
-                setInterval(function(){ 
-                    location.assign(url); 
+                _location = setInterval(function(){
+                    location.assign(url);
+                    clearInterval(_location);
                 }, 3000);
             }else{
                 toastr.error(data['message'], "Notificaci&oacute;n");

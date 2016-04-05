@@ -15,6 +15,7 @@
                     ,'sGroup'=>''
                     ,'limit'        			=>  ''
                     ,'offset'       			=>  ''
+                    ,'orderBy' => NULL
                 );
                 public $profiles = array(
                     'skProfiles'       	=>  ''
@@ -91,6 +92,9 @@
 								if(!empty($this->users['sUserName'])){
 				                    $sql .= " AND _users.sUserName = '".$this->users['sUserName']."'";
 				                }
+                                                if(!is_null($this->users['orderBy'])){
+                                                    $sql .=" ORDER BY ".$this->users['orderBy'];
+                                                }
 				                if(is_int($this->users['limit'])){
 				                    if(is_int($this->users['offset'])){
 				                        $sql .= " LIMIT ".$this->users['offset']." , ".$this->users['limit'];
@@ -98,7 +102,7 @@
 				                        $sql .= " LIMIT ".$this->users['limit'];
 				                    }
 				                }
-										//echo "<br><br><br><br>".$sql;
+						//exit($sql);
                 $result = $this->db->query($sql);
                 if($result){
                     if($result->num_rows > 0){

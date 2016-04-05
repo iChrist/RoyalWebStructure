@@ -8,17 +8,29 @@
     if($data['datos']){
         $result = $data['datos']->fetch_assoc();
     }
+    
+    $disabled_ejecutivo="";
+    $disabled_glosador="";
+    if(isset($result['skGlosa'])){
+        if($result['iStatus'] == 1){
+            $disabled_ejecutivo="disabled";
+        }else if($result['iStatus'] == 2){
+            $disabled_glosador="disabled";
+            $disabled_ejecutivo="disabled";
+        }
+    }
 
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
     <input type="hidden" name="skGlosa"  id="skGlosa" value="<?php echo (isset($result['skGlosa'])) ? $result['skGlosa'] : '' ; ?>">
+    <input type="hidden" name="iStatus"  id="iStatus" value="<?php echo (isset($result['iStatus'])) ? $result['iStatus'] : '1' ; ?>">
     <div class="form-body">
 
         <div class="form-group">
             <label class="control-label col-md-2">Referencia <span aria-required="true" class="required"> * </span> </label>
             <div class="col-md-4">
                 <div class="input-icon right"><i class="fa"></i>
-                    <input type="text" name="sReferencia" id="sReferencia" class="form-control" placeholder="Referencia" value="<?php echo (isset($result['sReferencia'])) ? htmlentities(utf8_encode($result['sReferencia'])) : '' ; ?>" >
+                    <input type="text" name="sReferencia" id="sReferencia" class="form-control" placeholder="Referencia" value="<?php echo (isset($result['sReferencia'])) ? htmlentities(utf8_encode($result['sReferencia'])) : '' ; ?>" <?php echo $disabled_ejecutivo; ?> >
                 </div>
             </div>
         </div>
@@ -26,14 +38,9 @@
         <hr>
         <div class="form-group" id="dvDatos"></div>
         <hr>
-<?php 
-$disabled="";
-if(isset($result['skGlosa'])){
-if(isset($result['iStatus']) && $result['iStatus'] == 2){
-    $disabled="disabled";
-    //$disabled="";
-}
-
+       
+<?php
+    if(isset($result['skGlosa'])){
 ?>
         <h4>Documentos <em>(Seleccione los documentos faltantes)</em></h4>
             <div class="col-md-12">
@@ -57,7 +64,7 @@ if(isset($result['iStatus']) && $result['iStatus'] == 2){
                     <fieldset>
                      <?php }//ENDIF ?>
                              <input type="checkbox" name="docGlo[]" value="<?php echo $v['skDocGlosa']; ?>"
-							 <?php echo  (isset($sDocumentos[$v['skDocGlosa']]) ? 'checked="checked"' : '')?>  <?php echo $disabled; ?>  >
+							 <?php echo  (isset($sDocumentos[$v['skDocGlosa']]) ? 'checked="checked"' : '')?>  <?php echo $disabled_glosador; ?>  >
                              <?php if(count($v['children']) > 0){ ?>
                             <strong>
                            <?php } ?>
@@ -70,7 +77,7 @@ if(isset($result['iStatus']) && $result['iStatus'] == 2){
                     <?php foreach($v['children'] AS $key=>$val){ ?>
                             <div class="col-md-6">
                                 <input type="checkbox" parent="<?php echo $v['skDocGlosa']; ?>" name="docGlo[]" value="<?php echo $val['skDocGlosa']; ?>"
-                                    <?php echo  (isset($sDocumentos[$val['skDocGlosa']]) ? 'checked="checked"' : '')?>  <?php echo $disabled; ?>  >
+                                    <?php echo  (isset($sDocumentos[$val['skDocGlosa']]) ? 'checked="checked"' : '')?>  <?php echo $disabled_glosador; ?>  >
                                     <?php echo htmlentities($val['sNombre']); ?>
                             </div>
                     <?php }//ENDFOREACH ?>
@@ -83,11 +90,12 @@ if(isset($result['iStatus']) && $result['iStatus'] == 2){
                 ?>
             </div>
         <div class="clearfix"></div><br>
+        
         <div class="form-group">
             <label class="control-label col-md-2">Observaciones del Pedimento <span aria-required="true" class="required"> * </span> </label>
             <div class="col-md-8">
                 <div class="input-icon right"> <i class="fa"></i>
-                    <textarea rows="5"  name="sObservacionesPedimento" id="sObservacionesPedimento" class="form-control" placeholder="Observaciones del Pedimento" <?php echo $disabled; ?> > <?php echo (isset($result['sObservacionesPedimento'])) ? htmlentities(utf8_encode($result['sObservacionesPedimento'])) : '' ; ?></textarea>
+                    <textarea rows="5"  name="sObservacionesPedimento" id="sObservacionesPedimento" class="form-control" placeholder="Observaciones del Pedimento" <?php echo $disabled_glosador; ?> > <?php echo (isset($result['sObservacionesPedimento'])) ? htmlentities(utf8_encode($result['sObservacionesPedimento'])) : '' ; ?></textarea>
                 </div>
             </div>
         </div>
@@ -120,11 +128,11 @@ if(isset($result['iStatus']) && $result['iStatus'] == 2){
                                 <tr>
                                     <th nowrap><center>Secuencia</center></th>
                                     <td>
-                                        <input type="text" name="iSecuencia[]" class="form-control" placeholder="Secuencia Pedimento" value="<?php echo $v['iSecuencia']; ?>">
+                                        <input type="text" name="iSecuencia[]" class="form-control" placeholder="Secuencia Pedimento" value="<?php echo $v['iSecuencia']; ?>" <?php echo $disabled_glosador; ?> >
                                     </td>
                                     <td>
                                         <!--<input type="text" name="sSecuenciaNumeroParte[]" class="form-control" placeholder="Secuencia Partida" value="<?php echo $v['sSecuenciaNumeroParte']; ?>">!-->
-                                        <select data-tags="true" name="secPartPed[<?php echo $sSecuenciaNumeroParte; ?>][]" class="form-control select2 secPartPed" data-placeholder="Secuencia de partida del pedimento" data-allow-clear="true" multiple="multiple">
+                                        <select data-tags="true" name="secPartPed[<?php echo $sSecuenciaNumeroParte; ?>][]" class="form-control select2 secPartPed" data-placeholder="Secuencia de partida del pedimento" data-allow-clear="true" multiple="multiple" <?php echo $disabled_glosador; ?> >
                                         <?php
                                             if(count($v['gloPartSec']) > 0){
                                                 foreach($v['gloPartSec'] AS $key => $val){
@@ -146,7 +154,7 @@ if(isset($result['iStatus']) && $result['iStatus'] == 2){
                                     <th nowrap><center>Observaciones</center></th>
 
                                     <td colspan="2">
-                                        <textarea name="sObservacionesPartida[]" class="form-control" placeholder="Observaciones"><?php echo $v['sObservacionesPartida']; ?></textarea>
+                                        <textarea name="sObservacionesPartida[]" class="form-control" placeholder="Observaciones" <?php echo $disabled_glosador; ?> >  <?php echo $v['sObservacionesPartida']; ?></textarea>
                                     </td>
 
 

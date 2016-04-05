@@ -10,6 +10,7 @@
                 ,'dFechaCreacion'=>null
                 ,'skUserModificacion'=>null
                 ,'dFechaModificacion'=>null
+                ,'iStatus'=>null
                 ,'skStatus'=>null
                 
                 ,'skEmpresa'=>null
@@ -286,13 +287,15 @@
             }
             
             public function read_glo(){
-                $sql = "SELECT 	glo.*, ce.sNombre AS cliente,
-                usr.sName AS autor,
-                _status.sHtml AS htmlStatus
+                $sql = "SELECT 	glo.*, ce.sNombre AS cliente
+                ,CONCAT(u.sName,' ',u.sLastNamePaternal,' ',u.sLastNameMaternal) AS ejecutivo 
+                ,CONCAT(usr.sName,' ',usr.sLastNamePaternal,' ',usr.sLastNameMaternal) AS glosador
+                ,_status.sHtml AS htmlStatus
                 FROM ope_glosa AS glo
                 INNER JOIN ope_recepciones_documentos AS rd ON rd.sReferencia = glo.sReferencia
                 INNER JOIN cat_empresas ce ON ce.skEmpresa = rd.skEmpresa
-                INNER JOIN _users AS usr ON usr.skUsers =  glo.skUserCreacion
+                INNER JOIN _users AS u ON u.skUsers =  glo.skUserCreacion
+                INNER JOIN _users AS usr ON usr.skUsers =  glo.skUserModificacion
                 INNER JOIN _status ON _status.skStatus = glo.skStatus
                 WHERE 1=1 ";
                 if(!is_null($this->glo['skGlosa'])){
@@ -307,8 +310,14 @@
                 if(!is_null($this->glo['skUserCreacion'])){
                     $sql .=" AND glo.skUserCreacion = '".$this->glo['skUserCreacion']."'";
                 }
+                if(!is_null($this->glo['skUserModificacion'])){
+                    $sql .=" AND glo.skUserModificacion = '".$this->glo['skUserModificacion']."'";
+                }
                 if(!is_null($this->glo['dFechaCreacion'])){
-                    $sql .=" AND glo.dFechaCreacion = '".$this->glo['dFechaCreacion']."'";
+                    $sql .=" AND DATE_FORMAT(glo.dFechaCreacion,'%Y-%m-%d') = '".$this->glo['dFechaCreacion']."'";
+                }
+                if(!is_null($this->glo['dFechaModificacion'])){
+                    $sql .=" AND DATE_FORMAT(glo.dFechaModificacion,'%Y-%m-%d') = '".$this->glo['dFechaModificacion']."'";
                 }
                 if(!is_null($this->glo['skStatus'])){
                     $sql .=" AND glo.skStatus = '".$this->glo['skStatus']."'";
@@ -360,6 +369,9 @@
                 $sql = "UPDATE ope_glosa SET ";
                 if(!is_null($this->glo['sReferencia'])){
                     $sql.=" sReferencia = '".$this->glo['sReferencia']."', ";
+                }
+                if(!is_null($this->glo['iStatus'])){
+                    $sql.=" iStatus = '".$this->glo['iStatus']."', ";
                 }
                 if(!is_null($this->glo['sObservacionesPedimento'])){
                     $sql.=" sObservacionesPedimento = '".$this->glo['sObservacionesPedimento']."', ";

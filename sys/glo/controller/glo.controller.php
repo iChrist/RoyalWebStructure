@@ -47,11 +47,17 @@
                             if(!empty($_POST['sObservacionesPedimento'])){
                                 $this->glo['sObservacionesPedimento'] = addslashes(utf8_decode($_POST['sObservacionesPedimento']));
                             }
-                            if(!empty($_POST['skUserCreacion'])){
-                                $this->glo['skUserCreacion'] = $_POST['skUserCreacion'];
+                            if(!empty($_POST['ejecutivo'])){
+                                $this->glo['skUserCreacion'] = $_POST['ejecutivo'];
+                            }
+                            if(!empty($_POST['glosador'])){
+                                $this->glo['skUserModificacion'] = $_POST['glosador'];
                             }
                             if(!empty($_POST['dFechaCreacion'])){
-                                $this->glo['dFechaCreacion'] = date('Y-m-d',  strtotime($_POST['dFechaCreacion']));
+                                $this->glo['dFechaCreacion'] = date('Y-m-d',strtotime($_POST['dFechaCreacion']));
+                            }
+                            if(!empty($_POST['dFechaModificacion'])){
+                                $this->glo['dFechaModificacion'] = date('Y-m-d',strtotime($_POST['dFechaModificacion']));
                             }
 
                             if(!empty($_POST['skEmpresa'])){
@@ -79,12 +85,14 @@
                             while($row = $this->data['data']->fetch_assoc()){
                                 $actions = $this->printModulesButtons(2,array($row['skGlosa']));
                                 array_push($records['data'], array(
-                                     utf8_encode($row['sReferencia'])
+                                    !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
+                                    ,utf8_encode($row['sReferencia'])
                                     ,utf8_encode($row['cliente'])
                                     ,utf8_encode($row['sObservacionesPedimento'])
-                                    ,utf8_encode($row['autor'])
+                                    ,utf8_encode($row['ejecutivo'])
                                     ,utf8_encode($row['dFechaCreacion'])
-                                   ,!empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
+                                    ,utf8_encode($row['glosador'])
+                                    ,utf8_encode($row['dFechaModificacion'])
                                 ));
                             }
                             header('Content-Type: application/json');
@@ -100,6 +108,7 @@
                 $cof = new Cof_Model();
                 $cof->users['status'] = $cof->read_status();
                 
+                $cof->users['orderBy'] = '_users.sName ASC , _users.sLastNamePaternal ASC , _users.sLastNameMaternal ASC';
                 $this->data['users'] = $cof->read_user();
 
                 $this->load_model('emp','emp');
@@ -214,80 +223,83 @@
                                     parent::delete_gloPart();
                                     if(!empty($_POST['sObservacionesPartida']) && !empty($_POST['iSecuencia'])){
                                         $this->gloPart['skClasificacionMercancia'] =  !empty($_POST['skClasificacionMercancia']) ? $_POST['skClasificacionMercancia'] : null;
-                                        $i=0;
-                                        $secPartPed = array_keys($_POST["secPartPed"]);
-                                        $i_secPartPed = 0;
-                                        foreach($_POST['sObservacionesPartida'] AS $k=>$v){
-                                            $this->gloPart['sObservacionesPartida'] = addslashes(utf8_decode(trim($v," ")));
-                                            $this->gloPart['iSecuencia'] = $_POST['iSecuencia'][$i];
-                                            //$this->gloPart['sSecuenciaNumeroParte'] = $_POST['sSecuenciaNumeroParte'][$i];
-                                            if(!empty($this->gloPart['sObservacionesPartida']) && !empty($this->gloPart['iSecuencia'])){
-                                                $ikGlosaPartidas = parent::create_gloPart();
-                                                if($ikGlosaPartidas){
-                                                    if(count($_POST["secPartPed"][$secPartPed[$i]]) > 0){
-                                                        $this->gloPartSec['ikGlosaPartidas'] = $ikGlosaPartidas;
-                                                        foreach($_POST["secPartPed"][$secPartPed[$i]] AS $key => $val){
-                                                            $this->gloPartSec['sSecuencia'] = $val;
-                                                            parent::create_gloPartSec();
+                                        if(!empty($_POST['secPartPed'])){
+                                            $i=0;
+                                            $secPartPed = array_keys($_POST["secPartPed"]);
+                                            $i_secPartPed = 0;
+                                            foreach($_POST['sObservacionesPartida'] AS $k=>$v){
+                                                $this->gloPart['sObservacionesPartida'] = addslashes(utf8_decode(trim($v," ")));
+                                                $this->gloPart['iSecuencia'] = $_POST['iSecuencia'][$i];
+                                                //$this->gloPart['sSecuenciaNumeroParte'] = $_POST['sSecuenciaNumeroParte'][$i];
+                                                if(!empty($this->gloPart['sObservacionesPartida']) && !empty($this->gloPart['iSecuencia'])){
+                                                    $ikGlosaPartidas = parent::create_gloPart();
+                                                    if($ikGlosaPartidas){
+                                                        if(count($_POST["secPartPed"][$secPartPed[$i]]) > 0){
+                                                            $this->gloPartSec['ikGlosaPartidas'] = $ikGlosaPartidas;
+                                                            foreach($_POST["secPartPed"][$secPartPed[$i]] AS $key => $val){
+                                                                $this->gloPartSec['sSecuencia'] = $val;
+                                                                parent::create_gloPartSec();
+                                                            }
                                                         }
-                                                        //$i_secPartPed++;
                                                     }
                                                 }
-                                                //$i++;
+                                                $i++;
                                             }
-                                            $i++;
                                         }
                                     }
                                 }
                             }else{
                                 // UPDATE //
                             $this->data['message'] = 'Registro Actualizado con &eacute;xito.';
-				//exit('<pre>'.print_r($_POST,1));		
-                                if(!parent::update_glo()){
-                                    $this->data['response'] = false;
-                                    $this->data['message'] = 'Hubo un error al intentar guardar el registro, intenta de nuevo.';
-                                }else{
-                                    $this->gloDocGlo['skGlosa'] = $this->glo['skGlosa'];
-                                    // DOCUMENTOS FALTANTES PARA GLOSA (gloDocGlo) //
-                                    parent::delete_gloDocGlo();
-                                    if(!empty($_POST['docGlo'])){
-                                        foreach($_POST['docGlo'] AS $k=>$v){
-                                            $this->gloDocGlo['skDocGlosa'] = addslashes(utf8_decode(trim($v," ")));
-                                            if(!empty($this->gloDocGlo['skDocGlosa'])){
-                                                parent::create_gloDocGlo();
-                                            }
-                                        }
-                                    }
-                                    $this->gloPart['skGlosa'] = $this->glo['skGlosa'];
-                                    // OBSERVACIONES A NIVEL PARTIDA (gloPart) //
-                                    parent::delete_gloPart();
-                                    if(!empty($_POST['sObservacionesPartida']) && !empty($_POST['iSecuencia'])){
-                                        $this->gloPart['skClasificacionMercancia'] =  !empty($_POST['skClasificacionMercancia']) ? $_POST['skClasificacionMercancia'] : null;
-                                        $i=0;
-                                        $secPartPed = array_keys($_POST["secPartPed"]);
-                                        $i_secPartPed = 0;
-                                        foreach($_POST['sObservacionesPartida'] AS $k=>$v){
-                                            $this->gloPart['sObservacionesPartida'] = addslashes(utf8_decode(trim($v," ")));
-                                            $this->gloPart['iSecuencia'] = $_POST['iSecuencia'][$i];
-                                            //$this->gloPart['sSecuenciaNumeroParte'] = $_POST['sSecuenciaNumeroParte'][$i];
-                                            if(!empty($this->gloPart['sObservacionesPartida']) && !empty($this->gloPart['iSecuencia'])){
-                                                $ikGlosaPartidas = parent::create_gloPart();
-                                                if($ikGlosaPartidas){
-                                                    if(count($_POST["secPartPed"][$secPartPed[$i]]) > 0){
-                                                        $this->gloPartSec['ikGlosaPartidas'] = $ikGlosaPartidas;
-                                                        foreach($_POST["secPartPed"][$secPartPed[$i]] AS $key => $val){
-                                                            $this->gloPartSec['sSecuencia'] = $val;
-                                                            parent::create_gloPartSec();
-                                                        }
-                                                        //$i_secPartPed++;
-                                                    }
+				//exit('<pre>'.print_r($_POST,1));
+                                if(isset($_POST['iStatus']) && $_POST['iStatus'] == 1){
+                                    $this->glo['iStatus'] = 2;
+                                    if(!parent::update_glo()){
+                                        $this->data['response'] = false;
+                                        $this->data['message'] = 'Hubo un error al intentar guardar el registro, intenta de nuevo.';
+                                    }else{
+                                        $this->gloDocGlo['skGlosa'] = $this->glo['skGlosa'];
+                                        // DOCUMENTOS FALTANTES PARA GLOSA (gloDocGlo) //
+                                        parent::delete_gloDocGlo();
+                                        if(!empty($_POST['docGlo'])){
+                                            foreach($_POST['docGlo'] AS $k=>$v){
+                                                $this->gloDocGlo['skDocGlosa'] = addslashes(utf8_decode(trim($v," ")));
+                                                if(!empty($this->gloDocGlo['skDocGlosa'])){
+                                                    parent::create_gloDocGlo();
                                                 }
-                                                //$i++;
                                             }
-                                            $i++;
+                                        }
+                                        $this->gloPart['skGlosa'] = $this->glo['skGlosa'];
+                                        // OBSERVACIONES A NIVEL PARTIDA (gloPart) //
+                                        parent::delete_gloPart();
+                                        if(!empty($_POST['sObservacionesPartida']) && !empty($_POST['iSecuencia'])){
+                                            $this->gloPart['skClasificacionMercancia'] =  !empty($_POST['skClasificacionMercancia']) ? $_POST['skClasificacionMercancia'] : null;
+                                            if(!empty($_POST['secPartPed'])){
+                                                $i=0;
+                                                $secPartPed = array_keys($_POST["secPartPed"]);
+                                                $i_secPartPed = 0;
+                                                foreach($_POST['sObservacionesPartida'] AS $k=>$v){
+                                                    $this->gloPart['sObservacionesPartida'] = addslashes(utf8_decode(trim($v," ")));
+                                                    $this->gloPart['iSecuencia'] = $_POST['iSecuencia'][$i];
+                                                    //$this->gloPart['sSecuenciaNumeroParte'] = $_POST['sSecuenciaNumeroParte'][$i];
+                                                    if(!empty($this->gloPart['sObservacionesPartida']) && !empty($this->gloPart['iSecuencia'])){
+                                                        $ikGlosaPartidas = parent::create_gloPart();
+                                                        if($ikGlosaPartidas){
+                                                            if(count($_POST["secPartPed"][$secPartPed[$i]]) > 0){
+                                                                $this->gloPartSec['ikGlosaPartidas'] = $ikGlosaPartidas;
+                                                                foreach($_POST["secPartPed"][$secPartPed[$i]] AS $key => $val){
+                                                                    $this->gloPartSec['sSecuencia'] = $val;
+                                                                    parent::create_gloPartSec();
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    $i++;
+                                                }
+                                            }
                                         }
                                     }
-                                }
+                                }// $this->glo['iStatus'] == 1
                             }
                             header('Content-Type: application/json');
                             echo json_encode($this->data);
