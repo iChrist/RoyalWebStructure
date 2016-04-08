@@ -16,11 +16,93 @@
                 </div>
             </div>
         </div>
-
         <div class="clearfix"></div>
         <hr>
         <div class="form-group col-md-12" id="dvDatos"></div>
-
+        <div class="form-group">
+            <label class="control-label col-md-2">Importador <span aria-required="true" class="required"> * </span> </label>
+            <div class="col-md-4">
+                <div class="input-icon right"><i class="fa"></i>
+                    <input type="text" name="skEmpresaImportador" id="skEmpresaImportador" class="form-control" placeholder="Importador" value="" >
+                </div>
+            </div>
+            <label class="control-label col-md-2">L&iacute;nea Naviera <span aria-required="true" class="required"> * </span> </label>
+            <div class="col-md-4">
+                <div class="input-icon right"><i class="fa"></i>
+                    <input type="text" name="skEmpresaNaviera" id="skEmpresaNaviera" class="form-control" placeholder="Linea Naviera" value="" >
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">Recinto <span aria-required="true" class="required"> * </span> </label>
+            <div class="col-md-4">
+                <div class="input-icon right"><i class="fa"></i>
+                    <input type="text" name="skEmpresaRecinto" id="skEmpresaRecinto" class="form-control" placeholder="Importador" value="" >
+                </div>
+            </div>
+          </div>
+          <div class="form-group">
+          <label class="control-label col-md-2">Tipo de Transporte <span aria-required="true" class="required"> * </span> </label>
+          <div class="col-md-4">
+              <div class="input-icon right"><i class="fa"></i>
+                  <input type="text" name="skTipoTransporte" id="skTipoTransporte" class="form-control" placeholder="Tipo de Transporte" value="" >
+              </div>
+          </div>
+      </div>
+        <div class="clearfix"></div>
+      <hr>
+        <div class="form-group">
+            <label class="control-label col-md-2">Tipo de Cambio <span aria-required="true" class="required"> * </span> </label>
+            <div class="col-md-4">
+                <div class="input-icon right"><i class="fa"></i>
+                    <input type="text" name="fTipoCambio" id="fTipoCambio" class="form-control" placeholder="Tipo de Cambio" value="" >
+                </div>
+            </div>
+            <label class="control-label col-md-2">Valor Mercanc&iacute;a<span aria-required="true" class="required"> * </span> </label>
+            <div class="col-md-4">
+                <div class="input-icon right"><i class="fa"></i>
+                    <input type="text" name="fValorMercancia" id="fValorMercancia" class="form-control" placeholder="Valor Mercanc&iacute;a" value="" >
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+      <hr>
+        <div class="form-group">
+            <label class="control-label col-md-2">Conceptos <span aria-required="true" class="required"> * </span> </label>
+            <div class="col-md-8">
+              <table class="table table-responsive">
+                <thead>
+                  <th nowrap>S</th>
+                  <th nowrap>Cantidad</th>
+                  <th nowrap>Precio Unitario</th>
+                  <th width="100%">Nombre</th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><input type="checkbox" class="form-control" id="chkServicio" name="chkServicio"></td>
+                    <td><input type="text" name="iCantidadServicio" id="iCantidadServicio" class="form-control input-small" placeholder="Cantidad" value="" ></td>
+                    <td><input type="text" name="fPrecioUnitario" id="fPrecioUnitario" class="form-control input-small" placeholder="Precio Unitario" value="" ></td>
+                    <td>Revalidacion</td>
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" class="form-control" id="chkServicio" name="chkServicio"></td>
+                    <td><input type="text" name="iCantidadServicio" id="iCantidadServicio" class="form-control input-small" placeholder="Cantidad" value="" ></td>
+                    <td><input type="text" name="fPrecioUnitario" id="fPrecioUnitario" class="form-control input-small" placeholder="Precio Unitario" value="" ></td>
+                    <td>Demoras</td>
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" class="form-control" id="chkServicio" name="chkServicio"></td>
+                    <td><input type="text" name="iCantidadServicio" id="iCantidadServicio" class="form-control input-small" placeholder="Cantidad" value="" ></td>
+                    <td><input type="text" name="fPrecioUnitario" id="fPrecioUnitario" class="form-control input-small" placeholder="Precio Unitario" value="" ></td>
+                    <td>Importacion</td>
+                  </tr>
+                </tbody>
+              </table>
+                <h1><label>LISTADO DE CONCEPTOS</label></h1>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+      <hr>
         <div class="form-group">
             <label class="control-label col-md-2">Observaciones <span aria-required="true" class="required"> * </span> </label>
             <div class="col-md-8">
@@ -29,6 +111,8 @@
                 </div>
             </div>
         </div>
+          <div class="clearfix"></div>
+        <hr>
     </div>
 </form>
 <div class="clearfix"></div>
