@@ -9,8 +9,30 @@
             }
         }
     }
-	
-	
+
+
+ob_start();
+?>
+
+<tr>
+   <td align="center"><a href="javascript:;" class="btn btn-default delete-contenedor"><i class="fa fa-trash-o"></i></a></td>
+   <td nowrap><input type="text" name="sBlHouse[<?php echo time(); ?>][]" class="form-control contenedor" placeholder="N&uacute;m. Contenedor" value="<?php echo (isset($result['sNumContenedor'])) ? htmlentities(utf8_encode($result['sNumContenedor'])) : '' ; ?>" ></td>
+   <td nowrap><input type="text" name="sNumContenedor[<?php echo time(); ?>][]" class="form-control contenedor" placeholder="N&uacute;m. Contenedor" value="<?php echo (isset($result['sNumContenedor'])) ? htmlentities(utf8_encode($result['sNumContenedor'])) : '' ; ?>" ></td>
+   <td nowrap>
+       <select name="skTipoContenedor[<?php echo time(); ?>][]" class="form-control contenedor">
+           <option value="20DC">20 DC</option>
+           <option value="40DC">40 DC</option>
+       </select>
+   </td>
+   <td  colspan="2">
+       <select name="skTipoEmbalaje[<?php echo time(); ?>][]" class="form-control contenedor">
+           <option value="CAJA">Caja</option>
+           <option value="ROLL">Rollos</option>
+       </select>
+   </td>
+</tr>
+<?php
+$rel_recepciones_mercancias = ob_get_clean();
 //echo "<pre>".print_r($data,1)."</pre>";
 //echo "<pre>".print_r($result,1)."</pre>";
 ?>
@@ -57,19 +79,31 @@
     <table class="table table-hover table-bordered" id="mercancia_contenedor">
         <thead>
             <tr>
-                <th align="center">E </th>
-                <th nowrap>Contenedor </th>
-                <th nowrap>Tipo Contenedor </th>
-                <th nowrap>Embalaje </th>
+                <th align="center">E</th>
+                <th nowrap>BL House</th>
+                <th nowrap>Contenedor</th>
+                <th nowrap>Tipo Contenedor</th>
+                <th nowrap>Embalaje</th>
                 <th nowrap><a href="javascript:;" class="add-contenedor"><i class="fa fa-plus"></i></a></th>
             </tr>
         </thead>
         <tbody>
             <tr>
                <td align="center"><a href="javascript:;" class="btn btn-default delete-contenedor"><i class="fa fa-trash-o"></i></a></td>
-               <td nowrap><input type="text" name="sNumContenedor[]" class="form-control contenedor" placeholder="N&uacute;m. Contenedor" value="<?php echo (isset($result['sNumContenedor'])) ? htmlentities(utf8_encode($result['sNumContenedor'])) : '' ; ?>" ></td>
-               <td nowrap><input type="text" name="skTipoContenedor[]"class="form-control contenedor" placeholder="Tipo Contenedor" value="<?php echo (isset($result['skTipoContenedor'])) ? htmlentities(utf8_encode($result['skTipoContenedor'])) : '' ; ?>" ></td>
-               <td  colspan="2"><input type="text" name="skTipoEmbalaje[]" class="form-control contenedor" placeholder="Embalaje" value="<?php echo (isset($result['skTipoEmbalaje'])) ? htmlentities(utf8_encode($result['skTipoEmbalaje'])) : '' ; ?>" ></td>
+               <td nowrap><input type="text" name="sBlHouse[<?php echo time(); ?>][]" class="form-control contenedor" placeholder="N&uacute;m. Contenedor" value="<?php echo (isset($result['sNumContenedor'])) ? htmlentities(utf8_encode($result['sNumContenedor'])) : '' ; ?>" ></td>
+               <td nowrap><input type="text" name="sNumContenedor[<?php echo time(); ?>][]" class="form-control contenedor" placeholder="N&uacute;m. Contenedor" value="<?php echo (isset($result['sNumContenedor'])) ? htmlentities(utf8_encode($result['sNumContenedor'])) : '' ; ?>" ></td>
+               <td nowrap>
+                   <select name="skTipoContenedor[<?php echo time(); ?>][]" class="form-control contenedor">
+                       <option value="20DC">20 DC</option>
+                       <option value="40DC">40 DC</option>
+                   </select>
+               </td>
+               <td  colspan="2">
+                   <select name="skTipoEmbalaje[<?php echo time(); ?>][]" class="form-control contenedor">
+                       <option value="CAJA">Caja</option>
+                       <option value="ROLL">Rollos</option>
+                   </select>
+               </td>
             </tr>
         </tbody>
     </table>
@@ -263,7 +297,9 @@
     </tbody>
   </table>
 </form>
+<?php echo isset($rel_recepciones_mercancias) ? $rel_recepciones_mercancias : ""; ?>
 <script type="text/javascript">
+    var rel_recepciones_mercancias = '<?php echo isset($rel_recepciones_mercancias) ? json_encode($rel_recepciones_mercancias) : ""; ?>';
     function saveRecepcionDocumentos(obj,url){
     obj.disabled = true;
     if(!isValid.form()){
@@ -316,8 +352,9 @@
          */
          /* AGREGAR FILA CONTENEDOR */
         $('body').delegate('.add-contenedor', 'click', function(){
-            var html_contenedor = '<tr><td align="center"><a href="javascript:;" class="btn btn-default delete-contenedor"><i class="fa fa-trash-o"></i></a></td><td nowrap><input type="text" name="sNumContenedor[]" class="form-control contenedor" placeholder="N&uacute;m. Contenedor" value="" ></td><td nowrap><input type="text" name="skTipoContenedor[]"class="form-control contenedor" placeholder="Tipo Contenedor" value="" ></td><td colspan="2"><input type="text" name="skTipoEmbalaje[]" class="form-control contenedor" placeholder="Embalaje" value="" ></td></tr>';
-            $("#mercancia_contenedor").append(html_contenedor);
+            $("#mercancia_contenedor").append(rel_recepciones_mercancias);
+            //var html_contenedor = '<tr><td align="center"><a href="javascript:;" class="btn btn-default delete-contenedor"><i class="fa fa-trash-o"></i></a></td><td nowrap><input type="text" name="sNumContenedor[]" class="form-control contenedor" placeholder="N&uacute;m. Contenedor" value="" ></td><td nowrap><input type="text" name="skTipoContenedor[]"class="form-control contenedor" placeholder="Tipo Contenedor" value="" ></td><td colspan="2"><input type="text" name="skTipoEmbalaje[]" class="form-control contenedor" placeholder="Embalaje" value="" ></td></tr>';
+            //$("#mercancia_contenedor").append(html_contenedor);
         });
         /* AGREGAR FILA CARGA SUELTA */
          $('body').delegate('.add-cargaSuelta', 'click', function(){
