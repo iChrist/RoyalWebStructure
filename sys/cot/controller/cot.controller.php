@@ -124,7 +124,7 @@
                     $_POST['axn'] = !empty($_POST['axn']) ? $_POST['axn'] : 'save';
                     switch ($_POST['axn']){
                         case "validarReferencia":
-                            $this->solreva['sReferencia'] = $_POST['sReferencia'];
+                            $this->cotizaciones['sReferencia'] = $_POST['sReferencia'];
                             $this->data['data']=parent::read_referencia();
                             if(!$this->data['data']){
                                 echo 'false';
@@ -134,7 +134,7 @@
                             return true;
                             break;
                         case "obtenerDatos":
-                            $this->solreva['sReferencia'] = $_POST['sReferencia'];
+                            $this->cotizaciones['sReferencia'] = $_POST['sReferencia'];
                             $this->data['data']=parent::read_referencia();
                             if(!$this->data['data']){
                                 $this->data['response'] = false;
@@ -187,10 +187,10 @@
                     }
                 }
                 if(isset($_GET['p1'])){
-                    $this->pro['skProforma'] = $_GET['p1'];
+                    $this->cotizacion['skCotizacion'] = $_GET['p1'];
                     $this->data['datos'] = parent::read_pro();
                 }
-                $this->load_view('coti-form', $this->data);
+                $this->load_view('cot-form', $this->data);
                 return true;
             }
 
