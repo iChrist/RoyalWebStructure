@@ -13,6 +13,78 @@
 
             }
 				/*COMIENZA MODULO DE RECEPCION DE DOCUMENTOS */
+        public function tipo_cambio(){
+            $client = new SoapClient(null, array(
+                'location' =>'http://www.banxico.org.mx:80/DgieWSWeb/DgieWS?WSDL', 
+                'uri'=>'http://DgieWSWeb/DgieWS?WSDL', 
+                'encoding'=> 'UTF-8'
+            ));
+            
+            try {
+                
+                $result = $client->tiposDeCambioBanxico();
+                
+            } catch (SoapFault $ex) {
+               
+                return $this->error($ex->getMessage());
+                
+            }
+            
+            if( !$result) {
+                
+                return false;
+                
+            }
+            
+            $dom = new DomDocument(); 
+            $dom->loadXML($result);
+            
+            $xmlDatos = $dom->getElementsByTagName('Obs'); 
+            
+            if( !$xmlDatos->length) { 
+                
+                return false;
+                
+            }
+            
+            $itemDolar = $xmlDatos->item(0);
+            $itemEuro = $xmlDatos->item(2);
+            $itemDolarCanadiense = $xmlDatos->item(3);
+            $itemYenCanadiense = $xmlDatos->item(4);
+            
+            if( !$itemDolar || !$itemDolarCanadiense || !$itemEuro || !$itemYenCanadiense) {
+                
+                return false;
+                
+            }
+            
+            $data = array(
+                'USD' => array(
+                    'moneda'=>'USD',
+                    'descripcion'=>'Dolar',
+                    'time'=>$itemDolar->getAttribute('TIME_PERIOD'),
+                    'valor'=>$itemDolar->getAttribute('OBS_VALUE')
+                ),
+                'EUR' => array(
+                    'moneda'=>'EUR',
+                    'descripcion'=>'Euro',
+                    'time'=>$itemEuro->getAttribute('TIME_PERIOD'),
+                    'valor'=>$itemEuro->getAttribute('OBS_VALUE')
+                ),
+                'CAN' => array(
+                    'moneda'=>'USD CAN',
+                    'descripcion'=>'Dolar Canadiense',
+                    'time'=>$itemDolarCanadiense->getAttribute('TIME_PERIOD'),
+                    'valor'=>$itemDolarCanadiense->getAttribute('OBS_VALUE')
+                ),
+                'YEN' => array(
+                    'moneda'=>'YEN CAN',
+                    'descripcion'=>'YEN Canadiense',
+                    'time'=>$itemYenCanadiense->getAttribute('TIME_PERIOD'),
+                    'valor'=>$itemYenCanadiense->getAttribute('OBS_VALUE')
+                )
+            );
+        }
 
         public function cot_index(){
             if(isset($_GET['axn'])){
