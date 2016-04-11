@@ -147,6 +147,40 @@
                     }
                 }
             }
+						public function read_referencia(){
+                $sql = "SELECT 	rd.*,
+                    st.sName AS status,
+                    us.sName AS Ejecutivo,
+                    ce.sNombre AS Empresa,
+                    ctt.sNombre AS TipoTramite,
+                    cts.sNombre AS TipoServicio,
+                    ccd.sNombre AS ClaveDocumento,
+                    st.sHtml,
+                    cla.skClasificacion
+                    FROM ope_recepciones_documentos rd
+                    INNER JOIN _status  st ON st.skStatus = rd.skStatus
+                    INNER JOIN cat_empresas  ce ON ce.skEmpresa = rd.skEmpresa
+                    INNER JOIN cat_tipos_tramites  ctt ON ctt.skTipoTramite = rd.skTipoTramite
+                    INNER JOIN cat_tipos_servicios  cts ON cts.skTipoServicio = rd.skTipoServicio
+                    INNER JOIN cat_claves_documentos  ccd ON ccd.skClaveDocumento = rd.skClaveDocumento
+                    INNER JOIN _users us ON us.skUsers = rd.skUsersCreacion
+                    INNER JOIN _status ON _status.skStatus = rd.skStatus
+                    LEFT JOIN cat_clasificacion cla ON cla.sReferencia = rd.sReferencia
+                    WHERE 1=1 ";
+
+                if(!empty($this->cotizaciones['sReferencia'])){
+                    $sql .=" AND rd.sReferencia = '".$this->cotizaciones['sReferencia']."'";
+                }
+                //exit($sql);
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
 
 
 

@@ -30,6 +30,18 @@
                     ,'orderBy'       					=>  ''
                     ,'sortBy'       					=>  'DESC'   
                 );
+                
+                public $mercancias = array(
+                    'skMercancia'=>''
+                    ,'skRecepcionDocumento'=>''
+                    ,'skEmbalaje'=>''
+                    ,'skTipoContenedor'=>''
+                    ,'sBlhouse'=>''
+                    ,'sNumContenedor'=>''
+                    ,'iBultos'=>0
+                    ,'fPeso'=>0
+                    ,'fVolumen'=>0
+                );
 
                  public $clavdocu = array(
                     'skClaveDocumento'    		=>  ''
@@ -476,25 +488,81 @@
                 }
             }
             
+            public function create_mercancias(){
+                $sql = "INSERT INTO rel_recepciones_mercancias (
+                    skMercancia
+                    ,skRecepcionDocumento
+                    ,skEmbalaje
+                    ,skTipoContenedor
+                    ,sBlhouse
+                    ,sNumContenedor
+                    ,iBultos
+                    ,fPeso
+                    ,fVolumen
+                    ) VALUES (
+                    '".$this->mercancias['skMercancia']."',
+                    '".$this->mercancias['skRecepcionDocumento']."',
+                    '".$this->mercancias['skEmbalaje']."',
+                    '".$this->mercancias['skTipoContenedor']."',
+                    '".$this->mercancias['sBlhouse']."',
+                    '".$this->mercancias['sNumContenedor']."',
+                    ".$this->mercancias['iBultos'].",
+                    ".$this->mercancias['fPeso'].",
+                    ".$this->mercancias['fVolumen']."
+                    )";
+                //exit($sql);
+                $result = $this->db->query($sql);
+                if($result){
+                    return $this->mercancias['skMercancia'];
+                }else{
+                    return false;
+                }
+            }
+            
+            public  function read_mercancias(){
+                $sql = "SELECT * FROM rel_recepciones_mercancias WHERE skRecepcionDocumento = '".$this->mercancias['skRecepcionDocumento']."' ";
+                //exit($sql);
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+            
+            public function delete_mercancias(){
+                $sql = "DELETE FROM rel_recepciones_mercancias WHERE skRecepcionDocumento = '".$this->mercancias['skRecepcionDocumento']."' ";
+                //exit($sql);
+                $result = $this->db->query($sql);
+                if($result){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+
+
             public function update_recepciondocumentos(){
 				
                 $sql = "UPDATE ope_recepciones_documentos SET ";
-                if(!empty($this->recepciondocumentos['sReferencia'])){
+                /*if(!empty($this->recepciondocumentos['sReferencia'])){
                     $sql .=" sReferencia = '".$this->recepciondocumentos['sReferencia']."' ,";
-                }
-                if(!empty($this->recepciondocumentos['sPedimento'])){
+                }*/
+                /*if(!empty($this->recepciondocumentos['sPedimento'])){
                     $sql .=" sPedimento = '".$this->recepciondocumentos['sPedimento']."' ,";
-                }
+                }*/
                 if(!empty($this->recepciondocumentos['sBlMaster'])){
                     $sql .=" sBlMaster = '".$this->recepciondocumentos['sBlMaster']."' ,";
                 }
                 if(!empty($this->recepciondocumentos['sBlHouse'])){
                     $sql .=" sBlHouse = '".$this->recepciondocumentos['sBlHouse']."' ,";
                 }
-				if(!empty($this->recepciondocumentos['sMercancia'])){
+                if(!empty($this->recepciondocumentos['sMercancia'])){
                     $sql .=" sMercancia = '".$this->recepciondocumentos['sMercancia']."' ,";
                 }
-				if(!empty($this->recepciondocumentos['sObservaciones'])){
+                if(!empty($this->recepciondocumentos['sObservaciones'])){
                     $sql .=" sObservaciones = '".$this->recepciondocumentos['sObservaciones']."' ,";
                 }
                 
@@ -514,17 +582,17 @@
                 if(!empty($this->recepciondocumentos['skTipoTramite'])){
                     $sql .=" skTipoTramite = '".$this->recepciondocumentos['skTipoTramite']."' ,";
                 }
-				if(!empty($this->recepciondocumentos['skTipoServicio'])){
+                if(!empty($this->recepciondocumentos['skTipoServicio'])){
                     $sql .=" skTipoServicio = '".$this->recepciondocumentos['skTipoServicio']."' ,";
                 }
-				if(!empty($this->recepciondocumentos['skClaveDocumento'])){
+                if(!empty($this->recepciondocumentos['skClaveDocumento'])){
                     $sql .=" skClaveDocumento = '".$this->recepciondocumentos['skClaveDocumento']."' ,";
                 }
                 
                 $sql .=" dFechaModificacion = CURRENT_TIMESTAMP() ,";
                 $sql .=" skUsersModificacion = '".$_SESSION['session']['skUsers']."'";
                 $sql .= "  WHERE skRecepcionDocumento = '".$this->recepciondocumentos['skRecepcionDocumento']."' LIMIT 1";
-				//echo $sql;die();
+                //exit($sql);
                 $result = $this->db->query($sql);
                 if($result){
                     return $this->recepciondocumentos['skRecepcionDocumento'];

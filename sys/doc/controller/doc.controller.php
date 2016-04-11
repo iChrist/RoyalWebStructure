@@ -149,7 +149,8 @@
                                                     $datosServicio .="<br>Bultos: ".$row['iBultos']."<br>Peso: ".$row['fPeso']."<br>Volumen: ".$row['fVolumen'];
                                                 }
                                                 array_push($records['data'], array(
-							 utf8_encode($row['sReferencia'])
+							!empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
+                                                        ,utf8_encode($row['sReferencia'])
 							,utf8_encode($row['sPedimento'])
 							,utf8_encode($row['sBlMaster'])
                                                         ,utf8_encode($row['sBlHouse'])
@@ -165,7 +166,7 @@
 							,date('d-m-Y H:i:s',strtotime($row['dFechaCreacion']))
                                                         ,utf8_encode($row['autor'])
                                                         ,utf8_encode($row['htmlStatus'])
-							, !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
+							
 						));
 					}
 					header('Content-Type: application/json');
@@ -222,6 +223,7 @@
                                         }
                                         
 					if($_POST){
+                                            
 					//exit('</pre>'.print_r($_POST,1).'</pre>');
 						if(empty($_POST['skRecepcionDocumento'])){
 							$this->recepciondocumentos['sPedimento'] = utf8_decode($_POST['sPedimento']);
@@ -238,7 +240,7 @@
 					$this->recepciondocumentos['sReferencia'] = addslashes(utf8_decode($_POST['sReferencia']));
 					$this->recepciondocumentos['sPedimento'] = addslashes(utf8_decode($_POST['sPedimento']));
                     $this->recepciondocumentos['sBlMaster'] = !empty($_POST['sBlMaster']) ? addslashes(utf8_decode($_POST['sBlMaster'])) : '';
-                    $this->recepciondocumentos['sBlHouse'] = !empty($_POST['sBlHouse']) ? addslashes(utf8_decode($_POST['sBlHouse'])) : '';;
+                    //$this->recepciondocumentos['sBlHouse'] = !empty($_POST['sBlHouse']) ? addslashes(utf8_decode($_POST['sBlHouse'])) : '';;
 					$this->recepciondocumentos['sMercancia'] = addslashes(utf8_decode($_POST['sMercancia']));
 					$this->recepciondocumentos['sObservaciones'] = addslashes(utf8_decode($_POST['sObservaciones']));
 					
@@ -247,10 +249,10 @@
 					$this->recepciondocumentos['skTipoServicio'] = utf8_decode($_POST['skTipoServicio']);
 					$this->recepciondocumentos['skClaveDocumento'] = utf8_decode($_POST['skClaveDocumento']);
                                         
-                    $this->recepciondocumentos['sNumContenedor'] = utf8_decode(!empty($_POST['sNumContenedor']) ? addslashes($_POST['sNumContenedor']) : '');
-                    $this->recepciondocumentos['iBultos'] = utf8_decode(!empty($_POST['iBultos']) ? $_POST['iBultos'] : 0);
-                    $this->recepciondocumentos['fPeso'] = utf8_decode(!empty($_POST['fPeso']) ? $_POST['fPeso'] : 0);
-                    $this->recepciondocumentos['fVolumen'] = utf8_decode(!empty($_POST['fVolumen']) ? $_POST['fVolumen'] : 0);
+                    //$this->recepciondocumentos['sNumContenedor'] = utf8_decode(!empty($_POST['sNumContenedor']) ? addslashes($_POST['sNumContenedor']) : '');
+                    //$this->recepciondocumentos['iBultos'] = utf8_decode(!empty($_POST['iBultos']) ? $_POST['iBultos'] : 0);
+                    //$this->recepciondocumentos['fPeso'] = utf8_decode(!empty($_POST['fPeso']) ? $_POST['fPeso'] : 0);
+                    //$this->recepciondocumentos['fVolumen'] = utf8_decode(!empty($_POST['fVolumen']) ? $_POST['fVolumen'] : 0);
 
                     $this->recepciondocumentos['dRecepcion'] = utf8_decode(!empty($_POST['dRecepcion']) ? date('Y-m-d',strtotime($_POST['dRecepcion'])) : date('Y-m-d'));
                     $this->recepciondocumentos['tRecepcion'] = utf8_decode(!empty($_POST['tRecepcion']) ? $_POST['tRecepcion'] : date('H:i:s'));
@@ -270,19 +272,49 @@
                                                             }
                                                         }
                                                         */
-							if(parent::create_recepciondocumentos()){
+                                                        $skRecepcionDocumento = parent::create_recepciondocumentos();
+							if($skRecepcionDocumento){
+                                                            $this->mercancias['skRecepcionDocumento'] = $skRecepcionDocumento;
+                                                            if($_POST['skTipoServicio'] == 'CONT'){ // CONTENEDORES
+                                                                if(isset($_POST['sNumContenedor'])){
+                                                                    for($i = 0; $i<count($_POST['sNumContenedor']); $i++){
+                                                                        $this->mercancias['skMercancia'] = substr(md5(microtime()), 1, 32);
+                                                                        $this->mercancias['sBlhouse'] = $_POST['sBlhouse'][$i];
+                                                                        $this->mercancias['sNumContenedor'] = $_POST['sNumContenedor'][$i];
+                                                                        $this->mercancias['skTipoContenedor'] = $_POST['skTipoContenedor'][$i];
+                                                                        $this->mercancias['skEmbalaje'] = $_POST['skEmbalaje'][$i];
+                                                                        if(!empty($this->mercancias['sBlhouse']) && !empty($this->mercancias['sNumContenedor']) && !empty($this->mercancias['skTipoContenedor']) && !empty($this->mercancias['skEmbalaje'])){
+                                                                            parent::create_mercancias();   
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }else if($_POST['skTipoServicio'] == 'CSUE'){ // CARGA SUELTA
+                                                                if(isset($_POST['iBultos'])){
+                                                                    for($i = 0; $i<count($_POST['iBultos']); $i++){
+                                                                        $this->mercancias['skMercancia'] = substr(md5(microtime()), 1, 32);
+                                                                        $this->mercancias['iBultos'] = $_POST['iBultos'][$i];
+                                                                        $this->mercancias['fPeso'] = $_POST['fPeso'][$i];
+                                                                        $this->mercancias['fVolumen'] = $_POST['fVolumen'][$i];
+                                                                        if(!empty($this->mercancias['iBultos']) && !empty($this->mercancias['fPeso']) && !empty($this->mercancias['fVolumen'])){
+                                                                            parent::create_mercancias();
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
                                                             //echo ('</pre>'.print_r($_FILES,1).'</pre>');
-                                                            foreach($_FILES['skDocTipo'] AS $k=>$v){
-                                                                if($k === 'name'){
-                                                                    foreach($v AS $key => $val){
-                                                                        // AQUI HACEMOS EL MOVE_UPLOADED_FILE //
-                                                                        $fileName = time().$_FILES['skDocTipo']['name'][$key];
-                                                                        if(move_uploaded_file($_FILES['skDocTipo']['tmp_name'][$key] , SYS_PATH.'/doc/files/'.$fileName)){
-                                                                            $this->recepcionDoc_docTipo['skRecepcionDoc_docTipo'] = substr(md5(microtime()), 1, 32);
-                                                                            $this->recepcionDoc_docTipo['skRecepcionDocumento'] = $this->recepciondocumentos['skRecepcionDocumento'];
-                                                                            $this->recepcionDoc_docTipo['skDocTipo'] = $key;
-                                                                            $this->recepcionDoc_docTipo['sFile'] = $fileName;
-                                                                            parent::create_recepcionDoc_docTipo();
+                                                            if(isset($_FILES['skDocTipo'])){
+                                                                foreach($_FILES['skDocTipo'] AS $k=>$v){
+                                                                    if($k === 'name'){
+                                                                        foreach($v AS $key => $val){
+                                                                            // AQUI HACEMOS EL MOVE_UPLOADED_FILE //
+                                                                            $fileName = time().$_FILES['skDocTipo']['name'][$key];
+                                                                            if(move_uploaded_file($_FILES['skDocTipo']['tmp_name'][$key] , SYS_PATH.'/doc/files/'.$fileName)){
+                                                                                $this->recepcionDoc_docTipo['skRecepcionDoc_docTipo'] = substr(md5(microtime()), 1, 32);
+                                                                                $this->recepcionDoc_docTipo['skRecepcionDocumento'] = $this->recepciondocumentos['skRecepcionDocumento'];
+                                                                                $this->recepcionDoc_docTipo['skDocTipo'] = $key;
+                                                                                $this->recepcionDoc_docTipo['sFile'] = $fileName;
+                                                                                parent::create_recepcionDoc_docTipo();
+                                                                            }
                                                                         }
                                                                     }
                                                                 }
@@ -301,7 +333,35 @@
 							}
 						}else{
 							//echo ('</pre>'.print_r($_POST,1).'</pre>');
-							if(isset($_FILES)){
+                                                        $this->mercancias['skRecepcionDocumento'] = $this->recepciondocumentos['skRecepcionDocumento'];
+                                                        parent::delete_mercancias();
+                                                            if($_POST['skTipoServicio'] == 'CONT'){ // CONTENEDORES
+                                                                if(isset($_POST['sNumContenedor'])){
+                                                                    for($i = 0; $i<count($_POST['sNumContenedor']); $i++){
+                                                                        $this->mercancias['skMercancia'] = substr(md5(microtime()), 1, 32);
+                                                                        $this->mercancias['sBlhouse'] = $_POST['sBlhouse'][$i];
+                                                                        $this->mercancias['sNumContenedor'] = $_POST['sNumContenedor'][$i];
+                                                                        $this->mercancias['skTipoContenedor'] = $_POST['skTipoContenedor'][$i];
+                                                                        $this->mercancias['skEmbalaje'] = $_POST['skEmbalaje'][$i];
+                                                                        if(!empty($this->mercancias['sBlhouse']) && !empty($this->mercancias['sNumContenedor']) && !empty($this->mercancias['skTipoContenedor']) && !empty($this->mercancias['skEmbalaje'])){
+                                                                            parent::create_mercancias();   
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }else if($_POST['skTipoServicio'] == 'CSUE'){ // CARGA SUELTA
+                                                                if(isset($_POST['iBultos'])){
+                                                                    for($i = 0; $i<count($_POST['iBultos']); $i++){
+                                                                        $this->mercancias['skMercancia'] = substr(md5(microtime()), 1, 32);
+                                                                        $this->mercancias['iBultos'] = $_POST['iBultos'][$i];
+                                                                        $this->mercancias['fPeso'] = $_POST['fPeso'][$i];
+                                                                        $this->mercancias['fVolumen'] = $_POST['fVolumen'][$i];
+                                                                        if(!empty($this->mercancias['iBultos']) && !empty($this->mercancias['fPeso']) && !empty($this->mercancias['fVolumen'])){
+                                                                            parent::create_mercancias();
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+							if(isset($_FILES['skDocTipo'])){
 								$this->recepcionDoc_docTipo['skRecepcionDocumento'] = $this->recepciondocumentos['skRecepcionDocumento'];
 								$this->recepcionDoc_docTipo['skStatus'] = 'IN';
                                 parent::updateStatus_recepcionDoc_docTipo();
@@ -351,12 +411,16 @@
 					$this->data['tiposservicios'] = parent::read_tipos_servicios();
 					$this->data['clavedocumento'] = parent::read_clave_documento();
 					$this->data['docTipo'] = parent::read_equal_docTipo();
+                                        $this->data['mercancias'] = false;
                                         
 					if(isset($_GET['p1'])){
                                             $this->recepciondocumentos['skRecepcionDocumento'] = $_GET['p1'];
                                             $this->recepcionDoc_docTipo['skRecepcionDocumento'] = $_GET['p1'];
                                             $this->data['datos'] = parent::read_recepciondocumentos();
                                             $this->data['filesDocTipo'] = parent::read_equal_recepcionDoc_docTipo();
+                                            // Retorna las mercancias (rel_recepciones_mercancias) //
+                                                $this->mercancias['skRecepcionDocumento'] = $_GET['p1'];
+                                                $this->data['mercancias'] = parent::read_mercancias();
                                             /*
                                              * ESTO ES PARA QUE SOLO PUEDA MODIFICAR EL USUARIO QUE CREÓ EL REGISTRO
                                              */

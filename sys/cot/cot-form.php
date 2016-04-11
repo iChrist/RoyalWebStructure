@@ -5,9 +5,9 @@
     }
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
-    <input type="hidden" name="skProforma"  id="skProforma" value="<?php echo (isset($result['skProforma'])) ? $result['skProforma'] : '' ; ?>">
+    <input type="hidden" name="skCotizacion"  id="skCotizacion" value="<?php echo (isset($result['skCotizacion'])) ? $result['skCotizacion'] : '' ; ?>">
     <div class="form-body">
-        
+
         <div class="form-group">
             <label class="control-label col-md-2">Referencia <span aria-required="true" class="required"> * </span> </label>
             <div class="col-md-4">
@@ -16,11 +16,93 @@
                 </div>
             </div>
         </div>
-        
         <div class="clearfix"></div>
         <hr>
-        <div class="form-group" id="dvDatos"></div>
-        <hr>
+        <div class="form-group col-md-12" id="dvDatos"></div>
+        <div class="form-group">
+            <label class="control-label col-md-2">Importador <span aria-required="true" class="required"> * </span> </label>
+            <div class="col-md-4">
+                <div class="input-icon right"><i class="fa"></i>
+                    <input type="text" name="skEmpresaImportador" id="skEmpresaImportador" class="form-control" placeholder="Importador" value="" >
+                </div>
+            </div>
+            <label class="control-label col-md-2">L&iacute;nea Naviera <span aria-required="true" class="required"> * </span> </label>
+            <div class="col-md-4">
+                <div class="input-icon right"><i class="fa"></i>
+                    <input type="text" name="skEmpresaNaviera" id="skEmpresaNaviera" class="form-control" placeholder="Linea Naviera" value="" >
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">Recinto <span aria-required="true" class="required"> * </span> </label>
+            <div class="col-md-4">
+                <div class="input-icon right"><i class="fa"></i>
+                    <input type="text" name="skEmpresaRecinto" id="skEmpresaRecinto" class="form-control" placeholder="Importador" value="" >
+                </div>
+            </div>
+          </div>
+          <div class="form-group">
+          <label class="control-label col-md-2">Tipo de Transporte <span aria-required="true" class="required"> * </span> </label>
+          <div class="col-md-4">
+              <div class="input-icon right"><i class="fa"></i>
+                  <input type="text" name="skTipoTransporte" id="skTipoTransporte" class="form-control" placeholder="Tipo de Transporte" value="" >
+              </div>
+          </div>
+      </div>
+        <div class="clearfix"></div>
+      <hr>
+        <div class="form-group">
+            <label class="control-label col-md-2">Tipo de Cambio <span aria-required="true" class="required"> * </span> </label>
+            <div class="col-md-4">
+                <div class="input-icon right"><i class="fa"></i>
+                    <input type="text" name="fTipoCambio" id="fTipoCambio" class="form-control" placeholder="Tipo de Cambio" value="" >
+                </div>
+            </div>
+            <label class="control-label col-md-2">Valor Mercanc&iacute;a<span aria-required="true" class="required"> * </span> </label>
+            <div class="col-md-4">
+                <div class="input-icon right"><i class="fa"></i>
+                    <input type="text" name="fValorMercancia" id="fValorMercancia" class="form-control" placeholder="Valor Mercanc&iacute;a" value="" >
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+      <hr>
+        <div class="form-group">
+            <label class="control-label col-md-2">Conceptos <span aria-required="true" class="required"> * </span> </label>
+            <div class="col-md-8">
+              <table class="table table-responsive">
+                <thead>
+                  <th nowrap>S</th>
+                  <th nowrap>Cantidad</th>
+                  <th nowrap>Precio Unitario</th>
+                  <th width="100%">Nombre</th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><input type="checkbox" class="form-control" id="chkServicio" name="chkServicio"></td>
+                    <td><input type="text" name="iCantidadServicio" id="iCantidadServicio" class="form-control input-small" placeholder="Cantidad" value="" ></td>
+                    <td><input type="text" name="fPrecioUnitario" id="fPrecioUnitario" class="form-control input-small" placeholder="Precio Unitario" value="" ></td>
+                    <td>Revalidacion</td>
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" class="form-control" id="chkServicio" name="chkServicio"></td>
+                    <td><input type="text" name="iCantidadServicio" id="iCantidadServicio" class="form-control input-small" placeholder="Cantidad" value="" ></td>
+                    <td><input type="text" name="fPrecioUnitario" id="fPrecioUnitario" class="form-control input-small" placeholder="Precio Unitario" value="" ></td>
+                    <td>Demoras</td>
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" class="form-control" id="chkServicio" name="chkServicio"></td>
+                    <td><input type="text" name="iCantidadServicio" id="iCantidadServicio" class="form-control input-small" placeholder="Cantidad" value="" ></td>
+                    <td><input type="text" name="fPrecioUnitario" id="fPrecioUnitario" class="form-control input-small" placeholder="Precio Unitario" value="" ></td>
+                    <td>Importacion</td>
+                  </tr>
+                </tbody>
+              </table>
+                <h1><label>LISTADO DE CONCEPTOS</label></h1>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+      <hr>
         <div class="form-group">
             <label class="control-label col-md-2">Observaciones <span aria-required="true" class="required"> * </span> </label>
             <div class="col-md-8">
@@ -29,6 +111,8 @@
                 </div>
             </div>
         </div>
+          <div class="clearfix"></div>
+        <hr>
     </div>
 </form>
 <div class="clearfix"></div>
@@ -36,16 +120,16 @@
 function obtenerDatos(){
     $('.page-title-loading').css('display','inline');
         var response = true;
-        $.post("",{ axn : "obtenerDatos" , sReferencia : $("#sReferencia").val() }, function(data){ 
+        $.post("",{ axn : "obtenerDatos" , sReferencia : $("#sReferencia").val() }, function(data){
         var cad = '';
         if(!data.data){
             response = false;
             var icon = $("#sReferencia").parent('.input-icon').children('i');
             $("#sReferencia").closest('.form-group').removeClass('has-success').addClass('has-error');
             icon.removeClass("fa-check").addClass("fa-warning");
-        }else{   
+        }else{
     	cad ='<div class="form-group">'+
-     	'<label class="col-md-2">Cliente</label>'+
+     	'<label class="col-md-2 control-label">Cliente</label>'+
      	'<div class="col-md-4">'+
        	'<label id="lbCliente" class="control-label">'+data.data.Empresa+'</label>'+
         '</div>'+
@@ -55,7 +139,7 @@ function obtenerDatos(){
 	    ' </div>'+
    ' </div>'+
     '<div class="form-group">'+
-     	'<label class="col-md-2">Ejecutivo</label>'+
+     	'<label class="col-md-2 control-label">Ejecutivo</label>'+
      	'<div class="col-md-4">'+
        	'	 <label id="lbEjecutivo" class="control-label">'+data.data.Ejecutivo+'</label>'+
        ' </div>'+
@@ -65,7 +149,7 @@ function obtenerDatos(){
 	    ' </div>'+
    ' </div>'+
     '<div class="form-group">'+
-      '<label class="col-md-2">Datos del tipo de servicio</label>'+
+      '<label class="col-md-2 control-label">Datos del tipo de servicio</label>'+
       '<div class="col-md-2">'+
         '  <label class="control-label">Num. Contenedor: '+data.data.sNumContenedor+'</label>'+
        ' </div>'+
@@ -80,13 +164,15 @@ function obtenerDatos(){
       ' </div>'+
    ' </div>'+
    '<div class="form-group">'+
+      '<label class="control-label col-md-2">BL Master</label>'+
       ' <div class="col-md-4">'+
-      '    <label class="control-label ">BL Master: '+data.data.sBlMaster+'</label>'+
+      '    <label class="control-label">'+data.data.sBlMaster+'</label>'+
       ' </div>'+
+      '<label class="control-label col-md-2">BL House</label>'+
       ' <div class="col-md-4">'+
-      '    <label class="control-label ">BL House: '+data.data.sBlHouse+'</label>'+
+      '    <label class="control-label ">'+data.data.sBlHouse+'</label>'+
       ' </div>'+
-   ' </div>';
+   ' </div> <hr>';
    }
     $("#dvDatos").html(cad);
     $('.page-title-loading').css('display','none');
@@ -105,22 +191,22 @@ function obtenerDatos(){
                     _fAgenteAduanal = parseFloat(($("#fAgenteAduanal").val()) ? $("#fAgenteAduanal").val() : 0)
                     var fAgenteAduanal = ( (_fAgenteAduanal / 100) * (parseFloat($("#fImporte").val())) );
                     $("#AA").html(fAgenteAduanal);
-                    
+
                     _fCorresponsal = parseFloat(($("#fCorresponsal").val()) ? $("#fCorresponsal").val() : 0)
                     var fCorresponsal = ( (_fCorresponsal / 100) * (parseFloat($("#fImporte").val())) );
                     $("#gananciaCorresponsal").html(fCorresponsal);
-                    
+
                     _fPromotor1 = parseFloat(($("#fPromotor1").val()) ? $("#fPromotor1").val() : 0)
                     var fPromotor1 = ( (_fPromotor1 / 100) * (parseFloat($("#fImporte").val())) );
                     $("#gananciaPromotor1").html(fPromotor1);
-                    
+
                     _fPromotor2 = parseFloat(($("#fPromotor2").val()) ? $("#fPromotor2").val() : 0)
                     var fPromotor2 = ( (_fPromotor2 / 100) * (parseFloat($("#fImporte").val())) );
                     $("#gananciaPromotor2").html(fPromotor2);
-                    
+
                     var gananciagc = parseFloat($("#fImporte").val()) - _fAgenteAduanal - _fCorresponsal - _fPromotor1 - _fPromotor2;
                     $("#gananciagc").html(gananciagc);
-                    
+
                     break;
                 case "2": // Por Procentaje
                     break;
@@ -130,7 +216,7 @@ function obtenerDatos(){
         });
         // VALIDADOR PARA OBTENER DATOS POR REFERENCIA //
         $.validator.addMethod(
-            "obtenerDatos", 
+            "obtenerDatos",
             function(value, element) {
                 if(obtenerDatos()){
                     return true;
@@ -140,7 +226,7 @@ function obtenerDatos(){
             },
             "La referencia no existe."
         );
-        
+
         /* VALIDATIONS */
         isValid = $("#_save").validate({
             errorElement: 'span', //default input error message container
@@ -164,26 +250,26 @@ function obtenerDatos(){
                     required: true,
                 }
             },
-            invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar              
+            invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar
                 $('.alert-success').hide();
                 $('.alert-danger').show();
                 App.scrollTo($('.alert-danger'), -200);
             },
             errorPlacement: function (error, element) { // hacer la colocación de error para cada tipo de entrada
                 var icon = $(element).parent('.input-icon').children('i');
-                icon.removeClass('fa-check').addClass("fa-warning");  
+                icon.removeClass('fa-check').addClass("fa-warning");
                 icon.attr("data-original-title", $('.alert-danger').text()).tooltip({'container': 'body'});
                 if (element.parent(".input-group").size() > 0) {
                     error.insertAfter(element.parent(".input-group"));
-                } else if (element.attr("data-error-container")) { 
+                } else if (element.attr("data-error-container")) {
                     error.appendTo(element.attr("data-error-container"));
-                } else if (element.parents('.radio-list').size() > 0) { 
+                } else if (element.parents('.radio-list').size() > 0) {
                     error.appendTo(element.parents('.radio-list').attr("data-error-container"));
-                } else if (element.parents('.radio-inline').size() > 0) { 
+                } else if (element.parents('.radio-inline').size() > 0) {
                     error.appendTo(element.parents('.radio-inline').attr("data-error-container"));
                 } else if (element.parents('.checkbox-list').size() > 0) {
                     error.appendTo(element.parents('.checkbox-list').attr("data-error-container"));
-                } else if (element.parents('.checkbox-inline').size() > 0) { 
+                } else if (element.parents('.checkbox-inline').size() > 0) {
                     error.appendTo(element.parents('.checkbox-inline').attr("data-error-container"));
                 } else {
                     error.insertAfter(element); // Para otros insumos, sólo realizar comportamiento predeterminado (llamar messages)
@@ -209,5 +295,5 @@ function obtenerDatos(){
                 }
             }
         });
-    }); 
+    });
 </script>
