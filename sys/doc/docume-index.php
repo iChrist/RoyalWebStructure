@@ -33,6 +33,7 @@ echo "</pre>";*/
       <table class="table table-striped table-bordered table-hover" id="datatable_ajax">
         <thead>
           <tr role="row" class="heading">
+            <th width="10%"> Acciones </th>
             <th width="10%"> Referencia </th>
             <th width="10%"> Pedimento </th>
             <th width="10%"> BL Master </th>
@@ -50,9 +51,14 @@ echo "</pre>";*/
             <th width="10%"> Fecha/Hora Creaci&oacute;n </th>
             <th width="25%"> Autor </th>
             <th width="10%"> Estatus </th>
-            <th width="10%"> Acciones </th>
           </tr>
           <tr role="row" class="filter">
+            <td>
+              <div aria-label="Acciones" role="group" class="btn-group btn-group-xs" style="width:100px">
+                  <button class="btn btn-xs btn-default filter-submit margin-bottom"><i class="fa fa-search"></i> Buscar</button>
+                  <button class="btn btn-xs btn-warning filter-cancel"><i class="fa fa-refresh"></i></button>
+              </div>
+            </td>
             <td>
                 <input type="text" class="form-control form-filter input-sm" name="sReferencia" placeholder="Referencia">
             </td>
@@ -193,11 +199,9 @@ echo "</pre>";*/
                                         }//ENDIF
                                     }//ENDWHILE
                                 ?>
-              </select></td>
-            <td><div aria-label="Acciones" role="group" class="btn-group btn-group-xs" style="width:100px">
-                <button class="btn btn-xs btn-default filter-submit margin-bottom"><i class="fa fa-search"></i> Buscar</button>
-                <button class="btn btn-xs btn-warning filter-cancel"><i class="fa fa-refresh"></i></button>
-              </div></td> 
+              </select>
+            </td>
+             
           </tr>
         </thead>
         <tbody>
