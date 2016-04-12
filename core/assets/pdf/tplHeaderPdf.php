@@ -1,4 +1,4 @@
-<page backtop="10mm" backbottom="10mm" backleft="10mm" backright="10mm" backimg="<?php echo $data['config']['background_image']; ?>" backimgx="center" backimgy="middle" backimgw="30%">
+<page backtop="10mm" backbottom="10mm" backleft="10mm" backright="10mm" backimg="<?php echo $data['config']['background_image']; ?>" backimgx="center" backimgy="middle" backimgw="40%">
     <page_header>
         <table class="col-md-12">
             <tr>

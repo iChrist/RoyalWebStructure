@@ -28,7 +28,7 @@
                         ,'address'=>'Manzanillo Colima'
                         ,'phone'=>'3141102645'
                         ,'website'=>'www.grupoalvez.royalweb.com.mx'
-                        ,'background_image'=>(SYS_URL).'core/assets/img/logo.png'
+                        ,'background_image'=>(SYS_URL).'core/assets/img/logoPdf.png'
                         ,'header'=>(CORE_PATH).'assets/pdf/tplHeaderPdf.php'
                         ,'footer'=>(CORE_PATH).'assets/pdf/tplFooterPdf.php'
                         ,'style'=>(CORE_PATH).'assets/pdf/tplStylePdf.php'
