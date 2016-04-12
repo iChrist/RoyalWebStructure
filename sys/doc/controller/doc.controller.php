@@ -13,7 +13,32 @@
 		
 		}
 				/*COMIENZA MODULO DE RECEPCION DE DOCUMENTOS */
- 
+                public function get_pdf(){
+                    if(!isset($_GET['p1'])){
+                        $text = 'Falta identificador para generar el PDF.';
+                        $this->_error($text,404);
+                        return false;
+                    }
+                    $this->recepciondocumentos['skRecepcionDocumento'] = $_GET['p1'];
+                    $this->data['datos'] = parent::read_recepciondocumentos();
+                    $this->data['config'] = array(
+                        'title'=>'Recepción de Documentos'
+                        ,'date'=>date('d-m-Y H:i:s')
+                        ,'company'=>'Gomez y Alvez'
+                        ,'address'=>'Manzanillo Colima'
+                        ,'phone'=>'3141102645'
+                        ,'website'=>'www.grupoalvez.royalweb.com.mx'
+                        ,'background_image'=>(SYS_URL).'core/assets/img/logo.png'
+                        ,'header'=>(CORE_PATH).'assets/pdf/tplHeaderPdf.php'
+                        ,'footer'=>(CORE_PATH).'assets/pdf/tplFooterPdf.php'
+                        ,'style'=>(CORE_PATH).'assets/pdf/tplStylePdf.php'
+                    );
+                    ob_start();
+                    $this->load_view('test-pdf', $this->data, FALSE, 'doc/pdf/');
+                    $content = ob_get_clean();
+                    Core_Functions::pdf($content, $this->data['config']['title'], 'P', 'A4', 'es', true, 'UTF-8', array(5, 5, 5, 5));
+                    return true;
+                }
 					public function docume_index(){
 					if(isset($_GET['axn'])){
 					switch ($_GET['axn']) {
