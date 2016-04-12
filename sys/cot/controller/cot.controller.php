@@ -15,49 +15,49 @@
 				/*COMIENZA MODULO DE RECEPCION DE DOCUMENTOS */
         public function tipo_cambio(){
             $client = new SoapClient(null, array(
-                'location' =>'http://www.banxico.org.mx:80/DgieWSWeb/DgieWS?WSDL', 
-                'uri'=>'http://DgieWSWeb/DgieWS?WSDL', 
+                'location' =>'http://www.banxico.org.mx:80/DgieWSWeb/DgieWS?WSDL',
+                'uri'=>'http://DgieWSWeb/DgieWS?WSDL',
                 'encoding'=> 'UTF-8'
             ));
-            
+
             try {
-                
+
                 $result = $client->tiposDeCambioBanxico();
-                
+
             } catch (SoapFault $ex) {
-               
+
                 return $this->error($ex->getMessage());
-                
+
             }
-            
+
             if( !$result) {
-                
+
                 return false;
-                
+
             }
-            
-            $dom = new DomDocument(); 
+
+            $dom = new DomDocument();
             $dom->loadXML($result);
-            
-            $xmlDatos = $dom->getElementsByTagName('Obs'); 
-            
-            if( !$xmlDatos->length) { 
-                
+
+            $xmlDatos = $dom->getElementsByTagName('Obs');
+
+            if( !$xmlDatos->length) {
+
                 return false;
-                
+
             }
-            
+
             $itemDolar = $xmlDatos->item(0);
             $itemEuro = $xmlDatos->item(2);
             $itemDolarCanadiense = $xmlDatos->item(3);
             $itemYenCanadiense = $xmlDatos->item(4);
-            
+
             if( !$itemDolar || !$itemDolarCanadiense || !$itemEuro || !$itemYenCanadiense) {
-                
+
                 return false;
-                
+
             }
-            
+
             $data = array(
                 'USD' => array(
                     'moneda'=>'USD',
@@ -234,30 +234,73 @@
                             return true;
                             break;
                         case "save":
-                            $this->pro['skProforma'] = !empty($_POST['skProforma']) ? $_POST['skProforma'] : substr(md5(microtime()), 1, 32);
-                            $this->pro['sReferencia'] = !empty($_POST['sReferencia']) ? addslashes(utf8_decode($_POST['sReferencia'])) : null;
-                            $this->pro['sObservaciones'] = !empty($_POST['sObservaciones']) ? addslashes(utf8_decode($_POST['sObservaciones'])) : null;
+                            $this->cotizaciones['skCotizacion'] = !empty($_POST['skCotizacion']) ? $_POST['skCotizacion'] : substr(md5(microtime()), 1, 32);
+                            $this->cotizaciones['skEstatus']            = !empty($_POST['skEstatus']) ? addslashes(utf8_decode($_POST['skEstatus'])) : null;
+                            $this->cotizaciones['skEmpresaImportador']  = !empty($_POST['skEmpresaImportador'])     ? addslashes(utf8_decode($_POST['skEmpresaImportador'])) : null;
+                            $this->cotizaciones['skEmpresaNaviera']     = !empty($_POST['skEmpresaNaviera'])        ? addslashes(utf8_decode($_POST['skEmpresaNaviera'])) : null;
+                            $this->cotizaciones['skEmpresaRecinto']     = !empty($_POST['skEmpresaRecinto'])        ? addslashes(utf8_decode($_POST['skEmpresaRecinto'])) : null;
+                            $this->cotizaciones['skReferencia']         = !empty($_POST['skReferencia'])            ? addslashes(utf8_decode($_POST['skReferencia'])) : null;
+                            $this->cotizaciones['skTipoServicio']       = !empty($_POST['skTipoServicio'])          ? addslashes(utf8_decode($_POST['skTipoServicio'])) : null;
+                            $this->cotizaciones['skTipoCobroCotizacion'] = !empty($_POST['skTipoCobroCotizacion'])  ? addslashes(utf8_decode($_POST['skTipoCobroCotizacion'])) : null;
+                            $this->cotizaciones['skTipoTramite']        = !empty($_POST['skTipoTramite'])           ? addslashes(utf8_decode($_POST['skTipoTramite'])) : null;
+                            $this->cotizaciones['skTipoTransporte']     = !empty($_POST['skTipoTransporte'])        ? addslashes(utf8_decode($_POST['skTipoTransporte'])) : null;
+                            $this->cotizaciones['fTipoCambio']          = !empty($_POST['fTipoCambio'])             ? addslashes(utf8_decode($_POST['fTipoCambio'])) : null;
+                            $this->cotizaciones['sPedimento']           = !empty($_POST['sPedimento'])              ? addslashes(utf8_decode($_POST['sPedimento'])) : null;
+                            $this->cotizaciones['fValorMercancia']      = !empty($_POST['fValorMercancia'])         ? addslashes(utf8_decode($_POST['fValorMercancia'])) : null;
+                            $this->cotizaciones['fImporteTotal']        = !empty($_POST['fImporteTotal'])           ? addslashes(utf8_decode($_POST['fImporteTotal'])) : null;
+                            $this->cotizaciones['sObservaciones']       = !empty($_POST['sObservaciones'])          ? addslashes(utf8_decode($_POST['sObservaciones'])) : null;
                             // DEFAULT //
                             $this->data['message'] = 'Registro guardado con &eacute;xito.';
-                            if(empty($_POST['skProforma'])){
+                            if(empty($_POST['skCotizacion'])){
                                 // CREATE //
-                                if(!parent::create_pro()){
-                                    $this->data['response'] = false;
-                                    $this->data['message'] = 'Hubo un error al intentar guardar el registro, intenta de nuevo.';
-                                }
+                                $skCotizacion = parent::create_cotizaciones();
+                                if($skCotizacion){
+                                  //  $this->cotizaciones['skCotizacion'] = $skCotizacion;
+
+                                  $this->data['response'] = true;
+                  								$this->data['message'] = 'Registro insertado con &eacute;xito.';
+                  								header('Content-Type: application/json');
+                  								echo json_encode($this->data);
+                  								return true;
+                              }else{
+                                $this->data['response'] = false;
+                                $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return false;
+                              }
                             }else{
                                 // UPDATE //
-                                if(!parent::update_pro()){
-                                    $this->data['response'] = false;
-                                    $this->data['message'] = 'Hubo un error al intentar guardar el registro, intenta de nuevo.';
+                                if(parent::update_cotizaciones()){
+                  								$this->data['response'] = true;
+                  								$this->data['message'] = 'Registro actualizado con &eacute;xito.';
+                  								header('Content-Type: application/json');
+                  								echo json_encode($this->data);
+                  								return true;
+                  							}else{
+                                  $this->data['response'] = false;
+                  								$this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
+                  								header('Content-Type: application/json');
+                  								echo json_encode($this->data);
+                  								return false;
                                 }
                             }
-                            header('Content-Type: application/json');
-                            echo json_encode($this->data);
-                            return true;
+
                             break;
                     }
                 }
+                $this->load_model('emp','emp');
+                $objEmpresaImpo = new Emp_Model();
+                $objEmpresaImpo->tipoempresas['skTipoEmpresa'] = 'CLIE';
+                $this->data['empresaImportador'] = $objEmpresaImpo->read_like_empresas();
+
+                $objEmpresaNavi = new Emp_Model();
+                $objEmpresaNavi->tipoempresas['skTipoEmpresa'] = 'LINA';
+                $this->data['empresaNaviera'] = $objEmpresaNavi->read_like_empresas();
+
+                $objEmpresaReci = new Emp_Model();
+                $objEmpresaReci->tipoempresas['skTipoEmpresa'] = 'RECI';
+                $this->data['empresaRecinto'] = $objEmpresaReci->read_like_empresas();
                 if(isset($_GET['p1'])){
                     $this->cotizacion['skCotizacion'] = $_GET['p1'];
                     $this->data['datos'] = parent::read_pro();
