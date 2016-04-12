@@ -20,27 +20,54 @@
         <hr>
         <div class="form-group col-md-12" id="dvDatos"></div>
         <div class="form-group">
-            <label class="control-label col-md-2">Importador <span aria-required="true" class="required"> * </span> </label>
-            <div class="col-md-4">
-                <div class="input-icon right"><i class="fa"></i>
-                    <input type="text" name="skEmpresaImportador" id="skEmpresaImportador" class="form-control" placeholder="Importador" value="" >
-                </div>
-            </div>
-            <label class="control-label col-md-2">L&iacute;nea Naviera <span aria-required="true" class="required"> * </span> </label>
-            <div class="col-md-4">
-                <div class="input-icon right"><i class="fa"></i>
-                    <input type="text" name="skEmpresaNaviera" id="skEmpresaNaviera" class="form-control" placeholder="Linea Naviera" value="" >
-                </div>
-            </div>
+          <label class="control-label col-md-2">Importador <span aria-required="true" class="required"> * </span> </label>
+          <div class="col-md-4">
+            <select name="skEmpresaImportador" id="skEmpresaImportador" class="form-control form-filter input-sm">
+              <option value="">- Importador -</option>
+              <?php
+                                        if($data['empresaImportador']){
+                                            while($rEmpresa = $data['empresaImportador']->fetch_assoc()){
+                                    ?>
+              <option value="<?php echo $rEmpresa['skEmpresa']; ?>" <?php echo (isset($result['skEmpresaImportador'])) ? ($result['skEmpresaImportador'] == $rEmpresa['skEmpresa'] ? 'selected' : '' ) : '' ; ?> > <?php echo utf8_encode($rEmpresa['sNombre']); ?> </option>
+              <?php
+                                            }//ENDIF
+                                        }//ENDWHILE
+                                    ?>
+            </select>
+          </div>
+          <label class="control-label col-md-2">L&iacute;nea Naviera <span aria-required="true" class="required"> * </span> </label>
+          <div class="col-md-4">
+            <select name="skEmpresaNaviera" id="skEmpresaNaviera" class="form-control form-filter input-sm">
+              <option value="">- Linea Naviera -</option>
+              <?php
+                                        if($data['empresaNaviera']){
+                                            while($rEmpresa = $data['empresaNaviera']->fetch_assoc()){
+                                    ?>
+              <option value="<?php echo $rEmpresa['skEmpresa']; ?>" <?php echo (isset($result['skEmpresaNaviera'])) ? ($result['skEmpresaNaviera'] == $rEmpresa['skEmpresa'] ? 'selected' : '' ) : '' ; ?> > <?php echo utf8_encode($rEmpresa['sNombre']); ?> </option>
+              <?php
+                                            }//ENDIF
+                                        }//ENDWHILE
+                                    ?>
+            </select>
+          </div>
         </div>
         <div class="form-group">
             <label class="control-label col-md-2">Recinto <span aria-required="true" class="required"> * </span> </label>
             <div class="col-md-4">
-                <div class="input-icon right"><i class="fa"></i>
-                    <input type="text" name="skEmpresaRecinto" id="skEmpresaRecinto" class="form-control" placeholder="Importador" value="" >
-                </div>
+              <select name="skEmpresaRecinto" id="skEmpresaRecinto" class="form-control form-filter input-sm">
+                <option value="">- Recinto -</option>
+                <?php
+                                          if($data['empresaRecinto']){
+                                              while($rEmpresa = $data['empresaRecinto']->fetch_assoc()){
+                                      ?>
+                <option value="<?php echo $rEmpresa['skEmpresa']; ?>" <?php echo (isset($result['skEmpresaRecinto'])) ? ($result['skEmpresaRecinto'] == $rEmpresa['skEmpresa'] ? 'selected' : '' ) : '' ; ?> > <?php echo utf8_encode($rEmpresa['sNombre']); ?> </option>
+                <?php
+                                              }//ENDIF
+                                          }//ENDWHILE
+                                      ?>
+              </select>
             </div>
-          </div>
+        </div>
           <div class="form-group">
           <label class="control-label col-md-2">Tipo de Transporte <span aria-required="true" class="required"> * </span> </label>
           <div class="col-md-4">
@@ -98,7 +125,6 @@
                   </tr>
                 </tbody>
               </table>
-                <h1><label>LISTADO DE CONCEPTOS</label></h1>
             </div>
         </div>
         <div class="clearfix"></div>

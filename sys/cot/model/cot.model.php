@@ -181,7 +181,84 @@
                     }
                 }
             }
+						public function create_cotizaciones(){
+							$sql = "INSERT INTO ope_cotizaciones (skCotizacion,skEstatus,skEmpresaImportador,skEmpresaNaviera,skEmpresaRecinto,
+																	skReferencia,skTipoServicio,skTipoCobroCotizacion,skTipoTramite,skTipoTransporte,fTipoCambio,sPedimento
+																	fValorMercancia,skUsuario,dFechaCreacion,fImporteTotal)
+							VALUES ('".$this->cotizaciones['skCotizacion']."',
+											'".$this->cotizaciones['skEstatus']."',
+											'".$this->cotizaciones['skEmpresaImportador']."',
+											'".$this->cotizaciones['skEmpresaNaviera']."',
+											'".$this->cotizaciones['skEmpresaRecinto']."',
+											'".$this->cotizaciones['skReferencia']."',
+											'".$this->cotizaciones['skTipoServicio']."',
+											'".$this->cotizaciones['skTipoCobroCotizacion']."',
+											'".$this->cotizaciones['skTipoTramite']."',
+											'".$this->cotizaciones['skTipoTransporte']."',
+											'".$this->cotizaciones['fTipoCambio']."',
+											'".$this->cotizaciones['sPedimento']."',
+											'".$this->cotizaciones['fValorMercancia']."',
+											'".$this->cotizaciones['skUsuario']."',
+											'".$this->cotizaciones['dFechaCreacion']."',
+											'".$this->cotizaciones['fImporteTotal']."')";
+							$result = $this->db->query($sql);
+							if($result){
+									return $this->cotizaciones['skCotizacion'];
+							}else{
+									return false;
+							}
 
+
+						}
+						public function update_cotizaciones(){
+							$sql = "UPDATE ope_cotizaciones SET ";
+							if(!empty($this->cotizaciones['skEmpresaImportador'])){
+									$sql .=" skEmpresaImportador = '".$this->cotizaciones['skEmpresaImportador']."' ,";
+							}
+							if(!empty($this->cotizaciones['skEmpresaNaviera'])){
+									$sql .=" skEmpresaNaviera = '".$this->cotizaciones['skEmpresaNaviera']."' ,";
+							}
+							if(!empty($this->cotizaciones['skEmpresaRecinto'])){
+									$sql .=" skEmpresaRecinto = '".$this->cotizaciones['skEmpresaRecinto']."' ,";
+							}
+							if(!empty($this->cotizaciones['skReferencia'])){
+									$sql .=" skReferencia = '".$this->cotizaciones['skReferencia']."' ,";
+							}
+							if(!empty($this->cotizaciones['skTipoServicio'])){
+									$sql .=" skTipoServicio = '".$this->cotizaciones['skTipoServicio']."' ,";
+							}
+							if(!empty($this->cotizaciones['skTipoCobroCotizacion'])){
+									$sql .=" skTipoCobroCotizacion = '".$this->cotizaciones['skTipoCobroCotizacion']."' ,";
+							}
+							if(!empty($this->cotizaciones['skTipoTramite'])){
+									$sql .=" skTipoTramite = '".$this->cotizaciones['skTipoTramite']."' ,";
+							}
+							if(!empty($this->cotizaciones['skTipoTransporte'])){
+									$sql .=" skTipoTransporte = '".$this->cotizaciones['skTipoTransporte']."' ,";
+							}
+							if(!empty($this->cotizaciones['fTipoCambio'])){
+									$sql .=" fTipoCambio = '".$this->cotizaciones['fTipoCambio']."' ,";
+							}
+							if(!empty($this->cotizaciones['sPedimento'])){
+									$sql .=" sPedimento = '".$this->cotizaciones['sPedimento']."' ,";
+							}
+							if(!empty($this->cotizaciones['fValorMercancia'])){
+									$sql .=" fValorMercancia = '".$this->cotizaciones['fValorMercancia']."' ,";
+							}
+							if(!empty($this->cotizaciones['fImporteTotal'])){
+									$sql .=" fImporteTotal = '".$this->cotizaciones['fImporteTotal']."' ,";
+							}
+							if(!empty($this->cotizaciones['skEstatus'])){
+									$sql .=" skEstatus = '".$this->cotizaciones['skEstatus']."' ,";
+							}
+							$sql .= " WHERE skCotizacion = '".$this->cotizaciones['skCotizacion']."' LIMIT 1 ";
+							$result = $this->db->query($sql);
+							if($result){
+									return $this->cotizaciones['skCotizacion'];
+							}else{
+									return false;
+							}
+						}
 
 
 
