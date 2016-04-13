@@ -195,6 +195,23 @@
                 if($_POST){
                     $_POST['axn'] = !empty($_POST['axn']) ? $_POST['axn'] : 'save';
                     switch ($_POST['axn']){
+                      case "getConceptos":
+                          //$this->cotizaciones['skTipoTramite'] = $_POST['sReferencia'];
+                          $this->cotizaciones['skTipoTramite'] = "IMPO";
+                          $this->cotizaciones['skEmpresaImportador'] = "";
+                          $this->cotizaciones['skEmpresaNaviera'] = "";
+                          $this->cotizaciones['skEmpresaRecinto'] = "";
+                          $this->data['conceptosPedimento']=parent::read_conceptos_pedimentos();
+                          $this->data['conceptosNaviera']=parent::read_conceptos_naviera();
+                          $this->data['conceptosRecinto']=parent::read_conceptos_recinto();
+                          $this->data['conceptosDespacho']=parent::read_conceptos_despacho();
+                          if(!$this->data['conceptosDespacho']){
+                              echo 'false';
+                              return false;
+                          }
+                          echo 'true';
+                          return true;
+                          break;
                         case "validarReferencia":
                             $this->cotizaciones['sReferencia'] = $_POST['sReferencia'];
                             $this->data['data']=parent::read_referencia();
