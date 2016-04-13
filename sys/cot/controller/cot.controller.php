@@ -301,6 +301,9 @@
                 $objEmpresaReci = new Emp_Model();
                 $objEmpresaReci->tipoempresas['skTipoEmpresa'] = 'RECI';
                 $this->data['empresaRecinto'] = $objEmpresaReci->read_like_empresas();
+                $this->data['tipoTranporte'] = parent::read_cat_tipos_transportes();
+                $this->data['tipoCotizacion'] = parent::read_cat_tipos_cotizaciones();
+                $this->data['tipoTramite'] = parent::read_cat_tipos_tramites();
                 if(isset($_GET['p1'])){
                     $this->cotizacion['skCotizacion'] = $_GET['p1'];
                     $this->data['datos'] = parent::read_pro();

@@ -260,6 +260,41 @@
 							}
 						}
 
+						// READ tipos Tranporte //
+						function read_cat_tipos_transportes(){
+								$sql="SELECT
+								tipTra.*
+								FROM
+								cat_tipos_transportes AS tipTra
+								 ORDER BY tipTra.sNombre ASC ";
+								//exit($sql);
+								$result = $this->db->query($sql);
+								if(!$result){
+										return false;
+								}
+								return $result;
+						}
+						function read_cat_tipos_cotizaciones(){
+								$sql="SELECT tipTra.* FROM cat_tipos_cobros_cotizaciones AS tipTra  ORDER BY tipTra.sNombre ASC ";
+								//exit($sql);
+								$result = $this->db->query($sql);
+								if(!$result){
+										return false;
+								}
+								return $result;
+						}
+
+						function read_cat_tipos_tramites(){
+								$sql="SELECT tipTra.* FROM cat_tipos_tramites AS tipTra  ORDER BY tipTra.sNombre ASC ";
+								//exit($sql);
+								$result = $this->db->query($sql);
+								if(!$result){
+										return false;
+								}
+								return $result;
+						}
+
+
 
 
 

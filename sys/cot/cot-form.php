@@ -7,7 +7,59 @@
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
     <input type="hidden" name="skCotizacion"  id="skCotizacion" value="<?php echo (isset($result['skCotizacion'])) ? $result['skCotizacion'] : '' ; ?>">
     <div class="form-body">
+      <div class="form-group">
+        <label class="control-label col-md-2">Tipo de Cotizaci&oacute;n  <span aria-required="true" class="required"> * </span> </label>
+        <div class="col-md-10">
+          <div class="radio-list">
+            <?php $i = 0 ?>
+            <?php while($rTipoCotizacion =  $data['tipoCotizacion']->fetch_assoc()){?>
+            <?php $i++;?>
+            <div class="col-md-2">
+            <label>
+              <input type="radio" name="skTipoCobroCotizacion" value="<?php echo $rTipoCotizacion{'skTipoCobroCotizacion'}?>" <?php echo ((isset($result['skTipoCobroCotizacion']) ? $result['skTipoCobroCotizacion'] : "-") == $rTipoCotizacion{'skTipoCobroCotizacion'} ? 'checked' : ($i==1 ) ? 'checked' : '' )?>  >
+              <?php echo utf8_encode($rTipoCotizacion{'sNombre'})?>
+            </label>
+          </div>
+            <?php }?>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-2">Tipo de Tramite <span aria-required="true" class="required"> * </span> </label>
+        <div class="col-md-10">
+          <div class="radio-list">
+            <?php $i = 0 ?>
+            <?php while($rTipoTramite =  $data['tipoTramite']->fetch_assoc()){?>
+            <?php $i++;?>
+            <div class="col-md-2">
+            <label>
+              <input type="radio" name="skTipoTramite" value="<?php echo $rTipoTramite{'skTipoTramite'}?>" <?php echo ((isset($result['skTipoTramite']) ? $result['skTipoTramite'] : "-") == $rTipoTramite{'skTipoTramite'} ? 'checked' : ($i==1 ) ? 'checked' : '' )?>  >
+              <?php echo utf8_encode($rTipoTramite{'sNombre'})?>
+            </label>
+          </div>
+            <?php }?>
+          </div>
+        </div>
+      </div>
 
+      <div class="form-group">
+        <label class="control-label col-md-2">Tipo de Transporte <span aria-required="true" class="required"> * </span> </label>
+        <div class="col-md-10">
+          <div class="radio-list">
+            <?php $i = 0 ?>
+            <?php while($rTransporte =  $data['tipoTranporte']->fetch_assoc()){?>
+            <?php $i++;?>
+            <div class="col-md-2">
+            <label>
+              <input type="radio" name="skTipoTransporte" value="<?php echo $rTransporte{'skTipoTransporte'}?>" <?php echo ((isset($result['skTipoTransporte']) ? $result['skTipoTransporte'] : "-") == $rTransporte{'skTipoTransporte'} ? 'checked' : ($i==1 ) ? 'checked' : '' )?>  >
+              <?php echo utf8_encode($rTransporte{'sNombre'})?>
+            </label>
+          </div>
+            <?php }?>
+          </div>
+        </div>
+      </div>
+  <hr>
         <div class="form-group">
             <label class="control-label col-md-2">Referencia <span aria-required="true" class="required"> * </span> </label>
             <div class="col-md-4">
@@ -68,14 +120,7 @@
               </select>
             </div>
         </div>
-          <div class="form-group">
-          <label class="control-label col-md-2">Tipo de Transporte <span aria-required="true" class="required"> * </span> </label>
-          <div class="col-md-4">
-              <div class="input-icon right"><i class="fa"></i>
-                  <input type="text" name="skTipoTransporte" id="skTipoTransporte" class="form-control" placeholder="Tipo de Transporte" value="" >
-              </div>
-          </div>
-      </div>
+
         <div class="clearfix"></div>
       <hr>
         <div class="form-group">
@@ -96,7 +141,7 @@
       <hr>
         <div class="form-group">
             <label class="control-label col-md-2">Conceptos <span aria-required="true" class="required"> * </span> </label>
-            <div class="col-md-8">
+            <div class="col-md-10">
               <table class="table table-responsive">
                 <thead>
                   <th nowrap>S</th>
