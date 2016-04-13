@@ -192,6 +192,7 @@ function obtenerDatos(){
     $('.page-title-loading').css('display','inline');
         var response = true;
         $.post("",{ axn : "obtenerDatos" , sReferencia : $("#sReferencia").val() }, function(data){
+            console.log(data);
         var cad = '';
         if(!data.data){
             response = false;
@@ -244,6 +245,9 @@ function obtenerDatos(){
       '    <label class="control-label ">'+data.data.sBlHouse+'</label>'+
       ' </div>'+
    ' </div> <hr>';
+   
+    // Selecciona la empresa (cliente) de la refernecia //
+    $("#skEmpresaImportador").val(data.data.skEmpresa);
    }
     $("#dvDatos").html(cad);
     $('.page-title-loading').css('display','none');
