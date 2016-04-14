@@ -79,12 +79,13 @@
                             while($row = $this->data['data']->fetch_assoc()){
                                 $actions = $this->printModulesButtons(2,array($row['skProforma']),$row['skUserCreacion']);
                                 array_push($records['data'], array(
-                                     utf8_encode($row['sReferencia'])
+                                    !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
+                                    ,utf8_encode($row['sReferencia'])
                                     ,utf8_encode($row['cliente'])
                                     ,utf8_encode($row['sObservaciones'])
                                     ,utf8_encode($row['autor'])
                                     ,utf8_encode($row['dFechaCreacion'])
-                                   ,!empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
+                                   
                                 ));
                             }
                             header('Content-Type: application/json');

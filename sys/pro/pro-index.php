@@ -10,14 +10,21 @@
             <table class="table table-striped table-bordered table-hover" id="datatable_ajax">
                 <thead>
                     <tr role="row" class="heading">
+                        <th width="10%">Acciones</th>
                         <th width="10%">Referencia</th>
                         <th width="10%">Cliente</th>
                         <th width="10%">Observaciones</th>
                         <th width="10%">Autor</th>
                         <th width="10%">Fecha creaci&oacute;n</th>
-                        <th width="10%">Acciones</th>
+                        
                     </tr>
                     <tr role="row" class="filter">
+                        <td>
+                            <div aria-label="Acciones" role="group" class="btn-group btn-group-xs" style="width:100px">
+                                <button class="btn btn-xs btn-default filter-submit margin-bottom"><i class="fa fa-search"></i> Buscar</button>
+                                <button class="btn btn-xs btn-warning filter-cancel"><i class="fa fa-refresh"></i></button>
+                            </div>
+                        </td>
                         <td>
                             <input type="text" class="form-control form-filter input-sm" name="sReferencia" placeholder="Referencia">
                         </td>
@@ -60,12 +67,7 @@
                                 </span>
                             </div>
                         </td>
-                        <td>
-                            <div aria-label="Acciones" role="group" class="btn-group btn-group-xs" style="width:100px">
-                                <button class="btn btn-xs btn-default filter-submit margin-bottom"><i class="fa fa-search"></i> Buscar</button>
-                                <button class="btn btn-xs btn-warning filter-cancel"><i class="fa fa-refresh"></i></button>
-                            </div>
-                        </td> 
+                         
                     </tr>
                 </thead>
                 <tbody>
