@@ -299,6 +299,88 @@
 								return $result;
 						}
 
+						function read_conceptos_pedimentos(){
+								$sql="SELECT
+											cc.skConcepto,
+											cc.sNombre AS Nombre,
+											cc.skDivisa,
+											cc.fPrecioUnitario,
+											'Pedimento' AS Clase
+										 FROM cat_conceptos cc
+										INNER JOIN rel_cat_conceptos_tipos_empresas rce ON rce.skConcepto =  cc.skConcepto AND rce.skTipoEmpresa = 'PEDI'
+										INNER JOIN rel_cat_conceptos_tipos_tramites rct ON rct.skConcepto =  cc.skConcepto AND rct.skTipoTramite = '".$this->cotizaciones['skTipoTramite']."'
+										WHERE cc.skStatus = 'AC'";
+								//exit($sql);
+								$result = $this->db->query($sql);
+								if(!$result){
+										return false;
+								}
+								return $result;
+						}
+						function read_conceptos_naviera(){
+							/*	$sql="SELECT * FROM rel_cat_empresas_tarifas_conceptos rce
+								WHERE rce.skTipoTramite = '' AND rce.skEmpresa = ''"; */
+							$sql="SELECT
+										cc.skConcepto,
+										cc.sNombre AS Nombre,
+										cc.skDivisa,
+										cc.fPrecioUnitario,
+										'Naviera' AS Clase
+									 FROM cat_conceptos cc
+									INNER JOIN rel_cat_conceptos_tipos_empresas rce ON rce.skConcepto =  cc.skConcepto AND rce.skTipoEmpresa = 'NAVI'
+									INNER JOIN rel_cat_conceptos_tipos_tramites rct ON rct.skConcepto =  cc.skConcepto AND rct.skTipoTramite = '".$this->cotizaciones['skTipoTramite']."'
+									WHERE cc.skStatus = 'AC'";
+							//exit($sql);
+							$result = $this->db->query($sql);
+							if(!$result){
+									return false;
+							}
+							return $result;
+
+						}
+						function read_conceptos_recinto(){
+							/*	$sql="SELECT * FROM rel_cat_empresas_tarifas_conceptos rce
+								WHERE rce.skTipoTramite = '' AND rce.skEmpresa = ''"; */
+							$sql="SELECT
+										cc.skConcepto,
+										cc.sNombre AS Nombre,
+										cc.skDivisa,
+										cc.fPrecioUnitario,
+										'Recinto' AS Clase
+									 FROM cat_conceptos cc
+									INNER JOIN rel_cat_conceptos_tipos_empresas rce ON rce.skConcepto =  cc.skConcepto AND rce.skTipoEmpresa = 'RECI'
+									INNER JOIN rel_cat_conceptos_tipos_tramites rct ON rct.skConcepto =  cc.skConcepto AND rct.skTipoTramite = '".$this->cotizaciones['skTipoTramite']."'
+									WHERE cc.skStatus = 'AC'";
+							//exit($sql);
+							$result = $this->db->query($sql);
+							if(!$result){
+									return false;
+							}
+							return $result;
+
+						}
+						function read_conceptos_despacho(){
+							/*	$sql="SELECT * FROM rel_cat_empresas_tarifas_conceptos rce
+								WHERE rce.skTipoTramite = '' AND rce.skEmpresa = ''"; */
+							$sql="SELECT
+										cc.skConcepto,
+										cc.sNombre AS Nombre,
+										cc.skDivisa,
+										cc.fPrecioUnitario,
+										'Despacho' AS Clase
+									 FROM cat_conceptos cc
+									INNER JOIN rel_cat_conceptos_tipos_empresas rce ON rce.skConcepto =  cc.skConcepto AND rce.skTipoEmpresa = 'DEAD'
+									INNER JOIN rel_cat_conceptos_tipos_tramites rct ON rct.skConcepto =  cc.skConcepto AND rct.skTipoTramite = '".$this->cotizaciones['skTipoTramite']."'
+									WHERE cc.skStatus = 'AC'";
+							//exit($sql);
+							$result = $this->db->query($sql);
+							if(!$result){
+									return false;
+							}
+							return $result;
+
+						}
+
 
 
 
