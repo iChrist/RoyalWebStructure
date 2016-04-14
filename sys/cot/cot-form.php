@@ -138,6 +138,8 @@
             </div>
         </div>
         <div class="clearfix"></div>
+        <div class="col-md-12 col-xs-12" id="divConceptos" style="display: <?php echo isset($_GET['p1']) ? 'block' : 'none'; ?>;">
+            
       <hr>
         <div class="form-group">
             <label class="control-label col-md-2">Conceptos <span aria-required="true" class="required"> * </span> </label>
@@ -172,6 +174,7 @@
               </table>
             </div>
         </div>
+      </div><!-- FIN DEL DIV cuando no es editado !-->
         <div class="clearfix"></div>
       <hr>
         <div class="form-group">
@@ -188,6 +191,21 @@
 </form>
 <div class="clearfix"></div>
 <script type="text/javascript">
+    function getConceptos(){
+        $('.page-title-loading').css('display','inline');
+        $.post("",{ 
+            axn : "getConceptos" 
+            ,sReferencia : $("#skEmpresaImportador").val()
+            ,skEmpresaNaviera : $("#skEmpresaNaviera").val()
+            ,skEmpresaRecinto : $("#skEmpresaRecinto").val()
+            ,skTipoTramite : $('input[name=skTipoTramite]:checked').val()
+            ,skTipoCobroCotizacion : $('input[name=skTipoCobroCotizacion]:checked').val()
+        }, function(data){
+            console.log(data);
+            $("#divConceptos").css("display","block");
+            $('.page-title-loading').css('display','none');
+        });
+    }
 function obtenerDatos(){
     $('.page-title-loading').css('display','inline');
         var response = true;
@@ -248,6 +266,12 @@ function obtenerDatos(){
    
     // Selecciona la empresa (cliente) de la refernecia //
     $("#skEmpresaImportador").val(data.data.skEmpresa);
+    // Selecciona la skEmpresaNaviera (Naviera) de la refernecia //
+    $("#skEmpresaNaviera").val(data.data.skEmpresaNaviera);
+    // Selecciona el tipo de tramite (skTipoTramite) IMPO | EXPO de la refernecia //
+    //$("#skTipoTramite_"+data.data.skTipoTramite).prop('checked',true);
+        
+    getConceptos();
    }
     $("#dvDatos").html(cad);
     $('.page-title-loading').css('display','none');

@@ -148,7 +148,12 @@
                 }
             }
 						public function read_referencia(){
-                $sql = "SELECT 	rd.*,
+                $sql = "SELECT 
+                    (SELECT rev.skEmpresaNaviera FROM ope_solicitud_revalidacion rev 
+                    WHERE rev.sReferencia = 'M6000015' 
+                    ORDER BY rev.dFechaCreacion DESC LIMIT 1
+                    ) AS skEmpresaNaviera,
+                    rd.*,
                     st.sName AS status,
                     us.sName AS Ejecutivo,
                     ce.sNombre AS Empresa,

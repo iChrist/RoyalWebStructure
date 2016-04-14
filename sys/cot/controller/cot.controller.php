@@ -219,6 +219,7 @@
                                      "Empresa"=>utf8_encode($row['Empresa'])
                                     ,"skEmpresa"=>utf8_encode($row['skEmpresa'])
                                     ,"TipoServicio"=>utf8_encode($row['TipoServicio'])
+                                   ,"skTipoTramite"=>utf8_encode($row['skTipoTramite'])
                                     ,"Ejecutivo"=>utf8_encode($row['Ejecutivo'])
                                     ,"sMercancia"=>utf8_encode($row['sMercancia'])
                                     ,"sNumContenedor"=>utf8_encode($row['sNumContenedor'])
@@ -227,6 +228,7 @@
                                     ,"fVolumen"=>utf8_encode($row['fVolumen'])
                                     ,"sBlMaster"=>utf8_encode($row['sBlMaster'])
                                     ,"sBlHouse"=>utf8_encode($row['sBlHouse'])
+                                    ,"skEmpresaNaviera"=>utf8_encode($row['skEmpresaNaviera'])
                                 );
                             }
                             header('Content-Type: application/json');
