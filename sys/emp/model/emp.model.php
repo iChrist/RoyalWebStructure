@@ -306,6 +306,7 @@
                 if(!empty($this->promotores['skStatus'])){
                     $sql .=" AND cat_promotores.skStatus like '%".$this->promotores['skStatus']."%'";
                 }
+                $sql .= " ORDER BY cat_promotores.sNombre ASC ";
                 if(is_int($this->promotores['limit'])){
                     if(is_int($this->promotores['offset'])){
                         $sql .= " LIMIT ".$this->promotores['offset']." , ".$this->promotores['limit'];
