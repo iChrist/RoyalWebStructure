@@ -198,20 +198,63 @@
                       case "getConceptos":
                           //$this->cotizaciones['skTipoTramite'] = $_POST['sReferencia'];
                           $this->cotizaciones['skTipoTramite'] = "IMPO";
-                          $this->cotizaciones['skEmpresaImportador'] = "";
-                          $this->cotizaciones['skEmpresaNaviera'] = "";
-                          $this->cotizaciones['skEmpresaRecinto'] = "";
+                        //  $this->cotizaciones['skEmpresaImportador'] = "";
+                          $this->cotizaciones['skEmpresaNaviera'] = "a32cb656846dcbfa1dcf799d1501dbf";
+                        //  $this->cotizaciones['skEmpresaRecinto'] = "";
                           $this->data['conceptosPedimento']=parent::read_conceptos_pedimentos();
                           $this->data['conceptosNaviera']=parent::read_conceptos_naviera();
                           $this->data['conceptosRecinto']=parent::read_conceptos_recinto();
                           $this->data['conceptosDespacho']=parent::read_conceptos_despacho();
-                          if(!$this->data['conceptosDespacho']){
-                              echo 'false';
+                        /*  if(!$this->data['conceptosPedimento']){
+                              header('Content-Type: application/json');
+                              echo json_encode($records);
                               return false;
+                          }*/
+                          //print_r($this->data['conceptosPedimento']);
+                          $html = array('conceptosPedimento'=>array(),'conceptosNaviera'=>array(),
+                                        'conceptosRecinto'=>array(),'conceptosDespacho'=>array());
+                          //$html = "";
+                          while($row = $this->data['conceptosPedimento']->fetch_assoc()){
+                              $tol='<tr>
+                                <td><input type="checkbox"  value="'.$row['skConcepto'].'" name="chkServicio[]"></td>
+                                <td><input type="text" name="iCantidadServicio" id="iCantidadServicio" class="form-control input-sm" placeholder="Cant" value="" ></td>
+                                <td><input type="text" name="fPrecioUnitario" id="fPrecioUnitario" class="form-control input-sm" placeholder="Precio Unitario" value="'.number_format($row['fPrecioUnitario'],2).'" ></td>
+                                <td>'.utf8_encode($row['Nombre']).'</td>
+                              </tr>';
+                              array_push($html['conceptosPedimento'],$tol);
                           }
-                          echo 'true';
-                          return true;
-                          break;
+                          while($row = $this->data['conceptosNaviera']->fetch_assoc()){
+                              $tol='<tr class="active">
+                                <td><input type="checkbox"  value="'.$row['skConcepto'].'" name="chkServicio[]"></td>
+                                <td><input type="text" name="iCantidadServicio" id="iCantidadServicio" class="form-control input-sm" placeholder="Cant" value="" ></td>
+                                <td><input type="text" name="fPrecioUnitario" id="fPrecioUnitario" class="form-control input-sm" placeholder="Precio Unitario" value="'.number_format($row['fPrecioUnitario'],2).'" ></td>
+                                <td>'.utf8_encode($row['Nombre']).'</td>
+                              </tr>';
+                              array_push($html['conceptosNaviera'],$tol);
+                          }
+                          while($row = $this->data['conceptosRecinto']->fetch_assoc()){
+                              $tol='<tr>
+                                <td><input type="checkbox" value="'.$row['skConcepto'].'" name="chkServicio[]"></td>
+                                <td><input type="text" name="iCantidadServicio" id="iCantidadServicio" class="form-control input-sm" placeholder="Cant" value="" ></td>
+                                <td><input type="text" name="fPrecioUnitario" id="fPrecioUnitario" class="form-control input-sm" placeholder="Precio Unitario" value="'.number_format($row['fPrecioUnitario'],2).'" ></td>
+                                <td>'.utf8_encode($row['Nombre']).'</td>
+                              </tr>';
+                              array_push($html['conceptosRecinto'],$tol);
+                          }
+                          while($row = $this->data['conceptosDespacho']->fetch_assoc()){
+                              $tol='<tr class="active">
+                                <td><input type="checkbox" value="'.$row['skConcepto'].'" name="chkServicio[]"></td>
+                                <td><input type="text" name="iCantidadServicio" id="iCantidadServicio" class="form-control input-sm" placeholder="Cant" value="" ></td>
+                                <td><input type="text" name="fPrecioUnitario" id="fPrecioUnitario" class="form-control input-sm" placeholder="Precio Unitario" value="'.number_format($row['fPrecioUnitario'],2).'" ></td>
+                                <td>'.utf8_encode($row['Nombre']).'</td>
+                              </tr>';
+                              array_push($html['conceptosDespacho'],$tol);
+                          }
+                        //  exit("<pre>".print_r($html,1));
+                          header('Content-Type: application/json');
+                          echo json_encode($html);
+                          return;
+                        break;
                         case "validarReferencia":
                             $this->cotizaciones['sReferencia'] = $_POST['sReferencia'];
                             $this->data['data']=parent::read_referencia();
@@ -323,6 +366,7 @@
                 $this->data['tipoTranporte'] = parent::read_cat_tipos_transportes();
                 $this->data['tipoCotizacion'] = parent::read_cat_tipos_cotizaciones();
                 $this->data['tipoTramite'] = parent::read_cat_tipos_tramites();
+                $this->data['tipo_cambio'] = $this->tipo_cambio();
                 if(isset($_GET['p1'])){
                     $this->cotizacion['skCotizacion'] = $_GET['p1'];
                     $this->data['datos'] = parent::read_pro();

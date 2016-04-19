@@ -3,9 +3,18 @@
     if($data['datos']){
         $result = $data['datos']->fetch_assoc();
     }
+
+
+?>
+<?php
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
     <input type="hidden" name="skCotizacion"  id="skCotizacion" value="<?php echo (isset($result['skCotizacion'])) ? $result['skCotizacion'] : '' ; ?>">
+    <?php
+    //echo "aaaaa";
+//    $a = $data['tipo_cambio']->fetch_assoc();
+//var_dump($data['tipo_cambio']);
+    ?>
     <div class="form-body">
       <div class="form-group">
         <label class="control-label col-md-2">Tipo de Cotizaci&oacute;n  <span aria-required="true" class="required"> * </span> </label>
@@ -74,7 +83,7 @@
         <div class="form-group">
           <label class="control-label col-md-2">Importador <span aria-required="true" class="required"> * </span> </label>
           <div class="col-md-4">
-            <select name="skEmpresaImportador" id="skEmpresaImportador" class="form-control form-filter input-sm">
+            <select name="skEmpresaImportador" id="skEmpresaImportador" class="form-control form-filter input-sm" onchange="getConceptos();">
               <option value="">- Importador -</option>
               <?php
                                         if($data['empresaImportador']){
@@ -89,7 +98,7 @@
           </div>
           <label class="control-label col-md-2">L&iacute;nea Naviera <span aria-required="true" class="required"> * </span> </label>
           <div class="col-md-4">
-            <select name="skEmpresaNaviera" id="skEmpresaNaviera" class="form-control form-filter input-sm">
+            <select name="skEmpresaNaviera" id="skEmpresaNaviera" class="form-control form-filter input-sm" onchange="getConceptos();">
               <option value="">- Linea Naviera -</option>
               <?php
                                         if($data['empresaNaviera']){
@@ -139,7 +148,7 @@
         </div>
         <div class="clearfix"></div>
         <div class="col-md-12 col-xs-12" id="divConceptos" style="display: <?php echo isset($_GET['p1']) ? 'block' : 'none'; ?>;">
-            
+
       <hr>
         <div class="form-group">
             <label class="control-label col-md-2">Conceptos <span aria-required="true" class="required"> * </span> </label>
@@ -151,27 +160,10 @@
                   <th nowrap>Precio Unitario</th>
                   <th width="100%">Nombre</th>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td><input type="checkbox" class="form-control" id="chkServicio" name="chkServicio"></td>
-                    <td><input type="text" name="iCantidadServicio" id="iCantidadServicio" class="form-control input-small" placeholder="Cantidad" value="" ></td>
-                    <td><input type="text" name="fPrecioUnitario" id="fPrecioUnitario" class="form-control input-small" placeholder="Precio Unitario" value="" ></td>
-                    <td>Revalidacion</td>
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" class="form-control" id="chkServicio" name="chkServicio"></td>
-                    <td><input type="text" name="iCantidadServicio" id="iCantidadServicio" class="form-control input-small" placeholder="Cantidad" value="" ></td>
-                    <td><input type="text" name="fPrecioUnitario" id="fPrecioUnitario" class="form-control input-small" placeholder="Precio Unitario" value="" ></td>
-                    <td>Demoras</td>
-                  </tr>
-                  <tr>
-                    <td><input type="checkbox" class="form-control" id="chkServicio" name="chkServicio"></td>
-                    <td><input type="text" name="iCantidadServicio" id="iCantidadServicio" class="form-control input-small" placeholder="Cantidad" value="" ></td>
-                    <td><input type="text" name="fPrecioUnitario" id="fPrecioUnitario" class="form-control input-small" placeholder="Precio Unitario" value="" ></td>
-                    <td>Importacion</td>
-                  </tr>
+                <tbody id="dvConceptosPedimento">
                 </tbody>
               </table>
+
             </div>
         </div>
       </div><!-- FIN DEL DIV cuando no es editado !-->
@@ -191,26 +183,44 @@
 </form>
 <div class="clearfix"></div>
 <script type="text/javascript">
+/*
+suma con clases
+
+var suma = 0;
+$('#mitabla tr.dato').each(function(){ //filas con clase 'dato', especifica una clase, asi no tomas el nombre de las columnas
+ suma += parseInt($(this).find('td').eq(2).text()||0,10) //numero de la celda 3
+})
+alert(suma)
+*/
     function getConceptos(){
         $('.page-title-loading').css('display','inline');
-        $.post("",{ 
-            axn : "getConceptos" 
-            ,sReferencia : $("#skEmpresaImportador").val()
-            ,skEmpresaNaviera : $("#skEmpresaNaviera").val()
-            ,skEmpresaRecinto : $("#skEmpresaRecinto").val()
-            ,skTipoTramite : $('input[name=skTipoTramite]:checked').val()
-            ,skTipoCobroCotizacion : $('input[name=skTipoCobroCotizacion]:checked').val()
-        }, function(data){
-            console.log(data);
-            $("#divConceptos").css("display","block");
-            $('.page-title-loading').css('display','none');
-        });
+
+
+        if(!$('#skEmpresaImportador').val() == ''&& !$('#skEmpresaNaviera').val() == ''){
+//          alert(conceptosPedimento);
+          $.post("",{
+              axn : "getConceptos"
+              ,sReferencia : $("#skEmpresaImportador").val()
+              ,skEmpresaNaviera : $("#skEmpresaNaviera").val()
+              ,skEmpresaRecinto : $("#skEmpresaRecinto").val()
+              ,skTipoTramite : $('input[name=skTipoTramite]:checked').val()
+              ,skTipoCobroCotizacion : $('input[name=skTipoCobroCotizacion]:checked').val()
+          }, function(response){
+             console.log(response);
+              $("#divConceptos").css("display","block");
+              $("#dvConceptosPedimento").html(response['conceptosPedimento']+response['conceptosNaviera']+response['conceptosRecinto']+response['conceptosDespacho']);
+            //  $("#dvConceptosNaviera").html(response['conceptosNaviera']);
+              $('.page-title-loading').css('display','none');
+          });
+        }
+
     }
+
 function obtenerDatos(){
     $('.page-title-loading').css('display','inline');
         var response = true;
         $.post("",{ axn : "obtenerDatos" , sReferencia : $("#sReferencia").val() }, function(data){
-            console.log(data);
+            //console.log(data);
         var cad = '';
         if(!data.data){
             response = false;
@@ -219,20 +229,17 @@ function obtenerDatos(){
             icon.removeClass("fa-check").addClass("fa-warning");
         }else{
     	cad ='<div class="form-group">'+
-     	'<label class="col-md-2 control-label">Cliente</label>'+
-     	'<div class="col-md-4">'+
-       	'<label id="lbCliente" class="control-label">'+data.data.Empresa+'</label>'+
-        '</div>'+
-      	'<label class="control-label col-md-2">Tipo de Servicio</label>'+
-	     '<div class="col-md-4">'+
-	       ' <label id="lbServicio" class="control-label">'+data.data.TipoServicio+'</label>'+
-	    ' </div>'+
+          	'<label class="control-label col-md-2">Tipo de Servicio</label>'+
+    	     '<div class="col-md-4">'+
+    	       ' <label id="lbServicio" class="control-label">'+data.data.TipoServicio+'</label>'+
+    	    ' </div>'+
+          '<label class="col-md-2 control-label">Ejecutivo</label>'+
+         	'<div class="col-md-4">'+
+           	'	 <label id="lbEjecutivo" class="control-label">'+data.data.Ejecutivo+'</label>'+
+           ' </div>'+
    ' </div>'+
     '<div class="form-group">'+
-     	'<label class="col-md-2 control-label">Ejecutivo</label>'+
-     	'<div class="col-md-4">'+
-       	'	 <label id="lbEjecutivo" class="control-label">'+data.data.Ejecutivo+'</label>'+
-       ' </div>'+
+
       	'<label class="control-label col-md-2">Mercancia</label>'+
 	    ' <div class="col-md-4">'+
 	    '    <label id="lbMercancia" class="control-label ">'+data.data.sMercancia+'</label>'+
@@ -263,15 +270,14 @@ function obtenerDatos(){
       '    <label class="control-label ">'+data.data.sBlHouse+'</label>'+
       ' </div>'+
    ' </div> <hr>';
-   
+
     // Selecciona la empresa (cliente) de la refernecia //
     $("#skEmpresaImportador").val(data.data.skEmpresa);
     // Selecciona la skEmpresaNaviera (Naviera) de la refernecia //
     $("#skEmpresaNaviera").val(data.data.skEmpresaNaviera);
     // Selecciona el tipo de tramite (skTipoTramite) IMPO | EXPO de la refernecia //
     //$("#skTipoTramite_"+data.data.skTipoTramite).prop('checked',true);
-        
-    getConceptos();
+      getConceptos();
    }
     $("#dvDatos").html(cad);
     $('.page-title-loading').css('display','none');
