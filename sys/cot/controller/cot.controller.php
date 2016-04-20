@@ -14,7 +14,8 @@
             }
 				/*COMIENZA MODULO DE RECEPCION DE DOCUMENTOS */
         public function tipo_cambio(){
-            $client = new SoapClient(null, array(
+
+         $client = new SoapClient(null, array(
                 'location' =>'http://www.banxico.org.mx:80/DgieWSWeb/DgieWS?WSDL',
                 'uri'=>'http://DgieWSWeb/DgieWS?WSDL',
                 'encoding'=> 'UTF-8'
@@ -58,7 +59,7 @@
 
             }
 
-            $data = array(
+           $data = array(
                 'USD' => array(
                     'moneda'=>'USD',
                     'descripcion'=>'Dolar',
@@ -84,6 +85,7 @@
                     'valor'=>$itemYenCanadiense->getAttribute('OBS_VALUE')
                 )
             );
+            return $data;
         }
 
         public function cot_index(){
@@ -188,7 +190,7 @@
             return true;
         }
 
-            public function cot_form(){
+        public function cot_form(){
                 $this->data['message'] = '';
                 $this->data['response'] = true;
                 $this->data['datos'] = false;
@@ -197,10 +199,10 @@
                     switch ($_POST['axn']){
                       case "getConceptos":
                           //$this->cotizaciones['skTipoTramite'] = $_POST['sReferencia'];
-                          $this->cotizaciones['skTipoTramite'] = "IMPO";
-                        //  $this->cotizaciones['skEmpresaImportador'] = "";
-                          $this->cotizaciones['skEmpresaNaviera'] = "a32cb656846dcbfa1dcf799d1501dbf";
-                        //  $this->cotizaciones['skEmpresaRecinto'] = "";
+                          $this->cotizaciones['skTipoTramite'] = $_POST['skTipoTramite'];
+                        //  $this->cotizaciones['skEmpresaImportador'] = $_POST['skEmpresaImportador'];
+                          $this->cotizaciones['skEmpresaNaviera'] = $_POST['skEmpresaNaviera'];
+                        //  $this->cotizaciones['skEmpresaRecinto'] = $_POST['skEmpresaRecinto'];
                           $this->data['conceptosPedimento']=parent::read_conceptos_pedimentos();
                           $this->data['conceptosNaviera']=parent::read_conceptos_naviera();
                           $this->data['conceptosRecinto']=parent::read_conceptos_recinto();
@@ -216,37 +218,49 @@
                           //$html = "";
                           while($row = $this->data['conceptosPedimento']->fetch_assoc()){
                               $tol='<tr>
-                                <td><input type="checkbox"  value="'.$row['skConcepto'].'" name="chkServicio[]"></td>
-                                <td><input type="text" name="iCantidadServicio" id="iCantidadServicio" class="form-control input-sm" placeholder="Cant" value="" ></td>
-                                <td><input type="text" name="fPrecioUnitario" id="fPrecioUnitario" class="form-control input-sm" placeholder="Precio Unitario" value="'.number_format($row['fPrecioUnitario'],2).'" ></td>
-                                <td>'.utf8_encode($row['Nombre']).'</td>
+                                <td><input type="checkbox" onChange="cotizar();"   value="'.$row['skConcepto'].'" name="conceptos[]"></td>
+                                <td><input type="text" name="iCantidad[]" onChange="cotizar();"   class="form-control input-sm iCantidad" placeholder="Cant" value="0" ></td>
+                                <td><input type="text" name="fPrecioUnitario[]" onChange="cotizar();"   class="form-control input-sm fPrecioUnitario" placeholder="Precio Unitario" value="'.number_format($row['fPrecioUnitario'],2).'" ></td>
+                                <td style="color:#777;">'.utf8_encode($row['skDivisa']).'<input type="hidden" class="divisa" name="divisa[]" value="'.utf8_encode($row['skDivisa']).'" /></td>
+                                <td nowrap>'.utf8_encode($row['Nombre']).'</td>
+                                <td nowrap></td>
+                                <td> <span class="show_subtotal"></span> <input type="hidden" name="subtotal[]" class="subtotal" value="" /></td>
                               </tr>';
                               array_push($html['conceptosPedimento'],$tol);
                           }
                           while($row = $this->data['conceptosNaviera']->fetch_assoc()){
                               $tol='<tr class="active">
-                                <td><input type="checkbox"  value="'.$row['skConcepto'].'" name="chkServicio[]"></td>
-                                <td><input type="text" name="iCantidadServicio" id="iCantidadServicio" class="form-control input-sm" placeholder="Cant" value="" ></td>
-                                <td><input type="text" name="fPrecioUnitario" id="fPrecioUnitario" class="form-control input-sm" placeholder="Precio Unitario" value="'.number_format($row['fPrecioUnitario'],2).'" ></td>
-                                <td>'.utf8_encode($row['Nombre']).'</td>
+                                <td><input type="checkbox" onChange="cotizar();"   value="'.$row['skConcepto'].'" name="conceptos[]"></td>
+                                <td><input type="text" name="iCantidad[]" onChange="cotizar();"  class="form-control input-sm iCantidad" placeholder="Cant" value="0" ></td>
+                                <td><input type="text" name="fPrecioUnitario[]" onChange="cotizar();"  class="form-control input-sm fPrecioUnitario" placeholder="Precio Unitario" value="'.number_format($row['fPrecioUnitario'],2).'" ></td>
+                                <td style="color:#777;">'.utf8_encode($row['skDivisa']).'<input type="hidden" class="divisa" name="divisa[]" value="'.utf8_encode($row['skDivisa']).'" /></td>
+                                <td nowrap>'.utf8_encode($row['Nombre']).'</td>
+                                <td nowrap></td>
+                                <td> <span class="show_subtotal"></span> <input type="hidden" name="subtotal[]" class="subtotal" value="" /></td>
                               </tr>';
                               array_push($html['conceptosNaviera'],$tol);
                           }
                           while($row = $this->data['conceptosRecinto']->fetch_assoc()){
                               $tol='<tr>
-                                <td><input type="checkbox" value="'.$row['skConcepto'].'" name="chkServicio[]"></td>
-                                <td><input type="text" name="iCantidadServicio" id="iCantidadServicio" class="form-control input-sm" placeholder="Cant" value="" ></td>
-                                <td><input type="text" name="fPrecioUnitario" id="fPrecioUnitario" class="form-control input-sm" placeholder="Precio Unitario" value="'.number_format($row['fPrecioUnitario'],2).'" ></td>
-                                <td>'.utf8_encode($row['Nombre']).'</td>
+                                <td><input type="checkbox" onChange="cotizar();"  value="'.$row['skConcepto'].'" name="conceptos[]"></td>
+                                <td><input type="text" name="iCantidad[]" onChange="cotizar();"  class="form-control input-sm iCantidad" placeholder="Cant" value="0" ></td>
+                                <td><input type="text" name="fPrecioUnitario[]" onChange="cotizar();"  class="form-control input-sm fPrecioUnitario" placeholder="Precio Unitario" value="'.number_format($row['fPrecioUnitario'],2).'" ></td>
+                                <td style="color:#777;">'.utf8_encode($row['skDivisa']).'<input type="hidden" class="divisa" name="divisa[]" value="'.utf8_encode($row['skDivisa']).'" /></td>
+                                <td nowrap>'.utf8_encode($row['Nombre']).'</td>
+                                <td nowrap></td>
+                                <td> <span class="show_subtotal"></span> <input type="hidden" name="subtotal[]" class="subtotal" value="" /></td>
                               </tr>';
                               array_push($html['conceptosRecinto'],$tol);
                           }
                           while($row = $this->data['conceptosDespacho']->fetch_assoc()){
                               $tol='<tr class="active">
-                                <td><input type="checkbox" value="'.$row['skConcepto'].'" name="chkServicio[]"></td>
-                                <td><input type="text" name="iCantidadServicio" id="iCantidadServicio" class="form-control input-sm" placeholder="Cant" value="" ></td>
-                                <td><input type="text" name="fPrecioUnitario" id="fPrecioUnitario" class="form-control input-sm" placeholder="Precio Unitario" value="'.number_format($row['fPrecioUnitario'],2).'" ></td>
-                                <td>'.utf8_encode($row['Nombre']).'</td>
+                                <td><input type="checkbox" value="'.$row['skConcepto'].'" onChange="cotizar();"  name="conceptos[]"></td>
+                                <td><input type="text" name="iCantidad[]" onChange="cotizar();"  class="form-control input-sm iCantidad" placeholder="Cant" value="0" ></td>
+                                <td><input type="text" name="fPrecioUnitario[]" onChange="cotizar();"  class="form-control input-sm fPrecioUnitario" placeholder="Precio Unitario" value="'.number_format($row['fPrecioUnitario'],2).'" ></td>
+                                <td style="color:#777;">'.utf8_encode($row['skDivisa']).'<input type="hidden" class="divisa"name="divisa[]" value="'.utf8_encode($row['skDivisa']).'" /></td>
+                                <td nowrap>'.utf8_encode($row['Nombre']).'</td>
+                                <td nowrap></td>
+                                <td> <span class="show_subtotal"></span> <input type="hidden" name="subtotal[]" class="subtotal" value="" /></td>
                               </tr>';
                               array_push($html['conceptosDespacho'],$tol);
                           }

@@ -407,6 +407,12 @@
 									WHERE cc.skStatus = 'AC'";
 							//exit($sql);
 							$result = $this->db->query($sql);
+							/*if($result){
+									if($result->num_rows > 0){
+
+									}
+									return false;
+							}*/
 							if(!$result){
 									return false;
 							}

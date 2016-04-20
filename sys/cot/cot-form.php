@@ -13,8 +13,10 @@
     <?php
     //echo "aaaaa";
 //    $a = $data['tipo_cambio']->fetch_assoc();
-//var_dump($data['tipo_cambio']);
-    ?>
+/*echo "<pre>";
+print_r($data['tipo_cambio']['USD']['valor']);
+echo "</pre>"; */
+  ?>
     <div class="form-body">
       <div class="form-group">
         <label class="control-label col-md-2">Tipo de Cotizaci&oacute;n  <span aria-required="true" class="required"> * </span> </label>
@@ -136,7 +138,7 @@
             <label class="control-label col-md-2">Tipo de Cambio <span aria-required="true" class="required"> * </span> </label>
             <div class="col-md-4">
                 <div class="input-icon right"><i class="fa"></i>
-                    <input type="text" name="fTipoCambio" id="fTipoCambio" class="form-control" placeholder="Tipo de Cambio" value="" >
+                    <input type="text" name="fTipoCambio" id="fTipoCambio" class="form-control" placeholder="Tipo de Cambio" value="<?php echo $data['tipo_cambio']['USD']['valor'];?>" >
                 </div>
             </div>
             <label class="control-label col-md-2">Valor Mercanc&iacute;a<span aria-required="true" class="required"> * </span> </label>
@@ -151,24 +153,50 @@
 
       <hr>
         <div class="form-group">
-            <label class="control-label col-md-2">Conceptos <span aria-required="true" class="required"> * </span> </label>
+            <label class="control-label col-md-2">Conceptos</label>
             <div class="col-md-10">
               <table class="table table-responsive">
                 <thead>
                   <th nowrap>S</th>
                   <th nowrap>Cantidad</th>
                   <th nowrap>Precio Unitario</th>
-                  <th width="100%">Nombre</th>
+                  <th nowrap>Divisa</th>
+                  <th >Nombre</th>
+                  <th width="100%"></th>
+
+                  <th nowrap>Subtotal</th>
                 </thead>
                 <tbody id="dvConceptosPedimento">
                 </tbody>
+                <tbody id="dvConceptosNaviera">
+                </tbody>
+                <tbody id="dvConceptosRecinto">
+                  <tbody id="dvConceptosDespacho">
+                  </tbody>
               </table>
 
             </div>
         </div>
-      </div><!-- FIN DEL DIV cuando no es editado !-->
-        <div class="clearfix"></div>
-      <hr>
+
+        <!--<div class="form-group">
+            <label class="control-label col-md-2">Recinto</label>
+            <div class="col-md-10">
+              <table class="table table-responsive">
+                <tbody id="dvConceptosRecinto">
+                </tbody>
+              </table>
+            </div>
+        </div>-->
+        <div class="form-group">
+          <div class="col-md-12">
+            <div class="col-md-2 col-md-offset-10">
+            <h3>Total: <span id="total">0.00</span></h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    <div class="clearfix"></div>
+      <!--<hr>
         <div class="form-group">
             <label class="control-label col-md-2">Observaciones <span aria-required="true" class="required"> * </span> </label>
             <div class="col-md-8">
@@ -178,29 +206,45 @@
             </div>
         </div>
           <div class="clearfix"></div>
-        <hr>
+        <hr>-->
     </div>
 </form>
 <div class="clearfix"></div>
 <script type="text/javascript">
-/*
-suma con clases
+function cotizar(){
+  //alert(1);
+  $(".subtotal").val("");
+  $(".show_subtotal").html("");
+    			var total = 0;
+    			$("input[name='conceptos[]']:checked").each(function(idx,obj){
+    				var tr = $(obj).parent().parent();
+            var precioUnitario = $(tr).find(".fPrecioUnitario").val();
+            var divisaConcepto = $(tr).find(".divisa").val();
+    				var cantidad = $(tr).find(".iCantidad").val();
+            var unidadCambio = $(tr).find("#fTipoCambio").val();
+            if(divisaConcepto == 'MXN'){
+              var resultado = precioUnitario * cantidad;
+            }else{
+                alert("entro");
+              var resultado = precioUnitario * cantidad * unidadCambio;
+            }
+            var subtotal = $(tr).find(".subtotal").val(resultado);
+            var show_subtotal = $(tr).find(".show_subtotal").html("$ "+resultado.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
 
-var suma = 0;
-$('#mitabla tr.dato').each(function(){ //filas con clase 'dato', especifica una clase, asi no tomas el nombre de las columnas
- suma += parseInt($(this).find('td').eq(2).text()||0,10) //numero de la celda 3
-})
-alert(suma)
-*/
+
+    				total += resultado;
+    			});
+    			$("#total").html("$ "+total.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+}
+
     function getConceptos(){
         $('.page-title-loading').css('display','inline');
 
 
         if(!$('#skEmpresaImportador').val() == ''&& !$('#skEmpresaNaviera').val() == ''){
-//          alert(conceptosPedimento);
           $.post("",{
               axn : "getConceptos"
-              ,sReferencia : $("#skEmpresaImportador").val()
+              ,skEmpresaImportador : $("#skEmpresaImportador").val()
               ,skEmpresaNaviera : $("#skEmpresaNaviera").val()
               ,skEmpresaRecinto : $("#skEmpresaRecinto").val()
               ,skTipoTramite : $('input[name=skTipoTramite]:checked').val()
@@ -208,7 +252,10 @@ alert(suma)
           }, function(response){
              console.log(response);
               $("#divConceptos").css("display","block");
-              $("#dvConceptosPedimento").html(response['conceptosPedimento']+response['conceptosNaviera']+response['conceptosRecinto']+response['conceptosDespacho']);
+              $("#dvConceptosPedimento").html(response['conceptosPedimento']);
+              $("#dvConceptosNaviera").html(response['conceptosNaviera']);
+              $("#dvConceptosRecinto").html(response['conceptosRecinto']);
+              $("#dvConceptosDespacho").html(response['conceptosDespacho']);
             //  $("#dvConceptosNaviera").html(response['conceptosNaviera']);
               $('.page-title-loading').css('display','none');
           });
@@ -237,39 +284,14 @@ function obtenerDatos(){
          	'<div class="col-md-4">'+
            	'	 <label id="lbEjecutivo" class="control-label">'+data.data.Ejecutivo+'</label>'+
            ' </div>'+
-   ' </div>'+
-    '<div class="form-group">'+
+           ' </div>'+
+           '<div class="form-group">'+
+              '<label class="control-label col-md-2">BL Master</label>'+
+              ' <div class="col-md-4">'+
+              '    <label class="control-label">'+data.data.sBlMaster+'</label>'+
+              ' </div>'+
 
-      	'<label class="control-label col-md-2">Mercancia</label>'+
-	    ' <div class="col-md-4">'+
-	    '    <label id="lbMercancia" class="control-label ">'+data.data.sMercancia+'</label>'+
-	    ' </div>'+
-   ' </div>'+
-    '<div class="form-group">'+
-      '<label class="col-md-2 control-label">Datos del tipo de servicio</label>'+
-      '<div class="col-md-2">'+
-        '  <label class="control-label">Num. Contenedor: '+data.data.sNumContenedor+'</label>'+
-       ' </div>'+
-      ' <div class="col-md-2">'+
-      '    <label class="control-label ">Bultos: '+data.data.iBultos+'</label>'+
-      ' </div>'+
-      ' <div class="col-md-2">'+
-      '    <label class="control-label ">Peso: '+data.data.fPeso+'</label>'+
-      ' </div>'+
-      ' <div class="col-md-2">'+
-      '    <label class="control-label ">Volumen: '+data.data.fVolumen+'</label>'+
-      ' </div>'+
-   ' </div>'+
-   '<div class="form-group">'+
-      '<label class="control-label col-md-2">BL Master</label>'+
-      ' <div class="col-md-4">'+
-      '    <label class="control-label">'+data.data.sBlMaster+'</label>'+
-      ' </div>'+
-      '<label class="control-label col-md-2">BL House</label>'+
-      ' <div class="col-md-4">'+
-      '    <label class="control-label ">'+data.data.sBlHouse+'</label>'+
-      ' </div>'+
-   ' </div> <hr>';
+           ' </div> <hr>';
 
     // Selecciona la empresa (cliente) de la refernecia //
     $("#skEmpresaImportador").val(data.data.skEmpresa);
@@ -289,36 +311,9 @@ function obtenerDatos(){
     }
 }
 
+
     $(document).ready(function(){
-        $(".calcular").change(function(){
-            switch(iTipoTarifa) {
-                case "1": // Por Monto Fijo
-                    _fAgenteAduanal = parseFloat(($("#fAgenteAduanal").val()) ? $("#fAgenteAduanal").val() : 0)
-                    var fAgenteAduanal = ( (_fAgenteAduanal / 100) * (parseFloat($("#fImporte").val())) );
-                    $("#AA").html(fAgenteAduanal);
 
-                    _fCorresponsal = parseFloat(($("#fCorresponsal").val()) ? $("#fCorresponsal").val() : 0)
-                    var fCorresponsal = ( (_fCorresponsal / 100) * (parseFloat($("#fImporte").val())) );
-                    $("#gananciaCorresponsal").html(fCorresponsal);
-
-                    _fPromotor1 = parseFloat(($("#fPromotor1").val()) ? $("#fPromotor1").val() : 0)
-                    var fPromotor1 = ( (_fPromotor1 / 100) * (parseFloat($("#fImporte").val())) );
-                    $("#gananciaPromotor1").html(fPromotor1);
-
-                    _fPromotor2 = parseFloat(($("#fPromotor2").val()) ? $("#fPromotor2").val() : 0)
-                    var fPromotor2 = ( (_fPromotor2 / 100) * (parseFloat($("#fImporte").val())) );
-                    $("#gananciaPromotor2").html(fPromotor2);
-
-                    var gananciagc = parseFloat($("#fImporte").val()) - _fAgenteAduanal - _fCorresponsal - _fPromotor1 - _fPromotor2;
-                    $("#gananciagc").html(gananciagc);
-
-                    break;
-                case "2": // Por Procentaje
-                    break;
-                case "3": // Por Contenedor
-                    break;
-            }
-        });
         // VALIDADOR PARA OBTENER DATOS POR REFERENCIA //
         $.validator.addMethod(
             "obtenerDatos",

@@ -1,14 +1,14 @@
 <?php
     require_once(SYS_PATH."cof/controller/cof.controller.php");
-    $usu = new Cof_Controller();   
+    $usu = new Cof_Controller();
     $rsPerfiles = $usu->consulta_Profile();
     if($_POST){
         $_SESSION['session']['skProfile'] = $_POST['skProfile'];
         header('Location: '.$_SERVER['REQUEST_URI']);
-    }			
+    }
 ?>
 <!DOCTYPE html>
-<!-- 
+<!--
 Template Name: Conquer - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.2.0
 Version: 2.0
 Author: KeenThemes
@@ -75,10 +75,10 @@ License: You must have a valid license purchased only from themeforest(the above
                                 <div class="input-group input-medium">
                                     <select class="form-control" name="skProfile">
                                         <option value="0">- Perf&iacute;l -</option>
-                                        <? while($rPerfil = $rsPerfiles->fetch_assoc()){?>
+                                        <?php while($rPerfil = $rsPerfiles->fetch_assoc()){?>
 										<option value="<?php echo $rPerfil['skProfiles']; ?>"><?php echo utf8_encode($rPerfil['sName']); ?></option>
-									
-										<? } ?>
+
+										<?php } ?>
                                     </select>
                                     <span class="input-group-btn">
                                         <button type="submit" class="btn btn-info">Seleccionar</button>
@@ -117,7 +117,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <script src="<?php echo SYS_URL; ?>core/assets/lib/app.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 <script>
-jQuery(document).ready(function() {     
+jQuery(document).ready(function() {
   App.init();
 });
 </script>
