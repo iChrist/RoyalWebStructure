@@ -221,11 +221,11 @@ function cotizar(){
             var precioUnitario = $(tr).find(".fPrecioUnitario").val();
             var divisaConcepto = $(tr).find(".divisa").val();
     				var cantidad = $(tr).find(".iCantidad").val();
-            var unidadCambio = $(tr).find("#fTipoCambio").val();
+            var unidadCambio = $("#fTipoCambio").val();
             if(divisaConcepto == 'MXN'){
               var resultado = precioUnitario * cantidad;
             }else{
-                alert("entro");
+              //  alert("entro");
               var resultado = precioUnitario * cantidad * unidadCambio;
             }
             var subtotal = $(tr).find(".subtotal").val(resultado);
