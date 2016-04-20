@@ -23,11 +23,6 @@ if (isset($data['datos']) && $data['datos']) {
     </tr>
     <tr><td style="height:1px;"></td></tr>
     <tr>
-        <td><strong>BL House: </strong></td>
-        <td><?php echo (isset($result['sBlHouse'])) ? utf8_encode($result['sBlHouse']) : ''; ?></td>
-    </tr>
-    <tr><td style="height:1px;"></td></tr>
-    <tr>
         <td><strong>Cliente: </strong></td>
         <td><?php echo (isset($result['Empresa'])) ? utf8_encode($result['Empresa']) : ''; ?></td>
     </tr>

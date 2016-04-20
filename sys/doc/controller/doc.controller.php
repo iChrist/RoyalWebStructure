@@ -301,7 +301,7 @@ Class doc_Controller Extends doc_Model {
                         if ($mercancias) {
                             while ($rmercancias = $mercancias->fetch_assoc()) {
                                 if ($row['skTipoServicio'] == 'CONT') {
-                                    $datosServicio .="<br> BL House: " . $rmercancias['sBlhouse'] . " | " . $rmercancias['sNumContenedor'];
+                                    $datosServicio .="<br> BL House: " . $rmercancias['sBlhouse'] . " | Contenedor: " . $rmercancias['sNumContenedor'];
                                 } elseif ($row['skTipoServicio'] == 'CSUE') {
                                     $datosServicio .="<br> Bultos: " . $rmercancias['iBultos'] . " | Peso: " . $rmercancias['fPeso'] . " | Volumen: " . $rmercancias['fVolumen'];
                                 }
@@ -437,11 +437,11 @@ Class doc_Controller Extends doc_Model {
                         if (isset($_POST['sNumContenedor'])) {
                             for ($i = 0; $i < count($_POST['sNumContenedor']); $i++) {
                                 $this->mercancias['skMercancia'] = substr(md5(microtime()), 1, 32);
-                                $this->mercancias['sBlhouse'] = $_POST['sBlhouse'][$i];
-                                $this->mercancias['sNumContenedor'] = $_POST['sNumContenedor'][$i];
-                                $this->mercancias['skTipoContenedor'] = $_POST['skTipoContenedor'][$i];
-                                $this->mercancias['skEmbalaje'] = $_POST['skEmbalaje'][$i];
-                                if (!empty($this->mercancias['sBlhouse']) && !empty($this->mercancias['sNumContenedor']) && !empty($this->mercancias['skTipoContenedor']) && !empty($this->mercancias['skEmbalaje'])) {
+                                $this->mercancias['sBlhouse'] = addslashes(utf8_decode($_POST['sBlhouse'][$i]));
+                                $this->mercancias['sNumContenedor'] = addslashes(utf8_decode($_POST['sNumContenedor'][$i]));
+                                $this->mercancias['skTipoContenedor'] = addslashes(utf8_decode($_POST['skTipoContenedor'][$i]));
+                                $this->mercancias['skEmbalaje'] = addslashes(utf8_decode($_POST['skEmbalaje'][$i]));
+                                if (!empty($this->mercancias['sNumContenedor'])) {
                                     parent::create_mercancias();
                                 }
                             }
@@ -450,9 +450,9 @@ Class doc_Controller Extends doc_Model {
                         if (isset($_POST['iBultos'])) {
                             for ($i = 0; $i < count($_POST['iBultos']); $i++) {
                                 $this->mercancias['skMercancia'] = substr(md5(microtime()), 1, 32);
-                                $this->mercancias['iBultos'] = $_POST['iBultos'][$i];
-                                $this->mercancias['fPeso'] = $_POST['fPeso'][$i];
-                                $this->mercancias['fVolumen'] = $_POST['fVolumen'][$i];
+                                $this->mercancias['iBultos'] = addslashes(utf8_decode($_POST['iBultos'][$i]));
+                                $this->mercancias['fPeso'] = addslashes(utf8_decode($_POST['fPeso'][$i]));
+                                $this->mercancias['fVolumen'] = addslashes(utf8_decode($_POST['fVolumen'][$i]));
                                 if (!empty($this->mercancias['iBultos']) && !empty($this->mercancias['fPeso']) && !empty($this->mercancias['fVolumen'])) {
                                     parent::create_mercancias();
                                 }
@@ -497,11 +497,11 @@ Class doc_Controller Extends doc_Model {
                     if (isset($_POST['sNumContenedor'])) {
                         for ($i = 0; $i < count($_POST['sNumContenedor']); $i++) {
                             $this->mercancias['skMercancia'] = substr(md5(microtime()), 1, 32);
-                            $this->mercancias['sBlhouse'] = $_POST['sBlhouse'][$i];
-                            $this->mercancias['sNumContenedor'] = $_POST['sNumContenedor'][$i];
-                            $this->mercancias['skTipoContenedor'] = $_POST['skTipoContenedor'][$i];
-                            $this->mercancias['skEmbalaje'] = $_POST['skEmbalaje'][$i];
-                            if (!empty($this->mercancias['sBlhouse']) && !empty($this->mercancias['sNumContenedor']) && !empty($this->mercancias['skTipoContenedor']) && !empty($this->mercancias['skEmbalaje'])) {
+                            $this->mercancias['sBlhouse'] = addslashes(utf8_decode($_POST['sBlhouse'][$i]));
+                            $this->mercancias['sNumContenedor'] = addslashes(utf8_decode($_POST['sNumContenedor'][$i]));
+                            $this->mercancias['skTipoContenedor'] = addslashes(utf8_decode($_POST['skTipoContenedor'][$i]));
+                            $this->mercancias['skEmbalaje'] = addslashes(utf8_decode($_POST['skEmbalaje'][$i]));
+                            if (!empty($this->mercancias['sNumContenedor'])) {
                                 parent::create_mercancias();
                             }
                         }
@@ -510,9 +510,9 @@ Class doc_Controller Extends doc_Model {
                     if (isset($_POST['iBultos'])) {
                         for ($i = 0; $i < count($_POST['iBultos']); $i++) {
                             $this->mercancias['skMercancia'] = substr(md5(microtime()), 1, 32);
-                            $this->mercancias['iBultos'] = $_POST['iBultos'][$i];
-                            $this->mercancias['fPeso'] = $_POST['fPeso'][$i];
-                            $this->mercancias['fVolumen'] = $_POST['fVolumen'][$i];
+                            $this->mercancias['iBultos'] = addslashes(utf8_decode($_POST['iBultos'][$i]));
+                            $this->mercancias['fPeso'] = addslashes(utf8_decode($_POST['fPeso'][$i]));
+                            $this->mercancias['fVolumen'] = addslashes(utf8_decode($_POST['fVolumen'][$i]));
                             if (!empty($this->mercancias['iBultos']) && !empty($this->mercancias['fPeso']) && !empty($this->mercancias['fVolumen'])) {
                                 parent::create_mercancias();
                             }
@@ -690,7 +690,7 @@ Class doc_Controller Extends doc_Model {
             if ($mercancias) {
                 while ($rmercancias = $mercancias->fetch_assoc()) {
                     if ($this->data['datos']['skTipoServicio'] == 'CONT') {
-                        $this->data['mercancias'] .="<br> BL House: " . $rmercancias['sBlhouse'] . " | " . $rmercancias['sNumContenedor'];
+                        $this->data['mercancias'] .="<br> BL House: " . $rmercancias['sBlhouse'] . " | Contenedor " . $rmercancias['sNumContenedor'];
                     } elseif ($this->data['datos']['skTipoServicio'] == 'CSUE') {
                         $this->data['mercancias'] .="<br> Bultos: " . $rmercancias['iBultos'] . " | Peso: " . $rmercancias['fPeso'] . " | Volumen: " . $rmercancias['fVolumen'];
                     }

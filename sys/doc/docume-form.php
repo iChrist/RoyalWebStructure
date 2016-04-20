@@ -14,13 +14,23 @@ ob_start();
 ?>
 <tr>
     <td align="center"><a href="javascript:;" class="btn btn-default delete-contenedor"><i class="fa fa-trash-o"></i></a></td>
-    <td nowrap><input type="text" name="sBlhouse[]" class="form-control contenedor" placeholder="N&uacute;m. Contenedor" value=""></td>
+    <td nowrap><input type="text" name="sBlhouse[]" class="form-control contenedor" placeholder="BL House" value=""></td>
     <td nowrap><input type="text" name="sNumContenedor[]" class="form-control contenedor" placeholder="N&uacute;m. Contenedor" value=""></td>
     <td nowrap>
         <select name="skTipoContenedor[]" class="form-control contenedor">
             <option value="">-Contenedor-</option>
-            <option value="20DC">20 DC</option>
-            <option value="40DC">40 DC</option>
+        <option value="20DC">20DC</option>
+        <option value="40DC">40DC</option>
+        <option value="20DV">20DV</option>
+        <option value="40DV">40DV</option>
+        <option value="40HC">40HC</option>
+        <option value="20OP">20OP</option>
+        <option value="40OP">40OP</option>
+        <option value="20FL">20FL</option>
+        <option value="40FL">40FL</option>
+        <option value="20RF">20RF</option>
+        <option value="40RF">40RF</option>
+        <option value="40RH">40RH</option>
         </select>
     </td>
     <td  colspan="2">
@@ -110,13 +120,23 @@ $mercanciasCargaSuelta = ob_get_clean();
                                 ?>
                                 <tr>
                                     <td align="center"><a href="javascript:;" class="btn btn-default delete-contenedor"><i class="fa fa-trash-o"></i></a></td>
-                                    <td nowrap><input type="text" name="sBlhouse[]" class="form-control contenedor" placeholder="N&uacute;m. Contenedor" value="<?php echo $v['sBlhouse']; ?>"></td>
+                                    <td nowrap><input type="text" name="sBlhouse[]" class="form-control contenedor" placeholder="BL House" value="<?php echo $v['sBlhouse']; ?>"></td>
                                     <td nowrap><input type="text" name="sNumContenedor[]" class="form-control contenedor" placeholder="N&uacute;m. Contenedor" value="<?php echo $v['sNumContenedor']; ?>"></td>
                                     <td nowrap>
                                         <select name="skTipoContenedor[]" class="form-control contenedor">
                                             <option value="">-Contenedor-</option>
                                             <option value="20DC" <?php echo ($v['skTipoContenedor'] == '20DC') ? 'selected' : ''; ?> >20 DC</option>
                                             <option value="40DC" <?php echo ($v['skTipoContenedor'] == '40DC') ? 'selected' : ''; ?>>40 DC</option>
+                                        <option value="20DV" <?php echo ($v['skTipoContenedor'] == '20DV') ? 'selected' : ''; ?>>20DV</option>
+                                        <option value="40DV" <?php echo ($v['skTipoContenedor'] == '40DV') ? 'selected' : ''; ?>>40DV</option>
+                                        <option value="40HC" <?php echo ($v['skTipoContenedor'] == '40HC') ? 'selected' : ''; ?>>40HC</option>
+                                        <option value="20OP" <?php echo ($v['skTipoContenedor'] == '20OP') ? 'selected' : ''; ?>>20OP</option>
+                                        <option value="40OP" <?php echo ($v['skTipoContenedor'] == '40OP') ? 'selected' : ''; ?>>40OP</option>
+                                        <option value="20FL" <?php echo ($v['skTipoContenedor'] == '20FL') ? 'selected' : ''; ?>>20FL</option>
+                                        <option value="40FL" <?php echo ($v['skTipoContenedor'] == '40FL') ? 'selected' : ''; ?>>40FL</option>
+                                        <option value="20RF" <?php echo ($v['skTipoContenedor'] == '20RF') ? 'selected' : ''; ?>>20RF</option>
+                                        <option value="40RF" <?php echo ($v['skTipoContenedor'] == '40RF') ? 'selected' : ''; ?>>40RF</option>
+                                        <option value="40RH" <?php echo ($v['skTipoContenedor'] == '40RH') ? 'selected' : ''; ?>>40RH</option>
                                         </select>
                                     </td>
                                     <td  colspan="2">
@@ -141,13 +161,23 @@ $mercanciasCargaSuelta = ob_get_clean();
                             ?>
                             <tr>
                                 <td align="center"><a href="javascript:;" class="btn btn-default delete-contenedor"><i class="fa fa-trash-o"></i></a></td>
-                                <td nowrap><input type="text" name="sBlhouse[]" class="form-control contenedor" placeholder="N&uacute;m. Contenedor" value=""></td>
+                                <td nowrap><input type="text" name="sBlhouse[]" class="form-control contenedor" placeholder="BL House" value=""></td>
                                 <td nowrap><input type="text" name="sNumContenedor[]" class="form-control contenedor" placeholder="N&uacute;m. Contenedor" value=""></td>
                                 <td nowrap>
                                     <select name="skTipoContenedor[]" class="form-control contenedor">
                                         <option value="">-Contenedor-</option>
-                                        <option value="20DC">20 DC</option>
-                                        <option value="40DC">40 DC</option>
+                                        <option value="20DC">20DC</option>
+                                        <option value="40DC">40DC</option>
+                                        <option value="20DV">20DV</option>
+                                        <option value="40DV">40DV</option>
+                                        <option value="40HC">40HC</option>
+                                        <option value="20OP">20OP</option>
+                                        <option value="40OP">40OP</option>
+                                        <option value="20FL">20FL</option>
+                                        <option value="40FL">40FL</option>
+                                        <option value="20RF">20RF</option>
+                                        <option value="40RF">40RF</option>
+                                        <option value="40RH">40RH</option>
                                     </select>
                                 </td>
                                 <td  colspan="2">
