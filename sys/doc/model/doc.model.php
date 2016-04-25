@@ -563,18 +563,18 @@ Abstract Class doc_Model Extends Core_Model {
     public function update_recepciondocumentos() {
 
         $sql = "UPDATE ope_recepciones_documentos SET ";
-        /* if(!empty($this->recepciondocumentos['sReferencia'])){
-          $sql .=" sReferencia = '".$this->recepciondocumentos['sReferencia']."' ,";
-          } */
+        if(!empty($this->recepciondocumentos['sReferencia'])){
+            $sql .=" sReferencia = '".$this->recepciondocumentos['sReferencia']."' ,";
+        }
         /* if(!empty($this->recepciondocumentos['sPedimento'])){
           $sql .=" sPedimento = '".$this->recepciondocumentos['sPedimento']."' ,";
           } */
         if (!empty($this->recepciondocumentos['sBlMaster'])) {
             $sql .=" sBlMaster = '" . $this->recepciondocumentos['sBlMaster'] . "' ,";
         }
-        if (!empty($this->recepciondocumentos['sBlHouse'])) {
+        /*if (!empty($this->recepciondocumentos['sBlHouse'])) {
             $sql .=" sBlHouse = '" . $this->recepciondocumentos['sBlHouse'] . "' ,";
-        }
+        }*/
         if (!empty($this->recepciondocumentos['sMercancia'])) {
             $sql .=" sMercancia = '" . $this->recepciondocumentos['sMercancia'] . "' ,";
         }

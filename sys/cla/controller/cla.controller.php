@@ -64,6 +64,8 @@
             $flag = true;
             $message = false;
             $lineaExcel = 2;
+            $factura = "";
+            $consecutivo = 0;
             foreach($data AS $k => $v){
                 // VERIFICACMOS QUE VENGA REFERENCIA Y PEDIMENTO //
                     if(empty($v['REFERENCIA']) && $lineaExcel==2){
@@ -81,7 +83,13 @@
                     $v['FACTURA'] = "";
                 }
                 $this->cla['sFactura'] = addslashes(trim($v['FACTURA']," "));
-                
+                // INICIA EL CONTADOR DEL CONSECUTIVO POR FACTURA //
+                if($factura == $this->cla['sFactura']){
+                    $consecutivo++;
+                }else{
+                  $factura = $this->cla['sFactura']; // ASIGNAMOS VALOR
+                  $consecutivo = 1;
+                }
                 // SE CREA LA PRIMERA CLASIFICACION //
                     if($validar == 0 && $lineaExcel==2){
                         $this->cla['skClasificacion'] = substr(md5(microtime()), 1, 32);
@@ -148,7 +156,8 @@
                         if(!isset($v['CONSECUTIVO'])){
                             $v['CONSECUTIVO'] = "";
                         }
-                        $this->claMer['iSecuencia'] = $lineaExcel - 1;
+                        //$this->claMer['iSecuencia'] = $lineaExcel - 1;
+                        $this->claMer['iSecuencia'] = $consecutivo;
                              
                         $skClasificacionMercancia = $this->create_claMer();
                         if(!$skClasificacionMercancia){ 

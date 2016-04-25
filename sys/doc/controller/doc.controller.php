@@ -290,11 +290,6 @@ Class doc_Controller Extends doc_Model {
                     while ($row = $this->data['data']->fetch_assoc()) {
                         $actions = $this->printModulesButtons(2, array($row['skRecepcionDocumento']), $row['skUsersCreacion']);
                         $datosServicio = $row['TipoServicio'];
-                        /* if ($row['skTipoServicio'] == 'CONT') {
-                          $datosServicio .="<br>" . $row['sNumContenedor'];
-                          } elseif ($row['skTipoServicio'] == 'CSUE') {
-                          $datosServicio .="<br>Bultos: " . $row['iBultos'] . "<br>Peso: " . $row['fPeso'] . "<br>Volumen: " . $row['fVolumen'];
-                          } */
                         // OBTENEMOS LAS MERCANCIAS //
                         $this->mercancias['skRecepcionDocumento'] = $row['skRecepcionDocumento'];
                         $mercancias = parent::read_mercancias();
@@ -602,46 +597,45 @@ Class doc_Controller Extends doc_Model {
         $i = 2;
         $this->data['data'] = parent::read_recepciondocumentos();
         while ($row = $this->data['data']->fetch_assoc()) {
-            $datosServicio = $row['TipoServicio'];
-            /*if ($row['skTipoServicio'] == 'CONT') {
-                $datosServicio .=" | " . $row['sNumContenedor'];
-            } elseif ($row['skTipoServicio'] == 'CSUE') {
-                $datosServicio .=" \n\n\n| Bultos: " . $row['iBultos'] . " | Peso: " . $row['fPeso'] . " | Volumen: " . $row['fVolumen'];
-            }*/
+            
+            //OBTENER PROMOROTES //
             $promotores = $row['promotor1'];
             if (!empty($row['promotor2'])) {
                 $promotores .= ' | ' . $row['promotor2'];
             }
+           
             // OBTENEMOS LAS MERCANCIAS //
+            $datosServicio = $row['TipoServicio'];
             $this->mercancias['skRecepcionDocumento'] = $row['skRecepcionDocumento'];
             $mercancias = parent::read_mercancias();
             if ($mercancias) {
                 while ($rmercancias = $mercancias->fetch_assoc()) {
                     if ($row['skTipoServicio'] == 'CONT') {
-                        $datosServicio .="\nBL House: " . $rmercancias['sBlhouse'] . " | " . $rmercancias['sNumContenedor'];
+                        $datosServicio .="\nBL House: " . $rmercancias['sBlhouse'] . " | Contenedor: " . $rmercancias['sNumContenedor'];
                     } elseif ($row['skTipoServicio'] == 'CSUE') {
                         $datosServicio .="\nBultos: " . $rmercancias['iBultos'] . " | Peso: " . $rmercancias['fPeso'] . " | Volumen: " . $rmercancias['fVolumen'];
                     }
                 }
             }
+            
             //exit('<pre>'.print_r($mercancias,1).'</pre>');
             $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $i, utf8_encode($row['sReferencia']));
             $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $i, utf8_encode($row['sPedimento']));
             $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $i, utf8_encode($row['sBlMaster']));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $i, utf8_encode($row['sBlHouse']));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $i, utf8_encode($row['TipoTramite']));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $i, utf8_encode($datosServicio));
-            $objPHPExcel->getActiveSheet()->getStyle('F' . $i)->getAlignment()->setWrapText(true);
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $i, utf8_encode($row['Empresa']));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $i, utf8_encode($row['corresponsalia']));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $i, utf8_encode($promotores));
-            $objPHPExcel->getActiveSheet()->getStyle('I' . $i)->getAlignment()->setWrapText(true);
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(9, $i, utf8_encode($row['skClaveDocumento']));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(10, $i, utf8_encode($row['sMercancia']));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(11, $i, utf8_encode($row['sObservaciones']));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(12, $i, date('d-m-Y', strtotime($row['dRecepcion'])) . ' ' . $row['tRecepcion']);
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(13, $i, date('d-m-Y H:i:s', strtotime($row['dFechaCreacion'])));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(14, $i, utf8_encode($row['autor']));
+            //$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $i, utf8_encode($row['sBlHouse']));
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $i, utf8_encode($row['TipoTramite']));
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $i, utf8_encode($datosServicio));
+            $objPHPExcel->getActiveSheet()->getStyle('E' . $i)->getAlignment()->setWrapText(true);
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $i, utf8_encode($row['Empresa']));
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $i, utf8_encode($row['corresponsalia']));
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $i, utf8_encode($promotores));
+            $objPHPExcel->getActiveSheet()->getStyle('H' . $i)->getAlignment()->setWrapText(true);
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $i, utf8_encode($row['skClaveDocumento']));
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(9, $i, utf8_encode($row['sMercancia']));
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(10, $i, utf8_encode($row['sObservaciones']));
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(11, $i, date('d-m-Y', strtotime($row['dRecepcion'])) . ' ' . $row['tRecepcion']);
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(12, $i, date('d-m-Y H:i:s', strtotime($row['dFechaCreacion'])));
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(13, $i, utf8_encode($row['autor']));
             $i++;
         }
         //exit('<pre>'.print_r($objPHPExcel,1).'<pre>');

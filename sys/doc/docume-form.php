@@ -116,12 +116,12 @@ $mercanciasCargaSuelta = ob_get_clean();
                     <tbody>
                         <?php
                         if ($data['mercancias'] && $result['skTipoServicio'] == 'CONT') {
-                            foreach ($data['mercancias'] AS $k => $v) {
+                            foreach ($data['mercancias'] AS $k => $v) { 
                                 ?>
                                 <tr>
                                     <td align="center"><a href="javascript:;" class="btn btn-default delete-contenedor"><i class="fa fa-trash-o"></i></a></td>
-                                    <td nowrap><input type="text" name="sBlhouse[]" class="form-control contenedor" placeholder="BL House" value="<?php echo $v['sBlhouse']; ?>"></td>
-                                    <td nowrap><input type="text" name="sNumContenedor[]" class="form-control contenedor" placeholder="N&uacute;m. Contenedor" value="<?php echo $v['sNumContenedor']; ?>"></td>
+                                    <td nowrap><input type="text" name="sBlhouse[]" class="form-control contenedor" placeholder="BL House" value="<?php echo htmlentities(utf8_encode($v['sBlhouse'])); ?>"></td>
+                                    <td nowrap><input type="text" name="sNumContenedor[]" class="form-control contenedor" placeholder="N&uacute;m. Contenedor" value="<?php echo htmlentities(utf8_encode($v['sNumContenedor'])); ?>"></td>
                                     <td nowrap>
                                         <select name="skTipoContenedor[]" class="form-control contenedor">
                                             <option value="">-Contenedor-</option>
@@ -225,9 +225,9 @@ $mercanciasCargaSuelta = ob_get_clean();
                                 ?>
                                 <tr >
                                     <td align="center"><a href="javascript:;" class="btn btn-default delete-cargaSuelta"><i class="fa fa-trash-o"></i></a></td>
-                                    <td nowrap> <input type="text" name="iBultos[]" class="form-control cargaSuelta" placeholder="Bultos" value="<?php echo $v['iBultos']; ?>"></td>
-                                    <td nowrap> <input type="text" name="fPeso[]" class="form-control cargaSuelta" placeholder="Peso" value="<?php echo $v['fPeso']; ?>"></td>
-                                    <td  colspan="2"><input type="text" name="fVolumen[]" class="form-control cargaSuelta" placeholder="Volumen" value="<?php echo $v['fVolumen']; ?>"></td>
+                                    <td nowrap> <input type="text" name="iBultos[]" class="form-control cargaSuelta" placeholder="Bultos" value="<?php echo htmlentities(utf8_encode($v['iBultos'])); ?>"></td>
+                                    <td nowrap> <input type="text" name="fPeso[]" class="form-control cargaSuelta" placeholder="Peso" value="<?php echo htmlentities(utf8_encode($v['fPeso'])); ?>"></td>
+                                    <td  colspan="2"><input type="text" name="fVolumen[]" class="form-control cargaSuelta" placeholder="Volumen" value="<?php echo htmlentities(utf8_encode($v['fVolumen'])); ?>"></td>
                                 </tr>
                                 <?php
                             }//ENDFOREACH
