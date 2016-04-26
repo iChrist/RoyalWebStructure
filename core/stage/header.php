@@ -111,7 +111,7 @@ global $dash;
                                         <li>
 						<a href="extra_profile.html"><i class="fa fa-user"></i> Mi perfil</a>
 					</li>
-                                        
+
 					<li class="divider">
 					</li>
                                         !-->
@@ -164,7 +164,7 @@ global $dash;
 	 				echo '<li class="start">
 					<a href="'.(count($datos)!=0 ? "javascript:;" : SYS_URL."sys/").'">
 					<i class="'.($array[$i]['sIcons'] ? $array[$i]['sIcons'] : '').'"></i>
-					<span class="title">'.$array[$i]['sTitle'].'</span>';
+					<span class="title">'.utf8_encode($array[$i]['sTitle']).'</span>';
 					 if(count($datos)==0){ echo '<span class="selected"></span></a>';}else{
 						 echo '<span class="arrow "></span></a>';
 						echo ' <ul class="sub-menu">';
