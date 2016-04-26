@@ -118,7 +118,8 @@ Class rev_Controller Extends rev_Model {
                         $fechas = '<b>Solicitud:</b> ' . $dFechaCreacion . '<br><b>Proceso:</b> ' . $dFechaProceso . '<br><b>Cierre:</b> ' . $dFechaCierre;
 
                         array_push($records['data'], array(
-                            utf8_encode($row['Icono'])
+                            !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">' . utf8_encode($actions['sHtml']) . '</ul></div>' : ''
+                            ,utf8_encode($row['Icono'])
                             , ($row['iPrioridad'] == 0) ? 'Normal' : 'Urgente'
                             , utf8_encode($row['sReferencia'])
                             , $fechas
@@ -127,7 +128,6 @@ Class rev_Controller Extends rev_Model {
                             , utf8_encode($row['EmpresaNaviera'])
                             , utf8_encode($row['Tramitador'])
                             , utf8_encode($row['sObservaciones'])
-                            , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">' . utf8_encode($actions['sHtml']) . '</ul></div>' : ''
                         ));
                     }
 

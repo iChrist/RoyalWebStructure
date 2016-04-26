@@ -71,7 +71,7 @@ Class Doc_Controller Extends Doc_Model {
                         </tr>';
                     }
                 }elseif($row['skTipoServicio']=='CONT'){
-                    $html .='<h3>Mercancia: </h3>
+                    $html .='<h3>Mercancía: </h3>
                     <table class="col-md-12 table table-striped">
                     <tr>
                     <th>BL House</th>

@@ -132,7 +132,7 @@
                             return true;
                             break;
                         case "obtenerDatos":
-                            $this->solreva['sReferencia'] = $_POST['sReferencia'];
+                            /*$this->solreva['sReferencia'] = $_POST['sReferencia'];
                             $this->data['data']=parent::read_referencia();
                             if(!$this->data['data']){
                                 $this->data['response'] = false;
@@ -156,7 +156,8 @@
                                 );
                             }
                             header('Content-Type: application/json');
-                            echo json_encode($result);
+                            echo json_encode($result);*/
+                            $this->load_controller('doc','obtenerDatos');
                             return true;
                             break;
                         case "save":
