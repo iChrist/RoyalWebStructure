@@ -84,6 +84,7 @@ if (isset($data['datos']) && $data['datos']) {
         <?php
     }//ENDIF
     ?>
+    <tr><td style="height:5px;"></td></tr>
     <tr>
         <td><strong>Mercancia: </strong></td>
         <td><?php echo (isset($result['sMercancia'])) ? utf8_encode($result['sMercancia']) : ''; ?></td>

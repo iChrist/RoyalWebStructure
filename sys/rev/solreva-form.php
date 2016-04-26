@@ -48,6 +48,7 @@
       </div>
     </div>
     
+    <!--
     <div class="form-group">
       <label class="control-label col-md-2">BL House</label>
       <div class="col-md-4">
@@ -56,6 +57,7 @@
         </div>
       </div>
     </div>
+    !-->
     
     <div class="form-group">
       <label class="control-label col-md-2">ETA <span aria-required="true" class="required"> * </span></label>
@@ -298,12 +300,13 @@ function lanzadera(){
 function obtenerDatos(){
 	  $('.page-title-loading').css('display','inline');
 	 $.post("",{ axn : "obtenerDatos" , sReferencia : $("#sReferencia").val() }, function(data){
-             
-             //console.log(data);
-                //console.log(data.data[0][0]); 
-              //  var cad="";
-              //if(data['data']){
-              //  if(data.data[0]){    
+            $("#dvDatos").html(data);
+            $('.page-title-loading').css('display','none');
+            /*if($("input[name=sBlMaster]").val().length == 0){
+                $("input[name=sBlMaster]").val(data.data[0][8]);
+                $("input[name=sBlHouse]").val(data.data[0][9]);
+            }*/
+        /*
         var cad = '';
         if(!data.data[0]){
             cad ='';
@@ -348,13 +351,10 @@ function obtenerDatos(){
                 $("input[name=sBlMaster]").val(data.data[0][8]);
                 $("input[name=sBlHouse]").val(data.data[0][9]);
             }
-   }
+   }*/
                  $("#dvDatos").html(cad);
-               /*$("#sNumeroParte").html(cad);
-               $("#sNumeroParte").prop('disabled', false);*/
                $('.page-title-loading').css('display','none');
             });
-          //  $('.page-title-loading').css('display','none');
 			}
 
     $(document).ready(function(){
@@ -447,7 +447,9 @@ invalidHandler: function (event, validator) { //alerta de error de visualizació
             messages:{
                 sReferencia:{
                     required:"Ingresa una Referencia",
-                    remote: "Esta referencia no Existe."
+                    remote: function(){
+                        return 'La referencia "'+$("#sReferencia").val()+'" no Existe.';
+                    }
                 },
                 skEmpresaNaviera:{
                     required: "Selecciona una Línea Naviera",

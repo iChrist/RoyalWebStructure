@@ -1,6 +1,6 @@
 <?php
 
-Abstract Class doc_Model Extends Core_Model {
+Class Doc_Model Extends Core_Model {
 
     // PUBLIC VARIABLES //
     public $recepciondocumentos = array(
@@ -83,9 +83,9 @@ Abstract Class doc_Model Extends Core_Model {
     public function __destruct() {
         
     }
-
+    
     /* CATALOGO DE TIPOS DE DOCUMENTOS PARA SUBIR COMO ARTCHIVO */
-
+    
     public function count_docTipo() {
         $sql = "SELECT COUNT(*) AS total FROM cat_docTipo AS docTipo WHERE 1=1 ";
         if (!empty($this->recepcionDoc_docTipo['skDocTipo'])) {
@@ -524,7 +524,10 @@ Abstract Class doc_Model Extends Core_Model {
     }
 
     public function read_mercancias() {
-        $sql = "SELECT * FROM rel_recepciones_mercancias WHERE skRecepcionDocumento = '" . $this->mercancias['skRecepcionDocumento'] . "' ";
+        $sql = " SELECT rm.*, em.sNombre AS embalaje, tc.sNombre AS tipoContenedor FROM rel_recepciones_mercancias rm "
+                . " LEFT JOIN cat_embalajes em ON em.skEmbalaje = rm.skEmbalaje "
+                . " LEFT JOIN cat_tipos_contenedores tc ON tc.skTipoContenedor = rm.skTipoContenedor "
+                . " WHERE skRecepcionDocumento = '" . $this->mercancias['skRecepcionDocumento'] . "' ";
         //exit($sql);
         $result = $this->db->query($sql);
         if ($result) {

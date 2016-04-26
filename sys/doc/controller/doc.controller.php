@@ -2,7 +2,7 @@
 
 require_once(SYS_PATH . "doc/model/doc.model.php");
 
-Class doc_Controller Extends doc_Model {
+Class Doc_Controller Extends Doc_Model {
 
     // PRIVATE VARIABLES //
     private $data = array();
@@ -15,7 +15,88 @@ Class doc_Controller Extends doc_Model {
     public function __destruct() {
         
     }
+    
+    public function obtenerDatos($sReferencia = ""){
+        
+        $this->recepciondocumentos['sReferencia'] = htmlentities($_POST['sReferencia']);
+        $this->data['data'] = $this->read_recepciondocumentos();
 
+        if (!$this->data['data']) {
+            $this->data['response'] = false;
+            $this->data['message'] = 'La Referencia '.htmlentities($_POST['sReferencia']).' no existe.';
+            header('Content-Type: application/json');
+            echo json_encode($this->data);
+            return false;
+        }
+        $html = "";
+        while ($row = $this->data['data']->fetch_assoc()) {
+            $html .='<div class="col-md-6"><h3>Detalles: </h3>
+                <table class="col-md-12 table table-striped">
+                    <tr>
+                        <th>Cliente:</th>
+                        <th>Tipo Servicio:</th>
+                        <th>Ejecutivo:</th>
+                    </tr>
+                    <tr>
+                        <td>'.utf8_encode($row['Empresa']).'</td>
+                        <td>'.utf8_encode($row['TipoServicio']).'</td>
+                        <td>'.utf8_encode($row['autor']).'</td>
+                    </tr>
+                    <tr>
+                        <th>BL Master:</th>
+                        <th>Clave Documento:</th>
+                        <th colspan="2">Mercancia:</th>
+                    </tr>
+                        <td>'.utf8_encode($row['sBlMaster']).'</td>
+                        <td>'.utf8_encode($row['ClaveDocumento']).'</td>
+                        <td>'.utf8_encode($row['sMercancia']).'</td>
+                    </tr>
+                </table></div><div class="col-md-6">';
+            $this->mercancias['skRecepcionDocumento'] = $row['skRecepcionDocumento'];
+            $mercancias = $this->read_mercancias();
+            if($mercancias){
+                if($row['skTipoServicio']=='CSUE'){
+                    $html .='<h3>Mercancía: </h3>
+                    <table class="col-md-12 table table-striped">
+                    <tr>
+                    <th>Bultos</th>
+                    <th>Peso</th>
+                    <th>Volumen</th>
+                    </tr>';
+                    while($r = $mercancias->fetch_assoc()){
+                        $html .='<tr>
+                        <td>'.$r['iBultos'].'</td>
+                        <td>'.$r['fPeso'].'</td>
+                        <td>'.$r['fVolumen'].'</td>
+                        </tr>';
+                    }
+                }elseif($row['skTipoServicio']=='CONT'){
+                    $html .='<h3>Mercancia: </h3>
+                    <table class="col-md-12 table table-striped">
+                    <tr>
+                    <th>BL House</th>
+                    <th>Núm. Contenedor</th>
+                    <th>Tipo Contenedor</th>
+                    <th>Embalaje</th>
+                    </tr>';
+                    while($r = $mercancias->fetch_assoc()){
+                        $html .='<tr>
+                        <td>'.$r['sBlhouse'].'</td>
+                        <td>'.$r['sNumContenedor'].'</td>
+                        <td>'.$r['embalaje'].'</td>
+                        <td>'.$r['tipoContenedor'].'</td>
+                        </tr>';
+                    }
+                }
+                $html .='</table>';
+            }
+            $html .='</div><div class="clearfix"></div><hr>';
+        }
+        header('Content-Type: application/json');
+        echo json_encode($html);
+        return true;
+    }
+    
     public function migrate() {
         $sql = "SELECT * FROM royalweb_gya.ope_recepciones_documentos WHERE skTipoServicio = 'CONT'";
         $result = $this->db->query($sql);
@@ -289,7 +370,7 @@ Class doc_Controller Extends doc_Model {
                     }
                     while ($row = $this->data['data']->fetch_assoc()) {
                         $actions = $this->printModulesButtons(2, array($row['skRecepcionDocumento']), $row['skUsersCreacion']);
-                        $datosServicio = $row['TipoServicio'];
+                        $datosServicio = "<b>".$row['TipoServicio']."</b>";
                         // OBTENEMOS LAS MERCANCIAS //
                         $this->mercancias['skRecepcionDocumento'] = $row['skRecepcionDocumento'];
                         $mercancias = parent::read_mercancias();
@@ -684,9 +765,9 @@ Class doc_Controller Extends doc_Model {
             if ($mercancias) {
                 while ($rmercancias = $mercancias->fetch_assoc()) {
                     if ($this->data['datos']['skTipoServicio'] == 'CONT') {
-                        $this->data['mercancias'] .="<br> BL House: " . $rmercancias['sBlhouse'] . " | Contenedor " . $rmercancias['sNumContenedor'];
+                        $this->data['mercancias'] .="<br> <b>BL House:</b> " . $rmercancias['sBlhouse'] . " <b>| Contenedor:</b> " . $rmercancias['sNumContenedor'];
                     } elseif ($this->data['datos']['skTipoServicio'] == 'CSUE') {
-                        $this->data['mercancias'] .="<br> Bultos: " . $rmercancias['iBultos'] . " | Peso: " . $rmercancias['fPeso'] . " | Volumen: " . $rmercancias['fVolumen'];
+                        $this->data['mercancias'] .="<br> <b>Bultos: " . $rmercancias['iBultos'] . " <b>| Peso:</b> " . $rmercancias['fPeso'] . " <b>| Volumen:</b> " . $rmercancias['fVolumen'];
                     }
                 }
             }
