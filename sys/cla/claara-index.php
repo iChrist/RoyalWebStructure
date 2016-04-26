@@ -30,6 +30,9 @@
                                 Cliente
                             </th>
                             <th width="25%">
+                                Factura
+                            </th>
+                            <th width="25%">
                                 Fracci&oacute;n
                             </th>
                             <th width="25%">
@@ -42,10 +45,10 @@
                                 Num. Parte
                             </th>
                             <th width="25%">
-                                F. Previo
+                                Secuencia
                             </th>
                             <th width="25%">
-                                Factura
+                                F. Previo
                             </th>
                             <th width="25%">
                                 Ejecutivo
@@ -87,6 +90,9 @@
                                 </select>
                             </td>
                             <td>
+                                <input type="text" class="form-control form-filter input-sm" name="sFactura" placeholder="Factura">
+                            </td>
+                            <td>
                                 <input type="text" class="form-control form-filter input-sm" name="sFraccion" placeholder="Fraccion">
                             </td>
                             <td>
@@ -99,10 +105,10 @@
                                 <input type="text" class="form-control form-filter input-sm" name="sNumeroParte" placeholder="Num. Parte">
                             </td>
                             <td>
-                                <input type="text" class="form-control form-filter input-sm" name="dFechaPrevio" placeholder="F. Previo">
+                                <input type="text" class="form-control form-filter input-sm" name="iSecuencia" placeholder="Secuencia">
                             </td>
                             <td>
-                                <input type="text" class="form-control form-filter input-sm" name="sFactura" placeholder="Factura">
+                                <input type="text" class="form-control form-filter input-sm" name="dFechaPrevio" placeholder="F. Previo">
                             </td>
                             <td>
                                 <input type="text" class="form-control form-filter input-sm" name="skUsersCreacion" placeholder="Ejecutivo">

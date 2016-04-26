@@ -82,12 +82,12 @@
                 if(!isset($v['FACTURA'])){
                     $v['FACTURA'] = "";
                 }
-                $this->cla['sFactura'] = addslashes(trim($v['FACTURA']," "));
+                $this->claMer['sFactura'] = addslashes(trim($v['FACTURA']," "));
                 // INICIA EL CONTADOR DEL CONSECUTIVO POR FACTURA //
-                if($factura == $this->cla['sFactura']){
+                if($factura == $this->claMer['sFactura']){
                     $consecutivo++;
                 }else{
-                  $factura = $this->cla['sFactura']; // ASIGNAMOS VALOR
+                  $factura = $this->claMer['sFactura']; // ASIGNAMOS VALOR
                   $consecutivo = 1;
                 }
                 // SE CREA LA PRIMERA CLASIFICACION //
@@ -353,7 +353,7 @@
                         break;
                     case 'fetch_all':
                         // PARAMETROS PARA FILTRADO //
-                        $this->cla['orderBy'] = "cla.sReferencia DESC , cla.dFechaCreacion DESC , claMer.iSecuencia ASC";
+                        $this->cla['orderBy'] = "cla.sReferencia DESC , cla.dFechaCreacion DESC , claMer.sFactura ASC , claMer.iSecuencia ASC";
                         $this->cla['year'] = $year;
                         //$this->cla['valido'] = 1;
                         
@@ -382,9 +382,9 @@
                         if(isset($_POST['sNumeroParte'])){
                             $this->claMer['sNumeroParte'] = $_POST['sNumeroParte'];
                         }
-                        if(isset($_POST['sFactura'])){
-                            $this->cla['sFactura'] = $_POST['sFactura'];
-                        }
+                        /*if(isset($_POST['sFactura'])){
+                            $this->claMer['sFactura'] = $_POST['sFactura'];
+                        }*/
                         if(isset($_POST['dFechaPrevio'])){
                             $this->cla['dFechaPrevio'] = $_POST['dFechaPrevio'];
                         }
@@ -430,13 +430,14 @@
                                 ,utf8_encode($row['sPedimento']) // PEDIMENTO
                                 ,utf8_encode($row['empresa']) // EMPRESA (CLIENTE)
                                 
+                                ,utf8_encode($row['sFactura']) // FACTURA
                                 ,utf8_encode($row['sFraccion']) // FRACCIÓN
                                 ,utf8_encode($row['sDescripcion']) // DESCRIPCIÓN
                                 ,utf8_encode($row['sDescripcionIngles']) // DESCIPCIÓN INGLÉS
                                 ,utf8_encode($row['sNumeroParte']) // NUMERO DE PARTE (MODELO)
+                                ,utf8_encode($row['iSecuencia']) // NUMERO DE PARTE (MODELO)
                                 
                                 ,utf8_encode($row['dFechaPrevio']) // FECHA PREVIO
-                                ,utf8_encode($row['sFactura']) // FACTURA
                                 ,utf8_encode($row['ejecutivo']) // skUsersCreacion
                                 ,utf8_encode($row['clasificador']) // skUsersModificacion
                                 
@@ -540,15 +541,14 @@
                 $this->cla['sReferencia'] = !empty($_POST['sReferencia']) ? utf8_decode($_POST['sReferencia']) : NULL ;
                 $this->cla['sPedimento'] = !empty($_POST['sPedimento']) ? utf8_decode($_POST['sPedimento']) : NULL ;
                 $this->cla['skEmpresa'] = !empty($_POST['skEmpresa']) ? utf8_decode($_POST['skEmpresa']) : NULL ;
-                $this->cla['sFactura'] = !empty($_POST['sFactura']) ? utf8_decode($_POST['sFactura']) : NULL ;
                 $this->cla['dFechaPrevio'] = !empty($_POST['dFechaPrevio']) ? utf8_decode($_POST['dFechaPrevio']) : NULL ;
                 $this->cla['skStatus'] = !empty($_POST['skStatus']) ? utf8_decode($_POST['skStatus']) : 'IN' ;
                 $this->cla['dFechaCreacion'] = 'CURRENT_TIMESTAMP';
                 $this->cla['skUsersCreacion'] = $_SESSION['session']['skUsers'];
                 $this->cla['dFechaImportacion'] = date('Y-m-d H:i:s');
+                
                 $this->claMer['dFechaImportacion'] = date('Y-m-d H:i:s');
-                
-                
+                $this->claMer['sFactura'] = !empty($_POST['sFactura']) ? utf8_decode($_POST['sFactura']) : NULL ;
                 $this->claMer['skStatus'] = !empty($_POST['skStatus']) ? utf8_decode($_POST['skStatus']) : 'IN' ;
                 $this->claMer['dFechaCreacion'] = 'CURRENT_TIMESTAMP';
                 $this->claMer['skUsersCreacion'] = $_SESSION['session']['skUsers'];
@@ -666,7 +666,6 @@
                         ,'sReferencia' => $row['sReferencia'] 
                         ,'sPedimento' => $row['sPedimento']
                         ,'dFechaPrevio' => $row['dFechaPrevio']
-                        ,'sFactura' => $row['sFactura']
                         ,'skStatus' => $row['skStatus']
                         ,'dFechaCreacion' => $row['dFechaCreacion']
                         ,'skUsersCreacion' => $row['skUsersCreacion']
@@ -683,6 +682,7 @@
                         while($rClaMer = $claMer->fetch_assoc()){
                             $records['mercancias'][$i] = array(
                                 'skClasificacionMercancia'=>utf8_encode($rClaMer['skClasificacionMercancia']) // skClasificacionMercancia
+                               ,'sFactura'=>utf8_encode($rClaMer['sFactura']) // FRACCIÓN
                                ,'sFraccion'=>utf8_encode($rClaMer['sFraccion']) // FRACCIÓN
                                ,'sNumeroParte'=>utf8_encode($rClaMer['sNumeroParte']) // NUMERO DE PARTE (MODELO)
                                ,'sDescripcion'=>utf8_encode($rClaMer['sDescripcion']) // DESCRIPCIÓN

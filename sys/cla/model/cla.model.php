@@ -273,7 +273,7 @@
         }
         
         public function read_filter_cla(){
-            $sql = "SELECT cla.*, rd.sPedimento, emp.sNombre AS empresa, claMer.sFraccion, claMer.sDescripcion, claMer.sDescripcionIngles, claMer.sNumeroParte, claMer.iSecuencia, CONCAT(u.sName,' ',u.sLastNamePaternal,' ',u.sLastNameMaternal) AS ejecutivo, CONCAT(usr.sName,' ',usr.sLastNamePaternal,' ',usr.sLastNameMaternal) AS clasificador, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
+            $sql = "SELECT cla.*, rd.sPedimento, emp.sNombre AS empresa, claMer.sFactura, claMer.sFraccion, claMer.sDescripcion, claMer.sDescripcionIngles, claMer.sNumeroParte, claMer.iSecuencia, CONCAT(u.sName,' ',u.sLastNamePaternal,' ',u.sLastNameMaternal) AS ejecutivo, CONCAT(usr.sName,' ',usr.sLastNamePaternal,' ',usr.sLastNameMaternal) AS clasificador, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
                 . "INNER JOIN ope_recepciones_documentos rd ON rd.sReferencia = cla.sReferencia "
                 . "INNER JOIN cat_empresas emp ON emp.skEmpresa = rd.skEmpresa "
                 . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
@@ -303,13 +303,13 @@
             if(!empty($this->cla['dFechaPrevio'])){
                 $sql .=" AND cla.dFechaPrevio like '%".$this->cla['dFechaPrevio']."%'";
             }
-            if(!empty($this->cla['sFactura'])){
-                $sql .=" AND cla.sFactura like '%".$this->cla['sFactura']."%'";
-            }
             if(!empty($this->cla['skStatus'])){
                 $sql .=" AND cla.skStatus like '%".$this->cla['skStatus']."%'";
             }
             /* COMIENZA CLAMER */
+            if(!empty($this->claMer['sFactura'])){
+                $sql .=" AND claMer.sFactura like '%".$this->claMer['sFactura']."%'";
+            }
             if(!empty($this->claMer['sFraccion'])){
                 $sql .=" AND claMer.sFraccion like '".$this->claMer['sFraccion']."%'";
             }
@@ -462,12 +462,11 @@
         
         public function create_cla(){
             $sql = "INSERT INTO cat_clasificacion 
-            (skClasificacion,sReferencia,dFechaPrevio,sFactura,skStatus,dFechaCreacion,skUsersCreacion,dFechaModificacion,skUsersModificacion,dFechaImportacion,valido) 
+            (skClasificacion,sReferencia,dFechaPrevio,skStatus,dFechaCreacion,skUsersCreacion,dFechaModificacion,skUsersModificacion,dFechaImportacion,valido) 
             VALUES 
             ('".$this->cla['skClasificacion']."',
             '".$this->cla['sReferencia']."',
             '".$this->cla['dFechaPrevio']."',
-            '".$this->cla['sFactura']."',
             '".$this->cla['skStatus']."',
             '".$this->cla['dFechaCreacion']."',
             '".$this->cla['skUsersCreacion']."',
@@ -489,7 +488,6 @@
             $sql = "UPDATE cat_clasificacion SET "
                 . "sReferencia = '".$this->cla['sReferencia']."',"
                 . "dFechaPrevio = '".$this->cla['dFechaPrevio']."',"
-                . "sFactura = '".$this->cla['sFactura']."',"
                 . "skStatus = '".$this->cla['skStatus']."',"
                 . "dFechaModificacion = '".$this->cla['dFechaModificacion']."',"
                 . "skUsersModificacion = '".$this->cla['skUsersModificacion']."'"
@@ -623,10 +621,11 @@
         
         public function create_claMer(){
             $sql = "INSERT INTO cat_clasificacionMercancia 
-            (skClasificacionMercancia,skClasificacion,sFraccion,sDescripcion,sDescripcionIngles,sNumeroParte,skStatus,dFechaCreacion,skUsersCreacion,dFechaModificacion,skUsersModificacion,iSecuencia,dFechaImportacion) 
+            (skClasificacionMercancia,skClasificacion,sFactura,sFraccion,sDescripcion,sDescripcionIngles,sNumeroParte,skStatus,dFechaCreacion,skUsersCreacion,dFechaModificacion,skUsersModificacion,iSecuencia,dFechaImportacion) 
             VALUES 
             ('".$this->claMer['skClasificacionMercancia']."',
             '".$this->claMer['skClasificacion']."',
+            '".$this->claMer['sFactura']."',
             '".$this->claMer['sFraccion']."',
             '".$this->claMer['sDescripcion']."',
             '".$this->claMer['sDescripcionIngles']."',
@@ -651,6 +650,7 @@
         
         public function update_claMer(){
             $sql = "UPDATE cat_clasificacionMercancia SET "
+                . "sFactura = '".$this->claMer['sFactura']."',"
                 . "sFraccion = '".$this->claMer['sFraccion']."',"
                 . "sDescripcion = '".$this->claMer['sDescripcion']."',"
                 . "sDescripcionIngles = '".$this->claMer['sDescripcionIngles']."',"
