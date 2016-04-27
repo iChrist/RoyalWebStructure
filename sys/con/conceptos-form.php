@@ -97,17 +97,11 @@
                     </span>
                 </div>
             </label>
+
             <label>
                 <div class="">
                     <span>
-                        <input type="checkbox" name="skTipoEmpresa[]" value="CORR" <?php echo (in_array("CORR", $arrayEmpresasConceptos) ? 'checked' : '')?>> Corresponsal
-                    </span>
-                </div>
-            </label>
-            <label>
-                <div class="">
-                    <span>
-                        <input type="checkbox" name="skTipoEmpresa[]" value="DEAD" <?php echo (in_array("DEAD", $arrayEmpresasConceptos) ? 'checked' : '')?>> Despacho Aduanal
+                        <input type="checkbox" name="skTipoEmpresa[]" value="CLIE" <?php echo (in_array("CLIE", $arrayEmpresasConceptos) ? 'checked' : '')?>> Despacho Aduanal
                     </span>
                 </div>
             </label>
