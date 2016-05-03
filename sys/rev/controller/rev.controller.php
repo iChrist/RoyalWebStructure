@@ -312,8 +312,23 @@ Class rev_Controller Extends rev_Model {
             if ($recepcionDocumentos) {
                 $this->data['recepcionDocumentos'] = $recepcionDocumentos->fetch_assoc();
             }
+            // OBTENEMOS LAS MERCANCIAS //
+            $this->load_model('doc', 'doc');
+            $doc = new Doc_Model();
+            $this->data['mercancias'] = "";
+            $doc->mercancias['skRecepcionDocumento'] = $this->data['recepcionDocumentos']['skRecepcionDocumento'];
+            $mercancias = $doc->read_mercancias();
+            if ($mercancias) {
+                while ($rmercancias = $mercancias->fetch_assoc()) {
+                    if ($this->data['recepcionDocumentos']['skTipoServicio'] == 'CONT') {
+                        $this->data['mercancias'] .="<br> <b>BL House:</b> " . $rmercancias['sBlhouse'] . " <b>| Contenedor:</b> " . $rmercancias['sNumContenedor'];
+                    } elseif ($this->data['recepcionDocumentos']['skTipoServicio'] == 'CSUE') {
+                        $this->data['mercancias'] .="<br> <b>Bultos:</b> " . $rmercancias['iBultos'] . " <b>| Peso:</b> " . $rmercancias['fPeso'] . " <b>| Volumen:</b> " . $rmercancias['fVolumen'];
+                    }
+                }
+            }
         }
-        //exit('<pre>'.print_r($this->data,1));
+        //exit('<pre>'.print_r($this->data['mercancias'] ,1).'</pre>');
         ob_start();
         $this->load_view('solreva-pdf', $this->data, FALSE, 'rev/pdf/');
         $content = ob_get_clean();

@@ -767,7 +767,7 @@ Class Doc_Controller Extends Doc_Model {
                     if ($this->data['datos']['skTipoServicio'] == 'CONT') {
                         $this->data['mercancias'] .="<br> <b>BL House:</b> " . $rmercancias['sBlhouse'] . " <b>| Contenedor:</b> " . $rmercancias['sNumContenedor'];
                     } elseif ($this->data['datos']['skTipoServicio'] == 'CSUE') {
-                        $this->data['mercancias'] .="<br> <b>Bultos: " . $rmercancias['iBultos'] . " <b>| Peso:</b> " . $rmercancias['fPeso'] . " <b>| Volumen:</b> " . $rmercancias['fVolumen'];
+                        $this->data['mercancias'] .="<br> <b>Bultos:</b> " . $rmercancias['iBultos'] . " <b>| Peso:</b> " . $rmercancias['fPeso'] . " <b>| Volumen:</b> " . $rmercancias['fVolumen'];
                     }
                 }
             }
