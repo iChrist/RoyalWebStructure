@@ -52,9 +52,10 @@
             }else{
                 $dFechaModificacion = date('Y-m-d H:i:s');
                 $this->cla['skUsersModificacion'] = $_SESSION['session']['skUsers'];
-                $this->cla['skUsersCreacion'] = $dFechaModificacion;
+                //$this->cla['skUsersCreacion'] = $dFechaModificacion;
+                $this->cla['dFechaModificacion'] = $dFechaImportacion;
                 $this->claMer['skUsersModificacion'] = $_SESSION['session']['skUsers'];
-                $this->claMer['skUsersModificacion'] = $dFechaModificacion;
+                $this->claMer['dFechaModificacion'] = $dFechaModificacion;
             }
             
             //exit('<pre>'.print_r($data,1).'</pre>');
