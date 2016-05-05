@@ -236,7 +236,7 @@
                         }
                         // EXPORTACIÓN A EXCEL //
                         if(isset($_POST['exportExcel']) && $_POST['exportExcel'] == 1){
-                            $this->cla['orderBy'] = "cla.dFechaCreacion DESC , cla.sReferencia DESC, claMer.iSecuencia ASC";
+                            $this->cla['orderBy'] = "cla.sReferencia DESC , cla.dFechaCreacion DESC , claMer.sFactura ASC , claMer.iSecuencia ASC";
                             $this->data['data'] = parent::read_filter_cla();
                             $this->claara_excel();
                             return true;
