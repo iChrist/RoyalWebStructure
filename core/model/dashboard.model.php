@@ -152,11 +152,19 @@
                   $ranoAbr = $result->fetch_assoc();
                   //mysqli_free_result($result);
 
+                  $sql="SELECT count(*) AS Refe
+                  FROM ope_recepciones_documentos
+                  WHERE dFechaCreacion BETWEEN '2016-05-01 00:00:00' AND '2016-06-01 00:00:00' ";
+                  $result = $this->db->query("$sql");
+                  $ranoMay = $result->fetch_assoc();
+                  //mysqli_free_result($result);
+
                   echo "['Mes', 'Referencia' ],
                   ['Enero', ".$ranoEne['Refe']."],
                   ['Febrero', ".$ranoFeb['Refe']."],
                   ['Marzo', ".$ranoMar['Refe']."],
-                  ['Abril', ".$ranoAbr['Refe']."]";
+                  ['Abril', ".$ranoAbr['Refe']."],
+                  ['Mayo', ".$ranoMay['Refe']."]";
           }
 	}
 ?>
