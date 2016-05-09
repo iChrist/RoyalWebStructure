@@ -10,6 +10,14 @@
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
     <input type="hidden" name="skCotizacion"  id="skCotizacion" value="<?php echo (isset($result['skCotizacion'])) ? $result['skCotizacion'] : '' ; ?>">
+    <?php
+
+    //echo "aaaaa";
+//    $a = $data['tipo_cambio']->fetch_assoc();
+/*echo "<pre>";
+print_r($data['tipo_cambio']['USD']['valor']);
+echo "</pre>"; */
+  ?>
 
     <div class="form-body">
       <div class="form-group">
@@ -198,11 +206,18 @@
 
                 <tbody id="dvConceptosRecinto">
                   </tbody>
+
+                <tbody id="dvConceptosDespacho">
+                </tbody>
               </table>
           </div>
         </div>
         </div>
         <!--<div class="form-group">
+=======
+
+        <!--<div class="form-group" id="dvConceptosPedimento">
+>>>>>>> 335735e0aa40a8dae6f3e811f18c0d865591bddf
             <label class="control-label col-md-2">Recinto</label>
             <div class="col-md-10">
               <table class="table table-responsive">
@@ -444,9 +459,6 @@ function obtenerDatos(){
                 sReferencia:{
                     required:"Campo obligatorio",
                     remote: "La referencia no existe."
-                },
-                sObservaciones:{
-                    required: "Campo obligatorio."
                 }
             }
         });
