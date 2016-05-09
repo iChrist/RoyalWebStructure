@@ -109,26 +109,16 @@ global $dash;
 
 						function drawChart1() {
 							var data = google.visualization.arrayToDataTable([
-								/*['Mes', 'Referencia' ],
-								['Enero', 120],
-								['Febrero', 240],
-								['Marzo', 200],
-								['Abril', 0],
-								['Mayo', 0],
-								['Junio', 0]*/
 								<?php   $dash->numRefeMes();?>
  							]);
-
-							var options = {
+ 							var options = {
 								chart: {
 									title: 'Agencia Aduanal Grupo Alvez',
 									subtitle: 'Referencias creadas  en el sistema 2016',
 								}
 							};
-
-							var chart1 = new google.charts.Bar(document.getElementById('columnchart_material1'));
-
-							chart1.draw(data, options);
+ 							var chart1 = new google.charts.Bar(document.getElementById('columnchart_material1'));
+ 							chart1.draw(data, options);
 						}
-
-				    </script>
+						
+ 				    </script>
