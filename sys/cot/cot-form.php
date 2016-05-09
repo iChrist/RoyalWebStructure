@@ -38,7 +38,7 @@
             <?php $i++;?>
             <div class="col-md-2">
             <label>
-              <input type="radio" name="skTipoTramite" value="<?php echo $rTipoTramite{'skTipoTramite'}?>" <?php echo ((isset($result['skTipoTramite']) ? $result['skTipoTramite'] : "-") == $rTipoTramite{'skTipoTramite'} ? 'checked' : ($i==1 ) ? 'checked' : '' )?>  >
+              <input type="radio" name="skTipoTramite" value="<?php echo $rTipoTramite{'skTipoTramite'}?>" <?php echo ((isset($result['skTipoTramite']) ? $result['skTipoTramite'] : "-") == $rTipoTramite{'skTipoTramite'} ? 'checked' : ($i==1 ) ? 'checked' : '' )?>  onchange="getConceptos();" >
               <?php echo utf8_encode($rTipoTramite{'sNombre'})?>
             </label>
           </div>
@@ -94,7 +94,7 @@
           </div>
           <label class="control-label col-md-2">L&iacute;nea Naviera <span aria-required="true" class="required"> * </span> </label>
           <div class="col-md-4">
-            <select name="skEmpresaNaviera" id="skEmpresaNaviera" class="form-control form-filter input-sm" onchange="getConceptosNaviera();">
+            <select name="skEmpresaNaviera" id="skEmpresaNaviera" class="form-control form-filter input-sm" onchange="getConceptos();">
               <option value="">- Linea Naviera -</option>
               <?php
                                         if($data['empresaNaviera']){
@@ -144,34 +144,64 @@
         </div>
         <div class="clearfix"></div>
         <div class="col-md-12 col-xs-12" id="divConceptos" style="display: <?php echo isset($_GET['p1']) ? 'block' : 'none'; ?>;">
-
-      <hr>
+            <hr>
         <div class="form-group">
-            <label class="control-label col-md-2">Conceptos</label>
-            <div class="col-md-10">
+          <!--//Conceptos de cliente-->
+            <div class="col-md-12">
+          <div class="col-md-6">
+            <table class="table table-responsive">
+              <thead>
+                <th nowrap>S</th>
+                <th nowrap>Cantidad</th>
+                <th nowrap>Precio Unitario</th>
+                <th nowrap>Divisa</th>
+                <th nowrap>Nombre</th>
+                <th nowrap></th>
+
+                <th nowrap>Subtotal</th>
+              </thead>
+                <tbody id="dvConceptosDespacho">
+                </tbody>
+            </table>
+          </div>
+          <!--//Conceptos de naviera-->
+          <div class="col-md-6">
+            <table class="table table-responsive">
+              <thead>
+                <th nowrap>S</th>
+                <th nowrap>Cantidad</th>
+                <th nowrap>Precio Unitario</th>
+                <th nowrap>Divisa</th>
+                <th nowrap>Nombre</th>
+                <th nowrap></th>
+
+                <th nowrap>Subtotal</th>
+              </thead>
+              <tbody id="dvConceptosNaviera">
+              </tbody>
+            </table>
+          </div>
+        </div>
+          <div class="col-md-12">
+          <div class="col-md-6">
               <table class="table table-responsive">
                 <thead>
                   <th nowrap>S</th>
                   <th nowrap>Cantidad</th>
                   <th nowrap>Precio Unitario</th>
                   <th nowrap>Divisa</th>
-                  <th >Nombre</th>
-                  <th width="100%"></th>
+                  <th nowrap>Nombre</th>
+                  <th nowrap></th>
 
                   <th nowrap>Subtotal</th>
                 </thead>
-                <tbody id="dvConceptosPedimento">
-                </tbody>
-                <tbody id="dvConceptosNaviera">
-                </tbody>
+
                 <tbody id="dvConceptosRecinto">
-                  <tbody id="dvConceptosDespacho">
                   </tbody>
               </table>
-
-            </div>
+          </div>
         </div>
-
+        </div>
         <!--<div class="form-group">
             <label class="control-label col-md-2">Recinto</label>
             <div class="col-md-10">
@@ -183,7 +213,7 @@
         </div>-->
         <div class="form-group">
           <div class="col-md-12">
-            <div class="col-md-2 col-md-offset-10">
+            <div class="col-md-3 col-md-offset-9">
             <h3>Total: <span id="total">0.00</span></h3>
             </div>
           </div>
@@ -231,13 +261,13 @@ function cotizar(){
     			$("#total").html("$ "+total.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
 }
 
-    function getConceptosImportador(){
+    /*function getConceptosImportador(){
         $('.page-title-loading').css('display','inline');
-        if(!$('#skEmpresaImportador').val() == ''){
           $.post("",{
               axn : "getConceptos"
               ,skEmpresaImportador : $("#skEmpresaImportador").val()
-
+              ,skEmpresaNaviera : $("#skEmpresaNaviera").val()
+              ,skEmpresaRecinto : $("#skEmpresaRecinto").val()
               ,skTipoTramite : $('input[name=skTipoTramite]:checked').val()
               ,skTipoCobroCotizacion : $('input[name=skTipoCobroCotizacion]:checked').val()
           }, function(response){
@@ -246,15 +276,14 @@ function cotizar(){
             //  $("#dvConceptosNaviera").html(response['conceptosNaviera']);
               $('.page-title-loading').css('display','none');
           });
-        }
-    }
-    function getConceptosNaviera(){
+    }*/
+    /*function getConceptosNaviera(){
         $('.page-title-loading').css('display','inline');
-        if(!$('#skEmpresaImportador').val() == ''){
           $.post("",{
               axn : "getConceptos"
+              ,skEmpresaImportador : $("#skEmpresaImportador").val()
               ,skEmpresaNaviera : $("#skEmpresaNaviera").val()
-
+              ,skEmpresaRecinto : $("#skEmpresaRecinto").val()
               ,skTipoTramite : $('input[name=skTipoTramite]:checked').val()
               ,skTipoCobroCotizacion : $('input[name=skTipoCobroCotizacion]:checked').val()
           }, function(response){
@@ -262,8 +291,8 @@ function cotizar(){
               $("#dvConceptosNaviera").html(response['conceptosNaviera']);
               $('.page-title-loading').css('display','none');
           });
-        }
-    }
+
+    }*/
     function getConceptos(){
         $('.page-title-loading').css('display','inline');
 
@@ -283,7 +312,6 @@ function cotizar(){
               $("#dvConceptosNaviera").html(response['conceptosNaviera']);
               $("#dvConceptosRecinto").html(response['conceptosRecinto']);
               $("#dvConceptosDespacho").html(response['conceptosDespacho']);
-            //  $("#dvConceptosNaviera").html(response['conceptosNaviera']);
               $('.page-title-loading').css('display','none');
           });
         }
