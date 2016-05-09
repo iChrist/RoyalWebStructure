@@ -52,9 +52,10 @@
             }else{
                 $dFechaModificacion = date('Y-m-d H:i:s');
                 $this->cla['skUsersModificacion'] = $_SESSION['session']['skUsers'];
-                $this->cla['skUsersCreacion'] = $dFechaModificacion;
+                //$this->cla['skUsersCreacion'] = $dFechaModificacion;
+                $this->cla['dFechaModificacion'] = $dFechaImportacion;
                 $this->claMer['skUsersModificacion'] = $_SESSION['session']['skUsers'];
-                $this->claMer['skUsersModificacion'] = $dFechaModificacion;
+                $this->claMer['dFechaModificacion'] = $dFechaModificacion;
             }
             
             //exit('<pre>'.print_r($data,1).'</pre>');
@@ -236,7 +237,7 @@
                         }
                         // EXPORTACIÓN A EXCEL //
                         if(isset($_POST['exportExcel']) && $_POST['exportExcel'] == 1){
-                            $this->cla['orderBy'] = "cla.dFechaCreacion DESC , cla.sReferencia DESC, claMer.iSecuencia ASC";
+                            $this->cla['orderBy'] = "cla.sReferencia DESC , cla.dFechaCreacion DESC , claMer.sFactura ASC , claMer.iSecuencia ASC";
                             $this->data['data'] = parent::read_filter_cla();
                             $this->claara_excel();
                             return true;

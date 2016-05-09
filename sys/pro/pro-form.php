@@ -20,7 +20,7 @@
         <div class="clearfix"></div>
         <hr>
         <div class="form-group" id="dvDatos"></div>
-        <hr>
+        
         <div class="form-group">
             <label class="control-label col-md-2">Observaciones <span aria-required="true" class="required"> * </span> </label>
             <div class="col-md-8">
@@ -37,59 +37,16 @@ function obtenerDatos(){
     $('.page-title-loading').css('display','inline');
         var response = true;
         $.post("",{ axn : "obtenerDatos" , sReferencia : $("#sReferencia").val() }, function(data){ 
-        var cad = '';
-        if(!data.data){
-            response = false;
-            var icon = $("#sReferencia").parent('.input-icon').children('i');
-            $("#sReferencia").closest('.form-group').removeClass('has-success').addClass('has-error');
-            icon.removeClass("fa-check").addClass("fa-warning");
-        }else{   
-    	cad ='<div class="form-group">'+
-     	'<label class="col-md-2">Cliente</label>'+
-     	'<div class="col-md-4">'+
-       	'<label id="lbCliente" class="control-label">'+data.data.Empresa+'</label>'+
-        '</div>'+
-      	'<label class="control-label col-md-2">Tipo de Servicio</label>'+
-	     '<div class="col-md-4">'+
-	       ' <label id="lbServicio" class="control-label">'+data.data.TipoServicio+'</label>'+
-	    ' </div>'+
-   ' </div>'+
-    '<div class="form-group">'+
-     	'<label class="col-md-2">Ejecutivo</label>'+
-     	'<div class="col-md-4">'+
-       	'	 <label id="lbEjecutivo" class="control-label">'+data.data.Ejecutivo+'</label>'+
-       ' </div>'+
-      	'<label class="control-label col-md-2">Mercancia</label>'+
-	    ' <div class="col-md-4">'+
-	    '    <label id="lbMercancia" class="control-label ">'+data.data.sMercancia+'</label>'+
-	    ' </div>'+
-   ' </div>'+
-    '<div class="form-group">'+
-      '<label class="col-md-2">Datos del tipo de servicio</label>'+
-      '<div class="col-md-2">'+
-        '  <label class="control-label">Num. Contenedor: '+data.data.sNumContenedor+'</label>'+
-       ' </div>'+
-      ' <div class="col-md-2">'+
-      '    <label class="control-label ">Bultos: '+data.data.iBultos+'</label>'+
-      ' </div>'+
-      ' <div class="col-md-2">'+
-      '    <label class="control-label ">Peso: '+data.data.fPeso+'</label>'+
-      ' </div>'+
-      ' <div class="col-md-2">'+
-      '    <label class="control-label ">Volumen: '+data.data.fVolumen+'</label>'+
-      ' </div>'+
-   ' </div>'+
-   '<div class="form-group">'+
-      ' <div class="col-md-4">'+
-      '    <label class="control-label ">BL Master: '+data.data.sBlMaster+'</label>'+
-      ' </div>'+
-      ' <div class="col-md-4">'+
-      '    <label class="control-label ">BL House: '+data.data.sBlHouse+'</label>'+
-      ' </div>'+
-   ' </div>';
-   }
-    $("#dvDatos").html(cad);
-    $('.page-title-loading').css('display','none');
+        $("#dvDatos").html(data);
+        $('.page-title-loading').css('display','none');
+        if(typeof data.response !== "undefined") {
+            if(data.response == false){
+                response = false;
+                var icon = $("#sReferencia").parent('.input-icon').children('i');
+                $("#sReferencia").closest('.form-group').removeClass('has-success').addClass('has-error');
+                icon.removeClass("fa-check").addClass("fa-warning");
+            }
+        }
     });
     if(response){
          return true;
@@ -137,8 +94,7 @@ function obtenerDatos(){
                 }else{
                     return false;
                 }
-            },
-            "La referencia no existe."
+            }
         );
         
         /* VALIDATIONS */
@@ -161,7 +117,7 @@ function obtenerDatos(){
                     obtenerDatos: true
                 },
                 sObservaciones:{
-                    required: true,
+                    required: true
                 }
             },
             invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar              
@@ -202,7 +158,9 @@ function obtenerDatos(){
             messages:{
                 sReferencia:{
                     required:"Campo obligatorio",
-                    remote: "La referencia no existe."
+                    remote: function(){
+                        return 'La referencia "'+$("#sReferencia").val()+'" no existe.';
+                    }
                 },
                 sObservaciones:{
                     required: "Campo obligatorio."

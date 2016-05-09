@@ -10,6 +10,7 @@
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
     <input type="hidden" name="skCotizacion"  id="skCotizacion" value="<?php echo (isset($result['skCotizacion'])) ? $result['skCotizacion'] : '' ; ?>">
+<<<<<<< HEAD
     <?php
     
     //echo "aaaaa";
@@ -18,6 +19,9 @@
 print_r($data['tipo_cambio']['USD']['valor']);
 echo "</pre>"; */
   ?>
+=======
+
+>>>>>>> 8a4b4c15a618fa52fe02b4656e0c01353d8f6f95
     <div class="form-body">
       <div class="form-group">
         <label class="control-label col-md-2">Tipo de Cotizaci&oacute;n  <span aria-required="true" class="required"> * </span> </label>
@@ -86,7 +90,7 @@ echo "</pre>"; */
         <div class="form-group">
           <label class="control-label col-md-2">Importador <span aria-required="true" class="required"> * </span> </label>
           <div class="col-md-4">
-            <select name="skEmpresaImportador" id="skEmpresaImportador" class="form-control form-filter input-sm" onchange="getConceptos();">
+            <select name="skEmpresaImportador" id="skEmpresaImportador" class="form-control form-filter input-sm" onchange="getConceptosImportador();">
               <option value="">- Importador -</option>
               <?php
                                         if($data['empresaImportador']){
@@ -101,7 +105,7 @@ echo "</pre>"; */
           </div>
           <label class="control-label col-md-2">L&iacute;nea Naviera <span aria-required="true" class="required"> * </span> </label>
           <div class="col-md-4">
-            <select name="skEmpresaNaviera" id="skEmpresaNaviera" class="form-control form-filter input-sm" onchange="getConceptos();">
+            <select name="skEmpresaNaviera" id="skEmpresaNaviera" class="form-control form-filter input-sm" onchange="getConceptosNaviera();">
               <option value="">- Linea Naviera -</option>
               <?php
                                         if($data['empresaNaviera']){
@@ -118,7 +122,7 @@ echo "</pre>"; */
         <div class="form-group">
             <label class="control-label col-md-2">Recinto <span aria-required="true" class="required"> * </span> </label>
             <div class="col-md-4">
-              <select name="skEmpresaRecinto" id="skEmpresaRecinto" class="form-control form-filter input-sm">
+              <select name="skEmpresaRecinto" id="skEmpresaRecinto" class="form-control form-filter input-sm" onchange="getConceptosRecinto();">
                 <option value="">- Recinto -</option>
                 <?php
                                           if($data['empresaRecinto']){
@@ -238,6 +242,39 @@ function cotizar(){
     			$("#total").html("$ "+total.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
 }
 
+    function getConceptosImportador(){
+        $('.page-title-loading').css('display','inline');
+        if(!$('#skEmpresaImportador').val() == ''){
+          $.post("",{
+              axn : "getConceptos"
+              ,skEmpresaImportador : $("#skEmpresaImportador").val()
+
+              ,skTipoTramite : $('input[name=skTipoTramite]:checked').val()
+              ,skTipoCobroCotizacion : $('input[name=skTipoCobroCotizacion]:checked').val()
+          }, function(response){
+             console.log(response);
+              $("#dvConceptosDespacho").html(response['conceptosDespacho']);
+            //  $("#dvConceptosNaviera").html(response['conceptosNaviera']);
+              $('.page-title-loading').css('display','none');
+          });
+        }
+    }
+    function getConceptosNaviera(){
+        $('.page-title-loading').css('display','inline');
+        if(!$('#skEmpresaImportador').val() == ''){
+          $.post("",{
+              axn : "getConceptos"
+              ,skEmpresaNaviera : $("#skEmpresaNaviera").val()
+
+              ,skTipoTramite : $('input[name=skTipoTramite]:checked').val()
+              ,skTipoCobroCotizacion : $('input[name=skTipoCobroCotizacion]:checked').val()
+          }, function(response){
+             console.log(response);
+              $("#dvConceptosNaviera").html(response['conceptosNaviera']);
+              $('.page-title-loading').css('display','none');
+          });
+        }
+    }
     function getConceptos(){
         $('.page-title-loading').css('display','inline');
 

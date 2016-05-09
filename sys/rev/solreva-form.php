@@ -352,8 +352,6 @@ function obtenerDatos(){
                 $("input[name=sBlHouse]").val(data.data[0][9]);
             }
    }*/
-                 $("#dvDatos").html(cad);
-               $('.page-title-loading').css('display','none');
             });
 			}
 

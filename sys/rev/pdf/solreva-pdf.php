@@ -111,6 +111,32 @@ font-size: 12px;
     <td><?php echo (isset($data['recepcionDocumentos']['TipoServicio'])) ? utf8_encode($data['recepcionDocumentos']['TipoServicio']) : ''; ?></td>
 </tr>
 <tr><td style="height:1px;"></td></tr>
+<?php
+    if($data['recepcionDocumentos']['skTipoServicio'] == 'CONT'){ 
+        ?>
+        <tr>
+            <td>
+                <?php 
+                    echo (isset($data['mercancias'])) ? utf8_encode($data['mercancias']) : ''; 
+                ?>
+            </td>
+        </tr>
+        <tr><td style="height:1px;"></td></tr>
+        <?php
+    }elseif($data['recepcionDocumentos']['skTipoServicio'] == 'CSUE'){
+        ?>
+        <tr>
+            <td>
+                <?php 
+                    echo (isset($data['mercancias'])) ? utf8_encode($data['mercancias']) : ''; 
+                ?>
+            </td>
+        </tr>
+        <tr><td style="height:1px;"></td></tr>
+<?php
+    }//ENDIF
+?>
+<!--
 <?php 
     if($data['recepcionDocumentos']['skTipoServicio'] == 'CONT'){ 
 ?>
@@ -140,6 +166,7 @@ font-size: 12px;
 <?php 
     }//ENDIF
 ?>
+!-->
 <tr>
     <td><strong>Mercancia: </strong></td>
     <td><?php echo (isset($data['recepcionDocumentos']['sMercancia'])) ? utf8_encode($data['recepcionDocumentos']['sMercancia']) : ''; ?></td>
