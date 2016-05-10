@@ -67,6 +67,7 @@
             $lineaExcel = 2;
             $factura = "";
             $consecutivo = 0;
+            $array_consecutivos = array();
             foreach($data AS $k => $v){
                 // VERIFICACMOS QUE VENGA REFERENCIA Y PEDIMENTO //
                     if(empty($v['REFERENCIA']) && $lineaExcel==2){
@@ -78,18 +79,23 @@
                 if(!isset($v['F DE PREVIO'])){
                     $v['F DE PREVIO'] = NULL;
                 }
-                $this->cla['dFechaPrevio'] = addslashes(trim($v['F DE PREVIO']," "));
+                $this->cla['dFechaPrevio'] = addslashes(trim(utf8_decode($v['F DE PREVIO'])," "));
                 $this->cla['dFechaPrevio'] =  '';
                 if(!isset($v['FACTURA'])){
                     $v['FACTURA'] = "";
                 }
-                $this->claMer['sFactura'] = addslashes(trim($v['FACTURA']," "));
+                $this->claMer['sFactura'] = addslashes(trim(utf8_decode($v['FACTURA'])," "));
                 // INICIA EL CONTADOR DEL CONSECUTIVO POR FACTURA //
-                if($factura == $this->claMer['sFactura']){
+                //if($factura == $this->claMer['sFactura']){
+                if(array_key_exists($this->claMer['sFactura'] , $array_consecutivos)){
                     $consecutivo++;
+                    $array_consecutivos[$this->claMer['sFactura']] += 1;
+                    //echo '('.$array_consecutivos[$this->claMer['sFactura']].' I '.$this->claMer['sFactura'].')-';
                 }else{
-                  $factura = $this->claMer['sFactura']; // ASIGNAMOS VALOR
+                  //$factura = $this->claMer['sFactura']; // ASIGNAMOS VALOR
                   $consecutivo = 1;
+                  $array_consecutivos[$this->claMer['sFactura']] = 1;
+                  //echo '('.$array_consecutivos[$this->claMer['sFactura']].' D '.$this->claMer['sFactura'].')-';
                 }
                 // SE CREA LA PRIMERA CLASIFICACION //
                     if($validar == 0 && $lineaExcel==2){
@@ -97,7 +103,7 @@
                         if(!isset($v['REFERENCIA'])){
                             $v['REFERENCIA'] = "";
                         }
-                        $this->cla['sReferencia'] = addslashes(trim($v['REFERENCIA']," "));
+                        $this->cla['sReferencia'] = addslashes(trim(utf8_decode($v['REFERENCIA'])," "));
                         $skClasificacion = $this->create_cla();
                         if(!$skClasificacion){ 
                             $flag = false;
@@ -106,7 +112,7 @@
                         }
                     }else if($validar == 1 && $lineaExcel==2){
                         // SE BUSCA LA REFERENCIA PARA SU VALIDACION //
-                        $this->cla['sReferencia'] = addslashes(trim($v['REFERENCIA']," "));
+                        $this->cla['sReferencia'] = addslashes(trim(utf8_decode($v['REFERENCIA'])," "));
                         $result = $this->get_cla();
                         if(!$result){
                             $flag = false;
@@ -137,7 +143,7 @@
                         if(!isset($v['FRACCION'])){
                             $v['FRACCION'] = "";
                         }
-                        $this->claMer['sFraccion'] = addslashes(trim($v['FRACCION']," "));
+                        $this->claMer['sFraccion'] = addslashes(trim(utf8_decode($v['FRACCION'])," "));
      
                         if(!isset($v['DESCRIPCION'])){
                             $v['DESCRIPCION'] = "";
@@ -152,13 +158,14 @@
                         if(!isset($v['MODELO'])){
                             $v['MODELO'] = "";
                         }
-                        $this->claMer['sNumeroParte'] = addslashes(trim($v['MODELO']," "));
+                        $this->claMer['sNumeroParte'] = addslashes(trim(utf8_decode($v['MODELO'])," "));
                         
                         if(!isset($v['CONSECUTIVO'])){
                             $v['CONSECUTIVO'] = "";
                         }
                         //$this->claMer['iSecuencia'] = $lineaExcel - 1;
-                        $this->claMer['iSecuencia'] = $consecutivo;
+                        //$this->claMer['iSecuencia'] = $consecutivo;
+                        $this->claMer['iSecuencia'] = $array_consecutivos[$this->claMer['sFactura']];
                              
                         $skClasificacionMercancia = $this->create_claMer();
                         if(!$skClasificacionMercancia){ 
@@ -171,6 +178,7 @@
                 
                 $lineaExcel++;
             }
+            //exit('<pre>'.print_r($array_consecutivos,1).'</pre>');
             if(!$flag){
                 return array(
                 "response"=>false
