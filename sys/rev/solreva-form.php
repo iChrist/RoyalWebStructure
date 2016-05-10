@@ -28,7 +28,7 @@
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
   <input type="hidden" name="skSolicitudRevalidacion"  id="skSolicitudRevalidacion" value="<?php echo (isset($result['skSolicitudRevalidacion'])) ? $result['skSolicitudRevalidacion'] : '' ; ?>">
   <div class="form-body">
-       
+
     <div class="form-group">
       <label class="control-label col-md-2">Referencia <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-4">
@@ -37,8 +37,8 @@
         </div>
       </div>
     </div>
-      
-      
+
+
     <div class="form-group">
       <label class="control-label col-md-2">BL Master</label>
       <div class="col-md-4">
@@ -47,7 +47,7 @@
         </div>
       </div>
     </div>
-    
+
     <!--
     <div class="form-group">
       <label class="control-label col-md-2">BL House</label>
@@ -58,7 +58,7 @@
       </div>
     </div>
     !-->
-    
+
     <div class="form-group">
       <label class="control-label col-md-2">ETA <span aria-required="true" class="required"> * </span></label>
       <div class="col-md-4">
@@ -70,7 +70,7 @@
         </div>
       </div>
     </div>
-      
+
     <div class="form-group">
       <label class="control-label col-md-2">Fecha de Arribo de buque </label>
       <div class="col-md-4">
@@ -99,10 +99,10 @@
 
     <hr>
      <div id="dvDatos">
-     
-         
+
+
      </div>
-     
+
 
     <div class="form-group">
       <label class="col-md-2">Línea Naviera <span aria-required="true" class="required"> * </span> </label>
@@ -120,13 +120,13 @@
                                 ?>
         </select>
       </div>
-    </div>  
-        
+    </div>
+
     <?php
         //skEstatusRevalidacion
         $skEstatusRevalidacion = isset($result['skEstatusRevalidacion']) ? $result['skEstatusRevalidacion'] : '';
         if($skEstatusRevalidacion == 'NU'){
-    ?> 
+    ?>
     <hr>
     <input type="hidden" name="skEstatusRevalidacion" value="PR">
       <div class="form-group">
@@ -145,13 +145,13 @@
             ?>
           </select>
         </div>
-      </div> 
-        
+      </div>
+
     <?php
         }elseif($skEstatusRevalidacion == 'PR' || $skEstatusRevalidacion == 'RV' || $skEstatusRevalidacion == 'RE'){
-    ?>    
+    ?>
 <div id="dvEstatusNaviera" style="display:none">
-     
+
      <div class="form-group">
         <label class="col-md-2">Tramitador <span aria-required="true" class="required"> * </span> </label>
         <div class="col-md-4">
@@ -173,9 +173,9 @@
     <div class="form-group">
       <label class="col-md-2">Estatus Naviera <span aria-required="true" class="required"> * </span> </label>
       <div class="col-md-10">
-        <?php 
+        <?php
           if($data['estatus']){
-            while($rEstatus =  $data['estatus']->fetch_assoc()){ 
+            while($rEstatus =  $data['estatus']->fetch_assoc()){
         ?>
         <label><input type="radio" name="skEstatusRevalidacion" class="form-filter tipoEstatus" tipo="<?php echo utf8_encode($rEstatus{'skEstatus'}); ?>" value="<?php echo $rEstatus{'skEstatus'}?>" <?php echo ((isset($result['skEstatusRevalidacion']) ? $result['skEstatusRevalidacion'] : "-") == $rEstatus{'skEstatus'} ? 'checked' : '' ? 'checked' : '' ); ?> <?php echo $disabled_solicitud; ?> ><?php echo utf8_encode($rEstatus['sNombre'])?></label>
         <?php
@@ -184,8 +184,8 @@
         ?>
       </div>
     </div>
-     
-       
+
+
     <div id="dvRechazos" style="display:none;">
     <hr>
      <div class="form-group">
@@ -194,8 +194,8 @@
                 <div class="col-md-10">
                     <div class="row">
                         <div class="checkbox-list">
-                                                           
-                                <?php 
+
+                                <?php
                                 if($data['rechazos'])
                                 {
                                     foreach ($data['rechazos'] as $rechazo)
@@ -204,27 +204,27 @@
                                         <div class="col-md-6">
                                                <label> <input type="checkbox" name="skRechazo[]" value="<?php echo $rechazo['skRechazo']; ?>" <?php  echo (in_array($rechazo['skRechazo'], $arrayRechazos) ? 'checked' : '') ?> <?php echo $disabled_solicitud; ?> />
                                                 <?php echo $rechazo['sNombre']; ?>    <br/>&nbsp;</label>
-                                            
+
                                         </div>
                                     <?php
                                     }
                                 }
                                 ?>
                         </div>
-                        
+
                     </div>
                 </div>
-                
+
             </div>
          <hr>
      </div>
-    
+
      </div>
       <!-- Cierra div dvEstatusNaviera-->
     <?php
         }//ENDIF skEstatusRevalidacion
-    ?>  
-      
+    ?>
+
     <div class="form-group">
       <label class=" col-md-2">Observaciones </label>
       <div class="col-md-8">
@@ -233,12 +233,12 @@
         </div>
       </div>
     </div>
-    
-    
- 
-    
-    
-     
+
+
+
+
+
+
   </div>
 </form>
 <div class="clearfix"></div>
@@ -257,7 +257,7 @@ function lanzadera(){
                 case 'PR':
                 break;
                 case 'TR':
-                    
+
                 break;
                 case 'RV':
                     obtenerDatos();
@@ -274,9 +274,9 @@ function lanzadera(){
 }
 
     window.onload = lanzadera;
-    
-    
-     var tipo = $('.tipoEstatus:checked').attr("tipo"); 
+
+
+     var tipo = $('.tipoEstatus:checked').attr("tipo");
         switch(tipo){
             case "RE":
                  $("#dvRechazos").css("display","block");
@@ -286,7 +286,7 @@ function lanzadera(){
                   break;
         }
         $(".tipoEstatus").click(function(){
-            tipo = $(this).attr("tipo"); 
+            tipo = $(this).attr("tipo");
            // alert(tipo);
            switch(tipo){
                case "RE":
@@ -302,64 +302,14 @@ function obtenerDatos(){
 	 $.post("",{ axn : "obtenerDatos" , sReferencia : $("#sReferencia").val() }, function(data){
             $("#dvDatos").html(data);
             $('.page-title-loading').css('display','none');
-            /*if($("input[name=sBlMaster]").val().length == 0){
-                $("input[name=sBlMaster]").val(data.data[0][8]);
-                $("input[name=sBlHouse]").val(data.data[0][9]);
-            }*/
-        /*
-        var cad = '';
-        if(!data.data[0]){
-            cad ='';
-        }else{        
-    	cad ='<div class="form-group">'+
-     	'<label class="col-md-2">Cliente</label>'+
-     	'<div class="col-md-4">'+
-       	'<label id="lbCliente" class="control-label">'+data.data[0][0]+'</label>'+
-        '</div>'+
-      	'<label class="control-label col-md-2">Tipo de Servicio</label>'+
-	     '<div class="col-md-4">'+
-	       ' <label id="lbServicio" class="control-label">'+data.data[0][1]+'</label>'+
-	    ' </div>'+
-   ' </div>'+
-    '<div class="form-group">'+
-     	'<label class="col-md-2">Ejecutivo</label>'+
-     	'<div class="col-md-4">'+
-       	'	 <label id="lbEjecutivo" class="control-label">'+data.data[0][2]+'</label>'+
-       ' </div>'+
-      	'<label class="control-label col-md-2">Mercancia</label>'+
-	    ' <div class="col-md-4">'+
-	    '    <label id="lbMercancia" class="control-label ">'+data.data[0][3]+'</label>'+
-	    ' </div>'+
-   ' </div>'+
-    '<div class="form-group">'+
-      '<label class="col-md-2">Datos del tipo de servicio</label>'+
-      '<div class="col-md-2">'+
-        '  <label class="control-label">Num. Contenedor: '+data.data[0][4]+'</label>'+
-       ' </div>'+
-      ' <div class="col-md-2">'+
-      '    <label class="control-label ">Bultos: '+data.data[0][5]+'</label>'+
-      ' </div>'+
-      ' <div class="col-md-2">'+
-      '    <label class="control-label ">Peso: '+data.data[0][6]+'</label>'+
-      ' </div>'+
-      ' <div class="col-md-2">'+
-      '    <label class="control-label ">Volumen: '+data.data[0][7]+'</label>'+
-      ' </div>'+
-   ' </div>';
-            
-            if($("input[name=sBlMaster]").val().length == 0){
-                $("input[name=sBlMaster]").val(data.data[0][8]);
-                $("input[name=sBlHouse]").val(data.data[0][9]);
-            }
-   }*/
             });
 			}
 
     $(document).ready(function(){
-    
-    
-    
-    
+
+
+
+
         /* VALIDATIONS */
         isValid = $("#_save").validate({
             errorElement: 'span', //default input error message container
@@ -378,12 +328,12 @@ function obtenerDatos(){
                         skSolicitudRevalidacion:  function (){return $( "#skSolicitudRevalidacion" ).val();}
                       }
                     }
-                    
+
                 },
-		
+
                 skEmpresaNaviera:{
                     required: true,
-                     minlength: 1 
+                     minlength: 1
                 },
                 skUsuarioTramitador:{
                     required: true
@@ -407,26 +357,26 @@ function obtenerDatos(){
                  }*/
             },
 
-invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar              
+invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar
                 $('.alert-success').hide();
                 $('.alert-danger').show();
                 App.scrollTo($('.alert-danger'), -200);
             },
             errorPlacement: function (error, element) { // hacer la colocación de error para cada tipo de entrada
                 var icon = $(element).parent('.input-icon').children('i');
-                icon.removeClass('fa-check').addClass("fa-warning");  
+                icon.removeClass('fa-check').addClass("fa-warning");
                 icon.attr("data-original-title", $('.alert-danger').text()).tooltip({'container': 'body'});
                 if (element.parent(".input-group").size() > 0) {
                     error.insertAfter(element.parent(".input-group"));
-                } else if (element.attr("data-error-container")) { 
+                } else if (element.attr("data-error-container")) {
                     error.appendTo(element.attr("data-error-container"));
-                } else if (element.parents('.radio-list').size() > 0) { 
+                } else if (element.parents('.radio-list').size() > 0) {
                     error.appendTo(element.parents('.radio-list').attr("data-error-container"));
-                } else if (element.parents('.radio-inline').size() > 0) { 
+                } else if (element.parents('.radio-inline').size() > 0) {
                     error.appendTo(element.parents('.radio-inline').attr("data-error-container"));
                 } else if (element.parents('.checkbox-list').size() > 0) {
                     error.appendTo(element.parents('.checkbox-list').attr("data-error-container"));
-                } else if (element.parents('.checkbox-inline').size() > 0) { 
+                } else if (element.parents('.checkbox-inline').size() > 0) {
                     error.appendTo(element.parents('.checkbox-inline').attr("data-error-container"));
                 } else {
                     error.insertAfter(element); // Para otros insumos, sólo realizar comportamiento predeterminado (llamar messages)
@@ -473,5 +423,5 @@ invalidHandler: function (event, validator) { //alerta de error de visualizació
                 },*/
             }
         });
-    }); 
+    });
 </script>

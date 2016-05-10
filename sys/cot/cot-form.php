@@ -156,34 +156,42 @@ echo "</pre>"; */
         <div class="form-group">
           <!--//Conceptos de cliente-->
             <div class="col-md-12">
-          <div class="col-md-6">
-            <table class="table table-responsive">
+          <div class="col-md-12">
+            <table class="table table-responsive table-striped">
               <thead>
+                <tr>
+                  <td colspan="7" align="center"><h3>Conceptos de Pedimento</h3></td>
+                </tr>
+                <tr>
                 <th nowrap>S</th>
                 <th nowrap>Cantidad</th>
                 <th nowrap>Precio Unitario</th>
                 <th nowrap>Divisa</th>
-                <th nowrap>Nombre</th>
+                <th width="100%">Nombre</th>
                 <th nowrap></th>
-
                 <th nowrap>Subtotal</th>
+              </tr>
               </thead>
-                <tbody id="dvConceptosDespacho">
+                <tbody id="dvConceptosPedimento">
                 </tbody>
             </table>
           </div>
           <!--//Conceptos de naviera-->
-          <div class="col-md-6">
-            <table class="table table-responsive">
+          <div class="col-md-12">
+            <table class="table table-responsive table-striped">
               <thead>
+                <tr>
+                  <td colspan="7" align="center"><h3>Conceptos de Naviera</h3></td>
+                </tr>
+                <tr>
                 <th nowrap>S</th>
                 <th nowrap>Cantidad</th>
                 <th nowrap>Precio Unitario</th>
                 <th nowrap>Divisa</th>
-                <th nowrap>Nombre</th>
+                <th width="100%">Nombre</th>
                 <th nowrap></th>
-
                 <th nowrap>Subtotal</th>
+              </tr>
               </thead>
               <tbody id="dvConceptosNaviera">
               </tbody>
@@ -191,26 +199,53 @@ echo "</pre>"; */
           </div>
         </div>
           <div class="col-md-12">
-          <div class="col-md-6">
-              <table class="table table-responsive">
+          <div class="col-md-12">
+              <table class="table table-responsive table-striped">
                 <thead>
+                  <tr>
+                    <td colspan="7" align="center"><h3>Conceptos de Recinto</h3></td>
+                  </tr>
+                  <tr>
                   <th nowrap>S</th>
                   <th nowrap>Cantidad</th>
                   <th nowrap>Precio Unitario</th>
                   <th nowrap>Divisa</th>
-                  <th nowrap>Nombre</th>
+                  <th width="100%">Nombre</th>
                   <th nowrap></th>
-
                   <th nowrap>Subtotal</th>
+                </tr>
                 </thead>
 
                 <tbody id="dvConceptosRecinto">
                   </tbody>
 
-                <tbody id="dvConceptosDespacho">
-                </tbody>
+
               </table>
           </div>
+          <div class="col-md-12">
+              <table class="table table-responsive table-striped">
+                <thead>
+                  <tr>
+                    <td colspan="7" align="center"><h3>Conceptos de Despacho</h3></td>
+                  </tr>
+                  <tr>
+                  <th nowrap>S</th>
+                  <th nowrap>Cantidad</th>
+                  <th nowrap>Precio Unitario</th>
+                  <th nowrap>Divisa</th>
+                  <th width="65%">Nombre</th>
+                  <th width="20%"></th>
+                  <th width="15%" style="border:1px solid red;">   Subtotal   </th>
+                </tr>
+                </thead>
+
+                <tbody id="dvConceptosDespacho">
+                </tbody>
+
+
+              </table>
+          </div>
+
         </div>
         </div>
         <!--<div class="form-group">
@@ -265,7 +300,9 @@ function cotizar(){
               var resultado = precioUnitario * cantidad;
             }else{
               //  alert("entro");
+              var resultadoDolares = precioUnitario * cantidad;
               var resultado = precioUnitario * cantidad * unidadCambio;
+              $(tr).find(".show_dolares").html("$ "+resultadoDolares.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
             }
             var subtotal = $(tr).find(".subtotal").val(resultado);
             var show_subtotal = $(tr).find(".show_subtotal").html("$ "+resultado.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
@@ -321,7 +358,7 @@ function cotizar(){
               ,skTipoTramite : $('input[name=skTipoTramite]:checked').val()
               ,skTipoCobroCotizacion : $('input[name=skTipoCobroCotizacion]:checked').val()
           }, function(response){
-             console.log(response);
+             //console.log(response);
               $("#divConceptos").css("display","block");
               $("#dvConceptosPedimento").html(response['conceptosPedimento']);
               $("#dvConceptosNaviera").html(response['conceptosNaviera']);
@@ -339,12 +376,10 @@ function obtenerDatos(){
         $.post("",{ axn : "obtenerDatos" , sReferencia : $("#sReferencia").val() }, function(data){
             //console.log(data);
         var cad = '';
-        if(!data.data){
-            response = false;
-            var icon = $("#sReferencia").parent('.input-icon').children('i');
-            $("#sReferencia").closest('.form-group').removeClass('has-success').addClass('has-error');
-            icon.removeClass("fa-check").addClass("fa-warning");
-        }else{
+        var content = '';
+        if(data.data){
+
+
     	cad ='<div class="form-group">'+
           	'<label class="control-label col-md-2">Tipo de Servicio</label>'+
     	     '<div class="col-md-4">'+
@@ -362,7 +397,7 @@ function obtenerDatos(){
               ' </div>'+
 
            ' </div> <hr>';
-
+           content = data.content;
     // Selecciona la empresa (cliente) de la refernecia //
     $("#skEmpresaImportador").val(data.data.skEmpresa);
     // Selecciona la skEmpresaNaviera (Naviera) de la refernecia //
@@ -371,19 +406,19 @@ function obtenerDatos(){
     //$("#skTipoTramite_"+data.data.skTipoTramite).prop('checked',true);
       getConceptos();
    }
-    $("#dvDatos").html(cad);
+    //$("#dvDatos").html(cad);
+    $("#dvDatos").html(content);
     $('.page-title-loading').css('display','none');
     });
-    if(response){
-         return true;
-    }else{
-         return false;
-    }
+    return true;
 }
 
 
     $(document).ready(function(){
-
+      // Refresca los subtotales de los conceptos cuando cambia el valor del tipo de cambio.
+      $("#fTipoCambio").change(function(){
+        cotizar();
+      });
         // VALIDADOR PARA OBTENER DATOS POR REFERENCIA //
         $.validator.addMethod(
             "obtenerDatos",
@@ -406,14 +441,14 @@ function obtenerDatos(){
             rules:{
                 sReferencia:{
                     required: true,
-                    remote: {
+                    /*remote: {
                         url: "",
                         type: "post",
                         data: {
                             sReferencia: function (){return $( "#sReferencia" ).val();},
                             axn: "validarReferencia"
                         }
-                    },
+                    },*/
                     obtenerDatos: true
                 },
                 sObservaciones:{

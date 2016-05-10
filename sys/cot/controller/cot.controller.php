@@ -223,19 +223,19 @@
                                 <td><input type="text" name="fPrecioUnitario[]" onChange="cotizar();"   class="form-control input-sm fPrecioUnitario" placeholder="Precio Unitario" value="'.number_format($row['fPrecioUnitario'],2).'" ></td>
                                 <td style="color:#777;">'.utf8_encode($row['skDivisa']).'<input type="hidden" class="divisa" name="divisa[]" value="'.utf8_encode($row['skDivisa']).'" /></td>
                                 <td nowrap>'.utf8_encode($row['Nombre']).'</td>
-                                <td nowrap></td>
+                                <td nowrap class="show_dolares"></td>
                                 <td> <span class="show_subtotal"></span> <input type="hidden" name="subtotal[]" class="subtotal" value="" /></td>
                               </tr>';
                               array_push($html['conceptosPedimento'],$tol);
                           }
                           while($row = $this->data['conceptosNaviera']->fetch_assoc()){
-                              $tol='<tr class="active">
+                              $tol='<tr>
                                 <td><input type="checkbox" onChange="cotizar();"   value="'.$row['skConcepto'].'" name="conceptos[]"></td>
                                 <td><input type="text" name="iCantidad[]" onChange="cotizar();"  class="form-control input-sm iCantidad" placeholder="Cant" value="0" ></td>
                                 <td><input type="text" name="fPrecioUnitario[]" onChange="cotizar();"  class="form-control input-sm fPrecioUnitario" placeholder="Precio Unitario" value="'.number_format($row['fPrecioUnitario'],2).'" ></td>
                                 <td style="color:#777;">'.utf8_encode($row['skDivisa']).'<input type="hidden" class="divisa" name="divisa[]" value="'.utf8_encode($row['skDivisa']).'" /></td>
                                 <td nowrap>'.utf8_encode($row['Nombre']).'</td>
-                                <td nowrap></td>
+                                <td nowrap class="show_dolares"></td>
                                 <td> <span class="show_subtotal"></span> <input type="hidden" name="subtotal[]" class="subtotal" value="" /></td>
                               </tr>';
                               array_push($html['conceptosNaviera'],$tol);
@@ -247,19 +247,19 @@
                                 <td><input type="text" name="fPrecioUnitario[]" onChange="cotizar();"  class="form-control input-sm fPrecioUnitario" placeholder="Precio Unitario" value="'.number_format($row['fPrecioUnitario'],2).'" ></td>
                                 <td style="color:#777;">'.utf8_encode($row['skDivisa']).'<input type="hidden" class="divisa" name="divisa[]" value="'.utf8_encode($row['skDivisa']).'" /></td>
                                 <td nowrap>'.utf8_encode($row['Nombre']).'</td>
-                                <td nowrap></td>
+                                <td nowrap class="show_dolares"></td>
                                 <td> <span class="show_subtotal"></span> <input type="hidden" name="subtotal[]" class="subtotal" value="" /></td>
                               </tr>';
                               array_push($html['conceptosRecinto'],$tol);
                           }
                           while($row = $this->data['conceptosDespacho']->fetch_assoc()){
-                              $tol='<tr class="active">
+                              $tol='<tr>
                                 <td><input type="checkbox" value="'.$row['skConcepto'].'" onChange="cotizar();"  name="conceptos[]"></td>
                                 <td><input type="text" name="iCantidad[]" onChange="cotizar();"  class="form-control input-sm iCantidad" placeholder="Cant" value="0" ></td>
                                 <td><input type="text" name="fPrecioUnitario[]" onChange="cotizar();"  class="form-control input-sm fPrecioUnitario" placeholder="Precio Unitario" value="'.number_format($row['fPrecioUnitario'],2).'" ></td>
                                 <td style="color:#777;">'.utf8_encode($row['skDivisa']).'<input type="hidden" class="divisa"name="divisa[]" value="'.utf8_encode($row['skDivisa']).'" /></td>
                                 <td nowrap>'.utf8_encode($row['Nombre']).'</td>
-                                <td nowrap></td>
+                                <td nowrap class="show_dolares"></td>
                                 <td> <span class="show_subtotal"></span> <input type="hidden" name="subtotal[]" class="subtotal" value="" /></td>
                               </tr>';
                               array_push($html['conceptosDespacho'],$tol);
@@ -270,41 +270,43 @@
                           return;
                         break;
                         case "validarReferencia":
-                            $this->cotizaciones['sReferencia'] = $_POST['sReferencia'];
+                            /*$this->cotizaciones['sReferencia'] = $_POST['sReferencia'];
                             $this->data['data']=parent::read_referencia();
                             if(!$this->data['data']){
                                 echo 'false';
                                 return false;
-                            }
+                            }*/
                             echo 'true';
                             return true;
                             break;
                         case "obtenerDatos":
                             $this->cotizaciones['sReferencia'] = $_POST['sReferencia'];
                             $this->data['data']=parent::read_referencia();
-                            if(!$this->data['data']){
-                                $this->data['response'] = false;
-                                $this->data['datos'] = false;
-                                return false;
-                            }
                             $result['data'] = array();
-                            while($row = $this->data['data']->fetch_assoc()){
-                               $result['data']= array(
-                                     "Empresa"=>utf8_encode($row['Empresa'])
-                                    ,"skEmpresa"=>utf8_encode($row['skEmpresa'])
-                                    ,"TipoServicio"=>utf8_encode($row['TipoServicio'])
-                                   ,"skTipoTramite"=>utf8_encode($row['skTipoTramite'])
-                                    ,"Ejecutivo"=>utf8_encode($row['Ejecutivo'])
-                                    ,"sMercancia"=>utf8_encode($row['sMercancia'])
-                                    ,"sNumContenedor"=>utf8_encode($row['sNumContenedor'])
-                                    ,"iBultos"=>utf8_encode($row['iBultos'])
-                                    ,"fPeso"=>utf8_encode($row['fPeso'])
-                                    ,"fVolumen"=>utf8_encode($row['fVolumen'])
-                                    ,"sBlMaster"=>utf8_encode($row['sBlMaster'])
-                                    ,"sBlHouse"=>utf8_encode($row['sBlHouse'])
-                                    ,"skEmpresaNaviera"=>utf8_encode($row['skEmpresaNaviera'])
-                                );
+                            if($this->data['data']){
+                              while($row = $this->data['data']->fetch_assoc()){
+                                 $result['data']= array(
+                                       "Empresa"=>utf8_encode($row['Empresa'])
+                                      ,"skEmpresa"=>utf8_encode($row['skEmpresa'])
+                                      ,"TipoServicio"=>utf8_encode($row['TipoServicio'])
+                                     ,"skTipoTramite"=>utf8_encode($row['skTipoTramite'])
+                                      ,"Ejecutivo"=>utf8_encode($row['Ejecutivo'])
+                                      ,"sMercancia"=>utf8_encode($row['sMercancia'])
+                                      ,"sNumContenedor"=>utf8_encode($row['sNumContenedor'])
+                                      ,"iBultos"=>utf8_encode($row['iBultos'])
+                                      ,"fPeso"=>utf8_encode($row['fPeso'])
+                                      ,"fVolumen"=>utf8_encode($row['fVolumen'])
+                                      ,"sBlMaster"=>utf8_encode($row['sBlMaster'])
+                                      ,"sBlHouse"=>utf8_encode($row['sBlHouse'])
+                                      ,"skEmpresaNaviera"=>utf8_encode($row['skEmpresaNaviera'])
+                                  );
+                                }
+                              ob_start();
+                              $this->load_controller('doc','obtenerDatos');
+                              $content = json_decode(ob_get_clean());
+                              $result['content'] = $content;
                             }
+                            //exit('<pre>'.print_r($result['content'],1));
                             header('Content-Type: application/json');
                             echo json_encode($result);
                             return true;
