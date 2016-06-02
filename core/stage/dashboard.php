@@ -48,7 +48,7 @@ global $dash;
 					</div>
 
 				</div>
-				<div class="col-md-6">
+				<div class="col-md-12">
 					<div class="portlet">
 						<div class="portlet-title">
 							<div class="caption">
@@ -56,8 +56,9 @@ global $dash;
 							</div>
 
 						</div>
-						<div class="portlet-body">
-							<div id="columnchart_ejecutivo" ></div>
+						<div class="portlet-body" >
+							<div id="columnchart_ejecutivo"  style="height: 400px;" >
+							</div>
 						</div>
 					</div>
 				</div>
