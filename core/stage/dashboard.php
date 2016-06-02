@@ -26,8 +26,6 @@ global $dash;
 
 						</div>
 						<div class="portlet-body">
-							<!--<div id="pie_chart_6" class="chart">
-							</div>-->
 							<div id="chart_div"></div>
 							<div id="columnchart_material" ></div>
 
@@ -44,45 +42,41 @@ global $dash;
 
 						</div>
 						<div class="portlet-body">
-							<!--<div id="pie_chart_6" class="chart">
-							</div>-->
 							<div id="chart_div"></div>
 							<div id="columnchart_material1" ></div>
-
-
 						</div>
 					</div>
 
 				</div>
-
-
-
-
-			<!--	<div class="col-md-12">
-				<center>
-				<img src="<?php echo SYS_URL; ?>core/assets/img/logo.svg" style="width:300px;height:200px;margin-top:40px;" />
-				</center>
-				</div>
-			</div>-->
-			<!--<div class="row ">
-
-				<div class="col-md-6 col-sm-6">
+				<div class="col-md-6">
 					<div class="portlet">
 						<div class="portlet-title">
 							<div class="caption">
-								<i class="fa fa-bell"></i>Opciones
+								<i class="fa fa-reorder"></i>Referencias por Ejecutivo (2016)
 							</div>
 
 						</div>
 						<div class="portlet-body">
-							<div class="table-scrollable">
-
+							<div id="columnchart_ejecutivo" ></div>
+						</div>
+					</div>
+				</div>
+			<!--	<div class="col-md-6">
+					<div class="portlet">
+						<div class="portlet-title">
+							<div class="caption">
+								<i class="fa fa-reorder"></i>Referencias por Ejecutivo Total
 							</div>
+
+						</div>
+						<div class="portlet-body">
+
+							<div id="estadisticaTotal" ></div>
 						</div>
 					</div>
 				</div>-->
 				<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-				    <script type="text/javascript">
+				<script type="text/javascript">
 
 						google.charts.load('current', {'packages':['bar']});
 						google.charts.setOnLoadCallback(drawChart);
@@ -111,14 +105,49 @@ global $dash;
 							var data = google.visualization.arrayToDataTable([
 								<?php   $dash->numRefeMes();?>
  							]);
- 							var options = {
+							var options = {
 								chart: {
 									title: 'Agencia Aduanal Grupo Alvez',
 									subtitle: 'Referencias creadas  en el sistema 2016',
 								}
 							};
- 							var chart1 = new google.charts.Bar(document.getElementById('columnchart_material1'));
- 							chart1.draw(data, options);
+							var chart1 = new google.charts.Bar(document.getElementById('columnchart_material1'));
+							chart1.draw(data, options);
 						}
-						
- 				    </script>
+						google.charts.setOnLoadCallback(drawChart2);
+						function drawChart2() {
+							var data = google.visualization.arrayToDataTable([
+								<?php   $dash->referenciasEjecutivo();?>
+ 							]);
+							var options = {
+								chart: {
+									title: 'Agencia Aduanal Grupo Alvez',
+									subtitle: 'Referencias por Ejecutivo 2016',
+								}
+							};
+							var chart2 = new google.charts.Bar(document.getElementById('columnchart_ejecutivo'));
+							chart2.draw(data, options);
+						}
+					/*	google.charts.load('current', {'packages':['corechart']});
+						google.charts.setOnLoadCallback(drawChart3);
+							function drawChart3() {
+
+								var data = google.visualization.arrayToDataTable([
+					          ['Task', 'Hours per Day'],
+					          ['Work',     11],
+					          ['Eat',      2],
+					          ['Commute',  2],
+					          ['Watch TV', 2],
+					          ['Sleep',    7]
+					        ]);
+
+
+								var options = {
+									title: 'Total de Referencias'
+								};
+
+								var chart = new google.visualization.PieChart(document.getElementById('estadisticaTotal'));
+
+								chart.draw(data, options);
+							}*/
+				    </script>
