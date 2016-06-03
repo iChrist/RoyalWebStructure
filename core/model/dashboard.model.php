@@ -176,7 +176,7 @@
               $cadena ="['Ejecutivo', 'ENE','FEB','MAR','ABR','MAY','JUN' ],";
               $result = $this->db->query($sql);
                 while($row = $result->fetch_assoc()){
-                  $cadena.="['".$row['CAT']."', '".$row['ENE']."','".$row['FEB']."','".$row['MAR']."','".$row['ABR']."','".$row['MAY']."','".$row['JUN']."' ],";
+                  $cadena.="['".$row['CAT']."', ".$row['ENE'].",".$row['FEB'].",".$row['MAR'].",".$row['ABR'].",".$row['MAY'].",".$row['JUN']." ],";
                 }
 
               echo $cadena;
