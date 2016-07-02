@@ -12,11 +12,35 @@
 			 }
 		 }
     }
+    $arraySucursalesUsuarios = array();
+  	if(isset($data['sucursalesusuarios']))
+      {
+  		if($data['sucursalesusuarios']->num_rows > 0){
+  			 while($row = $data['sucursalesusuarios']->fetch_assoc()){
+  				$arraySucursalesUsuarios[] = $row{'skSucursal'};
+  			 }
+  		 }
+      }
 
 ?>
-<form id="_save" method="post" class="form-horizontal" role="form"> 
-    <input type="hidden" name="skUsers"  id="skUsers" value="<?php echo (isset($result['skUsers'])) ? $result['skUsers'] : '' ; ?>">
-    <div class="form-body">
+<form id="_save" method="post" class="form-horizontal" role="form">
+  <div class="col-lg-12 col-md-12 col-xs-12">
+  <!-- BEGIN TAB -->
+      <ul class="nav nav-tabs">
+          <li class="active">
+              <a href="#tab_datosGenerales" data-toggle="tab">Datos Generales</a>
+          </li>
+          <li class="inactive">
+              <a href="#tab_perfiles" data-toggle="tab">Perfiles</a>
+          </li>
+          <li class="inactive">
+              <a href="#tab_sucursales" data-toggle="tab">Sucursales</a>
+          </li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane fade active in" id="tab_datosGenerales">
+          <input type="hidden" name="skUsers"  id="skUsers" value="<?php echo (isset($result['skUsers'])) ? $result['skUsers'] : '' ; ?>">
+          <div class="form-body">
             <div class="form-group">
                 <label class="control-label col-md-2">Nombres <span aria-required="true" class="required"> * </span>
                 </label>
@@ -27,7 +51,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="form-group">
                 <label class="control-label col-md-2">Apellido Paterno<span aria-required="true" class="required"> * </span>
                 </label>
@@ -38,7 +62,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="form-group">
                 <label class="control-label col-md-2">Apellido Materno<span aria-required="true" class="required"> * </span>
                 </label>
@@ -49,7 +73,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="form-group">
                 <label class="control-label col-md-2">Correo Electrónico <span aria-required="true" class="required"> * </span>
                 </label>
@@ -60,7 +84,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="form-group">
                 <label class="control-label col-md-2">Nombre de usuario <span aria-required="true" class="required"> * </span>
                 </label>
@@ -71,19 +95,19 @@
                     </div>
                 </div>
             </div>
-            
-            
+
+
             <div class="form-group">
                 <label class="control-label col-md-2">Contraseña <span aria-required="true" class="required"> * </span>
                 </label>
                 <div class="col-md-4">
                     <div class="input-icon right">
                         <i class="fa"></i>
-                        <input type="text" name="sPassword" id="sPassword" class="form-control" placeholder="" value="<?php echo (isset($result['sPassword'])) ? $result['sPassword'] : '' ; ?>" >                                            
+                        <input type="text" name="sPassword" id="sPassword" class="form-control" placeholder="" value="<?php echo (isset($result['sPassword'])) ? $result['sPassword'] : '' ; ?>" >
                     </div>
                 </div>
             </div>
-            
+
             <div class="form-group">
                 <label class="control-label col-md-2">Estatus <span aria-required="true" class="required"> * </span>
                 </label>
@@ -106,52 +130,117 @@
                         </div>
                 </div>
             </div>
-            
-            <div class="clearfix"><hr/></div>
-            
-            <div class="form-group">
-                <label class="control-label col-md-2">Perfil del usuario <span aria-required="true" class="required"> * <div class="help-block">( Elija al menos 1 perfil )</div> </span>
-                </label>
-                <div class="col-md-10">
-                    <div class="row">
-                        <div class="checkbox-list">
-                                                           
-                                <?php 
-                                if($data['profiles'])
-                                {
-                                    foreach ($data['profiles'] as $profile)
-                                    {
-                                    ?>
-                                        <div class="col-md-4">
-                                               <label> <input type="checkbox" name="skProfiles[]" value="<?php echo $profile['skProfiles']; ?>" <?php echo (in_array($profile['skProfiles'], $arrayPerfilesUsuarios) ? 'checked' : '')?>   />
-                                                <?php echo $profile['sName']; ?>    <br/>&nbsp;</label>
-                                            
-                                        </div>
-                                    <?php
-                                    }
-                                }
-                                ?>
-                        </div>
-                        
-                    </div>
-                </div>
-                
-            </div>
-            
-            <div class="clearfix"><hr/></div>
-            
-            <div class="form-group">
-                <label class="control-label col-md-2">Tipo de usuario <span aria-required="true" class="required"> * </span>
-                </label>
-                <div class="col-md-4">
-                    <label>
-                        <input type="checkbox" id="sGroup" name="sGroup" value="A" <?php echo (isset($result['sGroup']) && $result['sGroup'] == 'A') ? 'checked' : '' ; ?>  />
-                        Administrador    
-                    </label>
-                </div>
-            </div>
-            
+
+
+
+
+
+
+
+          </div>
         </div>
+        <div class="tab-pane fade" id="tab_perfiles">
+          <div class="form-group">
+              <label class="control-label col-md-2">Perfil del usuario <span aria-required="true" class="required"> * <div class="help-block">( Elija al menos 1 perfil )</div> </span>
+              </label>
+              <div class="col-md-10">
+                  <div class="row">
+                      <div class="checkbox-list">
+
+                              <?php
+                              if($data['profiles'])
+                              {
+                                  foreach ($data['profiles'] as $profile)
+                                  {
+                                  ?>
+                                      <div class="col-md-4">
+                                             <label> <input type="checkbox" name="skProfiles[]" value="<?php echo $profile['skProfiles']; ?>" <?php echo (in_array($profile['skProfiles'], $arrayPerfilesUsuarios) ? 'checked' : '')?>   />
+                                              <?php echo $profile['sName']; ?>    <br/>&nbsp;</label>
+
+                                      </div>
+                                  <?php
+                                  }
+                              }
+                              ?>
+                      </div>
+
+                  </div>
+              </div>
+
+          </div>
+          <div class="form-group">
+              <label class="control-label col-md-2">Empresa del Usuario <span aria-required="true" class="required"> * </span> </label>
+              <div class="col-md-4">
+                  <select name="skEmpresa" id="skSocioEmpresa" class="form-control form-filter input-sm">
+                      <option value="">- Cliente -</option>
+                      <?php
+                      if ($data['empresas']) {
+                          while ($rEmpresa = $data['empresas']->fetch_assoc()) {
+                              ?>
+                              <option value="<?php echo $rEmpresa['skSocioEmpresa']; ?>"
+                                <?php echo (isset($result['skSocioEmpresa'])) ? ($result['skSocioEmpresa'] == $rEmpresa['skSocioEmpresa'] ? 'selected' : '' ) : ''; ?> >
+                                <?php echo utf8_encode($rEmpresa['sNombre'])." ( ".utf8_encode($rEmpresa['tipoEmpresa']).")"; ?>
+                              </option>
+                              <?php
+                          }//ENDIF
+                      }//ENDWHILE
+                      ?>
+                  </select>
+              </div>
+          </div>
+
+        </div>
+        <div class="tab-pane fade" id="tab_sucursales">
+                <div class="form-body">
+                  <div class="clearfix"><hr/></div>
+                  <div class="form-group">
+                      <label class="control-label col-md-2">Tipo de usuario <span aria-required="true" class="required"> * </span>
+                      </label>
+                      <div class="col-md-4">
+                          <label>
+                              <input type="checkbox" id="sGroup" name="sGroup" value="A" <?php echo (isset($result['sGroup']) && $result['sGroup'] == 'A') ? 'checked' : '' ; ?>  />
+                              Administrador
+                          </label>
+                      </div>
+                  </div>
+                  <div class="clearfix"><hr/></div>
+
+                  <div class="form-group">
+                      <label class="control-label col-md-2">Sucursales <span aria-required="true" class="required"> * <div class="help-block">( Elija al menos 1 sucursal )</div> </span>
+                      </label>
+                      <div class="col-md-10">
+                          <div class="row">
+                              <div class="checkbox-list">
+
+                                      <?php
+                                      if($data['sucursales'])
+                                      {
+                                          foreach ($data['sucursales'] as $sucursales)
+                                          {
+                                          ?>
+                                              <div class="col-md-4">
+                                                     <label> <input type="checkbox" name="skSucursal[]" value="<?php echo $sucursales['skSucursal']; ?>" <?php echo (in_array($sucursales['skSucursal'], $arraySucursalesUsuarios) ? 'checked' : '')?>   />
+                                                      <?php echo $sucursales['sNombre']; ?>    <br/>&nbsp;</label>
+
+                                              </div>
+                                          <?php
+                                          }
+                                      }
+                                      ?>
+                              </div>
+
+                          </div>
+                      </div>
+
+                  </div>
+
+
+                </div>
+            </div>
+        </div>
+
+
+   </div>
 </form>
 
 
@@ -191,7 +280,7 @@
                         skUsers:  function (){return $( "#skUsers" ).val();}
                       }
                     }
-                    
+
                 },
                 sUserName:{
                     required: true,
@@ -214,26 +303,26 @@
                     // maxlength: 2
                 }
             },
-            invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar              
+            invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar
                 $('.alert-success').hide();
                 $('.alert-danger').show();
                 App.scrollTo($('.alert-danger'), -200);
             },
             errorPlacement: function (error, element) { // hacer la colocación de error para cada tipo de entrada
                 var icon = $(element).parent('.input-icon').children('i');
-                icon.removeClass('fa-check').addClass("fa-warning");  
+                icon.removeClass('fa-check').addClass("fa-warning");
                 icon.attr("data-original-title", $('.alert-danger').text()).tooltip({'container': 'body'});
                 if (element.parent(".input-group").size() > 0) {
                     error.insertAfter(element.parent(".input-group"));
-                } else if (element.attr("data-error-container")) { 
+                } else if (element.attr("data-error-container")) {
                     error.appendTo(element.attr("data-error-container"));
-                } else if (element.parents('.radio-list').size() > 0) { 
+                } else if (element.parents('.radio-list').size() > 0) {
                     error.appendTo(element.parents('.radio-list').attr("data-error-container"));
-                } else if (element.parents('.radio-inline').size() > 0) { 
+                } else if (element.parents('.radio-inline').size() > 0) {
                     error.appendTo(element.parents('.radio-inline').attr("data-error-container"));
                 } else if (element.parents('.checkbox-list').size() > 0) {
                     error.appendTo(element.parents('.checkbox-list').attr("data-error-container"));
-                } else if (element.parents('.checkbox-inline').size() > 0) { 
+                } else if (element.parents('.checkbox-inline').size() > 0) {
                     error.appendTo(element.parents('.checkbox-inline').attr("data-error-container"));
                 } else {
                     error.insertAfter(element); // Para otros insumos, sólo realizar comportamiento predeterminado (llamar messages)
@@ -276,5 +365,5 @@
                 }
             }
         });
-    }); 
+    });
 </script>

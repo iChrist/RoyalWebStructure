@@ -8,12 +8,18 @@
         if($result->num_rows > 0){
             while($row = $result->fetch_assoc()){
                 //$_SESSION['session']['skProfile'] = 'profile2';
-                $_SESSION['session']['skUsers'] = $row['skUsers'];	
+                $_SESSION['session']['skUsers'] = $row['skUsers'];
                 $_SESSION['session']['sName'] = utf8_encode($row['sName']);
                 $_SESSION['session']['sUserName'] = utf8_encode($row['sUserName']);
                 $_SESSION['session']['sEmail'] = $row['sEmail'];
                 $_SESSION['session']['sGroup'] = $row['sGroup'];
+
+                //  $_SESSION['session']['skIdentidadEmpresaC'] = $row['sGroup'];
+                //  $_SESSION['session']['skSocioEmpresaC'] = $row['sGroup'];
+                //  $_SESSION['session']['skIdentidadEmpresaC'] = $row['sGroup'];
+                //  $_SESSION['session']['skSocioEmpresa'] = $row['sGroup'];
             }
+
             header('Location: '.$_SERVER['REQUEST_URI']);
         }else{
                 $error_login = 1;
@@ -22,7 +28,7 @@
     }
 ?>
 <!DOCTYPE html>
-<!-- 
+<!--
 Template Name: Conquer - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.2.0
 Version: 2.0
 Author: KeenThemes
@@ -86,7 +92,7 @@ License: You must have a valid license purchased only from themeforest(the above
 		<div class="alert alert-danger <?php echo !empty($error_login) ? 'display-block' : 'display-hide';?>">
 			<button class="close" data-close="alert"></button>
 			<span>
-				<?php echo !empty($error_message) ? 'Usuario o contrase&ntilde;a invalida.': 'Ingresa el usuario y la contrase&ntilde;a.';?> 
+				<?php echo !empty($error_message) ? 'Usuario o contrase&ntilde;a invalida.': 'Ingresa el usuario y la contrase&ntilde;a.';?>
 			</span>
 		</div>
 		<div class="form-group">
@@ -172,7 +178,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <script src="<?php echo SYS_URL; ?>core/assets/lib/login.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 <script>
-jQuery(document).ready(function() {     
+jQuery(document).ready(function() {
   App.init();
   Login.init();
   var action = location.hash.substr(1);

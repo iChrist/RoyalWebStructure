@@ -77,22 +77,22 @@
                     $this->load_view('cof-usua-con', $this->data);
                 }
 
-                public function cof_usua_form(){
+            public function cof_usua_form(){
                     $this->data['message'] = '';
                     $this->data['response'] = true;
                     $this->data['datos'] = false;
 
-					$this->data['profiles'] = parent::read_profile(); // Mandamos a llamar todos los perfiles para cargarlos en la vista
+										$this->data['profiles'] = parent::read_profile(); // Mandamos a llamar todos los perfiles para cargarlos en la vista
+										$this->data['sucursales'] = parent::read_sucursales(); // Mandamos a llamar todos los perfiles para cargarlos en la vista
                     if(isset($_POST['axn']))
                     {
                         switch ($_POST['axn'])
                         {
-                            case "validarEmail":
+                          case "validarEmail":
                                 // echo 'false'; -> Email no encontrado
                                 // echo 'true';  -> Email encontrado
-
-                $this->users['sEmail'] = htmlentities(($_POST['sEmail']));
-								$this->users['skUsersDistinto'] = htmlentities(($_POST['skUsers']));
+	                					$this->users['sEmail'] = htmlentities(($_POST['sEmail']));
+														$this->users['skUsersDistinto'] = htmlentities(($_POST['skUsers']));
                                 if(parent::read_user())
                                 {
                                     echo 'false';
@@ -109,34 +109,32 @@
                                 // echo 'true';  -> UserName encontrado
                                 $this->users['sUserName'] = htmlentities(($_POST['sUserName']));
                                 $this->users['skUsersDistinto'] = htmlentities(($_POST['skUsers']));
-							    if(parent::read_user())
+							    							if(parent::read_user())
                                 {
                                     echo 'false';
-                                }
-                                else
-                                {
+                                }else{
                                     echo 'true';
                                 }
-                                exit;
+                              exit;
                             break;
                         }
                     }
 
                     if($_POST){
-                       			$this->users['skUsers'] 				= ($_POST['skUsers'] ? $_POST['skUsers'] : substr(md5(microtime()), 1, 32));
-								$this->users['sName'] 				= (utf8_decode($_POST['sName']));
-								$this->users['sLastNamePaternal'] 	= (utf8_decode($_POST['sLastNamePaternal']));
-								$this->users['sLastNameMaternal']	= (utf8_decode($_POST['sLastNameMaternal']));
-								$this->users['sPassword'] 			= (utf8_decode($_POST['sPassword']));
-								$this->users['sEmail'] 				= (utf8_decode($_POST['sEmail']));
-								$this->users['sUserName']	 		= (utf8_decode($_POST['sUserName']));
-								$this->users['skStatus']				= (utf8_decode($_POST['skStatus']));
-                $this->users['sGroup']				= utf8_decode(!empty($_POST['sGroup']) ? $_POST['sGroup'] : 'U');
+		                  $this->users['skUsers'] 				= ($_POST['skUsers'] ? $_POST['skUsers'] : substr(md5(microtime()), 1, 32));
+											$this->users['sName'] 				= (utf8_decode($_POST['sName']));
+											$this->users['sLastNamePaternal'] 	= (utf8_decode($_POST['sLastNamePaternal']));
+											$this->users['sLastNameMaternal']	= (utf8_decode($_POST['sLastNameMaternal']));
+											$this->users['sPassword'] 			= (utf8_decode($_POST['sPassword']));
+											$this->users['sEmail'] 				= (utf8_decode($_POST['sEmail']));
+											$this->users['sUserName']	 		= (utf8_decode($_POST['sUserName']));
+											$this->users['skStatus']				= (utf8_decode($_POST['skStatus']));
+			                $this->users['sGroup']				= utf8_decode(!empty($_POST['sGroup']) ? $_POST['sGroup'] : 'U');
 
                         if($_POST['skUsers']){
-								if(parent::update_Users()){
+													if(parent::update_Users()){
                                 if(isset($_POST['skProfiles'])) // En esta parte guardaremos todos los perfiles seleccionados para el nuevo usuario.
-								 {
+								 							  {
                                     $count = count($_POST['skProfiles']);
                                     $bandera = 1;
                                     $valores = "";
@@ -144,16 +142,34 @@
                                     {
                                         if( $bandera == $count )
                                         {
-                                            $valores .= "('".$this->users['skUsers']."' , '".$profiles."')";
+                                            $valores .= "('".$this->users['skUsers']."' , '".$profiles."','".$_POST['skEmpresa']."')";
                                         }
                                         else
                                         {
-                                            $valores .= "('".$this->users['skUsers']."' , '".$profiles."'),";
+                                            $valores .= "('".$this->users['skUsers']."' , '".$profiles."','".$_POST['skEmpresa']."'),";
                                         }
                                         $bandera++;
                                     }
                                     parent::create_Users_profiles($valores);
-								}
+																}
+																	if(isset($_POST['skSucursal'])){
+	                                    $count = count($_POST['skSucursal']);
+	                                    $bandera = 1;
+	                                    $valores1 = "";
+	                                    foreach ($_POST['skSucursal'] as $sucursales)
+	                                    {
+	                                        if( $bandera == $count )
+	                                        {
+	                                            $valores1 .= "('".$this->users['skUsers']."' , '".$sucursales."')";
+	                                        }
+	                                        else
+	                                        {
+	                                            $valores1 .= "('".$this->users['skUsers']."' , '".$sucursales."'),";
+	                                        }
+	                                        $bandera++;
+	                                    }
+	                                    parent::create_Users_sucursales($valores1);
+																	 }
                                 $this->data['response'] = true;
                                 $this->data['message'] = 'Registro actualizado con &eacute;xito.';
                                 header('Content-Type: application/json');
@@ -190,6 +206,25 @@
 										$rRespuesta = parent::create_Users_profiles($valores);
 									}
 
+									if(isset($_POST['skSucursal'])) // En esta parte guardaremos todos los perfiles seleccionados para el nuevo usuario.
+									{
+										$count = count($_POST['skSucursal']);
+										$valores1 = "";
+										foreach ($_POST['skSucursal'] as $sucursales)
+										{
+											if( $bandera == $count )
+											{
+												$valores1 .= "('".$this->users['skUsers']."' , '".$sucursales."')";
+											}
+											else
+											{
+												$valores1 .= "('".$this->users['skUsers']."' , '".$sucursales."'),";
+											}
+											$bandera++;
+										}
+										$rRespuesta = parent::create_Users_sucursales($valores1);
+									}
+
 									$this->data['response'] = true;
 									$this->data['message'] = 'Registro insertado con &eacute;xito.';
 									header('Content-Type: application/json');
@@ -209,7 +244,9 @@
 										if(isset($_GET['p1'])){
                         $this->users['skUsers'] = $_GET['p1'];
                         $this->data['datos'] = parent::read_user();
+												$this->data['empresas'] = parent::read_empresas_usuarios();
                         $this->data['perfilesusuarios'] = parent::read_user_profile();
+												$this->data['sucursalesusuarios'] = parent::read_user_sucursales();
                     }
 
                     $this->load_view('cof-usua-form', $this->data);
@@ -218,12 +255,14 @@
 
                 public function cof_usua_det(){
                     $this->data['datos'] = false;
-                    $this->data['profiles'] = parent::read_profile(); // Mandamos a llamar todos los perfiles para cargarlos en la vista
+										$this->data['profiles'] = parent::read_profile(); // Mandamos a llamar todos los perfiles para cargarlos en la vista
+										$this->data['sucursales'] = parent::read_sucursales(); // Mandamos a llamar todos los perfiles para cargarlos en la vista
                     if($_GET['p1'])
                     {
                         $this->skUsers = $_GET['p1'];
-                        $this->data['datos'] = parent::read_user();
+                        $this->data['empresas'] = parent::read_user();
                         $this->data['perfilesusuarios'] = parent::read_user_profile();
+												$this->data['sucursalesusuarios'] = parent::read_user_sucursales();
                     }
                     $this->load_view('cof-usua-det', $this->data);
                 }
@@ -232,7 +271,7 @@
 
 
 
-	        public function cof_perf_con(){
+	  	public function cof_perf_con(){
 	        	 if(isset($_GET['axn']) && $_GET['axn'] == 'fetch_all'){
 
                         // PARAMETROS PARA FILTRADO //
