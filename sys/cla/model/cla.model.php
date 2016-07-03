@@ -1116,8 +1116,111 @@
                 }
             }
         
-        
-        
+        // COMIENZA SEGUNDA CLASIFICACIÓN //
+        public function validarReferencia($datos = array()){
+            $sql = "SELECT * FROM ope_recepciones_documentos rd WHERE rd.sReferencia = '".trim($datos['sReferencia'])."'";
+            $result = $this->db->query($sql);
+            if($result){
+                if($result->num_rows > 0){
+                   return true; 
+                }else{
+                    return false;
+                }
+            }
+        }
+        public function segcla_form_getMercancias(){
+            $sql = "SELECT cla.*, rd.sPedimento, emp.sNombre AS empresa, claMer.sFactura, claMer.sFraccion, claMer.sDescripcion, claMer.sDescripcionIngles, claMer.sNumeroParte, claMer.iSecuencia, CONCAT(u.sName,' ',u.sLastNamePaternal,' ',u.sLastNameMaternal) AS ejecutivo, CONCAT(usr.sName,' ',usr.sLastNamePaternal,' ',usr.sLastNameMaternal) AS clasificador, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
+                . "INNER JOIN ope_recepciones_documentos rd ON rd.sReferencia = cla.sReferencia "
+                . "INNER JOIN cat_empresas emp ON emp.skEmpresa = rd.skEmpresa "
+                . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
+                . "INNER JOIN cat_clasificacionMercancia AS claMer ON claMer.skClasificacion = cla.skClasificacion "
+                . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion "
+                . "LEFT JOIN _users AS usr ON usr.skUsers = cla.skUsersModificacion WHERE 1=1 ";
+            
+            $this->segcla_form_criteriosMercancia($sql);
+            
+            if(!empty($this->cla['orderBy'])){
+                $sql .=" ORDER BY ".$this->cla['orderBy'];
+            }
+            if(is_int($this->cla['limit'])){
+                if(is_int($this->cla['offset'])){
+                    $sql .= " LIMIT ".$this->cla['offset']." , ".$this->cla['limit'];
+                }else{
+                    $sql .= " LIMIT ".$this->cla['limit'];
+                }
+            }
+            //exit($sql);
+            $result = $this->db->query($sql);
+            if($result){
+                if($result->num_rows > 0){
+                    return $result;
+                }else{
+                    return false;
+                }
+            }
+        }
+        public function segcla_form_count(){
+            $sql = "SELECT COUNT(*) AS total FROM cat_clasificacion AS cla "
+                . "INNER JOIN ope_recepciones_documentos rd ON rd.sReferencia = cla.sReferencia "
+                . "INNER JOIN cat_empresas emp ON emp.skEmpresa = rd.skEmpresa "
+                . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
+                . "INNER JOIN cat_clasificacionMercancia AS claMer ON claMer.skClasificacion = cla.skClasificacion "
+                . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE 1=1 ";
+            $this->segcla_form_criteriosMercancia($sql);
+            //exit($sql);
+            $result = $this->db->query($sql);
+            if($result){
+                if($result->num_rows > 0){
+                    return $result;
+                }else{
+                    return false;
+                }
+            }
+        }
+        public function segcla_form_criteriosMercancia(&$sql){
+            if($this->cla['valido'] === 0 || $this->cla['valido'] === 1){
+                $sql .=" AND cla.valido = ".$this->cla['valido'];
+            }
+            if(!empty($this->cla['skClasificacion'])){
+                $sql .=" AND cla.skClasificacion = '".$this->cla['skClasificacion']."'";
+            }
+            if(!empty($this->cla['skEmpresa'])){
+                $sql .=" AND emp.skEmpresa like '%".$this->cla['skEmpresa']."%'";
+            }
+            if(!empty($this->cla['sReferencia'])){
+                $sql .=" AND cla.sReferencia like '%".$this->cla['sReferencia']."%'";
+            }
+            if(!empty($this->cla['sPedimento'])){
+                $sql .=" AND rd.sPedimento like '%".$this->cla['sPedimento']."%'";
+            }
+            if(!empty($this->cla['dFechaPrevio'])){
+                $sql .=" AND cla.dFechaPrevio like '%".$this->cla['dFechaPrevio']."%'";
+            }
+            if(!empty($this->cla['skStatus'])){
+                $sql .=" AND cla.skStatus like '%".$this->cla['skStatus']."%'";
+            }
+            /* COMIENZA CLAMER */
+            if(!empty($this->claMer['sFactura'])){
+                $sql .=" AND claMer.sFactura like '%".$this->claMer['sFactura']."%'";
+            }
+            if(!empty($this->claMer['sFraccion'])){
+                $sql .=" AND claMer.sFraccion like '".$this->claMer['sFraccion']."%'";
+            }
+            if(!empty($this->claMer['sDescripcion'])){
+                $sql .=" AND claMer.sDescripcion like '%".$this->claMer['sDescripcion']."%'";
+            }
+            if(!empty($this->claMer['sDescripcionIngles'])){
+                $sql .=" AND claMer.sDescripcionIngles like '%".$this->claMer['sDescripcionIngles']."%'";
+            }
+            if(!empty($this->claMer['sNumeroParte'])){
+                $sql .=" AND claMer.sNumeroParte like '".$this->claMer['sNumeroParte']."%'";
+            }
+            return $sql;
+        }
+        public function asd(){
+            
+        }
+        // TERMINA SEGUNDA CLASIFICACIÓN //
 
         
     }

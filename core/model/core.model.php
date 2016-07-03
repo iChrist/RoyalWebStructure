@@ -227,7 +227,8 @@
                                     str_replace(
                                     '{{url}}',
                                     SYS_URL.SYS_PROJECT.$row['sUrl'],
-                                    htmlentities($row['sHtml'],ENT_QUOTES)
+                                    //htmlentities($row['sHtml'],ENT_QUOTES)
+                                    $row['sHtml']
                                     )
                                 )
                             ,'skPermissions' => $row['skPermissions']

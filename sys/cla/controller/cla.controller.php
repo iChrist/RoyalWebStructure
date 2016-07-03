@@ -274,6 +274,7 @@
                         $i = 0;
                         while($row = $this->data['data']->fetch_assoc()){
                                 $actions = $this->printModulesButtons(2,array($row['skClasificacion']));
+                                //exit('<pre>'.print_r($actions,1).'</pre>');
                                 $records['data'][$i] = array(
                                 !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
                                 ,($row['valido']==0) ? '<center><i class="fa fa-ban"></i></center>' : '<center><i class="fa fa-check"></i></center>'
@@ -1127,6 +1128,129 @@
             Core_Functions::pdf($content, $title, 'P', 'A4', 'es', true, 'UTF-8', array(3, 3, 3, 3));
             return true;
         }
-        /* TERMINA MODULO DE EMPRESAS clasifiación arancelaria */    
+        /* TERMINA MODULO DE EMPRESAS clasifiación arancelaria */ 
+        
+        // COMIENZA SEGUNDA CLASIFICACIÓN //
+        public function segcla_form(){
+            $this->data['message'] = '';
+            $this->data['response'] = true;
+            $this->data['datos'] = false;
+            // A
+                if(isset($_GET['p1'])){
+                    $this->cla['skClasificacion'] = $_GET['p1'];
+                    //$result = $this->segcla_form_getMercancias();
+                    //$this->load_view('segcla-form',$this->data);
+                }
+            // validarReferencia //
+                if(isset($_POST['axn']) && $_POST['axn'] == 'validarReferencia'){
+                    $datos = array(
+                        'sReferencia'=>(isset($_POST['sReferencia'])? $_POST['sReferencia'] : '')
+                    );
+                    if($this->validarReferencia($datos)){
+                        echo 'true';
+                    }else{
+                        echo 'false';
+                    }
+                    return true;
+                }
+            // obtenerDatos //
+                if(isset($_POST['axn']) && $_POST['axn'] == 'obtenerDatos'){
+                    $this->load_controller('doc','obtenerDatos');
+                    return true;
+                }
+            // validarReferencia //
+                if(isset($_POST['axn']) && $_POST['axn'] == 'validarReferencia'){
+                    $datos = array(
+                        'sReferencia'=>(isset($_POST['sReferencia'])? $_POST['sReferencia'] : '')
+                    );
+                    if($this->validarReferencia($datos)){
+                        echo 'true';
+                    }else{
+                        echo 'false';
+                    }
+                    return true;
+                }
+            // OBTENER CLASIFICACIÓN DE MERCANCIAS //
+                if(isset($_GET['axn']) && $_GET['axn'] == 'fetch_all'){
+                    if(isset($_GET['p1'])){
+                        $this->cla['skClasificacion'] = $_GET['p1'];
+                    }
+                    $this->segcla_form_getMercancias();
+                    return true;
+                }
+            $this->load_view('segcla-form',$this->data);
+        }
+        
+            public function segcla_form_getMercancias(){
+                // PARAMETROS PARA FILTRADO //
+                $this->cla['orderBy'] = "cla.sReferencia DESC , cla.dFechaCreacion DESC , claMer.sFactura ASC , claMer.iSecuencia ASC";
+                
+                //$this->cla['valido'] = 1;
+
+                if(isset($_GET['p1'])){
+                    $this->cla['skClasificacion'] = $_GET['p1'];
+                }
+                if(isset($_POST['sReferencia'])){
+                    $this->cla['sReferencia'] = $_POST['sReferencia'];
+                }
+                if(isset($_POST['sFraccion'])){
+                    $this->claMer['sFraccion'] = $_POST['sFraccion'];
+                }
+                if(isset($_POST['sDescripcion'])){
+                    $this->claMer['sDescripcion'] = $_POST['sDescripcion'];
+                }
+                if(isset($_POST['sDescripcionIngles'])){
+                    $this->claMer['sDescripcionIngles'] = $_POST['sDescripcionIngles'];
+                }
+                if(isset($_POST['sNumeroParte'])){
+                    $this->claMer['sNumeroParte'] = $_POST['sNumeroParte'];
+                }
+                if(isset($_POST['sFactura'])){
+                    $this->claMer['sFactura'] = $_POST['sFactura'];
+                }
+                // EXPORTACIÓN A EXCEL //
+                if(isset($_POST['exportExcel']) && $_POST['exportExcel'] == 1){
+                    $this->data['data'] = parent::segcla_form_getMercancias();
+                    $this->claara_excel();
+                    return true;
+                    exit;
+                }
+                // OBTENER REGISTROS //
+                $total = parent::segcla_form_count();
+                $records = Core_Functions::table_ajax($total);
+                if($records['recordsTotal'] === 0){
+                    header('Content-Type: application/json');
+                    echo json_encode($records);
+                    return false;
+                }
+
+                $this->cla['limit'] = $records['limit'];
+                $this->cla['offset'] = $records['offset'];
+                $this->data['data'] = parent::segcla_form_getMercancias();
+
+                if(!$this->data['data']){
+                    header('Content-Type: application/json');
+                    echo json_encode($records);
+                    return false;
+                }
+                $i = 0;
+                while($row = $this->data['data']->fetch_assoc()){
+                    $actions = $this->printModulesButtons(2,array($row['skClasificacion']));
+                    $records['data'][$i] = array(
+                        ''
+                        ,utf8_encode($row['sFactura']) // FACTURA
+                        ,utf8_encode($row['sFraccion']) // FRACCIÓN
+                        ,utf8_encode($row['sDescripcion']) // DESCRIPCIÓN
+                        ,utf8_encode($row['sDescripcionIngles']) // DESCIPCIÓN INGLÉS
+                        ,utf8_encode($row['sNumeroParte']) // NUMERO DE PARTE (MODELO)
+                        ,utf8_encode($row['iSecuencia']) // NUMERO DE PARTE (MODELO)
+                    );
+                    $i++;   
+                }
+                header('Content-Type: application/json');
+                echo json_encode($records);
+                return true;
+            }
+        // TEMRINA SEGUNDA CLASIFICACIÓN //
     }
 ?>
