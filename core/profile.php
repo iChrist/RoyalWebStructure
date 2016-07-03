@@ -2,8 +2,16 @@
     require_once(SYS_PATH."cof/controller/cof.controller.php");
     $usu = new Cof_Controller();
     $rsPerfiles = $usu->consulta_Profile();
-    if($_POST){
-        $_SESSION['session']['skProfile'] = $_POST['skProfile'];
+     if($_POST){
+        $ingreso = explode("-",$_POST['ingreso']);
+        $_SESSION['session']['skProfile'] = $ingreso[0];
+        $_SESSION['session']['skSocioEmpresaUsuario'] = $ingreso[1];
+        $raDatos = $usu->consulta_Profile1($ingreso[0],$ingreso[1]);
+        while($row = $raDatos->fetch_assoc()){
+               $_SESSION['session']['skEmpresaUsuario'] = $row['skEmpresaUsuario'];
+               $_SESSION['session']['skSocioEmpresaPropietario'] = $row['skSocioPropietario'];
+               $_SESSION['session']['skEmpresaPropietario'] = $row['skEmpresaPropietario'];
+         }
         header('Location: '.$_SERVER['REQUEST_URI']);
     }
 ?>
@@ -73,12 +81,11 @@ License: You must have a valid license purchased only from themeforest(the above
 			Seleccionar perf&iacute;l </span>
                         <form class="form-inline" action="" method="post">
                                 <div class="input-group input-medium">
-                                    <select class="form-control" name="skProfile">
+                                    <select class="form-control" name="ingreso">
                                         <option value="0">- Perf&iacute;l -</option>
-                                        <?php while($rPerfil = $rsPerfiles->fetch_assoc()){?>
-										<option value="<?php echo $rPerfil['skProfiles']; ?>"><?php echo utf8_encode($rPerfil['sName']); ?></option>
-
-										<?php } ?>
+                                        <?php  while($rPerfil = $rsPerfiles->fetch_assoc()){?>
+                    										<option value="<?php echo $rPerfil['skProfiles']."-".$rPerfil['skSocioEmpresa']; ?>"><?php echo utf8_encode($rPerfil['sName'])." ( ".utf8_encode($rPerfil['empresaUsuario'])." )"; ?></option>
+                    										<?php } ?>
                                     </select>
                                     <span class="input-group-btn">
                                         <button type="submit" class="btn btn-info">Seleccionar</button>

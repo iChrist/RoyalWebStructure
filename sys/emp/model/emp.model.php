@@ -1,6 +1,6 @@
 <?php
 	 Class Emp_Model Extends Core_Model {
-                
+
             // PUBLIC VARIABLES //
                 public $areas = array(
                     'skAreas'       =>  ''
@@ -19,7 +19,7 @@
                     ,'limit'        =>  ''
                     ,'offset'       =>  ''
                 );
-                
+
                 public $departamentos = array(
                     'skDepartamento'       =>  ''
                     ,'sNombre'       =>  ''
@@ -83,11 +83,11 @@
                     ,'dFechaFin'=>null
                     ,'skPromotor'=>null
                     ,'skCorresponsalia'=>null
-                    
+
                     ,'limit'        =>  null
                     ,'offset'       =>  null
                 );
-                
+
                 public $tarifaRango = array(
                      'skRango'=>null
                     ,'skTarifa'=>null
@@ -95,8 +95,8 @@
                     ,'iRango2'=>null
                     ,'fTarifa'=>null
                 );
-                
-                    
+
+
             // PRIVATE VARIABLES //
                     private $data = array();
 
@@ -107,7 +107,7 @@
             public function __destruct(){
 
             }
-            
+
             /* COMIENZA MODULO areas */
             public function count_areas(){
                 $sql = "SELECT COUNT(*) AS total FROM areas WHERE 1=1 ";
@@ -132,7 +132,7 @@
                     }
                 }
             }
-            
+
             public function read_equal_areas(){
                 $sql = "SELECT areas.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM areas INNER JOIN _status ON _status.skStatus = areas.skStatus WHERE 1=1 ";
                 if(!empty($this->areas['skAreas'])){
@@ -163,7 +163,7 @@
                     }
                 }
             }
-            
+
             public function read_like_areas(){
                 $sql = "SELECT areas.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM areas INNER JOIN _status ON _status.skStatus = areas.skStatus WHERE 1=1 ";
                 if(!empty($this->areas['skAreas'])){
@@ -194,7 +194,7 @@
                     }
                 }
             }
-            
+
             public function create_areas(){
                 $sql = "INSERT INTO areas (skAreas,sNombre,sTitulo,skStatus) VALUES ('".$this->areas['skAreas']."','".$this->areas['sNombre']."','".$this->areas['sTitulo']."','".$this->areas['skStatus']."')";
                 $result = $this->db->query($sql);
@@ -204,7 +204,7 @@
                     return false;
                 }
             }
-            
+
             public function update_areas(){
                 $sql = "UPDATE areas SET ";
                 if(!empty($this->areas['sNombre'])){
@@ -224,7 +224,7 @@
                     return false;
                 }
             }
-            
+
             public function delete_areas(){
                 $sql = "UPDATE areas SET skStatus = 'DE' WHERE skAreas = '".$this->areas['skAreas']."' LIMIT 1 ";
                 $result = $this->db->query($sql);
@@ -332,7 +332,7 @@
                     return false;
                 }
             }
-            
+
             public function update_promotores(){
                 $sql = "UPDATE cat_promotores SET ";
                 if(!empty($this->promotores['sNombre'])){
@@ -353,7 +353,7 @@
                 }
             }
             /* TERMINA MODULO promotores */
-            
+
             /*EMPIEZA MODULO DE DEPARTAMENTOS*/
             public function create_departamentos(){
                 $sql = "INSERT INTO cat_departamentos (skDepartamento,sNombre,skStatus) VALUES ('".$this->departamentos['skDepartamento']."','".$this->departamentos['sNombre']."','".$this->departamentos['skStatus']."')";
@@ -369,7 +369,7 @@
                 if(!empty($this->departamentos['sNombre'])){
                     $sql .=" sNombre = '".$this->departamentos['sNombre']."' ,";
                 }
-                
+
                 if(!empty($this->departamentos['skStatus'])){
                     $sql .=" skStatus = '".$this->departamentos['skStatus']."' ";
                 }
@@ -389,7 +389,7 @@
                 if(!empty($this->departamentos['sNombre'])){
                     $sql .=" AND sNombre like '%".$this->departamentos['sNombre']."%'";
                 }
-               
+
                 if(!empty($this->departamentos['skStatus'])){
                     $sql .=" AND cat_departamentos.skStatus like '%".$this->departamentos['skStatus']."%'";
                 }
@@ -410,7 +410,7 @@
                 if(!empty($this->departamentos['sNombre'])){
                     $sql .=" AND sNombre = '".$this->departamentos['sNombre']."'";
                 }
-             
+
                 if(!empty($this->departamentos['skStatus'])){
                     $sql .=" AND cat_departamentos.skStatus = '".$this->departamentos['skStatus']."'";
                 }
@@ -458,8 +458,8 @@
                 }
             }
              /* TERMINA MODULO DE DEPARTAMENTOS*/
-             
-            /* EMPIEZA MODULO DE TIPOS DE EMPRESAS*/ 
+
+            /* EMPIEZA MODULO DE TIPOS DE EMPRESAS*/
             public function count_tipoempresas(){
                 $sql = "SELECT COUNT(*) AS total FROM cat_tipos_empresas WHERE 1=1 ";
                 if(!empty($this->tipoempresas['skTipoEmpresa'])){
@@ -468,7 +468,7 @@
                 if(!empty($this->tipoempresas['sNombre'])){
                     $sql .=" AND sNombre like '%".$this->tipoempresas['sNombre']."%'";
                 }
-               
+
                 if(!empty($this->tipoempresas['skStatus'])){
                     $sql .=" AND cat_tipos_empresas.skStatus like '%".$this->tipoempresas['skStatus']."%'";
                 }
@@ -489,7 +489,7 @@
                 if(!empty($this->tipoempresas['sNombre'])){
                     $sql .=" AND sNombre = '".$this->tipoempresas['sNombre']."'";
                 }
-             
+
                 if(!empty($this->tipoempresas['skStatus'])){
                     $sql .=" AND cat_tipos_empresas.skStatus = '".$this->tipoempresas['skStatus']."'";
                 }
@@ -536,7 +536,7 @@
                     }
                 }
             }
-            public function create_tipoempresas(){
+          	public function create_tipoempresas(){
                 $sql = "INSERT INTO cat_tipos_empresas (skTipoEmpresa,sNombre,skStatus) VALUES ('".$this->tipoempresas['skTipoEmpresa']."','".$this->tipoempresas['sNombre']."','".$this->tipoempresas['skStatus']."')";
                 $result = $this->db->query($sql);
                 if($result){
@@ -550,7 +550,7 @@
                 if(!empty($this->tipoempresas['sNombre'])){
                     $sql .=" sNombre = '".$this->tipoempresas['sNombre']."' ,";
                 }
-                
+
                 if(!empty($this->tipoempresas['skStatus'])){
                     $sql .=" skStatus = '".$this->tipoempresas['skStatus']."' ,";
                 }
@@ -562,11 +562,11 @@
                     return false;
                 }
             }
-             /* TERMINA MODULO DE TIPOS DE EMPRESAS*/ 
-             
-             
-             
-              public function count_empresas(){
+             /* TERMINA MODULO DE TIPOS DE EMPRESAS*/
+
+
+
+            public function count_empresas(){
                 $sql = "SELECT COUNT(*) AS total FROM cat_empresas WHERE 1=1 ";
                 if(!empty($this->empresas['skEmpresa'])){
                     $sql .=" AND skEmpresa = '".$this->empresas['skEmpresa']."'";
@@ -598,12 +598,12 @@
                     }
                 }
             }
-              public function read_equal_empresas(){
-                $sql = "SELECT cat_empresas.*,rel_cat_empresas_cat_tipos_empresas.skTipoEmpresa, _status.sName AS status, _status.sHtml AS htmlStatus, 
+            public function read_equal_empresas(){
+                $sql = "SELECT cat_empresas.*,rc.skTipoEmpresa, _status.sName AS status, _status.sHtml AS htmlStatus,
                 	promo1.sNombre AS promotor1, promo2.sNombre AS promotor2, corr.sNombre AS corresponsal
-                        FROM cat_empresas 
-                	INNER JOIN _status ON _status.skStatus = cat_empresas.skStatus 
-                	LEFT JOIN rel_cat_empresas_cat_tipos_empresas ON rel_cat_empresas_cat_tipos_empresas.skEmpresa = cat_empresas.skEmpresa 
+                        FROM cat_empresas
+                	INNER JOIN _status ON _status.skStatus = cat_empresas.skStatus
+                	LEFT JOIN rel_cat_empresas_cat_tipos_empresas rc ON rc.skEmpresa = cat_empresas.skEmpresa
                         LEFT JOIN cat_promotores promo1 ON promo1.skPromotores =  cat_empresas.skPromotor1
                         LEFT JOIN cat_promotores promo2 ON promo2.skPromotores =  cat_empresas.skPromotor2
                         LEFT JOIN cat_empresas corr ON corr.skEmpresa = cat_empresas.skCorresponsalia
@@ -634,7 +634,7 @@
                     }
                 }
                 //echo($sql);
-                
+
                 $result = $this->db->query($sql);
                 if($result){
                     if($result->num_rows > 0){
@@ -644,8 +644,8 @@
                     }
                 }
             }
-              public function read_like_empresas(){
-                $sql = "SELECT
+            public function read_like_empresas(){
+                $sql = "SELECT DISTINCT
                 ce.*,  st.sName AS STATUS,
                 st.sHtml AS htmlStatus,
                 cte.sNombre AS tipoEmpresa,
@@ -655,12 +655,13 @@
                 FROM
                 cat_empresas ce
                 LEFT JOIN _status st ON  st.skStatus = ce.skStatus
-                LEFT JOIN cat_empresas catEmp ON  catEmp.skEmpresa = ce.skCorresponsalia 
+                LEFT JOIN cat_empresas catEmp ON  catEmp.skEmpresa = ce.skCorresponsalia
                 LEFT JOIN cat_promotores promo1 ON  promo1.skPromotores = ce.skPromotor1
                 LEFT JOIN cat_promotores promo2 ON  promo2.skPromotores = ce.skPromotor2
-                LEFT JOIN rel_cat_empresas_cat_tipos_empresas  rce ON rce.skEmpresa = ce.skEmpresa
-                LEFT JOIN cat_tipos_empresas cte ON cte.skTipoEmpresa = rce.skTipoEmpresa WHERE 1=1 ";
-                
+                LEFT JOIN rel_empresas_socios  rce ON rce.skEmpresa = ce.skEmpresa
+                LEFT JOIN cat_tipos_empresas cte ON cte.skTipoEmpresa = rce.skTipoEmpresa
+								WHERE 1=1 ";
+
                 if(!empty($this->empresas['skEmpresa'])){
                     $sql .=" AND ce.skEmpresa = '".$this->empresas['skEmpresa']."'";
                 }
@@ -703,7 +704,7 @@
                     }
                 }
             }
-              public function create_empresas(){
+            public function create_empresas(){
                 $sql = "INSERT INTO cat_empresas (skEmpresa,sNombre,sNombreCorto,sRFC,skStatus, dFechaCreacion,skCorresponsalia,skPromotor1,skPromotor2) VALUES ('".$this->empresas['skEmpresa']."','".$this->empresas['sNombre']."','".$this->empresas['sNombreCorto']."','".$this->empresas['sRFC']."','".$this->empresas['skStatus']."', CURRENT_TIMESTAMP(),'".$this->empresas['skCorresponsalia']."','".$this->empresas['skPromotor1']."','".$this->empresas['skPromotor2']."')";
                 //echo $sql;
                 //die();
@@ -715,10 +716,10 @@
                 }else{
                     return false;
                 }
-                
+
             }
-            
-              public function update_empresas(){
+
+            public function update_empresas(){
               	$sql="UPDATE rel_cat_empresas_cat_tipos_empresas SET skTipoEmpresa = '".$this->tipoempresas['skTipoEmpresa']."' WHERE skEmpresa = '".$this->empresas['skEmpresa']."' ";
               	$this->db->query($sql);
                 $sql = "UPDATE cat_empresas  SET ";
@@ -752,11 +753,11 @@
                     return false;
                 }
             }
-              public function read_empresa(){
-                $sql = "SELECT cat_empresas.*, _status.sName AS status, _status.sHtml  
-						FROM cat_empresas 
-						LEFT JOIN _status ON _status.skStatus = cat_empresas.skStatus 
-						WHERE 1=1 ";
+            public function read_empresa(){
+                $sql = "SELECT cat_empresas.*, _status.sName AS status, _status.sHtml
+								FROM cat_empresas
+								LEFT JOIN _status ON _status.skStatus = cat_empresas.skStatus
+								WHERE 1=1 ";
                 if(!empty($this->empresas['skEmpresaDistinta'])){
                     $sql .= " AND cat_empresas.skEmpresa <> '".$this->empresas['skEmpresaDistinta']."' ";
                 }
@@ -789,7 +790,6 @@
                         $sql .= " LIMIT ".$this->empresas['limit'];
                     }
                 }
-		//echo $sql;
                 $result = $this->db->query($sql);
                 if($result){
                     if($result->num_rows > 0){
@@ -814,7 +814,7 @@
             }
             public function getConceptosEmpresa(){
                 $sql = "SELECT empTarCon.* FROM rel_cat_empresas_tarifas_conceptos AS empTarCon WHERE empTarCon.skEmpresa = '".$this->empresas['skEmpresa']."' ";
-                
+
                 //exit($sql);
                 $result = $this->db->query($sql);
                 if($result){
@@ -826,7 +826,7 @@
                 }
             }
             public function read_conceptos_tipos_empresas(){
-                $sql="SELECT 
+                $sql="SELECT
                 con.skConcepto ,con.sNombre AS concepto
                 ,di.skDivisa ,di.sName AS divisa
                 ,tra.skTipoTramite ,tra.sNombre AS tramite
@@ -856,7 +856,7 @@
             }
             // READ DIVISAS //
             public function read_cat_divisas(){
-                $sql="SELECT 
+                $sql="SELECT
                 divi.*
                 FROM
                 cat_divisas AS divi
@@ -869,8 +869,8 @@
                 return $result;
             }
             // READ tiposTramites //
-            function read_cat_tipos_tramites(){
-                $sql="SELECT 
+            public function read_cat_tipos_tramites(){
+                $sql="SELECT
                 tipTra.*
                 FROM
                 cat_tipos_tramites AS tipTra
@@ -883,7 +883,7 @@
                 return $result;
             }
             // CREATE rel_cat_empresas_tarifas_conceptos (empTarCon) //
-            function create_empTarCon(){
+            public function create_empTarCon(){
                 $sql = "INSERT INTO rel_cat_empresas_tarifas_conceptos
                     (
                         skEmpresaTarifaConcepto
@@ -913,7 +913,7 @@
                     return false;
                 }
             }
-            function delete_empTarCon(){
+            public function delete_empTarCon(){
                 $sql = "DELETE FROM rel_cat_empresas_tarifas_conceptos WHERE skEmpresa = '".$this->empTarCon['skEmpresa']."' ";
                 //exit($sql);
                 $result = $this->db->query($sql);
@@ -930,7 +930,7 @@
                     INNER JOIN cat_empresas ce ON ce.skEmpresa = tarifas.skEmpresa
                     INNER JOIN cat_empresas corr ON corr.skEmpresa = ce.skCorresponsalia
                     INNER JOIN cat_promotores pr1 ON pr1.skPromotores = ce.skPromotor1
-                    INNER JOIN cat_promotores pr2 ON pr2.skPromotores = ce.skPromotor2 
+                    INNER JOIN cat_promotores pr2 ON pr2.skPromotores = ce.skPromotor2
                     INNER JOIN _status ON _status.skStatus = tarifas.skStatus
                     WHERE 1=1 ";
                 if(!is_null($this->tarifas['skTarifa'])){
@@ -999,7 +999,7 @@
                     }
                 }
             }
-            
+
             public function read_tarifas(){
                 $sql="SELECT tarifas.*,
                     ce.sNombre AS cliente,
@@ -1013,8 +1013,8 @@
                     INNER JOIN cat_empresas ce ON ce.skEmpresa = tarifas.skEmpresa
                     INNER JOIN cat_empresas corr ON corr.skEmpresa = ce.skCorresponsalia
                     INNER JOIN cat_promotores pr1 ON pr1.skPromotores = ce.skPromotor1
-                    INNER JOIN cat_promotores pr2 ON pr2.skPromotores = ce.skPromotor2 
-                    INNER JOIN _status ON _status.skStatus = tarifas.skStatus 
+                    INNER JOIN cat_promotores pr2 ON pr2.skPromotores = ce.skPromotor2
+                    INNER JOIN _status ON _status.skStatus = tarifas.skStatus
                     WHERE 1=1 ";
                 if(!is_null($this->tarifas['skTarifa'])){
                     $sql .=" AND tarifas.skTarifa = '".$this->tarifas['skTarifa']."'";
@@ -1112,7 +1112,7 @@
                     return false;
                 }
             }
-            
+
             public function terminarVigencia_tarifa(){
                 $sql="UPDATE rel_empresas_tarifas SET skStatus = 'IN' WHERE skEmpresa = '".$this->tarifas['skEmpresa']."'";
                 $result = $this->db->query($sql);
@@ -1122,7 +1122,7 @@
                     return false;
                 }
             }
-            
+
             public function create_Rank(){
                 $sql = "INSERT INTO rel_tarifas_rangos (skTarifa,iRango1,iRango2,fTarifa) VALUES ('".$this->tarifas['skTarifa']."',".$this->tarifaRango['iRango1'].",".$this->tarifaRango['iRango2'].",".$this->tarifaRango['fTarifa'].")";
                 //exit($sql);

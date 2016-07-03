@@ -150,13 +150,22 @@
                   WHERE dFechaCreacion BETWEEN '2016-04-01 00:00:00' AND '2016-05-01 00:00:00' ";
                   $result = $this->db->query("$sql");
                   $ranoAbr = $result->fetch_assoc();
-                  //mysqli_free_result($result);
 
                   $sql="SELECT count(*) AS Refe
                   FROM ope_recepciones_documentos
                   WHERE dFechaCreacion BETWEEN '2016-05-01 00:00:00' AND '2016-06-01 00:00:00' ";
                   $result = $this->db->query("$sql");
                   $ranoMay = $result->fetch_assoc();
+                  $sql="SELECT count(*) AS Refe
+                  FROM ope_recepciones_documentos
+                  WHERE dFechaCreacion BETWEEN '2016-06-01 00:00:00' AND '2016-07-01 00:00:00' ";
+                  $result = $this->db->query("$sql");
+                  $ranoJun = $result->fetch_assoc();
+                  $sql="SELECT count(*) AS Refe
+                  FROM ope_recepciones_documentos
+                  WHERE dFechaCreacion BETWEEN '2016-07-01 00:00:00' AND '2016-08-01 00:00:00' ";
+                  $result = $this->db->query("$sql");
+                  $ranoJul = $result->fetch_assoc();
                   //mysqli_free_result($result);
 
                   echo "['Mes', 'Referencia' ],
@@ -164,7 +173,28 @@
                   ['Febrero', ".$ranoFeb['Refe']."],
                   ['Marzo', ".$ranoMar['Refe']."],
                   ['Abril', ".$ranoAbr['Refe']."],
-                  ['Mayo', ".$ranoMay['Refe']."]";
+                  ['Mayo', ".$ranoMay['Refe']."],
+                  ['Junio', ".$ranoJun['Refe']."],
+                  ['Julio', ".$ranoJul['Refe']."]";
           }
+            public function referenciasEjecutivo(){
+              $sql="CALL stpEstadisticaReferencia (2016,NULL,NULL,NULL,NULL,NULL,NULL,'UC','ME') ";
+              $cadena ="['Ejecutivo', 'ENE','FEB','MAR','ABR','MAY','JUN','JUL' ],";
+              $result = $this->db->query($sql);
+                while($row = $result->fetch_assoc()){
+                  $cadena.="['".$row['CAT']."', ".$row['ENE'].",".$row['FEB'].",".$row['MAR'].",".$row['ABR'].",".$row['MAY'].",".$row['JUN']." ,".$row['JUL']."],";
+                }
+
+              echo $cadena;
+            }
+            public function refEjecTot(){
+              $sql="CALL stpEstadisticaReferencia (2016,NULL,NULL,NULL,NULL,NULL,NULL,'UC','TO') ";
+              $cadena ="['Ejecutivo', 'Total' ],";
+              $result = $this->db->query($sql);
+                while($row = $result->fetch_assoc()){
+                //  $cadena.="['".$row['CAT']."', ".$row['TOT']."],";
+                }
+              echo $cadena;
+            }
 	}
 ?>

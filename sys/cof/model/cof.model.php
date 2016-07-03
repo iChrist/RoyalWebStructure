@@ -25,6 +25,13 @@
                     ,'limit'        		=>  ''
                     ,'offset'       		=>  ''
                 );
+								public $sucursales = array(
+                    'skSucursal'       	=>  ''
+                    ,'sNombre'      		=>  ''
+                     ,'skEstatus'    	=>  ''
+                    ,'limit'        		=>  ''
+                    ,'offset'       		=>  ''
+                );
                 public $skUsers;
                 public $skUsersDistinto;
                 public $sName;
@@ -73,9 +80,11 @@
                 }
             }
             public function read_user(){
-                $sql = "SELECT _users.*, _status.sName AS status, _status.sHtml
+                $sql = "SELECT DISTINCT _users.*, _status.sName AS status, _status.sHtml,
+								us.skSocioEmpresa
 								FROM _users
 								INNER JOIN _status ON _status.skStatus = _users.skStatus
+								INNER JOIN _users_profiles us ON us.skUsers = _users.skUsers
 								WHERE 1=1 ";
                 if(!empty($this->users['skUsersDistinto'])){
                     $sql .= " AND _users.skUsers <> '".$this->users['skUsersDistinto']."' ";
@@ -115,6 +124,12 @@
 
             public function read_user_profile(){
 							$sql = "SELECT * FROM _users_profiles  WHERE 1=1 AND skUsers = '".$this->users['skUsers']."' ";
+					    $result = $this->db->query($sql);
+          		return $result;
+            }
+
+						public function read_user_sucursales(){
+							$sql = "SELECT * FROM _users_sucursales  WHERE 1=1 AND skUsers = '".$this->users['skUsers']."' ";
 					    $result = $this->db->query($sql);
           		return $result;
             }
@@ -165,16 +180,26 @@
 				                    sGroup='".$this->users['sGroup']."',
 				                    skStatus='".$this->users['skStatus']."'
 				                    WHERE skUsers = '".$this->users['skUsers']."'";
-				                $result = $this->db->query($sql);
-								//echo $sql;die();
-								$sql = "DELETE from _users_profiles  WHERE skUsers = '".$this->users['skUsers']."'";
+				          	$result = $this->db->query($sql);
+										//echo $sql;die();
+										$sql = "DELETE FROM _users_profiles  WHERE skUsers = '".$this->users['skUsers']."'";
 				                $this->db->query($sql);
-				                if($result){
-				                    return true;
+												if($result){
+				                    return TRUE;
 				                }else{
-				                    return false;
+				                    return FALSE;
 				                }
-				            }
+												$sql = "DELETE FROM _users_sucursales  WHERE skUsers = '".$this->users['skUsers']."'";
+
+												die();
+
+								        $this->db->query($sql);
+				                if($result){
+				                    return TRUE;
+				                }else{
+				                    return FALSE;
+				                }
+				      }
 
             public function delete(){
                 $sql = "UPDATE _users SET skStatus='".$this->users['skStatus']."' WHERE skUsers = '".$this->users['skUsers']."' ";
@@ -223,6 +248,16 @@
 
             public function verifyUser($sUserName,$sPassword){
                     $sql = "SELECT * FROM _users WHERE (sEmail = '".$sUserName."' OR sUserName = '".$sUserName."') AND (sPassword = '".$sPassword."') AND (skStatus = 'AC')";
+                    $result = $this->db->query($sql);
+                    return $result;
+            }
+						public function verifyUserEmpresas($sUsuario){
+                    $sql = "SELECT * FROM _users_profiles WHERE skUsers = '".$sUsuario."'";
+                    $result = $this->db->query($sql);
+                    return $result;
+            }
+						public function verifyUserSucursales($sUsuario){
+                    $sql = "SELECT * FROM _users_profiles WHERE skUsers = '".$sUsuario."'";
                     $result = $this->db->query($sql);
                     return $result;
             }
@@ -349,23 +384,57 @@
 						}
 
 	           public function consulta_Profile(){
-							 $sql = "SELECT pr.*
-								FROM _users us
-								INNER JOIN _users_profiles usp ON usp.skUsers = us.skUsers
-								INNER JOIN _profiles pr ON pr.skProfiles = usp.skProfiles
-								WHERE  pr.skStatus = 'AC'
-								AND us.skUsers = '".($_SESSION['session']['skUsers'])."'".
-								"order by pr.sName ASC" ;
-
+							 $sql = " SELECT  ".
+							 " pr.skProfiles , ".
+							 " pr.sName, ".
+							 " pr.skStatus, ".
+							 " ce.sNombre AS empresaUsuario , usp.skSocioEmpresa, ".
+							 " res.skEmpresa AS skEmpresaUsuario,rp.skSocioEmpresa AS skSocioPropietario,cep.skEmpresa AS skEmpresaPropietario ".
+							 "	 FROM _users us ".
+								"	 INNER JOIN _users_profiles usp ON usp.skUsers = us.skUsers ".
+								"	 INNER JOIN _profiles pr ON pr.skProfiles = usp.skProfiles ".
+								"	 INNER JOIN rel_empresas_socios res ON res.skSocioEmpresa = usp.skSocioEmpresa ".
+								"	 INNER JOIN cat_empresas ce ON ce.skEmpresa = res.skEmpresa ".
+								"	 LEFT JOIN rel_empresas_socios rp ON rp.skSocioEmpresa = res.skSocioEmpresaP ".
+								"	 LEFT JOIN cat_empresas cep ON cep.skEmpresa = rp.skEmpresa ".
+								"	 WHERE pr.skStatus = 'AC' AND us.skUsers ='".($_SESSION['session']['skUsers'])."'".
+								(isset($var1) ? " AND usp.skProfiles = '".$var1."' " : '').
+								(isset($var2) ? " AND usp.skSocioEmpresa = '".$var2."' " : '').
+							  "  order by pr.sName ASC";
 							$result = $this->db->query($sql);
 							if ($result) {
-								return $result;
+ 								return $result;
 							}else{
 								return false;
 							}
 						}
+						public function consulta_Profile1($var1,$var2){
+							$sql = " SELECT  ".
+							" pr.skProfiles , ".
+							" pr.sName, ".
+							" pr.skStatus, ".
+							" ce.sNombre AS empresaUsuario , usp.skSocioEmpresa, ".
+							" res.skEmpresa AS skEmpresaUsuario,rp.skSocioEmpresa AS skSocioPropietario,cep.skEmpresa AS skEmpresaPropietario ".
+							"	 FROM _users us ".
+							 "	 INNER JOIN _users_profiles usp ON usp.skUsers = us.skUsers ".
+							 "	 INNER JOIN _profiles pr ON pr.skProfiles = usp.skProfiles ".
+							 "	 INNER JOIN rel_empresas_socios res ON res.skSocioEmpresa = usp.skSocioEmpresa ".
+							 "	 INNER JOIN cat_empresas ce ON ce.skEmpresa = res.skEmpresa ".
+							 "	 LEFT JOIN rel_empresas_socios rp ON rp.skSocioEmpresa = res.skSocioEmpresaP ".
+							 "	 LEFT JOIN cat_empresas cep ON cep.skEmpresa = rp.skEmpresa ".
+							 "	 WHERE pr.skStatus = 'AC' AND us.skUsers ='".($_SESSION['session']['skUsers'])."'".
+							 (isset($var1) ? " AND usp.skProfiles = '".$var1."' " : '').
+							 (isset($var2) ? " AND usp.skSocioEmpresa = '".$var2."' " : '').
+							 "  order by pr.sName ASC";
+						 $result = $this->db->query($sql);
+						 if ($result) {
+							 return $result;
+						 }else{
+							 return false;
+						 }
+					 }
            public function create_Users_profiles($valores) {
-                    $sql = "INSERT INTO _users_profiles (skUsers, skProfiles ) VALUES ".$valores."";
+                    $sql = "INSERT INTO _users_profiles (skUsers, skProfiles, skSocioEmpresa ) VALUES ".$valores."";
                     //echo  $sql."<br><br><br>";die();
 										$result = $this->db->query($sql);
                     if($result){
@@ -373,8 +442,8 @@
                     }else{
                         return false;
                     }
-            }
-            public function createPermissions($datos) {
+           }
+           public function createPermissions($datos) {
                     $sql = "INSERT INTO _modules_profiles_permissions (skModule, skProfiles,skPermissions ) VALUES ".$datos."";
                     //echo $sql;
                     $result = $this->db->query($sql);
@@ -383,8 +452,8 @@
                     }else{
                         return false;
                     }
-            }
-                public function delete_permission_profile($profile){
+           }
+           public function delete_permission_profile($profile){
 	                 $sql = " DELETE FROM _modules_profiles_permissions WHERE skProfiles = '".$profile."'";
                     //echo $sql;
                     $result = $this->db->query($sql);
@@ -394,7 +463,43 @@
                         return false;
                     }
 
-                }
+            }
+					 public function read_sucursales(){
+                 $sql = "SELECT cat_sucursales.*, _status.sName AS status, _status.sHtml  FROM cat_sucursales
+								 INNER JOIN _status ON _status.skStatus = cat_sucursales.skEstatus WHERE 1=1 ";
 
+
+                 $result = $this->db->query($sql);
+                 if($result){
+                     if($result->num_rows > 0){
+                         return $result;
+                     }else{
+                         return false;
+                     }
+                 }
+            }
+						public function create_Users_sucursales($valores1) {
+										 $sql = "INSERT INTO _users_sucursales (skUsers, skSucursal ) VALUES ".$valores1."";
+										 //echo  $sql."<br><br><br>";die();
+										 $result = $this->db->query($sql);
+										 if($result){
+												 return true;
+										 }else{
+												 return false;
+										 }
+						}
+						public function read_empresas_usuarios(){
+								$sql = ' SELECT ce.*,res.skSocioEmpresa, cte.sNombre AS tipoEmpresa  FROM cat_empresas ce
+								INNER JOIN rel_empresas_socios res ON res.skEmpresa = ce.skEmpresa
+								INNER JOIN cat_tipos_empresas cte ON cte.skTipoEmpresa = res.skTipoEmpresa
+								ORDER BY ce.sNombre ASC';
+								$result = $this->db->query($sql);
+								if($result){
+										return $result;
+								}else{
+										return false;
+								}
+
+						}
 	}
 ?>

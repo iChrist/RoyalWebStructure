@@ -116,17 +116,17 @@ $mercanciasCargaSuelta = ob_get_clean();
                     <tbody>
                         <?php
                         if ($data['mercancias'] && $result['skTipoServicio'] == 'CONT') {
-                            foreach ($data['mercancias'] AS $k => $v) { 
+                            foreach ($data['mercancias'] AS $k => $v) {
                                 ?>
                                 <tr>
                                     <td align="center"><a href="javascript:;" class="btn btn-default delete-contenedor"><i class="fa fa-trash-o"></i></a></td>
                                     <td nowrap><input type="text" name="sBlhouse[]" class="form-control contenedor" placeholder="BL House" value="<?php echo htmlentities(utf8_encode($v['sBlhouse'])); ?>"></td>
                                     <td nowrap><input type="text" name="sNumContenedor[]" class="form-control contenedor" placeholder="N&uacute;m. Contenedor" value="<?php echo htmlentities(utf8_encode($v['sNumContenedor'])); ?>"></td>
                                     <td nowrap>
-                                        <select name="skTipoContenedor[]" class="form-control contenedor">
-                                            <option value="">-Contenedor-</option>
-                                            <option value="20DC" <?php echo ($v['skTipoContenedor'] == '20DC') ? 'selected' : ''; ?> >20 DC</option>
-                                            <option value="40DC" <?php echo ($v['skTipoContenedor'] == '40DC') ? 'selected' : ''; ?>>40 DC</option>
+                                      <select name="skTipoContenedor[]" class="form-control contenedor">
+                                        <option value="">-Contenedor-</option>
+                                        <option value="20DC" <?php echo ($v['skTipoContenedor'] == '20DC') ? 'selected' : ''; ?> >20 DC</option>
+                                        <option value="40DC" <?php echo ($v['skTipoContenedor'] == '40DC') ? 'selected' : ''; ?>>40 DC</option>
                                         <option value="20DV" <?php echo ($v['skTipoContenedor'] == '20DV') ? 'selected' : ''; ?>>20DV</option>
                                         <option value="40DV" <?php echo ($v['skTipoContenedor'] == '40DV') ? 'selected' : ''; ?>>40DV</option>
                                         <option value="40HC" <?php echo ($v['skTipoContenedor'] == '40HC') ? 'selected' : ''; ?>>40HC</option>
@@ -137,9 +137,9 @@ $mercanciasCargaSuelta = ob_get_clean();
                                         <option value="20RF" <?php echo ($v['skTipoContenedor'] == '20RF') ? 'selected' : ''; ?>>20RF</option>
                                         <option value="40RF" <?php echo ($v['skTipoContenedor'] == '40RF') ? 'selected' : ''; ?>>40RF</option>
                                         <option value="40RH" <?php echo ($v['skTipoContenedor'] == '40RH') ? 'selected' : ''; ?>>40RH</option>
-                                        </select>
+                                      </select>
                                     </td>
-                                    <td  colspan="2">
+                                    <td colspan="2">
                                         <select name="skEmbalaje[]" class="form-control contenedor">
                                             <option value="">-Embalaje-</option>
                                             <?php
@@ -305,7 +305,7 @@ $mercanciasCargaSuelta = ob_get_clean();
                     ?>
                 </select>
             </div>
-        </div>    
+        </div>
 
         <div class="form-group">
             <label class="control-label col-md-2">Clave de Documento <span aria-required="true" class="required"> * </span> </label>
@@ -574,7 +574,7 @@ $mercanciasCargaSuelta = ob_get_clean();
                     required: true
                 }
             },
-            invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar              
+            invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar
                 $('.alert-success').hide();
                 $('.alert-danger').show();
                 App.scrollTo($('.alert-danger'), -200);

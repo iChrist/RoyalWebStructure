@@ -36,9 +36,9 @@
 <!--<form id="_save" method="post" class="form-horizontal" role="form">!-->
     <div class="tab-content">
         <div class="tab-pane fade active in" id="tab_datosGenerales">
-            
+
             <!-- FORMULARIO DE DATOS GENERALES DE EMPRESAS !-->
-             
+
      <div class="form-body"> 
     <input type="hidden" name="skEmpresa"  id="skEmpresa" value="<?php echo (isset($result['skEmpresa'])) ? $result['skEmpresa'] : '' ; ?>">
         <div class="form-group">
@@ -50,8 +50,8 @@
                     <input type="text" name="sRFC" id="sRFC" class="form-control" placeholder="RFC" value="<?php echo (isset($result['sRFC'])) ? utf8_encode($result['sRFC']) : '' ; ?>" >
                 </div>
             </div>
-        </div>     
-        
+        </div>
+
         <div class="form-group">
             <label class="control-label col-md-2">Nombre <span aria-required="true" class="required"> * </span>
             </label>
@@ -63,7 +63,7 @@
             </div>
         </div>
          <div class="form-group">
-            <label class="control-label col-md-2">Nombre Corto 
+            <label class="control-label col-md-2">Nombre Corto
             </label>
             <div class="col-md-4">
                 <div class="input-icon">
@@ -73,47 +73,47 @@
             </div>
         </div>
          <div class="clearfix"><hr/></div>
-            
+
             <div class="form-group">
                 <label class="control-label col-md-2">Tipo de Empresa <span aria-required="true" class="required"> * </span>  </label>
-                                 <?php 
+                                 <?php
                                 if($data['tiposEmpresas'])
                                 {
-                                ?> 
+                                ?>
                                 <div class="col-md-4">
                                 <select class="form-control"id="skTipoEmpresa" name="skTipoEmpresa">
                                 		<option value="">- Seleccione -</option>
                                 	<?php  foreach ($data['tiposEmpresas'] as $profile)  {  ?>
-                                		<option value="<?php echo $profile['skTipoEmpresa']; ?>" 
-                                		<?php 
+                                		<option value="<?php echo $profile['skTipoEmpresa']; ?>"
+                                		<?php
                                 		if(isset($result['skTipoEmpresa'])){
 	                                	echo ($result['skTipoEmpresa']==$profile['skTipoEmpresa'] ? 'selected="selected"' : '');
                                 		}
-                                		
-                                		?>> 
+
+                                		?>>
                                 		<?php echo $profile['sNombre']; ?></option>
                                 	<?php }   ?>
                                 </select>
                                </div>
                                     <?php
-                                    
+
                                 }  ?>
-                        
-                 
-            </div>    
-         
+
+
+            </div>
+
         <!-- CORRESPONSALES !-->
         <div class="form-group skCorresponsalia" <?php if(isset($result['skTipoEmpresa']) && $result['skTipoEmpresa'] == 'CLIE'){ echo 'style="display:block;"';}else{ echo 'style="display:none;"'; }//ENDIF ?>>
             <label class="control-label col-md-2">Corresponsalia <span aria-required="true" class="required"> * </span> </label>
             <?php
                if($data['corresponsalias']){
-            ?> 
+            ?>
             <div class="col-md-4">
                 <select class="form-control skCorresponsalia" id="skCorresponsalia" name="skCorresponsalia">
                     <option value="">- Seleccione Corresponsalia -</option>
                     <?php  foreach ($data['corresponsalias'] as $corresponsalia)  {  ?>
-                        <option value="<?php echo $corresponsalia['skEmpresa']; ?>" 
-                    <?php 
+                        <option value="<?php echo $corresponsalia['skEmpresa']; ?>"
+                    <?php
                         if(isset($result['skCorresponsalia'])){
                             echo ($result['skCorresponsalia'] == $corresponsalia['skEmpresa'] ? 'selected="selected"' : '');
                         }
@@ -123,21 +123,21 @@
                </select>
             </div>
             <?php
-                }//ENDIF  
-            ?> 
+                }//ENDIF
+            ?>
         </div>
         <!-- PROMOTORES !-->
         <div class="form-group skPromotor" <?php if(isset($result['skTipoEmpresa']) && $result['skTipoEmpresa'] == 'CLIE'){ echo 'style="display:block;"';}else{ echo 'style="display:none;"'; }//ENDIF ?>>
             <label class="control-label col-md-2">Promotor 1 </label>
             <?php
                if($data['promotores']){
-            ?> 
+            ?>
             <div class="col-md-4">
                 <select class="form-control"id="skPromotor1" name="skPromotor1">
                     <option value="">- Seleccione Promotor -</option>
                     <?php  foreach ($data['promotores'] as $promotor)  {  ?>
-                        <option value="<?php echo $promotor['skPromotores']; ?>" 
-                    <?php 
+                        <option value="<?php echo $promotor['skPromotores']; ?>"
+                    <?php
                         if(isset($result['skPromotor1'])){
                             echo ($result['skPromotor1'] == $promotor['skPromotores'] ? 'selected="selected"' : '');
                         }
@@ -147,20 +147,20 @@
                </select>
             </div>
             <?php
-                }//ENDIF  
-            ?> 
+                }//ENDIF
+            ?>
         </div>
         <div class="form-group skPromotor" <?php if(isset($result['skTipoEmpresa']) && $result['skTipoEmpresa'] === 'CLIE'){ echo 'style="display:block;"';}else{ echo 'style="display:none;"'; }//ENDIF ?>>
             <label class="control-label col-md-2">Promotor 2 </label>
             <?php
                if($data['promotores']){
-            ?> 
+            ?>
             <div class="col-md-4">
                 <select class="form-control"id="skPromotor2" name="skPromotor2">
                     <option value="">- Seleccione Promotor -</option>
                     <?php  foreach ($data['promotores'] as $promotor)  {  ?>
-                        <option value="<?php echo $promotor['skPromotores']; ?>" 
-                    <?php 
+                        <option value="<?php echo $promotor['skPromotores']; ?>"
+                    <?php
                         if(isset($result['skPromotor2'])){
                             echo ($result['skPromotor2'] == $promotor['skPromotores'] ? 'selected="selected"' : '');
                         }
@@ -170,24 +170,24 @@
                </select>
             </div>
             <?php
-                }//ENDIF  
-            ?> 
+                }//ENDIF
+            ?>
         </div>
-         
-         
+
+
          <!--
              <div class="form-group">
                 <label class="control-label col-md-2">Estatus <span aria-required="true" class="required"> * </span></label>
-                                 <?php 
+                                 <?php
                                 if($data['status'])
                                 {
-                                ?> 
+                                ?>
                                 <div class="col-md-4">
                                 <select class="form-control"id="skStatus" name="skStatus">
                                 		<option value=""> Seleccionar...</option>
                                 	<?php  foreach ($data['status'] as $status)  {  ?>
-                                		<option value="<?php echo $status['skStatus']; ?>" 
-                                		<?php 
+                                		<option value="<?php echo $status['skStatus']; ?>"
+                                		<?php
                                 		if(isset($result['skStatus'])){
 	                                	echo ($result['skStatus']==$status['skStatus'] ? 'selected="selected"' : '');
                                 		}
@@ -197,10 +197,10 @@
                                 </select>
                                </div>
                                     <?php
-                                    
+
                                 }  ?>
-                        
-                 
+
+
             </div>
          !-->
             <!-- STATUS -->
@@ -226,14 +226,14 @@
                     </div>
                 </div>
             </div>
-            
-        
+
+
         </div>
-            
+
     <!--</div>!-->
             <!-- TEMRINA FORMULARIO DE DATOS GENERALES DE EMPRESAS !-->
-            
-            
+
+
         </div>
         <div class="tab-pane fade" id="tab_servicios">
             <div class="form-body">
@@ -276,15 +276,15 @@
                                                         <input type="radio" name="skTipoTramite[<?php echo $i; ?>]"  class="skTipoTramite" value="<?php echo utf8_encode($rTipoTramite['skTipoTramite']); ?>" <?php echo ($rTipoTramite['skTipoTramite'] == $row['skTipoTramite']) ? 'checked="checked"': ''; ?> >
                                                         <?php echo utf8_encode($rTipoTramite['sNombre']); ?>
                                                     </label>
-                                                    
+
                                                 </div>
                                                 <br><br>
-                                            <?php 
-                                                    
+                                            <?php
+
                                                     }//ENDFOREACH
                                                 }//ENDIF
                                             ?>
-                                
+
                                     </div>
                                 </div>
                             </td>
@@ -293,10 +293,10 @@
                                     <div class="col-md-12">
                                         <select class="form-control skConcepto" name="skConcepto[]">
                                             <option value="">-Servicios-</option>
-                                            <?php 
+                                            <?php
                                                 if($conceptos){
                                                     while($rConcepto = $conceptos->fetch_assoc()){
-                                                        
+
                                             ?>
                                                         <option value="<?php echo $rConcepto['skConcepto']; ?>" <?php echo ($rConcepto['skConcepto']==$row['skConcepto']) ? 'selected="selected"': ''; ?>><?php echo utf8_encode($rConcepto['concepto']); ?></option>
                                             <?php
@@ -312,7 +312,7 @@
                                     <div class="col-md-12">
                                         <select class="form-control skDivisa" name="skDivisa[]">
                                             <option value="">-Divisas-</option>
-                                            <?php 
+                                            <?php
                                                 if($divisas){
                                                     while($rDivisa = $divisas->fetch_assoc()){
                                             ?>
@@ -345,13 +345,13 @@
                     </table>
                     </div>
                 </div>
-            </div> 
+            </div>
         </div>
     </div>
 <!--</form>!-->
 <!-- END TAB -->
 </div>
-   </form>                           
+   </form>
 
 <div class="clearfix"></div>
 
@@ -370,7 +370,7 @@
             url: "",
             cache: false,
             async: false,
-            data: { 
+            data: {
                 axn : "obtenerTiposTramites"
             }
         })
@@ -393,7 +393,7 @@
             url: "",
             cache: false,
             async: false,
-            data: { 
+            data: {
                 axn : "obtenerDivisas"
             }
         })
@@ -423,7 +423,7 @@
             url: "",
             cache: false,
             async: false,
-            data: { 
+            data: {
                 axn : "obtenerServicios",
                 skTipoTramite : skTipoTramite,
                 skTipoEmpresa : skTipoEmpresa
@@ -469,7 +469,7 @@
             // Precio Unitario del Servicio //
             $(tr).find('input[name^="fPrecioUnitario"]').val("");
         });
-        
+
         // SELECCIÓN DE CONCEPTO //
         $('body').delegate('.skConcepto', 'change', function(){
             var skConcepto = $(this).val();
@@ -497,13 +497,13 @@
                 $("#skPromotor1").val("");
                 $("#skPromotor2").val("");
                 $(".skCorresponsalia").css("display","none");
-                $(".skPromotor").css("display","none"); 
-           } 
+                $(".skPromotor").css("display","none");
+           }
         });
         /*
          * Se valida que los promotores no se supliquen.
          */
-        $("#skPromotor1").change(function(){ 
+        $("#skPromotor1").change(function(){
             if($(this).val() != ""){
                 if($(this).val() == $("#skPromotor2").val()){
                     toastr.error("No puede tener el mismo promotor 2 veces en el mismo registro.", "Notificaci&oacute;n");
@@ -511,7 +511,7 @@
                 }
             }
         });
-        $("#skPromotor2").change(function(){ 
+        $("#skPromotor2").change(function(){
             if($(this).val() != ""){
                 if($(this).val() == $("#skPromotor1").val()){
                     toastr.error("No puede tener el mismo promotor 2 veces en el mismo registro.", "Notificaci&oacute;n");
@@ -519,19 +519,19 @@
                 }
             }
         });
-        
+
         /*
          * Aquí se valida el RFC
          */
-        /*if($("sRFC").length){	
+        /*if($("sRFC").length){
 		     if($("sRFC").attr("value").match(/^[a-zA-Z]{3,4}(\d{6})((\D|\d){3})?$/)){
 			    alert("good");
 		    }else{
 			    alert("bad");
-			    
+
 		    }
         }*/
-       
+
         /*
          * Aquí se valida el formulario.
          */
@@ -552,9 +552,9 @@
                         skEmpresa:  function (){return $( "#skEmpresa" ).val();}
                       }
                     }
-                    
+
                 },*/
-               
+
                 skTipoEmpresa:{
                     required: true
                 },
@@ -581,28 +581,28 @@
                 "fPrecioUnitario[]":{
                     required: true
                 }*/
-               
+
             },
-            invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar              
+            invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar
                 $('.alert-success').hide();
                 $('.alert-danger').show();
                 App.scrollTo($('.alert-danger'), -200);
             },
             errorPlacement: function (error, element) { // hacer la colocación de error para cada tipo de entrada
                 var icon = $(element).parent('.input-icon').children('i');
-                icon.removeClass('fa-check').addClass("fa-warning");  
+                icon.removeClass('fa-check').addClass("fa-warning");
                 icon.attr("data-original-title", $('.alert-danger').text()).tooltip({'container': 'body'});
                 if (element.parent(".input-group").size() > 0) {
                     error.insertAfter(element.parent(".input-group"));
-                } else if (element.attr("data-error-container")) { 
+                } else if (element.attr("data-error-container")) {
                     error.appendTo(element.attr("data-error-container"));
-                } else if (element.parents('.radio-list').size() > 0) { 
+                } else if (element.parents('.radio-list').size() > 0) {
                     error.appendTo(element.parents('.radio-list').attr("data-error-container"));
-                } else if (element.parents('.radio-inline').size() > 0) { 
+                } else if (element.parents('.radio-inline').size() > 0) {
                     error.appendTo(element.parents('.radio-inline').attr("data-error-container"));
                 } else if (element.parents('.checkbox-list').size() > 0) {
                     error.appendTo(element.parents('.checkbox-list').attr("data-error-container"));
-                } else if (element.parents('.checkbox-inline').size() > 0) { 
+                } else if (element.parents('.checkbox-inline').size() > 0) {
                     error.appendTo(element.parents('.checkbox-inline').attr("data-error-container"));
                 } else {
                     error.insertAfter(element); // Para otros insumos, sólo realizar comportamiento predeterminado (llamar messages)
@@ -644,7 +644,7 @@
                 "fPrecioUnitario[]":{
                     required: "Campo obligatorio."
                 }*/
-                
+
             }
         });
         //
@@ -667,8 +667,8 @@
             _add_multiple_rows_add_row(html);
         });
         //
-        $('body').delegate('._add_multiple_rows_delete_row','click',function(){  
+        $('body').delegate('._add_multiple_rows_delete_row','click',function(){
             _add_multiple_rows_delete_row(this);
         });
-    }); 
+    });
 </script>
