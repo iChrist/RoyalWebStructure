@@ -9,7 +9,6 @@ if ($data['datos']) {
         }
     }
 }
-
 ob_start();
 ?>
 <tr>

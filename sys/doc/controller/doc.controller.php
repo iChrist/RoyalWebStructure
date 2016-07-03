@@ -13,11 +13,11 @@ Class Doc_Controller Extends Doc_Model {
     }
 
     public function __destruct() {
-        
+
     }
-    
+
     public function obtenerDatos($sReferencia = ""){
-        
+
         $this->recepciondocumentos['sReferencia'] = htmlentities($_POST['sReferencia']);
         $this->data['data'] = $this->read_recepciondocumentos();
 
@@ -96,7 +96,7 @@ Class Doc_Controller Extends Doc_Model {
         echo json_encode($html);
         return true;
     }
-    
+
     public function migrate() {
         $sql = "SELECT * FROM royalweb_gya.ope_recepciones_documentos WHERE skTipoServicio = 'CONT'";
         $result = $this->db->query($sql);
@@ -114,7 +114,7 @@ Class Doc_Controller Extends Doc_Model {
                 if (trim($row['sNumContenedor'])) {
                     $cont++;
                     echo $cont . ' : ' . $row['sNumContenedor'] . '<br>';
-                    $sql = "INSERT INTO rel_recepciones_mercancias 
+                    $sql = "INSERT INTO rel_recepciones_mercancias
                                     (skMercancia
                                     ,skRecepcionDocumento
                                     ,skEmbalaje
@@ -124,7 +124,7 @@ Class Doc_Controller Extends Doc_Model {
                                     ,iBultos
                                     ,fPeso
                                     ,fVolumen)
-                                    VALUES 
+                                    VALUES
                                     ('" . addslashes(trim(substr(md5(microtime()), 0, 32), " ")) . "'
                                     ,'" . addslashes(trim($row['skRecepcionDocumento'], " ")) . "'
                                     ,''
@@ -174,7 +174,7 @@ Class Doc_Controller Extends Doc_Model {
                     if (trim($v)) {
                         $cont++;
                         echo $cont . ' : ' . $v . '<br>';
-                        $sql = "INSERT INTO rel_recepciones_mercancias 
+                        $sql = "INSERT INTO rel_recepciones_mercancias
                                         (skMercancia
                                         ,skRecepcionDocumento
                                         ,skEmbalaje
@@ -184,7 +184,7 @@ Class Doc_Controller Extends Doc_Model {
                                         ,iBultos
                                         ,fPeso
                                         ,fVolumen)
-                                        VALUES 
+                                        VALUES
                                         ('" . addslashes(trim(substr(md5(microtime()), 0, 32), " ")) . "'
                                         ,'" . addslashes(trim($row['skRecepcionDocumento'], " ")) . "'
                                         ,''
@@ -444,7 +444,7 @@ Class Doc_Controller Extends Doc_Model {
         return true;
     }
 
-    public function docume_form() {
+    public function docume_form(){
         $this->data['message'] = '';
         $this->data['response'] = true;
         $this->data['datos'] = false;
@@ -474,38 +474,17 @@ Class Doc_Controller Extends Doc_Model {
             $this->recepciondocumentos['sReferencia'] = addslashes(utf8_decode($_POST['sReferencia']));
             $this->recepciondocumentos['sPedimento'] = addslashes(utf8_decode($_POST['sPedimento']));
             $this->recepciondocumentos['sBlMaster'] = !empty($_POST['sBlMaster']) ? addslashes(utf8_decode($_POST['sBlMaster'])) : '';
-            //$this->recepciondocumentos['sBlHouse'] = !empty($_POST['sBlHouse']) ? addslashes(utf8_decode($_POST['sBlHouse'])) : '';;
             $this->recepciondocumentos['sMercancia'] = addslashes(utf8_decode($_POST['sMercancia']));
             $this->recepciondocumentos['sObservaciones'] = addslashes(utf8_decode($_POST['sObservaciones']));
-
             $this->recepciondocumentos['skEmpresa'] = utf8_decode($_POST['skEmpresa']);
             $this->recepciondocumentos['skTipoTramite'] = utf8_decode($_POST['skTipoTramite']);
             $this->recepciondocumentos['skTipoServicio'] = utf8_decode($_POST['skTipoServicio']);
             $this->recepciondocumentos['skClaveDocumento'] = utf8_decode($_POST['skClaveDocumento']);
-
-            //$this->recepciondocumentos['sNumContenedor'] = utf8_decode(!empty($_POST['sNumContenedor']) ? addslashes($_POST['sNumContenedor']) : '');
-            //$this->recepciondocumentos['iBultos'] = utf8_decode(!empty($_POST['iBultos']) ? $_POST['iBultos'] : 0);
-            //$this->recepciondocumentos['fPeso'] = utf8_decode(!empty($_POST['fPeso']) ? $_POST['fPeso'] : 0);
-            //$this->recepciondocumentos['fVolumen'] = utf8_decode(!empty($_POST['fVolumen']) ? $_POST['fVolumen'] : 0);
-
             $this->recepciondocumentos['dRecepcion'] = utf8_decode(!empty($_POST['dRecepcion']) ? date('Y-m-d', strtotime($_POST['dRecepcion'])) : date('Y-m-d'));
             $this->recepciondocumentos['tRecepcion'] = utf8_decode(!empty($_POST['tRecepcion']) ? $_POST['tRecepcion'] : date('H:i:s'));
             //exit('<pre>'.print_r($this->recepciondocumentos,1));
             if (empty($_POST['skRecepcionDocumento'])) {
-                // SE UTILIZABA PARA VER SI YA EXISTIA EL PEDIMENTO PERO ES UN BUG //
-                /*
-                  $maxPedimento = parent::getMaxPedimento();
-                  if($maxPedimento){
-                  if($maxPedimento['sPedimento'] == $this->recepciondocumentos['sPedimento']){
-                  $this->data['response'] = false;
-                  $this->data['errorPedimento'] = false;
-                  $this->data['message'] = 'El pedimento '.$this->recepciondocumentos['sPedimento']." Ya ha sido utilizado, intenta con ".($maxPedimento['sPedimento'] + 1);
-                  header('Content-Type: application/json');
-                  echo json_encode($this->data);
-                  return false;
-                  }
-                  }
-                 */
+
                 $skRecepcionDocumento = parent::create_recepciondocumentos();
                 if ($skRecepcionDocumento) {
                     $this->mercancias['skRecepcionDocumento'] = $skRecepcionDocumento;
@@ -565,7 +544,7 @@ Class Doc_Controller Extends Doc_Model {
                     echo json_encode($this->data);
                     return false;
                 }
-            } else {
+             }else{
                 //echo ('</pre>'.print_r($_POST,1).'</pre>');
                 $this->mercancias['skRecepcionDocumento'] = $this->recepciondocumentos['skRecepcionDocumento'];
                 parent::delete_mercancias();
@@ -647,7 +626,7 @@ Class Doc_Controller Extends Doc_Model {
         $this->data['docTipo'] = parent::read_equal_docTipo();
         $this->data['mercancias'] = false;
         $this->data['embalajes'] = parent::read_cat_embalajes();
-        
+
         if (isset($_GET['p1'])) {
             $this->recepciondocumentos['skRecepcionDocumento'] = $_GET['p1'];
             $this->recepcionDoc_docTipo['skRecepcionDocumento'] = $_GET['p1'];
@@ -656,7 +635,7 @@ Class Doc_Controller Extends Doc_Model {
             // Retorna las mercancias (rel_recepciones_mercancias) //
             $this->mercancias['skRecepcionDocumento'] = $_GET['p1'];
             $this->data['mercancias'] = parent::read_mercancias();
-            
+
             /*
              * ESTO ES PARA QUE SOLO PUEDA MODIFICAR EL USUARIO QUE CREÓ EL REGISTRO
              */
@@ -678,13 +657,13 @@ Class Doc_Controller Extends Doc_Model {
         $i = 2;
         $this->data['data'] = parent::read_recepciondocumentos();
         while ($row = $this->data['data']->fetch_assoc()) {
-            
+
             //OBTENER PROMOROTES //
             $promotores = $row['promotor1'];
             if (!empty($row['promotor2'])) {
                 $promotores .= ' | ' . $row['promotor2'];
             }
-           
+
             // OBTENEMOS LAS MERCANCIAS //
             $datosServicio = $row['TipoServicio'];
             $this->mercancias['skRecepcionDocumento'] = $row['skRecepcionDocumento'];
@@ -698,7 +677,7 @@ Class Doc_Controller Extends Doc_Model {
                     }
                 }
             }
-            
+
             //exit('<pre>'.print_r($mercancias,1).'</pre>');
             $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $i, utf8_encode($row['sReferencia']));
             $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $i, utf8_encode($row['sPedimento']));
@@ -772,7 +751,7 @@ Class Doc_Controller Extends Doc_Model {
                 }
             }
         }
-        
+
         $this->data['config'] = array(
             'title' => 'Recepción de Documentos'
             , 'date' => date('d-m-Y H:i:s')

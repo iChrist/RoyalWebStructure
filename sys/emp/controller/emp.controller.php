@@ -10,11 +10,11 @@
 		}
 
 		public function __destruct(){
-		
+
 		}
 
                 /* COMIENZA MODULO areas */
-                
+
                 public function areas_index(){
                     if(isset($_GET['axn'])){
                         switch ($_GET['axn']) {
@@ -69,19 +69,19 @@
                         }
                         return true;
                     }
-                    
+
                     // INCLUYE UN MODELO DE OTRO MODULO //
                     $this->load_model('cof','cof');
                     $cof = new Cof_Model();
                     $this->data['status'] = $cof->read_status();
-                     
+
                     // RETORNA LA VISTA areas-index.php //
                     $this->load_view('areas-index', $this->data);
                     return true;
                 }
-                
-                 
-                public function areas_form(){ 
+
+
+                public function areas_form(){
                     if(isset($_GET['axn'])){
                         if($_GET['axn']==='fileUpload'){
                             $upload_handler = new UploadHandler();
@@ -134,7 +134,7 @@
                     $this->load_view('areas-form', $this->data);
                     return true;
                 }
-                
+
                 public function areas_detail(){
                     if(isset($_GET['p1'])){
                         $this->areas['skAreas'] = $_GET['p1'];
@@ -150,7 +150,7 @@
                     $this->load_view('areas-detail', $this->data);
                     return true;
                 }
-                
+
                 private function areas_pdf(){
                     if(isset($_GET['p1'])){
                         $this->areas['skAreas'] = $_GET['p1'];
@@ -164,9 +164,9 @@
                     return true;
                 }
                 /* TERMINA MODULO areas */
-                
+
                 /* COMIENZA MODULO promotores */
-                
+
                 public function promotores_index(){
                     if(isset($_GET['axn'])){
                         switch ($_GET['axn']) {
@@ -218,7 +218,7 @@
                         }
                         return true;
                     }
-                     
+
                     // INCLUYE UN MODELO DE OTRO MODULO //
                     $this->load_model('cof','cof');
                     $cof = new Cof_Model();
@@ -268,44 +268,44 @@
                     $this->load_view('promotores-form', $this->data);
                     return true;
                 }
-                
+
                 /*EMPIEZA MODULO DE DEPARTAMENTOS*/
-                
-                 
-                
+
+
+
                 public function departamentos_index(){
                     if(isset($_GET['axn']) && $_GET['axn'] == 'fetch_all'){
-                        
+
                         // PARAMETROS PARA FILTRADO //
                         if(isset($_POST['sNombre'])){
                             $this->departamentos['sNombre'] = $_POST['sNombre'];
                         }
-                        
+
                         if(isset($_POST['skStatus'])){
                             $this->departamentos['skStatus'] = $_POST['skStatus'];
                         }
-                        
+
                         // TOTAL DE REGISTROS EN LA TABLA //
                         $getTotal = parent::count_departamentos()->fetch_assoc();
                         $iTotalRecords = $getTotal['total'];
                         // "LIMIT" TOTAL DE REGISTROS PARA MOSTRAR //
                         $iDisplayLength = intval($_REQUEST['length']);
-                        $iDisplayLength = ($iDisplayLength < 0) ? $iTotalRecords : $iDisplayLength; 
+                        $iDisplayLength = ($iDisplayLength < 0) ? $iTotalRecords : $iDisplayLength;
                         // "OFFSET" //
                         $iDisplayStart = intval($_REQUEST['start']);
                         // PAGINA //
                         $sEcho = intval($_REQUEST['draw']);
-                        
+
                         $this->departamentos['limit'] = $iDisplayLength;
                         $this->departamentos['offset'] = $iDisplayStart;
                         $this->data['departamentos'] = parent::read_like_departamentos();
-                        
+
                         $records = array();
-                        $records["data"] = array(); 
+                        $records["data"] = array();
 
                         $end = $iDisplayStart + $iDisplayLength;
                         $end = $end > $iTotalRecords ? $iTotalRecords : $end;
-                        
+
                         if($this->data['departamentos']){
                             while($row = $this->data['departamentos']->fetch_assoc()){
                                 $actions = $this->printModulesButtons(2,array($row['skDepartamento']));
@@ -313,7 +313,7 @@
                                     htmlentities(utf8_encode($row['sNombre']), ENT_QUOTES)
                                      ,utf8_encode($row['htmlStatus'])
                                     , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.$actions['sHtml'].'</ul></div>' : ''
-                                    
+
                                 );
                             }
                         }
@@ -324,25 +324,25 @@
                         echo json_encode($records);
                         return false;
                     }
-                    
+
                     // INCLUYE UN MODELO DE OTRO MODULO //
                      $this->load_model('cof','cof');
                     $cof = new Cof_Model();
                     $this->data['status'] = $cof->read_status();
-                   
-                    
+
+
                     // RETORNA LA VISTA areas-index.php //
                     $this->load_view('departamentos-index', $this->data);
                 }
-                
+
                 public function departamentos_form(){
                     $this->data['message'] = '';
                     $this->data['success'] = false;
                     $this->data['error'] = false;
                     $this->data['datos'] = false;
                     if($_POST){
-                        
-                         
+
+
                         $this->departamentos['skDepartamento'] = !empty($_POST['skDepartamento']) ? $_POST['skDepartamento'] : substr(md5(microtime()), 1, 32);
                         $this->departamentos['sNombre'] = htmlentities($_POST['sNombre'],ENT_QUOTES);
                          $this->departamentos['skStatus'] = htmlentities($_POST['skStatus'],ENT_QUOTES);
@@ -383,11 +383,11 @@
                     $this->load_view('departamentos-form', $this->data);
                     return true;
                 }
-                
+
                 /* TERMINA MODULO DE DEPARTAMENTOS*/
-                
-                
-                                
+
+
+
                 /*EMPIEZA MODULO DE TIPO DE EMPRESAS*/
                  public function tipemp_index(){
                     if(isset($_GET['axn'])){
@@ -400,7 +400,7 @@
                                 if(isset($_POST['sNombre'])){
                                     $this->tipoempresas['sNombre'] = $_POST['sNombre'];
                                 }
-                               
+
                                 if(isset($_POST['skStatus'])){
                                     $this->tipoempresas['skStatus'] = $_POST['skStatus'];
                                 }
@@ -440,27 +440,27 @@
                         }
                         return true;
                     }
-                    
+
                     // INCLUYE UN MODELO DE OTRO MODULO //
                      $this->load_model('cof','cof');
                     $cof = new Cof_Model();
                     $this->data['status'] = $cof->read_status();
-                     
+
                     // RETORNA LA VISTA areas-index.php //
                     $this->load_view('tipemp-index', $this->data);
                     return true;
                 }
-                	
+
                  public function tipemp_form(){
                   	$this->data['message'] = '';
                     $this->data['response'] = true;
                     $this->data['datos'] = false;
                     if($_POST){
-                        
-                         
+
+
                         $this->tipoempresas['skTipoEmpresaViejo'] = $_POST['skTipoEmpresaViejo'];
                         $this->tipoempresas['skTipoEmpresa'] = $_POST['skTipoEmpresa'];
-                        
+
                         $this->tipoempresas['sNombre'] = htmlentities($_POST['sNombre'],ENT_QUOTES);
                          $this->tipoempresas['skStatus'] = htmlentities($_POST['skStatus'],ENT_QUOTES);
                         if(empty($_POST['skTipoEmpresaViejo'])){
@@ -470,14 +470,14 @@
                                 header('Content-Type: application/json');
                                 echo json_encode($this->data);
                                 return true;
-                                
+
                             }else{
                             	 $this->data['response'] = true;
                                 $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
                                 header('Content-Type: application/json');
                                 echo json_encode($this->data);
                                 return false;
-                                
+
                             }
                         }else{
                             if(parent::update_tipoempresas()){
@@ -493,7 +493,7 @@
                                 echo json_encode($this->data);
                                 return false;
 
-                              
+
                             }
                         }
                     }
@@ -504,11 +504,11 @@
                     $this->load_view('tipemp-form', $this->data);
                     return true;
                 }
-                 
-                 
-                 
-                 
-                
+
+
+
+
+
                  /* EMPIEZA MODULO DE EMPRESAS*/
                  public function empresas_index(){
                     if(isset($_GET['axn'])){
@@ -527,20 +527,20 @@
                                  if(isset($_POST['sNombreCorto'])){
                                     $this->empresas['sNombreCorto'] = $_POST['sNombreCorto'];
                                 }
-                               
+
                                 if(isset($_POST['skCorresponsalia'])){
                                     $this->empresas['skCorresponsalia'] = $_POST['skCorresponsalia'];
                                 }
-                                
+
                                 if(isset($_POST['skPromotor'])){
                                     $this->empresas['skPromotor1'] = $_POST['skPromotor'];
                                     $this->empresas['skPromotor2'] = $_POST['skPromotor'];
                                 }
-                                
+
                                 if(isset($_POST['skTipoEmpresa'])){
                                     $this->tipoempresas['skTipoEmpresa'] = $_POST['skTipoEmpresa'];
                                 }
-                                
+
                                 if(isset($_POST['skStatus'])){
                                     $this->empresas['skStatus'] = $_POST['skStatus'];
                                 }
@@ -584,34 +584,34 @@
                         }
                         return true;
                     }
-                    
+
                     // tiposEmpresas //
                     $this->data['tiposEmpresas'] = parent::read_equal_tipoempresas();
-                    
+
                     // Empresas de tipo Corresponsalias //
                     $this->tipoempresas['skTipoEmpresa'] = 'CORR';
                     $this->data['corresponsalias'] = parent::read_like_empresas();
-                    
+
                     // Promotores //
                     $this->data['promotores'] = parent::read_equal_promotores();
-                    
+
                     // INCLUYE UN MODELO DE OTRO MODULO //
                     $this->load_model('cof','cof');
                     $cof = new Cof_Model();
                     $this->data['status'] = $cof->read_status();
-                    
+
                     // RETORNA LA VISTA areas-index.php //
                     $this->load_view('empresas-index', $this->data);
                     return true;
                 }
-                 
-               
-                
+
+
+
                 public function empresas_form(){
                     $this->data['message'] = '';
                     $this->data['response'] = true;
                     $this->data['datos'] = false;
-                    
+
                     if(isset($_POST['axn'])){
                         switch ($_POST['axn']){
                             case "obtenerServicios":
@@ -698,9 +698,9 @@
                         return true;
                    }
                     if($_POST){
-                    
+
                         //exit('</pre>'.print_r($_POST,1).'</pre>');
-                        
+
                         $this->empresas['skEmpresa'] = !empty($_POST['skEmpresa']) ? $_POST['skEmpresa'] : substr(md5(microtime()), 1, 32);
                         $this->tipoempresas['skTipoEmpresa'] = htmlentities($_POST['skTipoEmpresa'],ENT_QUOTES);
                         $this->empresas['skStatus'] = htmlentities($_POST['skStatus'],ENT_QUOTES);
@@ -710,7 +710,7 @@
                         $this->empresas['skCorresponsalia'] = $_POST['skCorresponsalia'];
                         $this->empresas['skPromotor1'] = $_POST['skPromotor1'];
                         $this->empresas['skPromotor2'] = $_POST['skPromotor2'];
-                        
+
                         if(empty($_POST['skEmpresa'])){
                             if(parent::create_empresas()){
                                 if(isset($_POST['skTipoTramite'])){
@@ -733,14 +733,14 @@
                                 header('Content-Type: application/json');
                                 echo json_encode($this->data);
                                 return true;
-                                
+
                             }else{
                             	 $this->data['response'] = true;
                                 $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
                                 header('Content-Type: application/json');
                                 echo json_encode($this->data);
                                 return false;
-                                
+
                             }
                         }else{
                             if(parent::update_empresas()){
@@ -771,14 +771,14 @@
                                 echo json_encode($this->data);
                                 return false;
 
-                              
+
                             }
                         }
                     }
-                    
+
                     $this->data['tiposEmpresas'] = parent::read_equal_tipoempresas();
                     $this->load_model('cof','cof');
-                    
+
                     // Catalogo Status //
                     $cof = new Cof_Model();
                     $this->data['status'] = $cof->read_status();
@@ -805,10 +805,10 @@
                     $this->load_view('empresas-form', $this->data);
                     return true;
                 }
-                
+
                  /* TERMINA MODULO DE EMPRESAS */
-                 
-                
+
+
                 // MODULO DE TARIFAS POR CLIENTE //
                 public function tarifas_index(){
                     $this->data['message'] = '';
@@ -868,7 +868,7 @@
                                 if(!empty($_POST['skUserCreacion'])){
                                     $this->tarifas['skUserCreacion'] = $_POST['skUserCreacion'];
                                 }
-                                
+
                                 if(!empty($_POST['dFechaInicio'])){
                                     $this->tarifas['dFechaInicio'] = $_POST['dFechaInicio'];
                                 }
@@ -928,7 +928,7 @@
                         }
                         return true;
                     }
-                    
+
                     $this->load_model('emp','emp');
                     $emp = new Emp_Model();
                     $emp->tipoempresas['skTipoEmpresa'] = 'CLIE';
@@ -936,23 +936,23 @@
                     $emp->tipoempresas['skTipoEmpresa'] = 'CORR';
                     $this->data['corresponsalias'] = $emp->read_like_empresas();
                     $this->data['promotores'] = $emp->read_like_promotores();
-                    
+
                     $this->load_model('cof','cof');
                     $cof = new Cof_Model();
                     $cof->users['skStatus'] = 'AC';
                     $this->data['usuarios'] = $cof->read_user();
-                    
+
                     $this->load_view('tarifas-index',$this->data);
                     return true;
                 }
-                
+
                 public function tarifas_form(){
                     $this->data['message'] = '';
                     $this->data['response'] = true;
                     $this->data['datos'] = false;
                     if($_POST){
                         $_POST['axn'] = !empty($_POST['axn']) ? $_POST['axn'] : 'save';
-                        switch ($_POST['axn']){           
+                        switch ($_POST['axn']){
                             case "getCliente":
                                 $this->empresas['skEmpresa'] = $_POST['skEmpresa'];
                                 $result = parent::read_equal_empresas();
@@ -972,15 +972,15 @@
                                 return true;
                                 break;
                             case "save":
-                                //exit(print_r($_POST));                              
-                                
+                                //exit(print_r($_POST));
+
                                 $this->tarifas['skTarifa'] = !empty($_POST['skTarifa']) ? $_POST['skTarifa'] : substr(md5(microtime()), 1, 32);
                                 $this->tarifas['skEmpresa'] = !empty($_POST['skEmpresa']) ? $_POST['skEmpresa'] : null;
                                 $this->tarifas['sTipoCambio'] = !empty($_POST['sTipoCambio']) ? $_POST['sTipoCambio'] : null;
                                 $this->tarifas['iTipoTarifa'] = !empty($_POST['iTipoTarifa']) ? $_POST['iTipoTarifa'] : null;
-                                
+
                                 $this->tarifas['skStatus'] = 'AC';
-                                
+
                                 switch ($this->tarifas['iTipoTarifa']){
                                     case 1:
                                         $this->tarifas['fTarifa'] = !empty($_POST['fTarifaPropuesta_1']) ? $_POST['fTarifaPropuesta_1'] : 'null';
@@ -988,7 +988,7 @@
                                         $this->tarifas['fCorresponsal'] = !empty($_POST['fCorresponsal_1']) ? $_POST['fCorresponsal_1'] : 'null';
                                         $this->tarifas['fPromotor1'] = !empty($_POST['fPromotor1_1']) ? $_POST['fPromotor1_1'] : 'null';
                                         $this->tarifas['fPromotor2'] = !empty($_POST['fPromotor2_1']) ? $_POST['fPromotor2_1'] : 'null';
-                                        
+
                                         $this->tarifas['iTipoCalculoAA'] = !empty($_POST['tipoCalculoAA_1']) ? $_POST['tipoCalculoAA_1'] : 0;
                                         $this->tarifas['iTipoCalculoCorresponsal'] = !empty($_POST['tipoCalculoCorresponsal_1']) ? $_POST['tipoCalculoCorresponsal_1'] : 0;
                                         $this->tarifas['iTipoCalculoPromotor1'] = !empty($_POST['tipoCalculoPromotor1_1']) ? $_POST['tipoCalculoPromotor1_1'] : 0;
@@ -1000,7 +1000,7 @@
                                         $this->tarifas['fCorresponsal'] = !empty($_POST['fCorresponsal_2']) ? $_POST['fCorresponsal_2'] : 'null';
                                         $this->tarifas['fPromotor1'] = !empty($_POST['fPromotor1_2']) ? $_POST['fPromotor1_2'] : 'null';
                                         $this->tarifas['fPromotor2'] = !empty($_POST['fPromotor2_2']) ? $_POST['fPromotor2_2'] : 'null';
-                                        
+
                                         $this->tarifas['iTipoCalculoAA'] = !empty($_POST['tipoCalculoAA_2']) ? $_POST['tipoCalculoAA_2'] : 0;
                                         $this->tarifas['iTipoCalculoCorresponsal'] = !empty($_POST['tipoCalculoCorresponsal_2']) ? $_POST['tipoCalculoCorresponsal_2'] : 0;
                                         $this->tarifas['iTipoCalculoPromotor1'] = !empty($_POST['tipoCalculoPromotor1_2']) ? $_POST['tipoCalculoPromotor1_2'] : 0;
@@ -1013,12 +1013,12 @@
                                             $this->tarifas['fCorresponsal'] = !empty($_POST['fCorresponsal_3']) ? $_POST['fCorresponsal_3'] : 'null';
                                             $this->tarifas['fPromotor1'] = !empty($_POST['fPromotor1_3']) ? $_POST['fPromotor1_3'] : 'null';
                                             $this->tarifas['fPromotor2'] = !empty($_POST['fPromotor2_3']) ? $_POST['fPromotor2_3'] : 'null';
-                                            
+
                                             $this->tarifas['iTipoCalculoAA'] = !empty($_POST['tipoCalculoAA_3']) ? $_POST['tipoCalculoAA_3'] : 0;
                                             $this->tarifas['iTipoCalculoCorresponsal'] = !empty($_POST['tipoCalculoCorresponsal_3']) ? $_POST['tipoCalculoCorresponsal_3'] : 0;
                                             $this->tarifas['iTipoCalculoPromotor1'] = !empty($_POST['tipoCalculoPromotor1_3']) ? $_POST['tipoCalculoPromotor1_3'] : 0;
                                             $this->tarifas['iTipoCalculoPromotor2'] = !empty($_POST['tipoCalculoPromotor2_3']) ? $_POST['tipoCalculoPromotor2_3'] : 0;
-                                            
+
                                             for($i=0;$i<count($_POST['rango1_3']);$i++){
                                                 $this->tarifaRango['iRango1'] = $_POST['rango1_3'][$i];
                                                 $this->tarifaRango['iRango2'] = $_POST['rango2_3'][$i];
@@ -1033,7 +1033,7 @@
                                             $this->tarifas['fCorresponsal'] = !empty($_POST['fCorresponsal_3']) ? $_POST['fCorresponsal_3'] : 'null';
                                             $this->tarifas['fPromotor1'] = !empty($_POST['fPromotor1_3']) ? $_POST['fPromotor1_3'] : 'null';
                                             $this->tarifas['fPromotor2'] = !empty($_POST['fPromotor2_3']) ? $_POST['fPromotor2_3'] : 'null';
-                                            
+
                                             $this->tarifas['iTipoCalculoAA'] = !empty($_POST['tipoCalculoAA_3']) ? $_POST['tipoCalculoAA_3'] : 'null';
                                             $this->tarifas['iTipoCalculoCorresponsal'] = !empty($_POST['tipoCalculoCorresponsal_3']) ? $_POST['tipoCalculoCorresponsal_3'] : 'null';
                                             $this->tarifas['iTipoCalculoPromotor1'] = !empty($_POST['tipoCalculoPromotor1_3']) ? $_POST['tipoCalculoPromotor1_3'] : 'null';
@@ -1043,8 +1043,8 @@
                                     default :
                                         break;
                                 }
-                                
-                                //exit(print_r($_POST)); 
+
+                                //exit(print_r($_POST));
                                 /*switch ($this->tarifas['iTipoTarifa']) {
                                     case 1:
                                         $this->tarifas['fTarifa'] = !empty($_POST['fTarifa']) ? $_POST['fTarifa'] : 'null';
@@ -1085,19 +1085,110 @@
                     if(isset($_GET['p1'])){
                         $this->tarifas['skTarifa'] = $_GET['p1'];
                         $this->data['datos'] = parent::read_equal_tarifa();
-                        
+
                     }
                     // CLIENTES //
                     $this->load_model('emp','emp');
                     $emp = new Emp_Model();
                     $emp->tipoempresas['skTipoEmpresa'] = 'CLIE';
                     $this->data['clientes'] = $emp->read_like_empresas();
-                    
+
                     $this->load_view('tarifas-form',$this->data);
                     return true;
                 }
-                 
-                
-                
+
+                /*EMPIEZA MODULO DE SOCIOS DE EMPRESAS*/
+								public function socios_index(){
+									 if(isset($_GET['axn'])){
+											switch ($_GET['axn']) {
+													 case 'fetch_all':
+															 // PARAMETROS PARA FILTRADO //
+															 if(isset($_POST['sRFC'])){
+																	 $this->sociosEmpresas['sRFC'] = $_POST['sRFC'];
+															 }
+															 if(isset($_POST['sNombre'])){
+																	 $this->sociosEmpresas['sNombre'] = $_POST['sNombre'];
+															 }
+															 if(isset($_POST['sNombreCorto'])){
+																	 $this->sociosEmpresas['sNombreCorto'] = $_POST['sNombreCorto'];
+															 }
+															 if(isset($_POST['skCorresponsalia'])){
+																	 $this->sociosEmpresas['skCorresponsalia'] = $_POST['skCorresponsalia'];
+															 }
+															 if(isset($_POST['skPromotor'])){
+																	 $this->sociosEmpresas['skPromotor1'] = $_POST['skPromotor'];
+																	 $this->sociosEmpresas['skPromotor2'] = $_POST['skPromotor'];
+															 }
+															 if(isset($_POST['skTipoEmpresa'])){
+																	 $this->tipoempresas['skTipoEmpresa'] = $_POST['skTipoEmpresa'];
+															 }
+															 if(isset($_POST['skStatus'])){
+																	 $this->sociosEmpresas['skStatus'] = $_POST['skStatus'];
+															 }
+															 // OBTENER REGISTROS //
+															 $total = parent::count_socios();
+
+															 $records = Core_Functions::table_ajax($total);
+															 if($records['recordsTotal'] === 0){
+																	 header('Content-Type: application/json');
+																	 echo json_encode($records);
+																	 return false;
+															 }
+
+															 $this->sociosEmpresas['limit'] = $records['limit'];
+															 $this->sociosEmpresas['offset'] = $records['offset'];
+															 $this->data['data'] = parent::read_like_socios();
+
+															 if(!$this->data['data']){
+																	 header('Content-Type: application/json');
+																	 echo json_encode($records);
+																	 return false;
+															 }
+																while($row = $this->data['data']->fetch_assoc()){
+																	 $actions = $this->printModulesButtons(2,array($row['skEmpresa']));
+																	 $promotores= utf8_encode(!empty($row['promotor1']) ? $row['promotor1'] : '' ).'<br>'.utf8_encode(!empty($row['promotor2']) ? $row['promotor2'] : '' );
+																	 array_push($records['data'], array(
+																			 utf8_encode($row['sRFC']),
+																			 utf8_encode($row['sNombre']),
+																			 utf8_encode($row['sNombreCorto']),
+																			 utf8_encode($row['tipoEmpresa']),
+																			 utf8_encode($row['propietario']),
+																			 utf8_encode($row['corresponsalia']),
+																			 $promotores,
+																			 utf8_encode($row['htmlStatus']),
+																				!empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.$actions['sHtml'].'</ul></div>' : ''
+																	 ));
+															 }
+																 header('Content-Type: application/json');
+															 echo json_encode($records);
+															 return true;
+															 break;
+											 }
+											 return true;
+									 }
+
+									 // tiposEmpresas //
+									 $this->data['tiposEmpresas'] = parent::read_equal_tipoempresas();
+
+									 // Empresas de tipo Corresponsalias //
+									 $this->tipoempresas['skTipoEmpresa'] = 'CORR';
+									 $this->data['corresponsalias'] = parent::read_like_empresas();
+
+									 // Promotores //
+									 $this->data['promotores'] = parent::read_equal_promotores();
+
+									 // INCLUYE UN MODELO DE OTRO MODULO //
+									 $this->load_model('cof','cof');
+									 $cof = new Cof_Model();
+									 $this->data['status'] = $cof->read_status();
+
+									 // RETORNA LA VISTA areas-index.php //
+									 $this->load_view('socios-index', $this->data);
+									 return true;
+							 }
+
+
+								/* FINALIZA MODULO DE SOCIOS DE EMPRESAS*/
+
 	}
 ?>
