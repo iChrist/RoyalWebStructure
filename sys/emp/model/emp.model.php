@@ -943,11 +943,7 @@
 											LEFT JOIN rel_empresas_socios rep ON rep.skSocioEmpresa = res.skSocioEmpresaP
 											LEFT JOIN cat_empresas cep ON cep.skEmpresa = rep.skEmpresa
 											WHERE 1=1 ";
-								if(!$_SESSION['session']['sGroup']=='A'){
-                 //if(!empty($_SESSION['session']['skSocioEmpresaPropietario'])){
                     $sql .=" AND res.skSocioEmpresaP = '".$_SESSION['session']['skSocioEmpresaPropietario']."'";
-                 //}
-							  }
 								if(!empty($this->sociosEmpresas['skEmpresa'])){
                     $sql .=" AND ce.skEmpresa = '".$this->sociosEmpresas['skEmpresa']."'";
                 }
