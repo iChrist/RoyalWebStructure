@@ -18,7 +18,7 @@
         die();
     }
 // DATABASE CONFIGURATION //
-    $_db_idx = 'localhost';
+    $_db_idx = 'test';
     $_db = array(
         'sys' => array(
             'HOST_DB' => 'royalweb.com.mx',

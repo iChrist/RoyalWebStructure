@@ -5,8 +5,9 @@
     }
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data"> 
-    <input type="hidden" name="skRechazo"  id="skRechazo" value="<?php echo (isset($result['skRechazo'])) ? $result['skRechazo'] : '' ; ?>">
-    
+    <input type="hidden" name="axn" value="insert" />
+    <input type="hidden" name="skClasificacion"  id="skClasificacion" value="<?php echo (isset($result['skClasificacion'])) ? $result['skClasificacion'] : '' ; ?>">
+    <input type="hidden" name="clasificacionSegundaMercancia" id="sJson" />
     <div class="form-body">
         
         <div class="form-group">
@@ -42,6 +43,15 @@
                     <span> Seleccionar Excel</span>
                     <input type="file" name="xlfile" id="xlf" />
                 </span>
+            </div>
+        </div>
+        
+        <!-- INFORMACION DE CUANTOS REGISTROS SE VAN A PROCESAR !-->
+        <div class="clearfix"></div>
+        <div class="form-group">
+            <div class="col-md-2"></div>
+            <div class="col-md-10 error-import">
+                <h3 id="total"></h3>
             </div>
         </div>
         
@@ -99,6 +109,7 @@
                                         </div>
                                     </td>
                                     <td>
+                                        <input type="hidden" class="form-control form-filter input-sm" name="sReferencia" id="sReferenciaClasificacion" value="<?php echo (isset($result['sReferencia'])) ? htmlentities(utf8_encode($result['sReferencia'])) : '' ; ?>">
                                         <input type="text" class="form-control form-filter input-sm" name="sFactura" placeholder="Factura">
                                     </td>
                                     <td>
@@ -129,20 +140,39 @@
     </div>
 </form>!-->
 <div class="clearfix"></div>
+
+<script type="text/javascript">
+    var js_rABS = '<?php echo SYS_URL ?>core/assets/sheetjs/xlsxworker2.js';
+    var js_norABS = '<?php echo SYS_URL ?>core/assets/sheetjs/xlsxworker1.js';
+    var js_noxfer = '<?php echo SYS_URL ?>core/assets/sheetjs/xlsxworker.js';
+</script>
+<script src="<?php echo SYS_URL ?>core/assets/sheetjs/shim.js"></script>
+<script src="<?php echo SYS_URL ?>core/assets/sheetjs/jszip.js"></script>
+<script src="<?php echo SYS_URL ?>core/assets/sheetjs/xlsx.js"></script>
+<script src="<?php echo SYS_URL ?>core/assets/sheetjs/dist/ods.js"></script>
+<script src="<?php echo SYS_URL ?>sys/cla/js/importarTemplateClasificacion.js"></script>
 <script type="text/javascript">
     
+    
+    
     function obtenerDatos(){
-        $('.page-title-loading').css('display','inline');
-        $.post("",{ axn : "obtenerDatos" , sReferencia : $("#sReferencia").val() }, function(data){
-            $("#dvDatos").html(data);
-            $('.page-title-loading').css('display','none');
-        });
+        if($("#sReferencia").val().trim() != ''){
+            $('.page-title-loading').css('display','inline');
+            $("#sReferenciaClasificacion").val($("#sReferencia").val());
+            $('.filter-submit').click();
+            $.post("",{ axn : "obtenerDatos" , sReferencia : $("#sReferencia").val() }, function(data){
+                $("#dvDatos").html(data);
+                $('.page-title-loading').css('display','none');
+            });
+        }
     }
     
     $(document).ready(function(){
         TableAjax.init('?axn=fetch_all');
+        
+        obtenerDatos();
          
-         /* VALIDATIONS */
+        /* VALIDATIONS */
         isValid = $("#_save").validate({
             errorElement: 'span', //default input error message container
             errorClass: 'help-block', // default input error message class
@@ -159,9 +189,6 @@
                             axn: "validarReferencia"
                         }
                     }
-                },
-                skStatus:{
-                    required: true
                 }
             },
             invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar              
@@ -200,11 +227,9 @@
                 icon.removeClass("fa-warning").addClass("fa-check");
             },
             messages:{
-                sNombre:{
-                    required: "Campo obligatorio."
-                },
-                skStatus:{
-                    required: "Campo obligatorio."
+                sReferencia:{
+                    required: "Campo obligatorio.",
+                    remote: "La referencia no existe o no tiene previo finalizado."
                 }
             }
         });

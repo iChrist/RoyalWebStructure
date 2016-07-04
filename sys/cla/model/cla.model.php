@@ -68,58 +68,6 @@
         );
         /* TERMINA CLASIFICACIÓN DE MERCANCIAS */
         
-        
-        public $desArc = array(
-             'skArchivoFraccionArancelaria' => NULL
-            ,'skFraccionArancelariaDescripcion'  =>  NULL
-            ,'sArchivo'     =>  NULL
-            ,'skStatus'     =>  NULL
-            ,'limit'        =>  NULL
-            ,'offset'       =>  NULL
-        );
-        
-        public $fraAraDes = array(
-             'skFraccionArancelariaDescripcion' =>  NULL
-            ,'skFraccionArancelaria'    =>  NULL
-            ,'sDescripcion'  =>  NULL
-            ,'sDescripcionIngles'   =>  NULL
-            ,'sModelo'  =>  NULL
-            ,'skStatus' =>  NULL
-            ,'dFechaCreacion'   =>  NULL
-            ,'skUsersCreacion'  =>  NULL
-            ,'dFechaModificacion'   =>  NULL
-            ,'skUsersModificacion'  =>  NULL
-            ,'limit'        =>  NULL
-            ,'offset'       =>  NULL
-        );
-
-        // cat_numerosParte_fraccionesFraccion
-         public $numparfraran = array(
-             'skNumeroParte'  =>  ''
-            ,'sNombre'     =>  ''
-            ,'sDescripcion'     =>  ''
-            ,'skStatus'     =>  ''
-            ,'dFechaCrecion'     =>  ''
-            ,'skUsersCreacion'     =>  ''
-            ,'dFechaModificacion'     =>  ''
-            ,'skUsersModificacion'     =>  ''
-            ,'limit'        =>  ''
-            ,'offset'       =>  ''
-        );
-
-        public $numPar = array(
-             'skNumeroParte' =>  NULL
-            ,'sNombre'    =>  NULL
-            ,'sDescripcion'  =>  NULL
-            ,'skStatus' =>  NULL
-            ,'dFechaCreacion'   =>  NULL
-            ,'skUsersCreacion'  =>  NULL
-            ,'dFechaModificacion'   =>  NULL
-            ,'skUsersModificacion'  =>  NULL
-            ,'limit'        =>  NULL
-            ,'offset'       =>  NULL
-        );
-
         // PRIVATE VARIABLES //
             private $data = array();
 
@@ -140,11 +88,11 @@
                 . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
                 . "INNER JOIN cat_clasificacionMercancia AS claMer ON claMer.skClasificacion = cla.skClasificacion "
                 . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE 1=1 ";
-            if(!empty($this->cla['year'])){
+            /*if(!empty($this->cla['year'])){
                 $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') = '".$this->cla['year']."'";
             }else{
                 $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') < '".date('Y')."'";
-            }
+            }*/
             if($this->cla['valido'] === 0 || $this->cla['valido'] === 1){
                 $sql .=" AND cla.valido = ".$this->cla['valido'];
             }
@@ -183,11 +131,11 @@
                 . "INNER JOIN cat_empresas emp ON emp.skEmpresa = rd.skEmpresa "
                 . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
                 . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE 1=1 ";
-            if(!empty($this->cla['year'])){
+            /*if(!empty($this->cla['year'])){
                 $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') = '".$this->cla['year']."'";
             }else{
                 $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') < '".date('Y')."'";
-            }
+            }*/
             if($this->cla['valido'] === 0 || $this->cla['valido'] === 1){
                 $sql .=" AND cla.valido = ".$this->cla['valido'];
             }
@@ -230,22 +178,25 @@
                 . "INNER JOIN cat_clasificacionMercancia AS claMer ON claMer.skClasificacion = cla.skClasificacion "
                 . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion "
                 . "LEFT JOIN _users AS usr ON usr.skUsers = cla.skUsersModificacion WHERE 1=1 ";
-            if(!empty($this->cla['year'])){
+            /*if(!empty($this->cla['year'])){
                 $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') = '".$this->cla['year']."'";
             }else{
                 $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') < '".date('Y')."'";
-            }
+            }*/
             if($this->cla['valido'] === 0 || $this->cla['valido'] === 1){
                 $sql .=" AND cla.valido = ".$this->cla['valido'];
+            }
+            if(!empty($this->cla['skClasificacion'])){
+                $sql .=" AND cla.skClasificacion = '".$this->cla['skClasificacion']."'";
             }
             if(!empty($this->cla['skEmpresa'])){
                 $sql .=" AND emp.skEmpresa like '%".$this->cla['skEmpresa']."%'";
             }
             if(!empty($this->cla['sReferencia'])){
-                $sql .=" AND cla.sReferencia like '%".$this->cla['sReferencia']."%'";
+                $sql .=" AND cla.sReferencia like '%".trim($this->cla['sReferencia'])."%'";
             }
             if(!empty($this->cla['sPedimento'])){
-                $sql .=" AND rd.sPedimento like '%".$this->cla['sPedimento']."%'";
+                $sql .=" AND rd.sPedimento like '%".trim($this->cla['sPedimento'])."%'";
             }
             
             // AGRUPAMOS LA CLASIFICACION PARA EL CONTEO DE FRACCIONES //
@@ -280,11 +231,11 @@
                 . "INNER JOIN cat_clasificacionMercancia AS claMer ON claMer.skClasificacion = cla.skClasificacion "
                 . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion "
                 . "LEFT JOIN _users AS usr ON usr.skUsers = cla.skUsersModificacion WHERE 1=1 ";
-            if(!empty($this->cla['year'])){
+            /*if(!empty($this->cla['year'])){
                 $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') = '".$this->cla['year']."'";
             }else if($this->cla['year'] != null){
                 $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') < '".date('Y')."'";
-            }
+            }*/
             if($this->cla['valido'] === 0 || $this->cla['valido'] === 1){
                 $sql .=" AND cla.valido = ".$this->cla['valido'];
             }
@@ -350,11 +301,11 @@
                 . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
                 . "INNER JOIN cat_empresas AS emp ON emp.skEmpresa = cla.skEmpresa "
                 . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE 1=1 ";
-            if(!empty($this->cla['year'])){
+            /*if(!empty($this->cla['year'])){
                 $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') = '".$this->cla['year']."'";
             }else{
                 $sql .=" AND DATE_FORMAT(cla.dFechaCreacion,'%Y') < '".date('Y')."'";
-            }
+            }*/
             if(!empty($this->cla['skEmpresa'])){
                 $sql .=" AND cla.skEmpresa like '%".$this->cla['skEmpresa']."%'";
             }
@@ -684,439 +635,10 @@
             }
         }
         
-/* cat_clasificacionMercancia_archivos */
+// ******************************************************************* // 
+                // COMIENZA SEGUNDA CLASIFICACIÓN //
+// ******************************************************************* // 
         
-        public function read_fraccionesFotos(){
-            $sql = "SELECT DISTINCT claMerArc.sFraccion FROM cat_clasificacionMercancia_archivos AS claMerArc WHERE claMerArc.skStatus = 'AC' ";
-            if(!empty($this->claMerArc['sFraccion'])){
-                $sql .=" AND (claMerArc.sFraccion = '".$this->claMerArc['sFraccion']."') ";
-            }
-            if(!empty($this->claMerArc['sNumeroParte'])){
-                $sql .=" AND (claMerArc.sNumeroParte = '".$this->claMerArc['sNumeroParte']."') ";
-            }
-            $sql .=" ORDER BY claMerArc.sFraccion ASC ";
-            $result = $this->db->query($sql);
-            if($result){
-                if($result->num_rows > 0){
-                    return $result;
-                }else{
-                    return false;
-                }
-            }
-        }
-        
-        public function read_numerosParteFotos(){
-            $sql = "SELECT DISTINCT claMerArc.sNumeroParte FROM cat_clasificacionMercancia_archivos AS claMerArc WHERE claMerArc.skStatus = 'AC' ";
-            if(!empty($this->claMerArc['sFraccion'])){
-                $sql .=" AND (claMerArc.sFraccion = '".$this->claMerArc['sFraccion']."') ";
-            }
-            if(!empty($this->claMerArc['sNumeroParte'])){
-                $sql .=" AND (claMerArc.sNumeroParte = '".$this->claMerArc['sNumeroParte']."') ";
-            }
-            $sql .=" ORDER BY claMerArc.sNumeroParte ASC ";
-            $result = $this->db->query($sql);
-            if($result){
-                if($result->num_rows > 0){
-                    return $result;
-                }else{
-                    return false;
-                }
-            }
-        }
-
-        public function read_equal_claMerArc(){
-            $sql = "SELECT claMerArc.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacionMercancia_archivos AS claMerArc "
-                . "INNER JOIN _status ON _status.skStatus = claMerArc.skStatus WHERE 1=1 ";
-            if(!empty($this->claMerArc['skClasificacionMercanciaArchivo'])){
-                $sql .=" AND (claMerArc.skClasificacionMercanciaArchivo = '".$this->claMerArc['skClasificacionMercanciaArchivo']."') ";
-            }
-            if(!empty($this->claMerArc['sFraccion'])){
-                $sql .=" AND (claMerArc.sFraccion = '".$this->claMerArc['sFraccion']."') ";
-            }
-            if(!empty($this->claMerArc['sNumeroParte'])){
-                $sql .=" AND (claMerArc.sNumeroParte = '".$this->claMerArc['sNumeroParte']."') ";
-            }
-            if(!empty($this->claMerArc['sArchivo'])){
-                $sql .=" AND (claMerArc.sArchivo = '".$this->claMerArc['sArchivo']."') ";
-            }
-            if(!empty($this->claMerArc['sThumbnail'])){
-                $sql .=" AND (claMerArc.sThumbnail = '".$this->claMerArc['sThumbnail']."') ";
-            }
-            if(!empty($this->claMerArc['skStatus'])){
-                $sql .=" AND (claMerArc.skStatus = '".$this->claMerArc['skStatus']."') ";
-            }
-            $result = $this->db->query($sql);
-            if($result){
-                if($result->num_rows > 0){
-                    return $result;
-                }else{
-                    return false;
-                }
-            }
-        }
-        public function read_like_claMerArc(){
-            $sql = "SELECT claMerArc.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacionMercancia_archivos AS claMerArc "
-                . "INNER JOIN _status ON _status.skStatus = claMerArc.skStatus WHERE 1=1 ";
-            if(!empty($this->claMerArc['sFraccion'])){
-                $sql .=" AND (claMerArc.sFraccion like '%".$this->claMerArc['sFraccion']."%') ";
-            }
-            if(!empty($this->claMerArc['sNumeroParte'])){
-                $sql .=" AND (claMerArc.sNumeroParte like '%".$this->claMerArc['sNumeroParte']."%') ";
-            }
-            if(!empty($this->claMerArc['sArchivo'])){
-                $sql .=" AND (claMerArc.sArchivo like '%".$this->claMerArc['sArchivo']."%') ";
-            }
-            if(!empty($this->claMerArc['sThumbnail'])){
-                $sql .=" AND (claMerArc.sThumbnail like '%".$this->claMerArc['sThumbnail']."%') ";
-            }
-            if(!empty($this->claMerArc['skStatus'])){
-                $sql .=" AND (claMerArc.skStatus = '".$this->claMerArc['skStatus']."') ";
-            }
-            $result = $this->db->query($sql);
-            if($result){
-                if($result->num_rows > 0){
-                    return $result;
-                }else{
-                    return false;
-                }
-            }
-        }
-        public function create_claMerArc(){
-            $sql = "INSERT INTO cat_clasificacionMercancia_archivos 
-            (skClasificacionMercanciaArchivo,sFraccion,sNumeroParte,sArchivo,sThumbnail,skStatus) 
-            VALUES 
-            ('".$this->claMerArc['skClasificacionMercanciaArchivo']."',
-            '".$this->claMerArc['sFraccion']."',
-            '".$this->claMerArc['sNumeroParte']."',
-            '".$this->claMerArc['sArchivo']."',
-            '".$this->claMerArc['sThumbnail']."',
-            '".$this->claMerArc['skStatus']."'
-            )";
-            $result = $this->db->query($sql);
-            if($result){
-                return $this->claMerArc['skClasificacionMercanciaArchivo'];
-            }else{
-                return false;
-            }
-        }
-
-        public function update_claMerArc(){
-            $sql = "UPDATE cat_clasificacionMercancia_archivos SET "
-                . "sFraccion = '".$this->claMer['sFraccion']."',"
-                . "sNumeroParte = '".$this->claMer['sNumeroParte']."',"
-                . "sArchivo = '".$this->claMer['sArchivo']."',"
-                . "sThumbnail = '".$this->claMer['sThumbnail']."',"
-                . "skStatus = '".$this->claMer['skStatus']."',"
-                . " WHERE skClasificacionMercanciaArchivo = '".$this->claMer['skClasificacionMercanciaArchivo']."';";
-            $result = $this->db->query($sql);
-            if($result){
-                return $this->cla['skClasificacion'];
-            }else{
-                return false;
-            }
-        }
-        /* TERMINA CLASIFICACIÓN DE MERCANCIAS */
-        
-        
-        /* COMIENZA MODULO clasifiación arancelaria */
-        
-        /* COMIENZA cat_descripcionFraccion_archivos */
-
-        public function count_numerosParte(){
-            $sql = "SELECT COUNT(*) AS total FROM cat_numerosParte WHERE 1=1 ";
-            $sql = "	SELECT COUNT(a.skNumeroParte)AS total
-					FROM (
-							SELECT
-								np.*, fnNombresFraccionesArancelarias(np.skNumeroParte)AS TodosLosNombres,
-								fnNombresFraccionesArancelariasDescripciones(np.skNumeroParte)AS TodasLasDescripciones
-							FROM
-								cat_numerosParte np
-						) as a
-					WHERE 1 = 1 ";
-           
-			
-			if(!empty($this->numPar['skNumeroParte'])){
-                $sql .=" AND skNumeroParte = '".$this->numPar['skNumeroParte']."'";
-            }
-            if(!empty($this->numPar['sNombre'])){
-                $sql .=" AND (sNombre like '%".$this->numPar['sNombre']."%' or TodosLosNombres like '%".$this->numPar['sNombre']."%')";
-            }
-            if(!empty($this->numPar['sDescripcion'])){
-                $sql .=" AND (sDescripcion like '%".$this->numPar['sDescripcion']."%' or TodosLosNombres like '%".$this->numPar['sDescripcion']."%')";
-            }
-            if(!empty($this->numPar['skStatus'])){
-                $sql .=" AND skStatus like '%".$this->numPar['skStatus']."%'";
-            }
-			//echo $sql;die();
-            $result = $this->db->query($sql);
-            if($result){
-                if($result->num_rows > 0){
-                    return $result;
-                }else{
-                    return false;
-                }
-            }
-        }
-
-        public function read_like_numerosParte(){
-            $sql = "SELECT numPar.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_numerosParte AS numPar INNER JOIN _status ON _status.skStatus = numPar.skStatus WHERE 1=1 ";
-            $sql = "SELECT numPar.*, _status.sName AS status, _status.sHtml AS htmlStatus 
-					FROM (
-							SELECT
-								np.*, fnNombresFraccionesArancelarias(np.skNumeroParte)AS TodosLosNombres,
-								fnNombresFraccionesArancelariasDescripciones(np.skNumeroParte)AS TodasLasDescripciones
-							FROM
-								cat_numerosParte np
-						) AS numPar 
-					INNER JOIN _status ON _status.skStatus = numPar.skStatus 
-					WHERE 1=1 ";
-            if(!empty($this->numPar['skNumeroParte'])){
-                $sql .=" AND numPar.skNumeroParte = '".$this->numPar['skNumeroParte']."'";
-            }
-            if(!empty($this->numPar['sNombre'])){
-                $sql .=" AND (numPar.sNombre like '%".$this->numPar['sNombre']."%' or numPar.TodosLosNombres like '%".$this->numPar['sNombre']."%')";
-            }
-            if(!empty($this->numPar['sDescripcion'])){
-                $sql .=" AND (numPar.sDescripcion like '%".$this->numPar['sDescripcion']."%' or numPar.TodasLasDescripciones like '%".$this->numPar['sDescripcion']."%')";
-            }
-            if(!empty($this->numPar['skStatus'])){
-                $sql .=" AND numPar.skStatus like '%".$this->numPar['skStatus']."%'";
-            }
-            if(is_int($this->numPar['limit'])){
-                if(is_int($this->numPar['offset'])){
-                    $sql .= " LIMIT ".$this->numPar['offset']." , ".$this->numPar['limit'];
-                }else{
-                    $sql .= " LIMIT ".$this->numPar['limit'];
-                }
-            }
-			//echo $sql;die();
-            $result = $this->db->query($sql);
-            if($result){
-                if($result->num_rows > 0){
-                    return $result;
-                }else{
-                    return false;
-                }
-            }
-        }
-        
-        public function read_equal_numPar(){
-            $sql = "SELECT numPar.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_numerosParte AS numPar INNER JOIN _status ON _status.skStatus = numPar.skStatus WHERE 1=1 ";
-            if(!empty($this->numPar['skNumeroParte'])){
-                $sql .=" AND (numPar.skNumeroParte = '".$this->numPar['skNumeroParte']."') ";
-            }
-            $result = $this->db->query($sql);
-            if($result){
-                if($result->num_rows > 0){
-                    return $result;
-                }else{
-                    return false;
-                }
-            }
-        }
-
-        public function read_equal_numparfraran(){
-            $sql = "SELECT numparfraran.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_numerosParte_fraccionesArancelarias AS numparfraran INNER JOIN _status ON _status.skStatus = numparfraran.skStatus WHERE 1=1 ";
-            if(!empty($this->numparfraran['skNumeroParte'])){
-                $sql .=" AND (numparfraran.skNumeroParte = '".$this->numparfraran['skNumeroParte']."') ";
-            }
-            $result = $this->db->query($sql);
-            if($result){
-                if($result->num_rows > 0){
-                    return $result;
-                }else{
-                    return false;
-                }
-            }
-        }
-
-        public function read_equal_fraAraDes(){
-            $sql = "SELECT fraAraDes.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_fraccionesArancelarias_descripcionFraccion AS fraAraDes INNER JOIN _status ON _status.skStatus = fraAraDes.skStatus WHERE 1=1 ";
-            if(!empty($this->fraAraDes['skFraccionArancelaria'])){
-                $sql .=" AND (fraAraDes.skFraccionArancelaria = '".$this->fraAraDes['skFraccionArancelaria']."') ";
-            }
-            $result = $this->db->query($sql);
-            if($result){
-                if($result->num_rows > 0){
-                    return $result;
-                }else{
-                    return false;
-                }
-            }
-        }
-
-        public function read_equal_desArc(){
-            $sql = "SELECT desArc.*, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_descripcionFraccion_archivos AS desArc INNER JOIN _status ON _status.skStatus = desArc.skStatus WHERE 1=1 ";
-            if(!empty($this->desArc['skFraccionArancelariaDescripcion'])){
-                $sql .=" AND (desArc.skFraccionArancelariaDescripcion = '".$this->desArc['skFraccionArancelariaDescripcion']."') ";
-            }
-            $result = $this->db->query($sql);
-            if($result){
-                if($result->num_rows > 0){
-                    return $result;
-                }else{
-                    return false;
-                }
-            }
-        }
-
-        public function create_cat_descripcionFraccion_archivos(){
-            $sql = "INSERT INTO cat_descripcionFraccion_archivos (skArchivoFraccionArancelaria,skFraccionArancelariaDescripcion,sArchivo,skStatus) "
-                    . "VALUES ('".$this->desArc['skArchivoFraccionArancelaria']."','".$this->desArc['skFraccionArancelariaDescripcion']."','".$this->desArc['sArchivo']."','AC')";
-            $result = $this->db->query($sql); 
-            if($result){
-                return $this->desArc['skFraccionArancelariaDescripcion'];
-            }else{
-                return false;
-            }
-        }
-        
-        public function update_cat_descripcionFraccion_archivos(){
-            $sql = "UPDATE cat_descripcionFraccion_archivos SET "
-                    . "";
-            $result = $this->db->query($sql);echo '<hr>'.$sql;
-            if($result){
-                return $this->desArc['skFraccionArancelariaDescripcion'];
-            }else{
-                return false;
-            }
-        }
-        
-        public function create_cat_fraccionesArancelarias_descripcionFraccion(){
-            $sql = "INSERT INTO cat_fraccionesArancelarias_descripcionFraccion ("
-                    . "skFraccionArancelariaDescripcion,"
-                    . "skFraccionArancelaria,"
-                    . "sDescripcion,"
-                    . "sDescripcionIngles,"
-                     . "skStatus,"
-                    . "dFechaCreacion,"
-                    . "skUsersCreacion"
-                     . ") VALUES ("
-                    . "'".$this->fraAraDes['skFraccionArancelariaDescripcion']."',"
-                    . "'".$this->fraAraDes['skFraccionArancelaria']."',"
-                    . "'".$this->fraAraDes['sDescripcion']."',"
-                    . "'".$this->fraAraDes['sDescripcionIngles']."',"
-                    . "'AC',"
-                    . "CURRENT_TIMESTAMP,"
-                    . "'".$this->fraAraDes['skUsersCreacion']."'"
-                     . ")";
-                 //  echo $sql;
-                  
-            $result = $this->db->query($sql);
-            if($result){
-                return $this->fraAraDes['skFraccionArancelariaDescripcion'];
-            }else{
-                return false;
-            }
-        }
-        
-        public function update_cat_fraccionesArancelarias_descripcionFraccion(){
-            $sql = "UPDATE cat_fraccionesArancelarias_descripcionFraccion SET "
-                    . "sDescripcion = '".$this->fraAraDes['sDescripcion']."',"
-                    . "sDescripcionIngles = '".$this->fraAraDes['sDescripcionIngles']."',"
-                    . "sModelo = '".$this->fraAraDes['sModelo']."',"
-                    . "skStatus = '".$this->fraAraDes['skStatus']."',"
-                    . "dFechaModificacion = '".$this->fraAraDes['dFechaModificacion']."',"
-                    . "skUsersModificacion = '".$this->fraAraDes['skUsersModificacion']."',"
-                    . " skFraccionArancelariaDescripcion = '".$this->fraAraDes['skFraccionArancelariaDescripcion']."' WHERE skFraccionArancelariaDescripcion = '".$this->fraAraDes['skFraccionArancelariaDescripcion']."'";
-            $result = $this->db->query($sql);
-            if($result){
-                return $this->fraAraDes['skFraccionArancelariaDescripcion'];
-            }else{
-                return false;
-            }
-        }
-        /* TERMINA cat_descripcionFraccion_archivos */
-        
-        /* TERMINA MODULO DE EMPRESAS clasifiación arancelaria */
-        
-        
-        
-        
-
-        /* COMIENZA create_cat_numeros_partes */
-        public function create_cat_numeroParte(){
-            $sql = "INSERT INTO cat_numerosParte (skNumeroParte,sNombre,sDescripcion,skStatus,dFechaCreacion,skUsersCreacion) 
-            VALUES 
-            ('".$this->numPar['skNumeroParte']."',
-            '".$this->numPar['sNombre']."',
-            '".$this->numPar['sDescripcion']."',
-            '".$this->numPar['skStatus']."',
-             CURRENT_TIMESTAMP,
-            '".$this->numPar['skUsersCreacion']."'
-            )";
-            
-            //echo $sql;
-           
-            $result = $this->db->query($sql);
-            if($result){
-                return $this->numPar['skNumeroParte'];
-            }else{
-                return false;
-            }
-        }
-          
-          public function update_cat_numeros_partes(){
-                $sql = "UPDATE cat_numerosParte SET ";
-                
-                if(!empty($this->numPar['sNombre'])){
-                    $sql .=" sNombre = '".$this->numPar['sNombre']."' ,";
-                }
-                 if(!empty($this->numPar['sDescripcion'])){
-                    $sql .=" sDescripcion = '".$this->numPar['sDescripcion']."' ,";
-                }
-                if(!empty($this->numPar['skStatus'])){
-                    $sql .=" skStatus = '".$this->numPar['skStatus']."' ,";
-                }
-                $sql .= " skNumeroParte = '".$this->numPar['skNumeroParte']."' WHERE skNumeroParte = '".$this->numPar['skNumeroParte']."' LIMIT 1";
-               
-                $result = $this->db->query($sql);
-                if($result){
-                    return $this->numPar['skNumeroParte'];
-                }else{
-                    return false;
-                }
-            }
-          /* TERMINA create_cat_numeros_partes */
-        
-        public function create_cat_numparfraran(){
-            $sql = "INSERT INTO cat_numerosParte_fraccionesArancelarias (skFraccionArancelaria,skNumeroParte,sNombre,skStatus,dFechaCreacion,skUsersCreacion) 
-            VALUES ('".$this->numparfraran['skFraccionArancelaria']."','".$this->numparfraran['skNumeroParte']."','".$this->numparfraran['sNombre']."',
-                    '".$this->numparfraran['skStatus']."',CURRENT_TIMESTAMP,'".$this->numparfraran['skUsersCreacion']."')";
-            $result = $this->db->query($sql);
-           // echo $sql;
-         
-            if($result){
-                return $this->numparfraran['skFraccionArancelaria'];
-            }else{
-                return false;
-            }
-        }
-        
-        public function update_numparfraran(){
-                $sql = "UPDATE cat_numerosParte_fraccionesFraccion SET ";
-                
-                if(!empty($this->numparfraran['sNombre'])){
-                    $sql .=" sNombre = '".$this->numparfraran['sNombre']."' ,";
-                }
-                 if(!empty($this->numparfraran['sDescripcion'])){
-                    $sql .=" sDescripcion = '".$this->numparfraran['sDescripcion']."' ,";
-                }
-                if(!empty($this->numparfraran['skStatus'])){
-                    $sql .=" skStatus = '".$this->numparfraran['skStatus']."' ,";
-                }
-                $sql .= " skFraccionArancelaria = '".$this->numparfraran['skFraccionArancelaria']."' WHERE skFraccionArancelaria = '".$this->numparfraran['skFraccionArancelaria']."' LIMIT 1";
-             //   echo $sql;
-              //  die();
-                $result = $this->db->query($sql);
-                if($result){
-                    return $this->numparfraran['skFraccionArancelaria'];
-                }else{
-                    return false;
-                }
-            }
-        
-        // COMIENZA SEGUNDA CLASIFICACIÓN //
         public function validarReferencia($datos = array()){
             $sql = "SELECT * FROM ope_recepciones_documentos rd WHERE rd.sReferencia = '".trim($datos['sReferencia'])."'";
             $result = $this->db->query($sql);
@@ -1128,12 +650,41 @@
                 }
             }
         }
+        public function existeSegundaClasificacion(){
+            if(!empty($this->cla['skClasificacion'])){
+                $sql = "SELECT * FROM cat_clasificacionSegunda WHERE skClasificacion = '".$this->cla['skClasificacion']."'";
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+            if(!empty($this->cla['sReferencia'])){
+                $sql = "SELECT * FROM cat_clasificacionSegunda WHERE sReferencia = '".$this->cla['sReferencia']."'";
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+            return false;
+        }
         public function segcla_form_getMercancias(){
-            $sql = "SELECT cla.*, rd.sPedimento, emp.sNombre AS empresa, claMer.sFactura, claMer.sFraccion, claMer.sDescripcion, claMer.sDescripcionIngles, claMer.sNumeroParte, claMer.iSecuencia, CONCAT(u.sName,' ',u.sLastNamePaternal,' ',u.sLastNameMaternal) AS ejecutivo, CONCAT(usr.sName,' ',usr.sLastNamePaternal,' ',usr.sLastNameMaternal) AS clasificador, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacion AS cla "
+            $clasificacion = "cat_clasificacion"; $clasificacionMercancia = "cat_clasificacionMercancia";
+            if($this->existeSegundaClasificacion()){
+                $clasificacion = "cat_clasificacionSegunda"; $clasificacionMercancia = "cat_clasificacionSegundaMercancia";
+            }
+            $sql = "SELECT cla.*, rd.sPedimento, emp.sNombre AS empresa, claMer.sFactura, claMer.sFraccion, claMer.sDescripcion, claMer.sDescripcionIngles, claMer.sNumeroParte, claMer.iSecuencia, CONCAT(u.sName,' ',u.sLastNamePaternal,' ',u.sLastNameMaternal) AS ejecutivo, CONCAT(usr.sName,' ',usr.sLastNamePaternal,' ',usr.sLastNameMaternal) AS clasificador, _status.sName AS status, _status.sHtml AS htmlStatus FROM ".$clasificacion." AS cla "
                 . "INNER JOIN ope_recepciones_documentos rd ON rd.sReferencia = cla.sReferencia "
                 . "INNER JOIN cat_empresas emp ON emp.skEmpresa = rd.skEmpresa "
                 . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
-                . "INNER JOIN cat_clasificacionMercancia AS claMer ON claMer.skClasificacion = cla.skClasificacion "
+                . "INNER JOIN ".$clasificacionMercancia." AS claMer ON claMer.skClasificacion = cla.skClasificacion "
                 . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion "
                 . "LEFT JOIN _users AS usr ON usr.skUsers = cla.skUsersModificacion WHERE 1=1 ";
             
@@ -1160,11 +711,15 @@
             }
         }
         public function segcla_form_count(){
-            $sql = "SELECT COUNT(*) AS total FROM cat_clasificacion AS cla "
+            $clasificacion = "cat_clasificacion"; $clasificacionMercancia = "cat_clasificacionMercancia";
+            if(!empty($this->cla['skClasificacion'])){
+                $clasificacion = "cat_clasificacionSegunda"; $clasificacionMercancia = "cat_clasificacionSegundaMercancia";
+            }
+            $sql = "SELECT COUNT(*) AS total FROM ".$clasificacion." AS cla "
                 . "INNER JOIN ope_recepciones_documentos rd ON rd.sReferencia = cla.sReferencia "
                 . "INNER JOIN cat_empresas emp ON emp.skEmpresa = rd.skEmpresa "
                 . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
-                . "INNER JOIN cat_clasificacionMercancia AS claMer ON claMer.skClasificacion = cla.skClasificacion "
+                . "INNER JOIN ".$clasificacionMercancia." AS claMer ON claMer.skClasificacion = cla.skClasificacion "
                 . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE 1=1 ";
             $this->segcla_form_criteriosMercancia($sql);
             //exit($sql);
@@ -1203,6 +758,9 @@
             if(!empty($this->claMer['sFactura'])){
                 $sql .=" AND claMer.sFactura like '%".$this->claMer['sFactura']."%'";
             }
+            if(!empty($this->claMer['iSecuencia'])){
+                $sql .=" AND claMer.iSecuencia like '%".$this->claMer['iSecuencia']."%'";
+            }
             if(!empty($this->claMer['sFraccion'])){
                 $sql .=" AND claMer.sFraccion like '".$this->claMer['sFraccion']."%'";
             }
@@ -1217,8 +775,34 @@
             }
             return $sql;
         }
-        public function asd(){
-            
+        public function deleteClasificacionSegunda(){
+            $sql = "DELETE FROM cat_clasificacionSegunda WHERE skClasificacion = '".$this->cla['skClasificacion']."'";
+            $result = $this->db->query($sql);
+            if(!$result){
+                return false;
+            }
+            return true;
+        }
+        public function insertarClasificacionSegunda(){
+            $sql = "INSERT INTO cat_clasificacionSegunda (SELECT
+                skClasificacion,sReferencia,NULL,'AC','".date('Y-m-d H:i:s')."','".$_SESSION['session']['skUsers']."',NULL,NULL,'".date('Y-m-d H:i:s')."',1
+                FROM cat_clasificacion c1 WHERE c1.skClasificacion = '".$this->cla['skClasificacion']."')";
+            $result = $this->db->query($sql);
+            if(!$result){
+                return false;
+            }
+            return true;
+        }
+        
+        public function insertarClasificacionSegundaMercancias(){
+            $sql = "INSERT INTO cat_clasificacionSegundaMercancia (SELECT
+                skClasificacionMercancia,skClasificacion,sFactura,sFraccion,sDescripcion,sDescripcionIngles,sNumeroParte,'AC','".date('Y-m-d H:i:s')."','".$_SESSION['session']['skUsers']."',NULL,NULL,iSecuencia,'".date('Y-m-d H:i:s')."'
+                FROM cat_clasificacionMercancia cm1 WHERE cm1.skClasificacion = '".$this->cla['skClasificacion']."')";
+            $result = $this->db->query($sql);
+            if(!$result){
+                return false;
+            }
+            return true;
         }
         // TERMINA SEGUNDA CLASIFICACIÓN //
 
