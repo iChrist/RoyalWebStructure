@@ -47,6 +47,19 @@
                     ,'limit'        =>  ''
                     ,'offset'       =>  ''
                 );
+								public $sociosEmpresas = array(
+                    'skEmpresa'       =>  ''
+                    ,'skEmpresaDistinta'       =>  ''
+                    ,'sNombreCorto'       =>  ''
+                    ,'sRFC'       =>  ''
+                    ,'sNombre'       =>  ''
+                    ,'skCorresponsalia'       =>  ''
+                    ,'skPromotor1'       =>  ''
+                    ,'skPromotor2'       =>  ''
+                    ,'skStatus'     =>  ''
+                    ,'limit'        =>  ''
+                    ,'offset'       =>  ''
+                );
                 public $conTipEmp = array(
                     'skTipoEmpresa'=>null
                     ,'skTipoTramite'=>null
@@ -237,7 +250,6 @@
                 }
             }
             /* TERMINA MODULO areas */
-
             /* COMIENZA MODULO promotores */
             public function count_promotores(){
                 $sql = "SELECT COUNT(*) AS total FROM cat_promotores WHERE 1=1 ";
@@ -332,7 +344,6 @@
                     return false;
                 }
             }
-
             public function update_promotores(){
                 $sql = "UPDATE cat_promotores SET ";
                 if(!empty($this->promotores['sNombre'])){
@@ -565,9 +576,11 @@
              /* TERMINA MODULO DE TIPOS DE EMPRESAS*/
 
 
-
+						 /* EMPIEZA MODULO  DE EMPRESAS*/
             public function count_empresas(){
-                $sql = "SELECT COUNT(*) AS total FROM cat_empresas WHERE 1=1 ";
+                $sql = "SELECT COUNT(*) AS total FROM
+								cat_empresas ce
+								WHERE 1=1 ";
                 if(!empty($this->empresas['skEmpresa'])){
                     $sql .=" AND skEmpresa = '".$this->empresas['skEmpresa']."'";
                 }
@@ -644,7 +657,8 @@
                     }
                 }
             }
-            public function read_like_empresas(){
+            /*public function read_like_empresas(){
+
                 $sql = "SELECT DISTINCT
                 ce.*,  st.sName AS STATUS,
                 st.sHtml AS htmlStatus,
@@ -683,8 +697,72 @@
                 if(!empty($this->empresas['skStatus'])){
                     $sql .=" AND ce.skStatus like '%".$this->empresas['skStatus']."%'";
                 }
-                 if(!empty($this->tipoempresas['skTipoEmpresa'])){
+                if(!empty($this->tipoempresas['skTipoEmpresa'])){
                     $sql .=" AND rce.skTipoEmpresa = '".$this->tipoempresas['skTipoEmpresa']."'";
+                }
+                $sql .=" ORDER BY ce.sNombre ASC ";
+                if(is_int($this->empresas['limit'])){
+                    if(is_int($this->empresas['offset'])){
+                        $sql .= " LIMIT ".$this->empresas['offset']." , ".$this->empresas['limit'];
+                    }else{
+                        $sql .= " LIMIT ".$this->empresas['limit'];
+                    }
+                }
+                //echo $sql;
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }*/
+						public function read_like_empresas(){
+                $sql = "
+											SELECT
+											ce.*,st.sName AS STATUS,
+											st.sHtml AS htmlStatus,
+											cte.sNombre AS tipoEmpresa,
+											cec.sNombre AS corresponsalia,
+											cp1.sNombre AS promotor1,
+											cp2.sNombre AS promotor2
+											FROM rel_empresas_socios res
+											LEFT JOIN cat_tipos_empresas cte ON cte.skTipoEmpresa = res.skTipoEmpresa
+											LEFT JOIN cat_empresas ce ON ce.skEmpresa = res.skEmpresa
+											LEFT JOIN _status st ON  st.skStatus = ce.skStatus
+											LEFT JOIN cat_promotores cp1 ON cp1.skPromotores = res.skPromotor1
+											LEFT JOIN cat_promotores cp2 ON cp2.skPromotores = res.skPromotor2
+											LEFT JOIN rel_empresas_socios resc ON resc.skSocioEmpresa = res.skCorresponsalia
+											LEFT JOIN cat_empresas cec ON cec.skEmpresa = resc.skEmpresa
+											WHERE 1=1 ";
+
+                if(!empty($_SESSION['session']['skSocioEmpresaPropietario'])){
+                    $sql .=" AND res.skSocioEmpresaP = '".$_SESSION['session']['skSocioEmpresaPropietario']."'";
+                }
+								if(!empty($this->empresas['skEmpresa'])){
+                    $sql .=" AND ce.skEmpresa = '".$this->empresas['skEmpresa']."'";
+                }
+                if(!empty($this->empresas['sNombre'])){
+                    $sql .=" AND ce.sNombre like '%".$this->empresas['sNombre']."%'";
+                }
+                 if(!empty($this->empresas['sNombreCorto'])){
+                    $sql .=" AND ce.sNombreCorto like '%".$this->empresas['sNombreCorto']."%'";
+                }
+                if(!empty($this->empresas['sRFC'])){
+                    $sql .=" AND ce.sRFC like '%".$this->empresas['sRFC']."%'";
+                }
+                if(!empty($this->empresas['skCorresponsalia'])){
+                    $sql .=" AND res.skCorresponsalia = '".$this->empresas['skCorresponsalia']."'";
+                }
+                if(!empty($this->empresas['skPromotor1'])){
+                    $sql .=" AND (res.skPromotor1 = '".$this->empresas['skPromotor1']."' OR res.skPromotor2 = '".$this->empresas['skPromotor2']."')";
+                }
+                if(!empty($this->empresas['skStatus'])){
+                    $sql .=" AND ce.skStatus like '%".$this->empresas['skStatus']."%'";
+                }
+                if(!empty($this->tipoempresas['skTipoEmpresa'])){
+                    $sql .=" AND res.skTipoEmpresa = '".$this->tipoempresas['skTipoEmpresa']."'";
                 }
                 $sql .=" ORDER BY ce.sNombre ASC ";
                 if(is_int($this->empresas['limit'])){
@@ -705,7 +783,11 @@
                 }
             }
             public function create_empresas(){
-                $sql = "INSERT INTO cat_empresas (skEmpresa,sNombre,sNombreCorto,sRFC,skStatus, dFechaCreacion,skCorresponsalia,skPromotor1,skPromotor2) VALUES ('".$this->empresas['skEmpresa']."','".$this->empresas['sNombre']."','".$this->empresas['sNombreCorto']."','".$this->empresas['sRFC']."','".$this->empresas['skStatus']."', CURRENT_TIMESTAMP(),'".$this->empresas['skCorresponsalia']."','".$this->empresas['skPromotor1']."','".$this->empresas['skPromotor2']."')";
+                $sql = "INSERT INTO cat_empresas (skEmpresa,sNombre,sNombreCorto,sRFC,skStatus, dFechaCreacion,skCorresponsalia,skPromotor1,skPromotor2)
+								VALUES ('".$this->empresas['skEmpresa']."','".$this->empresas['sNombre']."',
+												'".$this->empresas['sNombreCorto']."','".$this->empresas['sRFC']."',
+												'".$this->empresas['skStatus']."', CURRENT_TIMESTAMP(),'".$this->empresas['skCorresponsalia']."',
+												'".$this->empresas['skPromotor1']."','".$this->empresas['skPromotor2']."')";
                 //echo $sql;
                 //die();
                 $result = $this->db->query($sql);
@@ -799,6 +881,112 @@
                     }
                 }
             }
+						/* TERMINA MODULO DE EMPRESAS*/
+
+						/* EMPIEZA MODULO DE SOCIOS DE EMPRESAS*/
+						public function count_socios(){
+								$sql = "SELECT COUNT(*) AS total FROM
+								rel_empresas_socios res
+								INNER JOIN cat_empresas ce ON ce.skEmpresa = res.skEmpresa
+								WHERE 1=1 ";
+								if(!empty($_SESSION['session']['skSocioEmpresaPropietario'])){
+                    $sql .=" AND res.skSocioEmpresaP = '".$_SESSION['session']['skSocioEmpresaPropietario']."'";
+                }
+								if(!empty($this->sociosEmpresas['skEmpresa'])){
+										$sql .=" AND ce.skEmpresa = '".$this->sociosEmpresas['skEmpresa']."'";
+								}
+								if(!empty($this->sociosEmpresas['sNombre'])){
+										$sql .=" AND ce.sNombre like '%".$this->sociosEmpresas['sNombre']."%'";
+								}
+								if(!empty($this->sociosEmpresas['sNombreCorto'])){
+										$sql .=" AND ce.sNombreCorto like '%".$this->sociosEmpresas['sNombreCorto']."%'";
+								}
+								if(!empty($this->sociosEmpresas['sRFC'])){
+										$sql .=" AND ce.sRFC like '%".$this->sociosEmpresas['sRFC']."%'";
+								}
+								if(!empty($this->sociosEmpresas['skCorresponsalia'])){
+										$sql .=" AND res.skCorresponsalia = '".$this->sociosEmpresas['skCorresponsalia']."'";
+								}
+								if(!empty($this->sociosEmpresas['skPromotor1'])){
+										$sql .=" AND (res.skPromotor1 = '".$this->sociosEmpresas['skPromotor1']."' OR res.skPromotor2 = '".$this->sociosEmpresas['skPromotor2']."')";
+								}
+								if(!empty($this->sociosEmpresas['skStatus'])){
+										$sql .=" AND ce.cat_empresas.skStatus like '%".$this->sociosEmpresas['skStatus']."%'";
+								}
+
+								$result = $this->db->query($sql);
+								if($result){
+										if($result->num_rows > 0){
+												return $result;
+										}else{
+												return false;
+										}
+								}
+						}
+						public function read_like_socios(){
+                $sql = " SELECT
+											ce.*,st.sName AS STATUS,
+											st.sHtml AS htmlStatus,
+											cte.sNombre AS tipoEmpresa,
+											cec.sNombre AS corresponsalia,
+											cp1.sNombre AS promotor1,
+											cp2.sNombre AS promotor2,
+											cep.sNombre AS propietario
+											FROM rel_empresas_socios res
+											LEFT JOIN cat_tipos_empresas cte ON cte.skTipoEmpresa = res.skTipoEmpresa
+											LEFT JOIN cat_empresas ce ON ce.skEmpresa = res.skEmpresa
+											LEFT JOIN _status st ON  st.skStatus = ce.skStatus
+											LEFT JOIN cat_promotores cp1 ON cp1.skPromotores = res.skPromotor1
+											LEFT JOIN cat_promotores cp2 ON cp2.skPromotores = res.skPromotor2
+											LEFT JOIN rel_empresas_socios resc ON resc.skSocioEmpresa = res.skCorresponsalia
+											LEFT JOIN cat_empresas cec ON cec.skEmpresa = resc.skEmpresa
+											LEFT JOIN rel_empresas_socios rep ON rep.skSocioEmpresa = res.skSocioEmpresaP
+											LEFT JOIN cat_empresas cep ON cep.skEmpresa = rep.skEmpresa
+											WHERE 1=1 ";
+                    $sql .=" AND res.skSocioEmpresaP = '".$_SESSION['session']['skSocioEmpresaPropietario']."'";
+								if(!empty($this->sociosEmpresas['skEmpresa'])){
+                    $sql .=" AND ce.skEmpresa = '".$this->sociosEmpresas['skEmpresa']."'";
+                }
+                if(!empty($this->sociosEmpresas['sNombre'])){
+                    $sql .=" AND ce.sNombre like '%".$this->sociosEmpresas['sNombre']."%'";
+                }
+                if(!empty($this->sociosEmpresas['sNombreCorto'])){
+                    $sql .=" AND ce.sNombreCorto like '%".$this->sociosEmpresas['sNombreCorto']."%'";
+                }
+                if(!empty($this->sociosEmpresas['sRFC'])){
+                    $sql .=" AND ce.sRFC like '%".$this->sociosEmpresas['sRFC']."%'";
+                }
+                if(!empty($this->sociosEmpresas['skCorresponsalia'])){
+                    $sql .=" AND res.skCorresponsalia = '".$this->sociosEmpresas['skCorresponsalia']."'";
+                }
+                if(!empty($this->sociosEmpresas['skPromotor1'])){
+                    $sql .=" AND (res.skPromotor1 = '".$this->sociosEmpresas['skPromotor1']."' OR res.skPromotor2 = '".$this->sociosEmpresas['skPromotor2']."')";
+                }
+                if(!empty($this->sociosEmpresas['skStatus'])){
+                    $sql .=" AND ce.skStatus like '%".$this->sociosEmpresas['skStatus']."%'";
+                }
+                if(!empty($this->tipoempresas['skTipoEmpresa'])){
+                    $sql .=" AND res.skTipoEmpresa = '".$this->tipoempresas['skTipoEmpresa']."'";
+                }
+                $sql .=" ORDER BY ce.sNombre ASC ";
+                if(is_int($this->sociosEmpresas['limit'])){
+                    if(is_int($this->sociosEmpresas['offset'])){
+                        $sql .= " LIMIT ".$this->sociosEmpresas['offset']." , ".$this->sociosEmpresas['limit'];
+                    }else{
+                        $sql .= " LIMIT ".$this->sociosEmpresas['limit'];
+                    }
+                }
+
+                $result = $this->db->query($sql);
+                if($result){
+                    if($result->num_rows > 0){
+                        return $result;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+						/* TERMINA MODULO DE SOCIOS DE EMPRESAS*/
             // OBTENER LOS TIPOS DE TRAMITE (IMPO,EXPO) //
             public function read_tipos_tramites(){
                 $sql="SELECT tipTra.* FROM cat_tipos_tramites AS tipTra WHERE skStatus = 'AC' ORDER BY tipTra.sNombre ASC ";
@@ -1133,5 +1321,8 @@
                     return false;
                 }
             }
+
+
+
 	}
 ?>
