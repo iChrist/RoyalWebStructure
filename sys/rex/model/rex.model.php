@@ -32,15 +32,15 @@ Class Rex_Model Extends Core_Model {
         return $records;
     }
 
-    public function insertar($pedimento = null,$referencia = null){
+    public function insertar(){
 
+        $skReferenciaExterna =  substr(md5(microtime()), 1, 32);
         $sql_insert = "
-            INSERT INTO `royalweb_test_gya`.`ope_referenciasExternas` (
+            INSERT INTO `ope_referenciasExternas` (
                 `skReferenciaExterna`, 
                 `skSocioPropietario`, 
                 `skEmpresaPropietario`, 
                 `skSocioImportador`, 
-                `skSocioPromotor`, 
                 `skAlmacen`, 
                 `skEstatus`, 
                 `sPedimento`, 
@@ -63,41 +63,50 @@ Class Rex_Model Extends Core_Model {
             ) 
 
             VALUES (
-                'LeReferenciaExterna',  
-                'SocioPropietario', 
-                'EMpresaPropietario', 
-                'SocioImportador', 
-                NULL, 
-                'amlsc', 
-                'status', 
-                'Pedimentoquepide', 
-                'Referencia', 
-                'MecanciaSwag', 
-                'GuiaMaster', 
-                'GuiaJAUS', 
-                '666', 
-                'skUsairuoCreacion', 
-                'LeFechaCreacion', 
-                'LeFechaPrevio', 
-                'LeFechaDespacho', 
-                'LeFechaClasificacion', 
-                'LeFechaGlosa', 
-                'LeFechaCapturaPedimento', 
-                'LeFechaRevalicadion', 
-                'LeFechaFacturaciaoon', 
-                '3', 
-                '33333'
-            );" ;
+                '$skReferenciaExterna',  
+                '" . $this->db->real_escape_string($_SESSION["session"]["skSocioEmpresaPropietario"]) . "', 
+                '" . $this->db->real_escape_string($_SESSION["session"]["skEmpresaPropietario"])."', 
+                '" . $this->db->real_escape_string($_POST["skSocioImportador"]) . "', 
+                '" . $this->db->real_escape_string($_POST["skAlmacen"]) . "', 
+                '" . $this->db->real_escape_string($_POST["skEstatus"]) . "', 
+                '" . $this->db->real_escape_string($_POST["sPedimento"]) . "', 
+                '" . $this->db->real_escape_string($_POST["sReferencia"]) . "', 
+                '" . $this->db->real_escape_string($_POST["sMercancia"]) . "', 
+                '" . $this->db->real_escape_string($_POST["sGuiaMaster"]) . "', 
+                '" . $this->db->real_escape_string($_POST["sGuiaHouse"]) . "', 
+                '".$_POST["iBultos"]."', 
+                '".$_SESSION["session"]["skUsers"]."', 
+                NOW(), 
+                '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaPrevio"])->format('Y-m-d')."', 
+                '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaDespacho"])->format('Y-m-d')."', 
+                '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaClasificacion"])->format('Y-m-d')."', 
+                '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaGlosa"])->format('Y-m-d')."', 
+                '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaCapturaPedimento"])->format('Y-m-d')."', 
+                '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaRevalidacion"])->format('Y-m-d')."', 
+                '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaFacturacion"])->format('Y-m-d')."', 
+                '".$_POST["iDeposito"]."', 
+                '".$_POST["iSaldo"]."');" ;
+        //die($sql_insert);
 
-        if ($pedimento != null && $referencia != null ) {
-            $sql = "INSERT INTO `ope_referenciasExternas` (`sPedimento`, `sReferencia`) VALUES ('$pedimento', '$referencia');";
-            $result = $this->db->query($sql);
+        if (isset($_POST) ) {
+            
+            $result = $this->db->query($sql_insert);
             return true;
 
         }else{
             return false;
         }
         
+    }
+
+    public function getReferencia($skID = NULL)
+    {
+        $r = $this->db->query("SELECT * FROM ope_referenciasExternas WHERE skReferenciaExterna = '$skID'");
+        if ($this->db->affected_rows > 0){
+            return $r->fetch_assoc();
+        }else{
+            return false;
+        }
     }
 
     public function getAlmacenes()

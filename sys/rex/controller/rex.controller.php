@@ -40,13 +40,16 @@ Class Rex_Controller Extends Rex_Model {
         if(isset($_POST['axn']) && $_POST['axn'] =='insert'){
             return $this->refe_save();
         }
-        $this->load_view('refe-form',NULL,true);
+        if (isset($_GET["p1"])){
+            $this->data['datos'] = $this->getReferencia($_GET["p1"]);
+        }
+        $this->load_view('refe-form',$this->data,true);
     }
 
     public function refe_save()
     {
         
-        $le = $this->insertar($_POST);
+        $le = $this->insertar();
 
         if(!$le){
             $this->data['message'] = "Hubo un error al guardar el registro ";

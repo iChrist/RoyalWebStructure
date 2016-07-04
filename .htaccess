@@ -2,6 +2,7 @@
 SetEnv TZ America/Monterrey
 
 Options -Indexes
+Options -MultiViews
 Options +FollowSymLinks
 RewriteEngine on
 ErrorDocument 404 /core/404.php
