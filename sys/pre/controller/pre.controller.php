@@ -99,7 +99,7 @@
 										}
 
 										while($row = $this->data['data']->fetch_assoc()){
-												$actions = $this->printModulesButtons(2,array($row['skSolicitudPrevio']),$row['skUsuarioCreacion']);
+												$actions = $this->printModulesButtons(2,array($row['skSolicitudPrevio']));
 												array_push($records['data'], array(
 													!empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
 														 ,utf8_encode($row['Estatus'])
@@ -177,6 +177,17 @@
 
 
 		}
+		public function prevaut_form(){
+			$this->data['message'] = '';
+			$this->data['response'] = true;
+			$this->data['datos'] = false;
+			if (isset($_GET['p1'])) {
+					$this->previos['skSolicitudPrevio'] = $_GET['p1'];
+					$this->data['datos'] = parent::autcan_previo();
+			}
+			$this->load_view('prevaut-form', $this->data);
+			return true;
 
+		}
 	}
 ?>

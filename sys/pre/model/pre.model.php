@@ -34,10 +34,10 @@
 		}
 		public function read_previos(){
 				$sql = "SELECT 	osp.*,
-				cs.sName AS Estatus,
-				cs.sHtml As Icono
+				cs.sNombre AS Estatus,
+				cs.sIcono As Icono
 				FROM ope_solicitudes_previos  osp
-				LEFT JOIN _status  cs ON cs.skStatus = osp.skEstatus
+				LEFT JOIN cat_estatus  cs ON cs.skEstatus = osp.skEstatus
 				WHERE 1=1";
 
 				$result = $this->db->query($sql);
@@ -164,6 +164,49 @@
  							}
  					}
  		 }
+		public function autcan_previo(){
+			$sql= "SELECT LPAD(osp.ikSolicitudPrevio, 5, '0') AS codigo,
+							osp.skSolicitudPrevio AS skSolicitudPrevio,
+							ce.sNombre AS Estatus,
+							ce.sIcono AS iconoEstatus,
+							cei.sNombre AS importador,
+							cep.sNombre AS propietario,
+							cer.sNombre AS recinto,
+							osp.sMasterBL AS mbl,
+							osp.sContenedor AS contenedor,
+							osp.sSelloOrigen AS selloOrigen,
+							osp.sSelloFinal AS selloFinal,
+							osp.sNumeroFactura AS numeroFactura,
+							osp.sPais AS paisOrigen,
+							osp.dFechaSolicitud AS fechaSolicitud,
+							osp.dFechaProgramacion AS fechaProgramacion,
+							osp.dFechaPrevio AS fechaPrevio,
+							osp.dFechaApertura AS fechaApertura,
+							us.sName AS usuarioCreacion,
+							usj.sName AS usuarioEjecutivo,
+							ust.sName AS usuarioTramitador
+						FROM ope_solicitudes_previos osp
+						INNER JOIN cat_estatus ce ON ce.skEstatus = osp.skEstatus
+						INNER JOIN rel_empresas_socios resi ON resi.skSocioEmpresa = osp.skSocioImportador
+						INNER JOIN cat_empresas cei ON cei.skEmpresa = resi.skEmpresa
+						INNER JOIN rel_empresas_socios resp ON resp.skSocioEmpresa = osp.skSocioPropietario
+						INNER JOIN cat_empresas cep ON cep.skEmpresa = resp.skEmpresa
+						INNER JOIN rel_empresas_socios resr ON resr.skSocioEmpresa = osp.skSocioRecinto
+						INNER JOIN cat_empresas cer ON cer.skEmpresa = resr.skEmpresa
+						INNER JOIN _users us ON us.skUsers = osp.skUsuarioCreacion
+						INNER JOIN _users usj ON usj.skUsers = osp.skUsuarioEjecutivo
+						INNER JOIN _users ust ON ust.skUsers = osp.skUsuarioTramitador
+						WHERE osp.skSolicitudPrevio = '28e9e18dc56114a8c9a198a530ee21f' ";
+						//Poner el numero de previo
+						$result = $this->db->query($sql);
+		        if ($result) {
+		            if ($result->num_rows > 0) {
+		                return $result;
+		            } else {
+		                return false;
+		            }
+		        }
 
+		}
 	}
 ?>
