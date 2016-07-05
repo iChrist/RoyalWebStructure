@@ -18,7 +18,8 @@ Class Rex_Model Extends Core_Model {
     }
     
     /* COMIENZA MODULO (REX) */
-    public function getAreas($skStatus = null){
+    public function getAreas($skStatus = null)
+    {
         $sql = "SELECT * FROM areas";
         if($skStatus != null){ $sql .=" WHERE skStatus = '$skStatus'"; }
         $result = $this->db->query($sql);
@@ -32,7 +33,8 @@ Class Rex_Model Extends Core_Model {
         return $records;
     }
 
-    public function insertar(){
+    public function insertar()
+    {
 
         $skReferenciaExterna =  substr(md5(microtime()), 1, 32);
         $sql_insert = "
@@ -99,6 +101,48 @@ Class Rex_Model Extends Core_Model {
         
     }
 
+    public function updatear($skReferenciaExterna = NULL){
+        if ($skReferenciaExterna == NULL && $skReferenciaExterna != '') {
+            return false;
+        }
+        $sql_update = "
+            UPDATE `ope_referenciasExternas` SET  
+                `skSocioPropietario` = '".$this->db->real_escape_string($_SESSION["session"]["skSocioEmpresaPropietario"])."',
+                `skEmpresaPropietario` = '" . $this->db->real_escape_string($_SESSION["session"]["skEmpresaPropietario"])."', 
+                `skSocioImportador` = '" . $this->db->real_escape_string($_POST["skSocioImportador"]) . "',
+                `skAlmacen` = '" . $this->db->real_escape_string($_POST["skAlmacen"]) . "',
+                `skEstatus` = '" . $this->db->real_escape_string($_POST["skEstatus"]) . "', 
+                `sPedimento` ='" . $this->db->real_escape_string($_POST["sPedimento"]) . "', 
+                `sReferencia` = '" . $this->db->real_escape_string($_POST["sReferencia"]) . "', 
+                `sMercancia` = '" . $this->db->real_escape_string($_POST["sMercancia"]) . "',
+                `sGuiaMaster` = '" . $this->db->real_escape_string($_POST["sGuiaMaster"]) . "',  
+                `sGuiaHouse` = '" . $this->db->real_escape_string($_POST["sGuiaHouse"]) . "', 
+                `iBultos` = '".$_POST["iBultos"]."',  
+                `dFechaPrevio` = '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaPrevio"])->format('Y-m-d')."',  
+                `dFechaDespacho` = '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaDespacho"])->format('Y-m-d')."',
+                `dFechaClasificacion` = '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaClasificacion"])->format('Y-m-d')."', 
+                `dFechaGlosa` = '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaGlosa"])->format('Y-m-d')."',  
+                `dFechaCapturaPedimento` = '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaCapturaPedimento"])->format('Y-m-d')."', 
+                `dFechaRevalidacion` = '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaRevalidacion"])->format('Y-m-d')."',
+                `dFechaFacturacion` = '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaFacturacion"])->format('Y-m-d')."', 
+                `iDeposito` = '".$_POST["iDeposito"]."',  
+                `iSaldo` = '".$_POST["iSaldo"]."'
+
+                WHERE `skReferenciaExterna` = '$skReferenciaExterna';" ;
+        //die($sql_update);
+        
+
+        if (isset($_POST) ) {
+            
+            $result = $this->db->query($sql_update);
+            return true;
+
+        }else{
+            return false;
+        }
+        
+    }
+
     public function getReferencia($skID = NULL)
     {
         $r = $this->db->query("SELECT * FROM ope_referenciasExternas WHERE skReferenciaExterna = '$skID'");
@@ -142,23 +186,22 @@ Class Rex_Model Extends Core_Model {
 
     public function getSociosImportador($socioEmpresaP = false )
     {   
-        if ($socioEmpresaP === false || $socioEmpresaP != '') {
+        if ($socioEmpresaP === false || $socioEmpresaP === '') {
             return false;
         }
         
         $sql_socios = "SELECT 
                 rel_empresas_socios.skSocioEmpresa,
                 rel_empresas_socios.skEmpresa,
-                cat_empresas.sNombre as ''
+                cat_empresas.sNombre as 'Empresa'
                 FROM
                     rel_empresas_socios
                         INNER JOIN
                     cat_empresas ON (cat_empresas.skEmpresa = rel_empresas_socios.skEmpresa)
                 WHERE
-                    skSocioEmpresaP = '$socioEmpresaP'
+                    skSocioEmpresaP = 'da6997663e7411e6890d0025907ca43f'
                     AND skTipoEmpresa = 'CLIE'
                 ORDER BY sNombre;";
-
         $r = $this->db->query($sql_socios);
 
         if ($this->db->affected_rows > 0){
@@ -171,6 +214,8 @@ Class Rex_Model Extends Core_Model {
             return false;
         }
     }
+
+
 
     /* TERMINA MODULO (REX) */
 }

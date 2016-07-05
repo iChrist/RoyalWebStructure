@@ -1,20 +1,23 @@
 
-<pre>
+ <pre>
     <?php 
         echo print_r($_SESSION["session"],1);
         $fecha = DateTime::createFromFormat('d-m-Y', '30-07-2016');
-        echo $fecha->format('Y-m-d H:i:s');
+        //echo $fecha->format('Y-m-d H:i:s');
         $result = array();
         if($data['datos']){
             $result = $data['datos'];
         }
+        //echo (isset($result["dFechaFacturacion"])) ? $result["dFechaFacturacion"] : '' ;
+        //echo DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaFacturacion"])->format('d-m-Y');
+        //2016-07-26 00:00:00
         //(isset($result["sReferencia"])) ? echo $result["sReferencia"] : echo '' ;
     ?>
-</pre>
+</pre> 
 
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data"> 
     <input type="hidden" name="skReferenciaExterna"  id="skReferenciaExterna" value="<?php echo (isset($result['skReferenciaExterna'])) ? $result['skReferenciaExterna'] : '' ; ?>">
-    <input type="hidden" name="axn" id="insert" value="insert" ></input>
+    <input type="hidden" name="axn" id="anx" value="<?php echo (isset($result["sReferencia"])) ? 'update' : 'insert' ;?>" ></input>
     <div class="form-body">
 
         <div class="form-group">
@@ -36,7 +39,6 @@
                 <div class="input-icon right">
                     <i class="fa"></i>
                     <select class="form-control" id="skSocioImportador" name="skSocioImportador">
-                        <option value="FLow">Flow</option>
                     </select>
                 </div>
             </div>
@@ -127,7 +129,7 @@
             <label class="control-label col-md-2">Fecha de previo <span aria-required="true" class="required"> * </span></label>
             <div class="col-md-4">
                 <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
-                    <input type="text" id="dFechaPrevio" name="dFechaPrevio" class="form-control" >
+                    <input type="text" id="dFechaPrevio" name="dFechaPrevio" class="form-control" value="<?php echo (isset($result["dFechaPrevio"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaPrevio"])->format('d-m-Y') : '' ;?>">
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                     </span>
@@ -139,7 +141,7 @@
             <label class="control-label col-md-2">Fecha de despacho <span aria-required="true" class="required"> * </span></label>
             <div class="col-md-4">
                 <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
-                    <input type="text" id="dFechaDespacho" name="dFechaDespacho" class="form-control" >
+                    <input type="text" id="dFechaDespacho" name="dFechaDespacho" class="form-control" value="<?php echo (isset($result["dFechaDespacho"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaDespacho"])->format('d-m-Y') : '' ;?>">
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                     </span>
@@ -151,7 +153,7 @@
             <label class="control-label col-md-2">Fecha de clasificacion <span aria-required="true" class="required"> * </span></label>
             <div class="col-md-4">
                 <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
-                    <input type="text" id="dFechaClasificacion" name="dFechaClasificacion" class="form-control" >
+                    <input type="text" id="dFechaClasificacion" name="dFechaClasificacion" class="form-control" value="<?php echo (isset($result["dFechaClasificacion"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaClasificacion"])->format('d-m-Y') : '' ;?>">
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                     </span>
@@ -163,7 +165,7 @@
             <label class="control-label col-md-2">Fecha de glosa<span aria-required="true" class="required"> * </span></label>
             <div class="col-md-4">
                 <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
-                    <input type="text" id="dFechaGlosa" name="dFechaGlosa" class="form-control" >
+                    <input type="text" id="dFechaGlosa" name="dFechaGlosa" class="form-control" value="<?php echo (isset($result["dFechaGlosa"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaGlosa"])->format('d-m-Y') : '' ;?>">
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                     </span>
@@ -175,7 +177,7 @@
             <label class="control-label col-md-2">Fecha de captura de pedimento <span aria-required="true" class="required"> * </span></label>
             <div class="col-md-4">
                 <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
-                    <input type="text" id="dFechaCapturaPedimento" name="dFechaCapturaPedimento" class="form-control" >
+                    <input type="text" id="dFechaCapturaPedimento" name="dFechaCapturaPedimento" class="form-control" value="<?php echo (isset($result["dFechaCapturaPedimento"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaCapturaPedimento"])->format('d-m-Y') : '' ;?>">
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                     </span>
@@ -187,7 +189,7 @@
             <label class="control-label col-md-2">Fecha de revalidacion<span aria-required="true" class="required"> * </span></label>
             <div class="col-md-4">
                 <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
-                    <input type="text" id="dFechaRevalidacion" name="dFechaRevalidacion" class="form-control" >
+                    <input type="text" id="dFechaRevalidacion" name="dFechaRevalidacion" class="form-control" value="<?php echo (isset($result["dFechaRevalidacion"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaRevalidacion"])->format('d-m-Y') : '' ;?>">
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                     </span>
@@ -199,7 +201,7 @@
             <label class="control-label col-md-2">Fecha de facturacion<span aria-required="true" class="required"> * </span></label>
             <div class="col-md-4">
                 <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
-                    <input type="text" id="dFechaFacturacion" name="dFechaFacturacion" class="form-control" >
+                    <input type="text" id="dFechaFacturacion" name="dFechaFacturacion" class="form-control" value="<?php echo (isset($result["dFechaFacturacion"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaFacturacion"])->format('d-m-Y') : '' ;?>">
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                     </span>
@@ -279,6 +281,27 @@
             }
         });
         
+        $.ajax({
+            url : 'http://localhost:81/sys/rex/jsonSocioImportadores/<?php echo $_SESSION["session"]["skSocioEmpresaPropietario"]. "/" ;?>',
+            data : {},
+         
+            // especifica si será una petición POST o GET
+            type : 'GET',
+            dataType : 'json',
+            success : function(json) {
+                console.log(json);
+                for (o in json) {
+                    d = json[o];
+                    $("#skSocioImportador").append('<option value="' + d.skEmpresa +  '">'+d.Empresa+'</option>')
+                }
+            },
+            error : function(xhr, status) {
+                console.log("Algo salio mal en la peticion a jsonSocioImportadores")
+            },
+            complete : function(xhr, status) {
+                console.log('Petición realizada');
+            }
+        }); 
         
         /* VALIDATIONS */
         isValid = $("#_save").validate({

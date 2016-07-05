@@ -28,7 +28,6 @@ Class Rex_Controller Extends Rex_Model {
     public function refe_index()
     {
         $this->load_view('refe-index',NULL,true);
-        echo "No mames wey";
     }    
 
     public function refe_form(){
@@ -39,6 +38,9 @@ Class Rex_Controller Extends Rex_Model {
         
         if(isset($_POST['axn']) && $_POST['axn'] =='insert'){
             return $this->refe_save();
+        }
+        if (isset($_POST['axn']) &&  $_POST['axn'] =='update') {
+            return $this->refe_update();
         }
         if (isset($_GET["p1"])){
             $this->data['datos'] = $this->getReferencia($_GET["p1"]);
@@ -59,6 +61,26 @@ Class Rex_Controller Extends Rex_Model {
             return true;
         }else{
             $this->data['message'] = "Registros guardados exitosamente" ;
+            $this->data['response'] = true;
+            $this->data['success'] = true;
+            header('Content-Type: application/json');
+            echo json_encode($this->data);
+            return true;
+        }
+    }
+
+    public function refe_update()
+    {
+        $le = $this->updatear($_POST['skReferenciaExterna']);
+
+        if(!$le){
+            $this->data['message'] = "Hubo un error al actualizar el registro ";
+            $this->data['response'] = false;
+            header('Content-Type: application/json');
+            echo json_encode($this->data);
+            return true;
+        }else{
+            $this->data['message'] = "Registro actualizado exitosamente" ;
             $this->data['response'] = true;
             $this->data['success'] = true;
             header('Content-Type: application/json');
@@ -93,27 +115,20 @@ Class Rex_Controller Extends Rex_Model {
         }
     }    
 
-    public function jsonSocioImportadores($socioEmpresaP = false)
+    public function jsonSocioImportadores()
     {
-        $arr = $this->getSociosImportador($socioEmpresaP);
+       
+        $arr = $this->getSociosImportador($_GET['p1']);
         if (!$arr) {
             header('Content-Type: application/json');
             echo json_encode(array());
+            return false;
         }else{
             header('Content-Type: application/json');
             echo json_encode($arr);
             return true;
         }
     }
-    
-    public function getAreasn()
-    {
-        $this->data = $this->getAreas('AC');
-        header('Content-Type: application/json');
-        echo json_encode($this->data);
-        return true;
-    }
-
 
     
 
