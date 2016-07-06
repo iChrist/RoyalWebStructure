@@ -45,7 +45,7 @@
             <label class="control-label col-md-4"><b>Fecha Solicitud</b></label>
             <div class="col-md-8">
               <p class="form-control-static">
-                 <?php echo (isset($result['fechaSolicitud'])) ? date('d-m-Y H:i:s', strtotime($result['fechaSolicitud'])) : '' ; ?>
+                 <?php echo (isset($result['fechaSolicitud'])) ? date('d/m/Y H:i:s', strtotime($result['fechaSolicitud'])) : '' ; ?>
               </p>
             </div>
 

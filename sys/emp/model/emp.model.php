@@ -726,7 +726,8 @@
 											cte.sNombre AS tipoEmpresa,
 											cec.sNombre AS corresponsalia,
 											cp1.sNombre AS promotor1,
-											cp2.sNombre AS promotor2
+											cp2.sNombre AS promotor2,
+											res.skSocioEmpresa
 											FROM rel_empresas_socios res
 											LEFT JOIN cat_tipos_empresas cte ON cte.skTipoEmpresa = res.skTipoEmpresa
 											LEFT JOIN cat_empresas ce ON ce.skEmpresa = res.skEmpresa
