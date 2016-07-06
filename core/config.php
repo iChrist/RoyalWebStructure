@@ -18,13 +18,13 @@
         die();
     }
 // DATABASE CONFIGURATION //
-    $_db_idx = 'localhost';
+    $_db_idx = 'sys';
     $_db = array(
         'sys' => array(
             'HOST_DB' => 'royalweb.com.mx',
             'USER_DB' => 'royalweb_rw',
             'PASSWORD_DB' => 'RoyalWeb',
-            'DATABASE_DB' => 'royalweb_structure'
+            'DATABASE_DB' => 'royalweb_pruebas_gya'
         ),
         'localhost' => array(
             'HOST_DB' => '192.168.1.76',
