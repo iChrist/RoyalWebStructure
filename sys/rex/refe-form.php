@@ -248,7 +248,7 @@
                 console.log(json);
                 for (o in json) {
                     d = json[o];
-                    $("#skEstatus").append('<option value="' + d.skStatus +  '">'+d.sNombre+'</option>')
+                    $("#skEstatus").append('<option value="' + d.skEstatus +  '">'+d.sNombre+'</option>')
                 }
             },
             error : function(xhr, status) {
@@ -282,7 +282,7 @@
         });
         
         $.ajax({
-            url : 'http://localhost:81/sys/rex/jsonSocioImportadores/<?php echo $_SESSION["session"]["skSocioEmpresaPropietario"]. "/" ;?>',
+            url : 'http://localhost:81/sys/rex/jsonSocioImportadores/0/<?php echo $_SESSION["session"]["skSocioEmpresaPropietario"]. "/" ;?>',
             data : {},
          
             // especifica si será una petición POST o GET

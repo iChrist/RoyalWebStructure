@@ -186,9 +186,7 @@ Class Rex_Model Extends Core_Model {
 
     public function getSociosImportador($socioEmpresaP = false )
     {   
-        if ($socioEmpresaP === false || $socioEmpresaP === '') {
-            return false;
-        }
+        
         
         $sql_socios = "SELECT 
                 rel_empresas_socios.skSocioEmpresa,
@@ -199,7 +197,7 @@ Class Rex_Model Extends Core_Model {
                         INNER JOIN
                     cat_empresas ON (cat_empresas.skEmpresa = rel_empresas_socios.skEmpresa)
                 WHERE
-                    skSocioEmpresaP = 'da6997663e7411e6890d0025907ca43f'
+                    skSocioEmpresaP = '$socioEmpresaP'
                     AND skTipoEmpresa = 'CLIE'
                 ORDER BY sNombre;";
         $r = $this->db->query($sql_socios);
@@ -212,6 +210,152 @@ Class Rex_Model Extends Core_Model {
             return $arg;
         }else{
             return false;
+        }
+    }
+
+    public function selectAllope()
+    {
+        $sql_select_all = "
+        SELECT 
+            ope_referenciasExternas.skReferenciaExterna,
+            ope_referenciasExternas.sPedimento,
+            ope_referenciasExternas.sReferencia,
+            ope_referenciasExternas.sMercancia,
+            ope_referenciasExternas.sGuiaMaster,
+            ope_referenciasExternas.sGuiaHouse,
+            ope_referenciasExternas.dFechaCreacion,
+            ope_referenciasExternas.dFechaPrevio,
+            ope_referenciasExternas.dFechaDespacho,
+            ope_referenciasExternas.dFechaClasificacion,
+            ope_referenciasExternas.dFechaGlosa,
+            ope_referenciasExternas.dFechaCapturaPedimento,
+            ope_referenciasExternas.dFechaFacturacion,
+            ope_referenciasExternas.iDeposito,
+            ope_referenciasExternas.iSaldo,
+            cat_almacenes.sNombre AS 'sAlmacen',
+            cat_estatus.sNombre AS 'sEstatus',
+            cat_empresas.sNombre AS 'sSocioImportador'
+        FROM
+            ope_referenciasExternas
+                INNER JOIN
+            cat_almacenes ON (cat_almacenes.skAlmacen = ope_referenciasExternas.skAlmacen)
+                INNER JOIN
+            cat_estatus ON (cat_estatus.skEstatus = ope_referenciasExternas.skEstatus)
+                INNER JOIN
+            cat_empresas ON (cat_empresas.skEmpresa = ope_referenciasExternas.skSocioImportador);";
+
+        $r = $this->db->query($sql_select_all);
+
+        if ($this->db->affected_rows > 0){
+            $arg = array();
+            while ($row = $r->fetch_assoc()) {
+                array_push($arg, $row);
+            }
+            return $arg;
+        }else{
+            return false;
+        }
+    }
+
+    public function countGetReferenciasExternas($get = false)
+    {
+
+        $getol = "
+            ope_referenciasExternas.skReferenciaExterna,
+            ope_referenciasExternas.sPedimento,
+            ope_referenciasExternas.sReferencia,
+            ope_referenciasExternas.sMercancia,
+            ope_referenciasExternas.sGuiaMaster,
+            ope_referenciasExternas.sGuiaHouse,
+            ope_referenciasExternas.dFechaCreacion,
+            ope_referenciasExternas.dFechaPrevio,
+            ope_referenciasExternas.dFechaDespacho,
+            ope_referenciasExternas.dFechaClasificacion,
+            ope_referenciasExternas.dFechaGlosa,
+            ope_referenciasExternas.dFechaCapturaPedimento,
+            ope_referenciasExternas.dFechaFacturacion,
+            ope_referenciasExternas.iDeposito,
+            ope_referenciasExternas.iSaldo,
+            cat_almacenes.sNombre AS 'sAlmacen',
+            cat_estatus.sNombre AS 'sEstatus',
+            cat_empresas.sNombre AS 'sSocioImportador'
+        ";
+        $justcount = "count(*) as 'total'";
+        $lecua = ($get) ? $getol : $justcount;
+        $sql = "        
+        SELECT 
+            $lecua
+        FROM
+            ope_referenciasExternas
+                INNER JOIN
+            cat_almacenes ON (cat_almacenes.skAlmacen = ope_referenciasExternas.skAlmacen)
+                INNER JOIN
+            cat_estatus ON (cat_estatus.skEstatus = ope_referenciasExternas.skEstatus)
+                INNER JOIN
+            cat_empresas ON (cat_empresas.skEmpresa = ope_referenciasExternas.skSocioImportador) 
+        WHERE 1 = 1";
+
+        if ($get){
+
+            if(!empty($this->areas['sPedimento'])){
+                $sql .=" AND ope_referenciasExternas.sPedimento = '".$this->areas['sPedimento']."'";
+            }
+            if(!empty($this->areas['sReferencia'])){
+                $sql .=" AND ope_referenciasExternas.sReferencia like '%".$this->areas['sReferencia']."%'";
+            }
+            if(!empty($this->areas['sMercancia'])){
+                $sql .=" AND ope_referenciasExternas.sMercancia like '%".$this->areas['sMercancia']."%'";
+            }
+            if(!empty($this->areas['sGuiaMaster'])){
+                $sql .=" AND ope_referenciasExternas.sGuiaMaster like '%".$this->areas['sGuiaMaster']."%'";
+            }
+            if(!empty($this->areas['sGuiaHouse'])){
+                $sql .=" AND ope_referenciasExternas.sGuiaHouse = '".$this->areas['sGuiaHouse']."'";
+            }
+            if(!empty($this->areas['dFechaCreacion'])){
+                $sql .=" AND ope_referenciasExternas.dFechaCreacion like '%".$this->areas['dFechaCreacion']."%'";
+            }
+            if(!empty($this->areas['dFechaPrevio'])){
+                $sql .=" AND ope_referenciasExternas.dFechaPrevio like '%".$this->areas['dFechaPrevio']."%'";
+            }
+            if(!empty($this->areas['dFechaDespacho'])){
+                $sql .=" AND ope_referenciasExternas.dFechaDespacho like '%".$this->areas['dFechaDespacho']."%'";
+            }        
+            if(!empty($this->areas['dFechaClasificacion'])){
+                $sql .=" AND ope_referenciasExternas.dFechaClasificacion like '%".$this->areas['dFechaClasificacion']."%'";
+            }
+            if(!empty($this->areas['dFechaGlosa'])){
+                $sql .=" AND ope_referenciasExternas.dFechaGlosa like '%".$this->areas['dFechaGlosa']."%'";
+            }
+            if(!empty($this->areas['dFechaCapturaPedimento'])){
+                $sql .=" AND ope_referenciasExternas.dFechaCapturaPedimento like '%".$this->areas['dFechaCapturaPedimento']."%'";
+            }
+            if(!empty($this->areas[''])){
+                $sql .=" AND ope_referenciasExternas.dFechaFacturacion like '%".$this->areas['']."%'";
+            }
+            if(!empty($this->areas['dFechaFacturacion'])){
+                $sql .=" AND ope_referenciasExternas.iDeposito like '%".$this->areas['dFechaFacturacion']."%'";
+            }
+            if(!empty($this->areas['iSaldo'])){
+                $sql .=" AND ope_referenciasExternas.iSaldo like '%".$this->areas['iSaldo']."%'";
+            }
+            if(!empty($this->areas['sAlmacen'])){
+                $sql .=" AND cat_almacenes.sNombre like '%".$this->areas['sAlmacen']."%'";
+            }
+            if(!empty($this->areas['sEstatus'])){
+                $sql .=" AND cat_estatus.sNombre like '%".$this->areas['sEstatus']."%'";
+            }
+            if(!empty($this->areas['sSocioImportador'])){
+                $sql .=" AND cat_empresas.sNombre like '%".$this->areas['sSocioImportador']."%'";
+            }
+        }
+        $result = $this->db->query($sql);
+        if($result){
+            if($result->num_rows > 0){
+                return $result;
+            }else{
+                return false;
+            }
         }
     }
 

@@ -39,7 +39,7 @@
             'DATABASE_DB' => 'royalweb_test_gya'
         ),
         'test' => array(
-            'HOST_DB' => '192.168.1.73',
+            'HOST_DB' => '192.168.1.76',
             'USER_DB' => 'rwroot',
             'PASSWORD_DB' => '/*royalweb*/',
             'DATABASE_DB' => 'royalweb_test_gya'
