@@ -3,25 +3,28 @@
 
 		// PRIVATE VARIABLES //
 		public $previos = array(
-				'skSolicitudPrevio'=>null
-				,'ikSolicitudPrevio'=>null
-				,'sReferencia'=>null
-				,'sPedimento'=>null
-				,'dFechaSolicitud'=>null
-				,'dFechaPrevio'=>null
-				,'dFechaApertura'=>null
-				,'skUsuarioCreacion'=>null
-				,'skUsuarioEjecutivo'=>null
-				,'skUsuarioTramitador'=>null
-				,'sMasterBL'=>null
-				,'sSelloOrigen'=>null
-				,'sSelloFinal'=>null
-				,'sNumeroFactura'=>null
-				,'sPais'=>null
-				,'skStatus'=>null
-				,'skEmpresa'=>null
-				,'limit'=>null
-				,'offset'=>null
+				'skSolicitudPrevio'=>''
+				,'ikSolicitudPrevio'=>''
+				,'sReferencia'=>''
+				,'sPedimento'=>''
+				,'dFechaSolicitud'=>''
+				,'dFechaPrevio'=>''
+				,'dFechaApertura'=>''
+				,'skUsuarioCreacion'=>''
+				,'skUsuarioEjecutivo'=>''
+				,'skUsuarioTramitador'=>''
+				,'skSocioPropietario'=>''
+				,'skSocioImportador'=>''
+				,'sMasterBL'=>''
+				,'sContenedor'=>''
+				,'sSelloOrigen'=>''
+				,'sSelloFinal'=>''
+				,'sNumeroFactura'=>''
+				,'sPais'=>''
+				,'skStatus'=>''
+				,'skEmpresa'=>''
+				,'limit'=>''
+				,'offset'=>''
 				);
 			private $_data = array();
 
@@ -107,6 +110,8 @@
 																skUsuarioTramitador,
 																sObservacionesSolicitud,
 																sMasterBL,
+																sReferencia,
+																sPedimento,
 																sContenedor,
 																sSelloOrigen,
 																sSelloFinal,
@@ -123,12 +128,15 @@
 										'".$this->previos['skUsuarioTramitador']."',
 										'".$this->previos['sObservacionesSolicitud']."',
 										'".$this->previos['sMasterBL']."',
+										'".$this->previos['sReferencia']."',
+										'".$this->previos['sPedimento']."',
 										'".$this->previos['sContenedor']."',
 										'".$this->previos['sSelloOrigen']."',
 										'".$this->previos['sSelloFinal']."',
 										'".$this->previos['sNumeroFactura']."',
                     '".$this->previos['sPais'] . "')";
-        //exit($sql);
+										echo $sql;
+										die();
         $result = $this->db->query($sql);
         if ($result) {
             return $this->previos['skSolicitudPrevio'];
@@ -196,7 +204,7 @@
 						INNER JOIN _users us ON us.skUsers = osp.skUsuarioCreacion
 						INNER JOIN _users usj ON usj.skUsers = osp.skUsuarioEjecutivo
 						INNER JOIN _users ust ON ust.skUsers = osp.skUsuarioTramitador
-						WHERE osp.skSolicitudPrevio = '28e9e18dc56114a8c9a198a530ee21f' ";
+						WHERE osp.skSolicitudPrevio = '".$this->previos['skSolicitudPrevio']."' ";
 						//Poner el numero de previo
 						$result = $this->db->query($sql);
 		        if ($result) {

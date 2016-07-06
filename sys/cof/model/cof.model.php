@@ -101,9 +101,10 @@
 								if(!empty($this->users['sUserName'])){
 				                    $sql .= " AND _users.sUserName = '".$this->users['sUserName']."'";
 				                }
-                                                if(!is_null($this->users['orderBy'])){
-                                                    $sql .=" ORDER BY ".$this->users['orderBy'];
-                                                }
+								$sql .=" ORDER BY _users.sName ASC ";
+                /*if(!is_null($this->users['orderBy'])){
+                    $sql .=" ORDER BY ".$this->users['orderBy'];
+                }*/
 				                if(is_int($this->users['limit'])){
 				                    if(is_int($this->users['offset'])){
 				                        $sql .= " LIMIT ".$this->users['offset']." , ".$this->users['limit'];

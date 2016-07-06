@@ -155,11 +155,64 @@
 							break;
 					}
 			}
+			if ($_POST) {
+				$this->previos['skSolicitudPrevio'] = !empty($_POST['skSolicitudPrevio']) ? $_POST['skSolicitudPrevio'] : substr(md5(microtime()), 1, 32);
+				$this->previos['sReferencia'] = addslashes(utf8_decode($_POST['sReferencia']));
+				$this->previos['skUsuarioEjecutivo'] = utf8_decode(!empty($_POST['skUsuarioEjecutivo']) ? $_POST['skUsuarioEjecutivo'] : '');
+				$this->previos['skSocioImportador'] = utf8_decode(!empty($_POST['skSocioImportador']) ? $_POST['skSocioImportador'] : '');
+				$this->previos['skSocioPropietario'] = utf8_decode(!empty($_SESSION['session']['skSocioEmpresaPropietario']) ? $_SESSION['session']['skSocioEmpresaPropietario'] : '');
 
+				$this->previos['skSocioRecinto'] = utf8_decode(!empty($_POST['skSocioRecinto']) ? $_POST['skSocioRecinto'] : '');
+				$this->previos['skUsuarioTramitador'] = utf8_decode(!empty($_POST['skUsuarioTramitador']) ? $_POST['skUsuarioTramitador'] : '');
+				$this->previos['dFechaProgramacion'] = utf8_decode(!empty($_POST['dFechaProgramacion']) ? date('Y-m-d', strtotime($_POST['dFechaProgramacion'])) : date('Y-m-d'));
+				$this->previos['sSelloOrigen'] = addslashes(utf8_decode($_POST['sSelloOrigen']));
+				$this->previos['sSelloFinal'] = addslashes(utf8_decode($_POST['sSelloFinal']));
+				$this->previos['sNumeroFactura'] = addslashes(utf8_decode($_POST['sNumeroFactura']));
+				$this->previos['sPais'] = addslashes(utf8_decode($_POST['sPais']));
+				$this->previos['sObservacionesSolicitud'] = addslashes(utf8_decode($_POST['sObservacionesSolicitud']));
+				/*$this->recepciondocumentos['sObservaciones'] = addslashes(utf8_decode($_POST['sObservaciones']));
+				$this->recepciondocumentos['skEmpresa'] = utf8_decode($_POST['skEmpresa']);
+				$this->recepciondocumentos['skTipoTramite'] = utf8_decode($_POST['skTipoTramite']);
+				$this->recepciondocumentos['skTipoServicio'] = utf8_decode($_POST['skTipoServicio']);
+				$this->recepciondocumentos['skClaveDocumento'] = utf8_decode($_POST['skClaveDocumento']);
+				$this->recepciondocumentos['tRecepcion'] = utf8_decode(!empty($_POST['tRecepcion']) ? $_POST['tRecepcion'] : date('H:i:s'));
+				*/
+			//	exit('<pre>'.print_r($this->previos,1));
+				if (empty($_POST['skSolicitudPrevio'])) {
+					$skSolicitudPrevio = parent::create_previos();
+					if ($skSolicitudPrevio) {
+
+						$this->data['response'] = true;
+						$this->data['message'] = 'Registro insertado con &eacute;xito.';
+						header('Content-Type: application/json');
+						echo json_encode($this->data);
+						return true;
+
+					}else{
+						$this->data['response'] = false;
+						$this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
+						header('Content-Type: application/json');
+						echo json_encode($this->data);
+						return false;
+					}
+
+				}
+
+
+
+			}
 			$this->load_model('cof', 'cof');
 			$objUsuarios = new Cof_Model();
 			$this->data['ejecutivos'] = $objUsuarios->read_user();
 			$this->data['tramitadores'] = $objUsuarios->read_user();
+
+			$this->load_model('emp', 'emp');
+			$objEmpresas = new Emp_Model();
+			$objEmpresas->tipoempresas['skStatus'] = 'AC';
+			$objEmpresas->tipoempresas['skTipoEmpresa'] = 'CLIE';
+			$this->data['importador'] = $objEmpresas->read_like_empresas();
+			$objEmpresas->tipoempresas['skTipoEmpresa'] = 'RECI';
+			$this->data['recinto'] = $objEmpresas->read_like_empresas();
 
 			$this->previos['skSolicitudPrevio'] = !empty($_POST['skSolicitudPrevio']) ? $_POST['skSolicitudPrevio'] : substr(md5(microtime()), 1, 32);
 			$this->previos['sReferencia'] = isset($_POST['sReferencia']) ? addslashes(utf8_decode($_POST['sReferencia'])) : null;
@@ -171,6 +224,7 @@
 			if (isset($_GET['p1'])) {
 					$this->previos['skSolicitudPrevio'] = $_GET['p1'];
 					$this->data['datos'] = parent::read_previos();
+
 			}
 			$this->load_view('previos-form', $this->data);
 			return true;

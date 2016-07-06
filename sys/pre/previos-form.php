@@ -3,6 +3,9 @@
     if($data['datos']){
         $result = $data['datos']->fetch_assoc();
     }
+    echo "<PRE>";
+    print_r($result);
+    echo "</PRE>";
 
     $arrayAutoridades = array();
   	if(isset($data['autoridadesPrevios']))
@@ -42,7 +45,7 @@
                     if ($data['ejecutivos']) {
                         while ($rEjecutivo = $data['ejecutivos']->fetch_assoc()) {
                             ?>
-                            <option value="<?php echo $rEjecutivo['skUsers']; ?>" <?php echo (isset($result['skUsers'])) ? ($result['skUsers'] == $rEjecutivo['skUsers'] ? 'selected' : '' ) : ''; ?> > <?php echo utf8_encode($rEjecutivo['sName']); ?> </option>
+                            <option value="<?php echo $rEjecutivo['skUsers']; ?>" <?php echo (isset($result['skUsuarioEjecutivo'])) ? ($result['skUsuarioEjecutivo'] == $rEjecutivo['skUsers'] ? 'selected' : '' ) : ''; ?> > <?php echo utf8_encode($rEjecutivo['sName']); ?> </option>
                             <?php
                         }//ENDIF
                     }//ENDWHILE
@@ -59,7 +62,7 @@
           <label class="control-label col-md-2">Fecha Programaci&oacute;n</label>
           <div class="col-md-4">
             <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
-              <input type="text" id="dFechaProgramacion" name="dFechaProgramacion" class="form-control" value="<?php echo (isset($result['dFechaProgramacion'])) ?  utf8_encode(date('d-m-Y', strtotime($result['dFechaArriboBuque']))) : date('d-m-Y') ; ?>" >
+              <input type="text" id="dFechaProgramacion" name="dFechaProgramacion" class="form-control" value="<?php echo (isset($result['dFechaSolicitud'])) ?  utf8_encode(date('d-m-Y', strtotime($result['dFechaSolicitud']))) : date('d-m-Y') ; ?>" >
               <span class="input-group-btn">
               <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
               </span>
@@ -73,7 +76,7 @@
                   if ($data['importador']) {
                       while ($rImportador = $data['importador']->fetch_assoc()) {
                           ?>
-                          <option value="<?php echo $rImportador['skSocioImportador']; ?>" <?php echo (isset($result['skSocioImportador'])) ? ($result['skSocioImportador'] == $rImportador['skSocioImportador'] ? 'selected' : '' ) : ''; ?> > <?php echo utf8_encode($rImportador['sNombre']); ?> </option>
+                          <option value="<?php echo $rImportador['skSocioEmpresa']; ?>" <?php echo (isset($result['skSocioImportador'])) ? ($result['skSocioImportador'] == $rImportador['skSocioEmpresa'] ? 'selected' : '' ) : ''; ?> > <?php echo utf8_encode($rImportador['sNombre']); ?> </option>
                           <?php
                       }//ENDIF
                   }//ENDWHILE
@@ -90,7 +93,7 @@
                 if ($data['recinto']) {
                     while ($rRecinto = $data['recinto']->fetch_assoc()) {
                         ?>
-                        <option value="<?php echo $rRecinto['skSocioImportador']; ?>" <?php echo (isset($result['skSocioImportador'])) ? ($result['skSocioImportador'] == $rRecinto['skSocioImportador'] ? 'selected' : '' ) : ''; ?> > <?php echo utf8_encode($rRecinto['sNombre']); ?> </option>
+                        <option value="<?php echo $rRecinto['skSocioEmpresa']; ?>" <?php echo (isset($result['skSocioRecinto'])) ? ($result['skSocioRecinto'] == $rRecinto['skSocioEmpresa'] ? 'selected' : '' ) : ''; ?> > <?php echo utf8_encode($rRecinto['sNombre']); ?> </option>
                         <?php
                     }//ENDIF
                 }//ENDWHILE
@@ -124,6 +127,20 @@
           <div class="col-md-4">
             <div class="input-icon right"> <i class="fa"></i>
               <input type="text" name="sSelloFinal" id="sSelloFinal" class="form-control" placeholder="Sello Final" value="<?php echo (isset($result['sSelloFinal'])) ? htmlentities(utf8_encode($result['sSelloFinal'])) : '' ; ?>">
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-md-2">Numero de Factura</label>
+          <div class="col-md-4">
+            <div class="input-icon right"> <i class="fa"></i>
+              <input type="text" name="sNumeroFactura" id="sNumeroFactura" class="form-control" placeholder="Numero de Factura" value="<?php echo (isset($result['sNumeroFactura'])) ? htmlentities(utf8_encode($result['sNumeroFactura'])) : '' ; ?>">
+            </div>
+          </div>
+          <label class="control-label col-md-2">Pais Origen</label>
+          <div class="col-md-4">
+            <div class="input-icon right"> <i class="fa"></i>
+              <input type="text" name="sPais" id="sPais" class="form-control" placeholder="Pais Origen" value="<?php echo (isset($result['sPais'])) ? htmlentities(utf8_encode($result['sPais'])) : '' ; ?>">
             </div>
           </div>
         </div>
@@ -203,7 +220,6 @@
 </form>
 <div class="clearfix"></div>
 <script type="text/javascript">
-    var iTipoTarifa = 0;
     function obtenerDatos(){
     	  $('.page-title-loading').css('display','inline');
     	 $.post("",{ axn : "obtenerDatos" , sReferencia : $("#sReferencia").val() }, function(data){
