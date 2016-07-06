@@ -246,8 +246,11 @@
 
                 protected function printModulesButtons($iPlace = 1,$replace = array(), $ownerId = false){
                     $_secutiry['_users_profiles'] = $this->getUsersProfiles();
+                    //echo('<pre>'.print_r($_secutiry['_users_profiles'],1).'</pre>');
                     $_secutiry['_modules_profiles_permissions'] = $this->getModulesProfilesPermissions();
+                    //echo('<pre>'.print_r($_secutiry['_modules_profiles_permissions'],1).'</pre>');
                     $_buttons = $this->getModulesButtons();
+                    //echo('<pre>'.print_r($_buttons,1).'</pre>');
                     $sHtml = '';
                     $sScript = '';
                     if(!empty($_buttons) && count($_buttons) > 0){
@@ -265,8 +268,13 @@
                             }
                         }else{ //echo '<pre>'.print_r($_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$_SESSION['session']['skProfile']],1).'</pre>';
                             if(!empty($_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$_SESSION['session']['skProfile']])){
-                                foreach($_buttons AS $k => &$v){ //echo $v['skPermissions'];
-                                    if(array_key_exists($v['skPermissions'] , $_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$_SESSION['session']['skProfile']])){
+                                foreach($_buttons AS $k => &$v){
+                                    /*echo('<pre>'.print_r($v,1).'</pre><pre>'.print_r(
+                                    $_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$_SESSION['session']['skProfile']],1).'</pre>');*/
+                                    $sql = "SELECT * FROM _modules_profiles_permissions WHERE skProfiles = '".$_secutiry['_users_profiles'][0]['skProfiles']."' AND skModule = '".$v['sParentModule']."'";
+                                    $result = $this->db->query($sql);
+                                    if($result && $result->num_rows > 0){
+                                    //if(array_key_exists($v['skPermissions'] , $_secutiry['_modules_profiles_permissions'][$_GET['sysController']][$_SESSION['session']['skProfile']])){
                                         if($v['iPlace'] == $iPlace ){
                                             if(count($replace) > 0){
                                                 if(preg_match_all('/\{\{(.*?)\}\}/', $v['sHtml'], $search) !== FALSE){

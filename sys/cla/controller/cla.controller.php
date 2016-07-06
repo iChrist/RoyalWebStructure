@@ -765,7 +765,111 @@
 // ******************************************************************* // 
                 // COMIENZA SEGUNDA CLASIFICACIÓN //
 // ******************************************************************* // 
-                    
+        
+        public function segcla_index(){
+            $this->data['message'] = '';
+            $this->data['response'] = true;
+            $this->data['datos'] = false;
+            if(isset($_GET['axn'])){
+                switch ($_GET['axn']) {
+                    case 'delete':
+                        $this->data['message'] = 'Hubo un error al intentar eliminar el registro, intenta de nuevo.';
+                        $this->data['response'] = false;
+                        $this->data['datos'] = false;
+                        if(isset($_GET['p1'])){
+                            $this->cla['skClasificacion'] = $_GET['p1'];
+                            if($this->deleteClasificacionSegunda()){
+                                $this->data['response'] = true;
+                                $this->data['datos'] = true;
+                                $this->data['message'] = 'Registro eliminado con &eacute;xito.';
+                            }
+                        }
+                        header('Content-Type: application/json');
+                        echo json_encode($this->data);
+                        return true;
+                        break;
+                    case 'fetch_all':
+                        // PARAMETROS PARA FILTRADO //
+                        $this->cla['orderBy'] = "cla.dFechaCreacion DESC";
+                        
+                        if(isset($_POST['sReferencia'])){
+                            $this->cla['sReferencia'] = $_POST['sReferencia'];
+                        }
+                        if(isset($_POST['sPedimento'])){
+                            $this->cla['sPedimento'] = $_POST['sPedimento'];
+                        }
+                        if(isset($_POST['skEmpresa'])){
+                            $this->cla['skEmpresa'] = $_POST['skEmpresa'];
+                        }
+                        if(isset($_POST['skCreador'])){
+                            $this->cla['skCreador'] = $_POST['skCreador'];
+                        }
+                        if(isset($_POST['skStatus'])){
+                            $this->cla['skStatus'] = $_POST['skStatus'];
+                        }
+                        // EXPORTACIÓN A EXCEL //
+                        if(isset($_POST['exportExcel']) && $_POST['exportExcel'] == 1){
+                            $this->cla['orderBy'] = "cla.sReferencia DESC , cla.dFechaCreacion DESC , claMer.sFactura ASC , claMer.iSecuencia ASC";
+                            $this->data['data'] = parent::segcla_form_getMercancias();
+                            $this->claara_excel();
+                            return true;
+                            exit;
+                        }
+                        // OBTENER REGISTROS //
+                        $total = parent::segcla_index_getClasificacion(true);
+                        $records = Core_Functions::table_ajax($total);
+                        if($records['recordsTotal'] === 0){
+                            header('Content-Type: application/json');
+                            echo json_encode($records);
+                            return false;
+                        }
+                        
+                        $this->cla['limit'] = $records['limit'];
+                        $this->cla['offset'] = $records['offset'];
+                        $this->data['data'] = parent::segcla_index_getClasificacion(false);
+                        
+                        if(!$this->data['data']){
+                            header('Content-Type: application/json');
+                            echo json_encode($records);
+                            return false;
+                        }
+                        //exit('<pre>'.print_r($records['data'],1).'</pre>');
+                        $i = 0;
+                        while($row = $this->data['data']->fetch_assoc()){
+                                $actions = $this->printModulesButtons(2,array($row['skClasificacion']));
+                                $records['data'][$i] = array(
+                                !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
+                                ,utf8_encode($row['sReferencia']) // REFERENCIA
+                                ,utf8_encode($row['sPedimento']) // PEDIMENTO
+                                ,utf8_encode($row['empresa']) // EMPRESA (CLIENTE)
+                                ,utf8_encode($row['totalFracciones']) // total de fracciones
+                                ,utf8_encode($row['ejecutivo']) // skUsersCreacion
+                                ,utf8_encode($row['clasificador']) // skUsersModificacion
+                                );
+                                
+                             $i++;   
+                        }
+                        header('Content-Type: application/json');
+                        echo json_encode($records);
+                        return true;
+                        break;
+                }
+                return true;
+            }
+            // INCLUYE EL MODELO DEL MODULO cof //
+            $this->load_model('cof','cof');
+            $cof = new Cof_Model();
+            
+            // LISTAR TODOS LOS USUARIOS
+            $this->data['users'] = $cof->read_user();
+            
+            // INCLUYE EL MODELO DEL MODULO emp //
+            $this->load_model('emp','emp');
+            $emp = new Emp_Model();
+            $this->data['empresas'] = $emp->read_equal_empresas();
+            
+            $this->load_view('segcla-index',$this->data);
+        }
         public function segcla_form(){
             ini_set('memory_limit', '-1');
             $this->data['message'] = '';
@@ -809,18 +913,40 @@
                 if(isset($_POST['axn']) && $_POST['axn'] == 'insert'){
                     if(!empty($_POST['clasificacionSegundaMercancia'])){
                         $this->cla['skClasificacion'] = $_POST['skClasificacion'];
-                        $insertarClasificacionSegunda = $this->insertarClasificacionSegunda();
-                        if(!$insertarClasificacionSegunda){
-                            $this->data['response'] = false;
-                            $this->data['message'] = 'Hubo un error al registrar la segunda clasificación.';
-                            return false;
-                        }
-                        $dFechaImportacion = date('Y-m-d H:i:s');
                         $data = json_decode($_POST['clasificacionSegundaMercancia'],1);
-                        $response = $this->import_excel($data[key($data)],$dFechaImportacion,1);
-                        if(!$response['response']){
+                        //exit('<pre>'.print_r($data[key($data)][0],1).'</pre>');
+                        if(isset($data[key($data)][0]['REFERENCIA']) && $data[key($data)][0]['REFERENCIA'] == $_POST['sReferencia']){
+                            $this->cla['skClasificacion'] = $_POST['skClasificacion'];
+                            $deleteClasificacionSegunda = $this->deleteClasificacionSegunda();
+                            if(!$deleteClasificacionSegunda){
+                                $this->data['response'] = false;
+                                $this->data['message'] = 'Hubo un error al registrar la segunda clasificación.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return false;
+                            }
+                            $insertarClasificacionSegunda = $this->insertarClasificacionSegunda();
+                            if(!$insertarClasificacionSegunda){
+                                $this->data['response'] = false;
+                                $this->data['message'] = 'Hubo un error al registrar la segunda clasificación.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return false;
+                            }
+                            $dFechaImportacion = date('Y-m-d H:i:s');
+                            $response = $this->import_excel_clasificacionSegunda($data[key($data)],$dFechaImportacion,1);
+                            if(!$response['response']){
+                                $this->data['response'] = false;
+                                $this->data['message'] = 'Hubo un error al registrar la segunda clasificación.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return false;
+                            }
+                        }else{
                             $this->data['response'] = false;
-                            $this->data['message'] = 'Hubo un error al registrar la segunda clasificación.';
+                            $this->data['message'] = 'La referencia ingresada no coincide con el documento: '.$_POST['sReferencia'];
+                            header('Content-Type: application/json');
+                            echo json_encode($this->data);
                             return false;
                         }
                     }else{
@@ -829,18 +955,24 @@
                         if(!$deleteClasificacionSegunda){
                             $this->data['response'] = false;
                             $this->data['message'] = 'Hubo un error al registrar la segunda clasificación.';
+                            header('Content-Type: application/json');
+                            echo json_encode($this->data);
                             return false;
                         }
                         $insertarClasificacionSegunda = $this->insertarClasificacionSegunda();
                         if(!$insertarClasificacionSegunda){
                             $this->data['response'] = false;
                             $this->data['message'] = 'Hubo un error al registrar la segunda clasificación.';
+                            header('Content-Type: application/json');
+                            echo json_encode($this->data);
                             return false;
                         }
                         $insertarClasificacionSegundaMercancias = $this->insertarClasificacionSegundaMercancias();
                         if(!$insertarClasificacionSegundaMercancias){
                             $this->data['response'] = false;
                             $this->data['message'] = 'Hubo un error al registrar la segunda clasificación.';
+                            header('Content-Type: application/json');
+                            echo json_encode($this->data);
                             return false;
                         }
                     }
@@ -928,7 +1060,6 @@
             
             public function import_excel_clasificacionSegunda(&$data , &$dFechaImportacion, $validar = 1){
             ini_set('memory_limit', '-1');
-            
             $skClasificacion = NULL;
             $this->cla['valido'] = $validar;
             $this->cla['dFechaImportacion'] = $dFechaImportacion;
@@ -936,22 +1067,12 @@
             $this->cla['skStatus'] = 'AC';
             $this->claMer['skStatus'] = 'AC';
             
-            if($validar==0){
-                $dFechaCreacion = date('Y-m-d H:i:s');
-                $this->cla['skUsersCreacion'] = $_SESSION['session']['skUsers'];
-                $this->cla['dFechaCreacion'] = $dFechaCreacion;
-                $this->claMer['skUsersCreacion'] = $_SESSION['session']['skUsers'];
-                $this->claMer['dFechaCreacion'] = $dFechaCreacion;
-            }else{
-                $dFechaModificacion = date('Y-m-d H:i:s');
-                $this->cla['skUsersModificacion'] = $_SESSION['session']['skUsers'];
-                //$this->cla['skUsersCreacion'] = $dFechaModificacion;
-                $this->cla['dFechaModificacion'] = $dFechaImportacion;
-                $this->claMer['skUsersModificacion'] = $_SESSION['session']['skUsers'];
-                $this->claMer['dFechaModificacion'] = $dFechaModificacion;
-            }
+            $dFechaCreacion = date('Y-m-d H:i:s');
+            $this->cla['skUsersCreacion'] = $_SESSION['session']['skUsers'];
+            $this->cla['dFechaCreacion'] = $dFechaCreacion;
+            $this->claMer['skUsersCreacion'] = $_SESSION['session']['skUsers'];
+            $this->claMer['dFechaCreacion'] = $dFechaCreacion;
             
-            //exit('<pre>'.print_r($data,1).'</pre>');
             if(!count($data)){
                 return false;
             }
@@ -987,37 +1108,23 @@
                   $array_consecutivos[$this->claMer['sFactura']] = 1;
                 }
                 // SE CREA LA PRIMERA CLASIFICACION //
-                    if($validar == 0 && $lineaExcel==2){
-                        $this->cla['skClasificacion'] = substr(md5(microtime()), 1, 32);
-                        if(!isset($v['REFERENCIA'])){
-                            $v['REFERENCIA'] = "";
-                        }
-                        $this->cla['sReferencia'] = addslashes(trim(utf8_decode($v['REFERENCIA'])," "));
-                        $skClasificacion = $this->create_cla();
-                        if(!$skClasificacion){ 
-                            $flag = false;
-                            $message = "Hubo un error al registrar la primera clasificaci&oacute;n con la referencia: ".$this->cla['sReferencia'];
-                            break;
-                        }
-                    }else if($validar == 1 && $lineaExcel==2){
+                    if($validar == 1 && $lineaExcel==2){
                         // SE BUSCA LA REFERENCIA PARA SU VALIDACION //
                         $this->cla['sReferencia'] = addslashes(trim(utf8_decode($v['REFERENCIA'])," "));
-                        $result = $this->get_cla();
+                        $result = parent::get_cla();
                         if(!$result){
                             $flag = false;
                             $message = "No se encontró la referencia: ".$this->cla['sReferencia']." para validar.";
                             break;
                         }
                         $rCla = $result->fetch_assoc();
-                        $this->delete_cla();
+                        $this->deleteClasificacionSegunda();
                         $this->cla['skClasificacion'] = $rCla['skClasificacion'];
                         $this->cla['skUsersCreacion'] = $rCla['skUsersCreacion'];
                         $this->cla['dFechaCreacion'] = $rCla['dFechaCreacion'];
-                        $this->cla['dFechaModificacion'] = $dFechaImportacion;
                         $this->claMer['skUsersCreacion'] = $rCla['skUsersCreacion'];
                         $this->claMer['dFechaCreacion'] = $rCla['dFechaCreacion'];
-                        $this->claMer['dFechaModificacion'] = $dFechaImportacion;
-                        $skClasificacion = $this->create_cla();
+                        $skClasificacion = $this->create_claSeg();
                         if(!$skClasificacion){ 
                             $flag = false;
                             $message = "Hubo un error al al intentar validar la referencia: ".$this->cla['sReferencia'];
@@ -1053,12 +1160,11 @@
                         }
                         $this->claMer['iSecuencia'] = $array_consecutivos[$this->claMer['sFactura']];
                              
-                        $skClasificacionMercancia = $this->create_claMer();
+                        $skClasificacionMercancia = $this->create_claSegMer();
                         if(!$skClasificacionMercancia){ 
                             $flag = false;
                             $message = "Hubo un error al registar la fraccion ".$this->claMer['sFraccion']." con numero de parte: ".$this->claMer['sNumeroParte']." en la referencia: ".$this->cla['sReferencia'];
-                            $this->delete_cla();
-                            $this->delete_claMer();
+                            $this->deleteClasificacionSegunda();
                             break;
                         }
                 

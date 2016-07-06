@@ -675,6 +675,57 @@
             }
             return false;
         }
+        public function segcla_index_getClasificacion($total = false){
+            if($total){
+                $sql = "SELECT COUNT(*) AS total FROM cat_clasificacionSegunda AS cla "
+                . "INNER JOIN ope_recepciones_documentos rd ON rd.sReferencia = cla.sReferencia "
+                . "INNER JOIN cat_empresas emp ON emp.skEmpresa = rd.skEmpresa "
+                . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
+                . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion WHERE 1=1 ";
+            }else{
+            $sql="SELECT COUNT(*) AS totalFracciones, cla.skClasificacion, cla.sReferencia, cla.valido, cla.skUsersCreacion, rd.sPedimento, emp.sNombre AS empresa, CONCAT(u.sName,' ',u.sLastNamePaternal,' ',u.sLastNameMaternal) AS ejecutivo, CONCAT(usr.sName,' ',usr.sLastNamePaternal,' ',usr.sLastNameMaternal) AS clasificador, _status.sName AS status, _status.sHtml AS htmlStatus FROM cat_clasificacionSegunda AS cla "
+                . "INNER JOIN ope_recepciones_documentos rd ON rd.sReferencia = cla.sReferencia "
+                . "INNER JOIN cat_empresas emp ON emp.skEmpresa = rd.skEmpresa "
+                . "INNER JOIN _status ON _status.skStatus = cla.skStatus "
+                . "INNER JOIN cat_clasificacionSegundaMercancia AS claMer ON claMer.skClasificacion = cla.skClasificacion "
+                . "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion "
+                . "LEFT JOIN _users AS usr ON usr.skUsers = cla.skUsersModificacion WHERE 1=1 ";
+            }
+            if(!empty($this->cla['skClasificacion'])){
+                $sql .=" AND cla.skClasificacion = '".$this->cla['skClasificacion']."'";
+            }
+            if(!empty($this->cla['skEmpresa'])){
+                $sql .=" AND emp.skEmpresa like '%".$this->cla['skEmpresa']."%'";
+            }
+            if(!empty($this->cla['sReferencia'])){
+                $sql .=" AND cla.sReferencia like '%".trim($this->cla['sReferencia'])."%'";
+            }
+            if(!empty($this->cla['sPedimento'])){
+                $sql .=" AND rd.sPedimento like '%".trim($this->cla['sPedimento'])."%'";
+            }
+            // AGRUPAMOS LA CLASIFICACION PARA EL CONTEO DE FRACCIONES //
+            $sql .=" GROUP BY cla.skClasificacion ";
+            
+            if(!empty($this->cla['orderBy'])){
+                $sql .=" ORDER BY ".$this->cla['orderBy'];
+            }
+            if(is_int($this->cla['limit'])){
+                if(is_int($this->cla['offset'])){
+                    $sql .= " LIMIT ".$this->cla['offset']." , ".$this->cla['limit'];
+                }else{
+                    $sql .= " LIMIT ".$this->cla['limit'];
+                }
+            }
+            //exit($sql);
+            $result = $this->db->query($sql);
+            if($result){
+                if($result->num_rows > 0){
+                    return $result;
+                }else{
+                    return false;
+                }
+            }
+        }
         public function segcla_form_getMercancias(){
             $clasificacion = "cat_clasificacion"; $clasificacionMercancia = "cat_clasificacionMercancia";
             if($this->existeSegundaClasificacion()){
@@ -712,7 +763,7 @@
         }
         public function segcla_form_count(){
             $clasificacion = "cat_clasificacion"; $clasificacionMercancia = "cat_clasificacionMercancia";
-            if(!empty($this->cla['skClasificacion'])){
+            if($this->existeSegundaClasificacion()){
                 $clasificacion = "cat_clasificacionSegunda"; $clasificacionMercancia = "cat_clasificacionSegundaMercancia";
             }
             $sql = "SELECT COUNT(*) AS total FROM ".$clasificacion." AS cla "
@@ -803,6 +854,56 @@
                 return false;
             }
             return true;
+        }
+        public function create_claSeg(){
+            $sql = "INSERT INTO cat_clasificacionSegunda 
+            (skClasificacion,sReferencia,dFechaPrevio,skStatus,dFechaCreacion,skUsersCreacion,dFechaModificacion,skUsersModificacion,dFechaImportacion,valido) 
+            VALUES 
+            ('".$this->cla['skClasificacion']."',
+            '".$this->cla['sReferencia']."',
+            '".$this->cla['dFechaPrevio']."',
+            '".$this->cla['skStatus']."',
+            '".$this->cla['dFechaCreacion']."',
+            '".$this->cla['skUsersCreacion']."',
+            '".$this->cla['dFechaModificacion']."',
+            '".$this->cla['skUsersModificacion']."',
+            '".$this->cla['dFechaImportacion']."',
+            ".$this->cla['valido']."
+            );";
+            //exit($sql);
+            $result = $this->db->query($sql);
+            if($result){
+                return $this->cla['skClasificacion'];
+            }else{
+                return false;
+            }
+        }
+        public function create_claSegMer(){
+            $sql = "INSERT INTO cat_clasificacionSegundaMercancia 
+            (skClasificacionMercancia,skClasificacion,sFactura,sFraccion,sDescripcion,sDescripcionIngles,sNumeroParte,skStatus,dFechaCreacion,skUsersCreacion,dFechaModificacion,skUsersModificacion,iSecuencia,dFechaImportacion) 
+            VALUES 
+            ('".$this->claMer['skClasificacionMercancia']."',
+            '".$this->claMer['skClasificacion']."',
+            '".$this->claMer['sFactura']."',
+            '".$this->claMer['sFraccion']."',
+            '".$this->claMer['sDescripcion']."',
+            '".$this->claMer['sDescripcionIngles']."',
+            '".$this->claMer['sNumeroParte']."',
+            '".$this->claMer['skStatus']."',
+            '".$this->claMer['dFechaCreacion']."',
+            '".$this->claMer['skUsersCreacion']."',
+            '".$this->claMer['dFechaModificacion']."',
+            '".$this->claMer['skUsersModificacion']."',
+            '".$this->claMer['iSecuencia']."',
+            '".$this->claMer['dFechaImportacion']."'
+            );";
+            //exit($sql);
+            $result = $this->db->query($sql);
+            if($result){
+                return $this->claMer['skClasificacionMercancia'];
+            }else{
+                return false;
+            }
         }
         // TERMINA SEGUNDA CLASIFICACIÓN //
 
