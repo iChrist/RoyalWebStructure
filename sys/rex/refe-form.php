@@ -1,7 +1,7 @@
 
  <pre>
     <?php 
-        echo print_r($_SESSION["session"],1);
+        /*echo print_r($_SESSION["session"],1);
         $fecha = DateTime::createFromFormat('d-m-Y', '30-07-2016');
         //echo $fecha->format('Y-m-d H:i:s');
         $result = array();
@@ -12,6 +12,7 @@
         //echo DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaFacturacion"])->format('d-m-Y');
         //2016-07-26 00:00:00
         //(isset($result["sReferencia"])) ? echo $result["sReferencia"] : echo '' ;
+        */
     ?>
 </pre> 
 
@@ -30,9 +31,7 @@
 
                 </div>
             </div>
-        </div>
 
-        <div class="form-group">
             <label class="control-label col-md-2">Socio Importador <span aria-required="true" class="required"> * </span>
             </label>
             <div class="col-md-4">
@@ -43,6 +42,7 @@
                 </div>
             </div>
         </div>
+
 
         <div class="form-group">
             <label class="control-label col-md-2">Almacen <span aria-required="true" class="required"> * </span>
@@ -55,9 +55,6 @@
                     </select>
                 </div>
             </div>
-        </div>
-
-        <div class="form-group">
             <label class="control-label col-md-2">Estatus <span aria-required="true" class="required"> * </span>
             </label>
             <div class="col-md-4">
@@ -68,6 +65,10 @@
                     </select>
                 </div>
             </div>
+        </div>
+        <hr>
+        <div class="form-group">
+            
         </div>
 
         <div class="form-group">
@@ -84,46 +85,43 @@
         <div class="form-group">
             <label class="control-label col-md-2">Mercancia<span aria-required="true" class="required"> * </span>
             </label>
-            <div class="col-md-4">
+            <div class="col-md-10">
                 <div class="input-icon right">
                     <i class="fa"></i>
                     <textarea name="sMercancia" id="sMercancia" cols="30" class="form-control" rows="10" placeholder="Mercancia"><?php echo (isset($result["sMercancia"])) ? $result["sMercancia"] : '' ;?></textarea>
                 </div>
             </div>
         </div>
-
+<hr>
         <div class="form-group">
             <label class="control-label col-md-2">Guia Master<span aria-required="true" class="required"> * </span>
             </label>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <div class="input-icon right">
                     <i class="fa"></i>
                     <input type="text" maxlength="100" name="sGuiaMaster" id="sGuiaMaster" class="form-control" placeholder="Guia master" value="<?php echo (isset($result["sGuiaMaster"])) ? $result["sGuiaMaster"] : '' ;?>" >
                 </div>
             </div>
-        </div>
-
-        <div class="form-group">
             <label class="control-label col-md-2">Guia House<span aria-required="true" class="required"> * </span>
             </label>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <div class="input-icon right">
                     <i class="fa"></i>
                     <input type="text" maxlength="100" name="sGuiaHouse" id="sGuiaHouse" class="form-control" placeholder="Guia House" value="<?php echo (isset($result["sGuiaHouse"])) ? $result["sGuiaHouse"] : '' ;?>" >
                 </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            <label class="control-label col-md-2">Bultos<span aria-required="true" class="required"> * </span>
+            <label class="control-label col-md-1">Bultos<span aria-required="true" class="required"> * </span>
             </label>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <div class="input-icon right">
                     <i class="fa"></i>
                     <input type="number" min="0" name="iBultos" id="iBultos" class="form-control" placeholder="0" value="<?php echo (isset($result["iBultos"])) ? $result["iBultos"] : '' ;?>" >
                 </div>
             </div>
         </div>
+
+        <hr>
 
         <div class="form-group">
             <label class="control-label col-md-2">Fecha de previo <span aria-required="true" class="required"> * </span></label>
@@ -135,9 +133,6 @@
                     </span>
                 </div>
             </div>
-        </div>
-
-        <div class="form-group">
             <label class="control-label col-md-2">Fecha de despacho <span aria-required="true" class="required"> * </span></label>
             <div class="col-md-4">
                 <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
@@ -149,6 +144,7 @@
             </div>
         </div>
 
+
         <div class="form-group">
             <label class="control-label col-md-2">Fecha de clasificacion <span aria-required="true" class="required"> * </span></label>
             <div class="col-md-4">
@@ -159,9 +155,6 @@
                     </span>
                 </div>
             </div>
-        </div>
-
-        <div class="form-group">
             <label class="control-label col-md-2">Fecha de glosa<span aria-required="true" class="required"> * </span></label>
             <div class="col-md-4">
                 <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
@@ -173,6 +166,7 @@
             </div>
         </div>
 
+
         <div class="form-group">
             <label class="control-label col-md-2">Fecha de captura de pedimento <span aria-required="true" class="required"> * </span></label>
             <div class="col-md-4">
@@ -183,9 +177,6 @@
                     </span>
                 </div>
             </div>
-        </div>
-
-        <div class="form-group">
             <label class="control-label col-md-2">Fecha de revalidacion<span aria-required="true" class="required"> * </span></label>
             <div class="col-md-4">
                 <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
@@ -208,6 +199,8 @@
                 </div>
             </div>
         </div>
+
+        <hr>
 
         <div class="form-group">
             <label class="control-label col-md-2">Deposito <span aria-required="true" class="required"> * </span>

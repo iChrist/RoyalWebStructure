@@ -6,6 +6,9 @@ Class Rex_Model Extends Core_Model {
         'id'=>null,
         'nombre'=>null
     );
+
+    public $refex = array(
+        );
     // PRIVATE VARIABLES //
     private $data = array();
 
@@ -18,9 +21,9 @@ Class Rex_Model Extends Core_Model {
     }
     
     /* COMIENZA MODULO (REX) */
-    public function getAreas($skStatus = null)
+    public function getrefex($skStatus = null)
     {
-        $sql = "SELECT * FROM areas";
+        $sql = "SELECT * FROM refex";
         if($skStatus != null){ $sql .=" WHERE skStatus = '$skStatus'"; }
         $result = $this->db->query($sql);
         if(!$result){
@@ -297,57 +300,58 @@ Class Rex_Model Extends Core_Model {
 
         if ($get){
 
-            if(!empty($this->areas['sPedimento'])){
-                $sql .=" AND ope_referenciasExternas.sPedimento = '".$this->areas['sPedimento']."'";
+            if(!empty($this->refex['sPedimento'])){
+                $sql .=" AND ope_referenciasExternas.sPedimento = '".$this->refex['sPedimento']."'";
             }
-            if(!empty($this->areas['sReferencia'])){
-                $sql .=" AND ope_referenciasExternas.sReferencia like '%".$this->areas['sReferencia']."%'";
+            if(!empty($this->refex['sReferencia'])){
+                $sql .=" AND ope_referenciasExternas.sReferencia like '%".$this->refex['sReferencia']."%'";
             }
-            if(!empty($this->areas['sMercancia'])){
-                $sql .=" AND ope_referenciasExternas.sMercancia like '%".$this->areas['sMercancia']."%'";
+            if(!empty($this->refex['sMercancia'])){
+                $sql .=" AND ope_referenciasExternas.sMercancia like '%".$this->refex['sMercancia']."%'";
             }
-            if(!empty($this->areas['sGuiaMaster'])){
-                $sql .=" AND ope_referenciasExternas.sGuiaMaster like '%".$this->areas['sGuiaMaster']."%'";
+            if(!empty($this->refex['sGuiaMaster'])){
+                $sql .=" AND ope_referenciasExternas.sGuiaMaster like '%".$this->refex['sGuiaMaster']."%'";
             }
-            if(!empty($this->areas['sGuiaHouse'])){
-                $sql .=" AND ope_referenciasExternas.sGuiaHouse = '".$this->areas['sGuiaHouse']."'";
+            if(!empty($this->refex['sGuiaHouse'])){
+                $sql .=" AND ope_referenciasExternas.sGuiaHouse = '".$this->refex['sGuiaHouse']."'";
             }
-            if(!empty($this->areas['dFechaCreacion'])){
-                $sql .=" AND ope_referenciasExternas.dFechaCreacion like '%".$this->areas['dFechaCreacion']."%'";
+            if(!empty($this->refex['dFechaCreacion'])){
+                $sql .=" AND ope_referenciasExternas.dFechaCreacion like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaCreacion'])->format('Y-m-d H:i:s')."%'";
             }
-            if(!empty($this->areas['dFechaPrevio'])){
-                $sql .=" AND ope_referenciasExternas.dFechaPrevio like '%".$this->areas['dFechaPrevio']."%'";
+            if(!empty($this->refex['dFechaPrevio'])){
+                $sql .=" AND ope_referenciasExternas.dFechaPrevio like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaPrevio'])->format('Y-m-d H:i:s')."%'";
             }
-            if(!empty($this->areas['dFechaDespacho'])){
-                $sql .=" AND ope_referenciasExternas.dFechaDespacho like '%".$this->areas['dFechaDespacho']."%'";
+            if(!empty($this->refex['dFechaDespacho'])){
+                $sql .=" AND ope_referenciasExternas.dFechaDespacho like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaDespacho'])->format('Y-m-d H:i:s')."%'";
             }        
-            if(!empty($this->areas['dFechaClasificacion'])){
-                $sql .=" AND ope_referenciasExternas.dFechaClasificacion like '%".$this->areas['dFechaClasificacion']."%'";
+            if(!empty($this->refex['dFechaClasificacion'])){
+                $sql .=" AND ope_referenciasExternas.dFechaClasificacion like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaClasificacion'])->format('Y-m-d H:i:s')."%'";
             }
-            if(!empty($this->areas['dFechaGlosa'])){
-                $sql .=" AND ope_referenciasExternas.dFechaGlosa like '%".$this->areas['dFechaGlosa']."%'";
+            if(!empty($this->refex['dFechaGlosa'])){
+                $sql .=" AND ope_referenciasExternas.dFechaGlosa like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaGlosa'])->format('Y-m-d H:i:s')."%'";
             }
-            if(!empty($this->areas['dFechaCapturaPedimento'])){
-                $sql .=" AND ope_referenciasExternas.dFechaCapturaPedimento like '%".$this->areas['dFechaCapturaPedimento']."%'";
+            if(!empty($this->refex['dFechaCapturaPedimento'])){
+                $sql .=" AND ope_referenciasExternas.dFechaCapturaPedimento like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaCapturaPedimento'])->format('Y-m-d H:i:s')."%'";
             }
-            if(!empty($this->areas[''])){
-                $sql .=" AND ope_referenciasExternas.dFechaFacturacion like '%".$this->areas['']."%'";
+            if(!empty($this->refex['dFechaFacturacion'])){
+                $sql .=" AND ope_referenciasExternas.dFechaFacturacion like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaFacturacion'])->format('Y-m-d H:i:s')."%'";
             }
-            if(!empty($this->areas['dFechaFacturacion'])){
-                $sql .=" AND ope_referenciasExternas.iDeposito like '%".$this->areas['dFechaFacturacion']."%'";
+            if(!empty($this->refex['iDeposito'])){
+                $sql .=" AND ope_referenciasExternas.iDeposito like '%".$this->refex['iDeposito']."%'";
             }
-            if(!empty($this->areas['iSaldo'])){
-                $sql .=" AND ope_referenciasExternas.iSaldo like '%".$this->areas['iSaldo']."%'";
+            if(!empty($this->refex['iSaldo'])){
+                $sql .=" AND ope_referenciasExternas.iSaldo like '%".$this->refex['iSaldo']."%'";
             }
-            if(!empty($this->areas['sAlmacen'])){
-                $sql .=" AND cat_almacenes.sNombre like '%".$this->areas['sAlmacen']."%'";
+            if(!empty($this->refex['sAlmacen'])){
+                $sql .=" AND cat_almacenes.sNombre like '%".$this->refex['sAlmacen']."%'";
             }
-            if(!empty($this->areas['sEstatus'])){
-                $sql .=" AND cat_estatus.sNombre like '%".$this->areas['sEstatus']."%'";
+            if(!empty($this->refex['sEstatus'])){
+                $sql .=" AND cat_estatus.sNombre like '%".$this->refex['sEstatus']."%'";
             }
-            if(!empty($this->areas['sSocioImportador'])){
-                $sql .=" AND cat_empresas.sNombre like '%".$this->areas['sSocioImportador']."%'";
+            if(!empty($this->refex['sSocioImportador'])){
+                $sql .=" AND cat_empresas.sNombre like '%".$this->refex['sSocioImportador']."%'";
             }
+            //die($sql);
         }
         $result = $this->db->query($sql);
         if($result){

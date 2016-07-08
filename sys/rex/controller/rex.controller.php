@@ -19,10 +19,10 @@ Class Rex_Controller Extends Rex_Model {
     {
         $this->ref['id'] = 1;
         $this->ref['nombre'] = 'samuel';
-        $areas = $this->getAreas('AC');
-        $areas['otroDato'] = 'muajajaja';
+        $refex = $this->getrefex('AC');
+        $refex['otroDato'] = 'muajajaja';
         //$this->load_view('NombreArhivo' , $datosParaVista = array() , $bool = TRUE , $path = NULL);
-        $this->load_view('rex-index1',$areas,false);
+        $this->load_view('rex-index1',$refex,false);
     }
 
     public function refe_index()
@@ -32,52 +32,52 @@ Class Rex_Controller Extends Rex_Model {
                 case 'fetch_all':
                     // PARAMETROS PARA FILTRADO //
                 if(isset($_POST['sPedimento'])){
-                    $this->areas['sPedimento'] = $_POST['sPedimento'];
+                    $this->refex['sPedimento'] = $_POST['sPedimento'];
                 }
                 if(isset($_POST['sReferencia'])){
-                    $this->areas['sReferencia'] = $_POST['sReferencia'];
+                    $this->refex['sReferencia'] = $_POST['sReferencia'];
                 }
                 if(isset($_POST['sGuiaMaster'])){
-                    $this->areas['sGuiaMaster'] = $_POST['sGuiaMaster'];
+                    $this->refex['sGuiaMaster'] = $_POST['sGuiaMaster'];
                 }
                 if(isset($_POST['sGuiaHouse'])){
-                    $this->areas['sGuiaHouse'] = $_POST['sGuiaHouse'];
+                    $this->refex['sGuiaHouse'] = $_POST['sGuiaHouse'];
                 }
                 if(isset($_POST['dFechaCreacion'])){
-                    $this->areas['dFechaCreacion'] = $_POST['dFechaCreacion'];
+                    $this->refex['dFechaCreacion'] = $_POST['dFechaCreacion'];
                 }
                 if(isset($_POST['dFechaPrevio'])){
-                    $this->areas['dFechaPrevio'] = $_POST['dFechaPrevio'];
+                    $this->refex['dFechaPrevio'] = $_POST['dFechaPrevio'];
                 }
                 if(isset($_POST['dFechaDespacho'])){
-                    $this->areas['dFechaDespacho'] = $_POST['dFechaDespacho'];
+                    $this->refex['dFechaDespacho'] = $_POST['dFechaDespacho'];
                 }
                 if(isset($_POST['dFechaClasificacion'])){
-                    $this->areas['dFechaClasificacion'] = $_POST['dFechaClasificacion'];
+                    $this->refex['dFechaClasificacion'] = $_POST['dFechaClasificacion'];
                 }
                 if(isset($_POST['dFechaGlosa'])){
-                    $this->areas['dFechaGlosa'] = $_POST['dFechaGlosa'];
+                    $this->refex['dFechaGlosa'] = $_POST['dFechaGlosa'];
                 }
                 if(isset($_POST['dFechaCapturaPedimento'])){
-                    $this->areas['dFechaCapturaPedimento'] = $_POST['dFechaCapturaPedimento'];
+                    $this->refex['dFechaCapturaPedimento'] = $_POST['dFechaCapturaPedimento'];
                 }
                 if(isset($_POST['dFechaFacturacion'])){
-                    $this->areas['dFechaFacturacion'] = $_POST['dFechaFacturacion'];
+                    $this->refex['dFechaFacturacion'] = $_POST['dFechaFacturacion'];
                 }
                 if(isset($_POST['iDeposito'])){
-                    $this->areas['iDeposito'] = $_POST['iDeposito'];
+                    $this->refex['iDeposito'] = $_POST['iDeposito'];
                 }
                 if(isset($_POST['iSaldo'])){
-                    $this->areas['iSaldo'] = $_POST['iSaldo'];
+                    $this->refex['iSaldo'] = $_POST['iSaldo'];
                 }
                 if(isset($_POST['sAlmacen'])){
-                    $this->areas['sAlmacen'] = $_POST['sAlmacen'];
+                    $this->refex['sAlmacen'] = $_POST['sAlmacen'];
                 }
                 if(isset($_POST['sEstatus'])){
-                    $this->areas['sEstatus'] = $_POST['sEstatus'];
+                    $this->refex['sEstatus'] = $_POST['sEstatus'];
                 }
                 if(isset($_POST['sSocioImportador'])){
-                    $this->areas['sSocioImportador'] = $_POST['sSocioImportador'];
+                    $this->refex['sSocioImportador'] = $_POST['sSocioImportador'];
                 }
                     // OBTENER REGISTROS //
                 $total = parent::countGetReferenciasExternas();
@@ -88,8 +88,8 @@ Class Rex_Controller Extends Rex_Model {
                     return false;
                 }
 
-                $this->areas['limit'] = $records['limit'];
-                $this->areas['offset'] = $records['offset'];
+                $this->refex['limit'] = $records['limit'];
+                $this->refex['offset'] = $records['offset'];
                 $this->data['data'] = parent::countGetReferenciasExternas(true);
 
                 if(!$this->data['data']){
