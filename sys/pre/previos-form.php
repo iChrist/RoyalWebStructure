@@ -3,16 +3,16 @@
     if($data['datos']){
         $result = $data['datos']->fetch_assoc();
     }
-    echo "<PRE>";
-    print_r($result);
+  /*  echo "<PRE>";
+    print_r($data['autoridadesPrevios']);
     echo "</PRE>";
-
+*/
     $arrayAutoridades = array();
   	if(isset($data['autoridadesPrevios']))
       {
   		if($data['autoridadesPrevios']->num_rows > 0){
   			 while($row = $data['autoridadesPrevios']->fetch_assoc()){
-  				$arrayAutoriades[] = $row{'skAutoridad'};
+  				$arrayAutoridades[] = $row{'skAutoridad'};
   			 }
   		 }
       }
@@ -154,9 +154,9 @@
                     <div class="checkbox-list">
 
                             <?php
-                            if($data['autoridadesPrevios'])
+                            if($data['autoridades'])
                             {
-                                foreach ($data['autoridadesPrevios'] as $autoridades)
+                                foreach ($data['autoridades'] as $autoridades)
                                 {
                                 ?>
                                     <div class="col-md-4">
@@ -207,7 +207,7 @@
         <div class="form-group">
           <label class="control-label col-md-2">Motivo de Solicitud <span aria-required="true" class="required"> * </span> </label>
           <div class="col-md-10">
-          <textarea name="sObservacionesSolicitud"placeholder="Motivo por el cual solicita el previo"class="form-control" rows="3"></textarea>
+          <textarea name="sObservacionesSolicitud"placeholder="Motivo por el cual solicita el previo"class="form-control" rows="3"><?php echo (isset($result['sObservacionesSolicitud'])) ? $result['sObservacionesSolicitud'] : '' ; ?></textarea>
           </div>
         </div>
 

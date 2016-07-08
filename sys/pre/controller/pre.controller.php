@@ -2,18 +2,6 @@
 	require_once(SYS_PATH.$_GET["sysModule"]."/model/".$_GET["sysModule"].".model.php");
 	class Pre_Controller extends Pre_Model {
 
-		// PRIVATE VARIABLES //
-		/*private $_data = array();
-
-		public function __construct(){
-			parent::__construct();
-		}
-
-		public function __destruct(){
-			if($this->is_view_required()){
-				$this->load_view($_GET["sysFunction"], $this->_data);
-			}
-		}*/
 		private $data = array();
 
 		public function __construct(){
@@ -91,7 +79,7 @@
 										}
 										$this->previos['limit'] = $records['limit'];
 										$this->previos['offset'] = $records['offset'];
-										$this->data['data'] = parent::read_previos();
+										$this->data['data'] = parent::read_like_previos();
 										if(!$this->data['data']){
 												header('Content-Type: application/json');
 												echo json_encode($records);
@@ -102,10 +90,17 @@
 												$actions = $this->printModulesButtons(2,array($row['skSolicitudPrevio']));
 												array_push($records['data'], array(
 													!empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
-														 ,utf8_encode($row['Estatus'])
-														,str_pad($row['ikSolicitudPrevio'], 7, "0", STR_PAD_LEFT)
-														,utf8_encode($row['sReferencia'])
-														,utf8_encode($row['dFechaSolicitud'])
+														 ,utf8_encode($row['iconoEstatus'])
+														,str_pad($row['codigo'], 7, "0", STR_PAD_LEFT)
+														,($row['fechaSolicitud'] ? utf8_encode($row['fechaSolicitud']) : 'N/D')
+														,($row['fechaPrevio'] ? utf8_encode($row['fechaPrevio']) : 'N/D')
+														,($row['sReferencia'] ? utf8_encode($row['sReferencia']) : 'N/D')
+														,($row['importador'] ? utf8_encode($row['importador']) : 'N/D')
+														,($row['recinto'] ? utf8_encode($row['recinto']) : '')
+														,($row['usuarioEjecutivo'] ? utf8_encode($row['usuarioEjecutivo']) : 'N/D')
+														,($row['usuarioTramitador'] ? utf8_encode($row['usuarioTramitador']) : 'N/D')
+														,($row['numeroFactura'] ? utf8_encode($row['numeroFactura']) : 'N/D')
+														,($row['paisOrigen'] ? utf8_encode($row['paisOrigen']) : 'N/D')
 												));
 										}
 										header('Content-Type: application/json');
@@ -137,6 +132,9 @@
 			$this->data['message'] = '';
 			$this->data['response'] = true;
 			$this->data['datos'] = false;
+			$this->data['autoridades'] = parent::read_autoridades(); // Mandamos a llamar todos los perfiles para cargarlos en la vista
+			$this->data['tiposPrevios'] = parent::read_tiposPrevios(); // Mandamos a llamar todos los perfiles para cargarlos en la vista
+
 			if (isset($_POST['axn'])) {
 					switch ($_POST['axn']) {
 							case "validarReferencia":
@@ -164,23 +162,54 @@
 
 				$this->previos['skSocioRecinto'] = utf8_decode(!empty($_POST['skSocioRecinto']) ? $_POST['skSocioRecinto'] : '');
 				$this->previos['skUsuarioTramitador'] = utf8_decode(!empty($_POST['skUsuarioTramitador']) ? $_POST['skUsuarioTramitador'] : '');
-				$this->previos['dFechaProgramacion'] = utf8_decode(!empty($_POST['dFechaProgramacion']) ? date('Y-m-d', strtotime($_POST['dFechaProgramacion'])) : date('Y-m-d'));
+				$this->previos['dFechaSolicitud'] = utf8_decode(!empty($_POST['dFechaProgramacion']) ? date('Y-m-d', strtotime($_POST['dFechaProgramacion'])) : date('Y-m-d'));
+				//$this->previos['dFechaSolicitud'] = utf8_decode(!empty($_POST['dFechaSolicitud']) ? date('Y-m-d', strtotime($_POST['dFechaSolicitud'])) : date('Y-m-d'));
 				$this->previos['sSelloOrigen'] = addslashes(utf8_decode($_POST['sSelloOrigen']));
 				$this->previos['sSelloFinal'] = addslashes(utf8_decode($_POST['sSelloFinal']));
 				$this->previos['sNumeroFactura'] = addslashes(utf8_decode($_POST['sNumeroFactura']));
 				$this->previos['sPais'] = addslashes(utf8_decode($_POST['sPais']));
 				$this->previos['sObservacionesSolicitud'] = addslashes(utf8_decode($_POST['sObservacionesSolicitud']));
-				/*$this->recepciondocumentos['sObservaciones'] = addslashes(utf8_decode($_POST['sObservaciones']));
-				$this->recepciondocumentos['skEmpresa'] = utf8_decode($_POST['skEmpresa']);
-				$this->recepciondocumentos['skTipoTramite'] = utf8_decode($_POST['skTipoTramite']);
-				$this->recepciondocumentos['skTipoServicio'] = utf8_decode($_POST['skTipoServicio']);
-				$this->recepciondocumentos['skClaveDocumento'] = utf8_decode($_POST['skClaveDocumento']);
-				$this->recepciondocumentos['tRecepcion'] = utf8_decode(!empty($_POST['tRecepcion']) ? $_POST['tRecepcion'] : date('H:i:s'));
-				*/
-			//	exit('<pre>'.print_r($this->previos,1));
-				if (empty($_POST['skSolicitudPrevio'])) {
+				if (!$_POST['skSolicitudPrevio']) {
 					$skSolicitudPrevio = parent::create_previos();
-					if ($skSolicitudPrevio) {
+					if($skSolicitudPrevio) {
+						$bandera = 1;
+						$bandera1 = 1;
+							if(isset($_POST['skAutoridad'])) // En esta parte guardaremos todos los perfiles seleccionados para el nuevo usuario.
+							{
+									$count = count($_POST['skAutoridad']);
+									$valores = "";
+									foreach ($_POST['skAutoridad'] as $autoridades)
+									{
+										if( $bandera == $count )
+										{
+											$valores .= "('".$this->previos['skSolicitudPrevio']."' , '".$autoridades."')";
+										}
+										else
+										{
+											$valores .= "('".$this->previos['skSolicitudPrevio']."' , '".$autoridades."'),";
+										}
+										$bandera++;
+									}
+									$rRespuesta = parent::create_autoridades_previos($valores);
+								}
+							if(isset($_POST['skTipoPrevio'])) // En esta parte guardaremos todos los perfiles seleccionados para el nuevo usuario.
+							{
+										$count1 = count($_POST['skTipoPrevio']);
+										$valores = "";
+										foreach ($_POST['skTipoPrevio'] as $tipoPrevio)
+										{
+											if( $bandera1 == $count1 )
+											{
+												$valores .= "('".$this->previos['skSolicitudPrevio']."' , '".$tipoPrevio."')";
+											}
+											else
+											{
+												$valores .= "('".$this->previos['skSolicitudPrevio']."' , '".$tipoPrevio."'),";
+											}
+											$bandera1++;
+										}
+										$rRespuesta = parent::create_tiposPrevios_previos($valores);
+								}
 
 						$this->data['response'] = true;
 						$this->data['message'] = 'Registro insertado con &eacute;xito.';
@@ -195,35 +224,86 @@
 						echo json_encode($this->data);
 						return false;
 					}
+				}else{
+						if(parent::update_previos()){
+								$bandera = 1;
+								$bandera1 = 1;
+							if(isset($_POST['skAutoridad'])) // En esta parte guardaremos todos los perfiles seleccionados para el nuevo usuario.
+							{
+									$count = count($_POST['skAutoridad']);
+									$valores = "";
+									foreach ($_POST['skAutoridad'] as $autoridades)
+									{
+										if( $bandera == $count )
+										{
+											$valores .= "('".$this->previos['skSolicitudPrevio']."' , '".$autoridades."')";
+										}
+										else
+										{
+											$valores .= "('".$this->previos['skSolicitudPrevio']."' , '".$autoridades."'),";
+										}
+										$bandera++;
+									}
+									$rRespuesta = parent::create_autoridades_previos($valores);
+								}
+							if(isset($_POST['skTipoPrevio'])) // En esta parte guardaremos todos los perfiles seleccionados para el nuevo usuario.
+							{
+										$count = count($_POST['skTipoPrevio']);
+										$valores = "";
+										foreach ($_POST['skTipoPrevio'] as $tipoPrevio)
+										{
+											if( $bandera1 == $count )
+											{
+												$valores .= "('".$this->previos['skSolicitudPrevio']."' , '".$tipoPrevio."')";
+											}
+											else
+											{
+												$valores .= "('".$this->previos['skSolicitudPrevio']."' , '".$tipoPrevio."'),";
+											}
+											$bandera1++;
+										}
+										$rRespuesta = parent::create_tiposPrevios_previos($valores);
+								}
 
-				}
+							$this->data['response'] = true;
+							$this->data['message'] = 'Registro actualizado con &eacute;xito.';
+							header('Content-Type: application/json');
+							echo json_encode($this->data);
+							return true;
+					}else{
+							$this->data['response'] = false;
+							$this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
+							header('Content-Type: application/json');
+							echo json_encode($this->data);
+							return false;
+					}
+
+
+				} //Termina else de Editado o Registro Nuevo
 
 
 
-			}
-			$this->load_model('cof', 'cof');
-			$objUsuarios = new Cof_Model();
-			$this->data['ejecutivos'] = $objUsuarios->read_user();
-			$this->data['tramitadores'] = $objUsuarios->read_user();
+			} //Termina if de datos de post
+				$this->load_model('cof', 'cof');
+				$objUsuarios = new Cof_Model();
+				$this->data['ejecutivos'] = $objUsuarios->read_user();
+				$this->data['tramitadores'] = $objUsuarios->read_user();
 
-			$this->load_model('emp', 'emp');
-			$objEmpresas = new Emp_Model();
-			$objEmpresas->tipoempresas['skStatus'] = 'AC';
-			$objEmpresas->tipoempresas['skTipoEmpresa'] = 'CLIE';
-			$this->data['importador'] = $objEmpresas->read_like_empresas();
-			$objEmpresas->tipoempresas['skTipoEmpresa'] = 'RECI';
-			$this->data['recinto'] = $objEmpresas->read_like_empresas();
-
-			$this->previos['skSolicitudPrevio'] = !empty($_POST['skSolicitudPrevio']) ? $_POST['skSolicitudPrevio'] : substr(md5(microtime()), 1, 32);
-			$this->previos['sReferencia'] = isset($_POST['sReferencia']) ? addslashes(utf8_decode($_POST['sReferencia'])) : null;
-			$this->previos['sObservacionesSolicitud'] = isset($_POST['sObservacionesSolicitud']) ? addslashes(utf8_decode($_POST['sObservacionesSolicitud'])) : null;
+				$this->load_model('emp', 'emp');
+				$objEmpresas = new Emp_Model();
+				$objEmpresas->tipoempresas['skStatus'] = 'AC';
+				$objEmpresas->tipoempresas['skTipoEmpresa'] = 'CLIE';
+				$this->data['importador'] = $objEmpresas->read_like_empresas();
+				$objEmpresas->tipoempresas['skTipoEmpresa'] = 'RECI';
+				$this->data['recinto'] = $objEmpresas->read_like_empresas();
 
 
-			$this->data['autoridadesPrevios'] = parent::read_autoridades(); // Mandamos a llamar todos los perfiles para cargarlos en la vista
-			$this->data['tiposPrevios'] = parent::read_tiposPrevios(); // Mandamos a llamar todos los perfiles para cargarlos en la vista
-			if (isset($_GET['p1'])) {
+			if(isset($_GET['p1'])) {
 					$this->previos['skSolicitudPrevio'] = $_GET['p1'];
 					$this->data['datos'] = parent::read_previos();
+
+					$this->data['autoridadesPrevios'] = parent::read_previos_autoridades();
+					$this->data['tiposPreviosPrevio'] = parent::read_previos_previos();
 
 			}
 			$this->load_view('previos-form', $this->data);
@@ -242,6 +322,15 @@
 			$this->load_view('prevaut-form', $this->data);
 			return true;
 
+		}
+
+		public function predet_detail(){
+			if (isset($_GET['p1'])) {
+					$this->previos['skSolicitudPrevio'] = $_GET['p1'];
+					$this->data['datos'] = parent::detail_previo();
+			}
+			$this->load_view('predet-detail', $this->data);
+			return true;
 		}
 	}
 ?>
