@@ -182,7 +182,7 @@
 				                    skStatus='".$this->users['skStatus']."'
 				                    WHERE skUsers = '".$this->users['skUsers']."'";
 				          	$result = $this->db->query($sql);
-										//echo $sql;die();
+
 										$sql = "DELETE FROM _users_profiles  WHERE skUsers = '".$this->users['skUsers']."'";
 				                $this->db->query($sql);
 												if($result){
@@ -192,7 +192,7 @@
 				                }
 												$sql = "DELETE FROM _users_sucursales  WHERE skUsers = '".$this->users['skUsers']."'";
 
-												die();
+
 
 								        $this->db->query($sql);
 				                if($result){

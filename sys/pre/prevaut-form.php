@@ -248,8 +248,6 @@
                       }
                     }
 
-                },skUsuarioEjecutivo:{
-                    required: true
                 },
 
             },
@@ -294,9 +292,6 @@
                   remote: function(){
                       return 'La referencia "'+$("#sReferencia").val()+'" no Existe.';
                   }
-              },
-              skUsuarioEjecutivo:{
-                  required: true
               },
             }
         });
