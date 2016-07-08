@@ -256,7 +256,11 @@
                         //exit('<pre>'.print_r($records['data'],1).'</pre>');
                         $i = 0;
                         while($row = $this->data['data']->fetch_assoc()){
-                                $actions = $this->printModulesButtons(2,array($row['skClasificacion']));
+                            $segundaClasificacion = 'block';
+                            if($row['valido']==0){
+                                $segundaClasificacion = 'none';
+                            }
+                                $actions = $this->printModulesButtons(2,array($row['skClasificacion'],$segundaClasificacion));
                                 //exit('<pre>'.print_r($actions,1).'</pre>');
                                 $records['data'][$i] = array(
                                 !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
