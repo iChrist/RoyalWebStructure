@@ -93,6 +93,12 @@ Class Rex_Model Extends Core_Model {
                 '".$_POST["iSaldo"]."');" ;
         //die($sql_insert);
 
+        if (isset($_POST["conceptos"]) && isset($_POST["iCantidad"])) {
+            for ($i= 0; $i < count($_POST["conceptos"]); $i++) { 
+                $this->insertConceptos($skReferenciaExterna,$_POST["conceptos"][$i],$_POST["iCantidad"][$i]);
+            }
+        }
+
         if (isset($_POST) ) {
             
             $result = $this->db->query($sql_insert);
@@ -361,6 +367,60 @@ Class Rex_Model Extends Core_Model {
                 return false;
             }
         }
+    }
+
+    public function getConceptos($skEmpresa)
+    {
+
+        $sql = "
+        SELECT 
+
+            rel_cat_empresas_tarifas_conceptos.skTipoTramite,
+            cat_conceptos.skConcepto,
+            cat_conceptos.skStatus,
+            cat_conceptos.sNombreCorto,
+            cat_conceptos.sNombre,
+            cat_conceptos.sDescripcion,
+            cat_conceptos.skDivisa,
+            cat_conceptos.fPrecioUnitario
+        FROM
+            rel_cat_empresas_tarifas_conceptos
+                INNER JOIN
+            cat_conceptos ON (cat_conceptos.skConcepto = rel_cat_empresas_tarifas_conceptos.skConcepto)
+        WHERE
+            skEmpresa = '$skEmpresa';";
+
+        //die($sql);
+            
+        $r = $this->db->query($sql);
+
+        if ($this->db->affected_rows > 0){
+            $arg = array();
+            while ($row = $r->fetch_assoc()) {
+                array_push($arg, $row);
+            }
+            return $arg;
+        }else{
+            return false;
+        }
+    }
+
+    public function insertConceptos($skReferenciaExterna,$skConcepto,$iImporte){
+        $skReferenciaExternaConcepeteto =  substr(md5(microtime()), 1, 32);
+        $sql = "
+        INSERT INTO 
+        `rel_referenciasExternas_conceptos` (
+            `skReferenciaExternaConcepto`, 
+            `skReferenciaExterna`, 
+            `skConcepto`, 
+            `iImporte`
+            ) 
+        VALUES (
+            '$skReferenciaExternaConcepeteto', 
+            '$skReferenciaExterna', 
+            '$skConcepto', 
+            '$iImporte');";
+        $result = $this->db->query($sql);
     }
 
 

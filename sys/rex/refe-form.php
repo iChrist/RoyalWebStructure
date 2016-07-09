@@ -1,20 +1,5 @@
 
- <pre>
-    <?php 
-        /*echo print_r($_SESSION["session"],1);
-        $fecha = DateTime::createFromFormat('d-m-Y', '30-07-2016');
-        //echo $fecha->format('Y-m-d H:i:s');
-        $result = array();
-        if($data['datos']){
-            $result = $data['datos'];
-        }
-        //echo (isset($result["dFechaFacturacion"])) ? $result["dFechaFacturacion"] : '' ;
-        //echo DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaFacturacion"])->format('d-m-Y');
-        //2016-07-26 00:00:00
-        //(isset($result["sReferencia"])) ? echo $result["sReferencia"] : echo '' ;
-        */
-    ?>
-</pre> 
+
 
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data"> 
     <input type="hidden" name="skReferenciaExterna"  id="skReferenciaExterna" value="<?php echo (isset($result['skReferenciaExterna'])) ? $result['skReferenciaExterna'] : '' ; ?>">
@@ -38,6 +23,7 @@
                 <div class="input-icon right">
                     <i class="fa"></i>
                     <select class="form-control" id="skSocioImportador" name="skSocioImportador">
+                        <option value="">--Seleccione socio Importador--</option>
                     </select>
                 </div>
             </div>
@@ -51,7 +37,7 @@
                 <div class="input-icon right">
                     <i class="fa"></i>
                     <select class="form-control" id="skAlmacen" name="skAlmacen">
-                        
+                        <option value="">-- Seleccione un almacen --</option>
                     </select>
                 </div>
             </div>
@@ -61,14 +47,14 @@
                 <div class="input-icon right">
                     <i class="fa"></i>
                     <select class="form-control" id="skEstatus" name="skEstatus">
-                        
+                        <option value="">-- Seleccione un estatus --</option>
                     </select>
                 </div>
             </div>
         </div>
         <hr>
         <div class="form-group">
-            
+
         </div>
 
         <div class="form-group">
@@ -92,7 +78,7 @@
                 </div>
             </div>
         </div>
-<hr>
+        <hr>
         <div class="form-group">
             <label class="control-label col-md-2">Guia Master<span aria-required="true" class="required"> * </span>
             </label>
@@ -211,29 +197,138 @@
                     <input type="number" maxlength="400" name="iDeposito" id="iDeposito" class="form-control" placeholder="0" value="<?php echo (isset($result["iBultos"])) ? $result["iBultos"] : '' ;?>" >
                 </div>
             </div>
-        </div>
-
-        <div class="form-group">
-            <label class="control-label col-md-2">Saldo <span aria-required="true" class="required"> * </span>
+            <label class="control-label col-md-2">Tipo de cambio <span aria-required="true" class="required"> * </span>
             </label>
             <div class="col-md-4">
                 <div class="input-icon right">
                     <i class="fa"></i>
-                    <input type="number" maxlength="400" name="iSaldo" id="iSaldo" class="form-control" placeholder="0" value="<?php echo (isset($result["iBultos"])) ? $result["iBultos"] : '' ;?>" >
+                    <input type="number" maxlength="400" name="fTipoCambio" id="fTipoCambio" class="form-control" placeholder="0" value="<?php echo (isset($data["tipoCambio"]["USD"])) ? $data["tipoCambio"]["USD"]["valor"] : '' ;?>" >
                 </div>
             </div>
         </div>
+        <div class="col-md-12">
+            <table class="table table-responsive table-striped">
+                <thead>
+                    <tr>
+                        <td colspan="7" align="center"><h3>Conceptos de Pedimento</h3></td>
+                    </tr>
+                    <tr>
+                        <th nowrap>S</th>
+                        <th nowrap>Cantidad</th>
+                        <th nowrap>Precio Unitario</th>
+                        <th nowrap>Divisa</th>
+                        <th width="80%">Nombre</th>
+                        <th nowrap></th>
+                        <th width="80%">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody id="dvConceptosPedimento">
+                    <tr>
 
+                        <td>
+                            <input onchange="cotizar();" value="434fed5f4cae76cf09d246a99fde3c2" name="conceptos[]" type="checkbox">
+                        </td>
+
+                        <td>
+                            <input name="iCantidad[]" onchange="cotizar();" class="form-control input-sm iCantidad" placeholder="Cant" value="" type="text">
+                        </td>
+
+                        <td>
+                            <input name="fPrecioUnitario[]" onchange="cotizar();" class="form-control input-sm fPrecioUnitario" placeholder="Precio Unitario" value="0.00" type="text">
+                        </td>
+
+                        <td style="color:#777;">
+                            MXN<input class="divisa" name="divisa[]" value="MXN" type="hidden">
+                        </td>
+
+                        <td nowrap="">ADVALOREM</td>
+
+                        <td class="show_dolares" nowrap=""></td>
+
+                        <td> 
+                            <span class="show_subtotal"></span> 
+                            <input name="subtotal[]" class="subtotal" value="" type="hidden">
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+                    <div class="form-group">
+          <div class="col-md-12">
+            <div class="col-md-3 col-md-offset-9">
+            <h3>Total: <span id="total">0.00</span></h3>
+            </div>
+          </div>
+        </div>
+        </div>
+    <pre>
+        <?php 
+        /*echo print_r($_SESSION["session"],1);
+        $fecha = DateTime::createFromFormat('d-m-Y', '30-07-2016');
+        //echo $fecha->format('Y-m-d H:i:s');
+        $result = array();
+        if($data['datos']){
+            $result = $data['datos'];
+        }
+        //echo (isset($result["dFechaFacturacion"])) ? $result["dFechaFacturacion"] : '' ;
+        //echo DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaFacturacion"])->format('d-m-Y');
+        //2016-07-26 00:00:00
+        //(isset($result["sReferencia"])) ? echo $result["sReferencia"] : echo '' ;
+        */
+        //var_dump($data);
+        ?>
+    </pre> 
+
+    <div class="form-group">
+        <label class="control-label col-md-2">Saldo <span aria-required="true" class="required"> * </span>
+        </label>
+        <div class="col-md-4">
+            <div class="input-icon right">
+                <i class="fa"></i>
+                <input type="number" maxlength="400" name="iSaldo" id="iSaldo" class="form-control" placeholder="0" value="<?php echo (isset($result["iBultos"])) ? $result["iBultos"] : '' ;?>" >
+            </div>
+        </div>
     </div>
+
+</div>
 </form>
 
 <script type="text/javascript">
+function cotizar(){
+  //alert(1);
+  $(".subtotal").val("");
+  $(".show_subtotal").html("");
+                var total = 0;
+                $("input[name='conceptos[]']:checked").each(function(idx,obj){
+                    var tr = $(obj).parent().parent();
+            var precioUnitario = $(tr).find(".fPrecioUnitario").val();
+            var divisaConcepto = $(tr).find(".divisa").val();
+                    var cantidad = $(tr).find(".iCantidad").val();
+            var unidadCambio = $("#fTipoCambio").val();
+            if(divisaConcepto == 'MXN'){
+              var resultado = precioUnitario * cantidad;
+            }else{
+              //  alert("entro");
+              var resultadoDolares = precioUnitario * cantidad;
+              var resultado = precioUnitario * cantidad * unidadCambio;
+              $(tr).find(".show_dolares").html("$ "+resultadoDolares.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+            }
+            var subtotal = $(tr).find(".subtotal").val(resultado);
+            var show_subtotal = $(tr).find(".show_subtotal").html("$ "+resultado.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+
+
+                    total += resultado;
+                });
+                $("#total").html("$ "+total.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+}
     $(document).ready(function(){
+
+
 
         $.ajax({
             url : 'http://localhost:81/sys/rex/jsonStatus/',
             data : {},
-         
+
             // especifica si será una petición POST o GET
             type : 'GET',
             dataType : 'json',
@@ -255,7 +350,7 @@
         $.ajax({
             url : 'http://localhost:81/sys/rex/jsonAlmacenes/',
             data : {},
-         
+
             // especifica si será una petición POST o GET
             type : 'GET',
             dataType : 'json',
@@ -277,7 +372,7 @@
         $.ajax({
             url : 'http://localhost:81/sys/rex/jsonSocioImportadores/0/<?php echo $_SESSION["session"]["skSocioEmpresaPropietario"]. "/" ;?>',
             data : {},
-         
+
             // especifica si será una petición POST o GET
             type : 'GET',
             dataType : 'json',
@@ -295,6 +390,52 @@
                 console.log('Petición realizada');
             }
         }); 
+        
+        $( "#skSocioImportador" ).change(function() {
+            //alert($( "#skSocioImportador option:selected" ).val());
+            $.ajax({
+                url : 'http://localhost:81/sys/rex/jsonConceptos/',
+                data : {skEmpresa:$( "#skSocioImportador option:selected" ).val()},
+
+                // especifica si será una petición POST o GET
+                type : 'POST',
+                dataType : 'json',
+                success : function(json) {
+                    $("#dvConceptosPedimento").empty();
+                    console.log(json);
+                    for (o in json) {
+                        d = json[o];
+                        $("#dvConceptosPedimento").append(`
+                            <tr>
+                                <td>
+                                    <input onchange="cotizar();" value="`+d.skConcepto+`" name="conceptos[]" type="checkbox">
+                                </td>
+                                <td>
+                                    <input name="iCantidad[]" onchange="cotizar();" class="form-control input-sm iCantidad" placeholder="Cant" value="0" type="text">
+                                </td>
+                                <td>
+                                    <input name="fPrecioUnitario[]" onchange="cotizar();" class="form-control input-sm fPrecioUnitario" placeholder="Precio Unitario" value="`+d.fPrecioUnitario+`" type="text">
+                                </td>
+                                <td style="color:#777;">
+                                    `+d.skDivisa+`<input class="divisa" name="divisa[]" value="`+d.skDivisa+`" type="hidden">
+                                </td>
+                                <td nowrap="">`+d.sNombre+`</td>
+                                <td class="show_dolares" nowrap=""></td>
+                                <td> 
+                                    <span class="show_subtotal"></span> 
+                                    <input name="subtotal[]" class="subtotal" value="" type="hidden">
+                                </td>
+                            </tr>`);
+                    }
+                },
+                error : function(xhr, status) {
+                    console.log("Algo salio mal en la peticion a jsonConceptos")
+                },
+                complete : function(xhr, status) {
+                    console.log('Petición realizada');
+                }
+            }); 
+        });
         
         /* VALIDATIONS */
         isValid = $("#_save").validate({
@@ -400,7 +541,7 @@
                 }
             }
         });
-    }); 
+}); 
 </script>
 
 <!-- <script type="text/javascript" src="/path/to/moment.js"></script>
