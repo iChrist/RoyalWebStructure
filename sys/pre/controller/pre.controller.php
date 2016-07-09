@@ -14,6 +14,9 @@
 		public function previos_index(){
 				if(isset($_GET['axn'])){
 						switch ($_GET['axn']) {
+								case 'pdf':
+									$this->solicitudprevio_pdf();
+								break;
 								case 'fetch_all':
 										// PARAMETROS PARA FILTRADO //
 										if(!empty($_POST['skSolicitudPrevio'])){
@@ -155,7 +158,7 @@
 			}
 			if ($_POST) {
 				$this->previos['skSolicitudPrevio'] = !empty($_POST['skSolicitudPrevio']) ? $_POST['skSolicitudPrevio'] : substr(md5(microtime()), 1, 32);
-				$this->previos['sReferencia'] = addslashes(utf8_decode($_POST['sReferencia']));
+				$this->previos['sReferencia'] = utf8_decode(!empty($_POST['sReferencia']) ? $_POST['sReferencia'] : '');
 				$this->previos['skUsuarioEjecutivo'] = utf8_decode(!empty($_POST['skUsuarioEjecutivo']) ? $_POST['skUsuarioEjecutivo'] : '');
 				$this->previos['skSocioImportador'] = utf8_decode(!empty($_POST['skSocioImportador']) ? $_POST['skSocioImportador'] : '');
 				$this->previos['skSocioPropietario'] = utf8_decode(!empty($_SESSION['session']['skSocioEmpresaPropietario']) ? $_SESSION['session']['skSocioEmpresaPropietario'] : '');
@@ -323,7 +326,82 @@
 			return true;
 
 		}
+		public function preafo_form(){
+			$this->data['message'] = '';
+			$this->data['response'] = true;
+			$this->data['datos'] = false;
+			if (isset($_GET['p1'])) {
+					$this->previos['skSolicitudPrevio'] = $_GET['p1'];
+					$this->data['datos'] = parent::preafo_previo();
+			}
+			$this->load_view('preafo-form', $this->data);
+			return true;
 
+		}
+		public function preatr_form(){
+			$this->data['message'] = '';
+			$this->data['response'] = true;
+			$this->data['datos'] = false;
+			$this->previos['skSolicitudPrevio'] = !empty($_POST['skSolicitudPrevio']) ? $_POST['skSolicitudPrevio'] : '';
+			$this->previos['skUsuarioTramitador'] = utf8_decode(!empty($_POST['skUsuarioTramitador']) ? $_POST['skUsuarioTramitador'] : '');
+			if($_POST){
+				if(parent::update_preatr_previos()){
+
+					$this->data['response'] = true;
+					$this->data['message'] = 'Registro actualizado con &eacute;xito.';
+					header('Content-Type: application/json');
+					echo json_encode($this->data);
+					return true;
+			}else{
+					$this->data['response'] = false;
+					$this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
+					header('Content-Type: application/json');
+					echo json_encode($this->data);
+					return false;
+			}
+
+
+			}
+
+			$this->load_model('cof', 'cof');
+			$objUsuarios = new Cof_Model();
+			$this->data['tramitadores'] = $objUsuarios->read_user();
+			if (isset($_GET['p1'])) {
+					$this->previos['skSolicitudPrevio'] = $_GET['p1'];
+					$this->data['datos'] = parent::preatr_form();
+			}
+			$this->load_view('preatr-form', $this->data);
+			return true;
+
+		}
+		private function solicitudprevio_pdf() {
+				if (isset($_GET['p1'])) {
+						$this->previos['skSolicitudPrevio'] = $_GET['p1'];
+						$datos = parent::read_like_previos();
+						if ($datos) {
+								$this->data['datos'] = $datos->fetch_assoc();
+						}
+				}
+
+				$this->data['config'] = array(
+						'title' => 'Reporte de Inspeccion de Mercancias'
+						, 'date' => date('d-m-Y H:i:s')
+						, 'company' => 'Gomez y Alvez'
+						, 'address' => 'Manzanillo, Colima'
+						, 'phone' => ''
+						, 'website' => ''
+						, 'background_image' => (SYS_URL) . 'core/assets/img/logoPdf.png'
+						, 'header' => (CORE_PATH) . 'assets/pdf/tplHeaderPdf.php'
+						, 'footer' => (CORE_PATH) . 'assets/pdf/tplFooterPdf.php'
+						, 'style' => (CORE_PATH) . 'assets/pdf/tplStylePdf.php'
+				);
+				ob_start();
+				$this->load_view('solpre-pdf', $this->data, FALSE, 'pre/pdf/');
+				$content = ob_get_clean();
+				$title = 'Reporte de Inspeccion de Mercancias';
+				Core_Functions::pdf($content, $this->data['config']['title'], 'P', 'A4', 'es', true, 'UTF-8', array(5, 5, 5, 5));
+				return true;
+		}
 		public function predet_detail(){
 			if (isset($_GET['p1'])) {
 					$this->previos['skSolicitudPrevio'] = $_GET['p1'];

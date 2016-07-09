@@ -34,7 +34,7 @@
             <label class="control-label col-md-2">Referencia <span aria-required="true" class="required"> * </span> </label>
             <div class="col-md-4">
               <div class="input-icon right"> <i class="fa"></i>
-                <input type="text" name="sReferencia" id="sReferencia" class="form-control" onChange="obtenerDatos();" placeholder="Referencia" value="<?php echo (isset($result['sReferencia'])) ? htmlentities(utf8_encode($result['sReferencia'])) : '' ; ?>" >
+                <input type="text" name="sReferencia" id="sReferencia" <?php echo (isset($result['skSolicitudPrevio'])) ? 'disabled': '' ; ?> class="form-control" onChange="obtenerDatos();" placeholder="Referencia" value="<?php echo (isset($result['sReferencia'])) ? htmlentities(utf8_encode($result['sReferencia'])) : '' ; ?>" >
               </div>
             </div>
             <label class="control-label col-md-2">Ejecutivo <span aria-required="true" class="required"> * </span> </label>
@@ -59,7 +59,7 @@
 
         </div>
         <div class="form-group">
-          <label class="control-label col-md-2">Fecha Programaci&oacute;n</label>
+          <label class="control-label col-md-2">Fecha de Programaci&oacute;n</label>
           <div class="col-md-4">
             <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
               <input type="text" id="dFechaProgramacion" name="dFechaProgramacion" class="form-control" value="<?php echo (isset($result['dFechaSolicitud'])) ?  utf8_encode(date('d-m-Y', strtotime($result['dFechaSolicitud']))) : date('d-m-Y') ; ?>" >
@@ -221,8 +221,11 @@
 <div class="clearfix"></div>
 <script type="text/javascript">
     function obtenerDatos(){
+        //$("#dvDatos").empty();
+
     	  $('.page-title-loading').css('display','inline');
     	 $.post("",{ axn : "obtenerDatos" , sReferencia : $("#sReferencia").val() }, function(data){
+            //    $("#dvDatos").empty();
                 $("#dvDatos").html(data);
                 $('.page-title-loading').css('display','none');
                 });
@@ -310,7 +313,7 @@
                   }
               },
               skUsuarioEjecutivo:{
-                  required: true
+                  required: "Agregar Ejecutivo"
               },
             }
         });

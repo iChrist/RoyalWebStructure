@@ -372,6 +372,107 @@
 		        }
 
 		}
+		public function preafo_previo(){
+			$sql= "SELECT LPAD(osp.ikSolicitudPrevio, 5, '0') AS codigo,
+							osp.skSolicitudPrevio AS skSolicitudPrevio,
+							osp.sReferencia AS sReferencia,
+							ce.sNombre AS Estatus,
+							ce.sIcono AS iconoEstatus,
+							cei.sNombre AS importador,
+							cep.sNombre AS propietario,
+							cer.sNombre AS recinto,
+							osp.sMasterBL AS mbl,
+							osp.sContenedor AS contenedor,
+							osp.sSelloOrigen AS selloOrigen,
+							osp.sSelloFinal AS selloFinal,
+							osp.sNumeroFactura AS numeroFactura,
+							osp.sPais AS paisOrigen,
+							osp.dFechaSolicitud AS fechaSolicitud,
+							osp.dFechaProgramacion AS fechaProgramacion,
+							osp.dFechaPrevio AS fechaPrevio,
+							osp.dFechaApertura AS fechaApertura,
+							us.sName AS usuarioCreacion,
+							usj.sName AS usuarioEjecutivo,
+							ust.sName AS usuarioTramitador
+						FROM ope_solicitudes_previos osp
+						INNER JOIN cat_estatus ce ON ce.skEstatus = osp.skEstatus
+						INNER JOIN rel_empresas_socios resi ON resi.skSocioEmpresa = osp.skSocioImportador
+						INNER JOIN cat_empresas cei ON cei.skEmpresa = resi.skEmpresa
+						INNER JOIN rel_empresas_socios resp ON resp.skSocioEmpresa = osp.skSocioPropietario
+						INNER JOIN cat_empresas cep ON cep.skEmpresa = resp.skEmpresa
+						INNER JOIN rel_empresas_socios resr ON resr.skSocioEmpresa = osp.skSocioRecinto
+						INNER JOIN cat_empresas cer ON cer.skEmpresa = resr.skEmpresa
+						INNER JOIN _users us ON us.skUsers = osp.skUsuarioCreacion
+						INNER JOIN _users usj ON usj.skUsers = osp.skUsuarioEjecutivo
+						INNER JOIN _users ust ON ust.skUsers = osp.skUsuarioTramitador
+						WHERE osp.skSolicitudPrevio = '".$this->previos['skSolicitudPrevio']."' ";
+						//Poner el numero de previo
+						$result = $this->db->query($sql);
+		        if ($result) {
+		            if ($result->num_rows > 0) {
+		                return $result;
+		            } else {
+		                return false;
+		            }
+		        }
 
+		}
+		public function preatr_form(){
+			$sql= "SELECT LPAD(osp.ikSolicitudPrevio, 5, '0') AS codigo,
+							osp.skSolicitudPrevio AS skSolicitudPrevio,
+							osp.sReferencia AS sReferencia,
+							ce.sNombre AS Estatus,
+							ce.sIcono AS iconoEstatus,
+							cei.sNombre AS importador,
+							cep.sNombre AS propietario,
+							cer.sNombre AS recinto,
+							osp.sMasterBL AS mbl,
+							osp.sContenedor AS contenedor,
+							osp.sSelloOrigen AS selloOrigen,
+							osp.sSelloFinal AS selloFinal,
+							osp.sNumeroFactura AS numeroFactura,
+							osp.sPais AS paisOrigen,
+							osp.dFechaSolicitud AS fechaSolicitud,
+							osp.dFechaProgramacion AS fechaProgramacion,
+							osp.dFechaPrevio AS fechaPrevio,
+							osp.dFechaApertura AS fechaApertura,
+							us.sName AS usuarioCreacion,
+							usj.sName AS usuarioEjecutivo,
+							ust.sName AS usuarioTramitador,
+							osp.skUsuarioTramitador
+						FROM ope_solicitudes_previos osp
+						INNER JOIN cat_estatus ce ON ce.skEstatus = osp.skEstatus
+						INNER JOIN rel_empresas_socios resi ON resi.skSocioEmpresa = osp.skSocioImportador
+						INNER JOIN cat_empresas cei ON cei.skEmpresa = resi.skEmpresa
+						INNER JOIN rel_empresas_socios resp ON resp.skSocioEmpresa = osp.skSocioPropietario
+						INNER JOIN cat_empresas cep ON cep.skEmpresa = resp.skEmpresa
+						INNER JOIN rel_empresas_socios resr ON resr.skSocioEmpresa = osp.skSocioRecinto
+						INNER JOIN cat_empresas cer ON cer.skEmpresa = resr.skEmpresa
+						INNER JOIN _users us ON us.skUsers = osp.skUsuarioCreacion
+						INNER JOIN _users usj ON usj.skUsers = osp.skUsuarioEjecutivo
+						INNER JOIN _users ust ON ust.skUsers = osp.skUsuarioTramitador
+						WHERE osp.skSolicitudPrevio = '".$this->previos['skSolicitudPrevio']."' ";
+						//Poner el numero de previo
+						$result = $this->db->query($sql);
+		        if ($result) {
+		            if ($result->num_rows > 0) {
+		                return $result;
+		            } else {
+		                return false;
+		            }
+		        }
+
+		}
+		public function update_preatr_previos(){
+			$sql = "UPDATE ope_solicitudes_previos
+							SET skUsuarioTramitador='".$this->previos['skUsuarioTramitador']."'
+							WHERE skSolicitudPrevio = '".$this->previos['skSolicitudPrevio']."'";
+							$result = $this->db->query($sql);
+							if ($result) {
+			            return TRUE;
+			        } else {
+			            return FALSE;
+			        }
+		}
 	}
 ?>
