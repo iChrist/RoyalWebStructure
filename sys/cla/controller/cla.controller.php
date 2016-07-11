@@ -226,6 +226,12 @@
                         if(isset($_POST['skStatus'])){
                             $this->cla['skStatus'] = $_POST['skStatus'];
                         }
+                        if(isset($_POST['skUsersCreacion'])){
+                            $this->cla['skUsersCreacion'] = $_POST['skUsersCreacion'];
+                        }
+                        if(isset($_POST['skUsersModificacion'])){
+                            $this->cla['skUsersModificacion'] = $_POST['skUsersModificacion'];
+                        }
                         // EXPORTACIÓN A EXCEL //
                         if(isset($_POST['exportExcel']) && $_POST['exportExcel'] == 1){
                             $this->cla['orderBy'] = "cla.sReferencia DESC , cla.dFechaCreacion DESC , claMer.sFactura ASC , claMer.iSecuencia ASC";
@@ -357,15 +363,8 @@
                         if(isset($_GET['p1'])){
                             $this->cla['skClasificacion'] = $_GET['p1'];
                         }
-                        
                         if(isset($_POST['sReferencia'])){
                             $this->cla['sReferencia'] = $_POST['sReferencia'];
-                        }
-                        if(isset($_POST['sPedimento'])){
-                            $this->cla['sPedimento'] = $_POST['sPedimento'];
-                        }
-                        if(isset($_POST['skEmpresa'])){
-                            $this->cla['skEmpresa'] = $_POST['skEmpresa'];
                         }
                         if(isset($_POST['sFraccion'])){
                             $this->claMer['sFraccion'] = $_POST['sFraccion'];
@@ -379,9 +378,12 @@
                         if(isset($_POST['sNumeroParte'])){
                             $this->claMer['sNumeroParte'] = $_POST['sNumeroParte'];
                         }
-                        /*if(isset($_POST['sFactura'])){
+                        if(isset($_POST['sFactura'])){
                             $this->claMer['sFactura'] = $_POST['sFactura'];
-                        }*/
+                        }
+                        if(isset($_POST['iSecuencia'])){
+                            $this->claMer['iSecuencia'] = $_POST['iSecuencia'];
+                        }
                         if(isset($_POST['dFechaPrevio'])){
                             $this->cla['dFechaPrevio'] = $_POST['dFechaPrevio'];
                         }
@@ -423,9 +425,9 @@
                                 $actions = $this->printModulesButtons(2,array($row['skClasificacion']));
                                 $records['data'][$i] = array(
                                 ''
-                                ,utf8_encode($row['sReferencia']) // REFERENCIA
+                                /*,utf8_encode($row['sReferencia']) // REFERENCIA
                                 ,utf8_encode($row['sPedimento']) // PEDIMENTO
-                                ,utf8_encode($row['empresa']) // EMPRESA (CLIENTE)
+                                ,utf8_encode($row['empresa']) // EMPRESA (CLIENTE)*/
                                 
                                 ,utf8_encode($row['sFactura']) // FACTURA
                                 ,utf8_encode($row['sFraccion']) // FRACCIÓN
@@ -434,9 +436,9 @@
                                 ,utf8_encode($row['sNumeroParte']) // NUMERO DE PARTE (MODELO)
                                 ,utf8_encode($row['iSecuencia']) // NUMERO DE PARTE (MODELO)
                                 
-                                ,utf8_encode($row['dFechaPrevio']) // FECHA PREVIO
+                                /*,utf8_encode($row['dFechaPrevio']) // FECHA PREVIO
                                 ,utf8_encode($row['ejecutivo']) // skUsersCreacion
-                                ,utf8_encode($row['clasificador']) // skUsersModificacion
+                                ,utf8_encode($row['clasificador']) // skUsersModificacion*/
                                 
                                 ,utf8_encode($row['htmlStatus']) // STATUS
                                 
@@ -810,6 +812,12 @@
                         }
                         if(isset($_POST['skStatus'])){
                             $this->cla['skStatus'] = $_POST['skStatus'];
+                        }
+                        if(isset($_POST['skUsersCreacion'])){
+                            $this->cla['skUsersCreacion'] = $_POST['skUsersCreacion'];
+                        }
+                        if(isset($_POST['skUsersModificacion'])){
+                            $this->cla['skUsersModificacion'] = $_POST['skUsersModificacion'];
                         }
                         // EXPORTACIÓN A EXCEL //
                         if(isset($_POST['exportExcel']) && $_POST['exportExcel'] == 1){

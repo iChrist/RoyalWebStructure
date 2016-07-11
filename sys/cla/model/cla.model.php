@@ -108,12 +108,32 @@
             if(!empty($this->cla['dFechaPrevio'])){
                 $sql .=" AND cla.dFechaPrevio like '%".$this->cla['dFechaPrevio']."%'";
             }
-            if(!empty($this->cla['sfactura'])){
+            /*if(!empty($this->cla['sfactura'])){
                 $sql .=" AND cla.sfactura like '%".$this->cla['sfactura']."%'";
-            }
+            }*/
             if(!empty($this->cla['skStatus'])){
                 $sql .=" AND cla.skStatus like '%".$this->cla['skStatus']."%'";
             }
+            /* COMIENZA CLAMER */
+            if(!empty($this->claMer['sFactura'])){
+                $sql .=" AND claMer.sFactura like '%".$this->claMer['sFactura']."%'";
+            }
+            if(!empty($this->claMer['iSecuencia'])){
+                $sql .=" AND claMer.iSecuencia like '%".$this->claMer['iSecuencia']."%'";
+            }
+            if(!empty($this->claMer['sFraccion'])){
+                $sql .=" AND claMer.sFraccion like '".$this->claMer['sFraccion']."%'";
+            }
+            if(!empty($this->claMer['sDescripcion'])){
+                $sql .=" AND claMer.sDescripcion like '%".$this->claMer['sDescripcion']."%'";
+            }
+            if(!empty($this->claMer['sDescripcionIngles'])){
+                $sql .=" AND claMer.sDescripcionIngles like '%".$this->claMer['sDescripcionIngles']."%'";
+            }
+            if(!empty($this->claMer['sNumeroParte'])){
+                $sql .=" AND claMer.sNumeroParte like '".$this->claMer['sNumeroParte']."%'";
+            }
+            /* TERMINA CLAMER */
             //exit($sql);
             $result = $this->db->query($sql);
             if($result){
@@ -195,6 +215,15 @@
             if(!empty($this->cla['sReferencia'])){
                 $sql .=" AND cla.sReferencia like '%".trim($this->cla['sReferencia'])."%'";
             }
+            if(!empty($this->cla['skStatus'])){
+                $sql .=" AND cla.skStatus = '".$this->cla['skStatus']."'";
+            }
+            if(!empty($this->cla['skUsersCreacion'])){
+                $sql .=" AND cla.skUsersCreacion = '".$this->cla['skUsersCreacion']."'";
+            }
+            if(!empty($this->cla['skUsersModificacion'])){
+                $sql .=" AND cla.skUsersModificacion = '".$this->cla['skUsersModificacion']."'";
+            }
             if(!empty($this->cla['sPedimento'])){
                 $sql .=" AND rd.sPedimento like '%".trim($this->cla['sPedimento'])."%'";
             }
@@ -260,6 +289,9 @@
             /* COMIENZA CLAMER */
             if(!empty($this->claMer['sFactura'])){
                 $sql .=" AND claMer.sFactura like '%".$this->claMer['sFactura']."%'";
+            }
+            if(!empty($this->claMer['iSecuencia'])){
+                $sql .=" AND claMer.iSecuencia like '%".$this->claMer['iSecuencia']."%'";
             }
             if(!empty($this->claMer['sFraccion'])){
                 $sql .=" AND claMer.sFraccion like '".$this->claMer['sFraccion']."%'";
@@ -699,6 +731,15 @@
             }
             if(!empty($this->cla['sReferencia'])){
                 $sql .=" AND cla.sReferencia like '%".trim($this->cla['sReferencia'])."%'";
+            }
+            if(!empty($this->cla['skStatus'])){
+                $sql .=" AND cla.skStatus = '".$this->cla['skStatus']."'";
+            }
+            if(!empty($this->cla['skUsersCreacion'])){
+                $sql .=" AND cla.skUsersCreacion = '".$this->cla['skUsersCreacion']."'";
+            }
+            if(!empty($this->cla['skUsersModificacion'])){
+                $sql .=" AND cla.skUsersModificacion = '".$this->cla['skUsersModificacion']."'";
             }
             if(!empty($this->cla['sPedimento'])){
                 $sql .=" AND rd.sPedimento like '%".trim($this->cla['sPedimento'])."%'";
