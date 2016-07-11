@@ -813,6 +813,12 @@
                         if(isset($_POST['skStatus'])){
                             $this->cla['skStatus'] = $_POST['skStatus'];
                         }
+                        if(isset($_POST['skUsersCreacion'])){
+                            $this->cla['skUsersCreacion'] = $_POST['skUsersCreacion'];
+                        }
+                        if(isset($_POST['skUsersModificacion'])){
+                            $this->cla['skUsersModificacion'] = $_POST['skUsersModificacion'];
+                        }
                         // EXPORTACIÓN A EXCEL //
                         if(isset($_POST['exportExcel']) && $_POST['exportExcel'] == 1){
                             $this->cla['orderBy'] = "cla.sReferencia DESC , cla.dFechaCreacion DESC , claMer.sFactura ASC , claMer.iSecuencia ASC";

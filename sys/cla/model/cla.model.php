@@ -732,6 +732,15 @@
             if(!empty($this->cla['sReferencia'])){
                 $sql .=" AND cla.sReferencia like '%".trim($this->cla['sReferencia'])."%'";
             }
+            if(!empty($this->cla['skStatus'])){
+                $sql .=" AND cla.skStatus = '".$this->cla['skStatus']."'";
+            }
+            if(!empty($this->cla['skUsersCreacion'])){
+                $sql .=" AND cla.skUsersCreacion = '".$this->cla['skUsersCreacion']."'";
+            }
+            if(!empty($this->cla['skUsersModificacion'])){
+                $sql .=" AND cla.skUsersModificacion = '".$this->cla['skUsersModificacion']."'";
+            }
             if(!empty($this->cla['sPedimento'])){
                 $sql .=" AND rd.sPedimento like '%".trim($this->cla['sPedimento'])."%'";
             }

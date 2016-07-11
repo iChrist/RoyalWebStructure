@@ -72,10 +72,40 @@
                                 
                             </td>
                             <td>
-                                <input type="text" class="form-control form-filter input-sm" name="skUsersCreacion" placeholder="Ejecutivo">
+                                <!--<input type="text" class="form-control form-filter input-sm" name="skUsersCreacion" placeholder="Ejecutivo">!-->
+                                <select name="skUsersCreacion" class="form-control form-filter input-sm">
+                                    <option value="">- Ejecutivo -</option>
+                                <?php
+                                    if($data['users']){
+                                        while($row = $data['users']->fetch_assoc()){
+                                ?>
+                                            <option value="<?php echo $row['skUsers']; ?>">
+                                                <?php echo utf8_encode($row['sName'].' '.$row['sLastNamePaternal'].' '.$row['sLastNameMaternal']); ?>
+                                            </option>
+                                <?php
+                                        }//ENDIF
+                                    }//ENDWHILE
+                                    $data['users']->data_seek(0);
+                                ?>
+                                </select>
                             </td>
                             <td>
-                                <input type="text" class="form-control form-filter input-sm" name="skUsersModificacion" placeholder="Clasificador">
+                                <!--<input type="text" class="form-control form-filter input-sm" name="skUsersModificacion" placeholder="Clasificador">!-->
+                                <select name="skUsersModificacion" class="form-control form-filter input-sm">
+                                    <option value="">- Clasificador -</option>
+                                <?php
+                                    if($data['users']){
+                                        while($row = $data['users']->fetch_assoc()){
+                                ?>
+                                            <option value="<?php echo $row['skUsers']; ?>">
+                                                <?php echo utf8_encode($row['sName'].' '.$row['sLastNamePaternal'].' '.$row['sLastNameMaternal']); ?>
+                                            </option>
+                                <?php
+                                        }//ENDIF
+                                    }//ENDWHILE
+                                    $data['users']->data_seek(0);
+                                ?>
+                                </select>
                             </td>
                         </tr>
                         </thead>
