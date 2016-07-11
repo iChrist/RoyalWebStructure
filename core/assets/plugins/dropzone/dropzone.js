@@ -1321,6 +1321,19 @@ require.register("dropzone/lib/dropzone.js", function(exports, require, module){
         }
       }
     };
+    
+    // RoyalWeb //
+    Dropzone.prototype.getFilesRW = function() {
+      var i, parallelUploads, processingLength, queuedFiles;
+      parallelUploads = this.options.parallelUploads;
+      processingLength = this.getUploadingFiles().length;
+      i = processingLength;
+      if (processingLength >= parallelUploads) {
+        return;
+      }
+      queuedFiles = this.getQueuedFiles();
+      return queuedFiles;
+    };
 
     Dropzone.prototype.processFile = function(file) {
       return this.processFiles([file]);

@@ -145,5 +145,19 @@ Class Core_Functions {
             return false; 
         }
     }
+    
+    /**
+    * table_ajax
+    *
+    * @param	obj		$total - database query object
+    * @return	array
+    */
+    function thumbnailImageDropZone($datos = FALSE){
+        $html = "";
+        if(!$datos){
+            $html = "";
+        }
+        return $html;
+    }
 }
 ?>

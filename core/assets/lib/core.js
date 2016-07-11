@@ -1,6 +1,6 @@
 // SAVE DATA //
 var toastr = '';
-var isValid = ''; 
+var isValid = '';
 function _save(obj,url){
     obj.disabled = true;
     if(!isValid.form()){
@@ -14,6 +14,12 @@ function _save(obj,url){
     if (window.FormData) {
         formdata = new FormData($("#_save")[0]);
         //formdata.append("custom", "valor");
+        if(typeof _Core_RW_Dropzone != "undefined"){
+            var getFilesRW = _Core_RW_Dropzone.getFilesRW();
+            for(var i = 0 ; i < getFilesRW.length;i++){
+                formdata.append(String(_Core_RW_Dropzone.paramName)+'[]', getFilesRW[i], String(getFilesRW[i].name));
+            }
+        }
     }
     $.ajax({
         type: "POST",
