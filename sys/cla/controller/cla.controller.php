@@ -338,7 +338,114 @@
         }
         
         public function clara_index(){
+            // OBTENER CLASIFICACIÓN DE MERCANCIAS //
+                if(isset($_GET['axn']) && $_GET['axn'] == 'fetch_all'){
+                    $this->getCatalogoClasificacion();
+                    return true;
+                }
+            $this->load_view('clara-index', $this->data);
+            return true;
             $this->claara_index(false);
+        }
+        
+        public function getCatalogoClasificacion(){
+            // PARAMETROS PARA FILTRADO //
+                $this->cla['orderBy'] = "cla1.sReferencia DESC , cla1.dFechaCreacion DESC , claMer1.sFactura ASC , claMer1.iSecuencia ASC";
+                /*if(isset($_GET['p1'])){
+                    $this->cla['skClasificacion'] = $_GET['p1'];
+                }
+                if(isset($_POST['sReferencia'])){
+                    $this->cla['sReferencia'] = $_POST['sReferencia'];
+                }
+                if(isset($_POST['sFraccion'])){
+                    $this->claMer['sFraccion'] = $_POST['sFraccion'];
+                }
+                if(isset($_POST['sDescripcion'])){
+                    $this->claMer['sDescripcion'] = $_POST['sDescripcion'];
+                }
+                if(isset($_POST['sDescripcionIngles'])){
+                    $this->claMer['sDescripcionIngles'] = $_POST['sDescripcionIngles'];
+                }
+                if(isset($_POST['sNumeroParte'])){
+                    $this->claMer['sNumeroParte'] = $_POST['sNumeroParte'];
+                }
+                if(isset($_POST['sFactura'])){
+                    $this->claMer['sFactura'] = $_POST['sFactura'];
+                }
+                if(isset($_POST['iSecuencia'])){
+                    $this->claMer['iSecuencia'] = $_POST['iSecuencia'];
+                }*/
+                // EXPORTACIÓN A EXCEL //
+                if(isset($_POST['exportExcel']) && $_POST['exportExcel'] == 1){
+                    $this->data['data'] = parent::catalogoClasificacion(true);
+                    $this->claara_excel();
+                    return true;
+                    exit;
+                }
+                // OBTENER REGISTROS //
+                $total = parent::catalogoClasificacion(false);
+                $records = Core_Functions::table_ajax($total);
+                if($records['recordsTotal'] === 0){
+                    header('Content-Type: application/json');
+                    echo json_encode($records);
+                    return false;
+                }
+
+                $this->cla['limit'] = $records['limit'];
+                $this->cla['offset'] = $records['offset'];
+                $this->data['data'] = parent::catalogoClasificacion(true);
+
+                if(!$this->data['data']){
+                    header('Content-Type: application/json');
+                    echo json_encode($records);
+                    return false;
+                }
+                $i = 0;
+                while($row = $this->data['data']->fetch_assoc()){
+                    $actions = $this->printModulesButtons(2,array($row['skClasificacion1']));
+                    $records['data'][$i] = array(
+                        ''
+                        ,utf8_encode($row['sReferencia1'])
+                        
+                        ,utf8_encode($row['sFraccion1'])
+                        ,utf8_encode($row['sFraccion2'])
+                        
+                        ,utf8_encode($row['sNumeroParte1'])
+                        ,utf8_encode($row['sNumeroParte2'])
+                        
+                        ,utf8_encode($row['sDescripcion1'])
+                        ,utf8_encode($row['sDescripcion2'])
+                        
+                        ,utf8_encode($row['sDescripcionIngles1'])
+                        ,utf8_encode($row['sDescripcionIngles2'])
+                        
+                        ,utf8_encode($row['ejecutivo1'])
+                        ,utf8_encode($row['ejecutivo2'])
+                        
+                        ,utf8_encode($row['clasificador1'])
+                        //,utf8_encode($row['clasificador2'])
+                        ,utf8_encode($row['ejecutivo2']) // Clasificador 2da
+                        
+                        ,utf8_encode($row['sFactura1'])
+                        ,utf8_encode($row['sFactura2'])
+                        
+                        ,utf8_encode($row['iSecuencia1'])
+                        ,utf8_encode($row['iSecuencia2'])
+                        
+                        ,utf8_encode($row['dFechaPrevio1'])
+                        ,utf8_encode($row['dFechaPrevio2'])
+                        
+                        ,utf8_encode($row['dFechaCreacion1'])
+                        ,utf8_encode($row['dFechaCreacion2'])
+                        
+                        ,utf8_encode($row['dFechaModificacion1'])
+                        ,utf8_encode($row['dFechaModificacion2'])
+                    );
+                    $i++;   
+                }
+                header('Content-Type: application/json');
+                echo json_encode($records);
+                return true;
         }
         
         public function claara_index($year = true){

@@ -948,6 +948,134 @@
         }
         // TERMINA SEGUNDA CLASIFICACIÓN //
 
+// ******************************************************************* // 
+                // COMIENZA CATÁLOGO CLASIFICACIÓN //
+// ******************************************************************* // 
         
+        public function catalogoClasificacion($filters = true){
+            $sql = "";
+            if(!$filters){
+                $sql .= "SELECT COUNT(*) AS total FROM (";
+            }
+            $sql .= "
+            SELECT
+            cla1.skClasificacion AS skClasificacion1
+            ,cla1.sReferencia AS sReferencia1
+            ,cla1.dFechaPrevio AS dFechaPrevio1
+            ,cla1.skStatus AS skStatus1
+            ,cla1.dFechaCreacion AS dFechaCreacion1
+            ,cla1.skUsersCreacion AS skUsersCreacion1 
+            ,cla1.dFechaModificacion AS dFechaModificacion1
+            ,cla1.skUsersModificacion AS skUsersModificacion1
+            ,cla1.valido AS valido1
+            ,claMer1.sFactura AS sFactura1
+            ,claMer1.iSecuencia AS iSecuencia1
+            ,claMer1.sFraccion AS sFraccion1
+            ,claMer1.sNumeroParte AS sNumeroParte1
+            ,claMer1.sDescripcion AS sDescripcion1
+            ,claMer1.sDescripcionIngles AS sDescripcionIngles1
+            ,CONCAT(usr1c.sName,' ',usr1c.sLastNamePaternal,' ',usr1c.sLastNameMaternal) AS ejecutivo1
+            ,CONCAT(usr1m.sName,' ',usr1m.sLastNamePaternal,' ',usr1m.sLastNameMaternal) AS clasificador1
+
+            ,'------------------------' AS separacion
+
+            ,cla2.skClasificacion AS skClasificacion2
+            ,cla2.sReferencia AS sReferencia2
+            ,cla2.dFechaPrevio AS dFechaPrevio2
+            ,cla2.skStatus AS skStatus2
+            ,cla2.dFechaCreacion AS dFechaCreacion2
+            ,cla2.skUsersCreacion AS skUsersCreacion2
+            ,cla2.dFechaModificacion AS dFechaModificacion2
+            ,cla2.skUsersModificacion AS skUsersModificacion2
+            ,cla2.valido AS valido2
+            ,claMer2.sFactura AS sFactura2
+            ,claMer2.iSecuencia AS iSecuencia2
+            ,claMer2.sFraccion AS sFraccion2
+            ,claMer2.sNumeroParte AS sNumeroParte2
+            ,claMer2.sDescripcion AS sDescripcion2
+            ,claMer2.sDescripcionIngles AS sDescripcionIngles2
+            ,CONCAT(usr2c.sName,' ',usr2c.sLastNamePaternal,' ',usr2c.sLastNameMaternal) AS ejecutivo2
+            ,CONCAT(usr2m.sName,' ',usr2m.sLastNamePaternal,' ',usr2m.sLastNameMaternal) AS clasificador2
+            FROM cat_clasificacion cla1
+            LEFT JOIN cat_clasificacionMercancia claMer1 ON claMer1.skClasificacion = cla1.skClasificacion
+            LEFT JOIN cat_clasificacionSegunda cla2 ON cla2.skClasificacion = cla1.skClasificacion
+            LEFT JOIN cat_clasificacionSegundaMercancia claMer2 ON claMer2.skClasificacion = cla2.skClasificacion AND claMer2.sFactura = claMer1.sFactura AND claMer2.iSecuencia = claMer1.iSecuencia
+            LEFT JOIN _users AS usr1c ON usr1c.skUsers = cla1.skUsersCreacion
+            LEFT JOIN _users AS usr1m ON usr1m.skUsers = cla1.skUsersModificacion
+            LEFT JOIN _users AS usr2c ON usr2c.skUsers = cla2.skUsersCreacion
+            LEFT JOIN _users AS usr2m ON usr2m.skUsers = cla2.skUsersModificacion
+
+            UNION 
+
+            SELECT
+            cla1.skClasificacion AS skClasificacion1
+            ,cla1.sReferencia AS sReferencia1
+            ,cla1.dFechaPrevio AS dFechaPrevio1
+            ,cla1.skStatus AS skStatus1
+            ,cla1.dFechaCreacion AS dFechaCreacion1
+            ,cla1.skUsersCreacion AS skUsersCreacion1 
+            ,cla1.dFechaModificacion AS dFechaModificacion1
+            ,cla1.skUsersModificacion AS skUsersModificacion1
+            ,cla1.valido AS valido1
+            ,claMer1.sFactura AS sFactura1
+            ,claMer1.iSecuencia AS iSecuencia1
+            ,claMer1.sFraccion AS sFraccion1
+            ,claMer1.sNumeroParte AS sNumeroParte1
+            ,claMer1.sDescripcion AS sDescripcion1
+            ,claMer1.sDescripcionIngles AS sDescripcionIngles1
+            ,CONCAT(usr1c.sName,' ',usr1c.sLastNamePaternal,' ',usr1c.sLastNameMaternal) AS ejecutivo1
+            ,CONCAT(usr1m.sName,' ',usr1m.sLastNamePaternal,' ',usr1m.sLastNameMaternal) AS clasificador1
+            
+            ,'------------------------' AS separacion
+
+            ,cla2.skClasificacion AS skClasificacion2
+            ,cla2.sReferencia AS sReferencia2
+            ,cla2.dFechaPrevio AS dFechaPrevio2
+            ,cla2.skStatus AS skStatus2
+            ,cla2.dFechaCreacion AS dFechaCreacion2
+            ,cla2.skUsersCreacion AS skUsersCreacion2
+            ,cla2.dFechaModificacion AS dFechaModificacion2
+            ,cla2.skUsersModificacion AS skUsersModificacion2
+            ,cla2.valido AS valido2
+            ,claMer2.sFactura AS sFactura2
+            ,claMer2.iSecuencia AS iSecuencia2
+            ,claMer2.sFraccion AS sFraccion2
+            ,claMer2.sNumeroParte AS sNumeroParte2
+            ,claMer2.sDescripcion AS sDescripcion2
+            ,claMer2.sDescripcionIngles AS sDescripcionIngles2
+            ,CONCAT(usr2c.sName,' ',usr2c.sLastNamePaternal,' ',usr2c.sLastNameMaternal) AS ejecutivo2
+            ,CONCAT(usr2m.sName,' ',usr2m.sLastNamePaternal,' ',usr2m.sLastNameMaternal) AS clasificador2
+            FROM cat_clasificacionSegunda cla2
+            LEFT JOIN cat_clasificacionSegundaMercancia claMer2 ON claMer2.skClasificacion = cla2.skClasificacion
+            LEFT JOIN cat_clasificacion cla1 ON cla1.skClasificacion = cla2.skClasificacion
+            LEFT JOIN cat_clasificacionMercancia claMer1 ON claMer1.skClasificacion = cla1.skClasificacion AND claMer1.sFactura = claMer2.sFactura AND claMer1.iSecuencia = claMer2.iSecuencia
+            LEFT JOIN _users AS usr1c ON usr1c.skUsers = cla1.skUsersCreacion
+            LEFT JOIN _users AS usr1m ON usr1m.skUsers = cla1.skUsersModificacion
+            LEFT JOIN _users AS usr2c ON usr2c.skUsers = cla2.skUsersCreacion
+            LEFT JOIN _users AS usr2m ON usr2m.skUsers = cla2.skUsersModificacion WHERE 1=1 ";
+            if(!$filters){
+                $sql .= ") AS N1";
+            }else{
+                $this->filtrosCatalogoClasificacion($sql);
+            }
+            //exit('<pre>'.print_r($sql,1).'</pre>');
+            $result = $this->db->query($sql);
+            if($result){
+                return $result;
+            }else{
+                return false;
+            }
+        }
+        public function filtrosCatalogoClasificacion(&$sql){
+            // cla.valido
+                /*if($this->cla1['valido'] === 0 || $this->cla1['valido'] === 1){
+                    $sql .=" AND cla1.valido = ".$this->cla1['valido'];
+                }
+                if($this->cla2['valido'] === 0 || $this->cla2['valido'] === 1){
+                    $sql .=" AND cla2.valido = ".$this->cla2['valido'];
+                }*/
+            // cla.
+        }
+        // TERMINA CATÁLOGO CLASIFICACIÓN //
     }
 ?>
