@@ -957,7 +957,7 @@
             if($count){
                 $sql .= "SELECT COUNT(*) AS total FROM (";
             }
-            $sql .= "
+            $sql .= " SELECT * FROM (
             SELECT
             e.sNombre AS cliente
             ,cla1.skClasificacion AS skClasificacion1
@@ -1059,9 +1059,9 @@
             LEFT JOIN _users AS usr1c ON usr1c.skUsers = cla1.skUsersCreacion
             LEFT JOIN _users AS usr1m ON usr1m.skUsers = cla1.skUsersModificacion
             LEFT JOIN _users AS usr2c ON usr2c.skUsers = cla2.skUsersCreacion
-            LEFT JOIN _users AS usr2m ON usr2m.skUsers = cla2.skUsersModificacion WHERE 1=1 ".$this->filtrosCatalogoClasificacion($count, $filters).$this->setLimitCatalogoClasificacion($count, $filters);
+            LEFT JOIN _users AS usr2m ON usr2m.skUsers = cla2.skUsersModificacion WHERE 1=1 ".$this->filtrosCatalogoClasificacion($count, $filters).$this->setLimitCatalogoClasificacion($count, $filters)." ) N1 ORDER BY N1.sFraccion1 ASC ";
             if($count){
-                $sql .= ") AS N1";
+                $sql .= ") AS N2";
             }else{
                 //exit($sql);
             }
