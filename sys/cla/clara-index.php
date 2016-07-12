@@ -100,11 +100,11 @@
                             <td>
                                 <input type="text" class="form-control form-filter input-sm" name="sReferencia" placeholder="Referencia">
                             </td>
-                            <td>
+                            <td colspan="2">
                                 <input type="text" class="form-control form-filter input-sm" name="sFraccion1" placeholder="Fracción">
-                            </td>
+                            <!--</td>
                             <td>
-                                <input type="text" class="form-control form-filter input-sm" name="sFraccion2" placeholder="Fracción">
+                                <input type="text" class="form-control form-filter input-sm" name="sFraccion2" placeholder="Fracción">!-->
                             </td>
                             <td>
                                 <input type="text" class="form-control form-filter input-sm" name="sNumeroParte1" placeholder="Modelo">

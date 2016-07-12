@@ -350,40 +350,55 @@
         
         public function getCatalogoClasificacion(){
             // PARAMETROS PARA FILTRADO //
+                $filters = array();
                 $this->cla['orderBy'] = "cla1.sReferencia DESC , cla1.dFechaCreacion DESC , claMer1.sFactura ASC , claMer1.iSecuencia ASC";
-                /*if(isset($_GET['p1'])){
-                    $this->cla['skClasificacion'] = $_GET['p1'];
+                if(isset($_GET['p1'])){
+                    array_push($filters,array('skClasificacion'=>$_GET['p1']));
                 }
-                if(isset($_POST['sReferencia'])){
-                    $this->cla['sReferencia'] = $_POST['sReferencia'];
-                }
-                if(isset($_POST['sFraccion'])){
-                    $this->claMer['sFraccion'] = $_POST['sFraccion'];
-                }
-                if(isset($_POST['sDescripcion'])){
-                    $this->claMer['sDescripcion'] = $_POST['sDescripcion'];
-                }
-                if(isset($_POST['sDescripcionIngles'])){
-                    $this->claMer['sDescripcionIngles'] = $_POST['sDescripcionIngles'];
-                }
-                if(isset($_POST['sNumeroParte'])){
-                    $this->claMer['sNumeroParte'] = $_POST['sNumeroParte'];
-                }
-                if(isset($_POST['sFactura'])){
-                    $this->claMer['sFactura'] = $_POST['sFactura'];
-                }
-                if(isset($_POST['iSecuencia'])){
-                    $this->claMer['iSecuencia'] = $_POST['iSecuencia'];
-                }*/
+            // sReferencia
+                if(isset($_POST['sReferencia'])){ $filters['sReferencia'] = $_POST['sReferencia']; }
+            // sFraccion
+                if(isset($_POST['sFraccion1'])){ $filters['sFraccion1'] = $_POST['sFraccion1']; }
+                if(isset($_POST['sFraccion2'])){ $filters['sFraccion2'] = $_POST['sFraccion2']; }
+            // sNumeroParte
+                if(isset($_POST['sNumeroParte1'])){ $filters['sNumeroParte1'] = $_POST['sNumeroParte1']; }
+                if(isset($_POST['sNumeroParte2'])){ $filters['sNumeroParte2'] = $_POST['sNumeroParte2']; }
+            // sDescripcion
+                if(isset($_POST['sDescripcion1'])){ $filters['sDescripcion1'] = $_POST['sDescripcion1']; }
+                if(isset($_POST['sDescripcion2'])){ $filters['sDescripcion2'] = $_POST['sDescripcion2']; }
+            // sDescripcionIngles
+                if(isset($_POST['sDescripcionIngles1'])){ $filters['sDescripcionIngles1'] = $_POST['sDescripcionIngles1']; }
+                if(isset($_POST['sDescripcionIngles2'])){ $filters['sDescripcionIngles2'] = $_POST['sDescripcionIngles2']; }
+            // skUsersCreacion => Ejecutivo
+                if(isset($_POST['skUsersCreacion1'])){ $filters['skUsersCreacion1'] = $_POST['skUsersCreacion1']; }
+                if(isset($_POST['skUsersCreacion2'])){ $filters['skUsersCreacion2'] = $_POST['skUsersCreacion2']; }
+            // skUsersModificacion => Clasificador
+                if(isset($_POST['skUsersModificacion1'])){ $filters['skUsersModificacion1'] = $_POST['skUsersModificacion1']; }
+                if(isset($_POST['skUsersModificacion2'])){ $filters['skUsersModificacion2'] = $_POST['skUsersModificacion2']; }
+            // sFactura
+                if(isset($_POST['sFactura1'])){ $filters['sFactura1'] = $_POST['sFactura1']; }
+                if(isset($_POST['sFactura2'])){ $filters['sFactura2'] = $_POST['sFactura2']; }
+            // iSecuencia
+                if(isset($_POST['iSecuencia1'])){ $filters['iSecuencia1'] = $_POST['iSecuencia1']; }
+                if(isset($_POST['iSecuencia2'])){ $filters['iSecuencia2'] = $_POST['iSecuencia2']; }
+            // dFechaPrevio
+                if(isset($_POST['dFechaPrevio1'])){ $filters['dFechaPrevio1'] = $_POST['dFechaPrevio1']; }
+                if(isset($_POST['dFechaPrevio2'])){ $filters['dFechaPrevio2'] = $_POST['dFechaPrevio2']; }
+            // dFechaCreacion
+                if(isset($_POST['dFechaCreacion1'])){ $filters['dFechaCreacion1'] = $_POST['dFechaCreacion1']; }
+                if(isset($_POST['dFechaCreacion2'])){ $filters['dFechaCreacion2'] = $_POST['dFechaCreacion2']; }
+            // dFechaModificacion
+                if(isset($_POST['dFechaModificacion1'])){ $filters['dFechaModificacion1'] = $_POST['dFechaModificacion1']; }
+                if(isset($_POST['dFechaModificacion2'])){ $filters['dFechaModificacion2'] = $_POST['dFechaModificacion2']; }
                 // EXPORTACIÓN A EXCEL //
                 if(isset($_POST['exportExcel']) && $_POST['exportExcel'] == 1){
-                    $this->data['data'] = parent::catalogoClasificacion(true);
+                    $this->data['data'] = parent::catalogoClasificacion(false,$filters);
                     $this->claara_excel();
                     return true;
                     exit;
                 }
                 // OBTENER REGISTROS //
-                $total = parent::catalogoClasificacion(false);
+                $total = parent::catalogoClasificacion(true,$filters);
                 $records = Core_Functions::table_ajax($total);
                 if($records['recordsTotal'] === 0){
                     header('Content-Type: application/json');
@@ -393,7 +408,7 @@
 
                 $this->cla['limit'] = $records['limit'];
                 $this->cla['offset'] = $records['offset'];
-                $this->data['data'] = parent::catalogoClasificacion(true);
+                $this->data['data'] = parent::catalogoClasificacion(false,$filters);
 
                 if(!$this->data['data']){
                     header('Content-Type: application/json');
