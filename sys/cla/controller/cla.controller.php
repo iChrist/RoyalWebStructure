@@ -363,7 +363,7 @@
         public function getCatalogoClasificacion(){
             // PARAMETROS PARA FILTRADO //
                 $filters = array();
-                $this->cla['orderBy'] = "cla1.sReferencia DESC , cla1.dFechaCreacion DESC , claMer1.sFactura ASC , claMer1.iSecuencia ASC";
+            // skClasificacion
                 if(isset($_GET['p1'])){
                     if(isset($_POST['skClasificacion'])){ $filters['skClasificacion'] = $this->db->real_escape_string($_POST['skClasificacion']); }
                 }
