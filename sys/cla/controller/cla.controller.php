@@ -343,9 +343,21 @@
                     $this->getCatalogoClasificacion();
                     return true;
                 }
-            $this->load_view('clara-index', $this->data);
-            return true;
-            $this->claara_index(false);
+            
+            // INCLUYE EL MODELO DEL MODULO cof //
+                $this->load_model('cof','cof');
+                $cof = new Cof_Model();
+                    // LISTAR TODOS LOS USUARIOS
+                    $this->data['users'] = $cof->read_user();
+            // INCLUYE EL MODELO DEL MODULO emp //
+                $this->load_model('emp', 'emp');
+                $emp = new Emp_Model();
+                $emp->tipoempresas['skTipoEmpresa'] = 'CLIE';
+                $this->data['empresas'] = $emp->read_like_empresas();
+
+            // RETORNA LA VISTA -> clara-index.php //
+                $this->load_view('clara-index', $this->data);
+                return true;
         }
         
         public function getCatalogoClasificacion(){
@@ -353,43 +365,37 @@
                 $filters = array();
                 $this->cla['orderBy'] = "cla1.sReferencia DESC , cla1.dFechaCreacion DESC , claMer1.sFactura ASC , claMer1.iSecuencia ASC";
                 if(isset($_GET['p1'])){
-                    array_push($filters,array('skClasificacion'=>$_GET['p1']));
+                    if(isset($_POST['skClasificacion'])){ $filters['skClasificacion'] = $this->db->real_escape_string($_POST['skClasificacion']); }
                 }
+            // skEmpresa
+                if(isset($_POST['skEmpresa'])){ $filters['skEmpresa'] = $this->db->real_escape_string($_POST['skEmpresa']); }
             // sReferencia
-                if(isset($_POST['sReferencia'])){ $filters['sReferencia'] = $_POST['sReferencia']; }
+                if(isset($_POST['sReferencia'])){ $filters['sReferencia'] = $this->db->real_escape_string($_POST['sReferencia']); }
             // sFraccion
-                if(isset($_POST['sFraccion1'])){ $filters['sFraccion1'] = $_POST['sFraccion1']; }
-                if(isset($_POST['sFraccion2'])){ $filters['sFraccion2'] = $_POST['sFraccion2']; }
+                if(isset($_POST['sFraccion'])){ $filters['sFraccion'] = $this->db->real_escape_string($_POST['sFraccion']); }
             // sNumeroParte
-                if(isset($_POST['sNumeroParte1'])){ $filters['sNumeroParte1'] = $_POST['sNumeroParte1']; }
-                if(isset($_POST['sNumeroParte2'])){ $filters['sNumeroParte2'] = $_POST['sNumeroParte2']; }
+                if(isset($_POST['sNumeroParte'])){ $filters['sNumeroParte'] = $this->db->real_escape_string($_POST['sNumeroParte']); }
             // sDescripcion
-                if(isset($_POST['sDescripcion1'])){ $filters['sDescripcion1'] = $_POST['sDescripcion1']; }
-                if(isset($_POST['sDescripcion2'])){ $filters['sDescripcion2'] = $_POST['sDescripcion2']; }
+                if(isset($_POST['sDescripcion'])){ $filters['sDescripcion'] = $this->db->real_escape_string($_POST['sDescripcion']); }
             // sDescripcionIngles
-                if(isset($_POST['sDescripcionIngles1'])){ $filters['sDescripcionIngles1'] = $_POST['sDescripcionIngles1']; }
-                if(isset($_POST['sDescripcionIngles2'])){ $filters['sDescripcionIngles2'] = $_POST['sDescripcionIngles2']; }
+                if(isset($_POST['sDescripcionIngles'])){ $filters['sDescripcionIngles'] = $this->db->real_escape_string($_POST['sDescripcionIngles']); }
             // skUsersCreacion => Ejecutivo
-                if(isset($_POST['skUsersCreacion1'])){ $filters['skUsersCreacion1'] = $_POST['skUsersCreacion1']; }
-                if(isset($_POST['skUsersCreacion2'])){ $filters['skUsersCreacion2'] = $_POST['skUsersCreacion2']; }
+                if(isset($_POST['skUsersCreacion'])){ $filters['skUsersCreacion'] = $this->db->real_escape_string($_POST['skUsersCreacion']); }
             // skUsersModificacion => Clasificador
-                if(isset($_POST['skUsersModificacion1'])){ $filters['skUsersModificacion1'] = $_POST['skUsersModificacion1']; }
-                if(isset($_POST['skUsersModificacion2'])){ $filters['skUsersModificacion2'] = $_POST['skUsersModificacion2']; }
+                if(isset($_POST['skUsersModificacion'])){ $filters['skUsersModificacion'] = $this->db->real_escape_string($_POST['skUsersModificacion']); }
             // sFactura
-                if(isset($_POST['sFactura1'])){ $filters['sFactura1'] = $_POST['sFactura1']; }
-                if(isset($_POST['sFactura2'])){ $filters['sFactura2'] = $_POST['sFactura2']; }
+                if(isset($_POST['sFactura'])){ $filters['sFactura'] = $this->db->real_escape_string($_POST['sFactura']); }
             // iSecuencia
-                if(isset($_POST['iSecuencia1'])){ $filters['iSecuencia1'] = $_POST['iSecuencia1']; }
-                if(isset($_POST['iSecuencia2'])){ $filters['iSecuencia2'] = $_POST['iSecuencia2']; }
+                if(isset($_POST['iSecuencia'])){ $filters['iSecuencia'] = $this->db->real_escape_string($_POST['iSecuencia']); }
             // dFechaPrevio
-                if(isset($_POST['dFechaPrevio1'])){ $filters['dFechaPrevio1'] = $_POST['dFechaPrevio1']; }
-                if(isset($_POST['dFechaPrevio2'])){ $filters['dFechaPrevio2'] = $_POST['dFechaPrevio2']; }
+                if(isset($_POST['dFechaPrevio1']) && !empty($_POST['dFechaPrevio1'])){ $filters['dFechaPrevio1'] = $this->db->real_escape_string(date('Y-m-d', strtotime($_POST['dFechaPrevio1']))); }
+                if(isset($_POST['dFechaPrevio2']) && !empty($_POST['dFechaPrevio2'])){ $filters['dFechaPrevio2'] = $this->db->real_escape_string(date('Y-m-d', strtotime($_POST['dFechaPrevio2']))); }
             // dFechaCreacion
-                if(isset($_POST['dFechaCreacion1'])){ $filters['dFechaCreacion1'] = $_POST['dFechaCreacion1']; }
-                if(isset($_POST['dFechaCreacion2'])){ $filters['dFechaCreacion2'] = $_POST['dFechaCreacion2']; }
+                if(isset($_POST['dFechaCreacion1']) && !empty($_POST['dFechaCreacion1'])){ $filters['dFechaCreacion1'] = $this->db->real_escape_string(date('Y-m-d', strtotime($_POST['dFechaCreacion1']))); }
+                if(isset($_POST['dFechaCreacion2']) && !empty($_POST['dFechaCreacion2'])){ $filters['dFechaCreacion2'] = $this->db->real_escape_string(date('Y-m-d', strtotime($_POST['dFechaCreacion2']))); }
             // dFechaModificacion
-                if(isset($_POST['dFechaModificacion1'])){ $filters['dFechaModificacion1'] = $_POST['dFechaModificacion1']; }
-                if(isset($_POST['dFechaModificacion2'])){ $filters['dFechaModificacion2'] = $_POST['dFechaModificacion2']; }
+                if(isset($_POST['dFechaModificacion1']) && !empty($_POST['dFechaModificacion1'])){ $filters['dFechaModificacion1'] = $this->db->real_escape_string(date('Y-m-d', strtotime($_POST['dFechaModificacion1']))); }
+                if(isset($_POST['dFechaModificacion2']) && !empty($_POST['dFechaModificacion2'])){ $filters['dFechaModificacion2'] = $this->db->real_escape_string(date('Y-m-d', strtotime($_POST['dFechaModificacion2']))); }
                 // EXPORTACIÓN A EXCEL //
                 if(isset($_POST['exportExcel']) && $_POST['exportExcel'] == 1){
                     $this->data['data'] = parent::catalogoClasificacion(false,$filters);
@@ -406,8 +412,8 @@
                     return false;
                 }
 
-                $this->cla['limit'] = $records['limit'];
-                $this->cla['offset'] = $records['offset'];
+                $filters['limit'] = $records['limit'];
+                $filters['offset'] = $records['offset'];
                 $this->data['data'] = parent::catalogoClasificacion(false,$filters);
 
                 if(!$this->data['data']){
@@ -416,14 +422,34 @@
                     return false;
                 }
                 $i = 0;
+                $valido = '<i class="fa fa-lock" aria-hidden="true" style="color:#2E7D32;"></i> ';
+                $invalido = '<i class="fa fa-unlock" aria-hidden="true" style="color:#FF8F00;"></i> ';
                 while($row = $this->data['data']->fetch_assoc()){
                     $actions = $this->printModulesButtons(2,array($row['skClasificacion1']));
                     $records['data'][$i] = array(
-                        ''
+                        ($row['valido1'] == 1 && $row['valido2'] == 1) 
+                            ?
+                            ( 
+                                !empty($row['sFraccion1']) && !empty($row['sFraccion2']) 
+                                ? '<center><i class="fa fa-lock" aria-hidden="true" style="color:#2E7D32;font-size:18px !important;"></i></center>'
+                                : '<center><i class="fa fa-lock" aria-hidden="true" style="color:#FF8F00;font-size:18px !important;"></i></center>'
+                            )
+                            : '<center><i class="fa fa-lock" aria-hidden="true" style="color:#FF8F00;font-size:18px !important;"></i></center>'
+
+                        ,utf8_encode($row['cliente'])
+
                         ,utf8_encode($row['sReferencia1'])
                         
-                        ,utf8_encode($row['sFraccion1'])
-                        ,utf8_encode($row['sFraccion2'])
+                        ,($row['valido1'] == 1) 
+                            ? ( !empty($row['sFraccion1']) ? $valido.utf8_encode($row['sFraccion1']) : '' )
+                            : ( !empty($row['sFraccion1']) ? $invalido.utf8_encode($row['sFraccion1']) : '' )
+
+                        ,($row['valido2'] == 1) 
+                            ? ( !empty($row['sFraccion2']) ? $valido.utf8_encode($row['sFraccion2']) : '' )
+                            : ( !empty($row['sFraccion2']) ? $invalido.utf8_encode($row['sFraccion2']) : '' )
+                        
+
+                        //,($row['valido2'] == 1) ? $valido.utf8_encode($row['sFraccion2']) : $invalido.utf8_encode($row['sFraccion2'])
                         
                         ,utf8_encode($row['sNumeroParte1'])
                         ,utf8_encode($row['sNumeroParte2'])
@@ -447,14 +473,14 @@
                         ,utf8_encode($row['iSecuencia1'])
                         ,utf8_encode($row['iSecuencia2'])
                         
-                        ,utf8_encode($row['dFechaPrevio1'])
-                        ,utf8_encode($row['dFechaPrevio2'])
+                        ,(utf8_encode($row['dFechaPrevio1']) != '0000-00-00 00:00:00') ? utf8_encode($row['dFechaPrevio1']) : ''
+                        ,(utf8_encode($row['dFechaPrevio2']) != '0000-00-00 00:00:00') ? utf8_encode($row['dFechaPrevio2']) : '' 
                         
-                        ,utf8_encode($row['dFechaCreacion1'])
-                        ,utf8_encode($row['dFechaCreacion2'])
-                        
-                        ,utf8_encode($row['dFechaModificacion1'])
-                        ,utf8_encode($row['dFechaModificacion2'])
+                        ,(utf8_encode($row['dFechaCreacion1']) != '0000-00-00 00:00:00') ? utf8_encode($row['dFechaCreacion1']) : ''
+                        ,(utf8_encode($row['dFechaCreacion2']) != '0000-00-00 00:00:00') ? utf8_encode($row['dFechaCreacion2']) : ''
+
+                        ,(utf8_encode($row['dFechaModificacion1']) != '0000-00-00 00:00:00') ? utf8_encode($row['dFechaModificacion1']) : ''
+                        ,(utf8_encode($row['dFechaModificacion2']) != '0000-00-00 00:00:00') ? utf8_encode($row['dFechaModificacion2']) : ''
                     );
                     $i++;   
                 }
