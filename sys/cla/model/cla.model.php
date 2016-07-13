@@ -952,14 +952,15 @@
                 // COMIENZA CATÁLOGO CLASIFICACIÓN //
 // ******************************************************************* // 
         
-        public function catalogoClasificacion($filters = true){
+        public function catalogoClasificacion($count = true, $filters = array()){
             $sql = "";
-            if(!$filters){
+            if($count){
                 $sql .= "SELECT COUNT(*) AS total FROM (";
             }
-            $sql .= "
+            $sql .= " SELECT * FROM (
             SELECT
-            cla1.skClasificacion AS skClasificacion1
+            e.sNombre AS cliente
+            ,cla1.skClasificacion AS skClasificacion1
             ,cla1.sReferencia AS sReferencia1
             ,cla1.dFechaPrevio AS dFechaPrevio1
             ,cla1.skStatus AS skStatus1
@@ -1000,15 +1001,19 @@
             LEFT JOIN cat_clasificacionMercancia claMer1 ON claMer1.skClasificacion = cla1.skClasificacion
             LEFT JOIN cat_clasificacionSegunda cla2 ON cla2.skClasificacion = cla1.skClasificacion
             LEFT JOIN cat_clasificacionSegundaMercancia claMer2 ON claMer2.skClasificacion = cla2.skClasificacion AND claMer2.sFactura = claMer1.sFactura AND claMer2.iSecuencia = claMer1.iSecuencia
+            LEFT JOIN ope_recepciones_documentos rd ON rd.sReferencia = cla1.sReferencia
+            LEFT JOIN cat_empresas e ON e.skEmpresa = rd.skEmpresa
             LEFT JOIN _users AS usr1c ON usr1c.skUsers = cla1.skUsersCreacion
             LEFT JOIN _users AS usr1m ON usr1m.skUsers = cla1.skUsersModificacion
             LEFT JOIN _users AS usr2c ON usr2c.skUsers = cla2.skUsersCreacion
             LEFT JOIN _users AS usr2m ON usr2m.skUsers = cla2.skUsersModificacion
+            WHERE 1=1 ".$this->filtrosCatalogoClasificacion($count, $filters).$this->setLimitCatalogoClasificacion($count, $filters)."
 
             UNION 
 
             SELECT
-            cla1.skClasificacion AS skClasificacion1
+            e.sNombre AS cliente
+            ,cla1.skClasificacion AS skClasificacion1
             ,cla1.sReferencia AS sReferencia1
             ,cla1.dFechaPrevio AS dFechaPrevio1
             ,cla1.skStatus AS skStatus1
@@ -1049,14 +1054,16 @@
             LEFT JOIN cat_clasificacionSegundaMercancia claMer2 ON claMer2.skClasificacion = cla2.skClasificacion
             LEFT JOIN cat_clasificacion cla1 ON cla1.skClasificacion = cla2.skClasificacion
             LEFT JOIN cat_clasificacionMercancia claMer1 ON claMer1.skClasificacion = cla1.skClasificacion AND claMer1.sFactura = claMer2.sFactura AND claMer1.iSecuencia = claMer2.iSecuencia
+            LEFT JOIN ope_recepciones_documentos rd ON rd.sReferencia = cla1.sReferencia
+            LEFT JOIN cat_empresas e ON e.skEmpresa = rd.skEmpresa
             LEFT JOIN _users AS usr1c ON usr1c.skUsers = cla1.skUsersCreacion
             LEFT JOIN _users AS usr1m ON usr1m.skUsers = cla1.skUsersModificacion
             LEFT JOIN _users AS usr2c ON usr2c.skUsers = cla2.skUsersCreacion
-            LEFT JOIN _users AS usr2m ON usr2m.skUsers = cla2.skUsersModificacion WHERE 1=1 ";
-            if(!$filters){
-                $sql .= ") AS N1";
+            LEFT JOIN _users AS usr2m ON usr2m.skUsers = cla2.skUsersModificacion WHERE 1=1 ".$this->filtrosCatalogoClasificacion($count, $filters).$this->setLimitCatalogoClasificacion($count, $filters)." ) N1 ORDER BY N1.sFraccion1 ASC ";
+            if($count){
+                $sql .= ") AS N2";
             }else{
-                $this->filtrosCatalogoClasificacion($sql);
+                //exit($sql);
             }
             //exit('<pre>'.print_r($sql,1).'</pre>');
             $result = $this->db->query($sql);
@@ -1066,15 +1073,81 @@
                 return false;
             }
         }
-        public function filtrosCatalogoClasificacion(&$sql){
-            // cla.valido
-                /*if($this->cla1['valido'] === 0 || $this->cla1['valido'] === 1){
-                    $sql .=" AND cla1.valido = ".$this->cla1['valido'];
+        public function setLimitCatalogoClasificacion(&$count, &$filters){
+            $limit = "";
+            if(!$count){
+                if(is_int($filters['limit'])){
+                    if(is_int($filters['offset'])){
+                        $limit .= " LIMIT ".$filters['offset']." , ".$filters['limit'];
+                    }else{
+                        $limit .= " LIMIT ".$filters['limit'];
+                    }
                 }
-                if($this->cla2['valido'] === 0 || $this->cla2['valido'] === 1){
-                    $sql .=" AND cla2.valido = ".$this->cla2['valido'];
-                }*/
-            // cla.
+            }
+            return $limit;
+        }
+        public function filtrosCatalogoClasificacion(&$count, &$filters){
+            //exit('<pre>'.print_r($filters,1).'</pre>');
+            $where = "";
+            //if(!$count){
+            // skClasificacion
+                if(!empty($filters['skClasificacion'])){ $where .=" AND (cla1.skClasificacion = '".$filters['skClasificacion']."' OR cla2.skClasificacion = '".$filters['skClasificacion']."')"; }
+            // skEmpresa
+                if(!empty($filters['skEmpresa'])){ $where .=" AND (e.skEmpresa = '".$filters['skEmpresa']."')"; }
+            // sReferencia
+                if(!empty($filters['sReferencia'])){ $where .=" AND (cla1.sReferencia = '".$filters['sReferencia']."' OR cla2.sReferencia = '".$filters['sReferencia']."')"; }
+            // sFraccion
+                if(!empty($filters['sFraccion'])){ 
+                    $where .=" AND (claMer1.sFraccion like '".$filters['sFraccion']."%' OR claMer2.sFraccion like '".$filters['sFraccion']."%')"; 
+                }
+            // sNumeroParte
+                if(!empty($filters['sNumeroParte'])){ 
+                    $where .=" AND (claMer1.sNumeroParte like '".$filters['sNumeroParte']."%' OR claMer2.sNumeroParte like '".$filters['sNumeroParte']."%')"; 
+                }
+            // sDescripcion
+                if(!empty($filters['sDescripcion'])){ 
+                    $where .=" AND (claMer1.sDescripcion like '%".$filters['sDescripcion']."%' OR claMer2.sDescripcion like '%".$filters['sDescripcion']."%')";
+                }
+            // sDescripcionIngles
+                if(!empty($filters['sDescripcionIngles'])){ 
+                    $where .=" AND (claMer1.sDescripcionIngles like '%".$filters['sDescripcionIngles']."%' AND claMer2.sDescripcionIngles like '%".$filters['sDescripcionIngles']."%')"; 
+                }
+            // skUsersCreacion => Ejecutivo
+                if(!empty($filters['skUsersCreacion'])){ 
+                    $where .=" AND (cla1.skUsersCreacion = '".$filters['skUsersCreacion']."' OR cla2.skUsersCreacion = '".$filters['skUsersCreacion']."')";
+                }
+            // skUsersModificacion => Clasificador
+                if(!empty($filters['skUsersModificacion'])){ 
+                    $where .=" AND (cla1.skUsersModificacion = '".$filters['skUsersModificacion']."' OR cla2.skUsersModificacion = '".$filters['skUsersModificacion']."')"; 
+                }
+            // sFactura
+                if(!empty($filters['sFactura'])){ 
+                    $where .=" AND (claMer1.sFactura like '%".$filters['sFactura']."%' OR claMer2.sFactura like '%".$filters['sFactura']."%')"; 
+                }
+            // iSecuencia
+                if(!empty($filters['iSecuencia'])){ 
+                    $where .=" AND (claMer1.iSecuencia = '".$filters['iSecuencia']."' OR claMer2.iSecuencia = '".$filters['iSecuencia']."')";
+                }
+            // dFechaPrevio
+                if(!empty($filters['dFechaPrevio1']) && !empty($filters['dFechaPrevio2'])){
+                    $where .=" AND ( (DATE_FORMAT(cla1.dFechaPrevio,'%Y-%m-%d') >= '".$filters['dFechaPrevio1']."' AND DATE_FORMAT(cla1.dFechaPrevio,'%Y-%m-%d') <= '".$filters['dFechaPrevio2']."') OR (DATE_FORMAT(cla2.dFechaPrevio,'%Y-%m-%d') >= '".$filters['dFechaPrevio1']."' AND DATE_FORMAT(cla2.dFechaPrevio,'%Y-%m-%d') <= '".$filters['dFechaPrevio2']."') ) "; 
+                }elseif(!empty($filters['dFechaPrevio1'])){
+                    $where .=" AND ( DATE_FORMAT(cla1.dFechaPrevio,'%Y-%m-%d') = '".$filters['dFechaPrevio1']."')";
+                }
+            // dFechaCreacion
+                if(!empty($filters['dFechaCreacion1']) && !empty($filters['dFechaCreacion2'])){
+                    $where .=" AND ( (DATE_FORMAT(cla1.dFechaCreacion,'%Y-%m-%d') >= '".$filters['dFechaCreacion1']."' AND DATE_FORMAT(cla1.dFechaCreacion,'%Y-%m-%d') <= '".$filters['dFechaCreacion2']."') OR (DATE_FORMAT(cla2.dFechaCreacion,'%Y-%m-%d') >= '".$filters['dFechaCreacion1']."' AND DATE_FORMAT(cla2.dFechaCreacion,'%Y-%m-%d') <= '".$filters['dFechaCreacion2']."') ) "; 
+                }elseif(!empty($filters['dFechaCreacion1'])){
+                    $where .=" AND ( DATE_FORMAT(cla1.dFechaCreacion,'%Y-%m-%d') = '".$filters['dFechaCreacion1']."')";
+                }
+            // dFechaModificacion
+                if(!empty($filters['dFechaModificacion1']) && !empty($filters['dFechaModificacion2'])){
+                    $where .=" AND ( (DATE_FORMAT(cla1.dFechaModificacion,'%Y-%m-%d') >= '".$filters['dFechaModificacion1']."' AND DATE_FORMAT(cla1.dFechaModificacion,'%Y-%m-%d') <= '".$filters['dFechaModificacion2']."') OR (DATE_FORMAT(cla2.dFechaModificacion,'%Y-%m-%d') >= '".$filters['dFechaModificacion1']."' AND DATE_FORMAT(cla2.dFechaModificacion,'%Y-%m-%d') <= '".$filters['dFechaModificacion2']."') ) "; 
+                }elseif(!empty($filters['dFechaModificacion1'])){
+                    $where .=" AND ( DATE_FORMAT(cla1.dFechaCreacion,'%Y-%m-%d') = '".$filters['dFechaModificacion1']."')";
+                }
+            //}
+            return $where;
         }
         // TERMINA CATÁLOGO CLASIFICACIÓN //
     }
