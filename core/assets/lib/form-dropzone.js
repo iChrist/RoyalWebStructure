@@ -9,9 +9,6 @@ var FormDropzone = function () {
                 init: function() {
                     _Core_RW_Dropzone = this;
                     _Core_RW_Dropzone.paramName = obj.paramName;
-                    this.on("sending", function(file, xhr, formData) {
-                        formData.append("nameeeee", "valueeeeee");
-                    });
                     this.on("addedfile", function(file) {
                         // Create the remove button
                         var removeButton = Dropzone.createElement("<button class='btn btn-sm btn-danger btn-block'><i class='fa fa-trash-o'></i> Descartar</button>");

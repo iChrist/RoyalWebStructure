@@ -152,12 +152,27 @@ Class Core_Functions {
     * @param	obj		$total - database query object
     * @return	array
     */
-    function thumbnailImageDropZone($datos = FALSE){
+    function printDropzoneImages($datos = array()){
         $html = "";
-        if(!$datos){
-            $html = "";
+        if($datos){
+            foreach($datos AS $k=>&$v){
+                $html .= '
+                <div class="dz-preview dz-image-preview">
+                    <div class="dz-details">
+                        <div class="dz-filename"><span data-dz-name>'.$v['fileName'].'</span></div>
+                        <div class="dz-size" data-dz-size>'.$v['size'].'</div>
+                        <img data-dz-thumbnail="" src="'.$v['src'].'" />
+                        <input type="hidden" name="'.$v['param'].'" value="'.$v['id'].'">
+                    </div>
+                    <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
+                    <div class="dz-success-mark"><span>✔</span></div>
+                    <div class="dz-error-mark"><span>✘</span></div>
+                    <div class="dz-error-message"><span data-dz-errormessage></span></div>
+                    <button class="btn btn-sm btn-danger btn-block deleteDropzoneImage"><i class="fa fa-trash-o"></i> Descartar</button>
+                </div>';
+            }
         }
-        return $html;
+        echo $html;
     }
 }
 ?>
