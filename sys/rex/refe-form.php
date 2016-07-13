@@ -1,6 +1,25 @@
+<script type="text/javascript" src="/path/to/moment.js"></script>
+<script type="text/javascript" src="/path/to/bootstrap/js/transition.js"></script>
+<script type="text/javascript" src="/path/to/bootstrap/js/collapse.js"></script>
+<script type="text/javascript" src="/path/to/bootstrap-datetimepicker.min.js"></script>
 
-
-
+    <pre>
+        <?php 
+        //echo print_r($_SESSION["session"],1);
+        //$fecha = DateTime::createFromFormat('d-m-Y', '30-07-2016');
+        //echo $fecha->format('Y-m-d H:i:s');
+        $result = array();
+        if($data['datos']){
+            $result = $data['datos'];
+        }
+        //echo (isset($result["dFechaFacturacion"])) ? $result["dFechaFacturacion"] : '' ;
+        //echo DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaFacturacion"])->format('d-m-Y');
+        //2016-07-26 00:00:00
+        //(isset($result["sReferencia"])) ? echo $result["sReferencia"] : echo '' ;
+        
+        //var_dump($data);
+        ?>
+    </pre> 
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data"> 
     <input type="hidden" name="skReferenciaExterna"  id="skReferenciaExterna" value="<?php echo (isset($result['skReferenciaExterna'])) ? $result['skReferenciaExterna'] : '' ; ?>">
     <input type="hidden" name="axn" id="anx" value="<?php echo (isset($result["sReferencia"])) ? 'update' : 'insert' ;?>" ></input>
@@ -223,7 +242,7 @@
                     </tr>
                 </thead>
                 <tbody id="dvConceptosPedimento">
-                    <tr>
+                    <!-- <tr>
 
                         <td>
                             <input onchange="cotizar();" value="434fed5f4cae76cf09d246a99fde3c2" name="conceptos[]" type="checkbox">
@@ -250,7 +269,7 @@
                             <input name="subtotal[]" class="subtotal" value="" type="hidden">
                         </td>
 
-                    </tr>
+                    </tr> -->
                 </tbody>
             </table>
                     <div class="form-group">
@@ -261,23 +280,7 @@
           </div>
         </div>
         </div>
-    <pre>
-        <?php 
-        /*echo print_r($_SESSION["session"],1);
-        $fecha = DateTime::createFromFormat('d-m-Y', '30-07-2016');
-        //echo $fecha->format('Y-m-d H:i:s');
-        $result = array();
-        if($data['datos']){
-            $result = $data['datos'];
-        }
-        //echo (isset($result["dFechaFacturacion"])) ? $result["dFechaFacturacion"] : '' ;
-        //echo DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaFacturacion"])->format('d-m-Y');
-        //2016-07-26 00:00:00
-        //(isset($result["sReferencia"])) ? echo $result["sReferencia"] : echo '' ;
-        */
-        //var_dump($data);
-        ?>
-    </pre> 
+
 
     <div class="form-group">
         <label class="control-label col-md-2">Saldo <span aria-required="true" class="required"> * </span>
@@ -333,10 +336,20 @@ function cotizar(){
             type : 'GET',
             dataType : 'json',
             success : function(json) {
+                ifestat = "<?php echo (isset($result['skEstatus'])) ? $result['skEstatus'] : '' ; ?>";
                 console.log(json);
                 for (o in json) {
                     d = json[o];
-                    $("#skEstatus").append('<option value="' + d.skEstatus +  '">'+d.sNombre+'</option>')
+                    if (ifestat != "") {
+                        if(ifestat == d.skEstatus ){
+                            $("#skEstatus").append('<option selected="selected" value="' + d.skEstatus +  '">'+d.sNombre+'</option>')
+                        }else{
+                            $("#skEstatus").append('<option value="' + d.skEstatus +  '">'+d.sNombre+'</option>')
+                        }
+                    }else{
+                        $("#skEstatus").append('<option value="' + d.skEstatus +  '">'+d.sNombre+'</option>')
+                    }
+                    
                 }
             },
             error : function(xhr, status) {
@@ -355,10 +368,21 @@ function cotizar(){
             type : 'GET',
             dataType : 'json',
             success : function(json) {
+                ifalmacen = "<?php echo (isset($result['skAlmacen'])) ? $result['skAlmacen'] : '' ; ?>";
                 console.log(json);
                 for(i in json){
                     d = json[i];
-                    $("#skAlmacen").append('<option value="' + d.skAlmacen + '">'+d.sNombre+'</option>');
+                    if (ifalmacen != "") {
+                        if (ifalmacen == d.skAlmacen) {
+                            $("#skAlmacen").append('<option selected="selected" value="' + d.skAlmacen + '">'+d.sNombre+'</option>');
+                        }else{
+                            $("#skAlmacen").append('<option value="' + d.skAlmacen + '">'+d.sNombre+'</option>');
+                        }
+                        
+                    }else{
+                        $("#skAlmacen").append('<option value="' + d.skAlmacen + '">'+d.sNombre+'</option>');
+                    }
+                    
                 }
             },
             error : function(xhr, status) {
@@ -377,10 +401,20 @@ function cotizar(){
             type : 'GET',
             dataType : 'json',
             success : function(json) {
+                ifsocioimportador = "<?php echo (isset($result['skSocioImportador'])) ? $result['skSocioImportador'] : '' ; ?>";
                 console.log(json);
                 for (o in json) {
                     d = json[o];
-                    $("#skSocioImportador").append('<option value="' + d.skEmpresa +  '">'+d.Empresa+'</option>')
+                    if (ifsocioimportador != "") {
+                        if (ifsocioimportador == d.skEmpresa ) {
+                            $("#skSocioImportador").append('<option selected="selected" value="' + d.skEmpresa +  '">'+d.Empresa+'</option>');
+                        }else{
+                            $("#skSocioImportador").append('<option value="' + d.skEmpresa +  '">'+d.Empresa+'</option>');
+                        }
+                    }else{
+                        $("#skSocioImportador").append('<option value="' + d.skEmpresa +  '">'+d.Empresa+'</option>');
+                    }
+                    
                 }
             },
             error : function(xhr, status) {
@@ -544,7 +578,3 @@ function cotizar(){
 }); 
 </script>
 
-<!-- <script type="text/javascript" src="/path/to/moment.js"></script>
-<script type="text/javascript" src="/path/to/bootstrap/js/transition.js"></script>
-<script type="text/javascript" src="/path/to/bootstrap/js/collapse.js"></script>
-<script type="text/javascript" src="/path/to/bootstrap-datetimepicker.min.js"></script> -->

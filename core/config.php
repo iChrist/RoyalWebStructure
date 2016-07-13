@@ -18,19 +18,19 @@
         die();
     }
 // DATABASE CONFIGURATION //
-    $_db_idx = 'test';
+    $_db_idx = 'localhost';
     $_db = array(
         'sys' => array(
             'HOST_DB' => 'royalweb.com.mx',
             'USER_DB' => 'royalweb_rw',
             'PASSWORD_DB' => 'RoyalWeb',
-            'DATABASE_DB' => 'royalweb_structure'
+            'DATABASE_DB' => 'royalweb_test_gya'
         ),
         'localhost' => array(
             'HOST_DB' => 'localhost',
             'USER_DB' => 'root',
             'PASSWORD_DB' => '',
-            'DATABASE_DB' => 'royalweb_structure'
+            'DATABASE_DB' => 'royalweb_test_gya'
         ),
         'testONLINE' => array(
             'HOST_DB' => 'royalweb.com.mx',

@@ -136,7 +136,7 @@ Class Rex_Controller Extends Rex_Model {
         $this->data['message'] = '';
         $this->data['success'] = false;
         $this->data['datos'] = false;
-        $this->data['tipoCambio'] = $this->tipo_cambio();
+        $this->data['tipoCambio'] = 18.6607;//$this->tipo_cambio();
         
         if(isset($_POST['axn']) && $_POST['axn'] =='insert'){
             return $this->refe_save();
@@ -160,7 +160,7 @@ Class Rex_Controller Extends Rex_Model {
             $this->data['response'] = false;
             header('Content-Type: application/json');
             echo json_encode($this->data);
-            return true;
+            return false;
         }else{
             $this->data['message'] = "Registros guardados exitosamente" ;
             $this->data['response'] = true;
@@ -232,9 +232,7 @@ Class Rex_Controller Extends Rex_Model {
                 echo json_encode($arr);
                 return true;
             }
-        }
-
-        
+        } 
     }
 
     public function tipo_cambio(){

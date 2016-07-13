@@ -91,7 +91,6 @@ Class Rex_Model Extends Core_Model {
                 '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaFacturacion"])->format('Y-m-d')."', 
                 '".$_POST["iDeposito"]."', 
                 '".$_POST["iSaldo"]."');" ;
-        //die($sql_insert);
 
         if (isset($_POST["conceptos"]) && isset($_POST["iCantidad"])) {
             for ($i= 0; $i < count($_POST["conceptos"]); $i++) { 
@@ -110,10 +109,13 @@ Class Rex_Model Extends Core_Model {
         
     }
 
-    public function updatear($skReferenciaExterna = NULL){
+    public function updatear($skReferenciaExterna = NULL)
+    {
         if ($skReferenciaExterna == NULL && $skReferenciaExterna != '') {
             return false;
         }
+        
+        $this->deleteConceptos($skReferenciaExterna);
         $sql_update = "
             UPDATE `ope_referenciasExternas` SET  
                 `skSocioPropietario` = '".$this->db->real_escape_string($_SESSION["session"]["skSocioEmpresaPropietario"])."',
@@ -138,18 +140,19 @@ Class Rex_Model Extends Core_Model {
                 `iSaldo` = '".$_POST["iSaldo"]."'
 
                 WHERE `skReferenciaExterna` = '$skReferenciaExterna';" ;
-        //die($sql_update);
         
-
+        if (isset($_POST["conceptos"]) && isset($_POST["iCantidad"])) {
+            for ($i= 0; $i < count($_POST["conceptos"]); $i++) { 
+                $this->insertConceptos($skReferenciaExterna,$_POST["conceptos"][$i],$_POST["subtotal"][$i]);
+            }
+        }
+        
         if (isset($_POST) ) {
-            
             $result = $this->db->query($sql_update);
             return true;
-
         }else{
             return false;
         }
-        
     }
 
     public function getReferencia($skID = NULL)
@@ -195,7 +198,6 @@ Class Rex_Model Extends Core_Model {
 
     public function getSociosImportador($socioEmpresaP = false )
     {   
-        
         
         $sql_socios = "SELECT 
                 rel_empresas_socios.skSocioEmpresa,
@@ -420,10 +422,32 @@ Class Rex_Model Extends Core_Model {
             '$skReferenciaExterna', 
             '$skConcepto', 
             '$iImporte');";
-        $result = $this->db->query($sql);
+        //die($sql);
+        
+        $r = $this->db->query($sql);
+
+        if ($this->db->affected_rows > 0){
+            return $r;
+        }else{
+            return false;
+        }
     }
 
+    public function deleteConceptos($skReferenciaExterna)
+    {
 
+        $sql ="
+            DELETE FROM `rel_referenciasExternas_conceptos` 
+            WHERE `skReferenciaExterna`='$skReferenciaExterna';";
+
+        $r = $this->db->query($sql);
+
+        if ($this->db->affected_rows > 0){
+            return $r;
+        }else{
+            return false;
+        }
+    }
 
     /* TERMINA MODULO (REX) */
 }
