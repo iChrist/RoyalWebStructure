@@ -168,7 +168,7 @@ Class Core_Functions {
                     <div class="dz-success-mark"><span>✔</span></div>
                     <div class="dz-error-mark"><span>✘</span></div>
                     <div class="dz-error-message"><span data-dz-errormessage></span></div>
-                    <button class="btn btn-sm btn-danger btn-block deleteDropzoneImage"><i class="fa fa-trash-o"></i> Descartar</button>
+                    <a href="#" class="btn btn-sm btn-danger btn-block" onClick="deleteDropzoneImage(this);"><i class="fa fa-trash-o"></i> Eliminar</a>
                 </div>';
             }
         }
