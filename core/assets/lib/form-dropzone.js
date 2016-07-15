@@ -11,7 +11,7 @@ var FormDropzone = function () {
                     _Core_RW_Dropzone.paramName = obj.paramName;
                     this.on("addedfile", function(file) {
                         // Create the remove button
-                        var removeButton = Dropzone.createElement("<button class='btn btn-sm btn-danger btn-block'><i class='fa fa-trash-o'></i> Descartar</button>");
+                        var removeButton = Dropzone.createElement('<a href="#" class="btn btn-sm btn-danger btn-block"><i class="fa fa-trash-o"></i> Eliminar</a>');
                         
                         // Capture the Dropzone instance as closure.
                         var _this = this;
@@ -35,3 +35,7 @@ var FormDropzone = function () {
         }
     };
 }();
+
+function deleteDropzoneImage(obj){
+  $(obj).parent().remove();
+}

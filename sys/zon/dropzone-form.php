@@ -1,5 +1,6 @@
 <!-- BEGIN PAGE LEVEL STYLES (DROPZONE) -->
 <link href="<?php echo SYS_URL ?>core/assets/plugins/dropzone/css/dropzone.css" rel="stylesheet"/>
+<!--<link href="<?php echo SYS_URL ?>core/assets/plugins/dropzone/css/basic.css" rel="stylesheet"/>!-->
 <!-- END PAGE LEVEL STYLES (DROPZONE) -->
 
 <div class="col-md-12">
