@@ -18,7 +18,7 @@
         die();
     }
 // DATABASE CONFIGURATION //
-    $_db_idx = 'sys';
+    $_db_idx = 'samuel';
     $_db = array(
         'sys' => array(
             'HOST_DB' => 'royalweb.com.mx',
