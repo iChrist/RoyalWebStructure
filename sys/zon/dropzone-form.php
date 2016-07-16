@@ -1,6 +1,5 @@
 <!-- BEGIN PAGE LEVEL STYLES (DROPZONE) -->
 <link href="<?php echo SYS_URL ?>core/assets/plugins/dropzone/css/dropzone.css" rel="stylesheet"/>
-<!--<link href="<?php echo SYS_URL ?>core/assets/plugins/dropzone/css/basic.css" rel="stylesheet"/>!-->
 <!-- END PAGE LEVEL STYLES (DROPZONE) -->
 
 <div class="col-md-12">
@@ -51,15 +50,11 @@ jQuery(document).ready(function() {
    // initiate layout and plugins
     FormDropzone.init({
         url: "cambiarCuandoSeaCustom",
-        paramName: "myFiles", // The name that will be used to transfer the file
+        paramName: "myFiles",
         acceptedFiles: 'image/*',
-        maxFilesize: 2, // MB
-        dictDefaultMessage: 'Sube aqui tus archivos',
-        thumbnailWidth:'200',
-        thumbnailHeight:'200',
+        maxFilesize: 2,
         uploadMultiple: true,
-        autoProcessQueue: false,
-        
+        autoProcessQueue: false
     });
     
     /*Dropzone.options.myDropzone = {

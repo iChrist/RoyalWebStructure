@@ -6,6 +6,8 @@ var FormDropzone = function () {
         init: function (obj) {  
 
             Dropzone.options.myDropzone = Object.assign(obj,{
+                thumbnailWidth:'200',
+                thumbnailHeight:'200',
                 init: function() {
                     _Core_RW_Dropzone = this;
                     _Core_RW_Dropzone.paramName = obj.paramName;
