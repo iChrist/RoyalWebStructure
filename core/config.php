@@ -8,22 +8,27 @@
     session_start();
 // SYSTEM CONFIGURATION //
     $_GET['sysProject'] = isset($_GET['sysProject']) ? $_GET['sysProject'] : '';
-    define('DIR_PATH', '');
+    define('DIR_PATH', 'RoyalWebStructure/');
     define('CORE_PATH', __DIR__.'/');
     define('SYS_PROJECT', $_GET['sysProject']);
     define('SYS_PATH', $_SERVER['DOCUMENT_ROOT'].'/'.DIR_PATH.SYS_PROJECT.'/');
-    define('SYS_URL', 'http://'.$_SERVER['SERVER_NAME'].':81/'.DIR_PATH);
+    define('SYS_URL', 'http://'.$_SERVER['SERVER_NAME'].'/'.DIR_PATH);
     if(!is_dir(SYS_PATH)){
         session_destroy();
         die();
     }
 // DATABASE CONFIGURATION //
+<<<<<<< HEAD
     $_db_idx = 'localhost';
+=======
+    $_db_idx = 'sys';
+>>>>>>> 8a639b39603bdd5605be490b7ca1056cf8a6d54d
     $_db = array(
         'sys' => array(
             'HOST_DB' => 'royalweb.com.mx',
             'USER_DB' => 'royalweb_rw',
             'PASSWORD_DB' => 'RoyalWeb',
+<<<<<<< HEAD
             'DATABASE_DB' => 'royalweb_test_gya'
         ),
         'localhost' => array(
@@ -36,12 +41,26 @@
             'HOST_DB' => 'royalweb.com.mx',
             'USER_DB' => 'royalweb_rw',
             'PASSWORD_DB' => 'RoyalWeb',
-            'DATABASE_DB' => 'royalweb_test_gya'
+=======
+            'DATABASE_DB' => 'royalweb_pruebas_gya'
         ),
-        'test' => array(
+        'localhost' => array(
             'HOST_DB' => '192.168.1.76',
             'USER_DB' => 'rwroot',
             'PASSWORD_DB' => '/*royalweb*/',
+>>>>>>> 8a639b39603bdd5605be490b7ca1056cf8a6d54d
+            'DATABASE_DB' => 'royalweb_test_gya'
+        ),
+        'samuel' => array(
+            'HOST_DB' => '192.168.1.70',
+            'USER_DB' => 'rwroot',
+            'PASSWORD_DB' => '/*royalweb*/',
+            'DATABASE_DB' => 'royalweb_test_gya'
+        ),
+        'test' => array(
+            'HOST_DB' => 'royalweb.com.mx',
+            'USER_DB' => 'royalweb_rw',
+            'PASSWORD_DB' => 'RoyalWeb',
             'DATABASE_DB' => 'royalweb_test_gya'
         )
     );

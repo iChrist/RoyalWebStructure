@@ -1,0 +1,1 @@
+alert('SUKISTRUKIS xD muajajaja');

@@ -1,3 +1,4 @@
+var grid = new Datatable();
 var TableAjax = function () {
 
     var initPickers = function () {
@@ -9,7 +10,7 @@ var TableAjax = function () {
 
     var handleRecords = function (url) {
 
-        var grid = new Datatable();
+        //var grid = new Datatable();
         
         grid.init({
             src: $("#datatable_ajax"),
@@ -90,7 +91,7 @@ var TableAjax = function () {
         //main function to initiate the module
         init: function (url) {
 
-            initPickers();
+            //initPickers();
             handleRecords(url);
         }
 

@@ -101,9 +101,10 @@
 								if(!empty($this->users['sUserName'])){
 				                    $sql .= " AND _users.sUserName = '".$this->users['sUserName']."'";
 				                }
-                                                if(!is_null($this->users['orderBy'])){
-                                                    $sql .=" ORDER BY ".$this->users['orderBy'];
-                                                }
+								$sql .=" ORDER BY _users.sName ASC ";
+                /*if(!is_null($this->users['orderBy'])){
+                    $sql .=" ORDER BY ".$this->users['orderBy'];
+                }*/
 				                if(is_int($this->users['limit'])){
 				                    if(is_int($this->users['offset'])){
 				                        $sql .= " LIMIT ".$this->users['offset']." , ".$this->users['limit'];
@@ -181,7 +182,7 @@
 				                    skStatus='".$this->users['skStatus']."'
 				                    WHERE skUsers = '".$this->users['skUsers']."'";
 				          	$result = $this->db->query($sql);
-										//echo $sql;die();
+
 										$sql = "DELETE FROM _users_profiles  WHERE skUsers = '".$this->users['skUsers']."'";
 				                $this->db->query($sql);
 												if($result){
@@ -191,7 +192,7 @@
 				                }
 												$sql = "DELETE FROM _users_sucursales  WHERE skUsers = '".$this->users['skUsers']."'";
 
-												die();
+
 
 								        $this->db->query($sql);
 				                if($result){

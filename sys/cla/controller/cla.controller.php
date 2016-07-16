@@ -17,15 +17,6 @@
             $emp->empresas['sNombre'] = $sNombre;
             $empresa = $emp->read_like_empresas();
             if(!$empresa){
-                /*$emp->empresas['skEmpresa'] = substr(md5(microtime()), 1, 32);
-                $emp->empresas['skTipoEmpresa'] = 'N/A';
-                $emp->empresas['skStatus'] = 'AC';
-                $skEmpresa = $emp->create_empresas();
-                if(!$skEmpresa){
-                    return false;
-                }
-                return array($skEmpresa,$sNombre);
-                return true;*/
                 return false;
             }else{
                 $rEmpresa = $empresa->fetch_row();
@@ -72,7 +63,7 @@
                 // VERIFICACMOS QUE VENGA REFERENCIA Y PEDIMENTO //
                     if(empty($v['REFERENCIA']) && $lineaExcel==2){
                         $flag = false;
-                        $message = "Hubo un error al intentar realizar la importaci&oacute;n.";
+                        $message = "No se especificó la referencia en la Columna A2 del template.";
                         break;
                     }
                     
@@ -86,16 +77,12 @@
                 }
                 $this->claMer['sFactura'] = addslashes(trim(utf8_decode($v['FACTURA'])," "));
                 // INICIA EL CONTADOR DEL CONSECUTIVO POR FACTURA //
-                //if($factura == $this->claMer['sFactura']){
                 if(array_key_exists($this->claMer['sFactura'] , $array_consecutivos)){
                     $consecutivo++;
                     $array_consecutivos[$this->claMer['sFactura']] += 1;
-                    //echo '('.$array_consecutivos[$this->claMer['sFactura']].' I '.$this->claMer['sFactura'].')-';
                 }else{
-                  //$factura = $this->claMer['sFactura']; // ASIGNAMOS VALOR
                   $consecutivo = 1;
                   $array_consecutivos[$this->claMer['sFactura']] = 1;
-                  //echo '('.$array_consecutivos[$this->claMer['sFactura']].' D '.$this->claMer['sFactura'].')-';
                 }
                 // SE CREA LA PRIMERA CLASIFICACION //
                     if($validar == 0 && $lineaExcel==2){
@@ -116,11 +103,10 @@
                         $result = $this->get_cla();
                         if(!$result){
                             $flag = false;
-                            $message = "Hubo un error al intentar validar la referencia: ".$this->cla['sReferencia'];
+                            $message = "No se encontró la referencia: ".$this->cla['sReferencia']." para validar.";
                             break;
                         }
                         $rCla = $result->fetch_assoc();
-                        //exit('<pre>'.print_r($rCla,1).'</pre>');
                         $this->delete_cla();
                         $this->cla['skClasificacion'] = $rCla['skClasificacion'];
                         $this->cla['skUsersCreacion'] = $rCla['skUsersCreacion'];
@@ -163,8 +149,6 @@
                         if(!isset($v['CONSECUTIVO'])){
                             $v['CONSECUTIVO'] = "";
                         }
-                        //$this->claMer['iSecuencia'] = $lineaExcel - 1;
-                        //$this->claMer['iSecuencia'] = $consecutivo;
                         $this->claMer['iSecuencia'] = $array_consecutivos[$this->claMer['sFactura']];
                              
                         $skClasificacionMercancia = $this->create_claMer();
@@ -178,7 +162,6 @@
                 
                 $lineaExcel++;
             }
-            //exit('<pre>'.print_r($array_consecutivos,1).'</pre>');
             if(!$flag){
                 return array(
                 "response"=>false
@@ -243,6 +226,12 @@
                         if(isset($_POST['skStatus'])){
                             $this->cla['skStatus'] = $_POST['skStatus'];
                         }
+                        if(isset($_POST['skUsersCreacion'])){
+                            $this->cla['skUsersCreacion'] = $_POST['skUsersCreacion'];
+                        }
+                        if(isset($_POST['skUsersModificacion'])){
+                            $this->cla['skUsersModificacion'] = $_POST['skUsersModificacion'];
+                        }
                         // EXPORTACIÓN A EXCEL //
                         if(isset($_POST['exportExcel']) && $_POST['exportExcel'] == 1){
                             $this->cla['orderBy'] = "cla.sReferencia DESC , cla.dFechaCreacion DESC , claMer.sFactura ASC , claMer.iSecuencia ASC";
@@ -273,7 +262,11 @@
                         //exit('<pre>'.print_r($records['data'],1).'</pre>');
                         $i = 0;
                         while($row = $this->data['data']->fetch_assoc()){
-                                $actions = $this->printModulesButtons(2,array($row['skClasificacion']));
+                            $segundaClasificacion = 'block';
+                            if($row['valido']==0){
+                                $segundaClasificacion = 'none';
+                            }
+                                $actions = $this->printModulesButtons(2,array($row['skClasificacion'],$segundaClasificacion));
                                 //exit('<pre>'.print_r($actions,1).'</pre>');
                                 $records['data'][$i] = array(
                                 !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
@@ -345,7 +338,155 @@
         }
         
         public function clara_index(){
-            $this->claara_index(false);
+            // OBTENER CLASIFICACIÓN DE MERCANCIAS //
+                if(isset($_GET['axn']) && $_GET['axn'] == 'fetch_all'){
+                    $this->getCatalogoClasificacion();
+                    return true;
+                }
+            
+            // INCLUYE EL MODELO DEL MODULO cof //
+                $this->load_model('cof','cof');
+                $cof = new Cof_Model();
+                    // LISTAR TODOS LOS USUARIOS
+                    $this->data['users'] = $cof->read_user();
+            // INCLUYE EL MODELO DEL MODULO emp //
+                $this->load_model('emp', 'emp');
+                $emp = new Emp_Model();
+                $emp->tipoempresas['skTipoEmpresa'] = 'CLIE';
+                $this->data['empresas'] = $emp->read_like_empresas();
+
+            // RETORNA LA VISTA -> clara-index.php //
+                $this->load_view('clara-index', $this->data);
+                return true;
+        }
+        
+        public function getCatalogoClasificacion(){
+            // PARAMETROS PARA FILTRADO //
+                $filters = array();
+            // skClasificacion
+                if(isset($_GET['p1'])){
+                    if(isset($_POST['skClasificacion'])){ $filters['skClasificacion'] = $this->db->real_escape_string($_POST['skClasificacion']); }
+                }
+            // skEmpresa
+                if(isset($_POST['skEmpresa'])){ $filters['skEmpresa'] = $this->db->real_escape_string($_POST['skEmpresa']); }
+            // sReferencia
+                if(isset($_POST['sReferencia'])){ $filters['sReferencia'] = $this->db->real_escape_string($_POST['sReferencia']); }
+            // sFraccion
+                if(isset($_POST['sFraccion'])){ $filters['sFraccion'] = $this->db->real_escape_string($_POST['sFraccion']); }
+            // sNumeroParte
+                if(isset($_POST['sNumeroParte'])){ $filters['sNumeroParte'] = $this->db->real_escape_string($_POST['sNumeroParte']); }
+            // sDescripcion
+                if(isset($_POST['sDescripcion'])){ $filters['sDescripcion'] = $this->db->real_escape_string($_POST['sDescripcion']); }
+            // sDescripcionIngles
+                if(isset($_POST['sDescripcionIngles'])){ $filters['sDescripcionIngles'] = $this->db->real_escape_string($_POST['sDescripcionIngles']); }
+            // skUsersCreacion => Ejecutivo
+                if(isset($_POST['skUsersCreacion'])){ $filters['skUsersCreacion'] = $this->db->real_escape_string($_POST['skUsersCreacion']); }
+            // skUsersModificacion => Clasificador
+                if(isset($_POST['skUsersModificacion'])){ $filters['skUsersModificacion'] = $this->db->real_escape_string($_POST['skUsersModificacion']); }
+            // sFactura
+                if(isset($_POST['sFactura'])){ $filters['sFactura'] = $this->db->real_escape_string($_POST['sFactura']); }
+            // iSecuencia
+                if(isset($_POST['iSecuencia'])){ $filters['iSecuencia'] = $this->db->real_escape_string($_POST['iSecuencia']); }
+            // dFechaPrevio
+                if(isset($_POST['dFechaPrevio1']) && !empty($_POST['dFechaPrevio1'])){ $filters['dFechaPrevio1'] = $this->db->real_escape_string(date('Y-m-d', strtotime($_POST['dFechaPrevio1']))); }
+                if(isset($_POST['dFechaPrevio2']) && !empty($_POST['dFechaPrevio2'])){ $filters['dFechaPrevio2'] = $this->db->real_escape_string(date('Y-m-d', strtotime($_POST['dFechaPrevio2']))); }
+            // dFechaCreacion
+                if(isset($_POST['dFechaCreacion1']) && !empty($_POST['dFechaCreacion1'])){ $filters['dFechaCreacion1'] = $this->db->real_escape_string(date('Y-m-d', strtotime($_POST['dFechaCreacion1']))); }
+                if(isset($_POST['dFechaCreacion2']) && !empty($_POST['dFechaCreacion2'])){ $filters['dFechaCreacion2'] = $this->db->real_escape_string(date('Y-m-d', strtotime($_POST['dFechaCreacion2']))); }
+            // dFechaModificacion
+                if(isset($_POST['dFechaModificacion1']) && !empty($_POST['dFechaModificacion1'])){ $filters['dFechaModificacion1'] = $this->db->real_escape_string(date('Y-m-d', strtotime($_POST['dFechaModificacion1']))); }
+                if(isset($_POST['dFechaModificacion2']) && !empty($_POST['dFechaModificacion2'])){ $filters['dFechaModificacion2'] = $this->db->real_escape_string(date('Y-m-d', strtotime($_POST['dFechaModificacion2']))); }
+                // EXPORTACIÓN A EXCEL //
+                if(isset($_POST['exportExcel']) && $_POST['exportExcel'] == 1){
+                    $this->data['data'] = parent::catalogoClasificacion(false,$filters);
+                    $this->claara_excel();
+                    return true;
+                    exit;
+                }
+                // OBTENER REGISTROS //
+                $total = parent::catalogoClasificacion(true,$filters);
+                $records = Core_Functions::table_ajax($total);
+                if($records['recordsTotal'] === 0){
+                    header('Content-Type: application/json');
+                    echo json_encode($records);
+                    return false;
+                }
+
+                $filters['limit'] = $records['limit'];
+                $filters['offset'] = $records['offset'];
+                $this->data['data'] = parent::catalogoClasificacion(false,$filters);
+
+                if(!$this->data['data']){
+                    header('Content-Type: application/json');
+                    echo json_encode($records);
+                    return false;
+                }
+                $i = 0;
+                $valido = '<i class="fa fa-lock" aria-hidden="true" style="color:#2E7D32;"></i> ';
+                $invalido = '<i class="fa fa-unlock" aria-hidden="true" style="color:#FF8F00;"></i> ';
+                while($row = $this->data['data']->fetch_assoc()){
+                    $actions = $this->printModulesButtons(2,array($row['skClasificacion1']));
+                    $records['data'][$i] = array(
+                        ($row['valido1'] == 1 && $row['valido2'] == 1) 
+                            ?
+                            ( 
+                                !empty($row['sFraccion1']) && !empty($row['sFraccion2']) 
+                                ? '<center><i class="fa fa-lock" aria-hidden="true" style="color:#2E7D32;font-size:18px !important;"></i></center>'
+                                : '<center><i class="fa fa-lock" aria-hidden="true" style="color:#FF8F00;font-size:18px !important;"></i></center>'
+                            )
+                            : '<center><i class="fa fa-lock" aria-hidden="true" style="color:#FF8F00;font-size:18px !important;"></i></center>'
+
+                        ,utf8_encode($row['cliente'])
+
+                        ,utf8_encode($row['sReferencia1'])
+                        
+                        ,($row['valido1'] == 1) 
+                            ? ( !empty($row['sFraccion1']) ? $valido.utf8_encode($row['sFraccion1']) : '' )
+                            : ( !empty($row['sFraccion1']) ? $invalido.utf8_encode($row['sFraccion1']) : '' )
+
+                        ,($row['valido2'] == 1) 
+                            ? ( !empty($row['sFraccion2']) ? $valido.utf8_encode($row['sFraccion2']) : '' )
+                            : ( !empty($row['sFraccion2']) ? $invalido.utf8_encode($row['sFraccion2']) : '' )
+                        
+
+                        //,($row['valido2'] == 1) ? $valido.utf8_encode($row['sFraccion2']) : $invalido.utf8_encode($row['sFraccion2'])
+                        
+                        ,utf8_encode($row['sNumeroParte1'])
+                        ,utf8_encode($row['sNumeroParte2'])
+                        
+                        ,utf8_encode($row['sDescripcion1'])
+                        ,utf8_encode($row['sDescripcion2'])
+                        
+                        ,utf8_encode($row['sDescripcionIngles1'])
+                        ,utf8_encode($row['sDescripcionIngles2'])
+                        
+                        ,utf8_encode($row['ejecutivo1'])
+                        ,utf8_encode($row['ejecutivo2'])
+                        
+                        ,utf8_encode($row['clasificador1'])
+                        //,utf8_encode($row['clasificador2'])
+                        ,utf8_encode($row['ejecutivo2']) // Clasificador 2da
+                        
+                        ,utf8_encode($row['sFactura1'])
+                        ,utf8_encode($row['sFactura2'])
+                        
+                        ,utf8_encode($row['iSecuencia1'])
+                        ,utf8_encode($row['iSecuencia2'])
+                        
+                        ,(utf8_encode($row['dFechaPrevio1']) != '0000-00-00 00:00:00') ? utf8_encode($row['dFechaPrevio1']) : ''
+                        ,(utf8_encode($row['dFechaPrevio2']) != '0000-00-00 00:00:00') ? utf8_encode($row['dFechaPrevio2']) : '' 
+                        
+                        ,(utf8_encode($row['dFechaCreacion1']) != '0000-00-00 00:00:00') ? utf8_encode($row['dFechaCreacion1']) : ''
+                        ,(utf8_encode($row['dFechaCreacion2']) != '0000-00-00 00:00:00') ? utf8_encode($row['dFechaCreacion2']) : ''
+
+                        ,(utf8_encode($row['dFechaModificacion1']) != '0000-00-00 00:00:00') ? utf8_encode($row['dFechaModificacion1']) : ''
+                        ,(utf8_encode($row['dFechaModificacion2']) != '0000-00-00 00:00:00') ? utf8_encode($row['dFechaModificacion2']) : ''
+                    );
+                    $i++;   
+                }
+                header('Content-Type: application/json');
+                echo json_encode($records);
+                return true;
         }
         
         public function claara_index($year = true){
@@ -370,15 +511,8 @@
                         if(isset($_GET['p1'])){
                             $this->cla['skClasificacion'] = $_GET['p1'];
                         }
-                        
                         if(isset($_POST['sReferencia'])){
                             $this->cla['sReferencia'] = $_POST['sReferencia'];
-                        }
-                        if(isset($_POST['sPedimento'])){
-                            $this->cla['sPedimento'] = $_POST['sPedimento'];
-                        }
-                        if(isset($_POST['skEmpresa'])){
-                            $this->cla['skEmpresa'] = $_POST['skEmpresa'];
                         }
                         if(isset($_POST['sFraccion'])){
                             $this->claMer['sFraccion'] = $_POST['sFraccion'];
@@ -392,9 +526,12 @@
                         if(isset($_POST['sNumeroParte'])){
                             $this->claMer['sNumeroParte'] = $_POST['sNumeroParte'];
                         }
-                        /*if(isset($_POST['sFactura'])){
+                        if(isset($_POST['sFactura'])){
                             $this->claMer['sFactura'] = $_POST['sFactura'];
-                        }*/
+                        }
+                        if(isset($_POST['iSecuencia'])){
+                            $this->claMer['iSecuencia'] = $_POST['iSecuencia'];
+                        }
                         if(isset($_POST['dFechaPrevio'])){
                             $this->cla['dFechaPrevio'] = $_POST['dFechaPrevio'];
                         }
@@ -436,9 +573,9 @@
                                 $actions = $this->printModulesButtons(2,array($row['skClasificacion']));
                                 $records['data'][$i] = array(
                                 ''
-                                ,utf8_encode($row['sReferencia']) // REFERENCIA
+                                /*,utf8_encode($row['sReferencia']) // REFERENCIA
                                 ,utf8_encode($row['sPedimento']) // PEDIMENTO
-                                ,utf8_encode($row['empresa']) // EMPRESA (CLIENTE)
+                                ,utf8_encode($row['empresa']) // EMPRESA (CLIENTE)*/
                                 
                                 ,utf8_encode($row['sFactura']) // FACTURA
                                 ,utf8_encode($row['sFraccion']) // FRACCIÓN
@@ -447,9 +584,9 @@
                                 ,utf8_encode($row['sNumeroParte']) // NUMERO DE PARTE (MODELO)
                                 ,utf8_encode($row['iSecuencia']) // NUMERO DE PARTE (MODELO)
                                 
-                                ,utf8_encode($row['dFechaPrevio']) // FECHA PREVIO
+                                /*,utf8_encode($row['dFechaPrevio']) // FECHA PREVIO
                                 ,utf8_encode($row['ejecutivo']) // skUsersCreacion
-                                ,utf8_encode($row['clasificador']) // skUsersModificacion
+                                ,utf8_encode($row['clasificador']) // skUsersModificacion*/
                                 
                                 ,utf8_encode($row['htmlStatus']) // STATUS
                                 
@@ -542,9 +679,6 @@
                     return true;
                 }
             }
-
-            
-
             if($_POST){
                 //exit('<pre>'.print_r($_POST,1).'</pre>');
              	$this->cla['skClasificacion'] = !empty($_POST['skClasificacion']) ? $_POST['skClasificacion'] : substr(md5(microtime()), 1, 32);
@@ -716,252 +850,7 @@
             return true;
         }
         
-        // OBTENER NUMERO DE PARTE //
-        private function getNumeroParte(){
-            $datos = array();
-            $this->numPar['skNumeroParte'] = $_GET['p1'];
-            $numPar = parent::read_equal_numPar();
-            if($numPar){
-                $a = 0;
-                while($_numPar = $numPar->fetch_assoc()){
-                    $datos['numPar'] = array(
-                         'skNumeroParte'=>utf8_encode($_numPar['skNumeroParte'])
-                        ,'sNombre'=>utf8_encode($_numPar['sNombre'])
-                        ,'sDescripcion'=>utf8_encode($_numPar['sDescripcion'])
-                        ,'skStatus'=>utf8_encode($_numPar['skStatus'])
-                        ,'dFechaCreacion'=>!empty($_numPar['dFechaCreacion']) ? date("d-m-Y", strtotime($_numPar['dFechaCreacion'])) : ''
-                        ,'skUsersCreacion'=>utf8_encode($_numPar['skUsersCreacion'])
-                        ,'dFechaModificacion'=>!empty($_numPar['dFechaModificacion']) ? date("d-m-Y", strtotime($_numPar['dFechaModificacion'])) : ''
-                        ,'skUsersModificacion'=>utf8_encode($_numPar['skUsersModificacion'])
-                        ,'htmlStatus'=>utf8_encode($_numPar['htmlStatus'])
-                    );
-                    // OBTENER FRACCIONES ARANCELARIAS //
-                    $this->numparfraran['skNumeroParte'] = $_numPar['skNumeroParte'];
-                    $numparfraran = parent::read_equal_numparfraran();
-                    if(!$numparfraran){ continue; }
-                    $b = 0;
-                    while($_numparfraran = $numparfraran->fetch_assoc()){
-                        $datos['numPar']['numparfraran'][$b] = array(
-                             'skFraccionArancelaria'=>utf8_encode($_numparfraran['skFraccionArancelaria'])
-                            ,'skNumeroParte'=>utf8_encode($_numparfraran['skNumeroParte'])
-                            ,'sNombre'=>utf8_encode($_numparfraran['sNombre'])
-                            ,'skStatus'=>utf8_encode($_numparfraran['skStatus'])
-                            ,'dFechaCreacion'=>!empty($_numparfraran['dFechaCreacion']) ? date("d-m-Y", strtotime($_numparfraran['dFechaCreacion'])) : ''
-                            ,'skUsersCreacion'=>utf8_encode($_numparfraran['skUsersCreacion'])
-                            ,'dFechaModificacion'=>!empty($_numparfraran['dFechaModificacion']) ? date("d-m-Y", strtotime($_numparfraran['dFechaModificacion'])) : ''
-                            ,'skUsersModificacion'=>utf8_encode($_numparfraran['skUsersModificacion'])
-                        );
-                        $this->fraAraDes['skFraccionArancelaria'] = $_numparfraran['skFraccionArancelaria'];
-                        $fraAraDes = parent::read_equal_fraAraDes();
-                        if(!$fraAraDes){ continue; }
-                        $c = 0;
-                        while($_fraAraDes = $fraAraDes->fetch_assoc()){
-                            $datos['numPar']['numparfraran'][$b]['fraAraDes'][$c] = array(
-                                 'skFraccionArancelariaDescripcion'=>utf8_encode($_fraAraDes['skFraccionArancelariaDescripcion'])
-                                ,'skFraccionArancelaria'=>utf8_encode($_fraAraDes['skFraccionArancelaria'])
-                                ,'sDescripcion'=>utf8_encode($_fraAraDes['sDescripcion'])
-                                ,'sDescripcionIngles'=>utf8_encode($_fraAraDes['sDescripcionIngles'])
-                                ,'sModelo'=>utf8_encode($_fraAraDes['sModelo'])
-                                ,'skStatus'=>utf8_encode($_fraAraDes['skStatus'])
-                                ,'dFechaCreacion'=>!empty($_fraAraDes['dFechaCreacion']) ? date("d-m-Y", strtotime($_fraAraDes['dFechaCreacion'])) : ''
-                                ,'skUsersCreacion'=>utf8_encode($_fraAraDes['skUsersCreacion'])
-                                ,'dFechaModificacion'=>!empty($_fraAraDes['dFechaModificacion']) ? date("d-m-Y", strtotime($_fraAraDes['dFechaModificacion'])) : ''
-                                ,'skUsersModificacion'=>utf8_encode($_fraAraDes['skUsersModificacion'])
-                            );
-                            $this->desArc['skFraccionArancelariaDescripcion'] = $_fraAraDes['skFraccionArancelariaDescripcion'];
-                            $desArc = parent::read_equal_desArc();
-                            if(!$desArc){ continue; }
-                            $d = 0;
-                            while($_desArc = $desArc->fetch_assoc()){
-                                $datos['numPar']['numparfraran'][$b]['fraAraDes'][$c]['desArc'][$d] = array(
-                                     'skArchivoFraccionArancelaria'=>utf8_encode($_desArc['skArchivoFraccionArancelaria'])
-                                    ,'skFraccionArancelariaDescripcion'=>utf8_encode($_desArc['skFraccionArancelariaDescripcion'])
-                                    ,'sArchivo'=>utf8_encode($_desArc['sArchivo'])
-                                    ,'skStatus'=>utf8_encode($_desArc['skStatus'])
-                                );
-                                $d++;     
-                            }
-                            $c++;
-                        }
-                        $b++;
-                    }
-                    $a++;
-                }
-            }
-            //exit('<pre>'.print_r($datos,1).'</pre>');
-            return $datos;
-        }
-        
-        public function claara_detail(){
-            $this->data['message'] = '';
-            $this->data['response'] = true;
-            $this->data['datos'] = false;
-            if(isset($_GET['p1'])){
-                // OBTENER NUMERO DE PARTE //
-                $this->numPar['skNumeroParte'] = $_GET['p1'];
-                $numPar = parent::read_equal_numPar();
-                if($numPar){
-                    $this->data['datos'] = $this->getNumeroParte();
-                }
-            }
-            //exit('<pre>'.print_r($this->data['datos'],1).'</pre>');
-            if(isset($_GET['axn'])){
-                switch ($_GET['axn']) {
-                    case 'listImg':
-                        $this->desArc['skFraccionArancelariaDescripcion'] = $_POST['skFraccionArancelariaDescripcion'];
-                        $desArc = parent::read_equal_desArc();
-                        $datos = array();
-                        if(!$desArc){
-                            header('Content-Type: application/json');
-                            echo json_encode($datos);
-                            return false;
-                        }
-                        while($_desArc = $desArc->fetch_assoc()){
-                            $datos[] = array(
-                                 'src'=>utf8_encode(SYS_URL.$_GET['sysProject'].'/'.$_GET['sysModule'].'/files/claara-form/'.$_desArc['skFraccionArancelariaDescripcion'].'/'.$_desArc['sArchivo'])
-                                ,'sArchivo'=>utf8_encode($_desArc['sArchivo'])
-                            );    
-                        }
-                        header('Content-Type: application/json');
-                        echo json_encode($datos);
-                        return true;
-                    break;
-                    case 'pdf':
-                        $this->claara_pdf();
-                    break;
-                }
-            }
-
-            if(isset($_POST['axn'])){
-                if($_POST['axn']=='listImg'){
-                    $this->desArc['skFraccionArancelariaDescripcion'] = $_POST['skFraccionArancelariaDescripcion'];
-                    $desArc = parent::read_equal_desArc();
-                    $datos = array();
-                    if(!$desArc){
-                        header('Content-Type: application/json');
-                        echo json_encode($datos);
-                        return false;
-                    }
-                    while($_desArc = $desArc->fetch_assoc()){
-                        $datos[] = array(
-                             'src'=>utf8_encode(SYS_URL.$_GET['sysProject'].'/'.$_GET['sysModule'].'/files/claara-form/'.$_desArc['skFraccionArancelariaDescripcion'].'/'.$_desArc['sArchivo'])
-                            ,'sArchivo'=>utf8_encode($_desArc['sArchivo'])
-                        );    
-                    }
-                    header('Content-Type: application/json');
-                    echo json_encode($datos);
-                    return true;
-                }
-            }
-
-            $this->load_view('claara-detail', $this->data);
-            return true;
-        }
-        
-        public function claara_fotos(){
-            $this->data['message'] = '';
-            $this->data['response'] = true;
-            $this->data['datos'] = false;
-            if(isset($_POST)){
-		if(isset($_POST['axn'])){
-			switch ($_POST['axn']) {
-		            	case 'buscarFotos':
-				$path = SYS_PATH.$_GET['sysModule'].'/files/claara/files/';
-				if(!empty($_POST['sFraccion'])){
-					$path .= $_POST['sFraccion'].'/';
-                    $this->claMerArc['sFraccion'] = $_POST['sFraccion'];
-				}
-				if(!empty($_POST['sFraccion']) && !empty($_POST['sNumeroParte'])){
-					$path .= $_POST['sNumeroParte'].'/';
-                    $this->claMerArc['sNumeroParte'] = $_POST['sNumeroParte'];
-				}
-                $this->data['datos'] = array();
-                $result = parent::read_like_claMerArc();
-                while($row = $result->fetch_assoc()){
-                    array_push($this->data['datos'], array(
-                        "sFraccion"=> $row['sFraccion'],
-                        "sNumeroParte"=> $row['sNumeroParte'],
-                        "sArchivo"=> SYS_URL.SYS_PROJECT.'/cla/files/claara/files/'.$row['sFraccion'].'/'.$row['sNumeroParte'].'/'.$row['sArchivo'],
-                        "sThumbnail"=> SYS_URL.SYS_PROJECT.'/cla/files/claara/files/'.$row['sFraccion'].'/'.$row['sNumeroParte'].'/'.$row['sThumbnail']
-                        )
-                    );
-                }
-				if(!$this->data['datos']){
-					$this->data['message'] = 'No hay fotografias para este registro.';
-					$this->data['response'] = false;
-					header('Content-Type: application/json');
-	                        	echo json_encode($this->data);
-	                        	return false;
-				}
-				$this->data['message'] = 'Fotografias obtenidas.';
-				header('Content-Type: application/json');
-                        	echo json_encode($this->data);
-	                        return true;
-				break;
-                                
-                                case 'getNumerosParte':
-                                    $this->claMerArc['sFraccion'] = !empty($_POST['sFraccion']) ? $_POST['sFraccion'] : "";
-                                    $numerosParte = $this->data['numerosParte'] = parent::read_numerosParteFotos();
-                                    $data = array();
-                                    if($numerosParte){
-                                        while($row = $numerosParte->fetch_assoc()){
-                                            array_push($data,$row['sNumeroParte']);
-                                        }
-                                    }
-                                    header('Content-Type: application/json');
-                                    echo json_encode($data);
-                                    return true;
-                                break;
-			}//switch
-		}
-                if(!empty($_FILES['zip']['name'])){
-                    $arrayZips = array("application/zip", "application/x-zip", "application/x-zip-compressed");
-                    if(in_array($_FILES['zip']['type'] , $arrayZips)){
-                        //exit('<pre>'.print_r($_FILES['zip'],1).'</pre>');
-                        if( !$this->claara_zip() ){
-                            $this->data['response'] = false;
-                            $this->data['message'] = 'Hubo un error al subir el archivo ZIP.';
-                            header('Content-Type: application/json');
-                            echo json_encode($this->data);
-                            return false;    
-                        }
-                        $this->data['response'] = true;
-                        $this->data['message'] = 'Archivo ZIP subido con &eacute;xito.';
-                        header('Content-Type: application/json');
-                        echo json_encode($this->data);
-                        return true; 
-                    }else{
-                        $this->data['response'] = false;
-                        $this->data['message'] = 'El archivo que intenta subir no es un archivo ZIP.';
-                        header('Content-Type: application/json');
-                        echo json_encode($this->data);
-                        return false;
-                    }
-                }
-            }
-		if(isset($_GET['axn'])){
-			switch ($_GET['axn']) {
-		            	case 'getFoto':
-					$this->claara_getFoto();
-                                    return true;
-				break;
-			}
-		}
-            $this->data['fracciones'] = parent::read_fraccionesFotos();
-            //$this->data['numerosParte'] = parent::read_numerosParteFotos();
-            $this->load_view('claara-fotos', $this->data);
-            return true; 
-        }
-        
-        public function claara_excel(){
-            //exit('<pre>'.print_r($_POST,1));
-            //exit('<pre>'.print_r($this->data['data'],1));
-            //echo date('H:i:s') . ' Current memory usage: ' . (memory_get_usage(true) / 1024 / 1024) . " MB <hr>" . PHP_EOL;
-            /*ini_set('memory_limit', '-1');
-            if(isset($_GET['p1'])){
-                $this->cla['skClasificacion'] = $_GET['p1'];
-            }
-            $this->data['data'] = parent::read_equal_cla();*/           
+        public function claara_excel(){         
             if(!$this->data['data']){
                  header('Location: '.$_SERVER['HTTP_REFERER']); 
                 return false;
@@ -1000,7 +889,6 @@
             header('Cache-Control: max-age=0');
             // If you're serving to IE 9, then the following may be needed
             header('Cache-Control: max-age=1');
-
             // If you're serving to IE over SSL, then the following may be needed
             header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
             header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
@@ -1010,110 +898,8 @@
             $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
             //$objWriter->save(SYS_PATH.'cla/files/claara/Reporte.xlsx');
             $objWriter->save('php://output');
-
-
             //exit('<pre>'.print_r($records,1).'</pre>');
             exit;
-        }
-        
-        public function claara_zip(){
-            $destination = SYS_PATH.$_GET['sysModule'].'/files/claara/files/';
-            if( !move_uploaded_file($_FILES['zip']['tmp_name'] , $destination.$_FILES['zip']['name']) ){
-                return false;
-            }
-            $path = $destination.$_FILES['zip']['name'];
-            //$path = $destination.'fotos.zip';
-            $folder = null;
-            $zip = new ZipArchive;
-            if ($zip->open($path) === true) {
-                for($i = 0; $i < $zip->numFiles; $i++) {
-                    $filename = $zip->getNameIndex($i);
-                    $fileinfo = pathinfo($filename);
-                    $pos = strrpos($filename, ".jpg");
-                    if ($pos === false){
-                        // type --> FOLDER //
-                        $f = explode('/',$filename);
-                        $ignore = $f[0];
-                        foreach($f AS $k => &$v){
-                            
-                            if(!empty($v)){
-                            	if($folder === null){
-                            		$folder = $v;
-                            	}else{
-	                            	$folder .= '/'.$v;
-                            	}
-                				if($folder === $ignore){
-                					$folder=null;				
-                				}else{
-                                    //echo $folder.' => ';
-                                    if(!is_dir($destination.$folder)){
-                                        mkdir($destination.$folder, 0777, true);
-                                    }
-                				}
-                            }
-                        }// foreach
-                        
-                    }else{
-                        // type --> IMG //
-                        //echo "zip://".$path."#".$filename.' => '.$destination.$fileinfo['basename'].'<br><br>';
-            			$filenameOut = str_replace($ignore.'/', '', $filename);
-            			//echo $filenameOut.' --> ';
-            			$fraNum = explode('/',$filenameOut);
-            			//echo '<pre>'.print_r($fraNum,1).'</pre>';
-            			/*if(parent::claara_create){
-                                    copy("zip://".$path."#".$filename , $destination.$filenameOut);
-            			}*/
-            			
-                        //echo $destination.$filenameOut.' --> ';
-                        if(!file_exists($destination.$filenameOut)){
-                            copy("zip://".$path."#".$filename , $destination.$filenameOut);
-                            $arc = explode('/',$filenameOut);
-                            // Generate thumbnail //
-                            $img = SYS_URL.SYS_PROJECT.'/cla/files/claara/files/'.$filenameOut;
-                            //echo $img . ' ==> '. $destination.$arc[0].'/'.$arc[1].'/thumbnail_'.$arc[2];
-                            $imagick = new \Imagick($img);
-                            //$imagick->cropImage(400,400, 30,10);
-                            $imagick->cropThumbnailImage(150,150);
-                            $imagick->writeImage($destination.$arc[0].'/'.$arc[1].'/thumbnail_'.$arc[2]);
-
-                            // Save img in database //
-                            $this->claMerArc['skClasificacionMercanciaArchivo'] = substr(md5(microtime()), 1, 32);
-                            $this->claMerArc['sFraccion'] = $arc[0];
-                            $this->claMerArc['sNumeroParte'] = $arc[1]; 
-                            $this->claMerArc['sArchivo'] = $arc[2];
-                            $this->claMerArc['sThumbnail'] = 'thumbnail_'.$arc[2];
-                            $this->claMerArc['skStatus'] = 'AC';
-                            $this->create_claMerArc();
-                        }
-
-
-                }
-                    $folder = null;
-                    //copy("zip://".$path."#".$filename , $destination.$fileinfo['basename']);
-                }                  
-                $zip->close();
-                unlink($path);
-                //exit('SUCCESS');
-                return true;
-            }else{
-                //exit('ERROR');
-                return false;
-            }
-        }
-        
-        public function claara_getFoto(){
-            $imagePath = isset($_GET['url']) ? $_GET['url'] : FALSE;
-            $width = isset($_GET['width']) ? $_GET['width'] : 250;
-            $height = isset($_GET['height']) ? $_GET['height'] : 250;
-            if( !$imagePath ){
-                return  false;
-            }
-            $imagick = new \Imagick($imagePath);
-            $imagick->setbackgroundcolor('rgb(64, 64, 64)');
-            $imagick->thumbnailImage($width, $height, true, false);
-            header("Content-Type: image/jpg");
-            echo $imagick->getImageBlob();
-            return true;
         }
         
         private function claara_pdf(){
@@ -1130,16 +916,129 @@
         }
         /* TERMINA MODULO DE EMPRESAS clasifiación arancelaria */ 
         
-        // COMIENZA SEGUNDA CLASIFICACIÓN //
-        public function segcla_form(){
+// ******************************************************************* // 
+                // COMIENZA SEGUNDA CLASIFICACIÓN //
+// ******************************************************************* // 
+        
+        public function segcla_index(){
             $this->data['message'] = '';
             $this->data['response'] = true;
             $this->data['datos'] = false;
-            // A
+            if(isset($_GET['axn'])){
+                switch ($_GET['axn']) {
+                    case 'delete':
+                        $this->data['message'] = 'Hubo un error al intentar eliminar el registro, intenta de nuevo.';
+                        $this->data['response'] = false;
+                        $this->data['datos'] = false;
+                        if(isset($_GET['p1'])){
+                            $this->cla['skClasificacion'] = $_GET['p1'];
+                            if($this->deleteClasificacionSegunda()){
+                                $this->data['response'] = true;
+                                $this->data['datos'] = true;
+                                $this->data['message'] = 'Registro eliminado con &eacute;xito.';
+                            }
+                        }
+                        header('Content-Type: application/json');
+                        echo json_encode($this->data);
+                        return true;
+                        break;
+                    case 'fetch_all':
+                        // PARAMETROS PARA FILTRADO //
+                        $this->cla['orderBy'] = "cla.dFechaCreacion DESC";
+                        
+                        if(isset($_POST['sReferencia'])){
+                            $this->cla['sReferencia'] = $_POST['sReferencia'];
+                        }
+                        if(isset($_POST['sPedimento'])){
+                            $this->cla['sPedimento'] = $_POST['sPedimento'];
+                        }
+                        if(isset($_POST['skEmpresa'])){
+                            $this->cla['skEmpresa'] = $_POST['skEmpresa'];
+                        }
+                        if(isset($_POST['skCreador'])){
+                            $this->cla['skCreador'] = $_POST['skCreador'];
+                        }
+                        if(isset($_POST['skStatus'])){
+                            $this->cla['skStatus'] = $_POST['skStatus'];
+                        }
+                        if(isset($_POST['skUsersCreacion'])){
+                            $this->cla['skUsersCreacion'] = $_POST['skUsersCreacion'];
+                        }
+                        if(isset($_POST['skUsersModificacion'])){
+                            $this->cla['skUsersModificacion'] = $_POST['skUsersModificacion'];
+                        }
+                        // EXPORTACIÓN A EXCEL //
+                        if(isset($_POST['exportExcel']) && $_POST['exportExcel'] == 1){
+                            $this->cla['orderBy'] = "cla.sReferencia DESC , cla.dFechaCreacion DESC , claMer.sFactura ASC , claMer.iSecuencia ASC";
+                            $this->data['data'] = parent::segcla_form_getMercancias();
+                            $this->claara_excel();
+                            return true;
+                            exit;
+                        }
+                        // OBTENER REGISTROS //
+                        $total = parent::segcla_index_getClasificacion(true);
+                        $records = Core_Functions::table_ajax($total);
+                        if($records['recordsTotal'] === 0){
+                            header('Content-Type: application/json');
+                            echo json_encode($records);
+                            return false;
+                        }
+                        
+                        $this->cla['limit'] = $records['limit'];
+                        $this->cla['offset'] = $records['offset'];
+                        $this->data['data'] = parent::segcla_index_getClasificacion(false);
+                        
+                        if(!$this->data['data']){
+                            header('Content-Type: application/json');
+                            echo json_encode($records);
+                            return false;
+                        }
+                        //exit('<pre>'.print_r($records['data'],1).'</pre>');
+                        $i = 0;
+                        while($row = $this->data['data']->fetch_assoc()){
+                                $actions = $this->printModulesButtons(2,array($row['skClasificacion']));
+                                $records['data'][$i] = array(
+                                !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
+                                ,utf8_encode($row['sReferencia']) // REFERENCIA
+                                ,utf8_encode($row['sPedimento']) // PEDIMENTO
+                                ,utf8_encode($row['empresa']) // EMPRESA (CLIENTE)
+                                ,utf8_encode($row['totalFracciones']) // total de fracciones
+                                ,utf8_encode($row['ejecutivo']) // skUsersCreacion
+                                ,utf8_encode($row['clasificador']) // skUsersModificacion
+                                );
+                                
+                             $i++;   
+                        }
+                        header('Content-Type: application/json');
+                        echo json_encode($records);
+                        return true;
+                        break;
+                }
+                return true;
+            }
+            // INCLUYE EL MODELO DEL MODULO cof //
+            $this->load_model('cof','cof');
+            $cof = new Cof_Model();
+            
+            // LISTAR TODOS LOS USUARIOS
+            $this->data['users'] = $cof->read_user();
+            
+            // INCLUYE EL MODELO DEL MODULO emp //
+            $this->load_model('emp','emp');
+            $emp = new Emp_Model();
+            $this->data['empresas'] = $emp->read_equal_empresas();
+            
+            $this->load_view('segcla-index',$this->data);
+        }
+        public function segcla_form(){
+            ini_set('memory_limit', '-1');
+            $this->data['message'] = '';
+            $this->data['response'] = true;
+            $this->data['datos'] = false;
+            // OBTIENE LA CLASIFICACIÓN SI VIENE EL PARÁMETRO p1 (skClasificacion) //
                 if(isset($_GET['p1'])){
                     $this->cla['skClasificacion'] = $_GET['p1'];
-                    //$result = $this->segcla_form_getMercancias();
-                    //$this->load_view('segcla-form',$this->data);
+                    $this->data['datos'] = parent::read_cla_referencias_pendientes();
                 }
             // validarReferencia //
                 if(isset($_POST['axn']) && $_POST['axn'] == 'validarReferencia'){
@@ -1158,24 +1057,88 @@
                     $this->load_controller('doc','obtenerDatos');
                     return true;
                 }
-            // validarReferencia //
-                if(isset($_POST['axn']) && $_POST['axn'] == 'validarReferencia'){
-                    $datos = array(
-                        'sReferencia'=>(isset($_POST['sReferencia'])? $_POST['sReferencia'] : '')
-                    );
-                    if($this->validarReferencia($datos)){
-                        echo 'true';
+            // OBTENER CLASIFICACIÓN DE MERCANCIAS //
+                if(isset($_GET['axn']) && $_GET['axn'] == 'fetch_all'){
+                    if(isset($_GET['p1']) || isset($_POST['sReferencia'])){
+                        $this->segcla_form_getMercancias();
                     }else{
-                        echo 'false';
+                        $records = array("data"=>array(),"draw"=>1,"recordsTotal"=>0,"recordsFiltered"=>0);
+                        header('Content-Type: application/json');
+                        echo json_encode($records);
+                        return true;
                     }
                     return true;
                 }
-            // OBTENER CLASIFICACIÓN DE MERCANCIAS //
-                if(isset($_GET['axn']) && $_GET['axn'] == 'fetch_all'){
-                    if(isset($_GET['p1'])){
-                        $this->cla['skClasificacion'] = $_GET['p1'];
+            // GUARDAR SEGUNDA CLASIFICACIÓN //
+                if(isset($_POST['axn']) && $_POST['axn'] == 'insert'){
+                    if(!empty($_POST['clasificacionSegundaMercancia'])){
+                        $this->cla['skClasificacion'] = $_POST['skClasificacion'];
+                        $data = json_decode($_POST['clasificacionSegundaMercancia'],1);
+                        //exit('<pre>'.print_r($data[key($data)][0],1).'</pre>');
+                        if(isset($data[key($data)][0]['REFERENCIA']) && $data[key($data)][0]['REFERENCIA'] == $_POST['sReferencia']){
+                            $this->cla['skClasificacion'] = $_POST['skClasificacion'];
+                            $deleteClasificacionSegunda = $this->deleteClasificacionSegunda();
+                            if(!$deleteClasificacionSegunda){
+                                $this->data['response'] = false;
+                                $this->data['message'] = 'Hubo un error al registrar la segunda clasificación.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return false;
+                            }
+                            $insertarClasificacionSegunda = $this->insertarClasificacionSegunda();
+                            if(!$insertarClasificacionSegunda){
+                                $this->data['response'] = false;
+                                $this->data['message'] = 'Hubo un error al registrar la segunda clasificación.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return false;
+                            }
+                            $dFechaImportacion = date('Y-m-d H:i:s');
+                            $response = $this->import_excel_clasificacionSegunda($data[key($data)],$dFechaImportacion,1);
+                            if(!$response['response']){
+                                $this->data['response'] = false;
+                                $this->data['message'] = 'Hubo un error al registrar la segunda clasificación.';
+                                header('Content-Type: application/json');
+                                echo json_encode($this->data);
+                                return false;
+                            }
+                        }else{
+                            $this->data['response'] = false;
+                            $this->data['message'] = 'La referencia ingresada no coincide con el documento: '.$_POST['sReferencia'];
+                            header('Content-Type: application/json');
+                            echo json_encode($this->data);
+                            return false;
+                        }
+                    }else{
+                        $this->cla['skClasificacion'] = $_POST['skClasificacion'];
+                        $deleteClasificacionSegunda = $this->deleteClasificacionSegunda();
+                        if(!$deleteClasificacionSegunda){
+                            $this->data['response'] = false;
+                            $this->data['message'] = 'Hubo un error al registrar la segunda clasificación.';
+                            header('Content-Type: application/json');
+                            echo json_encode($this->data);
+                            return false;
+                        }
+                        $insertarClasificacionSegunda = $this->insertarClasificacionSegunda();
+                        if(!$insertarClasificacionSegunda){
+                            $this->data['response'] = false;
+                            $this->data['message'] = 'Hubo un error al registrar la segunda clasificación.';
+                            header('Content-Type: application/json');
+                            echo json_encode($this->data);
+                            return false;
+                        }
+                        $insertarClasificacionSegundaMercancias = $this->insertarClasificacionSegundaMercancias();
+                        if(!$insertarClasificacionSegundaMercancias){
+                            $this->data['response'] = false;
+                            $this->data['message'] = 'Hubo un error al registrar la segunda clasificación.';
+                            header('Content-Type: application/json');
+                            echo json_encode($this->data);
+                            return false;
+                        }
                     }
-                    $this->segcla_form_getMercancias();
+                    $this->data['message'] = 'Segunda clasificación guardada con exito.';
+                    header('Content-Type: application/json');
+                    echo json_encode($this->data);
                     return true;
                 }
             $this->load_view('segcla-form',$this->data);
@@ -1207,6 +1170,9 @@
                 }
                 if(isset($_POST['sFactura'])){
                     $this->claMer['sFactura'] = $_POST['sFactura'];
+                }
+                if(isset($_POST['iSecuencia'])){
+                    $this->claMer['iSecuencia'] = $_POST['iSecuencia'];
                 }
                 // EXPORTACIÓN A EXCEL //
                 if(isset($_POST['exportExcel']) && $_POST['exportExcel'] == 1){
@@ -1251,6 +1217,130 @@
                 echo json_encode($records);
                 return true;
             }
+            
+            public function import_excel_clasificacionSegunda(&$data , &$dFechaImportacion, $validar = 1){
+            ini_set('memory_limit', '-1');
+            $skClasificacion = NULL;
+            $this->cla['valido'] = $validar;
+            $this->cla['dFechaImportacion'] = $dFechaImportacion;
+            $this->claMer['dFechaImportacion'] = $dFechaImportacion;
+            $this->cla['skStatus'] = 'AC';
+            $this->claMer['skStatus'] = 'AC';
+            
+            $dFechaCreacion = date('Y-m-d H:i:s');
+            $this->cla['skUsersCreacion'] = $_SESSION['session']['skUsers'];
+            $this->cla['dFechaCreacion'] = $dFechaCreacion;
+            $this->claMer['skUsersCreacion'] = $_SESSION['session']['skUsers'];
+            $this->claMer['dFechaCreacion'] = $dFechaCreacion;
+            
+            if(!count($data)){
+                return false;
+            }
+            $flag = true;
+            $message = false;
+            $lineaExcel = 2;
+            $factura = "";
+            $consecutivo = 0;
+            $array_consecutivos = array();
+            foreach($data AS $k => $v){
+                // VERIFICACMOS QUE VENGA REFERENCIA Y PEDIMENTO //
+                    if(empty($v['REFERENCIA']) && $lineaExcel==2){
+                        $flag = false;
+                        $message = "No se especificó la referencia en la Columna A2 del template.";
+                        break;
+                    }
+                    
+                if(!isset($v['F DE PREVIO'])){
+                    $v['F DE PREVIO'] = NULL;
+                }
+                $this->cla['dFechaPrevio'] = addslashes(trim(utf8_decode($v['F DE PREVIO'])," "));
+                $this->cla['dFechaPrevio'] =  '';
+                if(!isset($v['FACTURA'])){
+                    $v['FACTURA'] = "";
+                }
+                $this->claMer['sFactura'] = addslashes(trim(utf8_decode($v['FACTURA'])," "));
+                // INICIA EL CONTADOR DEL CONSECUTIVO POR FACTURA //
+                if(array_key_exists($this->claMer['sFactura'] , $array_consecutivos)){
+                    $consecutivo++;
+                    $array_consecutivos[$this->claMer['sFactura']] += 1;
+                }else{
+                  $consecutivo = 1;
+                  $array_consecutivos[$this->claMer['sFactura']] = 1;
+                }
+                // SE CREA LA PRIMERA CLASIFICACION //
+                    if($validar == 1 && $lineaExcel==2){
+                        // SE BUSCA LA REFERENCIA PARA SU VALIDACION //
+                        $this->cla['sReferencia'] = addslashes(trim(utf8_decode($v['REFERENCIA'])," "));
+                        $result = parent::get_cla();
+                        if(!$result){
+                            $flag = false;
+                            $message = "No se encontró la referencia: ".$this->cla['sReferencia']." para validar.";
+                            break;
+                        }
+                        $rCla = $result->fetch_assoc();
+                        $this->deleteClasificacionSegunda();
+                        $this->cla['skClasificacion'] = $rCla['skClasificacion'];
+                        $this->cla['skUsersCreacion'] = $rCla['skUsersCreacion'];
+                        $this->cla['dFechaCreacion'] = $rCla['dFechaCreacion'];
+                        $this->claMer['skUsersCreacion'] = $rCla['skUsersCreacion'];
+                        $this->claMer['dFechaCreacion'] = $rCla['dFechaCreacion'];
+                        $skClasificacion = $this->create_claSeg();
+                        if(!$skClasificacion){ 
+                            $flag = false;
+                            $message = "Hubo un error al al intentar validar la referencia: ".$this->cla['sReferencia'];
+                            break;
+                        }
+                    }
+                // AGREGAMOS LAS FRACCIONES //
+                        $this->claMer['skClasificacionMercancia'] = substr(md5(microtime()), 1, 32);
+                        $this->claMer['skClasificacion'] = $skClasificacion;
+                        
+                        if(!isset($v['FRACCION'])){
+                            $v['FRACCION'] = "";
+                        }
+                        $this->claMer['sFraccion'] = addslashes(trim(utf8_decode($v['FRACCION'])," "));
+     
+                        if(!isset($v['DESCRIPCION'])){
+                            $v['DESCRIPCION'] = "";
+                        }
+                        $this->claMer['sDescripcion'] = addslashes(trim(utf8_decode($v['DESCRIPCION'])," "));
+                        
+                        if(!isset($v['INGLES'])){
+                            $v['INGLES'] = "";
+                        }
+                        $this->claMer['sDescripcionIngles'] = addslashes(trim(utf8_decode($v['INGLES'])," "));
+                        
+                        if(!isset($v['MODELO'])){
+                            $v['MODELO'] = "";
+                        }
+                        $this->claMer['sNumeroParte'] = addslashes(trim(utf8_decode($v['MODELO'])," "));
+                        
+                        if(!isset($v['CONSECUTIVO'])){
+                            $v['CONSECUTIVO'] = "";
+                        }
+                        $this->claMer['iSecuencia'] = $array_consecutivos[$this->claMer['sFactura']];
+                             
+                        $skClasificacionMercancia = $this->create_claSegMer();
+                        if(!$skClasificacionMercancia){ 
+                            $flag = false;
+                            $message = "Hubo un error al registar la fraccion ".$this->claMer['sFraccion']." con numero de parte: ".$this->claMer['sNumeroParte']." en la referencia: ".$this->cla['sReferencia'];
+                            $this->deleteClasificacionSegunda();
+                            break;
+                        }
+                
+                $lineaExcel++;
+            }
+            if(!$flag){
+                return array(
+                "response"=>false
+                ,"message"=>$message
+            );
+            }
+            return array(
+                "response"=>true
+                ,"message"=>"Importaci&oacute;n realizada con &eacute;xito"
+            );
+        }
         // TEMRINA SEGUNDA CLASIFICACIÓN //
     }
 ?>

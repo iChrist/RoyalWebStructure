@@ -21,15 +21,6 @@
                                 Buscar
                             </th>
                             <th width="25%">
-                                Referencia
-                            </th>
-                            <th width="25%">
-                                Pedimento
-                            </th>
-                            <th width="25%">
-                                Cliente
-                            </th>
-                            <th width="25%">
                                 Factura
                             </th>
                             <th width="25%">
@@ -47,18 +38,6 @@
                             <th width="25%">
                                 Secuencia
                             </th>
-                            <th width="25%">
-                                F. Previo
-                            </th>
-                            <th width="25%">
-                                Ejecutivo
-                            </th>
-                            <th width="25%">
-                                Clasificador
-                            </th>
-                            <th width="25%">
-                                Estatus
-                            </th>
                         </tr>
                         <tr role="row" class="filter">
                             <td>
@@ -66,28 +45,6 @@
                                     <button class="btn btn-xs btn-default filter-submit margin-bottom"><i class="fa fa-search"></i> Buscar</button>
                                     <button class="btn btn-xs btn-warning filter-cancel"><i class="fa fa-refresh"></i></button>
                                 </div>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control form-filter input-sm" name="sReferencia" placeholder="Referencia">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control form-filter input-sm" name="sPedimento" placeholder="Pedimento">
-                            </td>
-                            <td>
-                                <select name="skEmpresa" class="form-control form-filter input-sm">
-                                    <option value="">- Cliente -</option>
-                                <?php
-                                    if($data['empresas']){
-                                        while($row = $data['empresas']->fetch_assoc()){
-                                ?>
-                                            <option value="<?php echo $row['skEmpresa']; ?>">
-                                                <?php echo utf8_encode($row['sNombre']); ?>
-                                            </option>
-                                <?php
-                                        }//ENDIF
-                                    }//ENDWHILE
-                                ?>
-                                </select>
                             </td>
                             <td>
                                 <input type="text" class="form-control form-filter input-sm" name="sFactura" placeholder="Factura">
@@ -106,31 +63,6 @@
                             </td>
                             <td>
                                 <input type="text" class="form-control form-filter input-sm" name="iSecuencia" placeholder="Secuencia">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control form-filter input-sm" name="dFechaPrevio" placeholder="F. Previo">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control form-filter input-sm" name="skUsersCreacion" placeholder="Ejecutivo">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control form-filter input-sm" name="skUsersModificacion" placeholder="Clasificador">
-                            </td>
-                            <td>
-                                <select name="skStatus" class="form-control form-filter input-sm">
-                                    <option value="">- Estatus -</option>
-                                <?php
-                                    if($data['status']){
-                                        while($row = $data['status']->fetch_assoc()){
-                                ?>
-                                            <option value="<?php echo $row['skStatus']; ?>">
-                                                <?php echo $row['sName']; ?>
-                                            </option>
-                                <?php
-                                        }//ENDIF
-                                    }//ENDWHILE
-                                ?>
-                                </select>
                             </td>
                         </tr>
                         </thead>

@@ -726,7 +726,8 @@
 											cte.sNombre AS tipoEmpresa,
 											cec.sNombre AS corresponsalia,
 											cp1.sNombre AS promotor1,
-											cp2.sNombre AS promotor2
+											cp2.sNombre AS promotor2,
+											res.skSocioEmpresa
 											FROM rel_empresas_socios res
 											LEFT JOIN cat_tipos_empresas cte ON cte.skTipoEmpresa = res.skTipoEmpresa
 											LEFT JOIN cat_empresas ce ON ce.skEmpresa = res.skEmpresa
@@ -943,11 +944,7 @@
 											LEFT JOIN rel_empresas_socios rep ON rep.skSocioEmpresa = res.skSocioEmpresaP
 											LEFT JOIN cat_empresas cep ON cep.skEmpresa = rep.skEmpresa
 											WHERE 1=1 ";
-								if(!$_SESSION['session']['sGroup']=='A'){
-                 //if(!empty($_SESSION['session']['skSocioEmpresaPropietario'])){
                     $sql .=" AND res.skSocioEmpresaP = '".$_SESSION['session']['skSocioEmpresaPropietario']."'";
-                 //}
-							  }
 								if(!empty($this->sociosEmpresas['skEmpresa'])){
                     $sql .=" AND ce.skEmpresa = '".$this->sociosEmpresas['skEmpresa']."'";
                 }
