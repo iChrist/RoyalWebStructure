@@ -413,14 +413,15 @@
                 console.log(json);
                 for (o in json) {
                     d = json[o];
+                    console.log(d);
                     if (ifsocioimportador != "") {
-                        if (ifsocioimportador == d.skEmpresa ) {
-                            $("#skSocioImportador").append('<option selected="selected" value="' + d.skEmpresa +  '">'+d.Empresa+'</option>');
+                        if (ifsocioimportador == d.skSocioEmpresa ) {
+                            $("#skSocioImportador").append('<option selected="selected" value="' + d.skSocioEmpresa +  '">'+d.Empresa+'</option>');
                         }else{
-                            $("#skSocioImportador").append('<option value="' + d.skEmpresa +  '">'+d.Empresa+'</option>');
+                            $("#skSocioImportador").append('<option value="' + d.skSocioEmpresa +  '">'+d.Empresa+'</option>');
                         }
                     }else{
-                        $("#skSocioImportador").append('<option value="' + d.skEmpresa +  '">'+d.Empresa+'</option>');
+                        $("#skSocioImportador").append('<option value="' + d.skSocioEmpresa +  '">'+d.Empresa+'</option>');
                     }
                     
                 }
@@ -437,7 +438,7 @@
             //alert($( "#skSocioImportador option:selected" ).val());
             $.ajax({
                 url : '<?php echo SYS_URL;?>/sys/rex/jsonConceptos/',
-                data : {skEmpresa:$( "#skSocioImportador option:selected" ).val()},
+                data : {skSocioImportador:$( "#skSocioImportador option:selected" ).val()},
 
                 // especifica si será una petición POST o GET
                 type : 'POST',

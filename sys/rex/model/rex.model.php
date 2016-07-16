@@ -93,25 +93,24 @@ Class Rex_Model Extends Core_Model {
                 '".$_POST["iDeposito"]."', 
                 '".$_POST["iSaldo"]."',
                 '".$_POST["fTipoCambio"]."');" ;
-            if (isset($_POST["conceptos"]) && isset($_POST["iCantidad"])) {
-                for ($i= 0; $i < count($_POST["conceptos"]); $i++) { 
-                    $this->insertConceptos(
-                        $skReferenciaExterna,
-                        $_POST["conceptos"][$i],
-                        $_POST["iCantidad"][$i],
-                        $_POST["subtotal"][$i],
-                        $_POST["fPrecioUnitario"][$i],
-                        $_POST["divisa"][$i]);
+
+        if (isset($_POST["conceptos"]) && isset($_POST["iCantidad"])) {
+            for ($i= 0; $i < count($_POST["conceptos"]); $i++) { 
+                $this->insertConceptos(
+                    $skReferenciaExterna,
+                    $_POST["conceptos"][$i],
+                    $_POST["iCantidad"][$i],
+                    $_POST["subtotal"][$i],
+                    $_POST["fPrecioUnitario"][$i],
+                    $_POST["divisa"][$i]);
             }
+        }
 
 
         if (isset($_POST) ) {
             
             $result = $this->db->query($sql_insert);
-
-        }
             return true;
-
         }else{
             return false;
         }
@@ -153,7 +152,13 @@ Class Rex_Model Extends Core_Model {
         
         if (isset($_POST["conceptos"]) && isset($_POST["iCantidad"])) {
             for ($i= 0; $i < count($_POST["conceptos"]); $i++) { 
-                $this->insertConceptos($skReferenciaExterna,$_POST["conceptos"][$i],$_POST["subtotal"][$i]);
+                $this->insertConceptos(
+                    $skReferenciaExterna,
+                    $_POST["conceptos"][$i],
+                    $_POST["iCantidad"][$i],
+                    $_POST["subtotal"][$i],
+                    $_POST["fPrecioUnitario"][$i],
+                    $_POST["divisa"][$i]);
             }
         }
         
@@ -381,28 +386,24 @@ Class Rex_Model Extends Core_Model {
         }
     }
 
-    public function getConceptos($skEmpresa)
+    public function getConceptos($skSocioImportador)
     {
 
         $sql = "
-        SELECT 
+         SELECT 
 
-            rel_cat_empresas_tarifas_conceptos.skTipoTramite,
-            cat_conceptos.skConcepto,
-            cat_conceptos.skStatus,
-            cat_conceptos.sNombreCorto,
-            cat_conceptos.sNombre,
-            cat_conceptos.sDescripcion,
-            cat_conceptos.skDivisa,
-            cat_conceptos.fPrecioUnitario
-        FROM
-            rel_cat_empresas_tarifas_conceptos
-                INNER JOIN
-            cat_conceptos ON (cat_conceptos.skConcepto = rel_cat_empresas_tarifas_conceptos.skConcepto)
-        WHERE
-            skEmpresa = '$skEmpresa';";
-
-        //die($sql);
+            rcetc.skTipoTramite,
+            ca.skConcepto,
+            ca.skStatus,
+            ca.sNombreCorto,
+            ca.sNombre,
+            ca.sDescripcion,
+            ca.skDivisa,
+            ca.fPrecioUnitario
+        FROM rel_cat_empresas_tarifas_conceptos rcetc
+        INNER JOIN cat_conceptos ca ON (ca.skConcepto = rcetc.skConcepto)
+        INNER JOIN rel_empresas_socios ce ON (rcetc.skEmpresa = ce.skEmpresa)
+        WHERE ce.skSocioEmpresa = '$skSocioImportador';";
             
         $r = $this->db->query($sql);
 
@@ -412,8 +413,32 @@ Class Rex_Model Extends Core_Model {
                 array_push($arg, $row);
             }
             return $arg;
-        }else{
-            return false;
+        }else {
+           
+            $sql_todosConceptos = "
+                SELECT 
+                    
+                    cc.skConcepto,
+                    cc.skStatus,
+                    cc.sNombreCorto,
+                    cc.sNombre,
+                    cc.sDescripcion,
+                    cc.skDivisa,
+                    cc.fPrecioUnitario
+                FROM
+                    cat_conceptos cc
+                        INNER JOIN
+                    rel_cat_conceptos_tipos_empresas rccte ON (cc.skConcepto = rccte.skConcepto)
+                WHERE
+                    rccte.skTipoEmpresa = 'rext' ";
+            $r = $this->db->query($sql_todosConceptos);
+            $arg = array();
+            
+            while ($row = $r->fetch_assoc()) {
+                array_push($arg, $row);
+            }
+            
+            return $arg;
         }
     }
 

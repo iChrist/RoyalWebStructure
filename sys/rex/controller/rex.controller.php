@@ -315,10 +315,10 @@ Class Rex_Controller Extends Rex_Model {
 
     public function jsonConceptos()
     {
-        if (isset($_POST["skEmpresa"])) {
+        if (isset($_POST["skSocioImportador"])) {
             //die(var_dump(parent::getConceptos($_POST["skEmpresa"])));
             header('Content-Type: application/json');
-            echo json_encode(parent::getConceptos($_POST["skEmpresa"]));
+            echo json_encode(parent::getConceptos($_POST["skSocioImportador"]));
             return true;
         }else{
             return json_encode(array());
