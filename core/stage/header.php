@@ -25,10 +25,11 @@ global $dash;
 <link href="<?php echo SYS_URL; ?>core/assets/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
 <!-- END GLOBAL MANDATORY STYLES -->
 <!-- BEGIN PAGE LEVEL PLUGIN STYLES -->
+
 <link href="<?php echo SYS_URL; ?>core/assets/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css"/>
 <link href="<?php echo SYS_URL; ?>core/assets/plugins/fullcalendar/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css"/>
 <link href="<?php echo SYS_URL; ?>core/assets/plugins/jqvmap/jqvmap/jqvmap.css" rel="stylesheet" type="text/css"/>
-
+<link href="<?php echo SYS_URL; ?>core/assets/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet" type="text/css"/>
 <!-- NOTIFICATIONS !-->
 <link href="<?php echo SYS_URL; ?>core/assets/plugins/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css"/>
 <!-- FILE UPLOADS !-->
@@ -48,6 +49,7 @@ global $dash;
 <link href="<?php echo SYS_URL; ?>core/assets/css/style.css" rel="stylesheet" type="text/css"/>
 <link href="<?php echo SYS_URL; ?>core/assets/css/style-responsive.css" rel="stylesheet" type="text/css"/>
 <link href="<?php echo SYS_URL; ?>core/assets/css/plugins.css" rel="stylesheet" type="text/css"/>
+<link href="<?php echo SYS_URL; ?>core/assets/css/pages/portfolio.css" rel="stylesheet" type="text/css"/>
 <link href="<?php echo SYS_URL; ?>core/assets/css/pages/tasks.css" rel="stylesheet" type="text/css"/>
 <link href="<?php echo SYS_URL; ?>core/assets/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color"/>
 <link href="<?php echo SYS_URL; ?>core/assets/css/custom.css" rel="stylesheet" type="text/css"/>

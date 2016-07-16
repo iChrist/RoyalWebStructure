@@ -153,12 +153,50 @@
       <div class="row">
             <label class="text-right col-md-2"><b>Fotos del Previo</b></label>
             <div class="col-md-8">
-              <p class="text-left"> AQUI VAN LAS FOTOS DEL PREVIO </p>
-              <p class="text-left"> AQUI VAN LAS FOTOS DEL PREVIO </p>
-              <p class="text-left"> AQUI VAN LAS FOTOS DEL PREVIO </p>
-              <p class="text-left"> AQUI VAN LAS FOTOS DEL PREVIO </p>
-              <p class="text-left"> AQUI VAN LAS FOTOS DEL PREVIO </p>
-              <p class="text-left"> AQUI VAN LAS FOTOS DEL PREVIO </p>
+
+
+      									<div class="margin-top-10">
+      										<!--<ul class="mix-filter">
+      											<li class="filter btn" data-filter="all">
+      												All
+      											</li>
+
+      										</ul>-->
+      										<div class="row mix-grid">
+                            <?php
+                            if ($data['myFotos']) {
+                                while ($rFotos = $data['myFotos']->fetch_assoc()) {
+                                    ?>
+                                    <div class="col-md-3 col-sm-4 mix category_1" style="min-height:169px; min-width:229px;max-height:169px; max-width:229px;" >
+              												<div class="mix-inner" style="min-height:169px; min-width:229px;max-height:169px; max-width:229px;">
+              													<img  class="img-responsive" src="<?php echo SYS_URL.SYS_PROJECT.$rFotos['sUbicacion']; ?>" alt="">
+              													<div class="mix-details center">
+              														<a class="mix-preview fancybox-button" href="<?php echo SYS_URL.SYS_PROJECT.$rFotos['sUbicacion']; ?>"data-rel="fancybox-button"><i class="fa fa-search"></i></a>
+              													</div>
+              												</div>
+              											</div>
+                                    <?php
+                                }//ENDIF
+                            }//ENDWHILE
+                            ?>
+      											<!--<div class="col-md-3 col-sm-4 mix category_1">
+      												<div class="mix-inner">
+      													<img class="img-responsive" src="http://localhost/RoyalWebStructure/sys/pre/fotos/17878e998ac52bd84834d29570a65d7a.png" alt="">
+      													<div class="mix-details">
+      														<a class="mix-preview fancybox-button" href="http://localhost/RoyalWebStructure/sys/pre/fotos/17878e998ac52bd84834d29570a65d7a.png" title="Project Name" data-rel="fancybox-button"><i class="fa fa-search"></i></a>
+      													</div>
+      												</div>
+      											</div>-->
+
+
+
+      										</div>
+      									</div>
+
+
+
+
+
             </div>
       </div>
 

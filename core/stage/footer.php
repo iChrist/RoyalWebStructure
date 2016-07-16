@@ -83,6 +83,8 @@
 <script src="<?php echo SYS_URL; ?>core/assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
 <script src="<?php echo SYS_URL; ?>core/assets/plugins/jquery.blockui.min.js" type="text/javascript"></script>
 <script src="<?php echo SYS_URL; ?>core/assets/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="<?php echo SYS_URL; ?>core/assets/plugins/jquery-mixitup/jquery.mixitup.min.js"></script>
+
 <script src="<?php echo SYS_URL; ?>core/assets/plugins/fancybox/source/jquery.fancybox.pack.js"></script>
 <!-- END CORE PLUGINS -->
 <!-- BEGIN PAGE LEVEL PLUGINS -->
@@ -115,6 +117,7 @@
 
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="<?php echo SYS_URL; ?>core/assets/lib/app.js" type="text/javascript"></script>
+<script src="<?php echo SYS_URL; ?>core/assets/lib/portfolio.js"></script>
 <script src="<?php echo SYS_URL; ?>core/assets/lib/index.js" type="text/javascript"></script>
 <script src="<?php echo SYS_URL; ?>core/assets/lib/tasks.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
@@ -251,6 +254,7 @@
 <script type="text/javascript">
 jQuery(document).ready(function() {
    App.init(); // initlayout and core plugins
+   Portfolio.init();
    Index.init();
    Index.initJQVMAP(); // init index page's custom scripts
    Index.initCalendar(); // init index page's custom scripts
@@ -259,9 +263,11 @@ jQuery(document).ready(function() {
    Index.initMiniCharts();
    Index.initPeityElements();
    Index.initKnowElements();
+
    Index.initDashboardDaterange();
    Tasks.initDashboardWidget();
    UIToastr.init();
+
    //FormFileUpload.init();
 
     $('.date-picker').datepicker({
