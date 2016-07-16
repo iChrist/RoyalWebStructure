@@ -69,7 +69,6 @@
 						LEFT JOIN _users usj ON usj.skUsers = osp.skUsuarioEjecutivo
 						LEFT JOIN _users ust ON ust.skUsers = osp.skUsuarioTramitador
 						WHERE 1=1";
-
 						$sql .= " ORDER BY osp.ikSolicitudPrevio DESC ";
 
 			$result = $this->db->query($sql);
@@ -473,6 +472,31 @@
 			        } else {
 			            return FALSE;
 			        }
+		}
+		public function read_filter_cla(){
+				$sql = "SELECT cla.*, rd.sPedimento, emp.sNombre AS empresa, claMer.sFactura, claMer.sFraccion, claMer.sDescripcion, claMer.sDescripcionIngles, claMer.sNumeroParte, claMer.iSecuencia, CONCAT(u.sName,' ',u.sLastNamePaternal,' ',u.sLastNameMaternal) AS ejecutivo, CONCAT(usr.sName,' ',usr.sLastNamePaternal,' ',usr.sLastNameMaternal) AS clasificador, _status.sName AS status, _status.sHtml AS htmlStatus"
+						. " FROM cat_clasificacion AS cla "
+						. "INNER JOIN ope_recepciones_documentos rd ON rd.sReferencia = cla.sReferencia "
+						. "INNER JOIN cat_empresas emp ON emp.skEmpresa = rd.skEmpresa "
+						. "INNER JOIN _status ON _status.skStatus = cla.skStatus "
+						. "INNER JOIN cat_clasificacionMercancia AS claMer ON claMer.skClasificacion = cla.skClasificacion "
+						. "INNER JOIN _users AS u ON u.skUsers = cla.skUsersCreacion "
+						. "LEFT JOIN _users AS usr ON usr.skUsers = cla.skUsersModificacion WHERE 1=1 ";
+
+
+				if(!empty($this->previos['sReferencia'])){
+						$sql .=" AND cla.sReferencia = '".$this->previos['sReferencia']."'";
+				}
+
+			//exit($sql);
+				$result = $this->db->query($sql);
+				if($result){
+						if($result->num_rows > 0){
+								return $result;
+						}else{
+								return false;
+						}
+				}
 		}
 	}
 ?>
