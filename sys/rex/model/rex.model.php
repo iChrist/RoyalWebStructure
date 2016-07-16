@@ -64,7 +64,8 @@ Class Rex_Model Extends Core_Model {
                 `dFechaRevalidacion`,
                 `dFechaFacturacion`, 
                 `iDeposito`, 
-                `iSaldo`
+                `iSaldo`,
+                dTipoCambio
             ) 
 
             VALUES (
@@ -90,17 +91,25 @@ Class Rex_Model Extends Core_Model {
                 '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaRevalidacion"])->format('Y-m-d')."', 
                 '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaFacturacion"])->format('Y-m-d')."', 
                 '".$_POST["iDeposito"]."', 
-                '".$_POST["iSaldo"]."');" ;
-
-        if (isset($_POST["conceptos"]) && isset($_POST["iCantidad"])) {
-            for ($i= 0; $i < count($_POST["conceptos"]); $i++) { 
-                $this->insertConceptos($skReferenciaExterna,$_POST["conceptos"][$i],$_POST["iCantidad"][$i]);
+                '".$_POST["iSaldo"]."',
+                '".$_POST["fTipoCambio"]."');" ;
+            if (isset($_POST["conceptos"]) && isset($_POST["iCantidad"])) {
+                for ($i= 0; $i < count($_POST["conceptos"]); $i++) { 
+                    $this->insertConceptos(
+                        $skReferenciaExterna,
+                        $_POST["conceptos"][$i],
+                        $_POST["iCantidad"][$i],
+                        $_POST["subtotal"][$i],
+                        $_POST["fPrecioUnitario"][$i],
+                        $_POST["divisa"][$i]);
             }
-        }
+
 
         if (isset($_POST) ) {
             
             $result = $this->db->query($sql_insert);
+
+        }
             return true;
 
         }else{
@@ -407,7 +416,8 @@ Class Rex_Model Extends Core_Model {
         }
     }
 
-    public function insertConceptos($skReferenciaExterna,$skConcepto,$iImporte){
+    public function insertConceptos($skReferenciaExterna,$skConcepto,$iCantidad,$dImporte,$dPrecioUnitario,$skDivisa)
+    {
         $skReferenciaExternaConcepeteto =  substr(md5(microtime()), 1, 32);
         $sql = "
         INSERT INTO 
@@ -415,13 +425,20 @@ Class Rex_Model Extends Core_Model {
             `skReferenciaExternaConcepto`, 
             `skReferenciaExterna`, 
             `skConcepto`, 
-            `iImporte`
+            `dImporte`,
+            `iCantidad`,
+            `dPrecioUnitario`,
+            `skDivisa`
             ) 
         VALUES (
             '$skReferenciaExternaConcepeteto', 
             '$skReferenciaExterna', 
             '$skConcepto', 
-            '$iImporte');";
+            '$dImporte',
+            '$iCantidad',
+            '$dPrecioUnitario',
+            '$skDivisa'
+            );";
         //die($sql);
         
         $r = $this->db->query($sql);
@@ -439,6 +456,35 @@ Class Rex_Model Extends Core_Model {
         $sql ="
             DELETE FROM `rel_referenciasExternas_conceptos` 
             WHERE `skReferenciaExterna`='$skReferenciaExterna';";
+
+        $r = $this->db->query($sql);
+
+        if ($this->db->affected_rows > 0){
+            return $r;
+        }else{
+            return false;
+        }
+    }
+
+    public function getConceptosReferencia($skReferenciaExterna)
+    {
+        $sql = "
+        SELECT 
+            iCantidad,
+            rel_referenciasExternas_conceptos.skDivisa,
+            dPrecioUnitario,
+            dImporte,
+            cat_conceptos.sNombre,
+            cat_conceptos.skConcepto,
+            ope_referenciasExternas.dTipoCambio
+        FROM
+            rel_referenciasExternas_conceptos
+                INNER JOIN
+            cat_conceptos ON (rel_referenciasExternas_conceptos.skConcepto = cat_conceptos.skConcepto)
+                INNER JOIN
+            ope_referenciasExternas ON (ope_referenciasExternas.skReferenciaExterna = rel_referenciasExternas_conceptos.skReferenciaExterna)
+        WHERE
+            rel_referenciasExternas_conceptos.skReferenciaExterna = '$skReferenciaExterna';";
 
         $r = $this->db->query($sql);
 

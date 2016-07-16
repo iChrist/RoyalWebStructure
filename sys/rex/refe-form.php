@@ -242,40 +242,48 @@
                     </tr>
                 </thead>
                 <tbody id="dvConceptosPedimento">
-                    <!-- <tr>
 
+                    <?php 
+                    $totalConceptos = 0;
+                        if (isset($data["conceptosRef"])) {
+
+                            while ($row = $data["conceptosRef"]->fetch_assoc()) {
+                                
+
+                    ?>
+                    <tr>
                         <td>
-                            <input onchange="cotizar();" value="434fed5f4cae76cf09d246a99fde3c2" name="conceptos[]" type="checkbox">
+                            <input onchange="cotizar();" value="<?php echo $row['skConcepto'];?>" name="conceptos[]" type="checkbox">
                         </td>
-
                         <td>
-                            <input name="iCantidad[]" onchange="cotizar();" class="form-control input-sm iCantidad" placeholder="Cant" value="" type="text">
+                            <input name="iCantidad[]" onchange="cotizar();" class="form-control input-sm iCantidad" placeholder="Cant" value="<?php echo $row['iCantidad'];?>" type="text">
                         </td>
-
                         <td>
-                            <input name="fPrecioUnitario[]" onchange="cotizar();" class="form-control input-sm fPrecioUnitario" placeholder="Precio Unitario" value="0.00" type="text">
+                            <input name="fPrecioUnitario[]" onchange="cotizar();" class="form-control input-sm fPrecioUnitario" placeholder="Precio Unitario" value="<?php echo $row['dPrecioUnitario'];?>" type="text">
                         </td>
-
                         <td style="color:#777;">
-                            MXN<input class="divisa" name="divisa[]" value="MXN" type="hidden">
+                            <?php echo $row['skDivisa'];?><input class="divisa" name="divisa[]" value="<?php echo $row['skDivisa'];?>" type="hidden">
                         </td>
-
-                        <td nowrap="">ADVALOREM</td>
-
-                        <td class="show_dolares" nowrap=""></td>
-
+                        <td nowrap=""><?php echo $row['sNombre'];?></td>
+                        <td class="show_dolares" nowrap=""> <?php 
+                            if ($row['skDivisa'] === 'USD') {
+                                echo $row['dTipoCambio'] * ($row['iCantidad'] * $row['dPrecioUnitario'] );
+                            }?> </td>
                         <td> 
-                            <span class="show_subtotal"></span> 
+                            <span class="show_subtotal"><?php echo $row['dImporte']; $totalConceptos += $row['dImporte']?></span> 
                             <input name="subtotal[]" class="subtotal" value="" type="hidden">
                         </td>
-
-                    </tr> -->
+                    </tr>
+                    <?php
+                            }
+                        }
+                    ?>
                 </tbody>
             </table>
                     <div class="form-group">
           <div class="col-md-12">
             <div class="col-md-3 col-md-offset-9">
-            <h3>Total: <span id="total">0.00</span></h3>
+            <h3>Total: <span id="total"><?php echo $totalConceptos; ?></span></h3>
             </div>
           </div>
         </div>
@@ -297,33 +305,33 @@
 </form>
 
 <script type="text/javascript">
-function cotizar(){
-  //alert(1);
-  $(".subtotal").val("");
-  $(".show_subtotal").html("");
-                var total = 0;
-                $("input[name='conceptos[]']:checked").each(function(idx,obj){
-                    var tr = $(obj).parent().parent();
+    function cotizar(){
+      //alert(1);
+        $(".subtotal").val("");
+        $(".show_subtotal").html("");
+        var total = 0;
+        $("input[name='conceptos[]']:checked").each(function(idx,obj){
+            var tr = $(obj).parent().parent();
             var precioUnitario = $(tr).find(".fPrecioUnitario").val();
             var divisaConcepto = $(tr).find(".divisa").val();
-                    var cantidad = $(tr).find(".iCantidad").val();
+            var cantidad = $(tr).find(".iCantidad").val();
             var unidadCambio = $("#fTipoCambio").val();
-            if(divisaConcepto == 'MXN'){
-              var resultado = precioUnitario * cantidad;
-            }else{
-              //  alert("entro");
-              var resultadoDolares = precioUnitario * cantidad;
-              var resultado = precioUnitario * cantidad * unidadCambio;
-              $(tr).find(".show_dolares").html("$ "+resultadoDolares.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
-            }
-            var subtotal = $(tr).find(".subtotal").val(resultado);
-            var show_subtotal = $(tr).find(".show_subtotal").html("$ "+resultado.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+        if(divisaConcepto == 'MXN'){
+          var resultado = precioUnitario * cantidad;
+        }else{
+                  //  alert("entro");
+                  var resultadoDolares = precioUnitario * cantidad;
+                  var resultado = precioUnitario * cantidad * unidadCambio;
+                  $(tr).find(".show_dolares").html("$ "+resultadoDolares.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+              }
+              var subtotal = $(tr).find(".subtotal").val(resultado);
+              var show_subtotal = $(tr).find(".show_subtotal").html("$ "+resultado.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
 
 
-                    total += resultado;
-                });
-                $("#total").html("$ "+total.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
-}
+              total += resultado;
+          });
+      $("#total").html("$ "+total.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+    }
     $(document).ready(function(){
 
 

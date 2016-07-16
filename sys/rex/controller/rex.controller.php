@@ -131,12 +131,13 @@ Class Rex_Controller Extends Rex_Model {
         $this->load_view('refe-index',NULL,true);
     }    
 
-    public function refe_form(){
+    public function refe_form()
+    {
 
         $this->data['message'] = '';
         $this->data['success'] = false;
         $this->data['datos'] = false;
-        $this->data['tipoCambio'] = 18.6607;//$this->tipo_cambio();
+        $this->data['tipoCambio'] = $this->tipo_cambio();
         
         if(isset($_POST['axn']) && $_POST['axn'] =='insert'){
             return $this->refe_save();
@@ -145,7 +146,8 @@ Class Rex_Controller Extends Rex_Model {
             return $this->refe_update();
         }
         if (isset($_GET["p1"])){
-            $this->data['datos'] = $this->getReferencia($_GET["p1"]);
+            $this->data['datos'] =      parent::getReferencia($_GET["p1"]);
+            $this->data['conceptosRef'] = parent::getConceptosReferencia($_GET["p1"]);
         }
         $this->load_view('refe-form',$this->data,true);
     }
@@ -235,7 +237,8 @@ Class Rex_Controller Extends Rex_Model {
         } 
     }
 
-    public function tipo_cambio(){
+    public function tipo_cambio()
+    {
 
          $client = new SoapClient(null, array(
                 'location' =>'http://www.banxico.org.mx:80/DgieWSWeb/DgieWS?WSDL',
@@ -310,7 +313,8 @@ Class Rex_Controller Extends Rex_Model {
             return $data;
     }
 
-    public function jsonConceptos(){
+    public function jsonConceptos()
+    {
         if (isset($_POST["skEmpresa"])) {
             //die(var_dump(parent::getConceptos($_POST["skEmpresa"])));
             header('Content-Type: application/json');
