@@ -337,7 +337,7 @@
 
 
         $.ajax({
-            url : 'http://localhost:81/sys/rex/jsonStatus/',
+            url : '<?php echo SYS_URL;?>/sys/rex/jsonStatus/',
             data : {},
 
             // especifica si será una petición POST o GET
@@ -369,7 +369,7 @@
         });        
 
         $.ajax({
-            url : 'http://localhost:81/sys/rex/jsonAlmacenes/',
+            url : '<?php echo SYS_URL;?>/sys/rex/jsonAlmacenes/',
             data : {},
 
             // especifica si será una petición POST o GET
@@ -402,7 +402,7 @@
         });
         
         $.ajax({
-            url : 'http://localhost:81/sys/rex/jsonSocioImportadores/0/<?php echo $_SESSION["session"]["skSocioEmpresaPropietario"]. "/" ;?>',
+            url : '<?php echo SYS_URL;?>/sys/rex/jsonSocioImportadores/0/<?php echo $_SESSION["session"]["skSocioEmpresaPropietario"]. "/" ;?>',
             data : {},
 
             // especifica si será una petición POST o GET
@@ -436,7 +436,7 @@
         $( "#skSocioImportador" ).change(function() {
             //alert($( "#skSocioImportador option:selected" ).val());
             $.ajax({
-                url : 'http://localhost:81/sys/rex/jsonConceptos/',
+                url : '<?php echo SYS_URL;?>/sys/rex/jsonConceptos/',
                 data : {skEmpresa:$( "#skSocioImportador option:selected" ).val()},
 
                 // especifica si será una petición POST o GET
