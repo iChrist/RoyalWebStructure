@@ -312,13 +312,20 @@ Class Rex_Model Extends Core_Model {
         SELECT 
             $lecua
         FROM
-            ope_referenciasExternas
+            /*ope_referenciasExternas
                 INNER JOIN
             cat_almacenes ON (cat_almacenes.skAlmacen = ope_referenciasExternas.skAlmacen)
                 INNER JOIN
             cat_estatus ON (cat_estatus.skEstatus = ope_referenciasExternas.skEstatus)
                 INNER JOIN
-            cat_empresas ON (cat_empresas.skEmpresa = ope_referenciasExternas.skSocioImportador) 
+            cat_empresas ON (cat_empresas.skEmpresa = ope_referenciasExternas.skSocioImportador) */
+                        ope_referenciasExternas
+                INNER JOIN
+            cat_almacenes ON (cat_almacenes.skAlmacen = ope_referenciasExternas.skAlmacen)
+                INNER JOIN
+            cat_estatus ON (cat_estatus.skEstatus = ope_referenciasExternas.skEstatus)
+                LEFT JOIN  rel_empresas_socios resa ON resa.skSocioEmpresa = ope_referenciasExternas.skSocioImportador
+                LEFT JOIN  cat_empresas ON (cat_empresas.skEmpresa = resa.skEmpresa)
         WHERE 1 = 1";
 
         if ($get){
@@ -383,6 +390,8 @@ Class Rex_Model Extends Core_Model {
             }else{
                 return false;
             }
+        }else{
+            return false;
         }
     }
 

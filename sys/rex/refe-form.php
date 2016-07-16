@@ -345,7 +345,7 @@
             dataType : 'json',
             success : function(json) {
                 ifestat = "<?php echo (isset($result['skEstatus'])) ? $result['skEstatus'] : '' ; ?>";
-                console.log(json);
+                
                 for (o in json) {
                     d = json[o];
                     if (ifestat != "") {
@@ -377,7 +377,7 @@
             dataType : 'json',
             success : function(json) {
                 ifalmacen = "<?php echo (isset($result['skAlmacen'])) ? $result['skAlmacen'] : '' ; ?>";
-                console.log(json);
+                
                 for(i in json){
                     d = json[i];
                     if (ifalmacen != "") {
@@ -410,10 +410,8 @@
             dataType : 'json',
             success : function(json) {
                 ifsocioimportador = "<?php echo (isset($result['skSocioImportador'])) ? $result['skSocioImportador'] : '' ; ?>";
-                console.log(json);
                 for (o in json) {
                     d = json[o];
-                    console.log(d);
                     if (ifsocioimportador != "") {
                         if (ifsocioimportador == d.skSocioEmpresa ) {
                             $("#skSocioImportador").append('<option selected="selected" value="' + d.skSocioEmpresa +  '">'+d.Empresa+'</option>');
@@ -445,7 +443,7 @@
                 dataType : 'json',
                 success : function(json) {
                     $("#ConceptosReferenciasTabla").empty();
-                    console.log(json);
+                    
                     for (o in json) {
                         d = json[o];
                         $("#ConceptosReferenciasTabla").append(`
