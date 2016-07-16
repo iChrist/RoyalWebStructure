@@ -146,7 +146,8 @@ Class Rex_Model Extends Core_Model {
                 `dFechaRevalidacion` = '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaRevalidacion"])->format('Y-m-d')."',
                 `dFechaFacturacion` = '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaFacturacion"])->format('Y-m-d')."', 
                 `iDeposito` = '".$_POST["iDeposito"]."',  
-                `iSaldo` = '".$_POST["iSaldo"]."'
+                `iSaldo` = '".$_POST["iSaldo"]."',
+                `dTipoCambio` = '".$_POST["fTipoCambio"]."'
 
                 WHERE `skReferenciaExterna` = '$skReferenciaExterna';" ;
         
