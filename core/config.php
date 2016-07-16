@@ -19,15 +19,20 @@
     }
 // DATABASE CONFIGURATION //
 <<<<<<< HEAD
+<<<<<<< HEAD
     $_db_idx = 'localhost';
 =======
     $_db_idx = 'sys';
 >>>>>>> 8a639b39603bdd5605be490b7ca1056cf8a6d54d
+=======
+    $_db_idx = 'sys';
+>>>>>>> 1bcf28062e5841168ebfe2ebb86c773b7f252b93
     $_db = array(
         'sys' => array(
             'HOST_DB' => 'royalweb.com.mx',
             'USER_DB' => 'royalweb_rw',
             'PASSWORD_DB' => 'RoyalWeb',
+<<<<<<< HEAD
 <<<<<<< HEAD
             'DATABASE_DB' => 'royalweb_test_gya'
         ),
@@ -42,13 +47,18 @@
             'USER_DB' => 'royalweb_rw',
             'PASSWORD_DB' => 'RoyalWeb',
 =======
+=======
+>>>>>>> 1bcf28062e5841168ebfe2ebb86c773b7f252b93
             'DATABASE_DB' => 'royalweb_pruebas_gya'
         ),
         'localhost' => array(
             'HOST_DB' => '192.168.1.76',
             'USER_DB' => 'rwroot',
             'PASSWORD_DB' => '/*royalweb*/',
+<<<<<<< HEAD
 >>>>>>> 8a639b39603bdd5605be490b7ca1056cf8a6d54d
+=======
+>>>>>>> 1bcf28062e5841168ebfe2ebb86c773b7f252b93
             'DATABASE_DB' => 'royalweb_test_gya'
         ),
         'samuel' => array(

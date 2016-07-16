@@ -145,13 +145,20 @@
             </div>
         <!--/span-->
       </div>
-
+      <div class="row">
+        <div class="col-md-12">
+          <hr>
+        </div>
+      </div>
       <div class="row">
             <label class="text-right col-md-2"><b>Fotos del Previo</b></label>
             <div class="col-md-8">
-              <p class="text-left">
-                 AQUI VAN LAS FOTOS DEL PREVIO
-              </p>
+              <p class="text-left"> AQUI VAN LAS FOTOS DEL PREVIO </p>
+              <p class="text-left"> AQUI VAN LAS FOTOS DEL PREVIO </p>
+              <p class="text-left"> AQUI VAN LAS FOTOS DEL PREVIO </p>
+              <p class="text-left"> AQUI VAN LAS FOTOS DEL PREVIO </p>
+              <p class="text-left"> AQUI VAN LAS FOTOS DEL PREVIO </p>
+              <p class="text-left"> AQUI VAN LAS FOTOS DEL PREVIO </p>
             </div>
       </div>
 

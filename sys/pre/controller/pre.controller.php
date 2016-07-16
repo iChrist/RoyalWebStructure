@@ -376,11 +376,16 @@
 		}
 		private function solicitudprevio_pdf() {
 				if (isset($_GET['p1'])) {
-						$this->previos['skSolicitudPrevio'] = $_GET['p1'];
+					$this->previos['skSolicitudPrevio'] = $_GET['p1'];
 						$datos = parent::read_like_previos();
 						if ($datos) {
 								$this->data['datos'] = $datos->fetch_assoc();
+								$result = 	$this->data['datos'] = $datos->fetch_assoc();
+								//echo $result['sReferencia'];
+								$this->previos['sReferencia'] = $result['sReferencia'];
+								$this->data['clasificaciones'] = parent::read_filter_cla();
 						}
+
 				}
 
 				$this->data['config'] = array(
@@ -390,14 +395,16 @@
 						, 'address' => 'Manzanillo, Colima'
 						, 'phone' => ''
 						, 'website' => ''
-						, 'background_image' => (SYS_URL) . 'core/assets/img/logoPdf.png'
+						, 'background_image' => ''
 						, 'header' => (CORE_PATH) . 'assets/pdf/tplHeaderPdf.php'
 						, 'footer' => (CORE_PATH) . 'assets/pdf/tplFooterPdf.php'
-						, 'style' => (CORE_PATH) . 'assets/pdf/tplStylePdf.php'
+					, 'style' => (CORE_PATH) . 'assets/pdf/tplStylePdf.php'
 				);
 				ob_start();
 				$this->load_view('solpre-pdf', $this->data, FALSE, 'pre/pdf/');
 				$content = ob_get_clean();
+			//	echo $content;
+			//	die();
 				$title = 'Reporte de Inspeccion de Mercancias';
 				Core_Functions::pdf($content, $this->data['config']['title'], 'P', 'A4', 'es', true, 'UTF-8', array(5, 5, 5, 5));
 				return true;
