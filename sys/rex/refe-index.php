@@ -33,10 +33,49 @@
 					</tr>
 					<tr role="row" class="filter">
 						<td>
-							<input type="text" class="form-control form-filter input-sm" name="sNombre" placeholder="Nombre">
+							<input type="text" class="form-control form-filter input-sm" name="sPedimento" placeholder="Pedimento">
 						</td>
 						<td>
-							<select name="skStatus" class="form-control form-filter input-sm">
+							<input type="text" class="form-control form-filter input-sm" name="sReferencia" placeholder="Referencia">
+						</td>
+						<td>
+							<input type="text" class="form-control form-filter input-sm" name="sMercancia" placeholder="Mercancia">
+						</td>
+						<td>
+							<input type="text" class="form-control form-filter input-sm" name="sGuiaMaster" placeholder="Guia master">
+						</td>
+						<td>
+							<input type="text" class="form-control form-filter input-sm" name="sGuiaHouse" placeholder="Guia House">
+						</td>
+						<td>
+							<input type="text" class="form-control form-filter input-sm" name="dFechaCreacion" placeholder="Fecha creacion">
+						</td>
+						<td>
+							<input type="text" class="form-control form-filter input-sm" name="dFechaPrevio" placeholder="Fecha previo">
+						</td>
+						<td>
+							<input type="text" class="form-control form-filter input-sm" name="dFechaDespacho" placeholder="Fecha despacho">
+						</td>
+						<td>
+							<input type="text" class="form-control form-filter input-sm" name="dFechaClasificacion" placeholder="Fecha de clasificacion">
+						</td>
+						<td>
+							<input type="text" class="form-control form-filter input-sm" name="dFechaGlosa" placeholder="Fecha de glosa">
+						</td>
+						<td>
+							<input type="text" class="form-control form-filter input-sm" name="dFechaCapturaPedimento" placeholder="Fecha de captura del pedimento">
+						</td>
+						<td>
+							<input type="text" class="form-control form-filter input-sm" name="dFechaFacturacion" placeholder="Fecha de facturacion">
+						</td>
+						<td>
+							<input type="text" class="form-control form-filter input-sm" name="iDeposito" placeholder="Cantidad deposito">
+						</td>
+						<td>
+							<input type="text" class="form-control form-filter input-sm" name="iSaldo" placeholder="Saldo">
+						</td>
+						<td>
+							<select name="sAlmacen" class="form-control form-filter input-sm">
 								<option value="">- Estatus -</option>
 								<?php
 								if($data['status']){
@@ -50,28 +89,47 @@
                                     }//ENDWHILE
                                     ?>
                                 </select>
-                            </td>
-                            <td>
-                            	<div aria-label="Acciones" role="group" class="btn-group btn-group-xs">
+						</td>
+						<td>
+							<select name="sEstatus" class="form-control form-filter input-sm">
+								<option value="">- Estatus -</option>
+								<?php
+								if($data['status']){
+									while($row = $data['status']->fetch_assoc()){
+										?>
+										<option value="<?php echo $row['skStatus']; ?>">
+											<?php echo $row['sName']; ?>
+										</option>
+										<?php
+                                        }//ENDIF
+                                    }//ENDWHILE
+                                    ?>
+                                </select>
+                        </td>
+						<td>
+							<select name="sSocioImportador" class="form-control form-filter input-sm">
+								<option value="">- Estatus -</option>
+								<?php
+								if($data['status']){
+									while($row = $data['status']->fetch_assoc()){
+										?>
+										<option value="<?php echo $row['skStatus']; ?>">
+											<?php echo $row['sName']; ?>
+										</option>
+										<?php
+                                        }//ENDIF
+                                    }//ENDWHILE
+                                    ?>
+                                </select>
+                        </td>
+                        <td>
+                            <div aria-label="Acciones" role="group" class="btn-group btn-group-xs">
                             		<button class="btn btn-xs btn-default filter-submit margin-bottom"><i class="fa fa-search"></i> Buscar</button>
                             		<button class="btn btn-xs btn-warning filter-cancel"><i class="fa fa-refresh"></i></button>
                             	</div>
-                            </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
+                        </td>
+
+                    </tr>
                     </thead>
                     <tbody>
 

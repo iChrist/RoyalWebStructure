@@ -1,8 +1,12 @@
+<script type="text/javascript" src="/path/to/moment.js"></script>
+<script type="text/javascript" src="/path/to/bootstrap/js/transition.js"></script>
+<script type="text/javascript" src="/path/to/bootstrap/js/collapse.js"></script>
+<script type="text/javascript" src="/path/to/bootstrap-datetimepicker.min.js"></script>
 
- <pre>
-    <?php 
-        echo print_r($_SESSION["session"],1);
-        $fecha = DateTime::createFromFormat('d-m-Y', '30-07-2016');
+    <pre>
+        <?php 
+        //echo print_r($_SESSION["session"],1);
+        //$fecha = DateTime::createFromFormat('d-m-Y', '30-07-2016');
         //echo $fecha->format('Y-m-d H:i:s');
         $result = array();
         if($data['datos']){
@@ -12,9 +16,10 @@
         //echo DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaFacturacion"])->format('d-m-Y');
         //2016-07-26 00:00:00
         //(isset($result["sReferencia"])) ? echo $result["sReferencia"] : echo '' ;
-    ?>
-</pre> 
-
+        
+        //var_dump($data);
+        ?>
+    </pre> 
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data"> 
     <input type="hidden" name="skReferenciaExterna"  id="skReferenciaExterna" value="<?php echo (isset($result['skReferenciaExterna'])) ? $result['skReferenciaExterna'] : '' ; ?>">
     <input type="hidden" name="axn" id="anx" value="<?php echo (isset($result["sReferencia"])) ? 'update' : 'insert' ;?>" ></input>
@@ -30,19 +35,19 @@
 
                 </div>
             </div>
-        </div>
 
-        <div class="form-group">
             <label class="control-label col-md-2">Socio Importador <span aria-required="true" class="required"> * </span>
             </label>
             <div class="col-md-4">
                 <div class="input-icon right">
                     <i class="fa"></i>
                     <select class="form-control" id="skSocioImportador" name="skSocioImportador">
+                        <option value="">--Seleccione socio Importador--</option>
                     </select>
                 </div>
             </div>
         </div>
+
 
         <div class="form-group">
             <label class="control-label col-md-2">Almacen <span aria-required="true" class="required"> * </span>
@@ -51,23 +56,24 @@
                 <div class="input-icon right">
                     <i class="fa"></i>
                     <select class="form-control" id="skAlmacen" name="skAlmacen">
-                        
+                        <option value="">-- Seleccione un almacen --</option>
                     </select>
                 </div>
             </div>
-        </div>
-
-        <div class="form-group">
             <label class="control-label col-md-2">Estatus <span aria-required="true" class="required"> * </span>
             </label>
             <div class="col-md-4">
                 <div class="input-icon right">
                     <i class="fa"></i>
                     <select class="form-control" id="skEstatus" name="skEstatus">
-                        
+                        <option value="">-- Seleccione un estatus --</option>
                     </select>
                 </div>
             </div>
+        </div>
+        <hr>
+        <div class="form-group">
+
         </div>
 
         <div class="form-group">
@@ -84,46 +90,43 @@
         <div class="form-group">
             <label class="control-label col-md-2">Mercancia<span aria-required="true" class="required"> * </span>
             </label>
-            <div class="col-md-4">
+            <div class="col-md-10">
                 <div class="input-icon right">
                     <i class="fa"></i>
                     <textarea name="sMercancia" id="sMercancia" cols="30" class="form-control" rows="10" placeholder="Mercancia"><?php echo (isset($result["sMercancia"])) ? $result["sMercancia"] : '' ;?></textarea>
                 </div>
             </div>
         </div>
-
+        <hr>
         <div class="form-group">
             <label class="control-label col-md-2">Guia Master<span aria-required="true" class="required"> * </span>
             </label>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <div class="input-icon right">
                     <i class="fa"></i>
                     <input type="text" maxlength="100" name="sGuiaMaster" id="sGuiaMaster" class="form-control" placeholder="Guia master" value="<?php echo (isset($result["sGuiaMaster"])) ? $result["sGuiaMaster"] : '' ;?>" >
                 </div>
             </div>
-        </div>
-
-        <div class="form-group">
             <label class="control-label col-md-2">Guia House<span aria-required="true" class="required"> * </span>
             </label>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <div class="input-icon right">
                     <i class="fa"></i>
                     <input type="text" maxlength="100" name="sGuiaHouse" id="sGuiaHouse" class="form-control" placeholder="Guia House" value="<?php echo (isset($result["sGuiaHouse"])) ? $result["sGuiaHouse"] : '' ;?>" >
                 </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            <label class="control-label col-md-2">Bultos<span aria-required="true" class="required"> * </span>
+            <label class="control-label col-md-1">Bultos<span aria-required="true" class="required"> * </span>
             </label>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <div class="input-icon right">
                     <i class="fa"></i>
                     <input type="number" min="0" name="iBultos" id="iBultos" class="form-control" placeholder="0" value="<?php echo (isset($result["iBultos"])) ? $result["iBultos"] : '' ;?>" >
                 </div>
             </div>
         </div>
+
+        <hr>
 
         <div class="form-group">
             <label class="control-label col-md-2">Fecha de previo <span aria-required="true" class="required"> * </span></label>
@@ -135,9 +138,6 @@
                     </span>
                 </div>
             </div>
-        </div>
-
-        <div class="form-group">
             <label class="control-label col-md-2">Fecha de despacho <span aria-required="true" class="required"> * </span></label>
             <div class="col-md-4">
                 <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
@@ -149,6 +149,7 @@
             </div>
         </div>
 
+
         <div class="form-group">
             <label class="control-label col-md-2">Fecha de clasificacion <span aria-required="true" class="required"> * </span></label>
             <div class="col-md-4">
@@ -159,9 +160,6 @@
                     </span>
                 </div>
             </div>
-        </div>
-
-        <div class="form-group">
             <label class="control-label col-md-2">Fecha de glosa<span aria-required="true" class="required"> * </span></label>
             <div class="col-md-4">
                 <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
@@ -173,6 +171,7 @@
             </div>
         </div>
 
+
         <div class="form-group">
             <label class="control-label col-md-2">Fecha de captura de pedimento <span aria-required="true" class="required"> * </span></label>
             <div class="col-md-4">
@@ -183,9 +182,6 @@
                     </span>
                 </div>
             </div>
-        </div>
-
-        <div class="form-group">
             <label class="control-label col-md-2">Fecha de revalidacion<span aria-required="true" class="required"> * </span></label>
             <div class="col-md-4">
                 <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
@@ -209,6 +205,8 @@
             </div>
         </div>
 
+        <hr>
+
         <div class="form-group">
             <label class="control-label col-md-2">Deposito <span aria-required="true" class="required"> * </span>
             </label>
@@ -218,37 +216,140 @@
                     <input type="number" maxlength="400" name="iDeposito" id="iDeposito" class="form-control" placeholder="0" value="<?php echo (isset($result["iBultos"])) ? $result["iBultos"] : '' ;?>" >
                 </div>
             </div>
-        </div>
-
-        <div class="form-group">
-            <label class="control-label col-md-2">Saldo <span aria-required="true" class="required"> * </span>
+            <label class="control-label col-md-2">Tipo de cambio <span aria-required="true" class="required"> * </span>
             </label>
             <div class="col-md-4">
                 <div class="input-icon right">
                     <i class="fa"></i>
-                    <input type="number" maxlength="400" name="iSaldo" id="iSaldo" class="form-control" placeholder="0" value="<?php echo (isset($result["iBultos"])) ? $result["iBultos"] : '' ;?>" >
+                    <input type="number" maxlength="400" name="fTipoCambio" id="fTipoCambio" class="form-control" placeholder="0" value="<?php echo (isset($data["tipoCambio"]["USD"])) ? $data["tipoCambio"]["USD"]["valor"] : '' ;?>" >
                 </div>
             </div>
         </div>
+        <div class="col-md-12">
+            <table class="table table-responsive table-striped">
+                <thead>
+                    <tr>
+                        <td colspan="7" align="center"><h3>Conceptos de Pedimento</h3></td>
+                    </tr>
+                    <tr>
+                        <th nowrap>S</th>
+                        <th nowrap>Cantidad</th>
+                        <th nowrap>Precio Unitario</th>
+                        <th nowrap>Divisa</th>
+                        <th width="80%">Nombre</th>
+                        <th nowrap></th>
+                        <th width="80%">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody id="dvConceptosPedimento">
+                    <!-- <tr>
 
+                        <td>
+                            <input onchange="cotizar();" value="434fed5f4cae76cf09d246a99fde3c2" name="conceptos[]" type="checkbox">
+                        </td>
+
+                        <td>
+                            <input name="iCantidad[]" onchange="cotizar();" class="form-control input-sm iCantidad" placeholder="Cant" value="" type="text">
+                        </td>
+
+                        <td>
+                            <input name="fPrecioUnitario[]" onchange="cotizar();" class="form-control input-sm fPrecioUnitario" placeholder="Precio Unitario" value="0.00" type="text">
+                        </td>
+
+                        <td style="color:#777;">
+                            MXN<input class="divisa" name="divisa[]" value="MXN" type="hidden">
+                        </td>
+
+                        <td nowrap="">ADVALOREM</td>
+
+                        <td class="show_dolares" nowrap=""></td>
+
+                        <td> 
+                            <span class="show_subtotal"></span> 
+                            <input name="subtotal[]" class="subtotal" value="" type="hidden">
+                        </td>
+
+                    </tr> -->
+                </tbody>
+            </table>
+                    <div class="form-group">
+          <div class="col-md-12">
+            <div class="col-md-3 col-md-offset-9">
+            <h3>Total: <span id="total">0.00</span></h3>
+            </div>
+          </div>
+        </div>
+        </div>
+
+
+    <div class="form-group">
+        <label class="control-label col-md-2">Saldo <span aria-required="true" class="required"> * </span>
+        </label>
+        <div class="col-md-4">
+            <div class="input-icon right">
+                <i class="fa"></i>
+                <input type="number" maxlength="400" name="iSaldo" id="iSaldo" class="form-control" placeholder="0" value="<?php echo (isset($result["iBultos"])) ? $result["iBultos"] : '' ;?>" >
+            </div>
+        </div>
     </div>
+
+</div>
 </form>
 
 <script type="text/javascript">
+function cotizar(){
+  //alert(1);
+  $(".subtotal").val("");
+  $(".show_subtotal").html("");
+                var total = 0;
+                $("input[name='conceptos[]']:checked").each(function(idx,obj){
+                    var tr = $(obj).parent().parent();
+            var precioUnitario = $(tr).find(".fPrecioUnitario").val();
+            var divisaConcepto = $(tr).find(".divisa").val();
+                    var cantidad = $(tr).find(".iCantidad").val();
+            var unidadCambio = $("#fTipoCambio").val();
+            if(divisaConcepto == 'MXN'){
+              var resultado = precioUnitario * cantidad;
+            }else{
+              //  alert("entro");
+              var resultadoDolares = precioUnitario * cantidad;
+              var resultado = precioUnitario * cantidad * unidadCambio;
+              $(tr).find(".show_dolares").html("$ "+resultadoDolares.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+            }
+            var subtotal = $(tr).find(".subtotal").val(resultado);
+            var show_subtotal = $(tr).find(".show_subtotal").html("$ "+resultado.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+
+
+                    total += resultado;
+                });
+                $("#total").html("$ "+total.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+}
     $(document).ready(function(){
+
+
 
         $.ajax({
             url : 'http://localhost:81/sys/rex/jsonStatus/',
             data : {},
-         
+
             // especifica si será una petición POST o GET
             type : 'GET',
             dataType : 'json',
             success : function(json) {
+                ifestat = "<?php echo (isset($result['skEstatus'])) ? $result['skEstatus'] : '' ; ?>";
                 console.log(json);
                 for (o in json) {
                     d = json[o];
-                    $("#skEstatus").append('<option value="' + d.skEstatus +  '">'+d.sNombre+'</option>')
+                    if (ifestat != "") {
+                        if(ifestat == d.skEstatus ){
+                            $("#skEstatus").append('<option selected="selected" value="' + d.skEstatus +  '">'+d.sNombre+'</option>')
+                        }else{
+                            $("#skEstatus").append('<option value="' + d.skEstatus +  '">'+d.sNombre+'</option>')
+                        }
+                    }else{
+                        $("#skEstatus").append('<option value="' + d.skEstatus +  '">'+d.sNombre+'</option>')
+                    }
+                    
                 }
             },
             error : function(xhr, status) {
@@ -262,15 +363,26 @@
         $.ajax({
             url : 'http://localhost:81/sys/rex/jsonAlmacenes/',
             data : {},
-         
+
             // especifica si será una petición POST o GET
             type : 'GET',
             dataType : 'json',
             success : function(json) {
+                ifalmacen = "<?php echo (isset($result['skAlmacen'])) ? $result['skAlmacen'] : '' ; ?>";
                 console.log(json);
                 for(i in json){
                     d = json[i];
-                    $("#skAlmacen").append('<option value="' + d.skAlmacen + '">'+d.sNombre+'</option>');
+                    if (ifalmacen != "") {
+                        if (ifalmacen == d.skAlmacen) {
+                            $("#skAlmacen").append('<option selected="selected" value="' + d.skAlmacen + '">'+d.sNombre+'</option>');
+                        }else{
+                            $("#skAlmacen").append('<option value="' + d.skAlmacen + '">'+d.sNombre+'</option>');
+                        }
+                        
+                    }else{
+                        $("#skAlmacen").append('<option value="' + d.skAlmacen + '">'+d.sNombre+'</option>');
+                    }
+                    
                 }
             },
             error : function(xhr, status) {
@@ -284,15 +396,25 @@
         $.ajax({
             url : 'http://localhost:81/sys/rex/jsonSocioImportadores/0/<?php echo $_SESSION["session"]["skSocioEmpresaPropietario"]. "/" ;?>',
             data : {},
-         
+
             // especifica si será una petición POST o GET
             type : 'GET',
             dataType : 'json',
             success : function(json) {
+                ifsocioimportador = "<?php echo (isset($result['skSocioImportador'])) ? $result['skSocioImportador'] : '' ; ?>";
                 console.log(json);
                 for (o in json) {
                     d = json[o];
-                    $("#skSocioImportador").append('<option value="' + d.skEmpresa +  '">'+d.Empresa+'</option>')
+                    if (ifsocioimportador != "") {
+                        if (ifsocioimportador == d.skEmpresa ) {
+                            $("#skSocioImportador").append('<option selected="selected" value="' + d.skEmpresa +  '">'+d.Empresa+'</option>');
+                        }else{
+                            $("#skSocioImportador").append('<option value="' + d.skEmpresa +  '">'+d.Empresa+'</option>');
+                        }
+                    }else{
+                        $("#skSocioImportador").append('<option value="' + d.skEmpresa +  '">'+d.Empresa+'</option>');
+                    }
+                    
                 }
             },
             error : function(xhr, status) {
@@ -302,6 +424,52 @@
                 console.log('Petición realizada');
             }
         }); 
+        
+        $( "#skSocioImportador" ).change(function() {
+            //alert($( "#skSocioImportador option:selected" ).val());
+            $.ajax({
+                url : 'http://localhost:81/sys/rex/jsonConceptos/',
+                data : {skEmpresa:$( "#skSocioImportador option:selected" ).val()},
+
+                // especifica si será una petición POST o GET
+                type : 'POST',
+                dataType : 'json',
+                success : function(json) {
+                    $("#dvConceptosPedimento").empty();
+                    console.log(json);
+                    for (o in json) {
+                        d = json[o];
+                        $("#dvConceptosPedimento").append(`
+                            <tr>
+                                <td>
+                                    <input onchange="cotizar();" value="`+d.skConcepto+`" name="conceptos[]" type="checkbox">
+                                </td>
+                                <td>
+                                    <input name="iCantidad[]" onchange="cotizar();" class="form-control input-sm iCantidad" placeholder="Cant" value="0" type="text">
+                                </td>
+                                <td>
+                                    <input name="fPrecioUnitario[]" onchange="cotizar();" class="form-control input-sm fPrecioUnitario" placeholder="Precio Unitario" value="`+d.fPrecioUnitario+`" type="text">
+                                </td>
+                                <td style="color:#777;">
+                                    `+d.skDivisa+`<input class="divisa" name="divisa[]" value="`+d.skDivisa+`" type="hidden">
+                                </td>
+                                <td nowrap="">`+d.sNombre+`</td>
+                                <td class="show_dolares" nowrap=""></td>
+                                <td> 
+                                    <span class="show_subtotal"></span> 
+                                    <input name="subtotal[]" class="subtotal" value="" type="hidden">
+                                </td>
+                            </tr>`);
+                    }
+                },
+                error : function(xhr, status) {
+                    console.log("Algo salio mal en la peticion a jsonConceptos")
+                },
+                complete : function(xhr, status) {
+                    console.log('Petición realizada');
+                }
+            }); 
+        });
         
         /* VALIDATIONS */
         isValid = $("#_save").validate({
@@ -407,10 +575,6 @@
                 }
             }
         });
-    }); 
+}); 
 </script>
 
-<!-- <script type="text/javascript" src="/path/to/moment.js"></script>
-<script type="text/javascript" src="/path/to/bootstrap/js/transition.js"></script>
-<script type="text/javascript" src="/path/to/bootstrap/js/collapse.js"></script>
-<script type="text/javascript" src="/path/to/bootstrap-datetimepicker.min.js"></script> -->

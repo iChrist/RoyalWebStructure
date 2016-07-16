@@ -19,10 +19,10 @@ Class Rex_Controller Extends Rex_Model {
     {
         $this->ref['id'] = 1;
         $this->ref['nombre'] = 'samuel';
-        $areas = $this->getAreas('AC');
-        $areas['otroDato'] = 'muajajaja';
+        $refex = $this->getrefex('AC');
+        $refex['otroDato'] = 'muajajaja';
         //$this->load_view('NombreArhivo' , $datosParaVista = array() , $bool = TRUE , $path = NULL);
-        $this->load_view('rex-index1',$areas,false);
+        $this->load_view('rex-index1',$refex,false);
     }
 
     public function refe_index()
@@ -32,52 +32,52 @@ Class Rex_Controller Extends Rex_Model {
                 case 'fetch_all':
                     // PARAMETROS PARA FILTRADO //
                 if(isset($_POST['sPedimento'])){
-                    $this->areas['sPedimento'] = $_POST['sPedimento'];
+                    $this->refex['sPedimento'] = $_POST['sPedimento'];
                 }
                 if(isset($_POST['sReferencia'])){
-                    $this->areas['sReferencia'] = $_POST['sReferencia'];
+                    $this->refex['sReferencia'] = $_POST['sReferencia'];
                 }
                 if(isset($_POST['sGuiaMaster'])){
-                    $this->areas['sGuiaMaster'] = $_POST['sGuiaMaster'];
+                    $this->refex['sGuiaMaster'] = $_POST['sGuiaMaster'];
                 }
                 if(isset($_POST['sGuiaHouse'])){
-                    $this->areas['sGuiaHouse'] = $_POST['sGuiaHouse'];
+                    $this->refex['sGuiaHouse'] = $_POST['sGuiaHouse'];
                 }
                 if(isset($_POST['dFechaCreacion'])){
-                    $this->areas['dFechaCreacion'] = $_POST['dFechaCreacion'];
+                    $this->refex['dFechaCreacion'] = $_POST['dFechaCreacion'];
                 }
                 if(isset($_POST['dFechaPrevio'])){
-                    $this->areas['dFechaPrevio'] = $_POST['dFechaPrevio'];
+                    $this->refex['dFechaPrevio'] = $_POST['dFechaPrevio'];
                 }
                 if(isset($_POST['dFechaDespacho'])){
-                    $this->areas['dFechaDespacho'] = $_POST['dFechaDespacho'];
+                    $this->refex['dFechaDespacho'] = $_POST['dFechaDespacho'];
                 }
                 if(isset($_POST['dFechaClasificacion'])){
-                    $this->areas['dFechaClasificacion'] = $_POST['dFechaClasificacion'];
+                    $this->refex['dFechaClasificacion'] = $_POST['dFechaClasificacion'];
                 }
                 if(isset($_POST['dFechaGlosa'])){
-                    $this->areas['dFechaGlosa'] = $_POST['dFechaGlosa'];
+                    $this->refex['dFechaGlosa'] = $_POST['dFechaGlosa'];
                 }
                 if(isset($_POST['dFechaCapturaPedimento'])){
-                    $this->areas['dFechaCapturaPedimento'] = $_POST['dFechaCapturaPedimento'];
+                    $this->refex['dFechaCapturaPedimento'] = $_POST['dFechaCapturaPedimento'];
                 }
                 if(isset($_POST['dFechaFacturacion'])){
-                    $this->areas['dFechaFacturacion'] = $_POST['dFechaFacturacion'];
+                    $this->refex['dFechaFacturacion'] = $_POST['dFechaFacturacion'];
                 }
                 if(isset($_POST['iDeposito'])){
-                    $this->areas['iDeposito'] = $_POST['iDeposito'];
+                    $this->refex['iDeposito'] = $_POST['iDeposito'];
                 }
                 if(isset($_POST['iSaldo'])){
-                    $this->areas['iSaldo'] = $_POST['iSaldo'];
+                    $this->refex['iSaldo'] = $_POST['iSaldo'];
                 }
                 if(isset($_POST['sAlmacen'])){
-                    $this->areas['sAlmacen'] = $_POST['sAlmacen'];
+                    $this->refex['sAlmacen'] = $_POST['sAlmacen'];
                 }
                 if(isset($_POST['sEstatus'])){
-                    $this->areas['sEstatus'] = $_POST['sEstatus'];
+                    $this->refex['sEstatus'] = $_POST['sEstatus'];
                 }
                 if(isset($_POST['sSocioImportador'])){
-                    $this->areas['sSocioImportador'] = $_POST['sSocioImportador'];
+                    $this->refex['sSocioImportador'] = $_POST['sSocioImportador'];
                 }
                     // OBTENER REGISTROS //
                 $total = parent::countGetReferenciasExternas();
@@ -88,8 +88,8 @@ Class Rex_Controller Extends Rex_Model {
                     return false;
                 }
 
-                $this->areas['limit'] = $records['limit'];
-                $this->areas['offset'] = $records['offset'];
+                $this->refex['limit'] = $records['limit'];
+                $this->refex['offset'] = $records['offset'];
                 $this->data['data'] = parent::countGetReferenciasExternas(true);
 
                 if(!$this->data['data']){
@@ -136,6 +136,7 @@ Class Rex_Controller Extends Rex_Model {
         $this->data['message'] = '';
         $this->data['success'] = false;
         $this->data['datos'] = false;
+        $this->data['tipoCambio'] = 18.6607;//$this->tipo_cambio();
         
         if(isset($_POST['axn']) && $_POST['axn'] =='insert'){
             return $this->refe_save();
@@ -159,7 +160,7 @@ Class Rex_Controller Extends Rex_Model {
             $this->data['response'] = false;
             header('Content-Type: application/json');
             echo json_encode($this->data);
-            return true;
+            return false;
         }else{
             $this->data['message'] = "Registros guardados exitosamente" ;
             $this->data['response'] = true;
@@ -172,7 +173,7 @@ Class Rex_Controller Extends Rex_Model {
 
     public function refe_update()
     {
-        $le = $this->updatear($_POST['skReferenciaExterna']);
+        $le = parent::updatear($_POST['skReferenciaExterna']);
 
         if(!$le){
             $this->data['message'] = "Hubo un error al actualizar el registro ";
@@ -192,7 +193,7 @@ Class Rex_Controller Extends Rex_Model {
 
     public function jsonStatus()
     {
-        $arr = $this->getStatus();
+        $arr = parent::getStatus();
         if (!$arr) {
             header('Content-Type: application/json');
             echo json_encode(array());
@@ -205,7 +206,7 @@ Class Rex_Controller Extends Rex_Model {
 
     public function jsonAlmacenes()
     {
-        $arr = $this->getAlmacenes();
+        $arr = parent::getAlmacenes();
         if (!$arr) {
             header('Content-Type: application/json');
             echo json_encode(array());
@@ -221,7 +222,7 @@ Class Rex_Controller Extends Rex_Model {
 
         if (isset($_GET["p1"])){
 
-            $arr = $this->getSociosImportador($_GET['p1']);
+            $arr = parent::getSociosImportador($_GET['p1']);
             if (!$arr) {
                 header('Content-Type: application/json');
                 echo json_encode(array());
@@ -231,9 +232,93 @@ Class Rex_Controller Extends Rex_Model {
                 echo json_encode($arr);
                 return true;
             }
-        }
+        } 
+    }
 
-        
+    public function tipo_cambio(){
+
+         $client = new SoapClient(null, array(
+                'location' =>'http://www.banxico.org.mx:80/DgieWSWeb/DgieWS?WSDL',
+                'uri'=>'http://DgieWSWeb/DgieWS?WSDL',
+                'encoding'=> 'UTF-8'
+            ));
+
+            try {
+
+                $result = $client->tiposDeCambioBanxico();
+
+            } catch (SoapFault $ex) {
+
+                return $this->error($ex->getMessage());
+
+            }
+
+            if( !$result) {
+
+                return false;
+
+            }
+
+            $dom = new DomDocument();
+            $dom->loadXML($result);
+
+            $xmlDatos = $dom->getElementsByTagName('Obs');
+
+            if( !$xmlDatos->length) {
+
+                return false;
+
+            }
+
+            $itemDolar = $xmlDatos->item(0);
+            $itemEuro = $xmlDatos->item(2);
+            $itemDolarCanadiense = $xmlDatos->item(3);
+            $itemYenCanadiense = $xmlDatos->item(4);
+
+            if( !$itemDolar || !$itemDolarCanadiense || !$itemEuro || !$itemYenCanadiense) {
+
+                return false;
+
+            }
+
+           $data = array(
+                'USD' => array(
+                    'moneda'=>'USD',
+                    'descripcion'=>'Dolar',
+                    'time'=>$itemDolar->getAttribute('TIME_PERIOD'),
+                    'valor'=>$itemDolar->getAttribute('OBS_VALUE')
+                ),
+                'EUR' => array(
+                    'moneda'=>'EUR',
+                    'descripcion'=>'Euro',
+                    'time'=>$itemEuro->getAttribute('TIME_PERIOD'),
+                    'valor'=>$itemEuro->getAttribute('OBS_VALUE')
+                ),
+                'CAN' => array(
+                    'moneda'=>'USD CAN',
+                    'descripcion'=>'Dolar Canadiense',
+                    'time'=>$itemDolarCanadiense->getAttribute('TIME_PERIOD'),
+                    'valor'=>$itemDolarCanadiense->getAttribute('OBS_VALUE')
+                ),
+                'YEN' => array(
+                    'moneda'=>'YEN CAN',
+                    'descripcion'=>'YEN Canadiense',
+                    'time'=>$itemYenCanadiense->getAttribute('TIME_PERIOD'),
+                    'valor'=>$itemYenCanadiense->getAttribute('OBS_VALUE')
+                )
+            );
+            return $data;
+    }
+
+    public function jsonConceptos(){
+        if (isset($_POST["skEmpresa"])) {
+            //die(var_dump(parent::getConceptos($_POST["skEmpresa"])));
+            header('Content-Type: application/json');
+            echo json_encode(parent::getConceptos($_POST["skEmpresa"]));
+            return true;
+        }else{
+            return json_encode(array());
+        }
     }
 
     
