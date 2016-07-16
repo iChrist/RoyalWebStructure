@@ -112,6 +112,13 @@
                     </span>
                 </div>
             </label>
+            <label>
+                <div class="">
+                    <span>
+                        <input type="checkbox" name="skTipoEmpresa[]" value="REXT" <?php echo (in_array("REXT", $arrayEmpresasConceptos) ? 'checked' : '')?>> Referencias Externas
+                    </span>
+                </div>
+            </label>
 
         </div>
     </div>
