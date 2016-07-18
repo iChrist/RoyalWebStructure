@@ -102,16 +102,15 @@ Class Rex_Model Extends Core_Model {
                         $_POST["subtotal"][$i],
                         $_POST["fPrecioUnitario"][$i],
                         $_POST["divisa"][$i]);
+
             }
+        }
 
 
         if (isset($_POST) ) {
 
             $result = $this->db->query($sql_insert);
-
-        }
             return true;
-
         }else{
             return false;
         }
@@ -144,15 +143,24 @@ Class Rex_Model Extends Core_Model {
                 `dFechaGlosa` = '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaGlosa"])->format('Y-m-d')."',
                 `dFechaCapturaPedimento` = '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaCapturaPedimento"])->format('Y-m-d')."',
                 `dFechaRevalidacion` = '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaRevalidacion"])->format('Y-m-d')."',
+
                 `dFechaFacturacion` = '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaFacturacion"])->format('Y-m-d')."',
                 `iDeposito` = '".$_POST["iDeposito"]."',
-                `iSaldo` = '".$_POST["iSaldo"]."'
+                `iSaldo` = '".$_POST["iSaldo"]."',
+                `dTipoCambio` = '".$_POST["fTipoCambio"]."'
 
                 WHERE `skReferenciaExterna` = '$skReferenciaExterna';" ;
 
         if (isset($_POST["conceptos"]) && isset($_POST["iCantidad"])) {
+
             for ($i= 0; $i < count($_POST["conceptos"]); $i++) {
-                $this->insertConceptos($skReferenciaExterna,$_POST["conceptos"][$i],$_POST["subtotal"][$i]);
+                $this->insertConceptos(
+                    $skReferenciaExterna,
+                    $_POST["conceptos"][$i],
+                    $_POST["iCantidad"][$i],
+                    $_POST["subtotal"][$i],
+                    $_POST["fPrecioUnitario"][$i],
+                    $_POST["divisa"][$i]);
             }
         }
 
@@ -306,13 +314,14 @@ Class Rex_Model Extends Core_Model {
         SELECT
             $lecua
         FROM
-            ope_referenciasExternas
+            cat_empresas ON (cat_empresas.skEmpresa = ope_referenciasExternas.skSocioImportador) */
+                        ope_referenciasExternas
                 INNER JOIN
             cat_almacenes ON (cat_almacenes.skAlmacen = ope_referenciasExternas.skAlmacen)
                 INNER JOIN
             cat_estatus ON (cat_estatus.skEstatus = ope_referenciasExternas.skEstatus)
-                INNER JOIN
-            cat_empresas ON (cat_empresas.skEmpresa = ope_referenciasExternas.skSocioImportador)
+                LEFT JOIN  rel_empresas_socios resa ON resa.skSocioEmpresa = ope_referenciasExternas.skSocioImportador
+                LEFT JOIN  cat_empresas ON (cat_empresas.skEmpresa = resa.skEmpresa)
         WHERE 1 = 1";
 
         if ($get){
@@ -377,31 +386,31 @@ Class Rex_Model Extends Core_Model {
             }else{
                 return false;
             }
+        }else{
+            return false;
         }
     }
 
-    public function getConceptos($skEmpresa)
+    public function getConceptos($skSocioImportador)
     {
 
         $sql = "
-        SELECT
 
-            rel_cat_empresas_tarifas_conceptos.skTipoTramite,
-            cat_conceptos.skConcepto,
-            cat_conceptos.skStatus,
-            cat_conceptos.sNombreCorto,
-            cat_conceptos.sNombre,
-            cat_conceptos.sDescripcion,
-            cat_conceptos.skDivisa,
-            cat_conceptos.fPrecioUnitario
-        FROM
-            rel_cat_empresas_tarifas_conceptos
-                INNER JOIN
-            cat_conceptos ON (cat_conceptos.skConcepto = rel_cat_empresas_tarifas_conceptos.skConcepto)
-        WHERE
-            skEmpresa = '$skEmpresa';";
 
-        //die($sql);
+         SELECT
+
+            rcetc.skTipoTramite,
+            ca.skConcepto,
+            ca.skStatus,
+            ca.sNombreCorto,
+            ca.sNombre,
+            ca.sDescripcion,
+            ca.skDivisa,
+            ca.fPrecioUnitario
+        FROM rel_cat_empresas_tarifas_conceptos rcetc
+        INNER JOIN cat_conceptos ca ON (ca.skConcepto = rcetc.skConcepto)
+        INNER JOIN rel_empresas_socios ce ON (rcetc.skEmpresa = ce.skEmpresa)
+        WHERE ce.skSocioEmpresa = '$skSocioImportador';";
 
         $r = $this->db->query($sql);
 
@@ -411,8 +420,32 @@ Class Rex_Model Extends Core_Model {
                 array_push($arg, $row);
             }
             return $arg;
-        }else{
-            return false;
+        }else {
+
+            $sql_todosConceptos = "
+                SELECT
+
+                    cc.skConcepto,
+                    cc.skStatus,
+                    cc.sNombreCorto,
+                    cc.sNombre,
+                    cc.sDescripcion,
+                    cc.skDivisa,
+                    cc.fPrecioUnitario
+                FROM
+                    cat_conceptos cc
+                        INNER JOIN
+                    rel_cat_conceptos_tipos_empresas rccte ON (cc.skConcepto = rccte.skConcepto)
+                WHERE
+                    rccte.skTipoEmpresa = 'rext' ";
+            $r = $this->db->query($sql_todosConceptos);
+            $arg = array();
+
+            while ($row = $r->fetch_assoc()) {
+                array_push($arg, $row);
+            }
+
+            return $arg;
         }
     }
 

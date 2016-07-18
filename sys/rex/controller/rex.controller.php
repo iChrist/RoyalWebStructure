@@ -101,7 +101,8 @@ Class Rex_Controller Extends Rex_Model {
                 while($row = $this->data['data']->fetch_assoc()){
                     $actions = $this->printModulesButtons(2,array($row['skReferenciaExterna']));
                     array_push($records['data'], array(
-                         utf8_encode($row['sPedimento'])
+                        !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
+                        ,utf8_encode($row['sPedimento'])
                         ,utf8_encode($row['sReferencia'])
                         ,utf8_encode($row['sMercancia'])
                         ,utf8_encode($row['sGuiaMaster'])
@@ -118,7 +119,7 @@ Class Rex_Controller Extends Rex_Model {
                         ,utf8_encode($row['sAlmacen'])
                         ,utf8_encode($row['sEstatus'])
                         ,utf8_encode($row['sSocioImportador'])
-                        ,!empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''));
+                        ));
                 }
 
                 header('Content-Type: application/json');
@@ -315,10 +316,10 @@ Class Rex_Controller Extends Rex_Model {
 
     public function jsonConceptos()
     {
-        if (isset($_POST["skEmpresa"])) {
+        if (isset($_POST["skSocioImportador"])) {
             //die(var_dump(parent::getConceptos($_POST["skEmpresa"])));
             header('Content-Type: application/json');
-            echo json_encode(parent::getConceptos($_POST["skEmpresa"]));
+            echo json_encode(parent::getConceptos($_POST["skSocioImportador"]));
             return true;
         }else{
             return json_encode(array());

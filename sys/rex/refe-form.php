@@ -3,7 +3,7 @@
 <script type="text/javascript" src="/path/to/bootstrap/js/collapse.js"></script>
 <script type="text/javascript" src="/path/to/bootstrap-datetimepicker.min.js"></script>
 
-    <pre>
+    <!--<pre>
         <?php 
         //echo print_r($_SESSION["session"],1);
         //$fecha = DateTime::createFromFormat('d-m-Y', '30-07-2016');
@@ -19,7 +19,7 @@
         
         //var_dump($data);
         ?>
-    </pre> 
+    </pre> !-->
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data"> 
     <input type="hidden" name="skReferenciaExterna"  id="skReferenciaExterna" value="<?php echo (isset($result['skReferenciaExterna'])) ? $result['skReferenciaExterna'] : '' ; ?>">
     <input type="hidden" name="axn" id="anx" value="<?php echo (isset($result["sReferencia"])) ? 'update' : 'insert' ;?>" ></input>
@@ -241,7 +241,7 @@
                         <th width="80%">Subtotal</th>
                     </tr>
                 </thead>
-                <tbody id="dvConceptosPedimento">
+                <tbody id="ConceptosReferenciasTabla">
 
                     <?php 
                     $totalConceptos = 0;
@@ -253,7 +253,7 @@
                     ?>
                     <tr>
                         <td>
-                            <input onchange="cotizar();" value="<?php echo $row['skConcepto'];?>" name="conceptos[]" type="checkbox">
+                            <input onchange="cotizar();" value="<?php echo $row['skConcepto'];?>" name="conceptos[]" type="checkbox" checked>
                         </td>
                         <td>
                             <input name="iCantidad[]" onchange="cotizar();" class="form-control input-sm iCantidad" placeholder="Cant" value="<?php echo $row['iCantidad'];?>" type="text">
@@ -311,7 +311,7 @@
         $(".show_subtotal").html("");
         var total = 0;
         $("input[name='conceptos[]']:checked").each(function(idx,obj){
-            var tr = $(obj).parent().parent();
+            var tr = $(obj).closest('tr');
             var precioUnitario = $(tr).find(".fPrecioUnitario").val();
             var divisaConcepto = $(tr).find(".divisa").val();
             var cantidad = $(tr).find(".iCantidad").val();
@@ -334,7 +334,7 @@
     }
     $(document).ready(function(){
 
-
+        cotizar();
 
         $.ajax({
             url : '<?php echo SYS_URL;?>/sys/rex/jsonStatus/',
@@ -345,7 +345,7 @@
             dataType : 'json',
             success : function(json) {
                 ifestat = "<?php echo (isset($result['skEstatus'])) ? $result['skEstatus'] : '' ; ?>";
-                console.log(json);
+                
                 for (o in json) {
                     d = json[o];
                     if (ifestat != "") {
@@ -377,7 +377,7 @@
             dataType : 'json',
             success : function(json) {
                 ifalmacen = "<?php echo (isset($result['skAlmacen'])) ? $result['skAlmacen'] : '' ; ?>";
-                console.log(json);
+                
                 for(i in json){
                     d = json[i];
                     if (ifalmacen != "") {
@@ -410,17 +410,16 @@
             dataType : 'json',
             success : function(json) {
                 ifsocioimportador = "<?php echo (isset($result['skSocioImportador'])) ? $result['skSocioImportador'] : '' ; ?>";
-                console.log(json);
                 for (o in json) {
                     d = json[o];
                     if (ifsocioimportador != "") {
-                        if (ifsocioimportador == d.skEmpresa ) {
-                            $("#skSocioImportador").append('<option selected="selected" value="' + d.skEmpresa +  '">'+d.Empresa+'</option>');
+                        if (ifsocioimportador == d.skSocioEmpresa ) {
+                            $("#skSocioImportador").append('<option selected="selected" value="' + d.skSocioEmpresa +  '">'+d.Empresa+'</option>');
                         }else{
-                            $("#skSocioImportador").append('<option value="' + d.skEmpresa +  '">'+d.Empresa+'</option>');
+                            $("#skSocioImportador").append('<option value="' + d.skSocioEmpresa +  '">'+d.Empresa+'</option>');
                         }
                     }else{
-                        $("#skSocioImportador").append('<option value="' + d.skEmpresa +  '">'+d.Empresa+'</option>');
+                        $("#skSocioImportador").append('<option value="' + d.skSocioEmpresa +  '">'+d.Empresa+'</option>');
                     }
                     
                 }
@@ -437,17 +436,17 @@
             //alert($( "#skSocioImportador option:selected" ).val());
             $.ajax({
                 url : '<?php echo SYS_URL;?>/sys/rex/jsonConceptos/',
-                data : {skEmpresa:$( "#skSocioImportador option:selected" ).val()},
+                data : {skSocioImportador:$( "#skSocioImportador option:selected" ).val()},
 
                 // especifica si será una petición POST o GET
                 type : 'POST',
                 dataType : 'json',
                 success : function(json) {
-                    $("#dvConceptosPedimento").empty();
-                    console.log(json);
+                    $("#ConceptosReferenciasTabla").empty();
+                    
                     for (o in json) {
                         d = json[o];
-                        $("#dvConceptosPedimento").append(`
+                        $("#ConceptosReferenciasTabla").append(`
                             <tr>
                                 <td>
                                     <input onchange="cotizar();" value="`+d.skConcepto+`" name="conceptos[]" type="checkbox">
