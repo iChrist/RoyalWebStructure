@@ -385,7 +385,7 @@
                 $this->data['tipo_cambio'] = $this->tipo_cambio();
                 if(isset($_GET['p1'])){
                     $this->cotizacion['skCotizacion'] = $_GET['p1'];
-                    $this->data['datos'] = parent::read_pro();
+                  //  $this->data['datos'] = parent::read_pro();
                 }
                 $this->load_view('cot-form', $this->data);
                 return true;

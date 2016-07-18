@@ -14,7 +14,7 @@ Class Rex_Controller Extends Rex_Model {
 
     }
     /* COMIENZA MODULO (REX) */
-    
+
     public function rex_index()
     {
         $this->ref['id'] = 1;
@@ -129,7 +129,7 @@ Class Rex_Controller Extends Rex_Model {
             return true;
         }
         $this->load_view('refe-index',NULL,true);
-    }    
+    }
 
     public function refe_form()
     {
@@ -138,7 +138,7 @@ Class Rex_Controller Extends Rex_Model {
         $this->data['success'] = false;
         $this->data['datos'] = false;
         $this->data['tipoCambio'] = $this->tipo_cambio();
-        
+
         if(isset($_POST['axn']) && $_POST['axn'] =='insert'){
             return $this->refe_save();
         }
@@ -217,7 +217,7 @@ Class Rex_Controller Extends Rex_Model {
             echo json_encode($arr);
             return true;
         }
-    }    
+    }
 
     public function jsonSocioImportadores()
     {
@@ -234,7 +234,7 @@ Class Rex_Controller Extends Rex_Model {
                 echo json_encode($arr);
                 return true;
             }
-        } 
+        }
     }
 
     public function tipo_cambio()
@@ -325,7 +325,13 @@ Class Rex_Controller Extends Rex_Model {
         }
     }
 
-    
+    public function rextfo_index()
+    {
+      $this->data['datos'] = parent::reexfo_referencias($_GET["p1"]);
+      $this->load_view('rextfo_index',$refex,false);
+    }
+
+
 
     /* TERMINA MODULO (REX) */
 }

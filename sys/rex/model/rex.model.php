@@ -17,9 +17,9 @@ Class Rex_Model Extends Core_Model {
     }
 
     public function __destruct() {
-        
+
     }
-    
+
     /* COMIENZA MODULO (REX) */
     public function getrefex($skStatus = null)
     {
@@ -31,7 +31,7 @@ Class Rex_Model Extends Core_Model {
         }
         $records = array();
         while($row = $result->fetch_assoc()){
-            array_push($records , $row);  
+            array_push($records , $row);
         }
         return $records;
     }
@@ -42,59 +42,59 @@ Class Rex_Model Extends Core_Model {
         $skReferenciaExterna =  substr(md5(microtime()), 1, 32);
         $sql_insert = "
             INSERT INTO `ope_referenciasExternas` (
-                `skReferenciaExterna`, 
-                `skSocioPropietario`, 
-                `skEmpresaPropietario`, 
-                `skSocioImportador`, 
-                `skAlmacen`, 
-                `skEstatus`, 
-                `sPedimento`, 
-                `sReferencia`, 
-                `sMercancia`, 
-                `sGuiaMaster`, 
-                `sGuiaHouse`, 
-                `iBultos`, 
-                `skUsuarioCreacion`, 
-                `dFechaCreacion`, 
-                `dFechaPrevio`, 
-                `dFechaDespacho`, 
-                `dFechaClasificacion`, 
-                `dFechaGlosa`, 
-                `dFechaCapturaPedimento`, 
+                `skReferenciaExterna`,
+                `skSocioPropietario`,
+                `skEmpresaPropietario`,
+                `skSocioImportador`,
+                `skAlmacen`,
+                `skEstatus`,
+                `sPedimento`,
+                `sReferencia`,
+                `sMercancia`,
+                `sGuiaMaster`,
+                `sGuiaHouse`,
+                `iBultos`,
+                `skUsuarioCreacion`,
+                `dFechaCreacion`,
+                `dFechaPrevio`,
+                `dFechaDespacho`,
+                `dFechaClasificacion`,
+                `dFechaGlosa`,
+                `dFechaCapturaPedimento`,
                 `dFechaRevalidacion`,
-                `dFechaFacturacion`, 
-                `iDeposito`, 
+                `dFechaFacturacion`,
+                `iDeposito`,
                 `iSaldo`,
                 dTipoCambio
-            ) 
+            )
 
             VALUES (
-                '$skReferenciaExterna',  
-                '" . $this->db->real_escape_string($_SESSION["session"]["skSocioEmpresaPropietario"]) . "', 
-                '" . $this->db->real_escape_string($_SESSION["session"]["skEmpresaPropietario"])."', 
-                '" . $this->db->real_escape_string($_POST["skSocioImportador"]) . "', 
-                '" . $this->db->real_escape_string($_POST["skAlmacen"]) . "', 
-                '" . $this->db->real_escape_string($_POST["skEstatus"]) . "', 
-                '" . $this->db->real_escape_string($_POST["sPedimento"]) . "', 
-                '" . $this->db->real_escape_string($_POST["sReferencia"]) . "', 
-                '" . $this->db->real_escape_string($_POST["sMercancia"]) . "', 
-                '" . $this->db->real_escape_string($_POST["sGuiaMaster"]) . "', 
-                '" . $this->db->real_escape_string($_POST["sGuiaHouse"]) . "', 
-                '".$_POST["iBultos"]."', 
-                '".$_SESSION["session"]["skUsers"]."', 
-                NOW(), 
-                '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaPrevio"])->format('Y-m-d')."', 
-                '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaDespacho"])->format('Y-m-d')."', 
-                '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaClasificacion"])->format('Y-m-d')."', 
-                '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaGlosa"])->format('Y-m-d')."', 
-                '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaCapturaPedimento"])->format('Y-m-d')."', 
-                '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaRevalidacion"])->format('Y-m-d')."', 
-                '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaFacturacion"])->format('Y-m-d')."', 
-                '".$_POST["iDeposito"]."', 
+                '$skReferenciaExterna',
+                '" . $this->db->real_escape_string($_SESSION["session"]["skSocioEmpresaPropietario"]) . "',
+                '" . $this->db->real_escape_string($_SESSION["session"]["skEmpresaPropietario"])."',
+                '" . $this->db->real_escape_string($_POST["skSocioImportador"]) . "',
+                '" . $this->db->real_escape_string($_POST["skAlmacen"]) . "',
+                '" . $this->db->real_escape_string($_POST["skEstatus"]) . "',
+                '" . $this->db->real_escape_string($_POST["sPedimento"]) . "',
+                '" . $this->db->real_escape_string($_POST["sReferencia"]) . "',
+                '" . $this->db->real_escape_string($_POST["sMercancia"]) . "',
+                '" . $this->db->real_escape_string($_POST["sGuiaMaster"]) . "',
+                '" . $this->db->real_escape_string($_POST["sGuiaHouse"]) . "',
+                '".$_POST["iBultos"]."',
+                '".$_SESSION["session"]["skUsers"]."',
+                NOW(),
+                '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaPrevio"])->format('Y-m-d')."',
+                '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaDespacho"])->format('Y-m-d')."',
+                '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaClasificacion"])->format('Y-m-d')."',
+                '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaGlosa"])->format('Y-m-d')."',
+                '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaCapturaPedimento"])->format('Y-m-d')."',
+                '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaRevalidacion"])->format('Y-m-d')."',
+                '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaFacturacion"])->format('Y-m-d')."',
+                '".$_POST["iDeposito"]."',
                 '".$_POST["iSaldo"]."',
                 '".$_POST["fTipoCambio"]."');" ;
             if (isset($_POST["conceptos"]) && isset($_POST["iCantidad"])) {
-                for ($i= 0; $i < count($_POST["conceptos"]); $i++) { 
+                for ($i= 0; $i < count($_POST["conceptos"]); $i++) {
                     $this->insertConceptos(
                         $skReferenciaExterna,
                         $_POST["conceptos"][$i],
@@ -106,7 +106,7 @@ Class Rex_Model Extends Core_Model {
 
 
         if (isset($_POST) ) {
-            
+
             $result = $this->db->query($sql_insert);
 
         }
@@ -115,7 +115,7 @@ Class Rex_Model Extends Core_Model {
         }else{
             return false;
         }
-        
+
     }
 
     public function updatear($skReferenciaExterna = NULL)
@@ -123,39 +123,39 @@ Class Rex_Model Extends Core_Model {
         if ($skReferenciaExterna == NULL && $skReferenciaExterna != '') {
             return false;
         }
-        
+
         $this->deleteConceptos($skReferenciaExterna);
         $sql_update = "
-            UPDATE `ope_referenciasExternas` SET  
+            UPDATE `ope_referenciasExternas` SET
                 `skSocioPropietario` = '".$this->db->real_escape_string($_SESSION["session"]["skSocioEmpresaPropietario"])."',
-                `skEmpresaPropietario` = '" . $this->db->real_escape_string($_SESSION["session"]["skEmpresaPropietario"])."', 
+                `skEmpresaPropietario` = '" . $this->db->real_escape_string($_SESSION["session"]["skEmpresaPropietario"])."',
                 `skSocioImportador` = '" . $this->db->real_escape_string($_POST["skSocioImportador"]) . "',
                 `skAlmacen` = '" . $this->db->real_escape_string($_POST["skAlmacen"]) . "',
-                `skEstatus` = '" . $this->db->real_escape_string($_POST["skEstatus"]) . "', 
-                `sPedimento` ='" . $this->db->real_escape_string($_POST["sPedimento"]) . "', 
-                `sReferencia` = '" . $this->db->real_escape_string($_POST["sReferencia"]) . "', 
+                `skEstatus` = '" . $this->db->real_escape_string($_POST["skEstatus"]) . "',
+                `sPedimento` ='" . $this->db->real_escape_string($_POST["sPedimento"]) . "',
+                `sReferencia` = '" . $this->db->real_escape_string($_POST["sReferencia"]) . "',
                 `sMercancia` = '" . $this->db->real_escape_string($_POST["sMercancia"]) . "',
-                `sGuiaMaster` = '" . $this->db->real_escape_string($_POST["sGuiaMaster"]) . "',  
-                `sGuiaHouse` = '" . $this->db->real_escape_string($_POST["sGuiaHouse"]) . "', 
-                `iBultos` = '".$_POST["iBultos"]."',  
-                `dFechaPrevio` = '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaPrevio"])->format('Y-m-d')."',  
+                `sGuiaMaster` = '" . $this->db->real_escape_string($_POST["sGuiaMaster"]) . "',
+                `sGuiaHouse` = '" . $this->db->real_escape_string($_POST["sGuiaHouse"]) . "',
+                `iBultos` = '".$_POST["iBultos"]."',
+                `dFechaPrevio` = '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaPrevio"])->format('Y-m-d')."',
                 `dFechaDespacho` = '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaDespacho"])->format('Y-m-d')."',
-                `dFechaClasificacion` = '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaClasificacion"])->format('Y-m-d')."', 
-                `dFechaGlosa` = '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaGlosa"])->format('Y-m-d')."',  
-                `dFechaCapturaPedimento` = '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaCapturaPedimento"])->format('Y-m-d')."', 
+                `dFechaClasificacion` = '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaClasificacion"])->format('Y-m-d')."',
+                `dFechaGlosa` = '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaGlosa"])->format('Y-m-d')."',
+                `dFechaCapturaPedimento` = '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaCapturaPedimento"])->format('Y-m-d')."',
                 `dFechaRevalidacion` = '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaRevalidacion"])->format('Y-m-d')."',
-                `dFechaFacturacion` = '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaFacturacion"])->format('Y-m-d')."', 
-                `iDeposito` = '".$_POST["iDeposito"]."',  
+                `dFechaFacturacion` = '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaFacturacion"])->format('Y-m-d')."',
+                `iDeposito` = '".$_POST["iDeposito"]."',
                 `iSaldo` = '".$_POST["iSaldo"]."'
 
                 WHERE `skReferenciaExterna` = '$skReferenciaExterna';" ;
-        
+
         if (isset($_POST["conceptos"]) && isset($_POST["iCantidad"])) {
-            for ($i= 0; $i < count($_POST["conceptos"]); $i++) { 
+            for ($i= 0; $i < count($_POST["conceptos"]); $i++) {
                 $this->insertConceptos($skReferenciaExterna,$_POST["conceptos"][$i],$_POST["subtotal"][$i]);
             }
         }
-        
+
         if (isset($_POST) ) {
             $result = $this->db->query($sql_update);
             return true;
@@ -206,9 +206,9 @@ Class Rex_Model Extends Core_Model {
     }
 
     public function getSociosImportador($socioEmpresaP = false )
-    {   
-        
-        $sql_socios = "SELECT 
+    {
+
+        $sql_socios = "SELECT
                 rel_empresas_socios.skSocioEmpresa,
                 rel_empresas_socios.skEmpresa,
                 cat_empresas.sNombre as 'Empresa'
@@ -236,7 +236,7 @@ Class Rex_Model Extends Core_Model {
     public function selectAllope()
     {
         $sql_select_all = "
-        SELECT 
+        SELECT
             ope_referenciasExternas.skReferenciaExterna,
             ope_referenciasExternas.sPedimento,
             ope_referenciasExternas.sReferencia,
@@ -302,8 +302,8 @@ Class Rex_Model Extends Core_Model {
         ";
         $justcount = "count(*) as 'total'";
         $lecua = ($get) ? $getol : $justcount;
-        $sql = "        
-        SELECT 
+        $sql = "
+        SELECT
             $lecua
         FROM
             ope_referenciasExternas
@@ -312,7 +312,7 @@ Class Rex_Model Extends Core_Model {
                 INNER JOIN
             cat_estatus ON (cat_estatus.skEstatus = ope_referenciasExternas.skEstatus)
                 INNER JOIN
-            cat_empresas ON (cat_empresas.skEmpresa = ope_referenciasExternas.skSocioImportador) 
+            cat_empresas ON (cat_empresas.skEmpresa = ope_referenciasExternas.skSocioImportador)
         WHERE 1 = 1";
 
         if ($get){
@@ -340,7 +340,7 @@ Class Rex_Model Extends Core_Model {
             }
             if(!empty($this->refex['dFechaDespacho'])){
                 $sql .=" AND ope_referenciasExternas.dFechaDespacho like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaDespacho'])->format('Y-m-d H:i:s')."%'";
-            }        
+            }
             if(!empty($this->refex['dFechaClasificacion'])){
                 $sql .=" AND ope_referenciasExternas.dFechaClasificacion like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaClasificacion'])->format('Y-m-d H:i:s')."%'";
             }
@@ -384,7 +384,7 @@ Class Rex_Model Extends Core_Model {
     {
 
         $sql = "
-        SELECT 
+        SELECT
 
             rel_cat_empresas_tarifas_conceptos.skTipoTramite,
             cat_conceptos.skConcepto,
@@ -402,7 +402,7 @@ Class Rex_Model Extends Core_Model {
             skEmpresa = '$skEmpresa';";
 
         //die($sql);
-            
+
         $r = $this->db->query($sql);
 
         if ($this->db->affected_rows > 0){
@@ -420,27 +420,27 @@ Class Rex_Model Extends Core_Model {
     {
         $skReferenciaExternaConcepeteto =  substr(md5(microtime()), 1, 32);
         $sql = "
-        INSERT INTO 
+        INSERT INTO
         `rel_referenciasExternas_conceptos` (
-            `skReferenciaExternaConcepto`, 
-            `skReferenciaExterna`, 
-            `skConcepto`, 
+            `skReferenciaExternaConcepto`,
+            `skReferenciaExterna`,
+            `skConcepto`,
             `dImporte`,
             `iCantidad`,
             `dPrecioUnitario`,
             `skDivisa`
-            ) 
+            )
         VALUES (
-            '$skReferenciaExternaConcepeteto', 
-            '$skReferenciaExterna', 
-            '$skConcepto', 
+            '$skReferenciaExternaConcepeteto',
+            '$skReferenciaExterna',
+            '$skConcepto',
             '$dImporte',
             '$iCantidad',
             '$dPrecioUnitario',
             '$skDivisa'
             );";
         //die($sql);
-        
+
         $r = $this->db->query($sql);
 
         if ($this->db->affected_rows > 0){
@@ -454,7 +454,7 @@ Class Rex_Model Extends Core_Model {
     {
 
         $sql ="
-            DELETE FROM `rel_referenciasExternas_conceptos` 
+            DELETE FROM `rel_referenciasExternas_conceptos`
             WHERE `skReferenciaExterna`='$skReferenciaExterna';";
 
         $r = $this->db->query($sql);
@@ -469,7 +469,7 @@ Class Rex_Model Extends Core_Model {
     public function getConceptosReferencia($skReferenciaExterna)
     {
         $sql = "
-        SELECT 
+        SELECT
             iCantidad,
             rel_referenciasExternas_conceptos.skDivisa,
             dPrecioUnitario,
@@ -494,6 +494,54 @@ Class Rex_Model Extends Core_Model {
             return false;
         }
     }
-
+    public function reexfo_referencias($skReferenciaExterna)
+    {
+        $sql = "
+        SELECT
+        ore.skReferenciaExterna,
+        LPAD(ore.ikReferenciaExterna, 5, '0') AS codigo
+        cei.sNombre AS Importador,
+        cep.sNombre AS Propietario,
+        cer.sNombre AS Promotor,
+        ca.sNombre AS Almacen,
+        ce.sNombre AS Estatus,
+        ore.sPedimento AS Pedimento,
+        ore.sReferencia AS Referencia,
+        ore.sMercancia AS Mercancia,
+        ore.sGuiaMaster AS GuiaMaster,
+        ore.sGuiaHouse AS GuiaHouse,
+        ore.iBultos AS iBultos,
+        ore.dFechaCreacion AS FechaCreacion,
+        ore.dFechaPrevio AS FechaPrevio,
+        ore.dFechaDespacho AS FechaDespacho,
+        ore.dFechaClasificacion AS FechaClasificacion,
+        ore.dFechaGlosa AS FechaGlosa,
+        ore.dFechaCapturaPedimento AS FechaCapturaPedimento,
+        ore.dFechaRevalidacion AS FechaRevalidacion,
+        ore.dFechaFacturacion AS FechaFacturacion,
+        ore.dTipoCambio AS TipoCambio,
+        ore.iDeposito AS Deposito,
+        ore.iSaldo AS Saldo
+        FROM ope_referenciasExternas ore
+        LEFT JOIN rel_empresas_socios resi ON resi.skSocioEmpresa = ore.skSocioImportador
+        LEFT JOIN cat_empresas cei ON cei.skEmpresa = resi.skEmpresa
+        LEFT JOIN rel_empresas_socios resp ON resp.skSocioEmpresa = ore.skSocioPropietario
+        LEFT JOIN cat_empresas cep ON cep.skEmpresa = resp.skEmpresa
+        LEFT JOIN rel_empresas_socios resr ON resr.skSocioEmpresa = ore.skSocioPromotor
+        LEFT JOIN cat_empresas cer ON cer.skEmpresa = resr.skEmpresa
+        LEFT JOIN cat_almacenes ca ON ca.skAlmacen = ore.skAlmacen
+        LEFT JOIN cat_estatus ce ON ce.skEstatus = ore.skEstatus
+        LEFT JOIN _users us	 ON us.skUsers = ore.skUsuarioCreacion
+        WHERE ore.skReferenciaExterna = '".$skReferenciaExterna."' ";
+                    //Poner el numero de previo
+                    $result = $this->db->query($sql);
+        if ($result) {
+            if ($result->num_rows > 0) {
+                return $result;
+            } else {
+                return false;
+            }
+        }
+    }
     /* TERMINA MODULO (REX) */
 }

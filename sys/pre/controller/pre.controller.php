@@ -309,9 +309,9 @@
         }
         public function preafo_form()
         {
-            $this->data['message'] = '';
-            $this->data['response'] = true;
-            $this->data['datos'] = false;
+					$this->data['message'] = '';
+					$this->data['response'] = true;
+					$this->data['datos'] = false;
 						if ($_POST) {
 	            $this->previos['skSolicitudPrevio'] = $_POST['skSolicitudPrevio'];
 							$arrayFotos = (isset($_POST['myFiles']) ? $_POST['myFiles'] : array());
