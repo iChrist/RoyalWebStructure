@@ -8,11 +8,11 @@
     session_start();
 // SYSTEM CONFIGURATION //
     $_GET['sysProject'] = isset($_GET['sysProject']) ? $_GET['sysProject'] : '';
-    define('DIR_PATH', '');
+    define('DIR_PATH', 'RoyalWebStructure/');
     define('CORE_PATH', __DIR__.'/');
     define('SYS_PROJECT', $_GET['sysProject']);
     define('SYS_PATH', $_SERVER['DOCUMENT_ROOT'].'/'.DIR_PATH.SYS_PROJECT.'/');
-    define('SYS_URL', 'http://'.$_SERVER['SERVER_NAME'].':81/'.DIR_PATH);
+    define('SYS_URL', 'http://'.$_SERVER['SERVER_NAME'].'/'.DIR_PATH);
     if(!is_dir(SYS_PATH)){
         session_destroy();
         die();
