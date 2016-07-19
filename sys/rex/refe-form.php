@@ -36,16 +36,15 @@
                 </div>
             </div>
 
-            <label class="control-label col-md-2">Socio Importador <span aria-required="true" class="required"> * </span>
+            <label class="control-label col-md-2">Pedimento <span aria-required="true" class="required"> * </span>
             </label>
             <div class="col-md-4">
                 <div class="input-icon right">
                     <i class="fa"></i>
-                    <select class="form-control" id="skSocioImportador" name="skSocioImportador">
-                        <option value="">--Seleccione socio Importador--</option>
-                    </select>
+                    <input type="text" maxlength="50" name="sPedimento" id="sPedimento" class="form-control" placeholder="Numero de pedimento" value="<?php echo (isset($result['sPedimento'])) ? htmlentities(utf8_encode($result['sPedimento'])) : $data['maxPedimento']; ?>" >
                 </div>
             </div>
+            
         </div>
 
 
@@ -77,12 +76,14 @@
         </div>
 
         <div class="form-group">
-            <label class="control-label col-md-2">Pedimento <span aria-required="true" class="required"> * </span>
+            <label class="control-label col-md-2">Socio Importador <span aria-required="true" class="required"> * </span>
             </label>
             <div class="col-md-4">
                 <div class="input-icon right">
                     <i class="fa"></i>
-                    <input type="text" maxlength="50" name="sPedimento" id="sPedimento" class="form-control" placeholder="Numero de pedimento" value="<?php echo (isset($result["sPedimento"])) ? $result["sPedimento"] : '' ;?>" >
+                    <select class="form-control" id="skSocioImportador" name="skSocioImportador">
+                        <option value="">--Seleccione socio Importador--</option>
+                    </select>
                 </div>
             </div>
         </div>

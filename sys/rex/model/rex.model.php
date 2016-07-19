@@ -26,6 +26,18 @@ Class Rex_Model Extends Core_Model {
     }
 
     /* COMIENZA MODULO (REX) */
+    
+    public function getMaxPedimento() {
+        $sql = "SELECT MAX(sPedimento) AS sPedimento FROM ope_referenciasExternas WHERE skEstatus != 'EL' ";
+        //exit($sql);
+        $result = $this->db->query($sql);
+        if ($result) {
+            return $result->fetch_assoc();
+        } else {
+            return false;
+        }
+    }
+    
     public function getrefex($skStatus = null)
     {
         $sql = "SELECT * FROM refex";

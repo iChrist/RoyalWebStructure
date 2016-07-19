@@ -139,9 +139,16 @@ Class Rex_Controller Extends Rex_Model {
         $this->data['success'] = false;
         $this->data['datos'] = false;
         $this->data['tipoCambio'] = $this->tipo_cambio();
-
+        // SACAMOS EL PEDIMENTO EN COLA //
+        $maxPedimento = parent::getMaxPedimento();
+        if ($maxPedimento) {
+            $this->data['maxPedimento'] = $maxPedimento['sPedimento'] + 1;
+        } else {
+            $this->data['maxPedimento'] = '';
+        }
+        
         if(isset($_POST['axn']) && $_POST['axn'] =='insert'){
-            return $this->refe_save();
+            return $this->refe_save($maxPedimento);
         }
         if (isset($_POST['axn']) &&  $_POST['axn'] =='update') {
             return $this->refe_update();
@@ -153,8 +160,19 @@ Class Rex_Controller Extends Rex_Model {
         $this->load_view('refe-form',$this->data,true);
     }
 
-    public function refe_save()
+    public function refe_save($maxPedimento)
     {
+        
+        $this->refex['sPedimento'] = utf8_decode($_POST['sPedimento']);
+        if (parent::countGetReferenciasExternas(true)) {
+            $this->data['response'] = false;
+            $this->data['errorPedimento'] = false;
+            $this->data['message'] = 'El pedimento ' . $this->refex['sPedimento'] . " Ya ha sido utilizado, intenta con " . ($maxPedimento['sPedimento'] + 1);
+            header('Content-Type: application/json');
+            echo json_encode($this->data);
+            return false;
+        }
+        
 
         $le = $this->insertar();
 
