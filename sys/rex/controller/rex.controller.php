@@ -19,8 +19,10 @@ Class Rex_Controller Extends Rex_Model {
     {
         $this->ref['id'] = 1;
         $this->ref['nombre'] = 'samuel';
+        $this->ref['listAlmacenes'] = parent::getAlmacenes();
+        $this->ref['listEstados'] =  parent::getStatus();
         $refex = $this->getrefex('AC');
-        $refex['otroDato'] = 'muajajaja';
+
         //$this->load_view('NombreArhivo' , $datosParaVista = array() , $bool = TRUE , $path = NULL);
         $this->load_view('rex-index1',$refex,false);
     }
@@ -78,6 +80,9 @@ Class Rex_Controller Extends Rex_Model {
                 }
                 if(isset($_POST['sSocioImportador'])){
                     $this->refex['sSocioImportador'] = $_POST['sSocioImportador'];
+                }
+                if(isset($_POST['sMercancia'])){
+                    $this->refex['sMercancia'] = $_POST['sMercancia'];
                 }
                     // OBTENER REGISTROS //
                 $total = parent::countGetReferenciasExternas();

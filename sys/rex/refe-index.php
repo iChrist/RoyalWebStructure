@@ -1,4 +1,10 @@
 <!-- BEGIN PAGE CONTENT-->
+
+<pre>
+	<?php 
+		echo $data['listAlmacenes'];
+	 ?>
+</pre>
 <div class="row">
 	<div class="col-md-12">
 		<div class="table-container">
@@ -15,19 +21,19 @@
 						<th width="">Acciones</th>
 						<th width="">Pedimento</th>
 						<th width="">Referencia</th>
-						<th width="">Mercancia</th>
-						<th width="">GuiaMaster</th>
-						<th width="">GuiaHouse</th>
-						<th width="">FechaCreacion</th>
-						<th width="">FechaPrevio</th>
-						<th width="">FechaDespacho</th>
-						<th width="">FechaClasificacion</th>
-						<th width="">FechaGlosa</th>
-						<th width="">FechaCapturaPedimento</th>
-						<th width="">FechaFacturacion</th>
+						<th width="">Mercancía</th>
+						<th width="">Guia Master</th>
+						<th width="">Guia House</th>
+						<th width="">Fecha Creacion</th>
+						<th width="">Fecha Previo</th>
+						<th width="">Fecha Despacho</th>
+						<th width="">Fecha Clasificacion</th>
+						<th width="">Fecha Glosa</th>
+						<th width="">Fecha CapturaPedimento</th>
+						<th width="">Fecha Facturacion</th>
 						<th width="">Deposito</th>
 						<th width="">Saldo</th>
-						<th width="">Almacen</th>
+						<th width="">Almacén</th>
 						<th width="">Estado</th>
 						<th width="">Socio Importador</th>
 
@@ -151,5 +157,68 @@
    /*$("#enable_filter").click(function(){
        $(".table-filter").css("display","block");
    });*/
+   $.ajax({
+	    url : '<?php echo SYS_URL;?>/sys/rex/jsonStatus/',
+	    data : {},
+
+	    // especifica si será una petición POST o GET
+	    type : 'GET',
+	    dataType : 'json',
+	    success : function(json) {
+	        ifestat = "<?php echo (isset($result['skEstatus'])) ? $result['skEstatus'] : '' ; ?>";
+	        
+	        for (o in json) {
+	            d = json[o];
+	            if (ifestat != "") {
+	                if(ifestat == d.skEstatus ){
+	                    $("#skEstatus").append('<option selected="selected" value="' + d.skEstatus +  '">'+d.sNombre+'</option>')
+	                }else{
+	                    $("#skEstatus").append('<option value="' + d.skEstatus +  '">'+d.sNombre+'</option>')
+	                }
+	            }else{
+	                $("#skEstatus").append('<option value="' + d.skEstatus +  '">'+d.sNombre+'</option>')
+	            }
+	            
+	        }
+	    },
+	    error : function(xhr, status) {
+	        console.log("Algo salio mal en la peticion a jsonStatus")
+	    },
+	    complete : function(xhr, status) {
+	        console.log('Petición realizada');
+	    }
+    });        
+
+    $.ajax({
+        url : '<?php echo SYS_URL;?>/sys/rex/jsonAlmacenes/',
+        data : {},
+
+        type : 'GET',
+        dataType : 'json',
+        success : function(json) {
+            ifalmacen = "<?php echo (isset($result['skAlmacen'])) ? $result['skAlmacen'] : '' ; ?>";
+            
+            for(i in json){
+                d = json[i];
+                if (ifalmacen != "") {
+                    if (ifalmacen == d.skAlmacen) {
+                        $("#skAlmacen").append('<option selected="selected" value="' + d.skAlmacen + '">'+d.sNombre+'</option>');
+                    }else{
+                        $("#skAlmacen").append('<option value="' + d.skAlmacen + '">'+d.sNombre+'</option>');
+                    }
+                    
+                }else{
+                    $("#skAlmacen").append('<option value="' + d.skAlmacen + '">'+d.sNombre+'</option>');
+                }
+                
+            }
+        },
+        error : function(xhr, status) {
+            console.log("Algo salio mal en la peticion a jsonAlmacenes")
+        },
+        complete : function(xhr, status) {
+            console.log('Petición realizada');
+        }
+    });
 });
 </script>

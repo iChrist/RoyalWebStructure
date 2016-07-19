@@ -308,19 +308,12 @@ Class Rex_Model Extends Core_Model {
         cat_empresas.sNombre AS 'sSocioImportador'
     ";
     $justcount = "count(*) as 'total'";
-    $lecua = ($get) ? $getol : $justcount;
+    $camposPorRetornar = ($get) ? $getol : $justcount;
     $sql = "
     SELECT
-        $lecua
+        $camposPorRetornar
     FROM
-        /*ope_referenciasExternas
-            INNER JOIN
-        cat_almacenes ON (cat_almacenes.skAlmacen = ope_referenciasExternas.skAlmacen)
-            INNER JOIN
-        cat_estatus ON (cat_estatus.skEstatus = ope_referenciasExternas.skEstatus)
-            INNER JOIN
-        cat_empresas ON (cat_empresas.skEmpresa = ope_referenciasExternas.skSocioImportador) */
-                    ope_referenciasExternas
+        ope_referenciasExternas
             INNER JOIN
         cat_almacenes ON (cat_almacenes.skAlmacen = ope_referenciasExternas.skAlmacen)
             INNER JOIN
@@ -342,28 +335,42 @@ Class Rex_Model Extends Core_Model {
             $sql .=" AND ope_referenciasExternas.sGuiaMaster like '%".$this->refex['sGuiaMaster']."%'";
         }
         if(!empty($this->refex['sGuiaHouse'])){
-            $sql .=" AND ope_referenciasExternas.sGuiaHouse = '".$this->refex['sGuiaHouse']."'";
+            $sql .=" AND ope_referenciasExternas.sGuiaHouse like '%".$this->refex['sGuiaHouse']."%'";
         }
         if(!empty($this->refex['dFechaCreacion'])){
-            $sql .=" AND ope_referenciasExternas.dFechaCreacion like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaCreacion'])->format('Y-m-d H:i:s')."%'";
+            $sql .=" AND ope_referenciasExternas.dFechaCreacion like '%".
+            DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaCreacion'])->format('Y-m-d H:i:s')
+            ."%'";
         }
         if(!empty($this->refex['dFechaPrevio'])){
-            $sql .=" AND ope_referenciasExternas.dFechaPrevio like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaPrevio'])->format('Y-m-d H:i:s')."%'";
+            $sql .=" AND ope_referenciasExternas.dFechaPrevio like '%".
+            DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaPrevio'])->format('Y-m-d H:i:s')
+            ."%'";
         }
         if(!empty($this->refex['dFechaDespacho'])){
-            $sql .=" AND ope_referenciasExternas.dFechaDespacho like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaDespacho'])->format('Y-m-d H:i:s')."%'";
+            $sql .=" AND ope_referenciasExternas.dFechaDespacho like '%".
+            DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaDespacho'])->format('Y-m-d H:i:s')
+            ."%'";
         }
         if(!empty($this->refex['dFechaClasificacion'])){
-            $sql .=" AND ope_referenciasExternas.dFechaClasificacion like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaClasificacion'])->format('Y-m-d H:i:s')."%'";
+            $sql .=" AND ope_referenciasExternas.dFechaClasificacion like '%".
+            DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaClasificacion'])->format('Y-m-d H:i:s')
+            ."%'";
         }
         if(!empty($this->refex['dFechaGlosa'])){
-            $sql .=" AND ope_referenciasExternas.dFechaGlosa like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaGlosa'])->format('Y-m-d H:i:s')."%'";
+            $sql .=" AND ope_referenciasExternas.dFechaGlosa like '%".
+            DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaGlosa'])->format('Y-m-d H:i:s')
+            ."%'";
         }
         if(!empty($this->refex['dFechaCapturaPedimento'])){
-            $sql .=" AND ope_referenciasExternas.dFechaCapturaPedimento like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaCapturaPedimento'])->format('Y-m-d H:i:s')."%'";
+            $sql .=" AND ope_referenciasExternas.dFechaCapturaPedimento like '%".
+            DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaCapturaPedimento'])->format('Y-m-d H:i:s')
+            ."%'";
         }
         if(!empty($this->refex['dFechaFacturacion'])){
-            $sql .=" AND ope_referenciasExternas.dFechaFacturacion like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaFacturacion'])->format('Y-m-d H:i:s')."%'";
+            $sql .=" AND ope_referenciasExternas.dFechaFacturacion like '%".
+            DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaFacturacion'])->format('Y-m-d H:i:s')
+            ."%'";
         }
         if(!empty($this->refex['iDeposito'])){
             $sql .=" AND ope_referenciasExternas.iDeposito like '%".$this->refex['iDeposito']."%'";
@@ -380,7 +387,7 @@ Class Rex_Model Extends Core_Model {
         if(!empty($this->refex['sSocioImportador'])){
             $sql .=" AND cat_empresas.sNombre like '%".$this->refex['sSocioImportador']."%'";
         }
-        //die($sql);
+       // die($sql);
     }
     $result = $this->db->query($sql);
     if($result){
