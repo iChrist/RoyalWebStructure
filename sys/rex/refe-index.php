@@ -1,12 +1,5 @@
 <!-- BEGIN PAGE CONTENT-->
 
-<pre>
-	<?php
-		echo "da6997663e7411e6890d0025907ca43f";
-		//echo print_r($data['listSocios'],1);
-
-	 ?>
-</pre>
 <div class="row">
 	<div class="col-md-12">
 		<div class="table-container">
