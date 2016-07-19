@@ -8,6 +8,11 @@ Class Rex_Model Extends Core_Model {
     );
 
     public $refex = array(
+      'skReferenciaExterna'=>null,
+      'skFotoReferencia'=>null,
+      'codigo'=>null,
+      'sUbicacion'=>null
+
         );
     // PRIVATE VARIABLES //
     private $data = array();
@@ -528,12 +533,12 @@ Class Rex_Model Extends Core_Model {
             return false;
         }
     }
-    public function reexfo_referencias($skReferenciaExterna)
+    public function reexfo_referencias()
     {
         $sql = "
         SELECT
         ore.skReferenciaExterna,
-        LPAD(ore.ikReferenciaExterna, 5, '0') AS codigo
+        LPAD(ore.ikReferenciaExterna, 5, '0') AS codigo,
         cei.sNombre AS Importador,
         cep.sNombre AS Propietario,
         cer.sNombre AS Promotor,
@@ -555,7 +560,8 @@ Class Rex_Model Extends Core_Model {
         ore.dFechaFacturacion AS FechaFacturacion,
         ore.dTipoCambio AS TipoCambio,
         ore.iDeposito AS Deposito,
-        ore.iSaldo AS Saldo
+        ore.iSaldo AS Saldo,
+	      us.sName AS UsuarioCreacion
         FROM ope_referenciasExternas ore
         LEFT JOIN rel_empresas_socios resi ON resi.skSocioEmpresa = ore.skSocioImportador
         LEFT JOIN cat_empresas cei ON cei.skEmpresa = resi.skEmpresa
@@ -566,9 +572,10 @@ Class Rex_Model Extends Core_Model {
         LEFT JOIN cat_almacenes ca ON ca.skAlmacen = ore.skAlmacen
         LEFT JOIN cat_estatus ce ON ce.skEstatus = ore.skEstatus
         LEFT JOIN _users us	 ON us.skUsers = ore.skUsuarioCreacion
-        WHERE ore.skReferenciaExterna = '".$skReferenciaExterna."' ";
+        WHERE ore.skReferenciaExterna = '".$this->refex['skReferenciaExterna']."' ";
                     //Poner el numero de previo
-                    $result = $this->db->query($sql);
+        //  echo $sql; die();
+        $result = $this->db->query($sql);
         if ($result) {
             if ($result->num_rows > 0) {
                 return $result;
@@ -576,6 +583,53 @@ Class Rex_Model Extends Core_Model {
                 return false;
             }
         }
+    }
+    public function listar_fotos_referencias(){
+      $sql="SELECT * FROM rel_referenciasExternas_fotos WHERE skReferenciaExterna ='".$this->refex['skReferenciaExterna']."' AND skEstatus = 'AC' ";
+      //exit($sql);
+          $result = $this->db->query($sql);
+      if ($result) {
+          if ($result->num_rows > 0) {
+              return $result;
+          } else {
+              return false;
+          }
+      }
+    }
+    public function agregar_fotos_referencias(){
+
+      $sql = "INSERT INTO rel_referenciasExternas_fotos
+                          (skFotoReferencia, skReferenciaExterna,
+                           skUsuarioCreacion,skEstatus,sUbicacion,dFechaCreacion )
+                           VALUES (
+                          '".$this->refex['skFotoReferencia']."',
+                          '".$this->refex['skReferenciaExterna']."',
+                          '".$_SESSION['session']['skUsers']."',
+                          'AC',
+                          '".$this->refex['sUbicacion']."',
+                          CURRENT_TIMESTAMP()
+                           )";
+      //echo  $sql."<br><br><br>";die();
+      $result = $this->db->query($sql);
+      if ($result) {
+          return true;
+      } else {
+
+          return false;
+      }
+    }
+    public function eliminar_fotos_referencias($arrayNoEliminados){
+        $sql="UPDATE rel_referenciasExternas_fotos
+              SET skEstatus='EL'
+              WHERE skFotoReferencia NOT IN(".$arrayNoEliminados.")";
+              $result = $this->db->query($sql);
+              if ($result) {
+                  return true;
+              } else {
+
+                  return false;
+              }
+
     }
     /* TERMINA MODULO (REX) */
 }

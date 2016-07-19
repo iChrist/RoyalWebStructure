@@ -333,6 +333,67 @@ Class Rex_Controller Extends Rex_Model {
     }
 
 
+    /* Agregado de Fotos */
+    public function reexfo_form()
+    {
+      $this->data['message'] = '';
+      $this->data['response'] = true;
+      $this->data['datos'] = false;
+        if ($_POST) {
+          $this->refex['skReferenciaExterna'] = $_POST['skReferenciaExterna'];
+          $arrayFotos = (isset($_POST['myFiles']) ? $_POST['myFiles'] : array());
 
+          if ($_POST['skReferenciaExterna']) {
+              if (isset($_FILES['myFiles'])) {
+
+
+                  for ($i = 0;$i < count($_FILES['myFiles']['name']);$i++) {
+                      $extension = explode('.', $_FILES['myFiles']['name'][$i]);
+                      $extension = end($extension);
+                      $skFotoReferencia = md5(microtime());
+                      $sUbicacionBDA = '/rex/fotos/'.$skFotoReferencia.'.'.$extension;
+                      $sUbicacion = SYS_PATH.'rex/fotos/'.$skFotoReferencia.'.'.$extension;
+                      if (!@move_uploaded_file($_FILES['myFiles']['tmp_name'][$i], $sUbicacion)) {
+                          return FALSE;
+                      }
+                      $this->refex['skReferenciaExterna'] = $_POST['skReferenciaExterna'];
+                      $this->refex['skFotoReferencia'] = $skFotoReferencia;
+                      $this->refex['sUbicacion'] = $sUbicacionBDA;
+                      $skInsertadoFotos = parent::agregar_fotos_referencias();
+                      if($skInsertadoFotos){
+                        array_push($arrayFotos,$skFotoReferencia);
+                      }
+                  }
+              }
+          }
+          $arrayNoEliminados = '';
+          foreach($arrayFotos as $clave => $valor){
+              $arrayNoEliminados.= ($arrayNoEliminados ? ",'".$valor."'" : "'".$valor."'");
+          }
+          $eliminadoFotos = parent::eliminar_fotos_referencias($arrayNoEliminados);
+          if($eliminadoFotos){
+            return TRUE;
+          }else{
+            return FALSE;
+          }
+
+          $this->data['response'] = true;
+          $this->data['message'] = 'Registro actualizado con &eacute;xito.';
+          header('Content-Type: application/json');
+          echo json_encode($this->data);
+
+          return TRUE;
+
+        }
+
+        if (isset($_GET['p1'])) {
+           $this->refex['skReferenciaExterna'] = $_GET['p1'];
+           $this->data['datos'] = parent::reexfo_referencias();
+           $this->data['myFotos']= parent::listar_fotos_referencias();
+        }
+        $this->load_view('reexfo-form', $this->data);
+
+        return TRUE;
+    }
     /* TERMINA MODULO (REX) */
 }
