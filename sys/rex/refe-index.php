@@ -2,8 +2,8 @@
 
 <pre>
 	<?php
-		/*echo "da6997663e7411e6890d0025907ca43f";
-		echo print_r($data['listSocios'],1);**/
+		echo "da6997663e7411e6890d0025907ca43f";
+		//echo print_r($data['listSocios'],1);
 
 	 ?>
 </pre>
@@ -111,7 +111,7 @@
 								if(isset($data['listEstados'])){
 									for ($i=0; $i <= count($data['listEstados']) -1 ; $i++) { 
 										echo "<option value=".
-											$data['listEstados'][$i]["skEstatus"]. ">".
+											$data['listEstados'][$i]["skEstatus"].">".
 											$data['listEstados'][$i]["sNombre"]."</option>";
 										
 									}
@@ -127,7 +127,7 @@
 								if(isset($data['listSocios'])){
 									for ($i=0; $i <= count($data['listSocios']) -1 ; $i++) { 
 										echo "<option value=".
-											$data['listSocios'][$i]["skSocioEmpresa"]. ">".
+											$data['listSocios'][$i]["skSocioEmpresa"].">".
 											$data['listSocios'][$i]["Empresa"]."</option>";
 										
 									}

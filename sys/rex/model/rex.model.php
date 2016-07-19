@@ -386,7 +386,7 @@ Class Rex_Model Extends Core_Model {
             $sql .=" AND cat_estatus.skEstatus = '".$this->refex['sEstatus']."'";
         }
         if(!empty($this->refex['sSocioImportador'])){
-            $sql .=" AND cat_empresas.sNombre like '%".$this->refex['sSocioImportador']."%'";
+            $sql .=" AND resa.skSocioEmpresa = '".$this->refex['sSocioImportador']."'";
         }
        // die($sql);
     }
