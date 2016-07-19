@@ -1,8 +1,10 @@
 <!-- BEGIN PAGE CONTENT-->
 
 <pre>
-	<?php 
-		echo $data['listAlmacenes'];
+	<?php
+		/*echo "da6997663e7411e6890d0025907ca43f";
+		echo print_r($data['listSocios'],1);**/
+
 	 ?>
 </pre>
 <div class="row">
@@ -89,49 +91,47 @@
 						</td>
 						<td>
 							<select name="sAlmacen" class="form-control form-filter input-sm">
-								<option value="">- Estatus -</option>
+								<option value="">- Almacén -</option>
 								<?php
-								if($data['status']){
-									while($row = $data['status']->fetch_assoc()){
-										?>
-										<option value="<?php echo $row['skStatus']; ?>">
-											<?php echo $row['sName']; ?>
-										</option>
-										<?php
-                                        }//ENDIF
-                                    }//ENDWHILE
-                                    ?>
+								if(isset($data['listAlmacenes'])){
+									for ($i=0; $i <= count($data['listAlmacenes']) -1 ; $i++) { 
+										echo "<option value=".
+											$data['listAlmacenes'][$i]["skAlmacen"]. ">".
+											$data['listAlmacenes'][$i]["sNombre"]."</option>";
+										
+									}
+                                }
+                                ?>
                                 </select>
 						</td>
 						<td>
 							<select name="sEstatus" class="form-control form-filter input-sm">
 								<option value="">- Estatus -</option>
 								<?php
-								if($data['status']){
-									while($row = $data['status']->fetch_assoc()){
-										?>
-										<option value="<?php echo $row['skStatus']; ?>">
-											<?php echo $row['sName']; ?>
-										</option>
-										<?php
-                                        }//ENDIF
-                                    }//ENDWHILE
-                                    ?>
+								if(isset($data['listEstados'])){
+									for ($i=0; $i <= count($data['listEstados']) -1 ; $i++) { 
+										echo "<option value=".
+											$data['listEstados'][$i]["skEstatus"]. ">".
+											$data['listEstados'][$i]["sNombre"]."</option>";
+										
+									}
+                                }
+                                ?>
                                 </select>
                         </td>
 						<td>
 							<select name="sSocioImportador" class="form-control form-filter input-sm">
 								<option value="">- Estatus -</option>
 								<?php
-								if($data['status']){
-									while($row = $data['status']->fetch_assoc()){
-										?>
-										<option value="<?php echo $row['skStatus']; ?>">
-											<?php echo $row['sName']; ?>
-										</option>
-										<?php
-                                        }//ENDIF
-                                    }//ENDWHILE
+								
+								if(isset($data['listSocios'])){
+									for ($i=0; $i <= count($data['listSocios']) -1 ; $i++) { 
+										echo "<option value=".
+											$data['listSocios'][$i]["skSocioEmpresa"]. ">".
+											$data['listSocios'][$i]["Empresa"]."</option>";
+										
+									}
+                                }
                                     ?>
                                 </select>
                         </td>
@@ -154,71 +154,36 @@
 	jQuery(document).ready(function() {       
    // init ajax table 
    TableAjax.init('?axn=fetch_all');
-   /*$("#enable_filter").click(function(){
-       $(".table-filter").css("display","block");
-   });*/
-   $.ajax({
-	    url : '<?php echo SYS_URL;?>/sys/rex/jsonStatus/',
-	    data : {},
-
-	    // especifica si será una petición POST o GET
-	    type : 'GET',
-	    dataType : 'json',
-	    success : function(json) {
-	        ifestat = "<?php echo (isset($result['skEstatus'])) ? $result['skEstatus'] : '' ; ?>";
-	        
-	        for (o in json) {
-	            d = json[o];
-	            if (ifestat != "") {
-	                if(ifestat == d.skEstatus ){
-	                    $("#skEstatus").append('<option selected="selected" value="' + d.skEstatus +  '">'+d.sNombre+'</option>')
-	                }else{
-	                    $("#skEstatus").append('<option value="' + d.skEstatus +  '">'+d.sNombre+'</option>')
-	                }
-	            }else{
-	                $("#skEstatus").append('<option value="' + d.skEstatus +  '">'+d.sNombre+'</option>')
-	            }
-	            
-	        }
-	    },
-	    error : function(xhr, status) {
-	        console.log("Algo salio mal en la peticion a jsonStatus")
-	    },
-	    complete : function(xhr, status) {
-	        console.log('Petición realizada');
-	    }
-    });        
-
-    $.ajax({
-        url : '<?php echo SYS_URL;?>/sys/rex/jsonAlmacenes/',
+		$.ajax({
+        url : '<?php echo SYS_URL;?>/sys/rex/jsonSocioImportadores/0/<?php echo $_SESSION["session"]["skSocioEmpresaPropietario"]. "/" ;?>',
         data : {},
 
+        // especifica si será una petición POST o GET
         type : 'GET',
         dataType : 'json',
         success : function(json) {
-            ifalmacen = "<?php echo (isset($result['skAlmacen'])) ? $result['skAlmacen'] : '' ; ?>";
-            
-            for(i in json){
-                d = json[i];
-                if (ifalmacen != "") {
-                    if (ifalmacen == d.skAlmacen) {
-                        $("#skAlmacen").append('<option selected="selected" value="' + d.skAlmacen + '">'+d.sNombre+'</option>');
+            ifsocioimportador = "<?php echo (isset($result['skSocioImportador'])) ? $result['skSocioImportador'] : '' ; ?>";
+            for (o in json) {
+                d = json[o];
+                if (ifsocioimportador != "") {
+                    if (ifsocioimportador == d.skSocioEmpresa ) {
+                        $("#skSocioImportador").append('<option selected="selected" value="' + d.skSocioEmpresa +  '">'+d.Empresa+'</option>');
                     }else{
-                        $("#skAlmacen").append('<option value="' + d.skAlmacen + '">'+d.sNombre+'</option>');
+                        $("#skSocioImportador").append('<option value="' + d.skSocioEmpresa +  '">'+d.Empresa+'</option>');
                     }
-                    
                 }else{
-                    $("#skAlmacen").append('<option value="' + d.skAlmacen + '">'+d.sNombre+'</option>');
+                    $("#skSocioImportador").append('<option value="' + d.skSocioEmpresa +  '">'+d.Empresa+'</option>');
                 }
                 
             }
         },
         error : function(xhr, status) {
-            console.log("Algo salio mal en la peticion a jsonAlmacenes")
+            console.log("Algo salio mal en la peticion a jsonSocioImportadores")
         },
         complete : function(xhr, status) {
             console.log('Petición realizada');
         }
-    });
+    }); 
+   
 });
 </script>

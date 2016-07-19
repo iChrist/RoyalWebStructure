@@ -228,6 +228,7 @@ Class Rex_Model Extends Core_Model {
                     skSocioEmpresaP = '$socioEmpresaP'
                     AND skTipoEmpresa = 'CLIE'
                 ORDER BY sNombre;";
+        //die($sql_socios);
         $r = $this->db->query($sql_socios);
 
         if ($this->db->affected_rows > 0){
@@ -379,10 +380,10 @@ Class Rex_Model Extends Core_Model {
             $sql .=" AND ope_referenciasExternas.iSaldo like '%".$this->refex['iSaldo']."%'";
         }
         if(!empty($this->refex['sAlmacen'])){
-            $sql .=" AND cat_almacenes.sNombre like '%".$this->refex['sAlmacen']."%'";
+            $sql .=" AND cat_almacenes.skAlmacen = '".$this->refex['sAlmacen']."'";
         }
         if(!empty($this->refex['sEstatus'])){
-            $sql .=" AND cat_estatus.sNombre like '%".$this->refex['sEstatus']."%'";
+            $sql .=" AND cat_estatus.skEstatus = '".$this->refex['sEstatus']."'";
         }
         if(!empty($this->refex['sSocioImportador'])){
             $sql .=" AND cat_empresas.sNombre like '%".$this->refex['sSocioImportador']."%'";
