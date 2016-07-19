@@ -286,119 +286,120 @@ Class Rex_Model Extends Core_Model {
     }
 
     public function countGetReferenciasExternas($get = false)
-    {
-
-        $getol = "
-            ope_referenciasExternas.skReferenciaExterna,
-            ope_referenciasExternas.sPedimento,
-            ope_referenciasExternas.sReferencia,
-            ope_referenciasExternas.sMercancia,
-            ope_referenciasExternas.sGuiaMaster,
-            ope_referenciasExternas.sGuiaHouse,
-            ope_referenciasExternas.dFechaCreacion,
-            ope_referenciasExternas.dFechaPrevio,
-            ope_referenciasExternas.dFechaDespacho,
-            ope_referenciasExternas.dFechaClasificacion,
-            ope_referenciasExternas.dFechaGlosa,
-            ope_referenciasExternas.dFechaCapturaPedimento,
-            ope_referenciasExternas.dFechaFacturacion,
-            ope_referenciasExternas.iDeposito,
-            ope_referenciasExternas.iSaldo,
-            cat_almacenes.sNombre AS 'sAlmacen',
-            cat_estatus.sNombre AS 'sEstatus',
-            cat_empresas.sNombre AS 'sSocioImportador'
-        ";
-        $justcount = "count(*) as 'total'";
-        $lecua = ($get) ? $getol : $justcount;
-        $sql = "
-        SELECT
-            $lecua
-        FROM
-            cat_empresas ON (cat_empresas.skEmpresa = ope_referenciasExternas.skSocioImportador) */
-                        ope_referenciasExternas
-                INNER JOIN
-            cat_almacenes ON (cat_almacenes.skAlmacen = ope_referenciasExternas.skAlmacen)
-                INNER JOIN
-            cat_estatus ON (cat_estatus.skEstatus = ope_referenciasExternas.skEstatus)
-                LEFT JOIN  rel_empresas_socios resa ON resa.skSocioEmpresa = ope_referenciasExternas.skSocioImportador
-                LEFT JOIN  cat_empresas ON (cat_empresas.skEmpresa = resa.skEmpresa)
-        WHERE 1 = 1";
-
-        if ($get){
-
-            if(!empty($this->refex['sPedimento'])){
-                $sql .=" AND ope_referenciasExternas.sPedimento = '".$this->refex['sPedimento']."'";
-            }
-            if(!empty($this->refex['sReferencia'])){
-                $sql .=" AND ope_referenciasExternas.sReferencia like '%".$this->refex['sReferencia']."%'";
-            }
-            if(!empty($this->refex['sMercancia'])){
-                $sql .=" AND ope_referenciasExternas.sMercancia like '%".$this->refex['sMercancia']."%'";
-            }
-            if(!empty($this->refex['sGuiaMaster'])){
-                $sql .=" AND ope_referenciasExternas.sGuiaMaster like '%".$this->refex['sGuiaMaster']."%'";
-            }
-            if(!empty($this->refex['sGuiaHouse'])){
-                $sql .=" AND ope_referenciasExternas.sGuiaHouse = '".$this->refex['sGuiaHouse']."'";
-            }
-            if(!empty($this->refex['dFechaCreacion'])){
-                $sql .=" AND ope_referenciasExternas.dFechaCreacion like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaCreacion'])->format('Y-m-d H:i:s')."%'";
-            }
-            if(!empty($this->refex['dFechaPrevio'])){
-                $sql .=" AND ope_referenciasExternas.dFechaPrevio like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaPrevio'])->format('Y-m-d H:i:s')."%'";
-            }
-            if(!empty($this->refex['dFechaDespacho'])){
-                $sql .=" AND ope_referenciasExternas.dFechaDespacho like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaDespacho'])->format('Y-m-d H:i:s')."%'";
-            }
-            if(!empty($this->refex['dFechaClasificacion'])){
-                $sql .=" AND ope_referenciasExternas.dFechaClasificacion like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaClasificacion'])->format('Y-m-d H:i:s')."%'";
-            }
-            if(!empty($this->refex['dFechaGlosa'])){
-                $sql .=" AND ope_referenciasExternas.dFechaGlosa like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaGlosa'])->format('Y-m-d H:i:s')."%'";
-            }
-            if(!empty($this->refex['dFechaCapturaPedimento'])){
-                $sql .=" AND ope_referenciasExternas.dFechaCapturaPedimento like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaCapturaPedimento'])->format('Y-m-d H:i:s')."%'";
-            }
-            if(!empty($this->refex['dFechaFacturacion'])){
-                $sql .=" AND ope_referenciasExternas.dFechaFacturacion like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaFacturacion'])->format('Y-m-d H:i:s')."%'";
-            }
-            if(!empty($this->refex['iDeposito'])){
-                $sql .=" AND ope_referenciasExternas.iDeposito like '%".$this->refex['iDeposito']."%'";
-            }
-            if(!empty($this->refex['iSaldo'])){
-                $sql .=" AND ope_referenciasExternas.iSaldo like '%".$this->refex['iSaldo']."%'";
-            }
-            if(!empty($this->refex['sAlmacen'])){
-                $sql .=" AND cat_almacenes.sNombre like '%".$this->refex['sAlmacen']."%'";
-            }
-            if(!empty($this->refex['sEstatus'])){
-                $sql .=" AND cat_estatus.sNombre like '%".$this->refex['sEstatus']."%'";
-            }
-            if(!empty($this->refex['sSocioImportador'])){
-                $sql .=" AND cat_empresas.sNombre like '%".$this->refex['sSocioImportador']."%'";
-            }
-            //die($sql);
+{
+    $getol = "
+        ope_referenciasExternas.skReferenciaExterna,
+        ope_referenciasExternas.sPedimento,
+        ope_referenciasExternas.sReferencia,
+        ope_referenciasExternas.sMercancia,
+        ope_referenciasExternas.sGuiaMaster,
+        ope_referenciasExternas.sGuiaHouse,
+        ope_referenciasExternas.dFechaCreacion,
+        ope_referenciasExternas.dFechaPrevio,
+        ope_referenciasExternas.dFechaDespacho,
+        ope_referenciasExternas.dFechaClasificacion,
+        ope_referenciasExternas.dFechaGlosa,
+        ope_referenciasExternas.dFechaCapturaPedimento,
+        ope_referenciasExternas.dFechaFacturacion,
+        ope_referenciasExternas.iDeposito,
+        ope_referenciasExternas.iSaldo,
+        cat_almacenes.sNombre AS 'sAlmacen',
+        cat_estatus.sNombre AS 'sEstatus',
+        cat_empresas.sNombre AS 'sSocioImportador'
+    ";
+    $justcount = "count(*) as 'total'";
+    $lecua = ($get) ? $getol : $justcount;
+    $sql = "
+    SELECT
+        $lecua
+    FROM
+        /*ope_referenciasExternas
+            INNER JOIN
+        cat_almacenes ON (cat_almacenes.skAlmacen = ope_referenciasExternas.skAlmacen)
+            INNER JOIN
+        cat_estatus ON (cat_estatus.skEstatus = ope_referenciasExternas.skEstatus)
+            INNER JOIN
+        cat_empresas ON (cat_empresas.skEmpresa = ope_referenciasExternas.skSocioImportador) */
+                    ope_referenciasExternas
+            INNER JOIN
+        cat_almacenes ON (cat_almacenes.skAlmacen = ope_referenciasExternas.skAlmacen)
+            INNER JOIN
+        cat_estatus ON (cat_estatus.skEstatus = ope_referenciasExternas.skEstatus)
+            LEFT JOIN  rel_empresas_socios resa ON resa.skSocioEmpresa = ope_referenciasExternas.skSocioImportador
+            LEFT JOIN  cat_empresas ON (cat_empresas.skEmpresa = resa.skEmpresa)
+    WHERE 1 = 1";
+    if ($get){
+        if(!empty($this->refex['sPedimento'])){
+            $sql .=" AND ope_referenciasExternas.sPedimento = '".$this->refex['sPedimento']."'";
         }
-        $result = $this->db->query($sql);
-        if($result){
-            if($result->num_rows > 0){
-                return $result;
-            }else{
-                return false;
-            }
+        if(!empty($this->refex['sReferencia'])){
+            $sql .=" AND ope_referenciasExternas.sReferencia like '%".$this->refex['sReferencia']."%'";
+        }
+        if(!empty($this->refex['sMercancia'])){
+            $sql .=" AND ope_referenciasExternas.sMercancia like '%".$this->refex['sMercancia']."%'";
+        }
+        if(!empty($this->refex['sGuiaMaster'])){
+            $sql .=" AND ope_referenciasExternas.sGuiaMaster like '%".$this->refex['sGuiaMaster']."%'";
+        }
+        if(!empty($this->refex['sGuiaHouse'])){
+            $sql .=" AND ope_referenciasExternas.sGuiaHouse = '".$this->refex['sGuiaHouse']."'";
+        }
+        if(!empty($this->refex['dFechaCreacion'])){
+            $sql .=" AND ope_referenciasExternas.dFechaCreacion like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaCreacion'])->format('Y-m-d H:i:s')."%'";
+        }
+        if(!empty($this->refex['dFechaPrevio'])){
+            $sql .=" AND ope_referenciasExternas.dFechaPrevio like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaPrevio'])->format('Y-m-d H:i:s')."%'";
+        }
+        if(!empty($this->refex['dFechaDespacho'])){
+            $sql .=" AND ope_referenciasExternas.dFechaDespacho like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaDespacho'])->format('Y-m-d H:i:s')."%'";
+        }
+        if(!empty($this->refex['dFechaClasificacion'])){
+            $sql .=" AND ope_referenciasExternas.dFechaClasificacion like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaClasificacion'])->format('Y-m-d H:i:s')."%'";
+        }
+        if(!empty($this->refex['dFechaGlosa'])){
+            $sql .=" AND ope_referenciasExternas.dFechaGlosa like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaGlosa'])->format('Y-m-d H:i:s')."%'";
+        }
+        if(!empty($this->refex['dFechaCapturaPedimento'])){
+            $sql .=" AND ope_referenciasExternas.dFechaCapturaPedimento like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaCapturaPedimento'])->format('Y-m-d H:i:s')."%'";
+        }
+        if(!empty($this->refex['dFechaFacturacion'])){
+            $sql .=" AND ope_referenciasExternas.dFechaFacturacion like '%".DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaFacturacion'])->format('Y-m-d H:i:s')."%'";
+        }
+        if(!empty($this->refex['iDeposito'])){
+            $sql .=" AND ope_referenciasExternas.iDeposito like '%".$this->refex['iDeposito']."%'";
+        }
+        if(!empty($this->refex['iSaldo'])){
+            $sql .=" AND ope_referenciasExternas.iSaldo like '%".$this->refex['iSaldo']."%'";
+        }
+        if(!empty($this->refex['sAlmacen'])){
+            $sql .=" AND cat_almacenes.sNombre like '%".$this->refex['sAlmacen']."%'";
+        }
+        if(!empty($this->refex['sEstatus'])){
+            $sql .=" AND cat_estatus.sNombre like '%".$this->refex['sEstatus']."%'";
+        }
+        if(!empty($this->refex['sSocioImportador'])){
+            $sql .=" AND cat_empresas.sNombre like '%".$this->refex['sSocioImportador']."%'";
+        }
+        //die($sql);
+    }
+    $result = $this->db->query($sql);
+    if($result){
+        if($result->num_rows > 0){
+            return $result;
         }else{
             return false;
         }
+    }else{
+        return false;
     }
+}
+
 
     public function getConceptos($skSocioImportador)
     {
 
         $sql = "
-
-
-         SELECT
-
+        SELECT
             rcetc.skTipoTramite,
             ca.skConcepto,
             ca.skStatus,
