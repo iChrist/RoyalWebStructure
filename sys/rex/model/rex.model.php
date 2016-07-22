@@ -40,6 +40,51 @@ Class Rex_Model Extends Core_Model {
     {
 
         $skReferenciaExterna =  substr(md5(microtime()), 1, 32);
+
+        $fechas = array(
+            'dFechaPrevio'              => (
+                    $_POST["dFechaPrevio"] !== NULL && 
+                    $_POST["dFechaPrevio"] !== "" && 
+                    isset($_POST["dFechaPrevio"]))?
+            "'".DateTime::createFromFormat('d-m-Y', $_POST["dFechaPrevio"])->format('Y-m-d')."'" :  NULL ,
+            
+            'dFechaDespacho'            => (
+                    $_POST["dFechaDespacho"] !== NULL && 
+                    $_POST["dFechaDespacho"] !== "" && 
+                    isset($_POST["dFechaDespacho"]))? 
+            "'".DateTime::createFromFormat('d-m-Y', $_POST["dFechaDespacho"])->format('Y-m-d') ."'":  NULL,
+            
+            'dFechaClasificacion'       => (
+                    $_POST["dFechaClasificacion"] !== NULL && 
+                    $_POST["dFechaClasificacion"] !== "" && 
+                    isset($_POST["dFechaClasificacion"]))? 
+            "'". DateTime::createFromFormat('d-m-Y', $_POST["dFechaClasificacion"])->format('Y-m-d') ."'" :  NULL,
+
+            'dFechaGlosa'               => (
+                    $_POST["dFechaGlosa"] !== NULL && 
+                    $_POST["dFechaGlosa"] !== "" && 
+                    isset($_POST["dFechaGlosa"])) ? 
+            "'".DateTime::createFromFormat('d-m-Y', $_POST["dFechaGlosa"])->format('Y-m-d')."'":  NULL,
+
+            'dFechaCapturaPedimento'    => (
+                    $_POST["dFechaCapturaPedimento"] !== NULL && 
+                    $_POST["dFechaCapturaPedimento"] !== "" && 
+                    isset($_POST["dFechaCapturaPedimento"])) ? 
+            "'".DateTime::createFromFormat('d-m-Y', $_POST["dFechaCapturaPedimento"])->format('Y-m-d')."'":  NULL,
+
+            'dFechaRevalidacion'        => (
+                    $_POST["dFechaRevalidacion"] !== NULL && 
+                    $_POST["dFechaRevalidacion"] !== "" && 
+                    isset($_POST["dFechaRevalidacion"])) ?
+            "'".DateTime::createFromFormat('d-m-Y', $_POST["dFechaRevalidacion"])->format('Y-m-d') ."'":  NULL,
+
+            'dFechaFacturacion'         => (
+                    $_POST["dFechaRevalidacion"] !== NULL && 
+                    $_POST["dFechaRevalidacion"] !== "" && 
+                    isset($_POST["dFechaRevalidacion"])) ? 
+            "'".DateTime::createFromFormat('d-m-Y', $_POST["dFechaRevalidacion"])->format('Y-m-d')."'":  NULL 
+            );
+
         $sql_insert = "
             INSERT INTO `ope_referenciasExternas` (
                 `skReferenciaExterna`,
@@ -80,19 +125,19 @@ Class Rex_Model Extends Core_Model {
                 '" . $this->db->real_escape_string($_POST["sMercancia"]) . "',
                 '" . $this->db->real_escape_string($_POST["sGuiaMaster"]) . "',
                 '" . $this->db->real_escape_string($_POST["sGuiaHouse"]) . "',
-                '".$_POST["iBultos"]."',
-                '".$_SESSION["session"]["skUsers"]."',
-                NOW(),
-                '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaPrevio"])->format('Y-m-d')."',
-                '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaDespacho"])->format('Y-m-d')."',
-                '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaClasificacion"])->format('Y-m-d')."',
-                '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaGlosa"])->format('Y-m-d')."',
-                '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaCapturaPedimento"])->format('Y-m-d')."',
-                '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaRevalidacion"])->format('Y-m-d')."',
-                '".DateTime::createFromFormat('d-m-Y', $_POST["dFechaFacturacion"])->format('Y-m-d')."',
-                '".$_POST["iDeposito"]."',
-                '".$_POST["iSaldo"]."',
-                '".$_POST["fTipoCambio"]."');" ;
+                '" . $_POST["iBultos"]."',
+                '" . $_SESSION["session"]["skUsers"]."',
+                     NOW(),
+                " . $fechas["dFechaPrevio"] .",
+                " . $fechas["dFechaDespacho"].",
+                " . $fechas["dFechaClasificacion"].",
+                " . $fechas["dFechaGlosa"].",
+                " . $fechas["dFechaCapturaPedimento"].",
+                " . $fechas["dFechaRevalidacion"].",
+                " . $fechas["dFechaFacturacion"].",
+                '" . $_POST["iDeposito"]."',
+                '" . $_POST["iSaldo"]."',
+                '" . $_POST["fTipoCambio"]."');" ;
             if (isset($_POST["conceptos"]) && isset($_POST["iCantidad"])) {
                 for ($i= 0; $i < count($_POST["conceptos"]); $i++) {
                     $this->insertConceptos(

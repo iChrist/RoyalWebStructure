@@ -165,7 +165,7 @@ Class Rex_Controller Extends Rex_Model {
     public function refe_save()
     {
 
-        $le = $this->insertar();
+        $le = parent::insertar();
 
         if(!$le){
             $this->data['message'] = "Hubo un error al guardar el registro ";
