@@ -772,14 +772,7 @@ Class Rex_Model Extends Core_Model {
         }
         return true;
     }
-    /*
-    dFechaDespacho='".$this->refex['dFechaDespacho']."',
-    dFechaClasificacion='".$this->refex['dFechaClasificacion']."',
-    dFechaGlosa='".$this->refex['dFechaGlosa']."',
-    dFechaCapturaPedimento='".$this->refex['dFechaCapturaPedimento']."',
-    dFechaRevalidacion='".$this->refex['dFechaRevalidacion']."',
-    dFechaFacturacion='".$this->refex['dFechaFacturacion']."'
-    */
+
     public function editar_fechas_referencia(){
         $sql="UPDATE ope_referenciasExternas
               SET dFechaPrevio='".$this->refex['dFechaPrevio']."'
@@ -797,6 +790,34 @@ Class Rex_Model Extends Core_Model {
               } else {
                   return false;
               }
+
+    }
+    public function read_referencias_resumen(){
+        $sql="
+        SELECT ore.skReferenciaExterna,
+               ore.dFechaCreacion,
+               ore.dFechaPrevio,
+               ore.dFechaDespacho,
+               ore.dFechaClasificacion,
+               ore.dFechaGlosa,
+               ore.dFechaCapturaPedimento,
+               ore.dFechaRevalidacion,
+               ore.dFechaFacturacion,
+               ore.skEstatus,
+               ore.iDeposito,
+               ore.iSaldo,
+               ore.sReferencia
+        FROM ope_referenciasExternas ore
+        ";
+        $result = $this->db->query($sql);
+        if ($result) {
+            return $result;
+        } else {
+            return false;
+        }
+
+
+
 
     }
     /* TERMINA MODULO (REX) */

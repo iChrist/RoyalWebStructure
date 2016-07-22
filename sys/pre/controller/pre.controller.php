@@ -162,7 +162,7 @@
 
                 $this->previos['skSocioRecinto'] = utf8_decode(!empty($_POST['skSocioRecinto']) ? $_POST['skSocioRecinto'] : '');
                 $this->previos['skUsuarioTramitador'] = utf8_decode(!empty($_POST['skUsuarioTramitador']) ? $_POST['skUsuarioTramitador'] : '');
-                $this->previos['dFechaSolicitud'] = utf8_decode(!empty($_POST['dFechaProgramacion']) ? date('Y-m-d', strtotime($_POST['dFechaProgramacion'])) : date('Y-m-d'));
+                $this->previos['dFechaSolicitud'] = utf8_decode(!empty($_POST['dFechaProgramacion']) ? date('Y-m-d', strtotime($_POST['dFechaProgramacion'])) : '');
                 //$this->previos['dFechaSolicitud'] = utf8_decode(!empty($_POST['dFechaSolicitud']) ? date('Y-m-d', strtotime($_POST['dFechaSolicitud'])) : date('Y-m-d'));
                 $this->previos['sSelloOrigen'] = addslashes(utf8_decode($_POST['sSelloOrigen']));
                 $this->previos['sSelloFinal'] = addslashes(utf8_decode($_POST['sSelloFinal']));

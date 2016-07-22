@@ -577,5 +577,57 @@ Class Rex_Controller Extends Rex_Model {
 
         return true;
     }
+    public function reex_index()
+    {
+        if (isset($_GET['axn'])) {
+            switch ($_GET['axn']) {
+                            case 'fetch_all':
+                            $total = parent::countGetReferenciasExternas();
+                            $records = Core_Functions::table_ajax($total);
+                                    if ($records['recordsTotal'] === 0) {
+                                        header('Content-Type: application/json');
+                                        echo json_encode($records);
+                                        return false;
+                                    }
+                                    $this->refex['limit'] = $records['limit'];
+                                    $this->refex['offset'] = $records['offset'];
+                                    $this->data['data'] = parent::read_referencias_resumen();
+                                    if (!$this->data['data']) {
+                                        header('Content-Type: application/json');
+                                        echo json_encode($records);
+                                        return false;
+                                    }
+
+                                    while ($row = $this->data['data']->fetch_assoc()) {
+                                        $actions = $this->printModulesButtons(2, array($row['skReferenciaExterna']));
+                                        array_push($records['data'], array(
+                                                !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : '',
+                                                utf8_encode($row['skEstatus']),
+                                                ($row['sReferencia'] ? utf8_encode($row['sReferencia']) : 'N/D'),
+                                                ($row['dFechaPrevio'] ? '<label   data-toggle="tooltip" data-placement="top" title="'.date('d/m/Y H:i:s', strtotime($row['dFechaPrevio'])).'" ><i class="fa fa-check"></i></label>' : ''),
+                                                ($row['dFechaDespacho'] ? '<i class="fa fa-check"  data-toggle="tooltip" data-placement="top" title="'.date('d/m/Y H:i:s', strtotime($row['dFechaDespacho'])).'"></i>' : ''),
+                                                ($row['dFechaClasificacion'] ? '<i class="fa fa-check" data-toggle="tooltip" data-placement="top" title="'.date('d/m/Y H:i:s', strtotime($row['dFechaClasificacion'])).'"></i>' : ''),
+                                                ($row['dFechaGlosa'] ? '<i class="fa fa-check" data-toggle="tooltip" data-placement="top" title="'.date('d/m/Y H:i:s', strtotime($row['dFechaGlosa'])).'"></i>' : ''),
+                                                ($row['dFechaCapturaPedimento'] ? '<i class="fa fa-check" data-toggle="tooltip" data-placement="top" title="'.date('d/m/Y H:i:s', strtotime($row['dFechaCapturaPedimento'])).'"></i>' : ''),
+                                                ($row['dFechaRevalidacion'] ? '<i class="fa fa-check" data-toggle="tooltip" data-placement="top" title="'.date('d/m/Y H:i:s', strtotime($row['dFechaRevalidacion'])).'"></i>' : ''),
+                                                ($row['dFechaFacturacion'] ? '<i class="fa fa-check" data-toggle="tooltip" data-placement="top" title="'.date('d/m/Y H:i:s', strtotime($row['dFechaFacturacion'])).'"></i>' : ''),
+                                                ($row['iDeposito'] ? utf8_encode($row['iDeposito']) : 'N/D'),
+                                                ($row['iSaldo'] ? utf8_encode($row['iSaldo']) : 'N/D'),
+                                            ));
+                                    }
+                                    header('Content-Type: application/json');
+                                    echo json_encode($records);
+
+                            return true;
+                        break;
+                    }
+
+            return true;
+        }
+            $this->load_view('reex-index', $this->data);
+
+        return true;
+    }
+
     /* TERMINA MODULO (REX) */
 }
