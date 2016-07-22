@@ -26,7 +26,7 @@ Class Rex_Model Extends Core_Model {
     }
 
     /* COMIENZA MODULO (REX) */
-    
+
     public function getMaxPedimento() {
         $sql = "SELECT MAX(sPedimento) AS sPedimento FROM ope_referenciasExternas WHERE skEstatus != 'EL' ";
         //exit($sql);
@@ -37,7 +37,7 @@ Class Rex_Model Extends Core_Model {
             return false;
         }
     }
-    
+
     public function getrefex($skStatus = null)
     {
         $sql = "SELECT * FROM refex";
@@ -572,12 +572,19 @@ Class Rex_Model Extends Core_Model {
         ore.iBultos AS iBultos,
         ore.dFechaCreacion AS FechaCreacion,
         ore.dFechaPrevio AS FechaPrevio,
+        DATE_FORMAT(ore.dFechaPrevio, '%k:%i:%s') AS tHoraPrevio,
         ore.dFechaDespacho AS FechaDespacho,
+        DATE_FORMAT(ore.dFechaDespacho, '%k:%i:%s') AS tHoraDespacho,
         ore.dFechaClasificacion AS FechaClasificacion,
+        DATE_FORMAT(ore.dFechaClasificacion, '%k:%i:%s') AS tHoraClasificacion,
         ore.dFechaGlosa AS FechaGlosa,
+        DATE_FORMAT(ore.dFechaGlosa, '%k:%i:%s') AS tHoraGlosa,
         ore.dFechaCapturaPedimento AS FechaCapturaPedimento,
+        DATE_FORMAT(ore.dFechaCapturaPedimento, '%k:%i:%s') AS tHoraCaptura,
         ore.dFechaRevalidacion AS FechaRevalidacion,
+        DATE_FORMAT(ore.dFechaRevalidacion, '%k:%i:%s') AS tHoraRevalidacion,
         ore.dFechaFacturacion AS FechaFacturacion,
+        DATE_FORMAT(ore.dFechaFacturacion, '%k:%i:%s') AS tHoraFacturacion,
         ore.dTipoCambio AS TipoCambio,
         ore.iDeposito AS Deposito,
         ore.iSaldo AS Saldo,

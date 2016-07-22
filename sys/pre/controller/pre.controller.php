@@ -258,7 +258,6 @@
                         $this->data['message'] = 'Registro actualizado con &eacute;xito.';
                         header('Content-Type: application/json');
                         echo json_encode($this->data);
-
                         return true;
                     } else {
                         $this->data['response'] = false;

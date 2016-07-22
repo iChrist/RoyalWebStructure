@@ -381,7 +381,7 @@ Class Rex_Controller Extends Rex_Model {
                       $sUbicacionBDA = '/rex/fotos/'.$skFotoReferencia.'.'.$extension;
                       $sUbicacion = SYS_PATH.'rex/fotos/'.$skFotoReferencia.'.'.$extension;
                       if (!@move_uploaded_file($_FILES['myFiles']['tmp_name'][$i], $sUbicacion)) {
-                          return FALSE;
+                          return false;
                       }
                       $this->refex['skReferenciaExterna'] = $_POST['skReferenciaExterna'];
                       $this->refex['skFotoReferencia'] = $skFotoReferencia;
@@ -399,19 +399,21 @@ Class Rex_Controller Extends Rex_Model {
           }
           $eliminadoFotos = parent::eliminar_fotos_referencias($arrayNoEliminados);
           if($eliminadoFotos){
-            return TRUE;
+
+              $this->data['response'] = true;
+              $this->data['message'] = 'Registro actualizado con &eacute;xito.';
+              header('Content-Type: application/json');
+              echo json_encode($this->data);
+              return true;
           }else{
             return FALSE;
           }
 
-          $this->data['response'] = true;
-          $this->data['message'] = 'Registro actualizado con &eacute;xito.';
-          header('Content-Type: application/json');
-          echo json_encode($this->data);
 
-          return TRUE;
+          return true;
 
         }
+
 
         if (isset($_GET['p1'])) {
            $this->refex['skReferenciaExterna'] = $_GET['p1'];
@@ -420,7 +422,7 @@ Class Rex_Controller Extends Rex_Model {
         }
         $this->load_view('reexfo-form', $this->data);
 
-        return TRUE;
+        return true;
     }
     
     /* Agregado de Documentos */
@@ -520,6 +522,53 @@ Class Rex_Controller Extends Rex_Model {
             $this->data['myFotos']= parent::listar_fotos_referencias();
         }
         $this->load_view('reexde-detail', $this->data);
+
+        return true;
+    }
+    public function reexfe_form()
+    {
+      $this->data['message'] = '';
+      $this->data['response'] = true;
+      $this->data['datos'] = false;
+        if($_POST) {
+            $this->refex['skReferenciaExterna'] = $_POST['skReferenciaExterna'];
+            $this->refex['dFechaPrevio'] = utf8_decode(!empty($_POST['dFechaPrevio']) ? date('Y-m-d', strtotime($_POST['dFechaPrevio'])) : '');
+            $this->refex['tHoraPrevio'] = utf8_decode(!empty($_POST['tHoraPrevio']) ? $_POST['tHoraPrevio'] : '');
+            $this->refex['dFechaDespacho'] = utf8_decode(!empty($_POST['dFechaDespacho']) ? date('Y-m-d', strtotime($_POST['dFechaDespacho'])) : '');
+            $this->refex['tHoraDespacho'] = utf8_decode(!empty($_POST['tHoraDespacho']) ? $_POST['tHoraDespacho'] : '');
+            $this->refex['dFechaClasificacion'] = utf8_decode(!empty($_POST['dFechaClasificacion']) ? date('Y-m-d', strtotime($_POST['dFechaClasificacion'])) : '');
+            $this->refex['tHoraClasificacion'] = utf8_decode(!empty($_POST['tHoraClasificacion']) ? $_POST['tHoraClasificacion'] : '');
+            $this->refex['dFechaGlosa'] = utf8_decode(!empty($_POST['dFechaGlosa']) ? date('Y-m-d', strtotime($_POST['dFechaGlosa'])) : date('Y-m-d'));
+            $this->refex['tHoraGlosa'] = utf8_decode(!empty($_POST['tHoraGlosa']) ? $_POST['tHoraGlosa'] : '');
+            $this->refex['dFechaCapturaPedimento'] = utf8_decode(!empty($_POST['dFechaCapturaPedimento']) ? date('Y-m-d', strtotime($_POST['dFechaCapturaPedimento'])) : '');
+            $this->refex['tHoraCaptura'] = utf8_decode(!empty($_POST['tHoraCaptura']) ? $_POST['tHoraCaptura'] : '');
+            $this->refex['dFechaRevalidacion'] = utf8_decode(!empty($_POST['dFechaRevalidacion']) ? date('Y-m-d', strtotime($_POST['dFechaRevalidacion'])) : '');
+            $this->refex['tHoraRevalidacion'] = utf8_decode(!empty($_POST['tHoraRevalidacion']) ? $_POST['tHoraRevalidacion'] : '');
+            $this->refex['dFechaFacturacion'] = utf8_decode(!empty($_POST['dFechaFacturacion']) ? date('Y-m-d', strtotime($_POST['dFechaFacturacion'])) : '');
+            $this->refex['tHoraFacturacion'] = utf8_decode(!empty($_POST['tHoraFacturacion']) ? $_POST['tHoraFacturacion'] : '');
+          if ($_POST['skReferenciaExterna']) {
+                /*$skReferenciaExterna = parent::create_previos();
+                if(!$skReferenciaExterna){
+
+                }else{
+
+
+                }
+                */
+
+          }
+
+
+          return true;
+
+        }
+
+
+        if (isset($_GET['p1'])) {
+           $this->refex['skReferenciaExterna'] = $_GET['p1'];
+           $this->data['datos'] = parent::reexfo_referencias();
+        }
+        $this->load_view('reexfe-form', $this->data);
 
         return true;
     }

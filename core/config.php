@@ -8,7 +8,7 @@
     session_start();
 // SYSTEM CONFIGURATION //
     $_GET['sysProject'] = isset($_GET['sysProject']) ? $_GET['sysProject'] : '';
-    define('DIR_PATH', 'RoyalWebStructure/');
+    define('DIR_PATH', 'RoyalWebStructures/');
     define('CORE_PATH', __DIR__.'/');
     define('SYS_PROJECT', $_GET['sysProject']);
     define('SYS_PATH', $_SERVER['DOCUMENT_ROOT'].'/'.DIR_PATH.SYS_PROJECT.'/');
@@ -18,7 +18,7 @@
         die();
     }
 // DATABASE CONFIGURATION //
-    $_db_idx = 'localhost';
+    $_db_idx = 'test';
     $_db = array(
         'sys' => array(
             'HOST_DB' => 'royalweb.com.mx',
