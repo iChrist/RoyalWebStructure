@@ -1,4 +1,5 @@
 <!-- BEGIN PAGE CONTENT-->
+
 <div class="row">
 	<div class="col-md-12">
 		<div class="table-container">
@@ -15,19 +16,19 @@
 						<th width="">Acciones</th>
 						<th width="">Pedimento</th>
 						<th width="">Referencia</th>
-						<th width="">Mercancia</th>
-						<th width="">GuiaMaster</th>
-						<th width="">GuiaHouse</th>
-						<th width="">FechaCreacion</th>
-						<th width="">FechaPrevio</th>
-						<th width="">FechaDespacho</th>
-						<th width="">FechaClasificacion</th>
-						<th width="">FechaGlosa</th>
-						<th width="">FechaCapturaPedimento</th>
-						<th width="">FechaFacturacion</th>
+						<th width="">Mercancía</th>
+						<th width="">Guia Master</th>
+						<th width="">Guia House</th>
+						<th width="">Fecha Creacion</th>
+						<th width="">Fecha Previo</th>
+						<th width="">Fecha Despacho</th>
+						<th width="">Fecha Clasificacion</th>
+						<th width="">Fecha Glosa</th>
+						<th width="">Fecha CapturaPedimento</th>
+						<th width="">Fecha Facturacion</th>
 						<th width="">Deposito</th>
 						<th width="">Saldo</th>
-						<th width="">Almacen</th>
+						<th width="">Almacén</th>
 						<th width="">Estado</th>
 						<th width="">Socio Importador</th>
 
@@ -83,49 +84,47 @@
 						</td>
 						<td>
 							<select name="sAlmacen" class="form-control form-filter input-sm">
-								<option value="">- Estatus -</option>
+								<option value="">- Almacén -</option>
 								<?php
-								if($data['status']){
-									while($row = $data['status']->fetch_assoc()){
-										?>
-										<option value="<?php echo $row['skStatus']; ?>">
-											<?php echo $row['sName']; ?>
-										</option>
-										<?php
-                                        }//ENDIF
-                                    }//ENDWHILE
-                                    ?>
+								if(isset($data['listAlmacenes'])){
+									for ($i=0; $i <= count($data['listAlmacenes']) -1 ; $i++) { 
+										echo "<option value=".
+											$data['listAlmacenes'][$i]["skAlmacen"]. ">".
+											$data['listAlmacenes'][$i]["sNombre"]."</option>";
+										
+									}
+                                }
+                                ?>
                                 </select>
 						</td>
 						<td>
 							<select name="sEstatus" class="form-control form-filter input-sm">
 								<option value="">- Estatus -</option>
 								<?php
-								if($data['status']){
-									while($row = $data['status']->fetch_assoc()){
-										?>
-										<option value="<?php echo $row['skStatus']; ?>">
-											<?php echo $row['sName']; ?>
-										</option>
-										<?php
-                                        }//ENDIF
-                                    }//ENDWHILE
-                                    ?>
+								if(isset($data['listEstados'])){
+									for ($i=0; $i <= count($data['listEstados']) -1 ; $i++) { 
+										echo "<option value=".
+											$data['listEstados'][$i]["skEstatus"].">".
+											$data['listEstados'][$i]["sNombre"]."</option>";
+										
+									}
+                                }
+                                ?>
                                 </select>
                         </td>
 						<td>
 							<select name="sSocioImportador" class="form-control form-filter input-sm">
 								<option value="">- Estatus -</option>
 								<?php
-								if($data['status']){
-									while($row = $data['status']->fetch_assoc()){
-										?>
-										<option value="<?php echo $row['skStatus']; ?>">
-											<?php echo $row['sName']; ?>
-										</option>
-										<?php
-                                        }//ENDIF
-                                    }//ENDWHILE
+								
+								if(isset($data['listSocios'])){
+									for ($i=0; $i <= count($data['listSocios']) -1 ; $i++) { 
+										echo "<option value=".
+											$data['listSocios'][$i]["skSocioEmpresa"].">".
+											$data['listSocios'][$i]["Empresa"]."</option>";
+										
+									}
+                                }
                                     ?>
                                 </select>
                         </td>
@@ -148,8 +147,36 @@
 	jQuery(document).ready(function() {       
    // init ajax table 
    TableAjax.init('?axn=fetch_all');
-   /*$("#enable_filter").click(function(){
-       $(".table-filter").css("display","block");
-   });*/
+		$.ajax({
+        url : '<?php echo SYS_URL;?>/sys/rex/jsonSocioImportadores/0/<?php echo $_SESSION["session"]["skSocioEmpresaPropietario"]. "/" ;?>',
+        data : {},
+
+        // especifica si será una petición POST o GET
+        type : 'GET',
+        dataType : 'json',
+        success : function(json) {
+            ifsocioimportador = "<?php echo (isset($result['skSocioImportador'])) ? $result['skSocioImportador'] : '' ; ?>";
+            for (o in json) {
+                d = json[o];
+                if (ifsocioimportador != "") {
+                    if (ifsocioimportador == d.skSocioEmpresa ) {
+                        $("#skSocioImportador").append('<option selected="selected" value="' + d.skSocioEmpresa +  '">'+d.Empresa+'</option>');
+                    }else{
+                        $("#skSocioImportador").append('<option value="' + d.skSocioEmpresa +  '">'+d.Empresa+'</option>');
+                    }
+                }else{
+                    $("#skSocioImportador").append('<option value="' + d.skSocioEmpresa +  '">'+d.Empresa+'</option>');
+                }
+                
+            }
+        },
+        error : function(xhr, status) {
+            console.log("Algo salio mal en la peticion a jsonSocioImportadores")
+        },
+        complete : function(xhr, status) {
+            console.log('Petición realizada');
+        }
+    }); 
+   
 });
 </script>
