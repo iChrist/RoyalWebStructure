@@ -27,9 +27,9 @@
             'DATABASE_DB' => 'royalweb_pruebas_gya'
         ),
         'localhost' => array(
-            'HOST_DB' => '192.168.1.76',
-            'USER_DB' => 'rwroot',
-            'PASSWORD_DB' => '/*royalweb*/',
+            'HOST_DB' => 'localhost',
+            'USER_DB' => 'root',
+            'PASSWORD_DB' => '',
             'DATABASE_DB' => 'royalweb_test_gya'
         ),
         'samuel' => array(

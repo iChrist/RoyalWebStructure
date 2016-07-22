@@ -1,9 +1,5 @@
-<script type="text/javascript" src="/path/to/moment.js"></script>
-<script type="text/javascript" src="/path/to/bootstrap/js/transition.js"></script>
-<script type="text/javascript" src="/path/to/bootstrap/js/collapse.js"></script>
-<script type="text/javascript" src="/path/to/bootstrap-datetimepicker.min.js"></script>
 
-    <!--<pre>
+<pre>
         <?php 
         //echo print_r($_SESSION["session"],1);
         //$fecha = DateTime::createFromFormat('d-m-Y', '30-07-2016');
@@ -17,13 +13,29 @@
         //2016-07-26 00:00:00
         //(isset($result["sReferencia"])) ? echo $result["sReferencia"] : echo '' ;
         
-        //var_dump($data);
         ?>
-    </pre> !-->
+
+
+</pre>
+
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data"> 
     <input type="hidden" name="skReferenciaExterna"  id="skReferenciaExterna" value="<?php echo (isset($result['skReferenciaExterna'])) ? $result['skReferenciaExterna'] : '' ; ?>">
     <input type="hidden" name="axn" id="anx" value="<?php echo (isset($result["sReferencia"])) ? 'update' : 'insert' ;?>" ></input>
     <div class="form-body">
+
+    <div class="form-group">
+        <label class="control-label col-md-3">Meridian Format</label>
+        <div class="col-md-4">
+            <div class="input-group date form_meridian_datetime" data-date="2012-12-21T15:25:00Z">
+                <input type="text" size="16" readonly class="form-control">
+                <div class="input-group-btn">
+                    <button class="btn btn-success date-reset" type="button"><i class="fa fa-times"></i></button>
+                    <button class="btn btn-success date-set" type="button"><i class="fa fa-calendar"></i></button>
+                </div>
+            </div>
+            <!-- /input-group -->
+        </div>
+    </div>
 
         <div class="form-group">
             <label class="control-label col-md-2">Referencia <span aria-required="true" class="required"> * </span>
@@ -36,12 +48,22 @@
                 </div>
             </div>
 
+<<<<<<< HEAD
             <label class="control-label col-md-2">Pedimento <span aria-required="true" class="required"> * </span>
+=======
+            <label class="control-label col-md-2">Importador <span aria-required="true" class="required"> * </span>
+>>>>>>> d9f5d959188007792ee958ff3a1b2bacecc69b98
             </label>
             <div class="col-md-4">
                 <div class="input-icon right">
                     <i class="fa"></i>
+<<<<<<< HEAD
                     <input type="text" maxlength="50" name="sPedimento" id="sPedimento" class="form-control" placeholder="Numero de pedimento" value="<?php echo (isset($result['sPedimento'])) ? htmlentities(utf8_encode($result['sPedimento'])) : $data['maxPedimento']; ?>" >
+=======
+                    <select class="form-control" id="skSocioImportador" name="skSocioImportador">
+                        <option value="">--Seleccione Importador--</option>
+                    </select>
+>>>>>>> d9f5d959188007792ee958ff3a1b2bacecc69b98
                 </div>
             </div>
             
@@ -130,7 +152,7 @@
         <hr>
 
         <div class="form-group">
-            <label class="control-label col-md-2">Fecha de previo <span aria-required="true" class="required"> * </span></label>
+            <label class="control-label col-md-2">Fecha de previo</label>
             <div class="col-md-4">
                 <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
                     <input type="text" id="dFechaPrevio" name="dFechaPrevio" class="form-control" value="<?php echo (isset($result["dFechaPrevio"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaPrevio"])->format('d-m-Y') : '' ;?>">
@@ -139,7 +161,7 @@
                     </span>
                 </div>
             </div>
-            <label class="control-label col-md-2">Fecha de despacho <span aria-required="true" class="required"> * </span></label>
+            <label class="control-label col-md-2">Fecha de despacho</label>
             <div class="col-md-4">
                 <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
                     <input type="text" id="dFechaDespacho" name="dFechaDespacho" class="form-control" value="<?php echo (isset($result["dFechaDespacho"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaDespacho"])->format('d-m-Y') : '' ;?>">
@@ -152,7 +174,7 @@
 
 
         <div class="form-group">
-            <label class="control-label col-md-2">Fecha de clasificacion <span aria-required="true" class="required"> * </span></label>
+            <label class="control-label col-md-2">Fecha de clasificacion </label>
             <div class="col-md-4">
                 <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
                     <input type="text" id="dFechaClasificacion" name="dFechaClasificacion" class="form-control" value="<?php echo (isset($result["dFechaClasificacion"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaClasificacion"])->format('d-m-Y') : '' ;?>">
@@ -161,7 +183,7 @@
                     </span>
                 </div>
             </div>
-            <label class="control-label col-md-2">Fecha de glosa<span aria-required="true" class="required"> * </span></label>
+            <label class="control-label col-md-2">Fecha de glosa</label>
             <div class="col-md-4">
                 <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
                     <input type="text" id="dFechaGlosa" name="dFechaGlosa" class="form-control" value="<?php echo (isset($result["dFechaGlosa"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaGlosa"])->format('d-m-Y') : '' ;?>">
@@ -174,7 +196,7 @@
 
 
         <div class="form-group">
-            <label class="control-label col-md-2">Fecha de captura de pedimento <span aria-required="true" class="required"> * </span></label>
+            <label class="control-label col-md-2">Fecha de captura de pedimento </label>
             <div class="col-md-4">
                 <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
                     <input type="text" id="dFechaCapturaPedimento" name="dFechaCapturaPedimento" class="form-control" value="<?php echo (isset($result["dFechaCapturaPedimento"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaCapturaPedimento"])->format('d-m-Y') : '' ;?>">
@@ -183,7 +205,7 @@
                     </span>
                 </div>
             </div>
-            <label class="control-label col-md-2">Fecha de revalidacion<span aria-required="true" class="required"> * </span></label>
+            <label class="control-label col-md-2">Fecha de revalidacion</label>
             <div class="col-md-4">
                 <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
                     <input type="text" id="dFechaRevalidacion" name="dFechaRevalidacion" class="form-control" value="<?php echo (isset($result["dFechaRevalidacion"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaRevalidacion"])->format('d-m-Y') : '' ;?>">
@@ -195,7 +217,7 @@
         </div>
 
         <div class="form-group">
-            <label class="control-label col-md-2">Fecha de facturacion<span aria-required="true" class="required"> * </span></label>
+            <label class="control-label col-md-2">Fecha de facturacion</label>
             <div class="col-md-4">
                 <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
                     <input type="text" id="dFechaFacturacion" name="dFechaFacturacion" class="form-control" value="<?php echo (isset($result["dFechaFacturacion"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaFacturacion"])->format('d-m-Y') : '' ;?>">

@@ -183,7 +183,7 @@ Class Rex_Controller Extends Rex_Model {
         }
 
 
-        $le = $this->insertar();
+        $le = parent::insertar();
 
         if(!$le){
             $this->data['message'] = "Hubo un error al guardar el registro ";

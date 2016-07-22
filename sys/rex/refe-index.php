@@ -30,7 +30,7 @@
 						<th width="">Saldo</th>
 						<th width="">Almacén</th>
 						<th width="">Estado</th>
-						<th width="">Socio Importador</th>
+						<th width="">Importador</th>
 
 					</tr>
 					<tr role="row" class="filter">
@@ -56,25 +56,63 @@
 							<input type="text" class="form-control form-filter input-sm" name="sGuiaHouse" placeholder="Guia House">
 						</td>
 						<td>
-							<input type="text" class="form-control form-filter input-sm" name="dFechaCreacion" placeholder="Fecha creacion">
+							
+							<div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
+			                    <input type="text" placeholder="Fecha creacion" name="dFechaCreacion" class="form-control" value="">
+			                    <span class="input-group-btn">
+			                        <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+			                    </span>
+			                </div>
 						</td>
 						<td>
-							<input type="text" class="form-control form-filter input-sm" name="dFechaPrevio" placeholder="Fecha previo">
+							
+							<div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
+			                    <input type="text" placeholder="Fecha previo" name="dFechaPrevio" class="form-control" value="">
+			                    <span class="input-group-btn">
+			                        <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+			                    </span>
+			                </div>
 						</td>
 						<td>
-							<input type="text" class="form-control form-filter input-sm" name="dFechaDespacho" placeholder="Fecha despacho">
+							
+							<div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
+			                    <input type="text" name="dFechaDespacho" placeholder="Fecha despacho" class="form-control" value="">
+			                    <span class="input-group-btn">
+			                        <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+			                    </span>
+			                </div>
 						</td>
 						<td>
-							<input type="text" class="form-control form-filter input-sm" name="dFechaClasificacion" placeholder="Fecha de clasificacion">
+							<div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
+			                    <input type="text" name="dFechaClasificacion" placeholder="Fecha de clasificacion" class="form-control" value="">
+			                    <span class="input-group-btn">
+			                        <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+			                    </span>
+			                </div>
 						</td>
 						<td>
-							<input type="text" class="form-control form-filter input-sm" name="dFechaGlosa" placeholder="Fecha de glosa">
+							<div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
+			                    <input type="text" name="dFechaGlosa" placeholder="Fecha de glosa" class="form-control" value="">
+			                    <span class="input-group-btn">
+			                        <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+			                    </span>
+			                </div>
 						</td>
 						<td>
-							<input type="text" class="form-control form-filter input-sm" name="dFechaCapturaPedimento" placeholder="Fecha de captura del pedimento">
+							<div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
+			                    <input type="text" name="dFechaCapturaPedimento" placeholder="Fecha de captura del pedimento" class="form-control" value="">
+			                    <span class="input-group-btn">
+			                        <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+			                    </span>
+			                </div>
 						</td>
 						<td>
-							<input type="text" class="form-control form-filter input-sm" name="dFechaFacturacion" placeholder="Fecha de facturacion">
+							<div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
+			                    <input type="text" name="dFechaFacturacion" placeholder="Fecha de facturacion" class="form-control" value="">
+			                    <span class="input-group-btn">
+			                        <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+			                    </span>
+			                </div>
 						</td>
 						<td>
 							<input type="text" class="form-control form-filter input-sm" name="iDeposito" placeholder="Cantidad deposito">
@@ -114,7 +152,7 @@
                         </td>
 						<td>
 							<select name="sSocioImportador" class="form-control form-filter input-sm">
-								<option value="">- Estatus -</option>
+								<option value="">- Seleccione Importador -</option>
 								<?php
 								
 								if(isset($data['listSocios'])){
