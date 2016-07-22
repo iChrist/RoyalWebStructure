@@ -3,10 +3,6 @@
     if ($data['datos']) {
         $result = $data['datos']->fetch_assoc();
     }
-
-     /*echo "<PRE>";
-      print_r($result);
-      echo "</PRE>";*/
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
     <input type="hidden" name="skSolicitudPrevio"  id="skSolicitudPrevio" value="<?php echo (isset($result['skSolicitudPrevio'])) ? $result['skSolicitudPrevio'] : ''; ?>">
@@ -232,6 +228,28 @@
         <div class="clearfix"></div>
         <hr>
 </div>
+    <div class="row">
+        <div class="col-md-12">
+            <label class="text-right col-md-2"><b>Archivos</b></label>
+            <div class="col-md-8">
+                <?php
+                    if ($data['filesDocTipo']) {
+                ?>
+                    <ul>
+                <?php
+                    while ($row = $data['filesDocTipo']->fetch_assoc()) {
+                ?>
+                    <li><a href="<?php echo SYS_URL . SYS_PROJECT . $row['sUbicacion']; ?>" target="_blank"><?php echo $row['sNombre']; ?></a></li>
+                <?php
+                    }//ENDWHILE
+                ?>
+                    </ul>
+                <?php
+                    }//ENDIF
+                ?>
+            </div>
+        </div>
+      </div>
 
     </div>
 </form>

@@ -1,5 +1,6 @@
 <?php
     $result = array();
+    
     $filesDocTipo = array();
     if ($data['datos']) {
         $result = $data['datos']->fetch_assoc();
@@ -9,21 +10,6 @@
             }
         }
     }
-
-    $ArrayListado = array();
-    if($data['myFotos']) {
-      if($data['myFotos']->num_rows > 0){
-  			 while($row = $data['myFotos']->fetch_assoc()){
-           array_push($ArrayListado,array('id' => $row{'skFotoReferencia'},
-           'src' => SYS_URL.SYS_PROJECT.$row{'sUbicacion'},
-           'param' => 'myFiles[]',
-           'size' => '',
-           'fileName' => ''));
-  			 }
-  		 }
-    }
-  //  print_r($ArrayListado);
-
 ?>
 <!-- BEGIN PAGE LEVEL STYLES (DROPZONE) -->
 <link href="<?php echo SYS_URL ?>core/assets/plugins/dropzone/css/dropzone.css" rel="stylesheet"/>
