@@ -413,5 +413,94 @@ Class Rex_Controller Extends Rex_Model {
 
         return TRUE;
     }
+    
+    /* Agregado de Documentos */
+    public function reexdo_form()
+    {
+      $this->data['message'] = '';
+      $this->data['response'] = true;
+      $this->data['datos'] = false;
+        if ($_POST) {
+          $this->refex['skReferenciaExterna'] = $_POST['skReferenciaExterna'];
+          $arrayDocumentos = (isset($_POST['skDocTipo']) ? $_POST['skDocTipo'] : array());
+
+            if ($_POST['skReferenciaExterna']) {
+                
+                // ELIMINAMOS LOS ARCHIVOS QUE HALLA ELIMINADO EL USUARIO //
+                $datos = array('skReferenciaExterna'=>$_POST['skReferenciaExterna']);
+                if(isset($_POST['skDocumentoReferencia'])){
+                    $add_quotes = function ($str) {
+                        return sprintf("'%s'", $str);
+                    };
+                    $datos = array(
+                        'skReferenciaExterna'=>$_POST['skReferenciaExterna'],
+                        'skDocumentoReferencia'=>implode(',',array_map($add_quotes,$_POST['skDocumentoReferencia']))
+                    );
+                }
+                if(!parent::delete_referenciasExternas_documentos($datos)){
+                    $this->data['response'] = true;
+                    $this->data['message'] = 'Hubo un error al elmimar los documentos.';
+                    header('Content-Type: application/json');
+                    echo json_encode($this->data);
+                    return FALSE;
+                }
+                // GUARDAMOS LOS ARCHIVOS POR $_FILES //
+                if (isset($_FILES['skDocTipo'])) {
+                    foreach ($_FILES['skDocTipo'] AS $k => $v) {
+                        if ($k === 'name') {
+                            foreach ($v AS $key => $val) {
+                                if(!empty($_FILES['skDocTipo']['name'][$key])){
+                                    $extension = explode('.', $_FILES['skDocTipo']['name'][$key]);
+                                    $extension = end($extension);
+                                    $skDocumentoReferencia = md5(microtime());
+                                    $sUbicacionBDA = '/rex/documentos/'.$skDocumentoReferencia.'.'.$extension;
+                                    $sUbicacion = SYS_PATH.'rex/documentos/'.$skDocumentoReferencia.'.'.$extension;
+                                    if (!@move_uploaded_file($_FILES['skDocTipo']['tmp_name'][$key], $sUbicacion)) {
+                                        $this->data['response'] = true;
+                                        $this->data['message'] = 'Hubo un error al subir el documento.';
+                                        header('Content-Type: application/json');
+                                        echo json_encode($this->data);
+                                        return FALSE;
+                                    }
+                                    $datos = array(
+                                        'skDocumentoReferencia'=>$skDocumentoReferencia,
+                                        'skReferenciaExterna'=>$_POST['skReferenciaExterna'],
+                                        'sUbicacion'=>$sUbicacionBDA,
+                                        'skDocTipo'=>$key
+                                    );
+                                    if(!parent::create_referenciasExternas_documentos($datos)){
+                                        $this->data['response'] = true;
+                                        $this->data['message'] = 'Hubo un error al guardar el documento.';
+                                        header('Content-Type: application/json');
+                                        echo json_encode($this->data);
+                                        return FALSE;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+          
+          $this->data['response'] = true;
+          $this->data['message'] = 'Registro actualizado con &eacute;xito.';
+          header('Content-Type: application/json');
+          echo json_encode($this->data);
+          return TRUE;
+
+        }
+        
+
+        if (isset($_GET['p1'])) {
+           $this->refex['skReferenciaExterna'] = $_GET['p1'];
+           $this->data['datos'] = parent::reexfo_referencias();
+           $this->data['myFotos'] = parent::listar_fotos_referencias();
+           $this->data['filesDocTipo'] = parent::get_rel_referenciasExternas_documentos();
+        }
+        $this->data['docTipo'] = parent::get_cat_docTipo();
+        $this->load_view('reexdo-form', $this->data);
+
+        return TRUE;
+    }
     /* TERMINA MODULO (REX) */
 }

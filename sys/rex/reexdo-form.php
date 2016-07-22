@@ -1,7 +1,13 @@
 <?php
     $result = array();
+    $filesDocTipo = array();
     if ($data['datos']) {
         $result = $data['datos']->fetch_assoc();
+        if ($data['filesDocTipo']) {
+            while ($row = $data['filesDocTipo']->fetch_assoc()) {
+                $filesDocTipo[$row['skDocTipo']] = array($row['skDocumentoReferencia'], $row['sUbicacion']);
+            }
+        }
     }
 
     $ArrayListado = array();
@@ -146,34 +152,51 @@
         </div>
       </div>
         <div class="clearfix"></div>
-        <div class="row">
-          <label class="control-label col-md-2">Fotos <span aria-required="true" class="required"> * </span> </label>
-          <div class="dropzone col-md-9" id="myDropzone" >
-              <?php
-                Core_Functions::printDropzoneImages($ArrayListado);
-              ?>
-
-          </div>
-
+        
+        
+        <!-- CARGAR DOCUMENTOS rel_recepcionDoc_docTipo !-->
+        <div class="form-group">
+            <label class="control-label col-lg-2 col-md-2 col-xs-2"><b>Archivos</b></label>
+            <div class="col-lg-4 col-md-2 col-xs-2">
+                <?php
+                if ($data['docTipo']) {
+                    while ($docTipo = $data['docTipo']->fetch_assoc()) {
+                        ?>
+                        <label>
+                            <?php
+                            echo $docTipo['sNombre'];
+                            $hidden = false;
+                            if (array_key_exists($docTipo['skDocTipo'], $filesDocTipo)) {
+                                $hidden = true;
+                                ?>
+                                <span>
+                                    <input type="hidden" name="skDocumentoReferencia[]" value="<?php echo $filesDocTipo[$docTipo['skDocTipo']][0]; ?>" />
+                                    <a href="<?php echo SYS_URL . SYS_PROJECT . $filesDocTipo[$docTipo['skDocTipo']][1]; ?>" target="_blank">Ver archivo</a>
+                                    <a href="javascript:;" class="btn btn-default btn-xs delete-doc-tipo" skDocTipo="<?php echo $docTipo['skDocTipo']; ?>"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                                </span>
+                                <?php
+                            }//ENDIF
+                            ?>
+                            <input type="file" name="skDocTipo[<?php echo $docTipo['skDocTipo']; ?>]" id="<?php echo $docTipo['skDocTipo']; ?>" <?php
+                            if ($hidden) {
+                                echo 'style="display:none;"';
+                            }
+                            ?> />
+                        </label><br>
+                        <?php
+                    }//ENDWHILE
+                }//ENDIF
+                ?>
+            </div>
         </div>
+        
+        
     </div>
 </form>
 <div class="clearfix"></div>
-<!-- BEGIN PAGE LEVEL PLUGINS (DROPZONE) -->
-<script src="<?php echo SYS_URL ?>core/assets/plugins/dropzone/dropzone.js"></script>
-<script src="<?php echo SYS_URL ?>core/assets/lib/form-dropzone.js"></script>
-<!-- END PAGE LEVEL PLUGINS (DROPZONE) -->
 <script type="text/javascript">
 
     $(document).ready(function(){
-      FormDropzone.init({
-          url: "cambiarCuandoSeaCustom",
-          paramName: "myFiles",
-          acceptedFiles: 'image/*',
-          maxFilesize: 2,
-          uploadMultiple: true,
-          autoProcessQueue: false
-      });
 
       /* VALIDATIONS */
           isValid = $("#_save").validate({
@@ -224,6 +247,10 @@
               }
           });
 
-
+        $(".delete-doc-tipo").click(function () {
+            var skDocTipo = $(this).attr("skDocTipo");
+            $("#" + skDocTipo).css("display", "block");
+            $(this).parent().remove();
+        });
     });
 </script>

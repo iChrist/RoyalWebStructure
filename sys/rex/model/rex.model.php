@@ -643,5 +643,74 @@ Class Rex_Model Extends Core_Model {
               }
 
     }
+    // INSERTAR DOCUMENTOS DE REFERENCIAS EXTERNAS //
+    public function create_referenciasExternas_documentos($datos = array()){
+        if($datos){
+            $sql = "INSERT INTO rel_referenciasExternas_documentos (skDocumentoReferencia,skReferenciaExterna,skUsuarioCreacion,skEstatus,sUbicacion,dFechaCreacion,skDocTipo) VALUES (
+                '".$datos['skDocumentoReferencia']."',
+                '".$datos['skReferenciaExterna']."',
+                '".$_SESSION['session']['skUsers']."',
+                'AC',
+                '".$datos['sUbicacion']."',
+                CURRENT_TIMESTAMP,
+                '".$datos['skDocTipo']."'
+                )";
+            //exit('<pre>'.print_r($sql,1).'</pre>');
+            $result = $this->db->query($sql);
+            if (!$result) {
+                return false;
+            }
+            return true;
+        }
+        return false;
+        //rel_tiposDocumentos_modulos
+    }
+    // GET DOCUMENTOS PARA REFERENCIAS EXTERNAS //
+    public function get_cat_docTipo(){
+        $sql = "SELECT * FROM rel_tiposDocumentos_modulos tdm
+            INNER JOIN cat_docTipo dt ON dt.skDocTipo = tdm.skDocTipo WHERE dt.skStatus = 'AC' AND tdm.skModulo = 'reexdo-form' ";
+        //exit('<pre>'.print_r($sql,1).'</pre>');
+        $result = $this->db->query($sql);
+        if ($result) {
+            if ($result->num_rows > 0) {
+                return $result;
+            } else {
+                return false;
+            }
+        }
+    }
+    // GET REL DOCUMENTOS DE REFERENCIA EXTERNA  //
+    public function get_rel_referenciasExternas_documentos() {
+        $sql = "SELECT rexDoc.* FROM rel_referenciasExternas_documentos AS rexDoc WHERE rexDoc.skEstatus = 'AC' AND rexDoc.skReferenciaExterna = '".$this->refex['skReferenciaExterna']."' ";
+        //exit('<pre>'.print_r($sql,1).'</pre>');
+        $result = $this->db->query($sql);
+        if ($result) {
+            if ($result->num_rows > 0) {
+                return $result;
+            } else {
+                return false;
+            }
+        }
+    }
+    // ELIMINADO LOGICO DE DOCUMENTOS DE REFERENCIA EXTERNA //
+    public function delete_referenciasExternas_documentos($datos = array()){
+        if($datos){
+            $sql = "UPDATE rel_referenciasExternas_documentos SET skEstatus = 'DE' WHERE skEstatus != 'DE' ";
+            if(isset($datos['skReferenciaExterna']) && !empty($datos['skReferenciaExterna'])){
+               $sql .= " AND skReferenciaExterna = '".$datos['skReferenciaExterna']."'"; 
+            }
+            if(isset($datos['skDocumentoReferencia']) && !empty($datos['skDocumentoReferencia'])){
+                $sql .= " AND skDocumentoReferencia NOT IN (".$datos['skDocumentoReferencia'].")"; 
+            }
+            //exit('<pre>'.print_r($sql,1).'</pre>');
+            $result = $this->db->query($sql);
+            if ($result) {
+                return true;
+            }else{
+                return false;
+            }
+        }
+        return true;
+    }
     /* TERMINA MODULO (REX) */
 }
