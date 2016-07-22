@@ -146,7 +146,7 @@ Class Rex_Controller Extends Rex_Model {
         } else {
             $this->data['maxPedimento'] = '';
         }
-        
+
         if(isset($_POST['axn']) && $_POST['axn'] =='insert'){
             return $this->refe_save($maxPedimento);
         }
@@ -162,7 +162,7 @@ Class Rex_Controller Extends Rex_Model {
 
     public function refe_save($maxPedimento)
     {
-        
+
         $this->refex['sPedimento'] = utf8_decode($_POST['sPedimento']);
         if (parent::countGetReferenciasExternas(true)) {
             $this->data['response'] = false;
@@ -172,7 +172,7 @@ Class Rex_Controller Extends Rex_Model {
             echo json_encode($this->data);
             return false;
         }
-        
+
 
         $le = $this->insertar();
 
@@ -412,6 +412,17 @@ Class Rex_Controller Extends Rex_Model {
         $this->load_view('reexfo-form', $this->data);
 
         return TRUE;
+    }
+    public function reexde_detail()
+    {
+        if (isset($_GET['p1'])) {
+            $this->refex['skReferenciaExterna'] = $_GET['p1'];
+            $this->data['datos'] = parent::reexfo_referencias();
+            $this->data['myFotos']= parent::listar_fotos_referencias();
+        }
+        $this->load_view('reexde-detail', $this->data);
+
+        return true;
     }
     /* TERMINA MODULO (REX) */
 }
