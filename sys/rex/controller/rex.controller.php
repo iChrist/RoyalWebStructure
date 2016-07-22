@@ -19,14 +19,20 @@ Class Rex_Controller Extends Rex_Model {
     {
         $this->ref['id'] = 1;
         $this->ref['nombre'] = 'samuel';
-        $refex = $this->getrefex('AC');
-        $refex['otroDato'] = 'muajajaja';
+        $this->ref['listAlmacenes'] = parent::getAlmacenes();
+        $this->ref['listEstados'] =  parent::getStatus();
+        //$refex = $this->getrefex('AC');
+
         //$this->load_view('NombreArhivo' , $datosParaVista = array() , $bool = TRUE , $path = NULL);
         $this->load_view('rex-index1',$refex,false);
     }
 
     public function refe_index()
     {
+        $this->filters['listAlmacenes'] = parent::getAlmacenes();
+        $this->filters['listEstados'] =  parent::getStatus();
+        $this->filters['listSocios'] = parent::getSociosImportador($_SESSION['session']['skSocioEmpresaUsuario']);
+
         if(isset($_GET['axn'])){
             switch ($_GET['axn']) {
                 case 'fetch_all':
@@ -79,6 +85,9 @@ Class Rex_Controller Extends Rex_Model {
                 if(isset($_POST['sSocioImportador'])){
                     $this->refex['sSocioImportador'] = $_POST['sSocioImportador'];
                 }
+                if(isset($_POST['sMercancia'])){
+                    $this->refex['sMercancia'] = $_POST['sMercancia'];
+                }
                     // OBTENER REGISTROS //
                 $total = parent::countGetReferenciasExternas();
                 $records = Core_Functions::table_ajax($total);
@@ -129,7 +138,7 @@ Class Rex_Controller Extends Rex_Model {
             }
             return true;
         }
-        $this->load_view('refe-index',NULL,true);
+        $this->load_view('refe-index',$this->filters,true);
     }
 
     public function refe_form()
@@ -146,7 +155,7 @@ Class Rex_Controller Extends Rex_Model {
         } else {
             $this->data['maxPedimento'] = '';
         }
-        
+
         if(isset($_POST['axn']) && $_POST['axn'] =='insert'){
             return $this->refe_save($maxPedimento);
         }
@@ -162,7 +171,7 @@ Class Rex_Controller Extends Rex_Model {
 
     public function refe_save($maxPedimento)
     {
-        
+
         $this->refex['sPedimento'] = utf8_decode($_POST['sPedimento']);
         if (parent::countGetReferenciasExternas(true)) {
             $this->data['response'] = false;
@@ -172,7 +181,7 @@ Class Rex_Controller Extends Rex_Model {
             echo json_encode($this->data);
             return false;
         }
-        
+
 
         $le = $this->insertar();
 
@@ -501,6 +510,18 @@ Class Rex_Controller Extends Rex_Model {
         $this->load_view('reexdo-form', $this->data);
 
         return TRUE;
+    }
+    
+    public function reexde_detail()
+    {
+        if (isset($_GET['p1'])) {
+            $this->refex['skReferenciaExterna'] = $_GET['p1'];
+            $this->data['datos'] = parent::reexfo_referencias();
+            $this->data['myFotos']= parent::listar_fotos_referencias();
+        }
+        $this->load_view('reexde-detail', $this->data);
+
+        return true;
     }
     /* TERMINA MODULO (REX) */
 }
