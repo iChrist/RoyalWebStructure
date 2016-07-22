@@ -424,7 +424,7 @@ Class Rex_Controller Extends Rex_Model {
 
         return true;
     }
-    
+
     /* Agregado de Documentos */
     public function reexdo_form()
     {
@@ -436,7 +436,7 @@ Class Rex_Controller Extends Rex_Model {
           $arrayDocumentos = (isset($_POST['skDocTipo']) ? $_POST['skDocTipo'] : array());
 
             if ($_POST['skReferenciaExterna']) {
-                
+
                 // ELIMINAMOS LOS ARCHIVOS QUE HALLA ELIMINADO EL USUARIO //
                 $datos = array('skReferenciaExterna'=>$_POST['skReferenciaExterna']);
                 if(isset($_POST['skDocumentoReferencia'])){
@@ -492,7 +492,7 @@ Class Rex_Controller Extends Rex_Model {
                     }
                 }
             }
-          
+
           $this->data['response'] = true;
           $this->data['message'] = 'Registro actualizado con &eacute;xito.';
           header('Content-Type: application/json');
@@ -500,7 +500,7 @@ Class Rex_Controller Extends Rex_Model {
           return TRUE;
 
         }
-        
+
 
         if (isset($_GET['p1'])) {
            $this->refex['skReferenciaExterna'] = $_GET['p1'];
@@ -513,7 +513,7 @@ Class Rex_Controller Extends Rex_Model {
 
         return TRUE;
     }
-    
+
     public function reexde_detail()
     {
         if (isset($_GET['p1'])) {
@@ -532,29 +532,33 @@ Class Rex_Controller Extends Rex_Model {
       $this->data['datos'] = false;
         if($_POST) {
             $this->refex['skReferenciaExterna'] = $_POST['skReferenciaExterna'];
-            $this->refex['dFechaPrevio'] = utf8_decode(!empty($_POST['dFechaPrevio']) ? date('Y-m-d', strtotime($_POST['dFechaPrevio'])) : '');
+            $this->refex['dFechaPrevio'] = utf8_decode(!empty($_POST['dFechaPrevio']) ? date('Y-m-d H:i:s', strtotime($_POST['dFechaPrevio'].$_POST['tHoraPrevio'])) : 'NULL');
             $this->refex['tHoraPrevio'] = utf8_decode(!empty($_POST['tHoraPrevio']) ? $_POST['tHoraPrevio'] : '');
-            $this->refex['dFechaDespacho'] = utf8_decode(!empty($_POST['dFechaDespacho']) ? date('Y-m-d', strtotime($_POST['dFechaDespacho'])) : '');
+            $this->refex['dFechaDespacho'] = utf8_decode(!empty($_POST['dFechaDespacho']) ? date('Y-m-d', strtotime($_POST['dFechaDespacho'].$_POST['tHoraDespacho'])) : 'NULL');
             $this->refex['tHoraDespacho'] = utf8_decode(!empty($_POST['tHoraDespacho']) ? $_POST['tHoraDespacho'] : '');
-            $this->refex['dFechaClasificacion'] = utf8_decode(!empty($_POST['dFechaClasificacion']) ? date('Y-m-d', strtotime($_POST['dFechaClasificacion'])) : '');
+            $this->refex['dFechaClasificacion'] = utf8_decode(!empty($_POST['dFechaClasificacion']) ? date('Y-m-d', strtotime($_POST['dFechaClasificacion'].$_POST['tHoraClasificacion'])) : '');
             $this->refex['tHoraClasificacion'] = utf8_decode(!empty($_POST['tHoraClasificacion']) ? $_POST['tHoraClasificacion'] : '');
-            $this->refex['dFechaGlosa'] = utf8_decode(!empty($_POST['dFechaGlosa']) ? date('Y-m-d', strtotime($_POST['dFechaGlosa'])) : date('Y-m-d'));
+            $this->refex['dFechaGlosa'] = utf8_decode(!empty($_POST['dFechaGlosa']) ? date('Y-m-d', strtotime($_POST['dFechaGlosa'].$_POST['tHoraGlosa'])) : 'NULL');
             $this->refex['tHoraGlosa'] = utf8_decode(!empty($_POST['tHoraGlosa']) ? $_POST['tHoraGlosa'] : '');
-            $this->refex['dFechaCapturaPedimento'] = utf8_decode(!empty($_POST['dFechaCapturaPedimento']) ? date('Y-m-d', strtotime($_POST['dFechaCapturaPedimento'])) : '');
+            $this->refex['dFechaCapturaPedimento'] = utf8_decode(!empty($_POST['dFechaCapturaPedimento']) ? date('Y-m-d', strtotime($_POST['dFechaCapturaPedimento'].$_POST['tHoraCaptura'])) : 'NULL');
             $this->refex['tHoraCaptura'] = utf8_decode(!empty($_POST['tHoraCaptura']) ? $_POST['tHoraCaptura'] : '');
-            $this->refex['dFechaRevalidacion'] = utf8_decode(!empty($_POST['dFechaRevalidacion']) ? date('Y-m-d', strtotime($_POST['dFechaRevalidacion'])) : '');
+            $this->refex['dFechaRevalidacion'] = utf8_decode(!empty($_POST['dFechaRevalidacion']) ? date('Y-m-d', strtotime($_POST['dFechaRevalidacion'].$_POST['tHoraRevalidacion'])) : 'NULL');
             $this->refex['tHoraRevalidacion'] = utf8_decode(!empty($_POST['tHoraRevalidacion']) ? $_POST['tHoraRevalidacion'] : '');
-            $this->refex['dFechaFacturacion'] = utf8_decode(!empty($_POST['dFechaFacturacion']) ? date('Y-m-d', strtotime($_POST['dFechaFacturacion'])) : '');
+            $this->refex['dFechaFacturacion'] = utf8_decode(!empty($_POST['dFechaFacturacion']) ? date('Y-m-d', strtotime($_POST['dFechaFacturacion'].$_POST['tHoraFacturacion'])) : 'NULL');
             $this->refex['tHoraFacturacion'] = utf8_decode(!empty($_POST['tHoraFacturacion']) ? $_POST['tHoraFacturacion'] : '');
           if ($_POST['skReferenciaExterna']) {
-                /*$skReferenciaExterna = parent::create_previos();
+                $skReferenciaExterna = parent::editar_fechas_referencia();
                 if(!$skReferenciaExterna){
-
+                    $this->data['response'] = true;
+                    $this->data['message'] = 'Registro actualizado con &eacute;xito.';
+                    header('Content-Type: application/json');
+                    echo json_encode($this->data);
+                    return true;
                 }else{
 
 
                 }
-                */
+
 
           }
 

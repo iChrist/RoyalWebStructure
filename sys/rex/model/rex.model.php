@@ -60,46 +60,46 @@ Class Rex_Model Extends Core_Model {
 
         $fechas = array(
             'dFechaPrevio'              => (
-                    $_POST["dFechaPrevio"] !== NULL && 
-                    $_POST["dFechaPrevio"] !== "" && 
+                    $_POST["dFechaPrevio"] !== NULL &&
+                    $_POST["dFechaPrevio"] !== "" &&
                     isset($_POST["dFechaPrevio"]))?
             "'".DateTime::createFromFormat('d-m-Y', $_POST["dFechaPrevio"])->format('Y-m-d')."'" :  NULL ,
-            
+
             'dFechaDespacho'            => (
-                    $_POST["dFechaDespacho"] !== NULL && 
-                    $_POST["dFechaDespacho"] !== "" && 
-                    isset($_POST["dFechaDespacho"]))? 
+                    $_POST["dFechaDespacho"] !== NULL &&
+                    $_POST["dFechaDespacho"] !== "" &&
+                    isset($_POST["dFechaDespacho"]))?
             "'".DateTime::createFromFormat('d-m-Y', $_POST["dFechaDespacho"])->format('Y-m-d') ."'":  NULL,
-            
+
             'dFechaClasificacion'       => (
-                    $_POST["dFechaClasificacion"] !== NULL && 
-                    $_POST["dFechaClasificacion"] !== "" && 
-                    isset($_POST["dFechaClasificacion"]))? 
+                    $_POST["dFechaClasificacion"] !== NULL &&
+                    $_POST["dFechaClasificacion"] !== "" &&
+                    isset($_POST["dFechaClasificacion"]))?
             "'". DateTime::createFromFormat('d-m-Y', $_POST["dFechaClasificacion"])->format('Y-m-d') ."'" :  NULL,
 
             'dFechaGlosa'               => (
-                    $_POST["dFechaGlosa"] !== NULL && 
-                    $_POST["dFechaGlosa"] !== "" && 
-                    isset($_POST["dFechaGlosa"])) ? 
+                    $_POST["dFechaGlosa"] !== NULL &&
+                    $_POST["dFechaGlosa"] !== "" &&
+                    isset($_POST["dFechaGlosa"])) ?
             "'".DateTime::createFromFormat('d-m-Y', $_POST["dFechaGlosa"])->format('Y-m-d')."'":  NULL,
 
             'dFechaCapturaPedimento'    => (
-                    $_POST["dFechaCapturaPedimento"] !== NULL && 
-                    $_POST["dFechaCapturaPedimento"] !== "" && 
-                    isset($_POST["dFechaCapturaPedimento"])) ? 
+                    $_POST["dFechaCapturaPedimento"] !== NULL &&
+                    $_POST["dFechaCapturaPedimento"] !== "" &&
+                    isset($_POST["dFechaCapturaPedimento"])) ?
             "'".DateTime::createFromFormat('d-m-Y', $_POST["dFechaCapturaPedimento"])->format('Y-m-d')."'":  NULL,
 
             'dFechaRevalidacion'        => (
-                    $_POST["dFechaRevalidacion"] !== NULL && 
-                    $_POST["dFechaRevalidacion"] !== "" && 
+                    $_POST["dFechaRevalidacion"] !== NULL &&
+                    $_POST["dFechaRevalidacion"] !== "" &&
                     isset($_POST["dFechaRevalidacion"])) ?
             "'".DateTime::createFromFormat('d-m-Y', $_POST["dFechaRevalidacion"])->format('Y-m-d') ."'":  NULL,
 
             'dFechaFacturacion'         => (
-                    $_POST["dFechaRevalidacion"] !== NULL && 
-                    $_POST["dFechaRevalidacion"] !== "" && 
-                    isset($_POST["dFechaRevalidacion"])) ? 
-            "'".DateTime::createFromFormat('d-m-Y', $_POST["dFechaRevalidacion"])->format('Y-m-d')."'":  NULL 
+                    $_POST["dFechaRevalidacion"] !== NULL &&
+                    $_POST["dFechaRevalidacion"] !== "" &&
+                    isset($_POST["dFechaRevalidacion"])) ?
+            "'".DateTime::createFromFormat('d-m-Y', $_POST["dFechaRevalidacion"])->format('Y-m-d')."'":  NULL
             );
 
         $sql_insert = "
@@ -757,10 +757,10 @@ Class Rex_Model Extends Core_Model {
         if($datos){
             $sql = "UPDATE rel_referenciasExternas_documentos SET skEstatus = 'DE' WHERE skEstatus != 'DE' ";
             if(isset($datos['skReferenciaExterna']) && !empty($datos['skReferenciaExterna'])){
-               $sql .= " AND skReferenciaExterna = '".$datos['skReferenciaExterna']."'"; 
+               $sql .= " AND skReferenciaExterna = '".$datos['skReferenciaExterna']."'";
             }
             if(isset($datos['skDocumentoReferencia']) && !empty($datos['skDocumentoReferencia'])){
-                $sql .= " AND skDocumentoReferencia NOT IN (".$datos['skDocumentoReferencia'].")"; 
+                $sql .= " AND skDocumentoReferencia NOT IN (".$datos['skDocumentoReferencia'].")";
             }
             //exit('<pre>'.print_r($sql,1).'</pre>');
             $result = $this->db->query($sql);
@@ -771,6 +771,33 @@ Class Rex_Model Extends Core_Model {
             }
         }
         return true;
+    }
+    /*
+    dFechaDespacho='".$this->refex['dFechaDespacho']."',
+    dFechaClasificacion='".$this->refex['dFechaClasificacion']."',
+    dFechaGlosa='".$this->refex['dFechaGlosa']."',
+    dFechaCapturaPedimento='".$this->refex['dFechaCapturaPedimento']."',
+    dFechaRevalidacion='".$this->refex['dFechaRevalidacion']."',
+    dFechaFacturacion='".$this->refex['dFechaFacturacion']."'
+    */
+    public function editar_fechas_referencia(){
+        $sql="UPDATE ope_referenciasExternas
+              SET dFechaPrevio='".$this->refex['dFechaPrevio']."'
+              dFechaDespacho='".$this->refex['dFechaDespacho']."',
+              dFechaClasificacion='".$this->refex['dFechaClasificacion']."',
+              dFechaGlosa='".$this->refex['dFechaGlosa']."',
+              dFechaCapturaPedimento='".$this->refex['dFechaCapturaPedimento']."',
+              dFechaRevalidacion='".$this->refex['dFechaRevalidacion']."',
+              dFechaFacturacion='".$this->refex['dFechaFacturacion']."'
+              WHERE skReferenciaExterna ='".$this->refex['skReferenciaExterna']."'";
+
+              $result = $this->db->query($sql);
+              if ($result) {
+                  return $this->refex['skReferenciaExterna'];
+              } else {
+                  return false;
+              }
+
     }
     /* TERMINA MODULO (REX) */
 }
