@@ -741,7 +741,7 @@ Class Rex_Model Extends Core_Model {
     }
     // GET REL DOCUMENTOS DE REFERENCIA EXTERNA  //
     public function get_rel_referenciasExternas_documentos() {
-        $sql = "SELECT rexDoc.* FROM rel_referenciasExternas_documentos AS rexDoc WHERE rexDoc.skEstatus = 'AC' AND rexDoc.skReferenciaExterna = '".$this->refex['skReferenciaExterna']."' ";
+        $sql = "SELECT rexDoc.*, dt.sNombre FROM rel_referenciasExternas_documentos AS rexDoc INNER JOIN cat_docTipo dt ON dt.skDocTipo = rexDoc.skDocTipo WHERE rexDoc.skEstatus = 'AC' AND rexDoc.skReferenciaExterna = '".$this->refex['skReferenciaExterna']."' ";
         //exit('<pre>'.print_r($sql,1).'</pre>');
         $result = $this->db->query($sql);
         if ($result) {
