@@ -521,6 +521,7 @@ Class Rex_Controller Extends Rex_Model {
             $this->data['datos'] = parent::reexfo_referencias();
             $this->data['myFotos']= parent::listar_fotos_referencias();
             $this->data['filesDocTipo'] = parent::get_rel_referenciasExternas_documentos();
+            $this->data['conceptos'] = parent::conceptos_referencia();
         }
         $this->load_view('reexde-detail', $this->data);
 

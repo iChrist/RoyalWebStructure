@@ -123,13 +123,77 @@
         <!--/span-->
       </div>
       <div class="row">
+            <label class="text-right col-md-2"><b>Deposito</b></label>
+            <div class="col-md-4">
+              <p class="text-left">
+                 <?php echo (isset($result['Deposito'])) ? utf8_encode("$ ".number_format($result['Deposito'],2)) : 'N/D'; ?>
+              </p>
+            </div>
+            <label class="text-right col-md-2"><b>Saldo</b></label>
+            <div class="col-md-4">
+              <p class="">
+                 <?php echo (isset($result['Saldo'])) ? utf8_encode("$ ".number_format($result['Saldo'],2)) : 'N/D'; ?>
+              </p>
+            </div>
+        <!--/span-->
+      </div>
+      <div class="row">
         <div class="col-md-12">
           <hr>
         </div>
       </div>
-
-
       <div class="row">
+        <label class="text-right col-md-2"><b>Conceptos </b></label>
+        <div class="col-md-10">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th width="100%"> Concepto</th>
+                <th nowrap="nowrap"> Divisa</th>
+                <th nowrap="nowrap"> Cantidad</th>
+                <th nowrap="nowrap"> Importe</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+              $total = "";
+              if($data['conceptos']) {
+                $i=0;
+                while ($rConceptos = $data['conceptos']->fetch_assoc()) {
+                    if($i==0){
+                      $total = $rConceptos['Total'];
+                    }
+                      ?>
+                      <tr>
+                        <td><?php echo $rConceptos['Concepto'];?></td>
+                        <td nowrap="nowrap"><?php echo $rConceptos['skDivisa'];?></td>
+                        <td nowrap="nowrap"><?php echo $rConceptos['iCantidad'];?></td>
+                        <td nowrap="nowrap">$ <?php echo number_format($rConceptos['dImporte'],2);?></td>
+                      </tr>
+
+                      <?php
+                      $i++;
+                  }//ENDIF
+                  ?>
+
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td style="float:right;"><b>TOTAL</b></td>
+                    <td nowrap="nowrap"><b>$ <?php echo ($total ?  number_format($total,2) : '')?></b></td>
+                  </tr>
+                <?php }
+              ?>
+
+            </tbody>
+
+
+          </table>
+        </div>
+      </div>
+
+
+    <!-- <div class="row">
             <label class="text-right col-md-2"><b>Fecha de Revalidaci&oacute;n</b></label>
             <div class="col-md-4">
               <p class="text-left">
@@ -142,7 +206,6 @@
                 <?php echo $result['FechaPrevio'] ? date('d/m/Y H:i:s', strtotime($result['FechaPrevio'])) : 'N/D'; ?>
               </p>
             </div>
-        <!--/span-->
       </div>
       <div class="row">
             <label class="text-right col-md-2"><b>Fecha de Clasifiaci&oacute;n</b></label>
@@ -157,7 +220,6 @@
                 <?php echo $result['FechaGlosa'] ? date('d/m/Y H:i:s', strtotime($result['FechaGlosa'])) : 'N/D'; ?>
               </p>
             </div>
-        <!--/span-->
       </div>
 
       <div class="row">
@@ -173,8 +235,8 @@
                 <?php echo $result['FechaFacturacion'] ? date('d/m/Y H:i:s', strtotime($result['FechaFacturacion'])) : 'N/D'; ?>
               </p>
             </div>
-        <!--/span-->
       </div>
+    -->
       <!--<div class="row">
         <div class="col-md-12">
           <div class="progress">
@@ -208,6 +270,12 @@
                                     <?php
 
                                 }//ENDIF
+                            }else{
+                              ?>
+                                <div class="col-md-10">
+                                  <h3>No hay fotos cargadas para esta Referencia</h3>
+                                </div>
+                          <?php
                             }//ENDWHILE
                             ?>
 
@@ -245,7 +313,14 @@
                 ?>
                     </ul>
                 <?php
-                    }//ENDIF
+              }else{
+                ?>
+                <div class="col-md-10">
+                  <h3>No hay documentos cargados para esta Referencia</h3>
+                </div>
+
+              <?php
+              }//ENDIF
                 ?>
             </div>
         </div>
