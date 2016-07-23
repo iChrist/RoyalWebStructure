@@ -538,7 +538,7 @@ Class Rex_Controller Extends Rex_Model {
             $this->refex['tHoraPrevio'] = utf8_decode(!empty($_POST['tHoraPrevio']) ? $_POST['tHoraPrevio'] : '');
             $this->refex['dFechaDespacho'] = utf8_decode(!empty($_POST['dFechaDespacho']) ? date('Y-m-d', strtotime($_POST['dFechaDespacho'].$_POST['tHoraDespacho'])) : 'NULL');
             $this->refex['tHoraDespacho'] = utf8_decode(!empty($_POST['tHoraDespacho']) ? $_POST['tHoraDespacho'] : '');
-            $this->refex['dFechaClasificacion'] = utf8_decode(!empty($_POST['dFechaClasificacion']) ? date('Y-m-d', strtotime($_POST['dFechaClasificacion'].$_POST['tHoraClasificacion'])) : '');
+            $this->refex['dFechaClasificacion'] = utf8_decode(!empty($_POST['dFechaClasificacion']) ? date('Y-m-d', strtotime($_POST['dFechaClasificacion'].$_POST['tHoraClasificacion'])) : 'NULL');
             $this->refex['tHoraClasificacion'] = utf8_decode(!empty($_POST['tHoraClasificacion']) ? $_POST['tHoraClasificacion'] : '');
             $this->refex['dFechaGlosa'] = utf8_decode(!empty($_POST['dFechaGlosa']) ? date('Y-m-d', strtotime($_POST['dFechaGlosa'].$_POST['tHoraGlosa'])) : 'NULL');
             $this->refex['tHoraGlosa'] = utf8_decode(!empty($_POST['tHoraGlosa']) ? $_POST['tHoraGlosa'] : '');
