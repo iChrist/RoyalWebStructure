@@ -163,8 +163,9 @@ Class Rex_Controller Extends Rex_Model {
             return $this->refe_update();
         }
         if (isset($_GET["p1"])){
-            $this->data['datos'] =      parent::getReferencia($_GET["p1"]);
-            $this->data['conceptosRef'] = parent::getConceptosReferencia($_GET["p1"]);
+            $this->data['datos']                =       parent::getReferencia($_GET["p1"]);
+            $this->data['conceptosRef']         =       parent::getConceptosReferencia($_GET["p1"]);
+            $this->data['conceptosTotales']     =       parent::getConceptos(".", true);
         }
         $this->load_view('refe-form',$this->data,true);
     }
