@@ -820,5 +820,21 @@ Class Rex_Model Extends Core_Model {
 
 
     }
+    public function conceptos_referencia(){
+      $sql="SELECT rrc.* ,
+            cc.sNombre AS Concepto,
+          (SELECT SUM(aa.dImporte) FROM rel_referenciasExternas_conceptos aa WHERE aa.skReferenciaExterna ='".$this->refex['skReferenciaExterna']."') AS Total
+          FROM rel_referenciasExternas_conceptos rrc
+          INNER JOIN cat_conceptos cc ON cc.skConcepto = rrc.skConcepto
+          WHERE skReferenciaExterna ='".$this->refex['skReferenciaExterna']."' AND rrc.iCantidad > 0";
+          
+      $result = $this->db->query($sql);
+      if ($result) {
+          return $result;
+      } else {
+          return false;
+      }
+
+    }
     /* TERMINA MODULO (REX) */
 }
