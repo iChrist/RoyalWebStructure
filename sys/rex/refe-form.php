@@ -1,5 +1,5 @@
 
-<!--<pre>
+<pre>
         <?php 
         //echo print_r($_SESSION["session"],1);
         //$fecha = DateTime::createFromFormat('d-m-Y', '30-07-2016');
@@ -12,11 +12,11 @@
         //echo DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaFacturacion"])->format('d-m-Y');
         //2016-07-26 00:00:00
         //(isset($result["sReferencia"])) ? echo $result["sReferencia"] : echo '' ;
-        
+        //die(print_r($data["conceptosTotales"],true)."<br>".print_r($data["conceptosRef"],true));
         ?>
 
 
-</pre>-->
+</pre>
 
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data"> 
     <input type="hidden" name="skReferenciaExterna"  id="skReferenciaExterna" value="<?php echo (isset($result['skReferenciaExterna'])) ? $result['skReferenciaExterna'] : '' ; ?>">
@@ -295,20 +295,35 @@
                     <?php 
                     $totalConceptos = 0;
                         if (isset($data["conceptosRef"])) {
-
-                            while ($row = $data["conceptosRef"]->fetch_assoc()) {
+                           /*$data["conceptosTotales"]
+                            $data["conceptosRef"]*/
+                            
+                            while ($row = $data["conceptosTotales"]->fetch_assoc()) {
+                                $conceptoRecord = false;
+                                while($cr = $data["conceptosRef"]->fetch_assoc()){
+                                    $conceptoRecord = ( ($cr["skConcepto"] ===  $row["skConcepto"]) ) ? $cr : false;
+                                }
+                                echo "<pre>".print_r($conceptoRecord ,true)."</pre>";
                                 
 
+                                
                     ?>
+
                     <tr>
                         <td>
-                            <input onchange="cotizar();" value="<?php echo $row['skConcepto'];?>" name="conceptos[]" type="checkbox" checked>
+                            <input onchange="cotizar();" value="<?php 
+                                echo $row['skConcepto'];
+                            ?>" name="conceptos[]" type="checkbox" <?php echo ($conceptoRecord)? 'checked' : '';?> >
                         </td>
                         <td>
-                            <input name="iCantidad[]" onchange="cotizar();" class="form-control input-sm iCantidad" placeholder="Cant" value="<?php echo $row['iCantidad'];?>" type="text">
+                            <input name="iCantidad[]" onchange="cotizar();" class="form-control input-sm iCantidad" placeholder="Cant" value="<?php 
+                                echo ($conceptoRecord)? $conceptoRecord["iCantidad"]:"0" ;
+                            ?>" type="text">
                         </td>
                         <td>
-                            <input name="fPrecioUnitario[]" onchange="cotizar();" class="form-control input-sm fPrecioUnitario" placeholder="Precio Unitario" value="<?php echo $row['dPrecioUnitario'];?>" type="text">
+                            <input name="fPrecioUnitario[]" onchange="cotizar();" class="form-control input-sm fPrecioUnitario" placeholder="Precio Unitario" value="<?php 
+                                        echo ($conceptoRecord)? $conceptoRecord['dPrecioUnitario'] :$row['dPrecioUnitario'];
+                                ?>" type="text">
                         </td>
                         <td style="color:#777;">
                             <?php echo $row['skDivisa'];?><input class="divisa" name="divisa[]" value="<?php echo $row['skDivisa'];?>" type="hidden">
@@ -316,7 +331,9 @@
                         <td nowrap=""><?php echo $row['sNombre'];?></td>
                         <td class="show_dolares" nowrap=""> <?php 
                             if ($row['skDivisa'] === 'USD') {
-                                echo $row['dTipoCambio'] * ($row['iCantidad'] * $row['dPrecioUnitario'] );
+
+                                //echo $row['dTipoCambio'] * ($row['iCantidad'] * $row['dPrecioUnitario'] );
+                                echo ($conceptoRecord)? $conceptoRecord['dTipoCambio'] * ($conceptoRecord['iCantidad'] * $$conceptoRecord['dPrecioUnitario'] ): '';
                             }?> </td>
                         <td> 
                             <span class="show_subtotal"><?php echo $row['dImporte']; $totalConceptos += $row['dImporte']?></span> 
@@ -504,7 +521,7 @@
                                     <input name="iCantidad[]" onchange="cotizar();" class="form-control input-sm iCantidad" placeholder="Cant" value="0" type="text">
                                 </td>
                                 <td>
-                                    <input name="fPrecioUnitario[]" onchange="cotizar();" class="form-control input-sm fPrecioUnitario" placeholder="Precio Unitario" value="`+d.fPrecioUnitario+`" type="text">
+                                    <input name="fPrecioUnitario[]" onchange="cotizar();" class="form-control input-sm fPrecioUnitario" placeholder="Precio Unitario" value="`+d.dPrecioUnitario+`" type="text">
                                 </td>
                                 <td style="color:#777;">
                                     `+d.skDivisa+`<input class="divisa" name="divisa[]" value="`+d.skDivisa+`" type="hidden">

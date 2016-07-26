@@ -513,7 +513,7 @@ Class Rex_Model Extends Core_Model {
 }
 
 
-    public function getConceptos($skSocioImportador)
+    public function getConceptos($skSocioImportador, $robj = false)
     {
 
         $sql = "
@@ -525,11 +525,12 @@ Class Rex_Model Extends Core_Model {
             ca.sNombre,
             ca.sDescripcion,
             ca.skDivisa,
-            ca.fPrecioUnitario
+            ca.fPrecioUnitario as dPrecioUnitario
         FROM rel_cat_empresas_tarifas_conceptos rcetc
         INNER JOIN cat_conceptos ca ON (ca.skConcepto = rcetc.skConcepto)
         INNER JOIN rel_empresas_socios ce ON (rcetc.skEmpresa = ce.skEmpresa)
-        WHERE ce.skSocioEmpresa = '$skSocioImportador';";
+        WHERE ce.skSocioEmpresa = '$skSocioImportador' ORDER BY ca.sNombre ;";
+        //die($sql);
 
         $r = $this->db->query($sql);
 
@@ -550,14 +551,18 @@ Class Rex_Model Extends Core_Model {
                     cc.sNombre,
                     cc.sDescripcion,
                     cc.skDivisa,
-                    cc.fPrecioUnitario
+                    cc.fPrecioUnitario as dPrecioUnitario
                 FROM
                     cat_conceptos cc
                         INNER JOIN
                     rel_cat_conceptos_tipos_empresas rccte ON (cc.skConcepto = rccte.skConcepto)
                 WHERE
-                    rccte.skTipoEmpresa = 'rext' ";
+                    rccte.skTipoEmpresa = 'rext' ORDER BY cc.sNombre ";
             $r = $this->db->query($sql_todosConceptos);
+
+            if ($robj) {
+                return $r;
+            }
             $arg = array();
 
             while ($row = $r->fetch_assoc()) {
@@ -636,7 +641,7 @@ Class Rex_Model Extends Core_Model {
                 INNER JOIN
             ope_referenciasExternas ON (ope_referenciasExternas.skReferenciaExterna = rel_referenciasExternas_conceptos.skReferenciaExterna)
         WHERE
-            rel_referenciasExternas_conceptos.skReferenciaExterna = '$skReferenciaExterna';";
+            rel_referenciasExternas_conceptos.skReferenciaExterna = '$skReferenciaExterna' ORDER BY cat_conceptos.sNombre;";
 
         $r = $this->db->query($sql);
 
