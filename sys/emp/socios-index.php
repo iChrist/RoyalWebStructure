@@ -14,6 +14,9 @@
                         <thead>
                         <tr role="row" class="heading">
                             <th width="25%">
+                                Acciones
+                            </th>
+                            <th width="25%">
                                 RFC
                             </th>
                             <th width="25%">
@@ -37,11 +40,14 @@
                             <th width="25%">
                                Estatus
                             </th>
-                            <th width="25%">
-                                Acciones
-                            </th>
                         </tr>
                         <tr role="row" class="filter">
+                            <td>
+                                <div aria-label="Acciones" role="group" class="btn-group btn-group-xs">
+                                    <button class="btn btn-xs btn-default filter-submit margin-bottom"><i class="fa fa-search"></i> Buscar</button>
+                                    <button class="btn btn-xs btn-warning filter-cancel"><i class="fa fa-refresh"></i></button>
+                                </div>
+                            </td>
                             <td>
                                 <input type="text" class="form-control form-filter input-sm" name="sRFC" placeholder="RFC">
                             </td>
@@ -118,12 +124,6 @@
                                     }//ENDWHILE
                                 ?>
                                 </select>
-                            </td>
-                            <td>
-                                <div aria-label="Acciones" role="group" class="btn-group btn-group-xs">
-                                    <button class="btn btn-xs btn-default filter-submit margin-bottom"><i class="fa fa-search"></i> Buscar</button>
-                                    <button class="btn btn-xs btn-warning filter-cancel"><i class="fa fa-refresh"></i></button>
-                                </div>
                             </td>
                         </tr>
                         </thead>
