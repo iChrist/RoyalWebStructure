@@ -142,10 +142,10 @@
                   </span>
               </div>
         </div>
-          <label class="control-label col-md-1">Hora</label>
+          <label class="control-label col-md-1"></label>
            <div class="col-md-2">
               <div class="input-group bootstrap-timepicker">
-                  <input type="text" id="tHoraPrevio" name="tHoraPrevio" class="form-control timepicker-24" value="<?php echo (isset($result['tHoraPrevio']) ? utf8_encode($result['tHoraPrevio']) : ''); ?>">
+                  <input type="text" id="tHoraPrevio" name="tHoraPrevio" class="form-control timepicker-24" value="<?php echo (isset($result['tHoraPrevio']) ? utf8_encode($result['tHoraPrevio']) : ' '); ?>">
                   <span class="input-group-btn">
                       <button type="button" class="btn btn-default"><i class="fa fa-clock-o"></i></button>
                   </span>
@@ -163,10 +163,10 @@
                   </span>
               </div>
         </div>
-          <label class="control-label col-md-1">Hora</label>
+          <label class="control-label col-md-1"></label>
            <div class="col-md-2">
               <div class="input-group bootstrap-timepicker">
-                  <input type="text" id="tHoraDespacho" name="tHoraDespacho" class="form-control timepicker-24" value="<?php echo (isset($result['tHoraDespacho']) ? utf8_encode($result['tHoraDespacho']) : ''); ?>">
+                  <input type="text" id="tHoraDespacho" name="tHoraDespacho" class="form-control timepicker-24" value="<?php echo (isset($result['tHoraDespacho']) ? utf8_encode($result['tHoraDespacho']) : ' '); ?>">
                   <span class="input-group-btn">
                       <button type="button" class="btn btn-default"><i class="fa fa-clock-o"></i></button>
                   </span>
@@ -183,10 +183,10 @@
                   </span>
               </div>
         </div>
-          <label class="control-label col-md-1">Hora</label>
+          <label class="control-label col-md-1"></label>
            <div class="col-md-2">
               <div class="input-group bootstrap-timepicker">
-                  <input type="text" id="tHoraClasificacion" name="tHoraClasificacion" class="form-control timepicker-24" value="<?php echo (isset($result['tHoraClasificacion']) ? utf8_encode($result['tHoraClasificacion']) : ''); ?>">
+                  <input type="text" id="tHoraClasificacion" name="tHoraClasificacion" class="form-control timepicker-24" value="<?php echo (isset($result['tHoraClasificacion']) ? utf8_encode($result['tHoraClasificacion']) : ' '); ?>">
                   <span class="input-group-btn">
                       <button type="button" class="btn btn-default"><i class="fa fa-clock-o"></i></button>
                   </span>
@@ -203,10 +203,10 @@
                   </span>
               </div>
         </div>
-          <label class="control-label col-md-1">Hora</label>
+          <label class="control-label col-md-1"></label>
            <div class="col-md-2">
               <div class="input-group bootstrap-timepicker">
-                  <input type="text" id="tHoraGlosa" name="tHoraGlosa" class="form-control timepicker-24" value="<?php echo (isset($result['tHoraGlosa']) ? utf8_encode($result['tHoraGlosa']) : ''); ?>">
+                  <input type="text" id="tHoraGlosa" name="tHoraGlosa" class="form-control timepicker-24" value="<?php echo (isset($result['tHoraGlosa']) ? utf8_encode($result['tHoraGlosa']) : ' '); ?>">
                   <span class="input-group-btn">
                       <button type="button" class="btn btn-default"><i class="fa fa-clock-o"></i></button>
                   </span>
@@ -223,10 +223,10 @@
                   </span>
               </div>
         </div>
-          <label class="control-label col-md-1">Hora</label>
+          <label class="control-label col-md-1"></label>
            <div class="col-md-2">
               <div class="input-group bootstrap-timepicker">
-                  <input type="text" id="tHoraCaptura" name="tHoraCaptura" class="form-control timepicker-24" value="<?php echo (isset($result['tHoraCaptura']) ? utf8_encode($result['tHoraCaptura']) : ''); ?>">
+                  <input type="text" id="tHoraCaptura" name="tHoraCaptura" class="form-control timepicker-24" value="<?php echo (isset($result['tHoraCaptura']) ? utf8_encode($result['tHoraCaptura']) : ' '); ?>">
                   <span class="input-group-btn">
                       <button type="button" class="btn btn-default"><i class="fa fa-clock-o"></i></button>
                   </span>
@@ -243,10 +243,10 @@
                   </span>
               </div>
         </div>
-          <label class="control-label col-md-1">Hora</label>
+          <label class="control-label col-md-1"></label>
            <div class="col-md-2">
               <div class="input-group bootstrap-timepicker">
-                  <input type="text" id="tHoraRevalidacion" name="tHoraRevalidacion" class="form-control timepicker-24" value="<?php echo (isset($result['tHoraRevalidacion']) ? utf8_encode($result['tHoraRevalidacion']) : ''); ?>">
+                  <input type="text" id="tHoraRevalidacion" name="tHoraRevalidacion" class="form-control timepicker-24" value="<?php echo (isset($result['tHoraRevalidacion']) ? utf8_encode($result['tHoraRevalidacion']) : ' '); ?>">
                   <span class="input-group-btn">
                       <button type="button" class="btn btn-default"><i class="fa fa-clock-o"></i></button>
                   </span>
@@ -263,10 +263,10 @@
                   </span>
               </div>
         </div>
-          <label class="control-label col-md-1">Hora</label>
+          <label class="control-label col-md-1"></label>
            <div class="col-md-2">
               <div class="input-group bootstrap-timepicker">
-                  <input type="text" id="tHoraFacturacion" name="tHoraFacturacion" class="form-control timepicker-24" value="<?php echo (isset($result['tHoraFacturacion']) ? utf8_encode($result['tHoraFacturacion']) : ''); ?>">
+                  <input type="text" id="tHoraFacturacion" name="tHoraFacturacion" class="form-control timepicker-24" value="<?php echo (isset($result['tHoraFacturacion']) ? utf8_encode($result['tHoraFacturacion']) : ' '); ?>">
                   <span class="input-group-btn">
                       <button type="button" class="btn btn-default"><i class="fa fa-clock-o"></i></button>
                   </span>

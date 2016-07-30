@@ -163,8 +163,9 @@ Class Rex_Controller Extends Rex_Model {
             return $this->refe_update();
         }
         if (isset($_GET["p1"])){
-            $this->data['datos'] =      parent::getReferencia($_GET["p1"]);
-            $this->data['conceptosRef'] = parent::getConceptosReferencia($_GET["p1"]);
+            $this->data['datos']                =       parent::getReferencia($_GET["p1"]);
+            $this->data['conceptosRef']         =       parent::getConceptosReferencia($_GET["p1"]);
+            $this->data['conceptosTotales']     =       parent::getConceptos(".", true);
         }
         $this->load_view('refe-form',$this->data,true);
     }
@@ -424,7 +425,7 @@ Class Rex_Controller Extends Rex_Model {
 
         return true;
     }
-    
+
     /* Agregado de Documentos */
     public function reexdo_form()
     {
@@ -436,7 +437,7 @@ Class Rex_Controller Extends Rex_Model {
           $arrayDocumentos = (isset($_POST['skDocTipo']) ? $_POST['skDocTipo'] : array());
 
             if ($_POST['skReferenciaExterna']) {
-                
+
                 // ELIMINAMOS LOS ARCHIVOS QUE HALLA ELIMINADO EL USUARIO //
                 $datos = array('skReferenciaExterna'=>$_POST['skReferenciaExterna']);
                 if(isset($_POST['skDocumentoReferencia'])){
@@ -492,7 +493,7 @@ Class Rex_Controller Extends Rex_Model {
                     }
                 }
             }
-          
+
           $this->data['response'] = true;
           $this->data['message'] = 'Registro actualizado con &eacute;xito.';
           header('Content-Type: application/json');
@@ -500,7 +501,7 @@ Class Rex_Controller Extends Rex_Model {
           return TRUE;
 
         }
-        
+
 
         if (isset($_GET['p1'])) {
            $this->refex['skReferenciaExterna'] = $_GET['p1'];
@@ -513,7 +514,7 @@ Class Rex_Controller Extends Rex_Model {
 
         return TRUE;
     }
-    
+
     public function reexde_detail()
     {
         if (isset($_GET['p1'])) {
@@ -521,6 +522,7 @@ Class Rex_Controller Extends Rex_Model {
             $this->data['datos'] = parent::reexfo_referencias();
             $this->data['myFotos']= parent::listar_fotos_referencias();
             $this->data['filesDocTipo'] = parent::get_rel_referenciasExternas_documentos();
+            $this->data['conceptos'] = parent::conceptos_referencia();
         }
         $this->load_view('reexde-detail', $this->data);
 
@@ -533,29 +535,33 @@ Class Rex_Controller Extends Rex_Model {
       $this->data['datos'] = false;
         if($_POST) {
             $this->refex['skReferenciaExterna'] = $_POST['skReferenciaExterna'];
-            $this->refex['dFechaPrevio'] = utf8_decode(!empty($_POST['dFechaPrevio']) ? date('Y-m-d', strtotime($_POST['dFechaPrevio'])) : '');
+            $this->refex['dFechaPrevio'] = utf8_decode(!empty($_POST['dFechaPrevio']) ? date('Y-m-d H:i:s', strtotime($_POST['dFechaPrevio'].$_POST['tHoraPrevio'])) : 'NULL');
             $this->refex['tHoraPrevio'] = utf8_decode(!empty($_POST['tHoraPrevio']) ? $_POST['tHoraPrevio'] : '');
-            $this->refex['dFechaDespacho'] = utf8_decode(!empty($_POST['dFechaDespacho']) ? date('Y-m-d', strtotime($_POST['dFechaDespacho'])) : '');
+            $this->refex['dFechaDespacho'] = utf8_decode(!empty($_POST['dFechaDespacho']) ? date('Y-m-d', strtotime($_POST['dFechaDespacho'].$_POST['tHoraDespacho'])) : 'NULL');
             $this->refex['tHoraDespacho'] = utf8_decode(!empty($_POST['tHoraDespacho']) ? $_POST['tHoraDespacho'] : '');
-            $this->refex['dFechaClasificacion'] = utf8_decode(!empty($_POST['dFechaClasificacion']) ? date('Y-m-d', strtotime($_POST['dFechaClasificacion'])) : '');
+            $this->refex['dFechaClasificacion'] = utf8_decode(!empty($_POST['dFechaClasificacion']) ? date('Y-m-d', strtotime($_POST['dFechaClasificacion'].$_POST['tHoraClasificacion'])) : 'NULL');
             $this->refex['tHoraClasificacion'] = utf8_decode(!empty($_POST['tHoraClasificacion']) ? $_POST['tHoraClasificacion'] : '');
-            $this->refex['dFechaGlosa'] = utf8_decode(!empty($_POST['dFechaGlosa']) ? date('Y-m-d', strtotime($_POST['dFechaGlosa'])) : date('Y-m-d'));
+            $this->refex['dFechaGlosa'] = utf8_decode(!empty($_POST['dFechaGlosa']) ? date('Y-m-d', strtotime($_POST['dFechaGlosa'].$_POST['tHoraGlosa'])) : 'NULL');
             $this->refex['tHoraGlosa'] = utf8_decode(!empty($_POST['tHoraGlosa']) ? $_POST['tHoraGlosa'] : '');
-            $this->refex['dFechaCapturaPedimento'] = utf8_decode(!empty($_POST['dFechaCapturaPedimento']) ? date('Y-m-d', strtotime($_POST['dFechaCapturaPedimento'])) : '');
+            $this->refex['dFechaCapturaPedimento'] = utf8_decode(!empty($_POST['dFechaCapturaPedimento']) ? date('Y-m-d', strtotime($_POST['dFechaCapturaPedimento'].$_POST['tHoraCaptura'])) : 'NULL');
             $this->refex['tHoraCaptura'] = utf8_decode(!empty($_POST['tHoraCaptura']) ? $_POST['tHoraCaptura'] : '');
-            $this->refex['dFechaRevalidacion'] = utf8_decode(!empty($_POST['dFechaRevalidacion']) ? date('Y-m-d', strtotime($_POST['dFechaRevalidacion'])) : '');
+            $this->refex['dFechaRevalidacion'] = utf8_decode(!empty($_POST['dFechaRevalidacion']) ? date('Y-m-d', strtotime($_POST['dFechaRevalidacion'].$_POST['tHoraRevalidacion'])) : 'NULL');
             $this->refex['tHoraRevalidacion'] = utf8_decode(!empty($_POST['tHoraRevalidacion']) ? $_POST['tHoraRevalidacion'] : '');
-            $this->refex['dFechaFacturacion'] = utf8_decode(!empty($_POST['dFechaFacturacion']) ? date('Y-m-d', strtotime($_POST['dFechaFacturacion'])) : '');
+            $this->refex['dFechaFacturacion'] = utf8_decode(!empty($_POST['dFechaFacturacion']) ? date('Y-m-d', strtotime($_POST['dFechaFacturacion'].$_POST['tHoraFacturacion'])) : 'NULL');
             $this->refex['tHoraFacturacion'] = utf8_decode(!empty($_POST['tHoraFacturacion']) ? $_POST['tHoraFacturacion'] : '');
           if ($_POST['skReferenciaExterna']) {
-                /*$skReferenciaExterna = parent::create_previos();
+                $skReferenciaExterna = parent::editar_fechas_referencia();
                 if(!$skReferenciaExterna){
-
+                    $this->data['response'] = true;
+                    $this->data['message'] = 'Registro actualizado con &eacute;xito.';
+                    header('Content-Type: application/json');
+                    echo json_encode($this->data);
+                    return true;
                 }else{
 
 
                 }
-                */
+
 
           }
 
@@ -573,5 +579,57 @@ Class Rex_Controller Extends Rex_Model {
 
         return true;
     }
+    public function reex_index()
+    {
+        if (isset($_GET['axn'])) {
+            switch ($_GET['axn']) {
+                            case 'fetch_all':
+                            $total = parent::countGetReferenciasExternas();
+                            $records = Core_Functions::table_ajax($total);
+                                    if ($records['recordsTotal'] === 0) {
+                                        header('Content-Type: application/json');
+                                        echo json_encode($records);
+                                        return false;
+                                    }
+                                    $this->refex['limit'] = $records['limit'];
+                                    $this->refex['offset'] = $records['offset'];
+                                    $this->data['data'] = parent::read_referencias_resumen();
+                                    if (!$this->data['data']) {
+                                        header('Content-Type: application/json');
+                                        echo json_encode($records);
+                                        return false;
+                                    }
+
+                                    while ($row = $this->data['data']->fetch_assoc()) {
+                                        $actions = $this->printModulesButtons(2, array($row['skReferenciaExterna']));
+                                        array_push($records['data'], array(
+                                                !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : '',
+                                                utf8_encode($row['skEstatus']),
+                                                ($row['sReferencia'] ? utf8_encode($row['sReferencia']) : 'N/D'),
+                                                ($row['dFechaPrevio'] ? '<label   data-toggle="tooltip" data-placement="top" title="'.date('d/m/Y H:i:s', strtotime($row['dFechaPrevio'])).'" ><i class="fa fa-check"></i></label>' : ''),
+                                                ($row['dFechaDespacho'] ? '<i class="fa fa-check"  data-toggle="tooltip" data-placement="top" title="'.date('d/m/Y H:i:s', strtotime($row['dFechaDespacho'])).'"></i>' : ''),
+                                                ($row['dFechaClasificacion'] ? '<i class="fa fa-check" data-toggle="tooltip" data-placement="top" title="'.date('d/m/Y H:i:s', strtotime($row['dFechaClasificacion'])).'"></i>' : ''),
+                                                ($row['dFechaGlosa'] ? '<i class="fa fa-check" data-toggle="tooltip" data-placement="top" title="'.date('d/m/Y H:i:s', strtotime($row['dFechaGlosa'])).'"></i>' : ''),
+                                                ($row['dFechaCapturaPedimento'] ? '<i class="fa fa-check" data-toggle="tooltip" data-placement="top" title="'.date('d/m/Y H:i:s', strtotime($row['dFechaCapturaPedimento'])).'"></i>' : ''),
+                                                ($row['dFechaRevalidacion'] ? '<i class="fa fa-check" data-toggle="tooltip" data-placement="top" title="'.date('d/m/Y H:i:s', strtotime($row['dFechaRevalidacion'])).'"></i>' : ''),
+                                                ($row['dFechaFacturacion'] ? '<i class="fa fa-check" data-toggle="tooltip" data-placement="top" title="'.date('d/m/Y H:i:s', strtotime($row['dFechaFacturacion'])).'"></i>' : ''),
+                                                ($row['iDeposito'] ? utf8_encode($row['iDeposito']) : 'N/D'),
+                                                ($row['iSaldo'] ? utf8_encode($row['iSaldo']) : 'N/D'),
+                                            ));
+                                    }
+                                    header('Content-Type: application/json');
+                                    echo json_encode($records);
+
+                            return true;
+                        break;
+                    }
+
+            return true;
+        }
+            $this->load_view('reex-index', $this->data);
+
+        return true;
+    }
+
     /* TERMINA MODULO (REX) */
 }

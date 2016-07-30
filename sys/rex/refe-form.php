@@ -12,7 +12,7 @@
         //echo DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaFacturacion"])->format('d-m-Y');
         //2016-07-26 00:00:00
         //(isset($result["sReferencia"])) ? echo $result["sReferencia"] : echo '' ;
-        
+        //die(print_r($data["conceptosTotales"],true)."<br>".print_r($data["conceptosRef"],true));
         ?>
 
 
@@ -23,19 +23,7 @@
     <input type="hidden" name="axn" id="anx" value="<?php echo (isset($result["sReferencia"])) ? 'update' : 'insert' ;?>" ></input>
     <div class="form-body">
 
-    <div class="form-group">
-        <label class="control-label col-md-3">Meridian Format</label>
-        <div class="col-md-4">
-            <div class="input-group date form_meridian_datetime" data-date="2012-12-21T15:25:00Z">
-                <input type="text" size="16" readonly class="form-control">
-                <div class="input-group-btn">
-                    <button class="btn btn-success date-reset" type="button"><i class="fa fa-times"></i></button>
-                    <button class="btn btn-success date-set" type="button"><i class="fa fa-calendar"></i></button>
-                </div>
-            </div>
-            <!-- /input-group -->
-        </div>
-    </div>
+
 
         <div class="form-group">
             <label class="control-label col-md-2">Referencia <span aria-required="true" class="required"> * </span>
@@ -48,25 +36,16 @@
                 </div>
             </div>
 
-<<<<<<< HEAD
-            <label class="control-label col-md-2">Pedimento <span aria-required="true" class="required"> * </span>
-=======
             <label class="control-label col-md-2">Importador <span aria-required="true" class="required"> * </span>
->>>>>>> d9f5d959188007792ee958ff3a1b2bacecc69b98
             </label>
             <div class="col-md-4">
                 <div class="input-icon right">
                     <i class="fa"></i>
-<<<<<<< HEAD
-                    <input type="text" maxlength="50" name="sPedimento" id="sPedimento" class="form-control" placeholder="Numero de pedimento" value="<?php echo (isset($result['sPedimento'])) ? htmlentities(utf8_encode($result['sPedimento'])) : $data['maxPedimento']; ?>" >
-=======
                     <select class="form-control" id="skSocioImportador" name="skSocioImportador">
                         <option value="">--Seleccione Importador--</option>
                     </select>
->>>>>>> d9f5d959188007792ee958ff3a1b2bacecc69b98
                 </div>
             </div>
-            
         </div>
 
 
@@ -98,14 +77,12 @@
         </div>
 
         <div class="form-group">
-            <label class="control-label col-md-2">Socio Importador <span aria-required="true" class="required"> * </span>
+            <label class="control-label col-md-2">Pedimento <span aria-required="true" class="required"> * </span>
             </label>
             <div class="col-md-4">
                 <div class="input-icon right">
                     <i class="fa"></i>
-                    <select class="form-control" id="skSocioImportador" name="skSocioImportador">
-                        <option value="">--Seleccione socio Importador--</option>
-                    </select>
+                    <input type="text" maxlength="50" name="sPedimento" id="sPedimento" class="form-control" placeholder="Numero de pedimento" value="<?php echo (isset($result["sPedimento"])) ? $result["sPedimento"] : '' ;?>" >
                 </div>
             </div>
         </div>
@@ -159,7 +136,14 @@
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                     </span>
+                    
                 </div>
+                <div class="input-group bootstrap-timepicker">
+                        <input type="text" value="<?php echo (isset($result["dFechaPrevio"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaPrevio"])->format('H:i:s') : '0:00:00' ;?>" class="form-control timepicker-24" name="tHoraPrevio" id="tHoraPrevio" aria-invalid="false">
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" type="button"><i class="fa fa-clock-o"></i></button>
+                        </span>
+                    </div>
             </div>
             <label class="control-label col-md-2">Fecha de despacho</label>
             <div class="col-md-4">
@@ -168,7 +152,14 @@
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                     </span>
+
                 </div>
+                                    <div class="input-group bootstrap-timepicker">
+                        <input type="text" value="<?php echo (isset($result["dFechaDespacho"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaDespacho"])->format('H:i:s') : '0:00:00' ;?>" class="form-control timepicker-24" name="tHoraDespacho" id="tHoraDespacho" aria-invalid="false">
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" type="button"><i class="fa fa-clock-o"></i></button>
+                        </span>
+                    </div>
             </div>
         </div>
 
@@ -181,7 +172,14 @@
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                     </span>
+                    
                 </div>
+                <div class="input-group bootstrap-timepicker">
+                        <input type="text" value="<?php echo (isset($result["dFechaClasificacion"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaClasificacion"])->format('H:i:s') : '0:00:00' ;?>" class="form-control timepicker-24" name="tHoraClasificacion" id="tHoraClasificacion" aria-invalid="false">
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" type="button"><i class="fa fa-clock-o"></i></button>
+                        </span>
+                    </div>
             </div>
             <label class="control-label col-md-2">Fecha de glosa</label>
             <div class="col-md-4">
@@ -190,7 +188,14 @@
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                     </span>
+                    
                 </div>
+                <div class="input-group bootstrap-timepicker">
+                        <input type="text" value="<?php echo (isset($result["dFechaGlosa"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaGlosa"])->format('H:i:s') : '0:00:00' ;?>" class="form-control timepicker-24" name="tHoraGlosa" id="tHoraGlosa" aria-invalid="false">
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" type="button"><i class="fa fa-clock-o"></i></button>
+                        </span>
+                    </div>
             </div>
         </div>
 
@@ -203,7 +208,14 @@
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                     </span>
+                    
                 </div>
+                <div class="input-group bootstrap-timepicker">
+                        <input type="text" value="<?php echo (isset($result["dFechaCapturaPedimento"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaCapturaPedimento"])->format('H:i:s') : '0:00:00' ;?>" class="form-control timepicker-24" name="tHoraCapturaPedimento" id="tHoraCapturaPedimento" aria-invalid="false">
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" type="button"><i class="fa fa-clock-o"></i></button>
+                        </span>
+                    </div>
             </div>
             <label class="control-label col-md-2">Fecha de revalidacion</label>
             <div class="col-md-4">
@@ -212,7 +224,14 @@
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                     </span>
+                    
                 </div>
+                <div class="input-group bootstrap-timepicker">
+                        <input type="text" value="<?php echo (isset($result["dFechaRevalidacion"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaRevalidacion"])->format('H:i:s') : '0:00:00' ;?>" class="form-control timepicker-24" name="tHoraRevalidacion" id="tHoraRevalidacion" aria-invalid="false">
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" type="button"><i class="fa fa-clock-o"></i></button>
+                        </span>
+                    </div>
             </div>
         </div>
 
@@ -224,7 +243,14 @@
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                     </span>
+                    
                 </div>
+                <div class="input-group bootstrap-timepicker">
+                        <input type="text" value="<?php echo (isset($result["dFechaFacturacion"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaFacturacion"])->format('H:i:s') : '0:00:00' ;?>" class="form-control timepicker-24" name="tHoraFacturacion" id="tHoraFacturacion" aria-invalid="false">
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" type="button"><i class="fa fa-clock-o"></i></button>
+                        </span>
+                    </div>
             </div>
         </div>
 
@@ -269,20 +295,35 @@
                     <?php 
                     $totalConceptos = 0;
                         if (isset($data["conceptosRef"])) {
-
-                            while ($row = $data["conceptosRef"]->fetch_assoc()) {
+                           /*$data["conceptosTotales"]
+                            $data["conceptosRef"]*/
+                            
+                            while ($row = $data["conceptosTotales"]->fetch_assoc()) {
+                                $conceptoRecord = false;
+                                while($cr = $data["conceptosRef"]->fetch_assoc()){
+                                    $conceptoRecord = ( ($cr["skConcepto"] ===  $row["skConcepto"]) ) ? $cr : false;
+                                }
+                                echo "<pre>".print_r($conceptoRecord ,true)."</pre>";
                                 
 
+                                
                     ?>
+
                     <tr>
                         <td>
-                            <input onchange="cotizar();" value="<?php echo $row['skConcepto'];?>" name="conceptos[]" type="checkbox" checked>
+                            <input onchange="cotizar();" value="<?php 
+                                echo $row['skConcepto'];
+                            ?>" name="conceptos[]" type="checkbox" <?php echo ($conceptoRecord)? 'checked' : '';?> >
                         </td>
                         <td>
-                            <input name="iCantidad[]" onchange="cotizar();" class="form-control input-sm iCantidad" placeholder="Cant" value="<?php echo $row['iCantidad'];?>" type="text">
+                            <input name="iCantidad[]" onchange="cotizar();" class="form-control input-sm iCantidad" placeholder="Cant" value="<?php 
+                                echo ($conceptoRecord)? $conceptoRecord["iCantidad"]:"0" ;
+                            ?>" type="text">
                         </td>
                         <td>
-                            <input name="fPrecioUnitario[]" onchange="cotizar();" class="form-control input-sm fPrecioUnitario" placeholder="Precio Unitario" value="<?php echo $row['dPrecioUnitario'];?>" type="text">
+                            <input name="fPrecioUnitario[]" onchange="cotizar();" class="form-control input-sm fPrecioUnitario" placeholder="Precio Unitario" value="<?php 
+                                        echo ($conceptoRecord)? $conceptoRecord['dPrecioUnitario'] :$row['dPrecioUnitario'];
+                                ?>" type="text">
                         </td>
                         <td style="color:#777;">
                             <?php echo $row['skDivisa'];?><input class="divisa" name="divisa[]" value="<?php echo $row['skDivisa'];?>" type="hidden">
@@ -290,7 +331,9 @@
                         <td nowrap=""><?php echo $row['sNombre'];?></td>
                         <td class="show_dolares" nowrap=""> <?php 
                             if ($row['skDivisa'] === 'USD') {
-                                echo $row['dTipoCambio'] * ($row['iCantidad'] * $row['dPrecioUnitario'] );
+
+                                //echo $row['dTipoCambio'] * ($row['iCantidad'] * $row['dPrecioUnitario'] );
+                                echo ($conceptoRecord)? $conceptoRecord['dTipoCambio'] * ($conceptoRecord['iCantidad'] * $$conceptoRecord['dPrecioUnitario'] ): '';
                             }?> </td>
                         <td> 
                             <span class="show_subtotal"><?php echo $row['dImporte']; $totalConceptos += $row['dImporte']?></span> 
@@ -478,7 +521,7 @@
                                     <input name="iCantidad[]" onchange="cotizar();" class="form-control input-sm iCantidad" placeholder="Cant" value="0" type="text">
                                 </td>
                                 <td>
-                                    <input name="fPrecioUnitario[]" onchange="cotizar();" class="form-control input-sm fPrecioUnitario" placeholder="Precio Unitario" value="`+d.fPrecioUnitario+`" type="text">
+                                    <input name="fPrecioUnitario[]" onchange="cotizar();" class="form-control input-sm fPrecioUnitario" placeholder="Precio Unitario" value="`+d.dPrecioUnitario+`" type="text">
                                 </td>
                                 <td style="color:#777;">
                                     `+d.skDivisa+`<input class="divisa" name="divisa[]" value="`+d.skDivisa+`" type="hidden">
