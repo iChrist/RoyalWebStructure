@@ -138,7 +138,7 @@ Class Doc_Model Extends Core_Model {
     }
 
     public function read_equal_docTipo() {
-        $sql = "SELECT docTipo.*,st.sHtml AS htmlStatus FROM cat_docTipo AS docTipo INNER JOIN _status  st ON st.skStatus = docTipo.skStatus WHERE 1=1 ";
+        $sql = "SELECT docTipo.*,st.sHtml AS htmlStatus FROM cat_docTipo AS docTipo INNER JOIN rel_tiposDocumentos_modulos tdm ON tdm.skDocTipo = docTipo.skDocTipo AND tdm.skModulo = 'docume-form' INNER JOIN _status  st ON st.skStatus = docTipo.skStatus WHERE 1=1 ";
         if (!empty($this->recepcionDoc_docTipo['skDocTipo'])) {
             $sql .=" AND docTipo.skDocTipo = '" . $this->recepcionDoc_docTipo['skDocTipo'] . "'";
         }

@@ -34,10 +34,10 @@
                  <?php echo ($result['propietario'] ? utf8_encode($result['propietario']) : 'N/D') ; ?>
               </p>
             </div>
-            <label class="text-right col-md-2"><b>Fecha Solicitud</b></label>
+            <label class="text-right col-md-2"><b>Fecha Programacion</b></label>
             <div class="col-md-4">
               <p class="text-left">
-                 <?php echo ($result['fechaSolicitud'] ? date('d/m/Y H:i:s', strtotime($result['fechaSolicitud'])) : 'N/D') ; ?>
+                 <?php echo ($result['fechaProgramacion'] ? date('d/m/Y ', strtotime($result['fechaProgramacion'])) : 'N/D') ; ?>
               </p>
             </div>
 

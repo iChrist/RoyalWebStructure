@@ -14,19 +14,25 @@ Class Rex_Controller Extends Rex_Model {
 
     }
     /* COMIENZA MODULO (REX) */
-    
+
     public function rex_index()
     {
         $this->ref['id'] = 1;
         $this->ref['nombre'] = 'samuel';
-        $refex = $this->getrefex('AC');
-        $refex['otroDato'] = 'muajajaja';
+        $this->ref['listAlmacenes'] = parent::getAlmacenes();
+        $this->ref['listEstados'] =  parent::getStatus();
+        //$refex = $this->getrefex('AC');
+
         //$this->load_view('NombreArhivo' , $datosParaVista = array() , $bool = TRUE , $path = NULL);
         $this->load_view('rex-index1',$refex,false);
     }
 
     public function refe_index()
     {
+        $this->filters['listAlmacenes'] = parent::getAlmacenes();
+        $this->filters['listEstados'] =  parent::getStatus();
+        $this->filters['listSocios'] = parent::getSociosImportador($_SESSION['session']['skSocioEmpresaUsuario']);
+
         if(isset($_GET['axn'])){
             switch ($_GET['axn']) {
                 case 'fetch_all':
@@ -79,6 +85,9 @@ Class Rex_Controller Extends Rex_Model {
                 if(isset($_POST['sSocioImportador'])){
                     $this->refex['sSocioImportador'] = $_POST['sSocioImportador'];
                 }
+                if(isset($_POST['sMercancia'])){
+                    $this->refex['sMercancia'] = $_POST['sMercancia'];
+                }
                     // OBTENER REGISTROS //
                 $total = parent::countGetReferenciasExternas();
                 $records = Core_Functions::table_ajax($total);
@@ -101,7 +110,8 @@ Class Rex_Controller Extends Rex_Model {
                 while($row = $this->data['data']->fetch_assoc()){
                     $actions = $this->printModulesButtons(2,array($row['skReferenciaExterna']));
                     array_push($records['data'], array(
-                         utf8_encode($row['sPedimento'])
+                        !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''
+                        ,utf8_encode($row['sPedimento'])
                         ,utf8_encode($row['sReferencia'])
                         ,utf8_encode($row['sMercancia'])
                         ,utf8_encode($row['sGuiaMaster'])
@@ -118,7 +128,7 @@ Class Rex_Controller Extends Rex_Model {
                         ,utf8_encode($row['sAlmacen'])
                         ,utf8_encode($row['sEstatus'])
                         ,utf8_encode($row['sSocioImportador'])
-                        ,!empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : ''));
+                        ));
                 }
 
                 header('Content-Type: application/json');
@@ -128,8 +138,8 @@ Class Rex_Controller Extends Rex_Model {
             }
             return true;
         }
-        $this->load_view('refe-index',NULL,true);
-    }    
+        $this->load_view('refe-index',$this->filters,true);
+    }
 
     public function refe_form()
     {
@@ -138,24 +148,43 @@ Class Rex_Controller Extends Rex_Model {
         $this->data['success'] = false;
         $this->data['datos'] = false;
         $this->data['tipoCambio'] = $this->tipo_cambio();
-        
+        // SACAMOS EL PEDIMENTO EN COLA //
+        $maxPedimento = parent::getMaxPedimento();
+        if ($maxPedimento) {
+            $this->data['maxPedimento'] = $maxPedimento['sPedimento'] + 1;
+        } else {
+            $this->data['maxPedimento'] = '';
+        }
+
         if(isset($_POST['axn']) && $_POST['axn'] =='insert'){
-            return $this->refe_save();
+            return $this->refe_save($maxPedimento);
         }
         if (isset($_POST['axn']) &&  $_POST['axn'] =='update') {
             return $this->refe_update();
         }
         if (isset($_GET["p1"])){
-            $this->data['datos'] =      parent::getReferencia($_GET["p1"]);
-            $this->data['conceptosRef'] = parent::getConceptosReferencia($_GET["p1"]);
+            $this->data['datos']                =       parent::getReferencia($_GET["p1"]);
+            $this->data['conceptosRef']         =       parent::getConceptosReferencia($_GET["p1"]);
+            $this->data['conceptosTotales']     =       parent::getConceptos(".", true);
         }
         $this->load_view('refe-form',$this->data,true);
     }
 
-    public function refe_save()
+    public function refe_save($maxPedimento)
     {
 
-        $le = $this->insertar();
+        $this->refex['sPedimento'] = utf8_decode($_POST['sPedimento']);
+        if (parent::countGetReferenciasExternas(true)) {
+            $this->data['response'] = false;
+            $this->data['errorPedimento'] = false;
+            $this->data['message'] = 'El pedimento ' . $this->refex['sPedimento'] . " Ya ha sido utilizado, intenta con " . ($maxPedimento['sPedimento'] + 1);
+            header('Content-Type: application/json');
+            echo json_encode($this->data);
+            return false;
+        }
+
+
+        $le = parent::insertar();
 
         if(!$le){
             $this->data['message'] = "Hubo un error al guardar el registro ";
@@ -217,7 +246,7 @@ Class Rex_Controller Extends Rex_Model {
             echo json_encode($arr);
             return true;
         }
-    }    
+    }
 
     public function jsonSocioImportadores()
     {
@@ -234,7 +263,7 @@ Class Rex_Controller Extends Rex_Model {
                 echo json_encode($arr);
                 return true;
             }
-        } 
+        }
     }
 
     public function tipo_cambio()
@@ -315,17 +344,292 @@ Class Rex_Controller Extends Rex_Model {
 
     public function jsonConceptos()
     {
-        if (isset($_POST["skEmpresa"])) {
+        if (isset($_POST["skSocioImportador"])) {
             //die(var_dump(parent::getConceptos($_POST["skEmpresa"])));
             header('Content-Type: application/json');
-            echo json_encode(parent::getConceptos($_POST["skEmpresa"]));
+            echo json_encode(parent::getConceptos($_POST["skSocioImportador"]));
             return true;
         }else{
             return json_encode(array());
         }
     }
 
-    
+    public function rextfo_index()
+    {
+      $this->data['datos'] = parent::reexfo_referencias($_GET["p1"]);
+      $this->load_view('rextfo_index',$refex,false);
+    }
+
+
+    /* Agregado de Fotos */
+    public function reexfo_form()
+    {
+      $this->data['message'] = '';
+      $this->data['response'] = true;
+      $this->data['datos'] = false;
+        if ($_POST) {
+          $this->refex['skReferenciaExterna'] = $_POST['skReferenciaExterna'];
+          $arrayFotos = (isset($_POST['myFiles']) ? $_POST['myFiles'] : array());
+
+          if ($_POST['skReferenciaExterna']) {
+              if (isset($_FILES['myFiles'])) {
+
+
+                  for ($i = 0;$i < count($_FILES['myFiles']['name']);$i++) {
+                      $extension = explode('.', $_FILES['myFiles']['name'][$i]);
+                      $extension = end($extension);
+                      $skFotoReferencia = md5(microtime());
+                      $sUbicacionBDA = '/rex/fotos/'.$skFotoReferencia.'.'.$extension;
+                      $sUbicacion = SYS_PATH.'rex/fotos/'.$skFotoReferencia.'.'.$extension;
+                      if (!@move_uploaded_file($_FILES['myFiles']['tmp_name'][$i], $sUbicacion)) {
+                          return false;
+                      }
+                      $this->refex['skReferenciaExterna'] = $_POST['skReferenciaExterna'];
+                      $this->refex['skFotoReferencia'] = $skFotoReferencia;
+                      $this->refex['sUbicacion'] = $sUbicacionBDA;
+                      $skInsertadoFotos = parent::agregar_fotos_referencias();
+                      if($skInsertadoFotos){
+                        array_push($arrayFotos,$skFotoReferencia);
+                      }
+                  }
+              }
+          }
+          $arrayNoEliminados = '';
+          foreach($arrayFotos as $clave => $valor){
+              $arrayNoEliminados.= ($arrayNoEliminados ? ",'".$valor."'" : "'".$valor."'");
+          }
+          $eliminadoFotos = parent::eliminar_fotos_referencias($arrayNoEliminados);
+          if($eliminadoFotos){
+
+              $this->data['response'] = true;
+              $this->data['message'] = 'Registro actualizado con &eacute;xito.';
+              header('Content-Type: application/json');
+              echo json_encode($this->data);
+              return true;
+          }else{
+            return FALSE;
+          }
+
+
+          return true;
+
+        }
+
+
+        if (isset($_GET['p1'])) {
+           $this->refex['skReferenciaExterna'] = $_GET['p1'];
+           $this->data['datos'] = parent::reexfo_referencias();
+           $this->data['myFotos']= parent::listar_fotos_referencias();
+        }
+        $this->load_view('reexfo-form', $this->data);
+
+        return true;
+    }
+
+    /* Agregado de Documentos */
+    public function reexdo_form()
+    {
+      $this->data['message'] = '';
+      $this->data['response'] = true;
+      $this->data['datos'] = false;
+        if ($_POST) {
+          $this->refex['skReferenciaExterna'] = $_POST['skReferenciaExterna'];
+          $arrayDocumentos = (isset($_POST['skDocTipo']) ? $_POST['skDocTipo'] : array());
+
+            if ($_POST['skReferenciaExterna']) {
+
+                // ELIMINAMOS LOS ARCHIVOS QUE HALLA ELIMINADO EL USUARIO //
+                $datos = array('skReferenciaExterna'=>$_POST['skReferenciaExterna']);
+                if(isset($_POST['skDocumentoReferencia'])){
+                    $add_quotes = function ($str) {
+                        return sprintf("'%s'", $str);
+                    };
+                    $datos = array(
+                        'skReferenciaExterna'=>$_POST['skReferenciaExterna'],
+                        'skDocumentoReferencia'=>implode(',',array_map($add_quotes,$_POST['skDocumentoReferencia']))
+                    );
+                }
+                if(!parent::delete_referenciasExternas_documentos($datos)){
+                    $this->data['response'] = true;
+                    $this->data['message'] = 'Hubo un error al elmimar los documentos.';
+                    header('Content-Type: application/json');
+                    echo json_encode($this->data);
+                    return FALSE;
+                }
+                // GUARDAMOS LOS ARCHIVOS POR $_FILES //
+                if (isset($_FILES['skDocTipo'])) {
+                    foreach ($_FILES['skDocTipo'] AS $k => $v) {
+                        if ($k === 'name') {
+                            foreach ($v AS $key => $val) {
+                                if(!empty($_FILES['skDocTipo']['name'][$key])){
+                                    $extension = explode('.', $_FILES['skDocTipo']['name'][$key]);
+                                    $extension = end($extension);
+                                    $skDocumentoReferencia = md5(microtime());
+                                    $sUbicacionBDA = '/rex/documentos/'.$skDocumentoReferencia.'.'.$extension;
+                                    $sUbicacion = SYS_PATH.'rex/documentos/'.$skDocumentoReferencia.'.'.$extension;
+                                    if (!@move_uploaded_file($_FILES['skDocTipo']['tmp_name'][$key], $sUbicacion)) {
+                                        $this->data['response'] = true;
+                                        $this->data['message'] = 'Hubo un error al subir el documento.';
+                                        header('Content-Type: application/json');
+                                        echo json_encode($this->data);
+                                        return FALSE;
+                                    }
+                                    $datos = array(
+                                        'skDocumentoReferencia'=>$skDocumentoReferencia,
+                                        'skReferenciaExterna'=>$_POST['skReferenciaExterna'],
+                                        'sUbicacion'=>$sUbicacionBDA,
+                                        'skDocTipo'=>$key
+                                    );
+                                    if(!parent::create_referenciasExternas_documentos($datos)){
+                                        $this->data['response'] = true;
+                                        $this->data['message'] = 'Hubo un error al guardar el documento.';
+                                        header('Content-Type: application/json');
+                                        echo json_encode($this->data);
+                                        return FALSE;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+          $this->data['response'] = true;
+          $this->data['message'] = 'Registro actualizado con &eacute;xito.';
+          header('Content-Type: application/json');
+          echo json_encode($this->data);
+          return TRUE;
+
+        }
+
+
+        if (isset($_GET['p1'])) {
+           $this->refex['skReferenciaExterna'] = $_GET['p1'];
+           $this->data['datos'] = parent::reexfo_referencias();
+           $this->data['myFotos'] = parent::listar_fotos_referencias();
+           $this->data['filesDocTipo'] = parent::get_rel_referenciasExternas_documentos();
+        }
+        $this->data['docTipo'] = parent::get_cat_docTipo();
+        $this->load_view('reexdo-form', $this->data);
+
+        return TRUE;
+    }
+
+    public function reexde_detail()
+    {
+        if (isset($_GET['p1'])) {
+            $this->refex['skReferenciaExterna'] = $_GET['p1'];
+            $this->data['datos'] = parent::reexfo_referencias();
+            $this->data['myFotos']= parent::listar_fotos_referencias();
+            $this->data['filesDocTipo'] = parent::get_rel_referenciasExternas_documentos();
+            $this->data['conceptos'] = parent::conceptos_referencia();
+        }
+        $this->load_view('reexde-detail', $this->data);
+
+        return true;
+    }
+    public function reexfe_form()
+    {
+      $this->data['message'] = '';
+      $this->data['response'] = true;
+      $this->data['datos'] = false;
+        if($_POST) {
+            $this->refex['skReferenciaExterna'] = $_POST['skReferenciaExterna'];
+            $this->refex['dFechaPrevio'] = utf8_decode(!empty($_POST['dFechaPrevio']) ? date('Y-m-d H:i:s', strtotime($_POST['dFechaPrevio'].$_POST['tHoraPrevio'])) : 'NULL');
+            $this->refex['tHoraPrevio'] = utf8_decode(!empty($_POST['tHoraPrevio']) ? $_POST['tHoraPrevio'] : '');
+            $this->refex['dFechaDespacho'] = utf8_decode(!empty($_POST['dFechaDespacho']) ? date('Y-m-d', strtotime($_POST['dFechaDespacho'].$_POST['tHoraDespacho'])) : 'NULL');
+            $this->refex['tHoraDespacho'] = utf8_decode(!empty($_POST['tHoraDespacho']) ? $_POST['tHoraDespacho'] : '');
+            $this->refex['dFechaClasificacion'] = utf8_decode(!empty($_POST['dFechaClasificacion']) ? date('Y-m-d', strtotime($_POST['dFechaClasificacion'].$_POST['tHoraClasificacion'])) : 'NULL');
+            $this->refex['tHoraClasificacion'] = utf8_decode(!empty($_POST['tHoraClasificacion']) ? $_POST['tHoraClasificacion'] : '');
+            $this->refex['dFechaGlosa'] = utf8_decode(!empty($_POST['dFechaGlosa']) ? date('Y-m-d', strtotime($_POST['dFechaGlosa'].$_POST['tHoraGlosa'])) : 'NULL');
+            $this->refex['tHoraGlosa'] = utf8_decode(!empty($_POST['tHoraGlosa']) ? $_POST['tHoraGlosa'] : '');
+            $this->refex['dFechaCapturaPedimento'] = utf8_decode(!empty($_POST['dFechaCapturaPedimento']) ? date('Y-m-d', strtotime($_POST['dFechaCapturaPedimento'].$_POST['tHoraCaptura'])) : 'NULL');
+            $this->refex['tHoraCaptura'] = utf8_decode(!empty($_POST['tHoraCaptura']) ? $_POST['tHoraCaptura'] : '');
+            $this->refex['dFechaRevalidacion'] = utf8_decode(!empty($_POST['dFechaRevalidacion']) ? date('Y-m-d', strtotime($_POST['dFechaRevalidacion'].$_POST['tHoraRevalidacion'])) : 'NULL');
+            $this->refex['tHoraRevalidacion'] = utf8_decode(!empty($_POST['tHoraRevalidacion']) ? $_POST['tHoraRevalidacion'] : '');
+            $this->refex['dFechaFacturacion'] = utf8_decode(!empty($_POST['dFechaFacturacion']) ? date('Y-m-d', strtotime($_POST['dFechaFacturacion'].$_POST['tHoraFacturacion'])) : 'NULL');
+            $this->refex['tHoraFacturacion'] = utf8_decode(!empty($_POST['tHoraFacturacion']) ? $_POST['tHoraFacturacion'] : '');
+          if ($_POST['skReferenciaExterna']) {
+                $skReferenciaExterna = parent::editar_fechas_referencia();
+                if(!$skReferenciaExterna){
+                    $this->data['response'] = true;
+                    $this->data['message'] = 'Registro actualizado con &eacute;xito.';
+                    header('Content-Type: application/json');
+                    echo json_encode($this->data);
+                    return true;
+                }else{
+
+
+                }
+
+
+          }
+
+
+          return true;
+
+        }
+
+
+        if (isset($_GET['p1'])) {
+           $this->refex['skReferenciaExterna'] = $_GET['p1'];
+           $this->data['datos'] = parent::reexfo_referencias();
+        }
+        $this->load_view('reexfe-form', $this->data);
+
+        return true;
+    }
+    public function reex_index()
+    {
+        if (isset($_GET['axn'])) {
+            switch ($_GET['axn']) {
+                            case 'fetch_all':
+                            $total = parent::countGetReferenciasExternas();
+                            $records = Core_Functions::table_ajax($total);
+                                    if ($records['recordsTotal'] === 0) {
+                                        header('Content-Type: application/json');
+                                        echo json_encode($records);
+                                        return false;
+                                    }
+                                    $this->refex['limit'] = $records['limit'];
+                                    $this->refex['offset'] = $records['offset'];
+                                    $this->data['data'] = parent::read_referencias_resumen();
+                                    if (!$this->data['data']) {
+                                        header('Content-Type: application/json');
+                                        echo json_encode($records);
+                                        return false;
+                                    }
+
+                                    while ($row = $this->data['data']->fetch_assoc()) {
+                                        $actions = $this->printModulesButtons(2, array($row['skReferenciaExterna']));
+                                        array_push($records['data'], array(
+                                                !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : '',
+                                                utf8_encode($row['skEstatus']),
+                                                ($row['sReferencia'] ? utf8_encode($row['sReferencia']) : 'N/D'),
+                                                ($row['dFechaPrevio'] ? '<label   data-toggle="tooltip" data-placement="top" title="'.date('d/m/Y H:i:s', strtotime($row['dFechaPrevio'])).'" ><i class="fa fa-check"></i></label>' : ''),
+                                                ($row['dFechaDespacho'] ? '<i class="fa fa-check"  data-toggle="tooltip" data-placement="top" title="'.date('d/m/Y H:i:s', strtotime($row['dFechaDespacho'])).'"></i>' : ''),
+                                                ($row['dFechaClasificacion'] ? '<i class="fa fa-check" data-toggle="tooltip" data-placement="top" title="'.date('d/m/Y H:i:s', strtotime($row['dFechaClasificacion'])).'"></i>' : ''),
+                                                ($row['dFechaGlosa'] ? '<i class="fa fa-check" data-toggle="tooltip" data-placement="top" title="'.date('d/m/Y H:i:s', strtotime($row['dFechaGlosa'])).'"></i>' : ''),
+                                                ($row['dFechaCapturaPedimento'] ? '<i class="fa fa-check" data-toggle="tooltip" data-placement="top" title="'.date('d/m/Y H:i:s', strtotime($row['dFechaCapturaPedimento'])).'"></i>' : ''),
+                                                ($row['dFechaRevalidacion'] ? '<i class="fa fa-check" data-toggle="tooltip" data-placement="top" title="'.date('d/m/Y H:i:s', strtotime($row['dFechaRevalidacion'])).'"></i>' : ''),
+                                                ($row['dFechaFacturacion'] ? '<i class="fa fa-check" data-toggle="tooltip" data-placement="top" title="'.date('d/m/Y H:i:s', strtotime($row['dFechaFacturacion'])).'"></i>' : ''),
+                                                ($row['iDeposito'] ? utf8_encode($row['iDeposito']) : 'N/D'),
+                                                ($row['iSaldo'] ? utf8_encode($row['iSaldo']) : 'N/D'),
+                                            ));
+                                    }
+                                    header('Content-Type: application/json');
+                                    echo json_encode($records);
+
+                            return true;
+                        break;
+                    }
+
+            return true;
+        }
+            $this->load_view('reex-index', $this->data);
+
+        return true;
+    }
 
     /* TERMINA MODULO (REX) */
 }

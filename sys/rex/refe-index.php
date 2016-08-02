@@ -1,4 +1,5 @@
 <!-- BEGIN PAGE CONTENT-->
+
 <div class="row">
 	<div class="col-md-12">
 		<div class="table-container">
@@ -12,26 +13,33 @@
 			<table class="table table-striped table-bordered table-hover" id="datatable_ajax">
 				<thead>
 					<tr role="row" class="heading">
+						<th width="">Acciones</th>
 						<th width="">Pedimento</th>
 						<th width="">Referencia</th>
-						<th width="">Mercancia</th>
-						<th width="">GuiaMaster</th>
-						<th width="">GuiaHouse</th>
-						<th width="">FechaCreacion</th>
-						<th width="">FechaPrevio</th>
-						<th width="">FechaDespacho</th>
-						<th width="">FechaClasificacion</th>
-						<th width="">FechaGlosa</th>
-						<th width="">FechaCapturaPedimento</th>
-						<th width="">FechaFacturacion</th>
+						<th width="">Mercancía</th>
+						<th width="">Guia Master</th>
+						<th width="">Guia House</th>
+						<th width="">Fecha Creacion</th>
+						<th width="">Fecha Previo</th>
+						<th width="">Fecha Despacho</th>
+						<th width="">Fecha Clasificacion</th>
+						<th width="">Fecha Glosa</th>
+						<th width="">Fecha CapturaPedimento</th>
+						<th width="">Fecha Facturacion</th>
 						<th width="">Deposito</th>
 						<th width="">Saldo</th>
-						<th width="">Almacen</th>
+						<th width="">Almacén</th>
 						<th width="">Estado</th>
-						<th width="">Socio Importador</th>
+						<th width="">Importador</th>
 
 					</tr>
 					<tr role="row" class="filter">
+					    <td>
+                            <div aria-label="Acciones" role="group" class="btn-group btn-group-xs">
+                            		<button class="btn btn-xs btn-default filter-submit margin-bottom"><i class="fa fa-search"></i> Buscar</button>
+                            		<button class="btn btn-xs btn-warning filter-cancel"><i class="fa fa-refresh"></i></button>
+                            </div>
+                        </td>
 						<td>
 							<input type="text" class="form-control form-filter input-sm" name="sPedimento" placeholder="Pedimento">
 						</td>
@@ -48,25 +56,63 @@
 							<input type="text" class="form-control form-filter input-sm" name="sGuiaHouse" placeholder="Guia House">
 						</td>
 						<td>
-							<input type="text" class="form-control form-filter input-sm" name="dFechaCreacion" placeholder="Fecha creacion">
+							
+							<div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
+			                    <input type="text" placeholder="Fecha creacion" name="dFechaCreacion" class="form-control" value="">
+			                    <span class="input-group-btn">
+			                        <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+			                    </span>
+			                </div>
 						</td>
 						<td>
-							<input type="text" class="form-control form-filter input-sm" name="dFechaPrevio" placeholder="Fecha previo">
+							
+							<div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
+			                    <input type="text" placeholder="Fecha previo" name="dFechaPrevio" class="form-control" value="">
+			                    <span class="input-group-btn">
+			                        <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+			                    </span>
+			                </div>
 						</td>
 						<td>
-							<input type="text" class="form-control form-filter input-sm" name="dFechaDespacho" placeholder="Fecha despacho">
+							
+							<div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
+			                    <input type="text" name="dFechaDespacho" placeholder="Fecha despacho" class="form-control" value="">
+			                    <span class="input-group-btn">
+			                        <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+			                    </span>
+			                </div>
 						</td>
 						<td>
-							<input type="text" class="form-control form-filter input-sm" name="dFechaClasificacion" placeholder="Fecha de clasificacion">
+							<div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
+			                    <input type="text" name="dFechaClasificacion" placeholder="Fecha de clasificacion" class="form-control" value="">
+			                    <span class="input-group-btn">
+			                        <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+			                    </span>
+			                </div>
 						</td>
 						<td>
-							<input type="text" class="form-control form-filter input-sm" name="dFechaGlosa" placeholder="Fecha de glosa">
+							<div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
+			                    <input type="text" name="dFechaGlosa" placeholder="Fecha de glosa" class="form-control" value="">
+			                    <span class="input-group-btn">
+			                        <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+			                    </span>
+			                </div>
 						</td>
 						<td>
-							<input type="text" class="form-control form-filter input-sm" name="dFechaCapturaPedimento" placeholder="Fecha de captura del pedimento">
+							<div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
+			                    <input type="text" name="dFechaCapturaPedimento" placeholder="Fecha de captura del pedimento" class="form-control" value="">
+			                    <span class="input-group-btn">
+			                        <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+			                    </span>
+			                </div>
 						</td>
 						<td>
-							<input type="text" class="form-control form-filter input-sm" name="dFechaFacturacion" placeholder="Fecha de facturacion">
+							<div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
+			                    <input type="text" name="dFechaFacturacion" placeholder="Fecha de facturacion" class="form-control" value="">
+			                    <span class="input-group-btn">
+			                        <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+			                    </span>
+			                </div>
 						</td>
 						<td>
 							<input type="text" class="form-control form-filter input-sm" name="iDeposito" placeholder="Cantidad deposito">
@@ -76,58 +122,51 @@
 						</td>
 						<td>
 							<select name="sAlmacen" class="form-control form-filter input-sm">
-								<option value="">- Estatus -</option>
+								<option value="">- Almacén -</option>
 								<?php
-								if($data['status']){
-									while($row = $data['status']->fetch_assoc()){
-										?>
-										<option value="<?php echo $row['skStatus']; ?>">
-											<?php echo $row['sName']; ?>
-										</option>
-										<?php
-                                        }//ENDIF
-                                    }//ENDWHILE
-                                    ?>
+								if(isset($data['listAlmacenes'])){
+									for ($i=0; $i <= count($data['listAlmacenes']) -1 ; $i++) { 
+										echo "<option value=".
+											$data['listAlmacenes'][$i]["skAlmacen"]. ">".
+											$data['listAlmacenes'][$i]["sNombre"]."</option>";
+										
+									}
+                                }
+                                ?>
                                 </select>
 						</td>
 						<td>
 							<select name="sEstatus" class="form-control form-filter input-sm">
 								<option value="">- Estatus -</option>
 								<?php
-								if($data['status']){
-									while($row = $data['status']->fetch_assoc()){
-										?>
-										<option value="<?php echo $row['skStatus']; ?>">
-											<?php echo $row['sName']; ?>
-										</option>
-										<?php
-                                        }//ENDIF
-                                    }//ENDWHILE
-                                    ?>
+								if(isset($data['listEstados'])){
+									for ($i=0; $i <= count($data['listEstados']) -1 ; $i++) { 
+										echo "<option value=".
+											$data['listEstados'][$i]["skEstatus"].">".
+											$data['listEstados'][$i]["sNombre"]."</option>";
+										
+									}
+                                }
+                                ?>
                                 </select>
                         </td>
 						<td>
 							<select name="sSocioImportador" class="form-control form-filter input-sm">
-								<option value="">- Estatus -</option>
+								<option value="">- Seleccione Importador -</option>
 								<?php
-								if($data['status']){
-									while($row = $data['status']->fetch_assoc()){
-										?>
-										<option value="<?php echo $row['skStatus']; ?>">
-											<?php echo $row['sName']; ?>
-										</option>
-										<?php
-                                        }//ENDIF
-                                    }//ENDWHILE
+								
+								if(isset($data['listSocios'])){
+									for ($i=0; $i <= count($data['listSocios']) -1 ; $i++) { 
+										echo "<option value=".
+											$data['listSocios'][$i]["skSocioEmpresa"].">".
+											$data['listSocios'][$i]["Empresa"]."</option>";
+										
+									}
+                                }
                                     ?>
                                 </select>
                         </td>
-                        <td>
-                            <div aria-label="Acciones" role="group" class="btn-group btn-group-xs">
-                            		<button class="btn btn-xs btn-default filter-submit margin-bottom"><i class="fa fa-search"></i> Buscar</button>
-                            		<button class="btn btn-xs btn-warning filter-cancel"><i class="fa fa-refresh"></i></button>
-                            	</div>
-                        </td>
+
 
                     </tr>
                     </thead>
@@ -146,8 +185,36 @@
 	jQuery(document).ready(function() {       
    // init ajax table 
    TableAjax.init('?axn=fetch_all');
-   /*$("#enable_filter").click(function(){
-       $(".table-filter").css("display","block");
-   });*/
+		$.ajax({
+        url : '<?php echo SYS_URL;?>/sys/rex/jsonSocioImportadores/0/<?php echo $_SESSION["session"]["skSocioEmpresaPropietario"]. "/" ;?>',
+        data : {},
+
+        // especifica si será una petición POST o GET
+        type : 'GET',
+        dataType : 'json',
+        success : function(json) {
+            ifsocioimportador = "<?php echo (isset($result['skSocioImportador'])) ? $result['skSocioImportador'] : '' ; ?>";
+            for (o in json) {
+                d = json[o];
+                if (ifsocioimportador != "") {
+                    if (ifsocioimportador == d.skSocioEmpresa ) {
+                        $("#skSocioImportador").append('<option selected="selected" value="' + d.skSocioEmpresa +  '">'+d.Empresa+'</option>');
+                    }else{
+                        $("#skSocioImportador").append('<option value="' + d.skSocioEmpresa +  '">'+d.Empresa+'</option>');
+                    }
+                }else{
+                    $("#skSocioImportador").append('<option value="' + d.skSocioEmpresa +  '">'+d.Empresa+'</option>');
+                }
+                
+            }
+        },
+        error : function(xhr, status) {
+            console.log("Algo salio mal en la peticion a jsonSocioImportadores")
+        },
+        complete : function(xhr, status) {
+            console.log('Petición realizada');
+        }
+    }); 
+   
 });
 </script>

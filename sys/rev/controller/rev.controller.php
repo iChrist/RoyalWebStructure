@@ -1,23 +1,25 @@
 <?php
 
-require_once(SYS_PATH . "rev/model/rev.model.php");
+require_once SYS_PATH.'rev/model/rev.model.php';
 
-Class rev_Controller Extends rev_Model {
-
+class rev_Controller extends rev_Model
+{
     // PRIVATE VARIABLES //
     private $data = array();
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
-    public function __destruct() {
-        
+    public function __destruct()
+    {
     }
 
     /* COMIENZA MODULO DE RECEPCION DE DOCUMENTOS */
 
-    public function solreva_index() {
+    public function solreva_index()
+    {
         if (isset($_GET['axn'])) {
             switch ($_GET['axn']) {
                 case 'pdf':
@@ -38,6 +40,7 @@ Class rev_Controller Extends rev_Model {
                     }
                     header('Content-Type: application/json');
                     echo json_encode($this->data);
+
                     return true;
                     break;
                 case 'fetch_all':
@@ -94,6 +97,7 @@ Class rev_Controller Extends rev_Model {
                     if ($records['recordsTotal'] === 0) {
                         header('Content-Type: application/json');
                         echo json_encode($records);
+
                         return false;
                     }
 
@@ -106,6 +110,7 @@ Class rev_Controller Extends rev_Model {
                     if (!$this->data['data']) {
                         header('Content-Type: application/json');
                         echo json_encode($records);
+
                         return false;
                     }
 
@@ -115,27 +120,20 @@ Class rev_Controller Extends rev_Model {
                         $dFechaCreacion = !empty($row['dFechaCreacion']) ? date('d-m-Y H:i:s', strtotime($row['dFechaCreacion'])) : '-';
                         $dFechaProceso = !empty($row['dFechaProceso']) ? date('d-m-Y H:i:s', strtotime($row['dFechaProceso'])) : '-';
                         $dFechaCierre = !empty($row['dFechaCierre']) ? date('d-m-Y H:i:s', strtotime($row['dFechaCierre'])) : '-';
-                        $fechas = '<b>Solicitud:</b> ' . $dFechaCreacion . '<br><b>Proceso:</b> ' . $dFechaProceso . '<br><b>Cierre:</b> ' . $dFechaCierre;
+                        $fechas = '<b>Solicitud:</b> '.$dFechaCreacion.'<br><b>Proceso:</b> '.$dFechaProceso.'<br><b>Cierre:</b> '.$dFechaCierre;
 
                         array_push($records['data'], array(
-                            !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">' . utf8_encode($actions['sHtml']) . '</ul></div>' : ''
-                            ,utf8_encode($row['Icono'])
-                            , ($row['iPrioridad'] == 0) ? 'Normal' : 'Urgente'
-                            , utf8_encode($row['sReferencia'])
-                            , $fechas
-                            , utf8_encode($row['UsuarioEjecutivo'])
-                            , utf8_encode($row['Cliente'])
-                            , utf8_encode($row['EmpresaNaviera'])
-                            , utf8_encode($row['Tramitador'])
-                            , utf8_encode($row['sObservaciones'])
+                            !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : '', utf8_encode($row['Icono']), ($row['iPrioridad'] == 0) ? 'Normal' : 'Urgente', utf8_encode($row['sReferencia']), $fechas, utf8_encode($row['UsuarioEjecutivo']), utf8_encode($row['Cliente']), utf8_encode($row['EmpresaNaviera']), utf8_encode($row['Tramitador']), utf8_encode($row['sObservaciones']),
                         ));
                     }
 
                     header('Content-Type: application/json');
                     echo json_encode($records);
+
                     return true;
                     break;
             }
+
             return true;
         }
 
@@ -163,20 +161,21 @@ Class rev_Controller Extends rev_Model {
         $this->data['ejecutivo'] = $objEjecutivo->read_user();
         $this->data['estatus'] = parent::read_estatus();
 
-
         // RETORNA LA VISTA areas-index.php //
         $this->load_view('solreva-index', $this->data);
+
         return true;
     }
 
-    public function solreva_form() {
+    public function solreva_form()
+    {
         $this->data['message'] = '';
         $this->data['response'] = true;
         $this->data['datos'] = false;
-        
+
         if (isset($_POST['axn'])) {
             switch ($_POST['axn']) {
-                case "validarReferencia":
+                case 'validarReferencia':
                     $this->solreva['sReferencia'] = htmlentities(($_POST['sReferencia']));
                     $this->data['revalidaciones'] = parent::read_referencia();
                     if (parent::read_referencia()) {
@@ -184,10 +183,12 @@ Class rev_Controller Extends rev_Model {
                     } else {
                         echo 'false';
                     }
+
                     return true;
                 break;
-                 case "obtenerDatos":
-                    $this->load_controller('doc','obtenerDatos');
+                 case 'obtenerDatos':
+                    $this->load_controller('doc', 'obtenerDatos');
+
                     return true;
                 break;
             }
@@ -215,37 +216,35 @@ Class rev_Controller Extends rev_Model {
             }
             //exit('<pre>'.print_r($this->solreva,1));
             if (empty($_POST['skSolicitudRevalidacion'])) {
-
                 if (parent::create_solreva()) {
-
-
                     $this->data['response'] = true;
                     $this->data['message'] = 'Registro insertado con &eacute;xito.';
                     header('Content-Type: application/json');
                     echo json_encode($this->data);
+
                     return true;
                 } else {
                     $this->data['response'] = false;
                     $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
                     header('Content-Type: application/json');
                     echo json_encode($this->data);
+
                     return false;
                 }
             } else {
                 if (parent::update_solreva()) {
-
                     if (isset($_POST['skRechazo'])) { // En esta parte guardaremos todos los perfiles seleccionados para el nuevo usuario.
                         parent::delete_revalidacionesRechazos();
                         $count = count($_POST['skRechazo']);
                         $bandera = 1;
-                        $valores = "";
+                        $valores = '';
                         foreach ($_POST['skRechazo'] as $rechazo) {
                             if ($bandera == $count) {
-                                $valores .= "('" . $this->solreva['skSolicitudRevalidacion'] . "' , '" . $rechazo . "')";
+                                $valores .= "('".$this->solreva['skSolicitudRevalidacion']."' , '".$rechazo."')";
                             } else {
-                                $valores .= "('" . $this->solreva['skSolicitudRevalidacion'] . "' , '" . $rechazo . "'),";
+                                $valores .= "('".$this->solreva['skSolicitudRevalidacion']."' , '".$rechazo."'),";
                             }
-                            $bandera++;
+                            ++$bandera;
                         }
                         $rRespuesta = parent::create_solreva_rechazos($valores);
                     }
@@ -254,12 +253,14 @@ Class rev_Controller Extends rev_Model {
                     $this->data['message'] = 'Registro actualizado con &eacute;xito.';
                     header('Content-Type: application/json');
                     echo json_encode($this->data);
+
                     return true;
                 } else {
                     $this->data['response'] = false;
                     $this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
                     header('Content-Type: application/json');
                     echo json_encode($this->data);
+
                     return false;
                 }
             }
@@ -284,10 +285,12 @@ Class rev_Controller Extends rev_Model {
             $this->data['rechazosSolicitud'] = parent::read_solreva_rechazos();
         }
         $this->load_view('solreva-form', $this->data);
+
         return true;
     }
 
-    private function solicitudrevalidacion_pdf() {
+    private function solicitudrevalidacion_pdf()
+    {
         if (isset($_GET['p1'])) {
             $this->solreva['skSolicitudRevalidacion'] = $_GET['p1'];
             $solicitudRevalidacion = parent::read_solreva();
@@ -298,8 +301,7 @@ Class rev_Controller Extends rev_Model {
             $this->data['rechazos'] = array();
             while ($row = $rechazos->fetch_assoc()) {
                 array_push($this->data['rechazos'], array(
-                    'skRechazo' => utf8_encode($row['skRechazo'])
-                    , 'sNombre' => utf8_encode($row['sNombre'])
+                    'skRechazo' => utf8_encode($row['skRechazo']), 'sNombre' => utf8_encode($row['sNombre']),
                 ));
             }
             $rechazosSolicitud = parent::read_solreva_rechazos();
@@ -315,40 +317,44 @@ Class rev_Controller Extends rev_Model {
             // OBTENEMOS LAS MERCANCIAS //
             $this->load_model('doc', 'doc');
             $doc = new Doc_Model();
-            $this->data['mercancias'] = "";
+            $this->data['mercancias'] = '';
             $doc->mercancias['skRecepcionDocumento'] = $this->data['recepcionDocumentos']['skRecepcionDocumento'];
             $mercancias = $doc->read_mercancias();
             if ($mercancias) {
                 while ($rmercancias = $mercancias->fetch_assoc()) {
                     if ($this->data['recepcionDocumentos']['skTipoServicio'] == 'CONT') {
-                        $this->data['mercancias'] .="<br> <b>BL House:</b> " . $rmercancias['sBlhouse'] . " <b>| Contenedor:</b> " . $rmercancias['sNumContenedor'];
+                        $this->data['mercancias'] .= '<br> <b>BL House:</b> '.$rmercancias['sBlhouse'].' <b>| Contenedor:</b> '.$rmercancias['sNumContenedor'];
                     } elseif ($this->data['recepcionDocumentos']['skTipoServicio'] == 'CSUE') {
-                        $this->data['mercancias'] .="<br> <b>Bultos:</b> " . $rmercancias['iBultos'] . " <b>| Peso:</b> " . $rmercancias['fPeso'] . " <b>| Volumen:</b> " . $rmercancias['fVolumen'];
+                        $this->data['mercancias'] .= '<br> <b>Bultos:</b> '.$rmercancias['iBultos'].' <b>| Peso:</b> '.$rmercancias['fPeso'].' <b>| Volumen:</b> '.$rmercancias['fVolumen'];
                     }
                 }
             }
         }
         //exit('<pre>'.print_r($this->data['mercancias'] ,1).'</pre>');
         ob_start();
-        $this->load_view('solreva-pdf', $this->data, FALSE, 'rev/pdf/');
+        $this->load_view('solreva-pdf', $this->data, false, 'rev/pdf/');
         $content = ob_get_clean();
         $title = 'Solicitud de revaldaci&oacute;n';
         Core_Functions::pdf($content, $title, 'P', 'A4', 'es', true, 'UTF-8', array(3, 3, 3, 3));
+
         return true;
     }
 
-    public function docume_detail() {
+    public function docume_detail()
+    {
         if (isset($_GET['p1'])) {
             $this->solreva['skSolicitudRevalidacion'] = $_GET['p1'];
             $this->data['datos'] = parent::read_recepciondocumentos();
         }
         $this->load_view('docume-detail', $this->data);
+
         return true;
     }
 
     /* TERMINA MODULO CAPTURA DE DOCUMENTOS */
 
-    public function rechazos_index() {
+    public function rechazos_index()
+    {
         if (isset($_GET['axn'])) {
             switch ($_GET['axn']) {
                 case 'pdf':
@@ -372,6 +378,7 @@ Class rev_Controller Extends rev_Model {
                     if ($records['recordsTotal'] === 0) {
                         header('Content-Type: application/json');
                         echo json_encode($records);
+
                         return false;
                     }
 
@@ -382,25 +389,24 @@ Class rev_Controller Extends rev_Model {
                     if (!$this->data['data']) {
                         header('Content-Type: application/json');
                         echo json_encode($records);
+
                         return false;
                     }
 
                     while ($row = $this->data['data']->fetch_assoc()) {
                         $actions = $this->printModulesButtons(2, array($row['skRechazo']));
                         array_push($records['data'], array(
-                            utf8_encode($row['sNombre'])
-                            , utf8_encode($row['UsuarioCreacion'])
-                            , utf8_encode($row['dFechaCreacion'])
-                            , utf8_encode($row['htmlStatus'])
-                            , !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">' . utf8_encode($actions['sHtml']) . '</ul></div>' : ''
+                            utf8_encode($row['sNombre']), utf8_encode($row['UsuarioCreacion']), utf8_encode($row['dFechaCreacion']), utf8_encode($row['htmlStatus']), !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : '',
                         ));
                     }
 
                     header('Content-Type: application/json');
                     echo json_encode($records);
+
                     return true;
                     break;
             }
+
             return true;
         }
 
@@ -411,13 +417,16 @@ Class rev_Controller Extends rev_Model {
 
         // RETORNA LA VISTA areas-index.php //
         $this->load_view('rechazos-index', $this->data);
+
         return true;
     }
 
-    public function rechazos_form() {
+    public function rechazos_form()
+    {
         if (isset($_GET['axn'])) {
             if ($_GET['axn'] === 'fileUpload') {
                 $upload_handler = new UploadHandler();
+
                 return true;
             }
         }
@@ -435,12 +444,14 @@ Class rev_Controller Extends rev_Model {
                     $this->data['message'] = 'Registro insertado con &eacute;xito.';
                     header('Content-Type: application/json');
                     echo json_encode($this->data);
+
                     return true;
                 } else {
                     $this->data['response'] = true;
                     $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
                     header('Content-Type: application/json');
                     echo json_encode($this->data);
+
                     return false;
                 }
             } else {
@@ -449,12 +460,14 @@ Class rev_Controller Extends rev_Model {
                     $this->data['message'] = 'Registro actualizado con &eacute;xito.';
                     header('Content-Type: application/json');
                     echo json_encode($this->data);
+
                     return true;
                 } else {
                     $this->data['response'] = true;
                     $this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
                     header('Content-Type: application/json');
                     echo json_encode($this->data);
+
                     return false;
                 }
             }
@@ -464,9 +477,7 @@ Class rev_Controller Extends rev_Model {
             $this->data['datos'] = parent::read_equal_rechazos();
         }
         $this->load_view('rechazos-form', $this->data);
+
         return true;
     }
-
 }
-
-?>
