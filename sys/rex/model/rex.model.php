@@ -498,7 +498,7 @@ Class Rex_Model Extends Core_Model {
         if(!empty($this->refex['sSocioImportador'])){
             $sql .=" AND resa.skSocioEmpresa = '".$this->refex['sSocioImportador']."'";
         }
-       // die($sql);
+       //die($sql);
     }
     $result = $this->db->query($sql);
     if($result){

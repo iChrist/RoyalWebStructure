@@ -1,6 +1,4 @@
-
-<pre>
-        <?php 
+        <?php
         //echo print_r($_SESSION["session"],1);
         //$fecha = DateTime::createFromFormat('d-m-Y', '30-07-2016');
         //echo $fecha->format('Y-m-d H:i:s');
@@ -15,10 +13,7 @@
         //die(print_r($data["conceptosTotales"],true)."<br>".print_r($data["conceptosRef"],true));
         ?>
 
-
-</pre>
-
-<form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data"> 
+<form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
     <input type="hidden" name="skReferenciaExterna"  id="skReferenciaExterna" value="<?php echo (isset($result['skReferenciaExterna'])) ? $result['skReferenciaExterna'] : '' ; ?>">
     <input type="hidden" name="axn" id="anx" value="<?php echo (isset($result["sReferencia"])) ? 'update' : 'insert' ;?>" ></input>
     <div class="form-body">
@@ -130,14 +125,17 @@
 
         <div class="form-group">
             <label class="control-label col-md-2">Fecha de previo</label>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
                     <input type="text" id="dFechaPrevio" name="dFechaPrevio" class="form-control" value="<?php echo (isset($result["dFechaPrevio"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaPrevio"])->format('d-m-Y') : '' ;?>">
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                     </span>
-                    
+
                 </div>
+              </div>
+              <label class="control-label col-md-1"></label>
+              <div class="col-md-2">
                 <div class="input-group bootstrap-timepicker">
                         <input type="text" value="<?php echo (isset($result["dFechaPrevio"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaPrevio"])->format('H:i:s') : '0:00:00' ;?>" class="form-control timepicker-24" name="tHoraPrevio" id="tHoraPrevio" aria-invalid="false">
                         <span class="input-group-btn">
@@ -145,8 +143,10 @@
                         </span>
                     </div>
             </div>
+          </div>
+          <div class="form-group">
             <label class="control-label col-md-2">Fecha de despacho</label>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
                     <input type="text" id="dFechaDespacho" name="dFechaDespacho" class="form-control" value="<?php echo (isset($result["dFechaDespacho"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaDespacho"])->format('d-m-Y') : '' ;?>">
                     <span class="input-group-btn">
@@ -154,7 +154,10 @@
                     </span>
 
                 </div>
-                                    <div class="input-group bootstrap-timepicker">
+              </div>
+              <label class="control-label col-md-1"></label>
+              <div class="col-md-2">
+                    <div class="input-group bootstrap-timepicker">
                         <input type="text" value="<?php echo (isset($result["dFechaDespacho"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaDespacho"])->format('H:i:s') : '0:00:00' ;?>" class="form-control timepicker-24" name="tHoraDespacho" id="tHoraDespacho" aria-invalid="false">
                         <span class="input-group-btn">
                         <button class="btn btn-default" type="button"><i class="fa fa-clock-o"></i></button>
@@ -165,15 +168,18 @@
 
 
         <div class="form-group">
-            <label class="control-label col-md-2">Fecha de clasificacion </label>
-            <div class="col-md-4">
+            <label class="control-label col-md-2">Fecha de clasificaci&oacute;n </label>
+            <div class="col-md-2">
                 <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
                     <input type="text" id="dFechaClasificacion" name="dFechaClasificacion" class="form-control" value="<?php echo (isset($result["dFechaClasificacion"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaClasificacion"])->format('d-m-Y') : '' ;?>">
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                     </span>
-                    
+
                 </div>
+            </div>
+            <label class="control-label col-md-1"></label>
+            <div class="col-md-2">
                 <div class="input-group bootstrap-timepicker">
                         <input type="text" value="<?php echo (isset($result["dFechaClasificacion"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaClasificacion"])->format('H:i:s') : '0:00:00' ;?>" class="form-control timepicker-24" name="tHoraClasificacion" id="tHoraClasificacion" aria-invalid="false">
                         <span class="input-group-btn">
@@ -181,15 +187,20 @@
                         </span>
                     </div>
             </div>
+          </div>
+          <div class="form-group">
             <label class="control-label col-md-2">Fecha de glosa</label>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
                     <input type="text" id="dFechaGlosa" name="dFechaGlosa" class="form-control" value="<?php echo (isset($result["dFechaGlosa"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaGlosa"])->format('d-m-Y') : '' ;?>">
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                     </span>
-                    
+
                 </div>
+              </div>
+              <label class="control-label col-md-1"></label>
+              <div class="col-md-2">
                 <div class="input-group bootstrap-timepicker">
                         <input type="text" value="<?php echo (isset($result["dFechaGlosa"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaGlosa"])->format('H:i:s') : '0:00:00' ;?>" class="form-control timepicker-24" name="tHoraGlosa" id="tHoraGlosa" aria-invalid="false">
                         <span class="input-group-btn">
@@ -202,14 +213,17 @@
 
         <div class="form-group">
             <label class="control-label col-md-2">Fecha de captura de pedimento </label>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
                     <input type="text" id="dFechaCapturaPedimento" name="dFechaCapturaPedimento" class="form-control" value="<?php echo (isset($result["dFechaCapturaPedimento"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaCapturaPedimento"])->format('d-m-Y') : '' ;?>">
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                     </span>
-                    
+
                 </div>
+              </div>
+              <label class="control-label col-md-1"></label>
+              <div class="col-md-2">
                 <div class="input-group bootstrap-timepicker">
                         <input type="text" value="<?php echo (isset($result["dFechaCapturaPedimento"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaCapturaPedimento"])->format('H:i:s') : '0:00:00' ;?>" class="form-control timepicker-24" name="tHoraCapturaPedimento" id="tHoraCapturaPedimento" aria-invalid="false">
                         <span class="input-group-btn">
@@ -217,15 +231,20 @@
                         </span>
                     </div>
             </div>
-            <label class="control-label col-md-2">Fecha de revalidacion</label>
-            <div class="col-md-4">
+          </div>
+          <div class="form-group">
+            <label class="control-label col-md-2">Fecha de revalidaci&oacute;n</label>
+            <div class="col-md-2">
                 <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
                     <input type="text" id="dFechaRevalidacion" name="dFechaRevalidacion" class="form-control" value="<?php echo (isset($result["dFechaRevalidacion"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaRevalidacion"])->format('d-m-Y') : '' ;?>">
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                     </span>
-                    
+
                 </div>
+              </div>
+              <label class="control-label col-md-1"></label>
+                <div class="col-md-2">
                 <div class="input-group bootstrap-timepicker">
                         <input type="text" value="<?php echo (isset($result["dFechaRevalidacion"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaRevalidacion"])->format('H:i:s') : '0:00:00' ;?>" class="form-control timepicker-24" name="tHoraRevalidacion" id="tHoraRevalidacion" aria-invalid="false">
                         <span class="input-group-btn">
@@ -236,15 +255,18 @@
         </div>
 
         <div class="form-group">
-            <label class="control-label col-md-2">Fecha de facturacion</label>
-            <div class="col-md-4">
+            <label class="control-label col-md-2">Fecha de facturaci&oacute;n</label>
+            <div class="col-md-2">
                 <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
                     <input type="text" id="dFechaFacturacion" name="dFechaFacturacion" class="form-control" value="<?php echo (isset($result["dFechaFacturacion"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaFacturacion"])->format('d-m-Y') : '' ;?>">
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                     </span>
-                    
+
                 </div>
+              </div>
+              <label class="control-label col-md-1"></label>
+              <div class="col-md-2">
                 <div class="input-group bootstrap-timepicker">
                         <input type="text" value="<?php echo (isset($result["dFechaFacturacion"])) ? DateTime::createFromFormat('Y-m-d H:i:s', $result["dFechaFacturacion"])->format('H:i:s') : '0:00:00' ;?>" class="form-control timepicker-24" name="tHoraFacturacion" id="tHoraFacturacion" aria-invalid="false">
                         <span class="input-group-btn">
@@ -292,36 +314,36 @@
                 </thead>
                 <tbody id="ConceptosReferenciasTabla">
 
-                    <?php 
+                    <?php
                     $totalConceptos = 0;
                         if (isset($data["conceptosRef"])) {
                            /*$data["conceptosTotales"]
                             $data["conceptosRef"]*/
-                            
+
                             while ($row = $data["conceptosTotales"]->fetch_assoc()) {
                                 $conceptoRecord = false;
                                 while($cr = $data["conceptosRef"]->fetch_assoc()){
                                     $conceptoRecord = ( ($cr["skConcepto"] ===  $row["skConcepto"]) ) ? $cr : false;
                                 }
                                 echo "<pre>".print_r($conceptoRecord ,true)."</pre>";
-                                
 
-                                
+
+
                     ?>
 
                     <tr>
                         <td>
-                            <input onchange="cotizar();" value="<?php 
+                            <input onchange="cotizar();" value="<?php
                                 echo $row['skConcepto'];
                             ?>" name="conceptos[]" type="checkbox" <?php echo ($conceptoRecord)? 'checked' : '';?> >
                         </td>
                         <td>
-                            <input name="iCantidad[]" onchange="cotizar();" class="form-control input-sm iCantidad" placeholder="Cant" value="<?php 
+                            <input name="iCantidad[]" onchange="cotizar();" class="form-control input-sm iCantidad" placeholder="Cant" value="<?php
                                 echo ($conceptoRecord)? $conceptoRecord["iCantidad"]:"0" ;
                             ?>" type="text">
                         </td>
                         <td>
-                            <input name="fPrecioUnitario[]" onchange="cotizar();" class="form-control input-sm fPrecioUnitario" placeholder="Precio Unitario" value="<?php 
+                            <input name="fPrecioUnitario[]" onchange="cotizar();" class="form-control input-sm fPrecioUnitario" placeholder="Precio Unitario" value="<?php
                                         echo ($conceptoRecord)? $conceptoRecord['dPrecioUnitario'] :$row['dPrecioUnitario'];
                                 ?>" type="text">
                         </td>
@@ -329,14 +351,14 @@
                             <?php echo $row['skDivisa'];?><input class="divisa" name="divisa[]" value="<?php echo $row['skDivisa'];?>" type="hidden">
                         </td>
                         <td nowrap=""><?php echo $row['sNombre'];?></td>
-                        <td class="show_dolares" nowrap=""> <?php 
+                        <td class="show_dolares" nowrap=""> <?php
                             if ($row['skDivisa'] === 'USD') {
 
                                 //echo $row['dTipoCambio'] * ($row['iCantidad'] * $row['dPrecioUnitario'] );
                                 echo ($conceptoRecord)? $conceptoRecord['dTipoCambio'] * ($conceptoRecord['iCantidad'] * $$conceptoRecord['dPrecioUnitario'] ): '';
                             }?> </td>
-                        <td> 
-                            <span class="show_subtotal"><?php echo $row['dImporte']; $totalConceptos += $row['dImporte']?></span> 
+                        <td>
+                            <span class="show_subtotal"><?php echo $row['dImporte']; $totalConceptos += $row['dImporte']?></span>
                             <input name="subtotal[]" class="subtotal" value="" type="hidden">
                         </td>
                     </tr>
@@ -411,7 +433,7 @@
             dataType : 'json',
             success : function(json) {
                 ifestat = "<?php echo (isset($result['skEstatus'])) ? $result['skEstatus'] : '' ; ?>";
-                
+
                 for (o in json) {
                     d = json[o];
                     if (ifestat != "") {
@@ -423,7 +445,7 @@
                     }else{
                         $("#skEstatus").append('<option value="' + d.skEstatus +  '">'+d.sNombre+'</option>')
                     }
-                    
+
                 }
             },
             error : function(xhr, status) {
@@ -432,7 +454,7 @@
             complete : function(xhr, status) {
                 console.log('Petición realizada');
             }
-        });        
+        });
 
         $.ajax({
             url : '<?php echo SYS_URL;?>/sys/rex/jsonAlmacenes/',
@@ -443,7 +465,7 @@
             dataType : 'json',
             success : function(json) {
                 ifalmacen = "<?php echo (isset($result['skAlmacen'])) ? $result['skAlmacen'] : '' ; ?>";
-                
+
                 for(i in json){
                     d = json[i];
                     if (ifalmacen != "") {
@@ -452,11 +474,11 @@
                         }else{
                             $("#skAlmacen").append('<option value="' + d.skAlmacen + '">'+d.sNombre+'</option>');
                         }
-                        
+
                     }else{
                         $("#skAlmacen").append('<option value="' + d.skAlmacen + '">'+d.sNombre+'</option>');
                     }
-                    
+
                 }
             },
             error : function(xhr, status) {
@@ -466,7 +488,7 @@
                 console.log('Petición realizada');
             }
         });
-        
+
         $.ajax({
             url : '<?php echo SYS_URL;?>/sys/rex/jsonSocioImportadores/0/<?php echo $_SESSION["session"]["skSocioEmpresaPropietario"]. "/" ;?>',
             data : {},
@@ -487,7 +509,7 @@
                     }else{
                         $("#skSocioImportador").append('<option value="' + d.skSocioEmpresa +  '">'+d.Empresa+'</option>');
                     }
-                    
+
                 }
             },
             error : function(xhr, status) {
@@ -496,8 +518,8 @@
             complete : function(xhr, status) {
                 console.log('Petición realizada');
             }
-        }); 
-        
+        });
+
         $( "#skSocioImportador" ).change(function() {
             //alert($( "#skSocioImportador option:selected" ).val());
             $.ajax({
@@ -509,7 +531,7 @@
                 dataType : 'json',
                 success : function(json) {
                     $("#ConceptosReferenciasTabla").empty();
-                    
+
                     for (o in json) {
                         d = json[o];
                         $("#ConceptosReferenciasTabla").append(`
@@ -528,8 +550,8 @@
                                 </td>
                                 <td nowrap="">`+d.sNombre+`</td>
                                 <td class="show_dolares" nowrap=""></td>
-                                <td> 
-                                    <span class="show_subtotal"></span> 
+                                <td>
+                                    <span class="show_subtotal"></span>
                                     <input name="subtotal[]" class="subtotal" value="" type="hidden">
                                 </td>
                             </tr>`);
@@ -541,9 +563,9 @@
                 complete : function(xhr, status) {
                     console.log('Petición realizada');
                 }
-            }); 
+            });
         });
-        
+
         /* VALIDATIONS */
         isValid = $("#_save").validate({
             errorElement: 'span', //default input error message container
@@ -555,13 +577,13 @@
                     required: true
                 },
                 skSocioImportador:{
-
+                  required: true
                 },
                 skAlmacen:{
-
+                  required: true
                 },
                 skEstatus:{
-
+                  required: true
                 },sPedimento:{
                     required: true
                 },
@@ -601,29 +623,29 @@
                     number:true
                 },iSaldo:{
                     number:true
-                }                
+                }
 
             },
-            invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar              
+            invalidHandler: function (event, validator) { //alerta de error de visualización en forma de presentar
                 $('.alert-success').hide();
                 $('.alert-danger').show();
                 App.scrollTo($('.alert-danger'), -200);
             },
             errorPlacement: function (error, element) { // hacer la colocación de error para cada tipo de entrada
                 var icon = $(element).parent('.input-icon').children('i');
-                icon.removeClass('fa-check').addClass("fa-warning");  
+                icon.removeClass('fa-check').addClass("fa-warning");
                 icon.attr("data-original-title", $('.alert-danger').text()).tooltip({'container': 'body'});
                 if (element.parent(".input-group").size() > 0) {
                     error.insertAfter(element.parent(".input-group"));
-                } else if (element.attr("data-error-container")) { 
+                } else if (element.attr("data-error-container")) {
                     error.appendTo(element.attr("data-error-container"));
-                } else if (element.parents('.radio-list').size() > 0) { 
+                } else if (element.parents('.radio-list').size() > 0) {
                     error.appendTo(element.parents('.radio-list').attr("data-error-container"));
-                } else if (element.parents('.radio-inline').size() > 0) { 
+                } else if (element.parents('.radio-inline').size() > 0) {
                     error.appendTo(element.parents('.radio-inline').attr("data-error-container"));
                 } else if (element.parents('.checkbox-list').size() > 0) {
                     error.appendTo(element.parents('.checkbox-list').attr("data-error-container"));
-                } else if (element.parents('.checkbox-inline').size() > 0) { 
+                } else if (element.parents('.checkbox-inline').size() > 0) {
                     error.appendTo(element.parents('.checkbox-inline').attr("data-error-container"));
                 } else {
                     error.insertAfter(element); // Para otros insumos, sólo realizar comportamiento predeterminado (llamar messages)
@@ -648,6 +670,5 @@
                 }
             }
         });
-}); 
+});
 </script>
-
