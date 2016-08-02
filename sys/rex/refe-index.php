@@ -57,26 +57,64 @@
                         </td>
                         <td>
 
-                            <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
-                                <input type="text" placeholder="Fecha creacion" name="dFechaCreacion" class="form-control" value="">
+                             <div class="input-group input-group-sm date date-picker margin-bottom-5" data-date-format="dd-mm-yyyy">
+                                <input type="text" class="form-control form-filter" name="dFechaCreacion" placeholder="Fecha Inicio">
                                 <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                                    <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
                                 </span>
                             </div>
+
+                            <div class="input-group input-group-sm date date-picker margin-bottom-5" data-date-format="dd-mm-yyyy">
+                                <input type="text" class="form-control form-filter" name="dFechaCreacionHasta" placeholder="Hasta">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+                                </span>
+                            </div>
+
                         </td>
                         <td>
 
                             <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
-                                <input type="text" placeholder="Fecha previo" name="dFechaPrevio" class="form-control" value="">
+                                <input type="text" placeholder="Desde" name="dFechaPrevio" class="form-control" value="">
                                 <span class="input-group-btn">
                                     <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                                 </span>
                             </div>
+
+                            <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
+                                <input type="text" placeholder="Hasta" name="dFechaPrevioHasta" class="form-control" value="">
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                                </span>
+                            </div>
+
                         </td>
                         <td>
 
                             <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
-                                <input type="text" name="dFechaDespacho" placeholder="Fecha despacho" class="form-control" value="">
+                                <input type="text" name="dFechaDespacho" placeholder="Desde" class="form-control" value="">
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                                </span>
+                            </div>
+
+                            <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
+                                <input type="text" name="dFechaDespachoHasta" placeholder="Hasta" class="form-control" value="">
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                                </span>
+                            </div>
+
+                        </td>
+                        <td>
+                            <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
+                                <input type="text" name="dFechaClasificacion" placeholder="Desde" class="form-control" value="">
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                                </span>
+                            </div>
+                            <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
+                                <input type="text" name="dFechaClasificacionHasta" placeholder="Hasta" class="form-control" value="">
                                 <span class="input-group-btn">
                                     <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                                 </span>
@@ -84,7 +122,13 @@
                         </td>
                         <td>
                             <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
-                                <input type="text" name="dFechaClasificacion" placeholder="Fecha de clasificacion" class="form-control" value="">
+                                <input type="text" name="dFechaGlosa" placeholder="Desde" class="form-control" value="">
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                                </span>
+                            </div>
+                            <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
+                                <input type="text" name="dFechaGlosaHasta" placeholder="Hasta" class="form-control" value="">
                                 <span class="input-group-btn">
                                     <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                                 </span>
@@ -92,7 +136,13 @@
                         </td>
                         <td>
                             <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
-                                <input type="text" name="dFechaGlosa" placeholder="Fecha de glosa" class="form-control" value="">
+                                <input type="text" name="dFechaCapturaPedimento" placeholder="Desde" class="form-control" value="">
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                                </span>
+                            </div>
+                            <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
+                                <input type="text" name="dFechaCapturaPedimentoHasta" placeholder="Hasta" class="form-control" value="">
                                 <span class="input-group-btn">
                                     <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                                 </span>
@@ -100,15 +150,13 @@
                         </td>
                         <td>
                             <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
-                                <input type="text" name="dFechaCapturaPedimento" placeholder="Fecha de captura del pedimento" class="form-control" value="">
+                                <input type="text" name="dFechaFacturacion" placeholder="Desde" class="form-control" value="">
                                 <span class="input-group-btn">
                                     <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                                 </span>
                             </div>
-                        </td>
-                        <td>
                             <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
-                                <input type="text" name="dFechaFacturacion" placeholder="Fecha de facturacion" class="form-control" value="">
+                                <input type="text" name="dFechaFacturacionHasta" placeholder="Hasta" class="form-control" value="">
                                 <span class="input-group-btn">
                                     <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
                                 </span>
@@ -151,15 +199,15 @@
                         <td>
                             <select name="sSocioImportador" class="form-control form-filter input-sm">
                                 <option value="">- Seleccione Importador -</option>
-<?php
-if (isset($data['listSocios'])) {
-    for ($i = 0; $i <= count($data['listSocios']) - 1; $i++) {
-        echo "<option value=" .
-        $data['listSocios'][$i]["skSocioEmpresa"] . ">" .
-        $data['listSocios'][$i]["Empresa"] . "</option>";
-    }
-}
-?>
+                                <?php
+                                if (isset($data['listSocios'])) {
+                                    for ($i = 0; $i <= count($data['listSocios']) - 1; $i++) {
+                                        echo "<option value=" .
+                                        $data['listSocios'][$i]["skSocioEmpresa"] . ">" .
+                                        $data['listSocios'][$i]["Empresa"] . "</option>";
+                                    }
+                                }
+                                ?>
                             </select>
                         </td>
 

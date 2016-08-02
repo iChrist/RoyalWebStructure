@@ -49,26 +49,51 @@ Class Rex_Controller Extends Rex_Model {
                 if(isset($_POST['sGuiaHouse'])){
                     $this->refex['sGuiaHouse'] = $_POST['sGuiaHouse'];
                 }
+                
+                
                 if(isset($_POST['dFechaCreacion'])){
                     $this->refex['dFechaCreacion'] = $_POST['dFechaCreacion'];
                 }
+                if(isset($_POST['dFechaCreacionHasta'])){
+                    $this->refex['dFechaCreacionHasta'] = $_POST['dFechaCreacionHasta'];
+                }
+                
+                
                 if(isset($_POST['dFechaPrevio'])){
                     $this->refex['dFechaPrevio'] = $_POST['dFechaPrevio'];
+                }
+                if(isset($_POST['dFechaPrevioHasta'])){
+                    $this->refex['dFechaPrevioHasta'] = $_POST['dFechaPrevioHasta'];
                 }
                 if(isset($_POST['dFechaDespacho'])){
                     $this->refex['dFechaDespacho'] = $_POST['dFechaDespacho'];
                 }
+                if(isset($_POST['dFechaDespachoHasta'])){
+                    $this->refex['dFechaDespachoHasta'] = $_POST['dFechaDespachoHasta'];
+                }
                 if(isset($_POST['dFechaClasificacion'])){
                     $this->refex['dFechaClasificacion'] = $_POST['dFechaClasificacion'];
+                }
+                if(isset($_POST['dFechaClasificacionHasta'])){
+                    $this->refex['dFechaClasificacionHasta'] = $_POST['dFechaClasificacionHasta'];
                 }
                 if(isset($_POST['dFechaGlosa'])){
                     $this->refex['dFechaGlosa'] = $_POST['dFechaGlosa'];
                 }
+                if(isset($_POST['dFechaGlosaHasta'])){
+                    $this->refex['dFechaGlosaHasta'] = $_POST['dFechaGlosaHasta'];
+                }
                 if(isset($_POST['dFechaCapturaPedimento'])){
                     $this->refex['dFechaCapturaPedimento'] = $_POST['dFechaCapturaPedimento'];
                 }
+                if(isset($_POST['dFechaCapturaPedimentoHasta'])){
+                    $this->refex['dFechaCapturaPedimentoHasta'] = $_POST['dFechaCapturaPedimentoHasta'];
+                }
                 if(isset($_POST['dFechaFacturacion'])){
                     $this->refex['dFechaFacturacion'] = $_POST['dFechaFacturacion'];
+                }
+                if(isset($_POST['dFechaFacturacionHasta'])){
+                    $this->refex['dFechaFacturacionHasta'] = $_POST['dFechaFacturacionHasta'];
                 }
                 if(isset($_POST['iDeposito'])){
                     $this->refex['iDeposito'] = $_POST['iDeposito'];
@@ -170,6 +195,10 @@ Class Rex_Controller Extends Rex_Model {
         $this->load_view('refe-form',$this->data,true);
     }
 
+    
+    /*
+     * Guarda registros del formulario
+     */
     public function refe_save($maxPedimento)
     {
 
@@ -202,6 +231,9 @@ Class Rex_Controller Extends Rex_Model {
         }
     }
 
+    /*
+     * Acctualiza los datos de algun registro
+     */
     public function refe_update()
     {
         $le = parent::updatear($_POST['skReferenciaExterna']);
@@ -221,7 +253,10 @@ Class Rex_Controller Extends Rex_Model {
             return true;
         }
     }
-
+    
+    /*
+     * Retorna un json de los status
+     */
     public function jsonStatus()
     {
         $arr = parent::getStatus();
@@ -235,6 +270,9 @@ Class Rex_Controller Extends Rex_Model {
         }
     }
 
+    /*
+     * Retorna un json de los almacenes
+     */
     public function jsonAlmacenes()
     {
         $arr = parent::getAlmacenes();
@@ -248,6 +286,9 @@ Class Rex_Controller Extends Rex_Model {
         }
     }
 
+    /*
+     * Retorna un json de socios importadores
+     */
     public function jsonSocioImportadores()
     {
 
@@ -266,6 +307,9 @@ Class Rex_Controller Extends Rex_Model {
         }
     }
 
+    /*
+     * Obtiene el tipo de cambio segun el banco de mexico
+     */
     public function tipo_cambio()
     {
 

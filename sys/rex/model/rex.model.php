@@ -29,7 +29,7 @@ Class Rex_Model Extends Core_Model {
 
     public function getMaxPedimento() {
         $sql = "SELECT MAX(sPedimento) AS sPedimento FROM ope_referenciasExternas WHERE skEstatus != 'EL' ";
-        //exit($sql);
+        ////exit($sql);
         $result = $this->db->query($sql);
         if ($result) {
             return $result->fetch_assoc();
@@ -57,7 +57,7 @@ Class Rex_Model Extends Core_Model {
     {
 
         $skReferenciaExterna =  substr(md5(microtime()), 1, 32);
-        //die($_POST["dFechaPrevio"]." ".$_POST["tHoraPrevio"]);
+        ////die($_POST["dFechaPrevio"]." ".$_POST["tHoraPrevio"]);
 
         $fechas = array(
             'dFechaPrevio'              => (
@@ -259,7 +259,7 @@ Class Rex_Model Extends Core_Model {
                 `dTipoCambio` = '".$_POST["fTipoCambio"]."'
 
                 WHERE `skReferenciaExterna` = '$skReferenciaExterna';" ;
-                //die($sql_update);
+                ////die($sql_update);
 
         if (isset($_POST["conceptos"]) && isset($_POST["iCantidad"])) {
 
@@ -338,7 +338,7 @@ Class Rex_Model Extends Core_Model {
                     skSocioEmpresaP = '$socioEmpresaP'
                     AND skTipoEmpresa = 'CLIE'
                 ORDER BY sNombre;";
-        //die($sql_socios);
+        ////die($sql_socios);
         $r = $this->db->query($sql_socios);
 
         if ($this->db->affected_rows > 0){
@@ -396,8 +396,8 @@ Class Rex_Model Extends Core_Model {
         }
     }
 
-    public function countGetReferenciasExternas($get = false)
-{
+    public function countGetReferenciasExternas($get = false){
+       
     $getol = "
         ope_referenciasExternas.skReferenciaExterna,
         ope_referenciasExternas.sPedimento,
@@ -448,41 +448,99 @@ Class Rex_Model Extends Core_Model {
         if(!empty($this->refex['sGuiaHouse'])){
             $sql .=" AND ope_referenciasExternas.sGuiaHouse like '%".$this->refex['sGuiaHouse']."%'";
         }
+        
+        
         if(!empty($this->refex['dFechaCreacion'])){
-            $sql .=" AND ope_referenciasExternas.dFechaCreacion like '%".
-            DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaCreacion'])->format('Y-m-d H:i:s')
-            ."%'";
+            
+            $sql .=" AND ope_referenciasExternas.dFechaCreacion >=  '".
+            date('Y-m-d', strtotime($this->refex['dFechaCreacion']))
+            ."'";
+            
         }
+        if(!empty($this->refex['dFechaCreacionHasta'])){
+            $sql .=" AND ope_referenciasExternas.dFechaCreacion <=  '".
+            date('Y-m-d', strtotime($this->refex['dFechaCreacionHasta']))."'";
+        }
+        
+        
         if(!empty($this->refex['dFechaPrevio'])){
-            $sql .=" AND ope_referenciasExternas.dFechaPrevio like '%".
-            DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaPrevio'])->format('Y-m-d H:i:s')
-            ."%'";
+            $sql .=" AND ope_referenciasExternas.dFechaPrevio >=  '".
+            date('Y-m-d', strtotime($this->refex['dFechaPrevio']))
+            ."'";
         }
+        if(!empty($this->refex['dFechaPrevioHasta'])){
+            $sql .=" AND ope_referenciasExternas.dFechaPrevio <=  '".
+            date('Y-m-d', strtotime($this->refex['dFechaPrevioHasta']))
+            ."'";
+        }
+        
+        
+        
         if(!empty($this->refex['dFechaDespacho'])){
-            $sql .=" AND ope_referenciasExternas.dFechaDespacho like '%".
-            DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaDespacho'])->format('Y-m-d H:i:s')
-            ."%'";
+            $sql .=" AND ope_referenciasExternas.dFechaDespacho >=  '".
+            date('Y-m-d', strtotime($this->refex['dFechaDespacho']))
+            ."'";
         }
+        if(!empty($this->refex['dFechaDespachoHasta'])){
+            $sql .=" AND ope_referenciasExternas.dFechaDespacho <=  '".
+            date('Y-m-d', strtotime($this->refex['dFechaDespachoHasta']))
+            ."'";
+        }
+        
+        
+        
         if(!empty($this->refex['dFechaClasificacion'])){
-            $sql .=" AND ope_referenciasExternas.dFechaClasificacion like '%".
-            DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaClasificacion'])->format('Y-m-d H:i:s')
-            ."%'";
+            $sql .=" AND ope_referenciasExternas.dFechaClasificacion >=  '".
+            date('Y-m-d', strtotime($this->refex['dFechaClasificacion']))
+            ."'";
         }
+        if(!empty($this->refex['dFechaClasificacionHasta'])){
+            $sql .=" AND ope_referenciasExternas.dFechaClasificacion <=  '".
+            date('Y-m-d', strtotime($this->refex['dFechaClasificacionHasta']))
+            ."'";
+        }
+        
+        
+        
         if(!empty($this->refex['dFechaGlosa'])){
-            $sql .=" AND ope_referenciasExternas.dFechaGlosa like '%".
-            DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaGlosa'])->format('Y-m-d H:i:s')
-            ."%'";
+            $sql .=" AND ope_referenciasExternas.dFechaGlosa >=  '".
+            date('Y-m-d', strtotime($this->refex['dFechaGlosa']))
+            ."'";
         }
+        if(!empty($this->refex['dFechaGlosaHasta'])){
+            $sql .=" AND ope_referenciasExternas.dFechaGlosa <=  '".
+            date('Y-m-d', strtotime($this->refex['dFechaGlosaHasta']))
+            ."'";
+        }
+        
+        
+        
         if(!empty($this->refex['dFechaCapturaPedimento'])){
-            $sql .=" AND ope_referenciasExternas.dFechaCapturaPedimento like '%".
-            DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaCapturaPedimento'])->format('Y-m-d H:i:s')
-            ."%'";
+            $sql .=" AND ope_referenciasExternas.dFechaCapturaPedimento >=  '".
+            date('Y-m-d', strtotime($this->refex['dFechaCapturaPedimento']))
+            ."'";
         }
+        if(!empty($this->refex['dFechaCapturaPedimentoHasta'])){
+            $sql .=" AND ope_referenciasExternas.dFechaCapturaPedimento <=  '".
+            date('Y-m-d', strtotime($this->refex['dFechaCapturaPedimentoHasta']))
+            ."'";
+        }
+        
+        
+        
         if(!empty($this->refex['dFechaFacturacion'])){
-            $sql .=" AND ope_referenciasExternas.dFechaFacturacion like '%".
-            DateTime::createFromFormat('Y-m-d H:i:s', $this->refex['dFechaFacturacion'])->format('Y-m-d H:i:s')
-            ."%'";
+            $sql .=" AND ope_referenciasExternas.dFechaFacturacion >=  '".
+            date('Y-m-d', strtotime($this->refex['dFechaFacturacion']))
+            ."'";
         }
+        if(!empty($this->refex['dFechaFacturacionHasta'])){
+            $sql .=" AND ope_referenciasExternas.dFechaFacturacion >=  '".
+            date('Y-m-d', strtotime($this->refex['dFechaFacturacionHasta']))
+            ."'";
+        }
+        
+        
+        
         if(!empty($this->refex['iDeposito'])){
             $sql .=" AND ope_referenciasExternas.iDeposito like '%".$this->refex['iDeposito']."%'";
         }
@@ -498,7 +556,9 @@ Class Rex_Model Extends Core_Model {
         if(!empty($this->refex['sSocioImportador'])){
             $sql .=" AND resa.skSocioEmpresa = '".$this->refex['sSocioImportador']."'";
         }
-       //die($sql);
+        
+        //die($sql);
+      
     }
     $result = $this->db->query($sql);
     if($result){
@@ -530,7 +590,7 @@ Class Rex_Model Extends Core_Model {
         INNER JOIN cat_conceptos ca ON (ca.skConcepto = rcetc.skConcepto)
         INNER JOIN rel_empresas_socios ce ON (rcetc.skEmpresa = ce.skEmpresa)
         WHERE ce.skSocioEmpresa = '$skSocioImportador' ORDER BY ca.sNombre ;";
-        //die($sql);
+        ////die($sql);
 
         $r = $this->db->query($sql);
 
@@ -596,7 +656,7 @@ Class Rex_Model Extends Core_Model {
             '$dPrecioUnitario',
             '$skDivisa'
             );";
-        //die($sql);
+        ////die($sql);
 
         $r = $this->db->query($sql);
 
@@ -699,7 +759,7 @@ Class Rex_Model Extends Core_Model {
         LEFT JOIN _users us	 ON us.skUsers = ore.skUsuarioCreacion
         WHERE ore.skReferenciaExterna = '".$this->refex['skReferenciaExterna']."' ";
                     //Poner el numero de previo
-        //  echo $sql; die();
+        //  echo $sql; //die();
         $result = $this->db->query($sql);
         if ($result) {
             if ($result->num_rows > 0) {
@@ -711,7 +771,7 @@ Class Rex_Model Extends Core_Model {
     }
     public function listar_fotos_referencias(){
       $sql="SELECT * FROM rel_referenciasExternas_fotos WHERE skReferenciaExterna ='".$this->refex['skReferenciaExterna']."' AND skEstatus = 'AC' ";
-      //exit($sql);
+      ////exit($sql);
           $result = $this->db->query($sql);
       if ($result) {
           if ($result->num_rows > 0) {
@@ -734,7 +794,7 @@ Class Rex_Model Extends Core_Model {
                           '".$this->refex['sUbicacion']."',
                           CURRENT_TIMESTAMP()
                            )";
-      //echo  $sql."<br><br><br>";die();
+      //echo  $sql."<br><br><br>";//die();
       $result = $this->db->query($sql);
       if ($result) {
           return true;
@@ -768,7 +828,7 @@ Class Rex_Model Extends Core_Model {
                 CURRENT_TIMESTAMP,
                 '".$datos['skDocTipo']."'
                 )";
-            //exit('<pre>'.print_r($sql,1).'</pre>');
+            ////exit('<pre>'.print_r($sql,1).'</pre>');
             $result = $this->db->query($sql);
             if (!$result) {
                 return false;
@@ -782,7 +842,7 @@ Class Rex_Model Extends Core_Model {
     public function get_cat_docTipo(){
         $sql = "SELECT * FROM rel_tiposDocumentos_modulos tdm
             INNER JOIN cat_docTipo dt ON dt.skDocTipo = tdm.skDocTipo WHERE dt.skStatus = 'AC' AND tdm.skModulo = 'reexdo-form' ";
-        //exit('<pre>'.print_r($sql,1).'</pre>');
+        ////exit('<pre>'.print_r($sql,1).'</pre>');
         $result = $this->db->query($sql);
         if ($result) {
             if ($result->num_rows > 0) {
@@ -795,7 +855,7 @@ Class Rex_Model Extends Core_Model {
     // GET REL DOCUMENTOS DE REFERENCIA EXTERNA  //
     public function get_rel_referenciasExternas_documentos() {
         $sql = "SELECT rexDoc.*, dt.sNombre FROM rel_referenciasExternas_documentos AS rexDoc INNER JOIN cat_docTipo dt ON dt.skDocTipo = rexDoc.skDocTipo WHERE rexDoc.skEstatus = 'AC' AND rexDoc.skReferenciaExterna = '".$this->refex['skReferenciaExterna']."' ";
-        //exit('<pre>'.print_r($sql,1).'</pre>');
+        ////exit('<pre>'.print_r($sql,1).'</pre>');
         $result = $this->db->query($sql);
         if ($result) {
             if ($result->num_rows > 0) {
@@ -815,7 +875,7 @@ Class Rex_Model Extends Core_Model {
             if(isset($datos['skDocumentoReferencia']) && !empty($datos['skDocumentoReferencia'])){
                 $sql .= " AND skDocumentoReferencia NOT IN (".$datos['skDocumentoReferencia'].")";
             }
-            //exit('<pre>'.print_r($sql,1).'</pre>');
+            ////exit('<pre>'.print_r($sql,1).'</pre>');
             $result = $this->db->query($sql);
             if ($result) {
                 return true;
