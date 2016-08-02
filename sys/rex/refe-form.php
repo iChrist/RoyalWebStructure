@@ -80,6 +80,15 @@
                     <input type="text" maxlength="50" name="sPedimento" id="sPedimento" class="form-control" placeholder="Numero de pedimento" value="<?php echo (isset($result["sPedimento"])) ? $result["sPedimento"] : '' ;?>" >
                 </div>
             </div>
+            
+            <label class="control-label col-md-2">Bultos<span aria-required="true" class="required"> * </span>
+            </label>
+            <div class="col-md-4">
+                <div class="input-icon right">
+                    <i class="fa"></i>
+                    <input type="number" min="0" name="iBultos" id="iBultos" class="form-control" placeholder="0" value="<?php echo (isset($result["iBultos"])) ? $result["iBultos"] : '' ;?>" >
+                </div>
+            </div>
         </div>
 
         <div class="form-group">
@@ -108,15 +117,6 @@
                 <div class="input-icon right">
                     <i class="fa"></i>
                     <input type="text" maxlength="100" name="sGuiaHouse" id="sGuiaHouse" class="form-control" placeholder="Guia House" value="<?php echo (isset($result["sGuiaHouse"])) ? $result["sGuiaHouse"] : '' ;?>" >
-                </div>
-            </div>
-
-            <label class="control-label col-md-1">Bultos<span aria-required="true" class="required"> * </span>
-            </label>
-            <div class="col-md-2">
-                <div class="input-icon right">
-                    <i class="fa"></i>
-                    <input type="number" min="0" name="iBultos" id="iBultos" class="form-control" placeholder="0" value="<?php echo (isset($result["iBultos"])) ? $result["iBultos"] : '' ;?>" >
                 </div>
             </div>
         </div>
@@ -325,7 +325,7 @@
                                 while($cr = $data["conceptosRef"]->fetch_assoc()){
                                     $conceptoRecord = ( ($cr["skConcepto"] ===  $row["skConcepto"]) ) ? $cr : false;
                                 }
-                                echo "<pre>".print_r($conceptoRecord ,true)."</pre>";
+                               // echo "<pre>".print_r($conceptoRecord ,true)."</pre>";
 
 
 
