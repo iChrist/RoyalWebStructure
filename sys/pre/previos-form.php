@@ -17,15 +17,7 @@
   			 }
   		 }
       }
-      $arrayTiposPrevios = array();
-    	if(isset($data['tiposPreviosPrevio']))
-        {
-    		if($data['tiposPreviosPrevio']->num_rows > 0){
-    			 while($row = $data['tiposPreviosPrevio']->fetch_assoc()){
-    				$arrayTiposPrevios[] = $row{'skTipoPrevio'};
-    			 }
-    		 }
-       }
+
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
     <input type="hidden" name="skSolicitudPrevio"  id="skSolicitudPrevio" value="<?php echo (isset($result['skSolicitudPrevio'])) ? $result['skSolicitudPrevio'] : '' ; ?>">
@@ -37,21 +29,6 @@
               <div class="input-icon right"> <i class="fa"></i>
                 <input type="text" name="sReferencia" id="sReferencia" <?php echo (isset($result['skSolicitudPrevio'])) ? 'disabled': '' ; ?> class="form-control" onChange="obtenerDatos();" placeholder="Referencia" value="<?php echo (isset($result['sReferencia'])) ? htmlentities(utf8_encode($result['sReferencia'])) : '' ; ?>" >
               </div>
-            </div>
-            <label class="control-label col-md-2">Ejecutivo <span aria-required="true" class="required"> * </span> </label>
-            <div class="col-md-4">
-                <select name="skUsuarioEjecutivo" id="skUsuarioEjecutivo" class="form-control form-filter input-sm">
-                    <option value="">- Ejecutivo -</option>
-                    <?php
-                    if ($data['ejecutivos']) {
-                        while ($rEjecutivo = $data['ejecutivos']->fetch_assoc()) {
-                            ?>
-                            <option value="<?php echo $rEjecutivo['skUsers']; ?>" <?php echo (isset($result['skUsuarioEjecutivo'])) ? ($result['skUsuarioEjecutivo'] == $rEjecutivo['skUsers'] ? 'selected' : '' ) : ''; ?> > <?php echo utf8_encode($rEjecutivo['sName']); ?> </option>
-                            <?php
-                        }//ENDIF
-                    }//ENDWHILE
-                    ?>
-                </select>
             </div>
         </div>
         <hr>
@@ -101,7 +78,7 @@
                 ?>
             </select>
           </div>
-          <label class="control-label col-md-2">Tramitador <span aria-required="true" class="required"> * </span> </label>
+          <label class="control-label col-md-2">Tramitador</label>
           <div class="col-md-4">
               <select name="skUsuarioTramitador" id="skUsuarioTramitador" class="form-control form-filter input-sm">
                   <option value="">- Tramitador -</option>
@@ -145,8 +122,25 @@
             </div>
           </div>
         </div>
-        <div class="clearfix"><hr></div>
+        <div class="form-group">
+          <label class="control-label col-md-2">Tipo de Previo</label>
+          <div class="col-md-4">
+              <select name="skTipoPrevio" id="skTipoPrevio" class="form-control form-filter input-sm">
+                  <option value="">- Tipo de Previo -</option>
+                  <?php
+                  if ($data['tiposPrevios']) {
+                      while ($rTipoPrevio = $data['tiposPrevios']->fetch_assoc()) {
+                          ?>
+                          <option value="<?php echo $rTipoPrevio['skTipoPrevio']; ?>" <?php echo (isset($result['skTipoPrevio'])) ? ($result['skTipoPrevio'] == $rTipoPrevio['skTipoPrevio'] ? 'selected' : '' ) : ''; ?> > <?php echo utf8_encode($rTipoPrevio['sNombre']); ?> </option>
+                          <?php
+                      }//ENDIF
+                  }//ENDWHILE
+                  ?>
+              </select>
+          </div>
 
+        </div>
+        <div class="clearfix"><hr></div>
         <div class="form-group">
             <label class="control-label col-md-2">Autoridades <span aria-required="true" class="required">  </span>
             </label>
@@ -163,35 +157,6 @@
                                     <div class="col-md-4">
                                            <label> <input type="checkbox" name="skAutoridad[]" value="<?php echo $autoridades['skAutoridad']; ?>" <?php echo (in_array($autoridades['skAutoridad'], $arrayAutoridades) ? 'checked' : '')?>   />
                                             <?php echo $autoridades['sNombre']; ?>    <br/>&nbsp;</label>
-
-                                    </div>
-                                <?php
-                                }
-                            }
-                            ?>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-        <div class="clearfix"><hr></div>
-        <div class="form-group">
-            <label class="control-label col-md-2">Tipo de Previo <span aria-required="true" class="required">  </span>
-            </label>
-            <div class="col-md-10">
-                <div class="row">
-                    <div class="checkbox-list">
-
-                            <?php
-                            if($data['tiposPrevios'])
-                            {
-                                foreach ($data['tiposPrevios'] as $tiposPrevios)
-                                {
-                                ?>
-                                    <div class="col-md-4">
-                                           <label> <input type="checkbox" name="skTipoPrevio[]" value="<?php echo $tiposPrevios['skTipoPrevio']; ?>" <?php echo (in_array($tiposPrevios['skTipoPrevio'], $arrayTiposPrevios) ? 'checked' : '')?>   />
-                                            <?php echo $tiposPrevios['sNombre']; ?>    <br/>&nbsp;</label>
 
                                     </div>
                                 <?php
@@ -266,7 +231,7 @@
                       }
                     }
 
-                },skUsuarioEjecutivo:{
+                },skSocioImportador:{
                     required: true
                 },
 
@@ -313,8 +278,8 @@
                       return 'La referencia "'+$("#sReferencia").val()+'" no Existe.';
                   }
               },
-              skUsuarioEjecutivo:{
-                  required: "Agregar Ejecutivo"
+              skSocioImportador:{
+                  required: "Agregar Cliente"
               },
             }
         });

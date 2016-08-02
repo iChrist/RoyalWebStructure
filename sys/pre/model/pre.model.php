@@ -3,7 +3,18 @@
     {
         // PRIVATE VARIABLES //
         public $previos = array(
-                'skSolicitudPrevio' => '', 'ikSolicitudPrevio' => '', 'sReferencia' => '', 'sPedimento' => '', 'dFechaSolicitud' => '', 'dFechaPrevio' => '', 'dFechaApertura' => '', 'skUsuarioCreacion' => '', 'skUsuarioEjecutivo' => '', 'skUsuarioTramitador' => '', 'skSocioPropietario' => '', 'skSocioImportador' => '', 'sMasterBL' => '', 'sContenedor' => '', 'sSelloOrigen' => '', 'sSelloFinal' => '', 'sNumeroFactura' => '', 'sPais' => '', 'skStatus' => '', 'skEmpresa' => '', 'skFotoPrevio' => '','sUbicacion' => '','limit' => '', 'offset' => '',
+                'skSolicitudPrevio' => '',
+                'ikSolicitudPrevio' => '',
+                'sReferencia' => '',
+                'sPedimento' => '',
+                'dFechaSolicitud' => '',
+                'dFechaPrevio' => '',
+                'dFechaInicioProgramacion' => '',
+                'dFechaFinProgramacion' => '',
+                'dFechaApertura' => '',
+                'skUsuarioCreacion' => '',
+                'skUsuarioEjecutivo' => '',
+                 'skUsuarioTramitador' => '', 'skSocioPropietario' => '', 'skSocioImportador' => '', 'sMasterBL' => '', 'sContenedor' => '', 'sSelloOrigen' => '', 'sSelloFinal' => '', 'sNumeroFactura' => '', 'sPais' => '', 'skStatus' => '', 'skEmpresa' => '', 'skFotoPrevio' => '','sUbicacion' => '','limit' => '', 'offset' => '',
                 );
         private $_data = array();
 
@@ -37,7 +48,8 @@
 							osp.dFechaApertura AS fechaApertura,
 							us.sName AS usuarioCreacion,
 							usj.sName AS usuarioEjecutivo,
-							ust.sName AS usuarioTramitador
+              ust.sName AS usuarioTramitador,
+              ctp.sNombre AS tipoPrevio
 						FROM ope_solicitudes_previos osp
 						LEFT JOIN cat_estatus ce ON ce.skEstatus = osp.skEstatus
 						LEFT JOIN rel_empresas_socios resi ON resi.skSocioEmpresa = osp.skSocioImportador
@@ -48,14 +60,42 @@
 						LEFT JOIN cat_empresas cer ON cer.skEmpresa = resr.skEmpresa
 						LEFT JOIN _users us ON us.skUsers = osp.skUsuarioCreacion
 						LEFT JOIN _users usj ON usj.skUsers = osp.skUsuarioEjecutivo
-						LEFT JOIN _users ust ON ust.skUsers = osp.skUsuarioTramitador
+            LEFT JOIN _users ust ON ust.skUsers = osp.skUsuarioTramitador
+            LEFT JOIN cat_tiposPrevios ctp ON ctp.skTipoPrevio = osp.skTipoPrevio
 						WHERE 1=1";
 
             if (!empty($this->previos['skSolicitudPrevio'])) {
                 $sql .= " AND osp.skSolicitudPrevio = '".$this->previos['skSolicitudPrevio']."'";
             }
-            $sql .= ' ORDER BY osp.ikSolicitudPrevio DESC ';
+            if (!empty($this->previos['sReferencia'])) {
+                $sql .= " AND osp.sReferencia = '".$this->previos['sReferencia']."'";
+            }
+            if (!empty($this->previos['skUsuarioEjecutivo'])) {
+                $sql .= " AND osp.skUsuarioEjecutivo = '".$this->previos['skUsuarioEjecutivo']."'";
+            }
+            if (!empty($this->previos['skUsuarioTramitador'])) {
+                $sql .= " AND osp.skUsuarioTramitador = '".$this->previos['skUsuarioTramitador']."'";
+            }
+            if (!empty($this->previos['skSocioImportador'])) {
+                $sql .= " AND osp.skSocioImportador = '".$this->previos['skSocioImportador']."'";
+            }
+            if (!empty($this->previos['skSocioRecinto'])) {
+                $sql .= " AND osp.skSocioRecinto = '".$this->previos['skSocioRecinto']."'";
+            }
+            if (!empty($this->previos['sNumeroFactura'])) {
+                $sql .= " AND osp.sNumeroFactura = '".$this->previos['sNumeroFactura']."'";
+            }
+            if (!empty($this->previos['sPais'])) {
+                $sql .= " AND osp.sPais = '".$this->previos['sPais']."'";
+            }
 
+            /*if (!is_null($this->previos['dFechaInicioProgramacion'])) {
+                if (!is_null($this->previos['dFechaFinProgramacion'])) {
+                      $sql .= " AND (DATE_FORMAT(dFechaProgramacion,'%Y-%m-%d') >= '" . date('Y-m-d', strtotime($this->previos['dFechaInicioProgramacion'])) . "' AND DATE_FORMAT(dFechaProgramacion,'%Y-%m-%d') <= '" . date('Y-m-d', strtotime($this->previos['dFechaFinProgramacion'])) . "')";
+                }
+            }*/
+            $sql .= ' ORDER BY osp.ikSolicitudPrevio DESC ';
+            //echo $sql;
             $result = $this->db->query($sql);
             if ($result) {
                 if ($result->num_rows > 0) {
@@ -94,7 +134,8 @@
 									sSelloOrigen='".$this->previos['sSelloOrigen']."',
 									sSelloFinal='".$this->previos['sSelloFinal']."',
 									sNumeroFactura='".$this->previos['sNumeroFactura']."',
-									sObservacionesSolicitud='".$this->previos['sObservacionesSolicitud']."',
+                  sObservacionesSolicitud='".$this->previos['sObservacionesSolicitud']."',
+                  skTipoPrevio='".$this->previos['skTipoPrevio']."',
 									sPais='".$this->previos['sPais']."'
 									WHERE skSolicitudPrevio = '".$this->previos['skSolicitudPrevio']."'";
             $result = $this->db->query($sql);
@@ -166,7 +207,8 @@
 																skSocioImportador,
 																skSocioPropietario,
 																skSocioRecinto,
-																dFechaSolicitud,
+                                dFechaSolicitud,
+                                dFechaProgramacion,
 																skUsuarioCreacion,
 																skUsuarioEjecutivo,
 																skUsuarioTramitador,
@@ -177,16 +219,18 @@
 																sContenedor,
 																sSelloOrigen,
 																sSelloFinal,
-																sNumeroFactura,
+                                sNumeroFactura,
+                                skTipoPrevio,
 																sPais)
 						VALUES ('".$this->previos['skSolicitudPrevio']."',
 										'NU',
   									'".$this->previos['skSocioImportador']."',
 										'".$this->previos['skSocioPropietario']."',
 										'".$this->previos['skSocioRecinto']."',
- 										CURRENT_TIMESTAMP(),
+                    CURRENT_TIMESTAMP(),
+                    '".$this->previos['dFechaProgramacion']."',
 										'".$_SESSION['session']['skUsers']."',
-										'".$this->previos['skUsuarioEjecutivo']."',
+										'".$_SESSION['session']['skUsers']."',
 										'".$this->previos['skUsuarioTramitador']."',
 										'".$this->previos['sObservacionesSolicitud']."',
 										'".$this->previos['sMasterBL']."',
@@ -195,7 +239,8 @@
 										'".$this->previos['sContenedor']."',
 										'".$this->previos['sSelloOrigen']."',
 										'".$this->previos['sSelloFinal']."',
-										'".$this->previos['sNumeroFactura']."',
+                    '".$this->previos['sNumeroFactura']."',
+                    '".$this->previos['skTipoPrevio']."',
                     '".$this->previos['sPais']."')";
 
             $result = $this->db->query($sql);
@@ -477,8 +522,9 @@
             if (!empty($this->previos['sReferencia'])) {
                 $sql .= " AND cla.sReferencia = '".$this->previos['sReferencia']."'";
             }
+            $sql.=" ORDER BY claMer.sFactura,claMer.iSecuencia ASC";
 
-            //exit($sql);
+        //  exit($sql);
                 $result = $this->db->query($sql);
             if ($result) {
                 if ($result->num_rows > 0) {
