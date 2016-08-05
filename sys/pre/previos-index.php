@@ -11,11 +11,10 @@
                 <thead>
                     <tr role="row" class="heading">
                         <th nowrap>Acciones</th>
-                        <th nowrap>E</th>
-                        <th nowrap>Código</th>
+                        <th nowrap>Estatus</th>
+                        <th nowrap>Referencia</th>
                         <th nowrap>Fecha de Solicitud</th>
                         <th nowrap>Fecha de Programaci&oacute;n</th>
-                        <th nowrap>Referencia</th>
                         <th nowrap>Importador</th>
                         <th nowrap>Recinto</th>
                         <th nowrap>Ejecutivo</th>
@@ -31,8 +30,9 @@
                           </div>
                       </td>
                       <td></td>
-                      <td></td>
                       <td>
+                        <input type="text" class="form-control form-filter input-sm" name="sReferencia" placeholder="Referencia">
+                      </td>                      <td>
                         <div class="input-group input-group-sm date date-picker margin-bottom-5" data-date-format="dd-mm-yyyy">
                             <input type="text" class="form-control form-filter" id="dFechaSolicitud" name="dFechaSolicitud" placeholder="Fecha Solicitud">
                             <span class="input-group-btn">
@@ -54,9 +54,7 @@
                             </span>
                         </div>
                       </td>
-                      <td>
-                        <input type="text" class="form-control form-filter input-sm" name="sReferencia" placeholder="Referencia">
-                      </td>
+
                       <td><select name="skSocioImportador" class="form-control form-filter input-sm">
                               <option value="">- Importador -</option>
                               <?php

@@ -12,10 +12,10 @@
     <input type="hidden" name="skSolicitudPrevio"  id="skSolicitudPrevio" value="<?php echo (isset($result['skSolicitudPrevio'])) ? $result['skSolicitudPrevio'] : '' ; ?>">
     <div class="form-body">
       <div class="row">
-            <label class="text-right col-md-2"><b>C&oacute;digo</b></label>
+            <label class="text-right col-md-2"><b>Referencia</b></label>
             <div class="col-md-4">
               <p class="text-left">
-                 <?php echo ($result['codigo'] ? utf8_encode($result['codigo']) : ' N/D') ; ?>
+                 <?php echo ($result['sReferencia'] ? utf8_encode($result['sReferencia']) : ' N/D') ; ?>
               </p>
             </div>
             <label class="text-right col-md-2"><b>Estatus</b></label>
@@ -177,6 +177,13 @@
               											</div>
                                     <?php
                                 }//ENDIF
+                            }else{
+                            ?>
+                            <label>No hay Fotos Cargadas para este previo</label>
+
+                            <?php
+
+
                             }//ENDWHILE
                             ?>
       											<!--<div class="col-md-3 col-sm-4 mix category_1">

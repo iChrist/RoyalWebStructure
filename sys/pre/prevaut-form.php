@@ -13,10 +13,10 @@
     <div class="form-body">
       <div class="row">
         <div class="col-md-6">
-            <label class="control-label col-md-4"><b>C&oacute;digo</b></label>
+            <label class="control-label col-md-4"><b>Referencia</b></label>
             <div class="col-md-8">
               <p class="form-control-static">
-                 <?php echo (isset($result['codigo'])) ? utf8_encode($result['codigo']) : '' ; ?>
+                 <?php echo (isset($result['sReferencia'])) ? utf8_encode($result['sReferencia']) : '' ; ?>
               </p>
             </div>
         </div>

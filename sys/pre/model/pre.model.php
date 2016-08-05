@@ -89,13 +89,13 @@
                 $sql .= " AND osp.sPais = '".$this->previos['sPais']."'";
             }
 
-            /*if (!is_null($this->previos['dFechaInicioProgramacion'])) {
-                if (!is_null($this->previos['dFechaFinProgramacion'])) {
-                      $sql .= " AND (DATE_FORMAT(dFechaProgramacion,'%Y-%m-%d') >= '" . date('Y-m-d', strtotime($this->previos['dFechaInicioProgramacion'])) . "' AND DATE_FORMAT(dFechaProgramacion,'%Y-%m-%d') <= '" . date('Y-m-d', strtotime($this->previos['dFechaFinProgramacion'])) . "')";
+            if (!empty($this->previos['dFechaInicioProgramacion'])) {
+                if (!empty($this->previos['dFechaFinProgramacion'])) {
+                      $sql .= " AND (DATE_FORMAT(osp.dFechaProgramacion,'%Y-%m-%d') >= '" . date('Y-m-d', strtotime($this->previos['dFechaInicioProgramacion'])) . "' AND DATE_FORMAT(osp.dFechaProgramacion,'%Y-%m-%d') <= '" . date('Y-m-d', strtotime($this->previos['dFechaFinProgramacion'])) . "')";
                 }
-            }*/
+            }
             $sql .= ' ORDER BY osp.ikSolicitudPrevio DESC ';
-            //echo $sql;
+          //  echo $sql;
             $result = $this->db->query($sql);
             if ($result) {
                 if ($result->num_rows > 0) {
@@ -125,16 +125,14 @@
         public function update_previos()
         {
             $sql = "UPDATE ope_solicitudes_previos
-							SET skSocioImportador='".$this->previos['skSocioImportador']."',
-									skSocioPropietario='".$this->previos['skSocioPropietario']."',
+							SET skSocioPropietario='".$this->previos['skSocioPropietario']."',
 									skSocioRecinto='".$this->previos['skSocioRecinto']."',
 									skUsuarioEjecutivo='".$this->previos['skUsuarioEjecutivo']."',
-									dFechaSolicitud='".$this->previos['dFechaSolicitud']."',
+									dFechaProgramacion='".$this->previos['dFechaProgramacion']."',
 									skUsuarioTramitador='".$this->previos['skUsuarioTramitador']."',
 									sSelloOrigen='".$this->previos['sSelloOrigen']."',
 									sSelloFinal='".$this->previos['sSelloFinal']."',
 									sNumeroFactura='".$this->previos['sNumeroFactura']."',
-                  sObservacionesSolicitud='".$this->previos['sObservacionesSolicitud']."',
                   skTipoPrevio='".$this->previos['skTipoPrevio']."',
 									sPais='".$this->previos['sPais']."'
 									WHERE skSolicitudPrevio = '".$this->previos['skSolicitudPrevio']."'";
@@ -144,11 +142,7 @@
             if (!$result1) {
                 return false;
             }
-            $sql = "DELETE FROM rel_solicitudesPrevios_tiposPrevio  WHERE skSolicitudPrevio = '".$this->previos['skSolicitudPrevio']."'";
-            $result2 = $this->db->query($sql);
-            if (!$result2) {
-                return false;
-            }
+
 
             return $this->previos['skSolicitudPrevio'];
         }
@@ -184,13 +178,56 @@
 		        INNER JOIN cat_claves_documentos  ccd ON ccd.skClaveDocumento = rd.skClaveDocumento
 		        INNER JOIN _users us ON us.skUsers = rd.skUsersCreacion
 		        INNER JOIN _status ON _status.skStatus = rd.skStatus
+            INNER JOIN cat_clasificacion cc ON cc.sReferencia = rd.sReferencia
 		        WHERE 1=1 ';
 
-            if (!empty($this->solreva['sReferencia'])) {
-                $sql .= " AND rd.sReferencia = '".$this->solreva['sReferencia']."'";
+            if (!empty($this->previos['sReferencia'])) {
+                $sql .= " AND rd.sReferencia = '".$this->previos['sReferencia']."'";
             }
 		        //exit('<pre>'.print_r($sql,1).'</pre>');
 		        $result = $this->db->query($sql);
+		            if ($result) {
+		                if ($result->num_rows > 0) {
+		                    return $result;
+		                } else {
+		                    return false;
+		                }
+		            }
+        }
+        public function obtenerCliente()
+        {
+            $sql = 'SELECT
+            res.skSocioEmpresa
+		        FROM ope_recepciones_documentos rd
+		        INNER JOIN _status  st ON st.skStatus = rd.skStatus
+            INNER JOIN cat_empresas  ce ON ce.skEmpresa = rd.skEmpresa
+            INNER JOIN rel_empresas_socios  res ON res.skEmpresa = ce.skEmpresa
+		        WHERE 1=1 ';
+
+            if (!empty($this->previos['sReferencia'])) {
+                $sql .= " AND rd.sReferencia = '".$this->previos['sReferencia']."'";
+            }
+		      //  exit('<pre>'.print_r($sql,1).'</pre>');
+		        $result = $this->db->query($sql);
+            //exit('<pre>'.print_r($result,1).'</pre>');
+		            if ($result) {
+		                if ($result->num_rows > 0) {
+		                    return $result;
+		                } else {
+		                    return false;
+		                }
+		            }
+        }
+        public function obtenerBl()
+        {
+            $sql = "SELECT
+            rd.sBlMaster
+		        FROM ope_recepciones_documentos rd
+		        WHERE 1=1  AND rd.sReferencia = '".$this->previos['sReferencia']."' ";
+
+		      //  exit('<pre>'.print_r($sql,1).'</pre>');
+		        $result = $this->db->query($sql);
+            //exit('<pre>'.print_r($result,1).'</pre>');
 		            if ($result) {
 		                if ($result->num_rows > 0) {
 		                    return $result;
@@ -212,7 +249,6 @@
 																skUsuarioCreacion,
 																skUsuarioEjecutivo,
 																skUsuarioTramitador,
-																sObservacionesSolicitud,
 																sMasterBL,
 																sReferencia,
 																sPedimento,
@@ -223,17 +259,16 @@
                                 skTipoPrevio,
 																sPais)
 						VALUES ('".$this->previos['skSolicitudPrevio']."',
-										'NU',
+										'PR',
   									'".$this->previos['skSocioImportador']."',
 										'".$this->previos['skSocioPropietario']."',
 										'".$this->previos['skSocioRecinto']."',
                     CURRENT_TIMESTAMP(),
-                    '".$this->previos['dFechaProgramacion']."',
+                    ".$this->previos['dFechaProgramacion'].",
 										'".$_SESSION['session']['skUsers']."',
 										'".$_SESSION['session']['skUsers']."',
 										'".$this->previos['skUsuarioTramitador']."',
-										'".$this->previos['sObservacionesSolicitud']."',
-										'".$this->previos['sMasterBL']."',
+										'".$this->previos['sBlMaster']."',
 										'".$this->previos['sReferencia']."',
 										'".$this->previos['sPedimento']."',
 										'".$this->previos['sContenedor']."',
@@ -242,7 +277,7 @@
                     '".$this->previos['sNumeroFactura']."',
                     '".$this->previos['skTipoPrevio']."',
                     '".$this->previos['sPais']."')";
-
+                    
             $result = $this->db->query($sql);
             if ($result) {
                 return $this->previos['skSolicitudPrevio'];
@@ -472,7 +507,6 @@
 							osp.dFechaApertura AS fechaApertura,
 							us.sName AS usuarioCreacion,
 							usj.sName AS usuarioEjecutivo,
-							ust.sName AS usuarioTramitador,
 							osp.skUsuarioTramitador
 						FROM ope_solicitudes_previos osp
 						INNER JOIN cat_estatus ce ON ce.skEstatus = osp.skEstatus
@@ -482,11 +516,12 @@
 						INNER JOIN cat_empresas cep ON cep.skEmpresa = resp.skEmpresa
 						INNER JOIN rel_empresas_socios resr ON resr.skSocioEmpresa = osp.skSocioRecinto
 						INNER JOIN cat_empresas cer ON cer.skEmpresa = resr.skEmpresa
-						INNER JOIN _users us ON us.skUsers = osp.skUsuarioCreacion
-						INNER JOIN _users usj ON usj.skUsers = osp.skUsuarioEjecutivo
-						INNER JOIN _users ust ON ust.skUsers = osp.skUsuarioTramitador
+						LEFT JOIN _users us ON us.skUsers = osp.skUsuarioCreacion
+						LEFT JOIN _users usj ON usj.skUsers = osp.skUsuarioEjecutivo
+						LEFT JOIN _users ust ON ust.skUsers = osp.skUsuarioTramitador
 						WHERE osp.skSolicitudPrevio = '".$this->previos['skSolicitudPrevio']."' ";
                         //Poner el numero de previo
+
                         $result = $this->db->query($sql);
             if ($result) {
                 if ($result->num_rows > 0) {

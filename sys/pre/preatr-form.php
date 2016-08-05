@@ -8,16 +8,16 @@
     <input type="hidden" name="skSolicitudPrevio"  id="skSolicitudPrevio" value="<?php echo (isset($result['skSolicitudPrevio'])) ? $result['skSolicitudPrevio'] : '' ; ?>">
     <div class="form-body">
       <div class="row">
-            <label class="text-right col-md-2"><b>C&oacute;digo</b></label>
+            <label class="text-right col-md-2"><b>Referencia</b></label>
             <div class="col-md-4">
               <p class="text-left">
-                 <?php echo ($result['codigo'] ? utf8_encode($result['codigo']) : ' N/D') ; ?>
+                <?php echo (isset($result['sReferencia'])) ? utf8_encode($result['sReferencia']) : 'N/D' ; ?>
               </p>
             </div>
             <label class="text-right col-md-2"><b>Estatus</b></label>
             <div class="col-md-4">
               <p class="text-left">
-                 <?php echo ($result['Estatus'] ? utf8_encode($result['Estatus']) : 'N/D') ; ?>
+                 <?php echo (isset($result['Estatus']) ? utf8_encode($result['Estatus']) : 'N/D') ; ?>
               </p>
             </div>
         <!--/span-->
@@ -27,13 +27,13 @@
             <label class="text-right col-md-2"><b>Propietario</b></label>
             <div class="col-md-4">
               <p class="text-left">
-                 <?php echo ($result['propietario'] ? utf8_encode($result['propietario']) : 'N/D') ; ?>
+                 <?php echo (isset($result['propietario']) ? utf8_encode($result['propietario']) : 'N/D') ; ?>
               </p>
             </div>
             <label class="text-right col-md-2"><b>Fecha Solicitud</b></label>
             <div class="col-md-4">
               <p class="text-left">
-                 <?php echo ($result['fechaSolicitud'] ? date('d/m/Y H:i:s', strtotime($result['fechaSolicitud'])) : 'N/D') ; ?>
+                 <?php echo (isset($result['fechaSolicitud']) ? date('d/m/Y H:i:s', strtotime($result['fechaSolicitud'])) : 'N/D') ; ?>
               </p>
             </div>
 
@@ -45,14 +45,14 @@
             <label class="text-right col-md-2"><b>Cliente</b></label>
             <div class="col-md-4">
               <p class="text-left">
-                 <?php echo ($result['importador'] ? utf8_encode($result['importador']) : 'N/D') ; ?>
+                 <?php echo (isset($result['importador']) ? utf8_encode($result['importador']) : 'N/D') ; ?>
               </p>
             </div>
         <!--/span-->
             <label class="text-right col-md-2"><b>Recinto</b></label>
             <div class="col-md-4">
               <p class="text-left">
-                 <?php echo ($result['recinto'] ? utf8_encode($result['recinto']) : 'N/D') ; ?>
+                 <?php echo (isset($result['recinto']) ? utf8_encode($result['recinto']) : 'N/D') ; ?>
               </p>
             </div>
         <!--/span-->
@@ -66,13 +66,13 @@
             <label class="text-right col-md-2"><b>Usuario Creación</b></label>
             <div class="col-md-4">
               <p class="text-left">
-                 <?php echo ($result['usuarioCreacion'] ? utf8_encode($result['usuarioCreacion']) : 'N/D') ; ?>
+                 <?php echo (isset($result['usuarioCreacion']) ? utf8_encode($result['usuarioCreacion']) : 'N/D') ; ?>
               </p>
             </div>
             <label class="text-right col-md-2"><b>Usuario Ejecutivo</b></label>
             <div class="col-md-4">
               <p class="text-left">
-                 <?php echo ($result['usuarioEjecutivo'] ? utf8_encode($result['usuarioEjecutivo']) : 'N/D') ; ?>
+                 <?php echo (isset($result['usuarioEjecutivo']) ? utf8_encode($result['usuarioEjecutivo']) : 'N/D') ; ?>
               </p>
             </div>
         <!--/span-->
@@ -106,16 +106,16 @@
         </div>
       </div>
       <div class="row">
-            <label class="text-right col-md-2"><b>Mbl</b></label>
+            <label class="text-right col-md-2"><b>Master BL</b></label>
             <div class="col-md-4">
               <p class="text-left">
-                 <?php echo ($result['mbl'] ? utf8_encode($result['mbl']) : 'N/D') ; ?>
+                 <?php echo (isset($result['mbl']) ? utf8_encode($result['mbl']) : 'N/D') ; ?>
               </p>
             </div>
             <label class="text-right col-md-2"><b>Contenedor</b></label>
             <div class="col-md-4">
               <p class="text-left">
-                 <?php echo ($result['contenedor'] ? utf8_encode($result['contenedor']) : 'N/D') ; ?>
+                 <?php echo (isset($result['contenedor']) ? utf8_encode($result['contenedor']) : 'N/D') ; ?>
               </p>
             </div>
         <!--/span-->
@@ -124,13 +124,13 @@
             <label class="text-right col-md-2"><b>Sello de Origen</b></label>
             <div class="col-md-4">
               <p class="text-left">
-                 <?php echo ($result['selloOrigen'] ? utf8_encode($result['selloOrigen']) : 'N/D') ; ?>
+                 <?php echo (isset($result['selloOrigen']) ? utf8_encode($result['selloOrigen']) : 'N/D') ; ?>
               </p>
             </div>
             <label class="text-right col-md-2"><b>Sello Final</b></label>
             <div class="col-md-4">
               <p class="text-left">
-                 <?php echo ($result['selloFinal'] ? utf8_encode($result['selloFinal']) : 'N/D') ; ?>
+                 <?php echo (isset($result['selloFinal']) ? utf8_encode($result['selloFinal']) : 'N/D') ; ?>
               </p>
             </div>
         <!--/span-->
@@ -159,29 +159,9 @@
 </form>
 <div class="clearfix"></div>
 <script type="text/javascript">
-    var iTipoTarifa = 0;
-    function obtenerDatos(){
-    	  $('.page-title-loading').css('display','inline');
-    	 $.post("",{ axn : "obtenerDatos" , sReferencia : $("#sReferencia").val() }, function(data){
-                $("#dvDatos").html(data);
-                $('.page-title-loading').css('display','none');
-                });
-    			}
+
     $(document).ready(function(){
 
-        // VALIDADOR PARA OBTENER DATOS POR REFERENCIA //
-        $.validator.addMethod(
-            "obtenerDatos",
-            function(value, element) {
-                if(obtenerDatos()){
-                    return true;
-                }else{
-                    return false;
-                }
-            },
-            "La referencia no existe."
-        );
-        // VALIDADOR DE SUMA DE PORCENTAJE //
 
         /* VALIDATIONS */
         isValid = $("#_save").validate({
@@ -190,17 +170,9 @@
             focusInvalid: false, // do not focus the last invalid input
             ignore: ":hidden",
             rules:{
-              sReferencia:{
+              skUsuarioTramitador:{
                     required: true,
-                     remote: {
-                      url: "",
-                      type: "post",
-                      data: {
-                        sReferencia: function (){return $( "#sReferencia" ).val();},
-                        axn: "validarReferencia",
-                        skSolicitudRevalidacion:  function (){return $( "#skSolicitudRevalidacion" ).val();}
-                      }
-                    }
+
 
                 },
 
@@ -241,11 +213,8 @@
                 icon.removeClass("fa-warning").addClass("fa-check");
             },
             messages:{
-              sReferencia:{
-                  required:"Ingresa una Referencia",
-                  remote: function(){
-                      return 'La referencia "'+$("#sReferencia").val()+'" no Existe.';
-                  }
+              skUsuarioTramitador:{
+                  required:"Ingrese un Tramitador"
               },
             }
         });
