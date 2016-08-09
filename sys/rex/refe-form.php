@@ -346,7 +346,7 @@
                         <td>
                             <input onchange="cotizar();" value="<?php
                                 echo $row['skConcepto'];
-                            ?>" name="conceptos[]" type="checkbox" <?php echo ' '.($conceptoRecord != false)? 'checked' : '';?> >
+                            ?>" name="conceptos[]" type="checkbox" <?php echo ($conceptoRecord != false)? 'checked' : '';?> >
                         </td>
                         <td>
                             <input name="iCantidad[]" onchange="cotizar();" class="form-control input-sm iCantidad" placeholder="Cant" value="<?php
