@@ -186,14 +186,17 @@
     	           $('.page-title-loading').css('display','inline');
                  $('.filter-submit').click();
     	           $.post("",{ axn : "obtenerDatos" , sReferencia : $("#sReferencia").val() }, function(data){
-                $("#dvDatos").html(data);
+                    $("#dvDatos").html(data);
                   //POST para traer cliente, BL y Contenedor
-                  $.post("",{ axn : "obtenerCliente" , sReferencia : $("#sReferencia").val() }, function(data){
-                    $("#skSocioImportador").val(data);
-                  });
-                  $.post("",{ axn : "obtenerBl" , sReferencia : $("#sReferencia").val() }, function(data){
-                   $("#sBlMaster").val(data);
-                  });
+                  if($("#skSolicitudPrevio").val().trim() == ''){
+                    $.post("",{ axn : "obtenerCliente" , sReferencia : $("#sReferencia").val() }, function(data){
+                      $("#skSocioImportador").val(data);
+                    });
+                    $.post("",{ axn : "obtenerBl" , sReferencia : $("#sReferencia").val() }, function(data){
+                     $("#sBlMaster").val(data);
+                    });
+                  }
+
 
                 $('.page-title-loading').css('display','none');
                 });
@@ -230,7 +233,7 @@
                       data: {
                         sReferencia: function (){return $( "#sReferencia" ).val();},
                         axn: "validarReferencia",
-                        skSolicitudRevalidacion:  function (){return $( "#skSolicitudRevalidacion" ).val();}
+                        skSolicitudPrevio:  function (){return $( "#skSolicitudPrevio" ).val();}
                       }
                     }
 
@@ -278,7 +281,7 @@
               sReferencia:{
                   required:"Ingresa una Referencia",
                   remote: function(){
-                      return 'La referencia "'+$("#sReferencia").val()+'" no Existe o no contiene una primera clasificacion.';
+                      return 'La referencia "'+$("#sReferencia").val()+'" no existe,no contiene una primera clasificacion o ya cuenta con un previo.';
                   }
               },
               skSocioImportador:{

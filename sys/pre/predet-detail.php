@@ -150,6 +150,7 @@
           <hr>
         </div>
       </div>
+      <?php if ($data['myFotos']) { ?>
       <div class="row">
             <label class="text-right col-md-2"><b>Fotos del Previo</b></label>
             <div class="col-md-8">
@@ -206,6 +207,9 @@
 
             </div>
       </div>
+      <div class="clearfix"></div>
+      <hr>
+      <?php }?>
 
 
 
@@ -213,8 +217,7 @@
 
 
 
-        <div class="clearfix"></div>
-        <hr>
+
 </div>
 
     </div>

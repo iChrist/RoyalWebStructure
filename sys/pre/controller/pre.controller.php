@@ -158,7 +158,8 @@
             if (isset($_POST['axn'])) {
                 switch ($_POST['axn']) {
                             case 'validarReferencia':
-                                    $this->previos['sReferencia'] = htmlentities(($_POST['sReferencia']));
+                            $this->previos['sReferencia'] = htmlentities(($_POST['sReferencia']));
+                            $this->previos['skSolicitudPrevio'] = htmlentities(($_POST['skSolicitudPrevio']));
                                     $this->data['revalidaciones'] = parent::read_referencia();
                                     if (parent::read_referencia()) {
                                         echo 'true';
@@ -458,4 +459,40 @@
 
             return true;
         }
+        public function prevfi_form()
+        {
+            $this->data['message'] = '';
+            $this->data['response'] = true;
+            $this->data['datos'] = false;
+            if($_POST){
+              $this->previos['skSolicitudPrevio'] = (!empty($_POST['skSolicitudPrevio']) ? $_POST['skSolicitudPrevio'] : '');
+              $this->previos['skEstatus'] = utf8_decode(!empty($_POST['skEstatus']) ? $_POST['skEstatus'] : '');
+              if ($_POST['skSolicitudPrevio']) {
+                $skSolicitudPrevio = parent::finalizar_previo();
+                if($skSolicitudPrevio){
+                  $this->data['response'] = true;
+                  $this->data['message'] = 'Registro actualizado con &eacute;xito.';
+                  header('Content-Type: application/json');
+                  echo json_encode($this->data);
+                  return true;
+                }else{
+                  $this->data['response'] = false;
+                  $this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
+                  header('Content-Type: application/json');
+                  echo json_encode($this->data);
+                  return false;
+                }
+
+              }
+            }
+            // skEstatus
+            if (isset($_GET['p1'])) {
+                $this->previos['skSolicitudPrevio'] = $_GET['p1'];
+                $this->data['datos'] = parent::detail_previo();
+            }
+            $this->load_view('prevfi-form', $this->data);
+
+            return true;
+        }
+
     }

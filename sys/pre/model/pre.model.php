@@ -125,10 +125,8 @@
         public function update_previos()
         {
             $sql = "UPDATE ope_solicitudes_previos
-							SET skSocioPropietario='".$this->previos['skSocioPropietario']."',
-									skSocioRecinto='".$this->previos['skSocioRecinto']."',
-									skUsuarioEjecutivo='".$this->previos['skUsuarioEjecutivo']."',
-									dFechaProgramacion='".$this->previos['dFechaProgramacion']."',
+							SET skSocioRecinto='".$this->previos['skSocioRecinto']."',
+									dFechaProgramacion=".($this->previos['dFechaProgramacion'] ? "'".$this->previos['dFechaProgramacion']."'" : "NULL").",
 									skUsuarioTramitador='".$this->previos['skUsuarioTramitador']."',
 									sSelloOrigen='".$this->previos['sSelloOrigen']."',
 									sSelloFinal='".$this->previos['sSelloFinal']."',
@@ -136,6 +134,8 @@
                   skTipoPrevio='".$this->previos['skTipoPrevio']."',
 									sPais='".$this->previos['sPais']."'
 									WHERE skSolicitudPrevio = '".$this->previos['skSolicitudPrevio']."'";
+                //  echo $sql;
+                //  die();
             $result = $this->db->query($sql);
             $sql = "DELETE FROM rel_solicitudesPrevio_Autoridades  WHERE skSolicitudPrevio = '".$this->previos['skSolicitudPrevio']."'";
             $result1 = $this->db->query($sql);
@@ -162,7 +162,7 @@
         }
         public function read_referencia()
         {
-            $sql = 'SELECT 	rd.*,
+            $sql = "SELECT 	rd.*,
 		        st.sName AS status,
 		        us.sName AS Ejecutivo,
 		        ce.sNombre AS Empresa,
@@ -179,7 +179,11 @@
 		        INNER JOIN _users us ON us.skUsers = rd.skUsersCreacion
 		        INNER JOIN _status ON _status.skStatus = rd.skStatus
             INNER JOIN cat_clasificacion cc ON cc.sReferencia = rd.sReferencia
-		        WHERE 1=1 ';
+            LEFT JOIN ope_solicitudes_previos osp ON osp.sReferencia = rd.sReferencia
+		        WHERE 1=1   ";
+            if(!empty($this->previos['skSolicitudPrevio'])) {
+                $sql .= " AND osp.sReferencia <> '".$this->previos['sReferencia']."'";
+            }
 
             if (!empty($this->previos['sReferencia'])) {
                 $sql .= " AND rd.sReferencia = '".$this->previos['sReferencia']."'";
@@ -264,7 +268,7 @@
 										'".$this->previos['skSocioPropietario']."',
 										'".$this->previos['skSocioRecinto']."',
                     CURRENT_TIMESTAMP(),
-                    ".$this->previos['dFechaProgramacion'].",
+                    ".($this->previos['dFechaProgramacion'] ? "'".$this->previos['dFechaProgramacion']."'" : 'NULL').",
 										'".$_SESSION['session']['skUsers']."',
 										'".$_SESSION['session']['skUsers']."',
 										'".$this->previos['skUsuarioTramitador']."',
@@ -277,7 +281,7 @@
                     '".$this->previos['sNumeroFactura']."',
                     '".$this->previos['skTipoPrevio']."',
                     '".$this->previos['sPais']."')";
-                    
+
             $result = $this->db->query($sql);
             if ($result) {
                 return $this->previos['skSolicitudPrevio'];
@@ -559,7 +563,7 @@
             }
             $sql.=" ORDER BY claMer.sFactura,claMer.iSecuencia ASC";
 
-        //  exit($sql);
+            //  exit($sql);
                 $result = $this->db->query($sql);
             if ($result) {
                 if ($result->num_rows > 0) {
@@ -616,4 +620,19 @@
 									}
 
 				}
+        public function finalizar_previo()
+        {
+            $sql = "UPDATE ope_solicitudes_previos
+							SET skEstatus='".$this->previos['skEstatus']."'
+									WHERE skSolicitudPrevio = '".$this->previos['skSolicitudPrevio']."'";
+              //echo $sql;
+              //die();
+            $result = $this->db->query($sql);
+            if (!$result) {
+                return false;
+            }
+
+
+            return $this->previos['skSolicitudPrevio'];
+        }
     }
