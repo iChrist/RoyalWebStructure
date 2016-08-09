@@ -1,5 +1,5 @@
         <?php
-        echo print_r($_SESSION["session"],1);
+        //echo print_r($_SESSION["session"],1);
         //$fecha = DateTime::createFromFormat('d-m-Y', '30-07-2016');
         //echo $fecha->format('Y-m-d H:i:s');
         $result = array();
@@ -431,9 +431,14 @@
               total += resultado;
           });
       $("#total").html("$ "+total.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+      $("#iSaldo").val(total - $("#iDeposito").val());
     }
     $(document).ready(function(){
-
+        
+        
+        $("#iDeposito").change(function(){
+            cotizar();
+        });
         cotizar();
 
         $.ajax({
