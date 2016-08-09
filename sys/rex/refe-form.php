@@ -1,5 +1,5 @@
         <?php
-        //echo print_r($_SESSION["session"],1);
+        echo print_r($_SESSION["session"],1);
         //$fecha = DateTime::createFromFormat('d-m-Y', '30-07-2016');
         //echo $fecha->format('Y-m-d H:i:s');
         $result = array();
@@ -315,17 +315,29 @@
                 <tbody id="ConceptosReferenciasTabla">
 
                     <?php
+                    /**/
                     $totalConceptos = 0;
-                        if (isset($data["conceptosRef"])) {
-                           /*$data["conceptosTotales"]
+                        if (isset($data["conceptosTotales"]) ) {
+                          /* $data["conceptosTotales"]
                             $data["conceptosRef"]*/
+                            //exit('<pre>' . print_r($data["conceptosRef"]->fetch_array(),true).'</pre>');
 
                             while ($row = $data["conceptosTotales"]->fetch_assoc()) {
-                                $conceptoRecord = false;
+                                
+                                $conceptoRecord;
+                                
                                 while($cr = $data["conceptosRef"]->fetch_assoc()){
-                                    $conceptoRecord = ( ($cr["skConcepto"] ===  $row["skConcepto"]) ) ? $cr : false;
+                                    //echo $cr["skConcepto"]."-----".$row["skConcepto"]; 
+                                    if ($cr["skConcepto"] ===  $row["skConcepto"]) {
+                                        $conceptoRecord = $cr;
+                                        
+                                    }
+                                    
                                 }
-                               // echo "<pre>".print_r($conceptoRecord ,true)."</pre>";
+                                //exit( "<pre>".print_r($conceptoRecord ,true)."</pre>");
+                                $data["conceptosRef"]->data_seek(0);
+                               
+                              
 
 
 
@@ -335,11 +347,11 @@
                         <td>
                             <input onchange="cotizar();" value="<?php
                                 echo $row['skConcepto'];
-                            ?>" name="conceptos[]" type="checkbox" <?php echo ($conceptoRecord)? 'checked' : '';?> >
+                            ?>" name="conceptos[]" type="checkbox" <?php echo ' '.($conceptoRecord != false)? 'checked' : '';?> >
                         </td>
                         <td>
                             <input name="iCantidad[]" onchange="cotizar();" class="form-control input-sm iCantidad" placeholder="Cant" value="<?php
-                                echo ($conceptoRecord)? $conceptoRecord["iCantidad"]:"0" ;
+                                echo ($conceptoRecord["iCantidad"]) ? $conceptoRecord["iCantidad"] : ' ';
                             ?>" type="text">
                         </td>
                         <td>

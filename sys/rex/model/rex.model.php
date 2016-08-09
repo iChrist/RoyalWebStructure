@@ -671,8 +671,9 @@ Class Rex_Model Extends Core_Model {
         WHERE
             rel_referenciasExternas_conceptos.skReferenciaExterna = '$skReferenciaExterna' ORDER BY cat_conceptos.sNombre;";
 
+       
         $r = $this->db->query($sql);
-
+        // exit(var_dump($r->fetch_array()));
         if ($this->db->affected_rows > 0) {
             return $r;
         } else {
