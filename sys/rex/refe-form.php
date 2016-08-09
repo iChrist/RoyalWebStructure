@@ -323,19 +323,18 @@
                             //exit('<pre>' . print_r($data["conceptosRef"]->fetch_array(),true).'</pre>');
 
                             while ($row = $data["conceptosTotales"]->fetch_assoc()) {
-                                
-                                $conceptoRecord;
+                                $conceptoRecord = false;
                                 
                                 while($cr = $data["conceptosRef"]->fetch_assoc()){
-                                    //echo $cr["skConcepto"]."-----".$row["skConcepto"]; 
+                                    
                                     if ($cr["skConcepto"] ===  $row["skConcepto"]) {
                                         $conceptoRecord = $cr;
-                                        
+                                        //$data["conceptosRef"]->data_seek(0);
                                     }
                                     
                                 }
-                                //exit( "<pre>".print_r($conceptoRecord ,true)."</pre>");
-                                $data["conceptosRef"]->data_seek(0);
+                                //echo ( "<pre>".print_r($conceptoRecord ,true)."</pre>");
+                                
                                
                               
 
@@ -375,6 +374,7 @@
                         </td>
                     </tr>
                     <?php
+                    
                             }
                         }
                     ?>
@@ -396,7 +396,7 @@
         <div class="col-md-4">
             <div class="input-icon right">
                 <i class="fa"></i>
-                <input type="number" maxlength="400" name="iSaldo" id="iSaldo" class="form-control" placeholder="0" value="<?php echo (isset($result["iSaldo"])) ? $result["iSaldo"] : '' ;?>" >
+                <input readonly type="number" maxlength="400" name="iSaldo" id="iSaldo" class="form-control" placeholder="0" value="<?php echo (isset($result["iSaldo"])) ? $result["iSaldo"] : '' ;?>" >
             </div>
         </div>
     </div>
