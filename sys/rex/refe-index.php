@@ -57,7 +57,7 @@
                         </td>
                         <td>
 
-                             <div class="input-group input-group-sm date date-picker margin-bottom-5" data-date-format="dd-mm-yyyy">
+                            <div class="input-group input-group-sm date date-picker margin-bottom-5" data-date-format="dd-mm-yyyy">
                                 <input type="text" class="form-control form-filter" name="dFechaCreacion" placeholder="Fecha Inicio">
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>

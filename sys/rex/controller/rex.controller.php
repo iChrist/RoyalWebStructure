@@ -49,52 +49,56 @@ Class Rex_Controller Extends Rex_Model {
                 if(isset($_POST['sGuiaHouse'])){
                     $this->refex['sGuiaHouse'] = $_POST['sGuiaHouse'];
                 }
-                
-                
+                                
                 if(isset($_POST['dFechaCreacion'])){
                     $this->refex['dFechaCreacion'] = $_POST['dFechaCreacion'];
                 }
                 if(isset($_POST['dFechaCreacionHasta'])){
                     $this->refex['dFechaCreacionHasta'] = $_POST['dFechaCreacionHasta'];
                 }
-                
-                
+                                               
                 if(isset($_POST['dFechaPrevio'])){
                     $this->refex['dFechaPrevio'] = $_POST['dFechaPrevio'];
                 }
                 if(isset($_POST['dFechaPrevioHasta'])){
                     $this->refex['dFechaPrevioHasta'] = $_POST['dFechaPrevioHasta'];
                 }
+                
                 if(isset($_POST['dFechaDespacho'])){
                     $this->refex['dFechaDespacho'] = $_POST['dFechaDespacho'];
                 }
                 if(isset($_POST['dFechaDespachoHasta'])){
                     $this->refex['dFechaDespachoHasta'] = $_POST['dFechaDespachoHasta'];
                 }
+                
                 if(isset($_POST['dFechaClasificacion'])){
                     $this->refex['dFechaClasificacion'] = $_POST['dFechaClasificacion'];
                 }
                 if(isset($_POST['dFechaClasificacionHasta'])){
                     $this->refex['dFechaClasificacionHasta'] = $_POST['dFechaClasificacionHasta'];
                 }
+                
                 if(isset($_POST['dFechaGlosa'])){
                     $this->refex['dFechaGlosa'] = $_POST['dFechaGlosa'];
                 }
                 if(isset($_POST['dFechaGlosaHasta'])){
                     $this->refex['dFechaGlosaHasta'] = $_POST['dFechaGlosaHasta'];
                 }
+                
                 if(isset($_POST['dFechaCapturaPedimento'])){
                     $this->refex['dFechaCapturaPedimento'] = $_POST['dFechaCapturaPedimento'];
                 }
                 if(isset($_POST['dFechaCapturaPedimentoHasta'])){
                     $this->refex['dFechaCapturaPedimentoHasta'] = $_POST['dFechaCapturaPedimentoHasta'];
                 }
+                
                 if(isset($_POST['dFechaFacturacion'])){
                     $this->refex['dFechaFacturacion'] = $_POST['dFechaFacturacion'];
                 }
                 if(isset($_POST['dFechaFacturacionHasta'])){
                     $this->refex['dFechaFacturacionHasta'] = $_POST['dFechaFacturacionHasta'];
                 }
+                
                 if(isset($_POST['iDeposito'])){
                     $this->refex['iDeposito'] = $_POST['iDeposito'];
                 }
@@ -113,7 +117,8 @@ Class Rex_Controller Extends Rex_Model {
                 if(isset($_POST['sMercancia'])){
                     $this->refex['sMercancia'] = $_POST['sMercancia'];
                 }
-                    // OBTENER REGISTROS //
+                    
+                // OBTENER REGISTROS //
                 $total = parent::countGetReferenciasExternas();
                 $records = Core_Functions::table_ajax($total);
                 if($records['recordsTotal'] === 0){
@@ -404,7 +409,6 @@ Class Rex_Controller Extends Rex_Model {
       $this->load_view('rextfo_index',$refex,false);
     }
 
-
     /* Agregado de Fotos */
     public function reexfo_form()
     {
@@ -572,6 +576,7 @@ Class Rex_Controller Extends Rex_Model {
 
         return true;
     }
+    
     public function reexfe_form()
     {
       $this->data['message'] = '';
@@ -623,6 +628,7 @@ Class Rex_Controller Extends Rex_Model {
 
         return true;
     }
+    
     public function reex_index()
     {
         if (isset($_GET['axn'])) {

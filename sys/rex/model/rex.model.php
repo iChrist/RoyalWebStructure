@@ -1,19 +1,18 @@
 <?php
+
 Class Rex_Model Extends Core_Model {
 
     // PUBLIC VARIABLES //
     public $ref = array(
-        'id'=>null,
-        'nombre'=>null
+        'id' => null,
+        'nombre' => null
     );
-
     public $refex = array(
-      'skReferenciaExterna'=>null,
-      'skFotoReferencia'=>null,
-      'codigo'=>null,
-      'sUbicacion'=>null
-
-        );
+        'skReferenciaExterna' => null,
+        'skFotoReferencia' => null,
+        'codigo' => null,
+        'sUbicacion' => null
+    );
     // PRIVATE VARIABLES //
     private $data = array();
 
@@ -22,7 +21,7 @@ Class Rex_Model Extends Core_Model {
     }
 
     public function __destruct() {
-
+        
     }
 
     /* COMIENZA MODULO (REX) */
@@ -38,72 +37,65 @@ Class Rex_Model Extends Core_Model {
         }
     }
 
-    public function getrefex($skStatus = null)
-    {
+    public function getrefex($skStatus = null) {
         $sql = "SELECT * FROM refex";
-        if($skStatus != null){ $sql .=" WHERE skStatus = '$skStatus'"; }
+        if ($skStatus != null) {
+            $sql .=" WHERE skStatus = '$skStatus'";
+        }
         $result = $this->db->query($sql);
-        if(!$result){
+        if (!$result) {
             return false;
         }
         $records = array();
-        while($row = $result->fetch_assoc()){
-            array_push($records , $row);
+        while ($row = $result->fetch_assoc()) {
+            array_push($records, $row);
         }
         return $records;
     }
 
-    public function insertar()
-    {
+    public function insertar() {
 
-        $skReferenciaExterna =  substr(md5(microtime()), 1, 32);
+        $skReferenciaExterna = substr(md5(microtime()), 1, 32);
         ////die($_POST["dFechaPrevio"]." ".$_POST["tHoraPrevio"]);
 
         $fechas = array(
-            'dFechaPrevio'              => (
-                    $_POST["dFechaPrevio"] !== NULL &&
-                    $_POST["dFechaPrevio"] !== "" &&
-                    isset($_POST["dFechaPrevio"]))?
+            'dFechaPrevio' => (
+            $_POST["dFechaPrevio"] !== NULL &&
+            $_POST["dFechaPrevio"] !== "" &&
+            isset($_POST["dFechaPrevio"])) ?
+                    "'" . DateTime::createFromFormat('d-m-Y H:i:s', $_POST["dFechaPrevio"] . " " . $_POST["tHoraPrevio"])->format('Y-m-d H:i:s') . "'" : 'NULL',
+            'dFechaDespacho' => (
+            $_POST["dFechaDespacho"] !== NULL &&
+            $_POST["dFechaDespacho"] !== "" &&
+            isset($_POST["dFechaDespacho"])) ?
+                    "'" . DateTime::createFromFormat('d-m-Y H:i:s', $_POST["dFechaDespacho"] . " " . $_POST["tHoraDespacho"])->format('Y-m-d H:i:s') . "'" : 'NULL',
+            'dFechaClasificacion' => (
+            $_POST["dFechaClasificacion"] !== NULL &&
+            $_POST["dFechaClasificacion"] !== "" &&
+            isset($_POST["dFechaClasificacion"])) ?
+                    "'" . DateTime::createFromFormat('d-m-Y H:i:s', $_POST["dFechaClasificacion"] . " " . $_POST["tHoraClasificacion"])->format('Y-m-d H:i:s') . "'" : 'NULL',
+            'dFechaGlosa' => (
+            $_POST["dFechaGlosa"] !== NULL &&
+            $_POST["dFechaGlosa"] !== "" &&
+            isset($_POST["dFechaGlosa"])) ?
+                    "'" . DateTime::createFromFormat('d-m-Y H:i:s', $_POST["dFechaGlosa"] . " " . $_POST["tHoraGlosa"])->format('Y-m-d H:i:s') . "'" : 'NULL',
+            'dFechaCapturaPedimento' => (
+            $_POST["dFechaCapturaPedimento"] !== NULL &&
+            $_POST["dFechaCapturaPedimento"] !== "" &&
+            isset($_POST["dFechaCapturaPedimento"])) ?
+                    "'" . DateTime::createFromFormat('d-m-Y H:i:s', $_POST["dFechaCapturaPedimento"] . " " . $_POST["tHoraCapturaPedimento"])->format('Y-m-d H:i:s') . "'" : 'NULL',
+            'dFechaRevalidacion' => (
+            $_POST["dFechaRevalidacion"] !== NULL &&
+            $_POST["dFechaRevalidacion"] !== "" &&
+            isset($_POST["dFechaRevalidacion"])) ?
+                    "'" . DateTime::createFromFormat('d-m-Y H:i:s', $_POST["dFechaRevalidacion"] . " " . $_POST["tHoraRevalidacion"])->format('Y-m-d H:i:s') . "'" : 'NULL',
+            'dFechaFacturacion' => (
 
-            "'".DateTime::createFromFormat('d-m-Y H:i:s', $_POST["dFechaPrevio"]." ".$_POST["tHoraPrevio"] )->format('Y-m-d H:i:s')."'" :  'NULL' ,
-
-            'dFechaDespacho'            => (
-                    $_POST["dFechaDespacho"] !== NULL &&
-                    $_POST["dFechaDespacho"] !== "" &&
-                    isset($_POST["dFechaDespacho"]))?
-            "'".DateTime::createFromFormat('d-m-Y H:i:s', $_POST["dFechaDespacho"]." ".$_POST["tHoraDespacho"])->format('Y-m-d H:i:s') ."'":  'NULL',
-
-            'dFechaClasificacion'       => (
-                    $_POST["dFechaClasificacion"] !== NULL &&
-                    $_POST["dFechaClasificacion"] !== "" &&
-                    isset($_POST["dFechaClasificacion"]))?
-            "'". DateTime::createFromFormat('d-m-Y H:i:s', $_POST["dFechaClasificacion"]." ".$_POST["tHoraClasificacion"])->format('Y-m-d H:i:s') ."'" :  'NULL',
-
-            'dFechaGlosa'               => (
-                    $_POST["dFechaGlosa"] !== NULL &&
-                    $_POST["dFechaGlosa"] !== "" &&
-                    isset($_POST["dFechaGlosa"])) ?
-            "'".DateTime::createFromFormat('d-m-Y H:i:s', $_POST["dFechaGlosa"]." ".$_POST["tHoraGlosa"])->format('Y-m-d H:i:s')."'":  'NULL',
-
-            'dFechaCapturaPedimento'    => (
-                    $_POST["dFechaCapturaPedimento"] !== NULL &&
-                    $_POST["dFechaCapturaPedimento"] !== "" &&
-                    isset($_POST["dFechaCapturaPedimento"])) ?
-            "'".DateTime::createFromFormat('d-m-Y H:i:s', $_POST["dFechaCapturaPedimento"]." ".$_POST["tHoraCapturaPedimento"])->format('Y-m-d H:i:s')."'":  'NULL',
-
-            'dFechaRevalidacion'        => (
-                    $_POST["dFechaRevalidacion"] !== NULL &&
-                    $_POST["dFechaRevalidacion"] !== "" &&
-                    isset($_POST["dFechaRevalidacion"])) ?
-            "'".DateTime::createFromFormat('d-m-Y H:i:s', $_POST["dFechaRevalidacion"]." ".$_POST["tHoraRevalidacion"])->format('Y-m-d H:i:s') ."'":  'NULL',
-
-            'dFechaFacturacion'         => (
-
-                    $_POST["dFechaRevalidacion"] !== NULL &&
-                    $_POST["dFechaRevalidacion"] !== "" &&
-                    isset($_POST["dFechaRevalidacion"])) ?
-            "'".DateTime::createFromFormat('d-m-Y H:i:s', $_POST["dFechaRevalidacion"]." ".$_POST["tHoraRevalidacion"])->format('Y-m-d H:i:s')."'":  'NULL'
-            );
+            $_POST["dFechaRevalidacion"] !== NULL &&
+            $_POST["dFechaRevalidacion"] !== "" &&
+            isset($_POST["dFechaRevalidacion"])) ?
+                    "'" . DateTime::createFromFormat('d-m-Y H:i:s', $_POST["dFechaRevalidacion"] . " " . $_POST["tHoraRevalidacion"])->format('Y-m-d H:i:s') . "'" : 'NULL'
+        );
 
         $sql_insert = "
             INSERT INTO `ope_referenciasExternas` (
@@ -136,7 +128,7 @@ Class Rex_Model Extends Core_Model {
             VALUES (
                 '$skReferenciaExterna',
                 '" . $this->db->real_escape_string($_SESSION["session"]["skSocioEmpresaPropietario"]) . "',
-                '" . $this->db->real_escape_string($_SESSION["session"]["skEmpresaPropietario"])."',
+                '" . $this->db->real_escape_string($_SESSION["session"]["skEmpresaPropietario"]) . "',
                 '" . $this->db->real_escape_string($_POST["skSocioImportador"]) . "',
                 '" . $this->db->real_escape_string($_POST["skAlmacen"]) . "',
                 '" . $this->db->real_escape_string($_POST["skEstatus"]) . "',
@@ -145,99 +137,85 @@ Class Rex_Model Extends Core_Model {
                 '" . $this->db->real_escape_string($_POST["sMercancia"]) . "',
                 '" . $this->db->real_escape_string($_POST["sGuiaMaster"]) . "',
                 '" . $this->db->real_escape_string($_POST["sGuiaHouse"]) . "',
-                '" . $_POST["iBultos"]."',
-                '" . $_SESSION["session"]["skUsers"]."',
+                '" . $_POST["iBultos"] . "',
+                '" . $_SESSION["session"]["skUsers"] . "',
                      NOW(),
-                " . $fechas["dFechaPrevio"] .",
-                " . $fechas["dFechaDespacho"].",
-                " . $fechas["dFechaClasificacion"].",
-                " . $fechas["dFechaGlosa"].",
-                " . $fechas["dFechaCapturaPedimento"].",
-                " . $fechas["dFechaRevalidacion"].",
-                " . $fechas["dFechaFacturacion"].",
-                '" . $_POST["iDeposito"]."',
-                '" . $_POST["iSaldo"]."',
-                '" . $_POST["fTipoCambio"]."');" ;
+                " . $fechas["dFechaPrevio"] . ",
+                " . $fechas["dFechaDespacho"] . ",
+                " . $fechas["dFechaClasificacion"] . ",
+                " . $fechas["dFechaGlosa"] . ",
+                " . $fechas["dFechaCapturaPedimento"] . ",
+                " . $fechas["dFechaRevalidacion"] . ",
+                " . $fechas["dFechaFacturacion"] . ",
+                '" . $_POST["iDeposito"] . "',
+                '" . $_POST["iSaldo"] . "',
+                '" . $_POST["fTipoCambio"] . "');";
 
 
-            if (isset($_POST["conceptos"]) && isset($_POST["iCantidad"])) {
-                for ($i= 0; $i < count($_POST["conceptos"]); $i++) {
-                    $this->insertConceptos(
-                        $skReferenciaExterna,
-                        $_POST["conceptos"][$i],
-                        $_POST["iCantidad"][$i],
-                        $_POST["subtotal"][$i],
-                        $_POST["fPrecioUnitario"][$i],
-                        $_POST["divisa"][$i]);
-
+        if (isset($_POST["conceptos"]) && isset($_POST["iCantidad"])) {
+            for ($i = 0; $i < count($_POST["conceptos"]); $i++) {
+                $this->insertConceptos(
+                        $skReferenciaExterna, $_POST["conceptos"][$i], $_POST["iCantidad"][$i], $_POST["subtotal"][$i], $_POST["fPrecioUnitario"][$i], $_POST["divisa"][$i]);
             }
         }
 
 
-        if (isset($_POST) ) {
+        if (isset($_POST)) {
 
             $result = $this->db->query($sql_insert);
             return true;
-        }else{
+        } else {
             return false;
         }
-
     }
 
-    public function updatear($skReferenciaExterna = NULL)
-    {
+    public function updatear($skReferenciaExterna = NULL) {
         if ($skReferenciaExterna == NULL && $skReferenciaExterna != '') {
             return false;
         }
         $fechas = array(
-            'dFechaPrevio'              => (
-                    $_POST["dFechaPrevio"] !== NULL &&
-                    $_POST["dFechaPrevio"] !== "" &&
-                    isset($_POST["dFechaPrevio"]))?
-            "'".DateTime::createFromFormat('d-m-Y H:i:s', $_POST["dFechaPrevio"]." ".$_POST["tHoraPrevio"] )->format('Y-m-d H:i:s')."'" :  'NULL' ,
-
-            'dFechaDespacho'            => (
-                    $_POST["dFechaDespacho"] !== NULL &&
-                    $_POST["dFechaDespacho"] !== "" &&
-                    isset($_POST["dFechaDespacho"]))?
-            "'".DateTime::createFromFormat('d-m-Y H:i:s', $_POST["dFechaDespacho"]." ".$_POST["tHoraDespacho"])->format('Y-m-d H:i:s') ."'":  'NULL',
-
-            'dFechaClasificacion'       => (
-                    $_POST["dFechaClasificacion"] !== NULL &&
-                    $_POST["dFechaClasificacion"] !== "" &&
-                    isset($_POST["dFechaClasificacion"]))?
-            "'". DateTime::createFromFormat('d-m-Y H:i:s', $_POST["dFechaClasificacion"]." ".$_POST["tHoraClasificacion"])->format('Y-m-d H:i:s') ."'" :  'NULL',
-
-            'dFechaGlosa'               => (
-                    $_POST["dFechaGlosa"] !== NULL &&
-                    $_POST["dFechaGlosa"] !== "" &&
-                    isset($_POST["dFechaGlosa"])) ?
-            "'".DateTime::createFromFormat('d-m-Y H:i:s', $_POST["dFechaGlosa"]." ".$_POST["tHoraGlosa"])->format('Y-m-d H:i:s')."'":  'NULL',
-
-            'dFechaCapturaPedimento'    => (
-                    $_POST["dFechaCapturaPedimento"] !== NULL &&
-                    $_POST["dFechaCapturaPedimento"] !== "" &&
-                    isset($_POST["dFechaCapturaPedimento"])) ?
-            "'".DateTime::createFromFormat('d-m-Y H:i:s', $_POST["dFechaCapturaPedimento"]." ".$_POST["tHoraCapturaPedimento"])->format('Y-m-d H:i:s')."'":  'NULL',
-
-            'dFechaRevalidacion'        => (
-                    $_POST["dFechaRevalidacion"] !== NULL &&
-                    $_POST["dFechaRevalidacion"] !== "" &&
-                    isset($_POST["dFechaRevalidacion"])) ?
-            "'".DateTime::createFromFormat('d-m-Y H:i:s', $_POST["dFechaRevalidacion"]." ".$_POST["tHoraRevalidacion"])->format('Y-m-d H:i:s') ."'":  'NULL',
-
-            'dFechaFacturacion'         => (
-                    $_POST["dFechaRevalidacion"] !== NULL &&
-                    $_POST["dFechaRevalidacion"] !== "" &&
-                    isset($_POST["dFechaRevalidacion"])) ?
-            "'".DateTime::createFromFormat('d-m-Y H:i:s', $_POST["dFechaRevalidacion"]." ".$_POST["tHoraRevalidacion"])->format('Y-m-d H:i:s')."'":  'NULL'
-            );
+            'dFechaPrevio' => (
+            $_POST["dFechaPrevio"] !== NULL &&
+            $_POST["dFechaPrevio"] !== "" &&
+            isset($_POST["dFechaPrevio"])) ?
+                    "'" . DateTime::createFromFormat('d-m-Y H:i:s', $_POST["dFechaPrevio"] . " " . $_POST["tHoraPrevio"])->format('Y-m-d H:i:s') . "'" : 'NULL',
+            'dFechaDespacho' => (
+            $_POST["dFechaDespacho"] !== NULL &&
+            $_POST["dFechaDespacho"] !== "" &&
+            isset($_POST["dFechaDespacho"])) ?
+                    "'" . DateTime::createFromFormat('d-m-Y H:i:s', $_POST["dFechaDespacho"] . " " . $_POST["tHoraDespacho"])->format('Y-m-d H:i:s') . "'" : 'NULL',
+            'dFechaClasificacion' => (
+            $_POST["dFechaClasificacion"] !== NULL &&
+            $_POST["dFechaClasificacion"] !== "" &&
+            isset($_POST["dFechaClasificacion"])) ?
+                    "'" . DateTime::createFromFormat('d-m-Y H:i:s', $_POST["dFechaClasificacion"] . " " . $_POST["tHoraClasificacion"])->format('Y-m-d H:i:s') . "'" : 'NULL',
+            'dFechaGlosa' => (
+            $_POST["dFechaGlosa"] !== NULL &&
+            $_POST["dFechaGlosa"] !== "" &&
+            isset($_POST["dFechaGlosa"])) ?
+                    "'" . DateTime::createFromFormat('d-m-Y H:i:s', $_POST["dFechaGlosa"] . " " . $_POST["tHoraGlosa"])->format('Y-m-d H:i:s') . "'" : 'NULL',
+            'dFechaCapturaPedimento' => (
+            $_POST["dFechaCapturaPedimento"] !== NULL &&
+            $_POST["dFechaCapturaPedimento"] !== "" &&
+            isset($_POST["dFechaCapturaPedimento"])) ?
+                    "'" . DateTime::createFromFormat('d-m-Y H:i:s', $_POST["dFechaCapturaPedimento"] . " " . $_POST["tHoraCapturaPedimento"])->format('Y-m-d H:i:s') . "'" : 'NULL',
+            'dFechaRevalidacion' => (
+            $_POST["dFechaRevalidacion"] !== NULL &&
+            $_POST["dFechaRevalidacion"] !== "" &&
+            isset($_POST["dFechaRevalidacion"])) ?
+                    "'" . DateTime::createFromFormat('d-m-Y H:i:s', $_POST["dFechaRevalidacion"] . " " . $_POST["tHoraRevalidacion"])->format('Y-m-d H:i:s') . "'" : 'NULL',
+            'dFechaFacturacion' => (
+            $_POST["dFechaRevalidacion"] !== NULL &&
+            $_POST["dFechaRevalidacion"] !== "" &&
+            isset($_POST["dFechaRevalidacion"])) ?
+                    "'" . DateTime::createFromFormat('d-m-Y H:i:s', $_POST["dFechaRevalidacion"] . " " . $_POST["tHoraRevalidacion"])->format('Y-m-d H:i:s') . "'" : 'NULL'
+        );
 
         $this->deleteConceptos($skReferenciaExterna);
         $sql_update = "
             UPDATE `ope_referenciasExternas` SET
-                `skSocioPropietario` = '".$this->db->real_escape_string($_SESSION["session"]["skSocioEmpresaPropietario"])."',
-                `skEmpresaPropietario` = '" . $this->db->real_escape_string($_SESSION["session"]["skEmpresaPropietario"])."',
+                `skSocioPropietario` = '" . $this->db->real_escape_string($_SESSION["session"]["skSocioEmpresaPropietario"]) . "',
+                `skEmpresaPropietario` = '" . $this->db->real_escape_string($_SESSION["session"]["skEmpresaPropietario"]) . "',
                 `skSocioImportador` = '" . $this->db->real_escape_string($_POST["skSocioImportador"]) . "',
                 `skAlmacen` = '" . $this->db->real_escape_string($_POST["skAlmacen"]) . "',
                 `skEstatus` = '" . $this->db->real_escape_string($_POST["skEstatus"]) . "',
@@ -246,85 +224,76 @@ Class Rex_Model Extends Core_Model {
                 `sMercancia` = '" . $this->db->real_escape_string($_POST["sMercancia"]) . "',
                 `sGuiaMaster` = '" . $this->db->real_escape_string($_POST["sGuiaMaster"]) . "',
                 `sGuiaHouse` = '" . $this->db->real_escape_string($_POST["sGuiaHouse"]) . "',
-                `iBultos` = ".$_POST["iBultos"].",
-                `dFechaPrevio` = ".$fechas["dFechaPrevio"].",
-                `dFechaDespacho` = ".$fechas["dFechaDespacho"].",
-                `dFechaClasificacion` = ".$fechas["dFechaClasificacion"].",
-                `dFechaGlosa` = ".$fechas["dFechaGlosa"].",
-                `dFechaCapturaPedimento` = ".$fechas["dFechaCapturaPedimento"].",
-                `dFechaRevalidacion` = ".$fechas["dFechaRevalidacion"].",
-                `dFechaFacturacion` = ".$fechas["dFechaFacturacion"].",
-                `iDeposito` = '".$_POST["iDeposito"]."',
-                `iSaldo` = '".$_POST["iSaldo"]."',
-                `dTipoCambio` = '".$_POST["fTipoCambio"]."'
+                `iBultos` = " . $_POST["iBultos"] . ",
+                `dFechaPrevio` = " . $fechas["dFechaPrevio"] . ",
+                `dFechaDespacho` = " . $fechas["dFechaDespacho"] . ",
+                `dFechaClasificacion` = " . $fechas["dFechaClasificacion"] . ",
+                `dFechaGlosa` = " . $fechas["dFechaGlosa"] . ",
+                `dFechaCapturaPedimento` = " . $fechas["dFechaCapturaPedimento"] . ",
+                `dFechaRevalidacion` = " . $fechas["dFechaRevalidacion"] . ",
+                `dFechaFacturacion` = " . $fechas["dFechaFacturacion"] . ",
+                `iDeposito` = '" . $_POST["iDeposito"] . "',
+                `iSaldo` = '" . $_POST["iSaldo"] . "',
+                `dTipoCambio` = '" . $_POST["fTipoCambio"] . "'
 
-                WHERE `skReferenciaExterna` = '$skReferenciaExterna';" ;
-                ////die($sql_update);
+                WHERE `skReferenciaExterna` = '$skReferenciaExterna';";
+        ////die($sql_update);
 
         if (isset($_POST["conceptos"]) && isset($_POST["iCantidad"])) {
 
-            for ($i= 0; $i < count($_POST["conceptos"]); $i++) {
+            for ($i = 0; $i < count($_POST["conceptos"]); $i++) {
                 $this->insertConceptos(
-                    $skReferenciaExterna,
-                    $_POST["conceptos"][$i],
-                    $_POST["iCantidad"][$i],
-                    $_POST["subtotal"][$i],
-                    $_POST["fPrecioUnitario"][$i],
-                    $_POST["divisa"][$i]);
+                        $skReferenciaExterna, $_POST["conceptos"][$i], $_POST["iCantidad"][$i], $_POST["subtotal"][$i], $_POST["fPrecioUnitario"][$i], $_POST["divisa"][$i]);
             }
         }
 
-        if (isset($_POST) ) {
+        if (isset($_POST)) {
             $result = $this->db->query($sql_update);
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
-    public function getReferencia($skID = NULL)
-    {
+    public function getReferencia($skID = NULL) {
         $r = $this->db->query("SELECT * FROM ope_referenciasExternas WHERE skReferenciaExterna = '$skID'");
-        if ($this->db->affected_rows > 0){
+        if ($this->db->affected_rows > 0) {
             return $r->fetch_assoc();
-        }else{
+        } else {
             return false;
         }
     }
 
-    public function getAlmacenes()
-    {
+    public function getAlmacenes() {
         $sql_almacenes = 'SELECT * FROM cat_almacenes;';
         $r = $this->db->query($sql_almacenes);
 
-        if ($this->db->affected_rows > 0){
+        if ($this->db->affected_rows > 0) {
             $arg = array();
             while ($row = $r->fetch_assoc()) {
                 array_push($arg, $row);
             }
             return $arg;
-        }else{
+        } else {
             return false;
         }
     }
 
-    public function getStatus()
-    {
+    public function getStatus() {
         $sql_status = 'SELECT * FROM cat_estatus;';
         $r = $this->db->query($sql_status);
-        if ($this->db->affected_rows > 0){
+        if ($this->db->affected_rows > 0) {
             $arg = array();
             while ($row = $r->fetch_assoc()) {
                 array_push($arg, $row);
             }
             return $arg;
-        }else{
+        } else {
             return false;
         }
     }
 
-    public function getSociosImportador($socioEmpresaP = false )
-    {
+    public function getSociosImportador($socioEmpresaP = false) {
 
         $sql_socios = "SELECT
                 rel_empresas_socios.skSocioEmpresa,
@@ -341,19 +310,18 @@ Class Rex_Model Extends Core_Model {
         ////die($sql_socios);
         $r = $this->db->query($sql_socios);
 
-        if ($this->db->affected_rows > 0){
+        if ($this->db->affected_rows > 0) {
             $arg = array();
             while ($row = $r->fetch_assoc()) {
                 array_push($arg, $row);
             }
             return $arg;
-        }else{
+        } else {
             return false;
         }
     }
 
-    public function selectAllope()
-    {
+    public function selectAllope() {
         $sql_select_all = "
         SELECT
             ope_referenciasExternas.skReferenciaExterna,
@@ -385,196 +353,199 @@ Class Rex_Model Extends Core_Model {
 
         $r = $this->db->query($sql_select_all);
 
-        if ($this->db->affected_rows > 0){
+        if ($this->db->affected_rows > 0) {
             $arg = array();
             while ($row = $r->fetch_assoc()) {
                 array_push($arg, $row);
             }
             return $arg;
-        }else{
+        } else {
             return false;
         }
     }
 
-    public function countGetReferenciasExternas($get = false){
-       
-    $getol = "
-        ope_referenciasExternas.skReferenciaExterna,
-        ope_referenciasExternas.sPedimento,
-        ope_referenciasExternas.sReferencia,
-        ope_referenciasExternas.sMercancia,
-        ope_referenciasExternas.sGuiaMaster,
-        ope_referenciasExternas.sGuiaHouse,
-        ope_referenciasExternas.dFechaCreacion,
-        ope_referenciasExternas.dFechaPrevio,
-        ope_referenciasExternas.dFechaDespacho,
-        ope_referenciasExternas.dFechaClasificacion,
-        ope_referenciasExternas.dFechaGlosa,
-        ope_referenciasExternas.dFechaCapturaPedimento,
-        ope_referenciasExternas.dFechaFacturacion,
-        ope_referenciasExternas.iDeposito,
-        ope_referenciasExternas.iSaldo,
-        cat_almacenes.sNombre AS 'sAlmacen',
-        cat_estatus.sNombre AS 'sEstatus',
-        cat_empresas.sNombre AS 'sSocioImportador'
-    ";
-    $justcount = "count(*) as 'total'";
-    $camposPorRetornar = ($get) ? $getol : $justcount;
-    $sql = "
-    SELECT
-        $camposPorRetornar
-    FROM
-        ope_referenciasExternas
-            INNER JOIN
-        cat_almacenes ON (cat_almacenes.skAlmacen = ope_referenciasExternas.skAlmacen)
-            INNER JOIN
-        cat_estatus ON (cat_estatus.skEstatus = ope_referenciasExternas.skEstatus)
-            LEFT JOIN  rel_empresas_socios resa ON resa.skSocioEmpresa = ope_referenciasExternas.skSocioImportador
-            LEFT JOIN  cat_empresas ON (cat_empresas.skEmpresa = resa.skEmpresa)
-    WHERE 1 = 1";
-    if ($get){
-        if(!empty($this->refex['sPedimento'])){
-            $sql .=" AND ope_referenciasExternas.sPedimento = '".$this->refex['sPedimento']."'";
-        }
-        if(!empty($this->refex['sReferencia'])){
-            $sql .=" AND ope_referenciasExternas.sReferencia like '%".$this->refex['sReferencia']."%'";
-        }
-        if(!empty($this->refex['sMercancia'])){
-            $sql .=" AND ope_referenciasExternas.sMercancia like '%".$this->refex['sMercancia']."%'";
-        }
-        if(!empty($this->refex['sGuiaMaster'])){
-            $sql .=" AND ope_referenciasExternas.sGuiaMaster like '%".$this->refex['sGuiaMaster']."%'";
-        }
-        if(!empty($this->refex['sGuiaHouse'])){
-            $sql .=" AND ope_referenciasExternas.sGuiaHouse like '%".$this->refex['sGuiaHouse']."%'";
-        }
+    public function countGetReferenciasExternas($get = false) {
         
+        $getol = "
+            ope_referenciasExternas.skReferenciaExterna,
+            ope_referenciasExternas.sPedimento,
+            ope_referenciasExternas.sReferencia,
+            ope_referenciasExternas.sMercancia,
+            ope_referenciasExternas.sGuiaMaster,
+            ope_referenciasExternas.sGuiaHouse,
+            ope_referenciasExternas.dFechaCreacion,
+            ope_referenciasExternas.dFechaPrevio,
+            ope_referenciasExternas.dFechaDespacho,
+            ope_referenciasExternas.dFechaClasificacion,
+            ope_referenciasExternas.dFechaGlosa,
+            ope_referenciasExternas.dFechaCapturaPedimento,
+            ope_referenciasExternas.dFechaFacturacion,
+            ope_referenciasExternas.iDeposito,
+            ope_referenciasExternas.iSaldo,
+            cat_almacenes.sNombre AS 'sAlmacen',
+            cat_estatus.sNombre AS 'sEstatus',
+            cat_empresas.sNombre AS 'sSocioImportador'
+            ";
+        $justcount = "count(*) as 'total'";
+        $camposPorRetornar = ($get) ? $getol : $justcount;
+        $sql = "
+            SELECT
+                $camposPorRetornar
+            FROM
+                ope_referenciasExternas
+                    INNER JOIN
+                cat_almacenes ON (cat_almacenes.skAlmacen = ope_referenciasExternas.skAlmacen)
+                    INNER JOIN
+                cat_estatus ON (cat_estatus.skEstatus = ope_referenciasExternas.skEstatus)
+                    LEFT JOIN  rel_empresas_socios resa ON resa.skSocioEmpresa = ope_referenciasExternas.skSocioImportador
+                    LEFT JOIN  cat_empresas ON (cat_empresas.skEmpresa = resa.skEmpresa)
+            WHERE 1 = 1";
         
-        if(!empty($this->refex['dFechaCreacion'])){
-            
-            $sql .=" AND ope_referenciasExternas.dFechaCreacion >=  '".
-            date('Y-m-d', strtotime($this->refex['dFechaCreacion']))
-            ."'";
-            
+        if ($get) {
+
+            if (!empty($this->refex['sPedimento'])) {
+                $sql .=" AND ope_referenciasExternas.sPedimento = '" . $this->refex['sPedimento'] . "'";
+            }
+
+            if (!empty($this->refex['sReferencia'])) {
+                $sql .=" AND ope_referenciasExternas.sReferencia like '%" . $this->refex['sReferencia'] . "%'";
+            }
+
+            if (!empty($this->refex['sMercancia'])) {
+                $sql .=" AND ope_referenciasExternas.sMercancia like '%" . $this->refex['sMercancia'] . "%'";
+            }
+
+            if (!empty($this->refex['sGuiaMaster'])) {
+                $sql .=" AND ope_referenciasExternas.sGuiaMaster like '%" . $this->refex['sGuiaMaster'] . "%'";
+            }
+
+            if (!empty($this->refex['sGuiaHouse'])) {
+                $sql .=" AND ope_referenciasExternas.sGuiaHouse like '%" . $this->refex['sGuiaHouse'] . "%'";
+            }
+
+            if (!empty($this->refex['dFechaCreacion'])) {
+
+                $sql .=" AND ope_referenciasExternas.dFechaCreacion >=  '" .
+                        date('Y-m-d', strtotime($this->refex['dFechaCreacion']))
+                        . "'";
+            }
+            if (!empty($this->refex['dFechaCreacionHasta'])) {
+                $sql .=" AND ope_referenciasExternas.dFechaCreacion <=  '" .
+                        date('Y-m-d', strtotime($this->refex['dFechaCreacionHasta'])) . "'";
+                
+            }
+            //die($sql);
+
+            if (!empty($this->refex['dFechaPrevio'])) {
+                $sql .=" AND ope_referenciasExternas.dFechaPrevio >=  '" .
+                        date('Y-m-d', strtotime($this->refex['dFechaPrevio']))
+                        . "'";
+            }
+            if (!empty($this->refex['dFechaPrevioHasta'])) {
+                $sql .=" AND ope_referenciasExternas.dFechaPrevio <=  '" .
+                        date('Y-m-d', strtotime($this->refex['dFechaPrevioHasta']))
+                        . "'";
+            }
+
+
+
+            if (!empty($this->refex['dFechaDespacho'])) {
+                $sql .=" AND ope_referenciasExternas.dFechaDespacho >=  '" .
+                        date('Y-m-d', strtotime($this->refex['dFechaDespacho']))
+                        . "'";
+            }
+            if (!empty($this->refex['dFechaDespachoHasta'])) {
+                $sql .=" AND ope_referenciasExternas.dFechaDespacho <=  '" .
+                        date('Y-m-d', strtotime($this->refex['dFechaDespachoHasta']))
+                        . "'";
+            }
+
+
+
+            if (!empty($this->refex['dFechaClasificacion'])) {
+                $sql .=" AND ope_referenciasExternas.dFechaClasificacion >=  '" .
+                        date('Y-m-d', strtotime($this->refex['dFechaClasificacion']))
+                        . "'";
+            }
+            if (!empty($this->refex['dFechaClasificacionHasta'])) {
+                $sql .=" AND ope_referenciasExternas.dFechaClasificacion <=  '" .
+                        date('Y-m-d', strtotime($this->refex['dFechaClasificacionHasta']))
+                        . "'";
+            }
+
+
+
+            if (!empty($this->refex['dFechaGlosa'])) {
+                $sql .=" AND ope_referenciasExternas.dFechaGlosa >=  '" .
+                        date('Y-m-d', strtotime($this->refex['dFechaGlosa']))
+                        . "'";
+            }
+            if (!empty($this->refex['dFechaGlosaHasta'])) {
+                $sql .=" AND ope_referenciasExternas.dFechaGlosa <=  '" .
+                        date('Y-m-d', strtotime($this->refex['dFechaGlosaHasta']))
+                        . "'";
+            }
+
+
+
+            if (!empty($this->refex['dFechaCapturaPedimento'])) {
+                $sql .=" AND ope_referenciasExternas.dFechaCapturaPedimento >=  '" .
+                        date('Y-m-d', strtotime($this->refex['dFechaCapturaPedimento']))
+                        . "'";
+            }
+            if (!empty($this->refex['dFechaCapturaPedimentoHasta'])) {
+                $sql .=" AND ope_referenciasExternas.dFechaCapturaPedimento <=  '" .
+                        date('Y-m-d', strtotime($this->refex['dFechaCapturaPedimentoHasta']))
+                        . "'";
+            }
+
+
+
+            if (!empty($this->refex['dFechaFacturacion'])) {
+                $sql .=" AND ope_referenciasExternas.dFechaFacturacion >=  '" .
+                        date('Y-m-d', strtotime($this->refex['dFechaFacturacion']))
+                        . "'";
+            }
+            if (!empty($this->refex['dFechaFacturacionHasta'])) {
+                $sql .=" AND ope_referenciasExternas.dFechaFacturacion >=  '" .
+                        date('Y-m-d', strtotime($this->refex['dFechaFacturacionHasta']))
+                        . "'";
+            }
+
+
+            if (!empty($this->refex['iDeposito'])) {
+                $sql .=" AND ope_referenciasExternas.iDeposito like '%" . $this->refex['iDeposito'] . "%'";
+            }
+
+            if (!empty($this->refex['iSaldo'])) {
+                $sql .=" AND ope_referenciasExternas.iSaldo like '%" . $this->refex['iSaldo'] . "%'";
+            }
+
+            if (!empty($this->refex['sAlmacen'])) {
+                $sql .=" AND cat_almacenes.skAlmacen = '" . $this->refex['sAlmacen'] . "'";
+            }
+
+            if (!empty($this->refex['sEstatus'])) {
+                $sql .=" AND cat_estatus.skEstatus = '" . $this->refex['sEstatus'] . "'";
+            }
+
+            if (!empty($this->refex['sSocioImportador'])) {
+                $sql .=" AND resa.skSocioEmpresa = '" . $this->refex['sSocioImportador'] . "'";
+            }
         }
-        if(!empty($this->refex['dFechaCreacionHasta'])){
-            $sql .=" AND ope_referenciasExternas.dFechaCreacion <=  '".
-            date('Y-m-d', strtotime($this->refex['dFechaCreacionHasta']))."'";
-        }
-        
-        
-        if(!empty($this->refex['dFechaPrevio'])){
-            $sql .=" AND ope_referenciasExternas.dFechaPrevio >=  '".
-            date('Y-m-d', strtotime($this->refex['dFechaPrevio']))
-            ."'";
-        }
-        if(!empty($this->refex['dFechaPrevioHasta'])){
-            $sql .=" AND ope_referenciasExternas.dFechaPrevio <=  '".
-            date('Y-m-d', strtotime($this->refex['dFechaPrevioHasta']))
-            ."'";
-        }
-        
-        
-        
-        if(!empty($this->refex['dFechaDespacho'])){
-            $sql .=" AND ope_referenciasExternas.dFechaDespacho >=  '".
-            date('Y-m-d', strtotime($this->refex['dFechaDespacho']))
-            ."'";
-        }
-        if(!empty($this->refex['dFechaDespachoHasta'])){
-            $sql .=" AND ope_referenciasExternas.dFechaDespacho <=  '".
-            date('Y-m-d', strtotime($this->refex['dFechaDespachoHasta']))
-            ."'";
-        }
-        
-        
-        
-        if(!empty($this->refex['dFechaClasificacion'])){
-            $sql .=" AND ope_referenciasExternas.dFechaClasificacion >=  '".
-            date('Y-m-d', strtotime($this->refex['dFechaClasificacion']))
-            ."'";
-        }
-        if(!empty($this->refex['dFechaClasificacionHasta'])){
-            $sql .=" AND ope_referenciasExternas.dFechaClasificacion <=  '".
-            date('Y-m-d', strtotime($this->refex['dFechaClasificacionHasta']))
-            ."'";
-        }
-        
-        
-        
-        if(!empty($this->refex['dFechaGlosa'])){
-            $sql .=" AND ope_referenciasExternas.dFechaGlosa >=  '".
-            date('Y-m-d', strtotime($this->refex['dFechaGlosa']))
-            ."'";
-        }
-        if(!empty($this->refex['dFechaGlosaHasta'])){
-            $sql .=" AND ope_referenciasExternas.dFechaGlosa <=  '".
-            date('Y-m-d', strtotime($this->refex['dFechaGlosaHasta']))
-            ."'";
-        }
-        
-        
-        
-        if(!empty($this->refex['dFechaCapturaPedimento'])){
-            $sql .=" AND ope_referenciasExternas.dFechaCapturaPedimento >=  '".
-            date('Y-m-d', strtotime($this->refex['dFechaCapturaPedimento']))
-            ."'";
-        }
-        if(!empty($this->refex['dFechaCapturaPedimentoHasta'])){
-            $sql .=" AND ope_referenciasExternas.dFechaCapturaPedimento <=  '".
-            date('Y-m-d', strtotime($this->refex['dFechaCapturaPedimentoHasta']))
-            ."'";
-        }
-        
-        
-        
-        if(!empty($this->refex['dFechaFacturacion'])){
-            $sql .=" AND ope_referenciasExternas.dFechaFacturacion >=  '".
-            date('Y-m-d', strtotime($this->refex['dFechaFacturacion']))
-            ."'";
-        }
-        if(!empty($this->refex['dFechaFacturacionHasta'])){
-            $sql .=" AND ope_referenciasExternas.dFechaFacturacion >=  '".
-            date('Y-m-d', strtotime($this->refex['dFechaFacturacionHasta']))
-            ."'";
-        }
-        
-        
-        
-        if(!empty($this->refex['iDeposito'])){
-            $sql .=" AND ope_referenciasExternas.iDeposito like '%".$this->refex['iDeposito']."%'";
-        }
-        if(!empty($this->refex['iSaldo'])){
-            $sql .=" AND ope_referenciasExternas.iSaldo like '%".$this->refex['iSaldo']."%'";
-        }
-        if(!empty($this->refex['sAlmacen'])){
-            $sql .=" AND cat_almacenes.skAlmacen = '".$this->refex['sAlmacen']."'";
-        }
-        if(!empty($this->refex['sEstatus'])){
-            $sql .=" AND cat_estatus.skEstatus = '".$this->refex['sEstatus']."'";
-        }
-        if(!empty($this->refex['sSocioImportador'])){
-            $sql .=" AND resa.skSocioEmpresa = '".$this->refex['sSocioImportador']."'";
-        }
-        
-        //die($sql);
-      
-    }
-    $result = $this->db->query($sql);
-    if($result){
-        if($result->num_rows > 0){
-            return $result;
-        }else{
+        $result = $this->db->query($sql);
+        if ($result) {
+            if ($result->num_rows > 0) {
+                return $result;
+            } else {
+                return false;
+            }
+        } else {
             return false;
         }
-    }else{
-        return false;
     }
-}
 
-
-    public function getConceptos($skSocioImportador, $robj = false)
-    {
+    public function getConceptos($skSocioImportador, $robj = false) {
 
         $sql = "
         SELECT
@@ -594,13 +565,13 @@ Class Rex_Model Extends Core_Model {
 
         $r = $this->db->query($sql);
 
-        if ($this->db->affected_rows > 0){
+        if ($this->db->affected_rows > 0) {
             $arg = array();
             while ($row = $r->fetch_assoc()) {
                 array_push($arg, $row);
             }
             return $arg;
-        }else {
+        } else {
 
             $sql_todosConceptos = "
                 SELECT
@@ -633,9 +604,8 @@ Class Rex_Model Extends Core_Model {
         }
     }
 
-    public function insertConceptos($skReferenciaExterna,$skConcepto,$iCantidad,$dImporte,$dPrecioUnitario,$skDivisa)
-    {
-        $skReferenciaExternaConcepeteto =  substr(md5(microtime()), 1, 32);
+    public function insertConceptos($skReferenciaExterna, $skConcepto, $iCantidad, $dImporte, $dPrecioUnitario, $skDivisa) {
+        $skReferenciaExternaConcepeteto = substr(md5(microtime()), 1, 32);
         $sql = "
         INSERT INTO
         `rel_referenciasExternas_conceptos` (
@@ -660,31 +630,29 @@ Class Rex_Model Extends Core_Model {
 
         $r = $this->db->query($sql);
 
-        if ($this->db->affected_rows > 0){
+        if ($this->db->affected_rows > 0) {
             return $r;
-        }else{
+        } else {
             return false;
         }
     }
 
-    public function deleteConceptos($skReferenciaExterna)
-    {
+    public function deleteConceptos($skReferenciaExterna) {
 
-        $sql ="
+        $sql = "
             DELETE FROM `rel_referenciasExternas_conceptos`
             WHERE `skReferenciaExterna`='$skReferenciaExterna';";
 
         $r = $this->db->query($sql);
 
-        if ($this->db->affected_rows > 0){
+        if ($this->db->affected_rows > 0) {
             return $r;
-        }else{
+        } else {
             return false;
         }
     }
 
-    public function getConceptosReferencia($skReferenciaExterna)
-    {
+    public function getConceptosReferencia($skReferenciaExterna) {
         $sql = "
         SELECT
             iCantidad,
@@ -705,14 +673,14 @@ Class Rex_Model Extends Core_Model {
 
         $r = $this->db->query($sql);
 
-        if ($this->db->affected_rows > 0){
+        if ($this->db->affected_rows > 0) {
             return $r;
-        }else{
+        } else {
             return false;
         }
     }
-    public function reexfo_referencias()
-    {
+
+    public function reexfo_referencias() {
         $sql = "
         SELECT
         ore.skReferenciaExterna,
@@ -757,8 +725,8 @@ Class Rex_Model Extends Core_Model {
         LEFT JOIN cat_almacenes ca ON ca.skAlmacen = ore.skAlmacen
         LEFT JOIN cat_estatus ce ON ce.skEstatus = ore.skEstatus
         LEFT JOIN _users us	 ON us.skUsers = ore.skUsuarioCreacion
-        WHERE ore.skReferenciaExterna = '".$this->refex['skReferenciaExterna']."' ";
-                    //Poner el numero de previo
+        WHERE ore.skReferenciaExterna = '" . $this->refex['skReferenciaExterna'] . "' ";
+        //Poner el numero de previo
         //  echo $sql; //die();
         $result = $this->db->query($sql);
         if ($result) {
@@ -769,64 +737,67 @@ Class Rex_Model Extends Core_Model {
             }
         }
     }
-    public function listar_fotos_referencias(){
-      $sql="SELECT * FROM rel_referenciasExternas_fotos WHERE skReferenciaExterna ='".$this->refex['skReferenciaExterna']."' AND skEstatus = 'AC' ";
-      ////exit($sql);
-          $result = $this->db->query($sql);
-      if ($result) {
-          if ($result->num_rows > 0) {
-              return $result;
-          } else {
-              return false;
-          }
-      }
-    }
-    public function agregar_fotos_referencias(){
 
-      $sql = "INSERT INTO rel_referenciasExternas_fotos
+    public function listar_fotos_referencias() {
+        $sql = "SELECT * FROM rel_referenciasExternas_fotos WHERE skReferenciaExterna ='" . $this->refex['skReferenciaExterna'] . "' AND skEstatus = 'AC' ";
+        ////exit($sql);
+        $result = $this->db->query($sql);
+        if ($result) {
+            if ($result->num_rows > 0) {
+                return $result;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public function agregar_fotos_referencias() {
+
+        $sql = "INSERT INTO rel_referenciasExternas_fotos
                           (skFotoReferencia, skReferenciaExterna,
                            skUsuarioCreacion,skEstatus,sUbicacion,dFechaCreacion )
                            VALUES (
-                          '".$this->refex['skFotoReferencia']."',
-                          '".$this->refex['skReferenciaExterna']."',
-                          '".$_SESSION['session']['skUsers']."',
+                          '" . $this->refex['skFotoReferencia'] . "',
+                          '" . $this->refex['skReferenciaExterna'] . "',
+                          '" . $_SESSION['session']['skUsers'] . "',
                           'AC',
-                          '".$this->refex['sUbicacion']."',
+                          '" . $this->refex['sUbicacion'] . "',
                           CURRENT_TIMESTAMP()
                            )";
-      //echo  $sql."<br><br><br>";//die();
-      $result = $this->db->query($sql);
-      if ($result) {
-          return true;
-      } else {
+        //echo  $sql."<br><br><br>";//die();
+        $result = $this->db->query($sql);
+        if ($result) {
+            return true;
+        } else {
 
-          return false;
-      }
+            return false;
+        }
     }
-    public function eliminar_fotos_referencias($arrayNoEliminados){
-        $sql="UPDATE rel_referenciasExternas_fotos
+
+    public function eliminar_fotos_referencias($arrayNoEliminados) {
+        $sql = "UPDATE rel_referenciasExternas_fotos
               SET skEstatus='EL'
-              WHERE skFotoReferencia NOT IN(".$arrayNoEliminados.")";
-              $result = $this->db->query($sql);
-              if ($result) {
-                  return true;
-              } else {
+              WHERE skFotoReferencia NOT IN(" . $arrayNoEliminados . ")";
+        $result = $this->db->query($sql);
+        if ($result) {
+            return true;
+        } else {
 
-                  return false;
-              }
-
+            return false;
+        }
     }
+
     // INSERTAR DOCUMENTOS DE REFERENCIAS EXTERNAS //
-    public function create_referenciasExternas_documentos($datos = array()){
-        if($datos){
+    public function create_referenciasExternas_documentos($datos = array()) {
+        if ($datos) {
             $sql = "INSERT INTO rel_referenciasExternas_documentos (skDocumentoReferencia,skReferenciaExterna,skUsuarioCreacion,skEstatus,sUbicacion,dFechaCreacion,skDocTipo) VALUES (
-                '".$datos['skDocumentoReferencia']."',
-                '".$datos['skReferenciaExterna']."',
-                '".$_SESSION['session']['skUsers']."',
+                '" . $datos['skDocumentoReferencia'] . "',
+                '" . $datos['skReferenciaExterna'] . "',
+                '" . $_SESSION['session']['skUsers'] . "',
                 'AC',
-                '".$datos['sUbicacion']."',
+                '" . $datos['sUbicacion'] . "',
                 CURRENT_TIMESTAMP,
-                '".$datos['skDocTipo']."'
+                '" . $datos['skDocTipo'] . "'
                 )";
             ////exit('<pre>'.print_r($sql,1).'</pre>');
             $result = $this->db->query($sql);
@@ -838,8 +809,9 @@ Class Rex_Model Extends Core_Model {
         return false;
         //rel_tiposDocumentos_modulos
     }
+
     // GET DOCUMENTOS PARA REFERENCIAS EXTERNAS //
-    public function get_cat_docTipo(){
+    public function get_cat_docTipo() {
         $sql = "SELECT * FROM rel_tiposDocumentos_modulos tdm
             INNER JOIN cat_docTipo dt ON dt.skDocTipo = tdm.skDocTipo WHERE dt.skStatus = 'AC' AND tdm.skModulo = 'reexdo-form' ";
         ////exit('<pre>'.print_r($sql,1).'</pre>');
@@ -852,9 +824,10 @@ Class Rex_Model Extends Core_Model {
             }
         }
     }
+
     // GET REL DOCUMENTOS DE REFERENCIA EXTERNA  //
     public function get_rel_referenciasExternas_documentos() {
-        $sql = "SELECT rexDoc.*, dt.sNombre FROM rel_referenciasExternas_documentos AS rexDoc INNER JOIN cat_docTipo dt ON dt.skDocTipo = rexDoc.skDocTipo WHERE rexDoc.skEstatus = 'AC' AND rexDoc.skReferenciaExterna = '".$this->refex['skReferenciaExterna']."' ";
+        $sql = "SELECT rexDoc.*, dt.sNombre FROM rel_referenciasExternas_documentos AS rexDoc INNER JOIN cat_docTipo dt ON dt.skDocTipo = rexDoc.skDocTipo WHERE rexDoc.skEstatus = 'AC' AND rexDoc.skReferenciaExterna = '" . $this->refex['skReferenciaExterna'] . "' ";
         ////exit('<pre>'.print_r($sql,1).'</pre>');
         $result = $this->db->query($sql);
         if ($result) {
@@ -865,48 +838,49 @@ Class Rex_Model Extends Core_Model {
             }
         }
     }
+
     // ELIMINADO LOGICO DE DOCUMENTOS DE REFERENCIA EXTERNA //
-    public function delete_referenciasExternas_documentos($datos = array()){
-        if($datos){
+    public function delete_referenciasExternas_documentos($datos = array()) {
+        if ($datos) {
             $sql = "UPDATE rel_referenciasExternas_documentos SET skEstatus = 'DE' WHERE skEstatus != 'DE' ";
-            if(isset($datos['skReferenciaExterna']) && !empty($datos['skReferenciaExterna'])){
-               $sql .= " AND skReferenciaExterna = '".$datos['skReferenciaExterna']."'";
+            if (isset($datos['skReferenciaExterna']) && !empty($datos['skReferenciaExterna'])) {
+                $sql .= " AND skReferenciaExterna = '" . $datos['skReferenciaExterna'] . "'";
             }
-            if(isset($datos['skDocumentoReferencia']) && !empty($datos['skDocumentoReferencia'])){
-                $sql .= " AND skDocumentoReferencia NOT IN (".$datos['skDocumentoReferencia'].")";
+            if (isset($datos['skDocumentoReferencia']) && !empty($datos['skDocumentoReferencia'])) {
+                $sql .= " AND skDocumentoReferencia NOT IN (" . $datos['skDocumentoReferencia'] . ")";
             }
             ////exit('<pre>'.print_r($sql,1).'</pre>');
             $result = $this->db->query($sql);
             if ($result) {
                 return true;
-            }else{
+            } else {
                 return false;
             }
         }
         return true;
     }
 
-    public function editar_fechas_referencia(){
-        $sql="UPDATE ope_referenciasExternas
-              SET dFechaPrevio='".$this->refex['dFechaPrevio']."'
-              dFechaDespacho='".$this->refex['dFechaDespacho']."',
-              dFechaClasificacion='".$this->refex['dFechaClasificacion']."',
-              dFechaGlosa='".$this->refex['dFechaGlosa']."',
-              dFechaCapturaPedimento='".$this->refex['dFechaCapturaPedimento']."',
-              dFechaRevalidacion='".$this->refex['dFechaRevalidacion']."',
-              dFechaFacturacion='".$this->refex['dFechaFacturacion']."'
-              WHERE skReferenciaExterna ='".$this->refex['skReferenciaExterna']."'";
+    public function editar_fechas_referencia() {
+        $sql = "UPDATE ope_referenciasExternas
+              SET dFechaPrevio='" . $this->refex['dFechaPrevio'] . "'
+              dFechaDespacho='" . $this->refex['dFechaDespacho'] . "',
+              dFechaClasificacion='" . $this->refex['dFechaClasificacion'] . "',
+              dFechaGlosa='" . $this->refex['dFechaGlosa'] . "',
+              dFechaCapturaPedimento='" . $this->refex['dFechaCapturaPedimento'] . "',
+              dFechaRevalidacion='" . $this->refex['dFechaRevalidacion'] . "',
+              dFechaFacturacion='" . $this->refex['dFechaFacturacion'] . "'
+              WHERE skReferenciaExterna ='" . $this->refex['skReferenciaExterna'] . "'";
 
-              $result = $this->db->query($sql);
-              if ($result) {
-                  return $this->refex['skReferenciaExterna'];
-              } else {
-                  return false;
-              }
-
+        $result = $this->db->query($sql);
+        if ($result) {
+            return $this->refex['skReferenciaExterna'];
+        } else {
+            return false;
+        }
     }
-    public function read_referencias_resumen(){
-        $sql="
+
+    public function read_referencias_resumen() {
+        $sql = "
         SELECT ore.skReferenciaExterna,
                ore.dFechaCreacion,
                ore.dFechaPrevio,
@@ -928,26 +902,23 @@ Class Rex_Model Extends Core_Model {
         } else {
             return false;
         }
-
-
-
-
     }
-    public function conceptos_referencia(){
-      $sql="SELECT rrc.* ,
+
+    public function conceptos_referencia() {
+        $sql = "SELECT rrc.* ,
             cc.sNombre AS Concepto,
-          (SELECT SUM(aa.dImporte) FROM rel_referenciasExternas_conceptos aa WHERE aa.skReferenciaExterna ='".$this->refex['skReferenciaExterna']."') AS Total
+          (SELECT SUM(aa.dImporte) FROM rel_referenciasExternas_conceptos aa WHERE aa.skReferenciaExterna ='" . $this->refex['skReferenciaExterna'] . "') AS Total
           FROM rel_referenciasExternas_conceptos rrc
           INNER JOIN cat_conceptos cc ON cc.skConcepto = rrc.skConcepto
-          WHERE skReferenciaExterna ='".$this->refex['skReferenciaExterna']."' AND rrc.iCantidad > 0";
+          WHERE skReferenciaExterna ='" . $this->refex['skReferenciaExterna'] . "' AND rrc.iCantidad > 0";
 
-      $result = $this->db->query($sql);
-      if ($result) {
-          return $result;
-      } else {
-          return false;
-      }
-
+        $result = $this->db->query($sql);
+        if ($result) {
+            return $result;
+        } else {
+            return false;
+        }
     }
+
     /* TERMINA MODULO (REX) */
 }

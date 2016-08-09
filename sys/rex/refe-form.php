@@ -284,7 +284,7 @@
             <div class="col-md-4">
                 <div class="input-icon right">
                     <i class="fa"></i>
-                    <input type="number" maxlength="400" name="iDeposito" id="iDeposito" class="form-control" placeholder="0" value="<?php echo (isset($result["iBultos"])) ? $result["iBultos"] : '' ;?>" >
+                    <input type="number" maxlength="400" name="iDeposito" id="iDeposito" class="form-control" placeholder="0" value="<?php echo (isset($result["iDeposito"])) ? $result["iDeposito"] : '' ;?>" >
                 </div>
             </div>
             <label class="control-label col-md-2">Tipo de cambio <span aria-required="true" class="required"> * </span>
@@ -384,7 +384,7 @@
         <div class="col-md-4">
             <div class="input-icon right">
                 <i class="fa"></i>
-                <input type="number" maxlength="400" name="iSaldo" id="iSaldo" class="form-control" placeholder="0" value="<?php echo (isset($result["iBultos"])) ? $result["iBultos"] : '' ;?>" >
+                <input type="number" maxlength="400" name="iSaldo" id="iSaldo" class="form-control" placeholder="0" value="<?php echo (isset($result["iSaldo"])) ? $result["iSaldo"] : '' ;?>" >
             </div>
         </div>
     </div>
