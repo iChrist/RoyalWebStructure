@@ -325,14 +325,17 @@
                             while ($row = $data["conceptosTotales"]->fetch_assoc()) {
                                 $conceptoRecord = false;
                                 
-                                while($cr = $data["conceptosRef"]->fetch_assoc()){
-                                    
-                                    if ($cr["skConcepto"] ===  $row["skConcepto"]) {
-                                        $conceptoRecord = $cr;
-                                        //$data["conceptosRef"]->data_seek(0);
+                                if ($data["conceptosRef"]) {
+                                    while($cr = $data["conceptosRef"]->fetch_assoc()){
+
+                                        if ($cr["skConcepto"] ===  $row["skConcepto"]) {
+                                            $conceptoRecord = $cr;
+                                           // 
+                                        }
+
                                     }
-                                    
                                 }
+                                
                                 //echo ( "<pre>".print_r($conceptoRecord ,true)."</pre>");
                                 
                                
@@ -350,7 +353,7 @@
                         </td>
                         <td>
                             <input name="iCantidad[]" onchange="cotizar();" class="form-control input-sm iCantidad" placeholder="Cant" value="<?php
-                                echo ($conceptoRecord["iCantidad"]) ? $conceptoRecord["iCantidad"] : ' ';
+                                echo ($conceptoRecord["iCantidad"] !== false) ? $conceptoRecord["iCantidad"] : 0;
                             ?>" type="text">
                         </td>
                         <td>
@@ -374,7 +377,7 @@
                         </td>
                     </tr>
                     <?php
-                    
+                    $data["conceptosRef"]->data_seek(0);
                             }
                         }
                     ?>
