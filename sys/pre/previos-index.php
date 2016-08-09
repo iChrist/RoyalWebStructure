@@ -11,11 +11,10 @@
                 <thead>
                     <tr role="row" class="heading">
                         <th nowrap>Acciones</th>
-                        <th nowrap>E</th>
-                        <th nowrap>Código</th>
-                        <th nowrap>Fecha de Solicitud</th>
-                        <th nowrap>Fecha de Previo</th>
+                        <th nowrap>Estatus</th>
                         <th nowrap>Referencia</th>
+                        <th nowrap>Fecha de Solicitud</th>
+                        <th nowrap>Fecha de Programaci&oacute;n</th>
                         <th nowrap>Importador</th>
                         <th nowrap>Recinto</th>
                         <th nowrap>Ejecutivo</th>
@@ -31,8 +30,9 @@
                           </div>
                       </td>
                       <td></td>
-                      <td></td>
                       <td>
+                        <input type="text" class="form-control form-filter input-sm" name="sReferencia" placeholder="Referencia">
+                      </td>                      <td>
                         <div class="input-group input-group-sm date date-picker margin-bottom-5" data-date-format="dd-mm-yyyy">
                             <input type="text" class="form-control form-filter" id="dFechaSolicitud" name="dFechaSolicitud" placeholder="Fecha Solicitud">
                             <span class="input-group-btn">
@@ -42,19 +42,67 @@
                       </td>
                       <td>
                         <div class="input-group input-group-sm date date-picker margin-bottom-5" data-date-format="dd-mm-yyyy">
-                            <input type="text" class="form-control form-filter" id="dFechaPrevio" name="dFechaPrevio" placeholder="Fecha Previo">
+                            <input type="text" class="form-control form-filter" name="dFechaInicioProgramacion" placeholder="Fecha Inicio">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </div>
+                        <div class="input-group input-group-sm date date-picker margin-bottom-5" data-date-format="dd-mm-yyyy">
+                            <input type="text" class="form-control form-filter" name="dFechaFinProgramacion" placeholder="Fecha Fin">
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
                             </span>
                         </div>
                       </td>
-                      <td>
-                        <input type="text" class="form-control form-filter input-sm" name="sReferencia" placeholder="Referencia">
-                      </td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
+
+                      <td><select name="skSocioImportador" class="form-control form-filter input-sm">
+                              <option value="">- Importador -</option>
+                              <?php
+                              if ($data['clientes']) {
+                                  while ($row = $data['clientes']->fetch_assoc()) {
+                                      ?>
+                                      <option value="<?php echo $row['skSocioEmpresa']; ?>"> <?php echo utf8_encode($row['sNombre']); ?> </option>
+                                      <?php
+                                  }//ENDIF
+                              }//ENDWHILE
+                              ?>
+                          </select></td>
+                          <td><select name="skSocioRecinto" class="form-control form-filter input-sm">
+                                  <option value="">- Recinto -</option>
+                                  <?php
+                                  if ($data['recintos']) {
+                                      while ($row = $data['recintos']->fetch_assoc()) {
+                                          ?>
+                                          <option value="<?php echo $row['skSocioEmpresa']; ?>"> <?php echo utf8_encode($row['sNombre']); ?> </option>
+                                          <?php
+                                      }//ENDIF
+                                  }//ENDWHILE
+                                  ?>
+                              </select></td>
+                              <td><select name="skUsuarioEjecutivo" class="form-control form-filter input-sm">
+                                      <option value="">- Ejecutivo -</option>
+                                      <?php
+                                      if ($data['users']) {
+                                          while ($row = $data['users']->fetch_assoc()) {
+                                              ?>
+                                              <option value="<?php echo $row['skUsers']; ?>"> <?php echo utf8_encode($row['sName']); ?> </option>
+                                              <?php
+                                          }//ENDIF
+                                      }//ENDWHILE
+                                      ?>
+                                  </select></td>
+                                  <td><select name="skUsuarioTramitador" class="form-control form-filter input-sm">
+                                          <option value="">- Tramitador -</option>
+                                          <?php
+                                          if ($data['usersTramitador']) {
+                                              while ($row = $data['usersTramitador']->fetch_assoc()) {
+                                                  ?>
+                                                  <option value="<?php echo $row['skUsers']; ?>"> <?php echo utf8_encode($row['sName']); ?> </option>
+                                                  <?php
+                                              }//ENDIF
+                                          }//ENDWHILE
+                                          ?>
+                                      </select></td>
                       <td>
                         <input type="text" class="form-control form-filter input-sm" name="sNumeroFactura" placeholder="Nº Factura">
                       </td>

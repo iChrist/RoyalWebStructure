@@ -17,15 +17,7 @@
   			 }
   		 }
       }
-      $arrayTiposPrevios = array();
-    	if(isset($data['tiposPreviosPrevio']))
-        {
-    		if($data['tiposPreviosPrevio']->num_rows > 0){
-    			 while($row = $data['tiposPreviosPrevio']->fetch_assoc()){
-    				$arrayTiposPrevios[] = $row{'skTipoPrevio'};
-    			 }
-    		 }
-       }
+
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
     <input type="hidden" name="skSolicitudPrevio"  id="skSolicitudPrevio" value="<?php echo (isset($result['skSolicitudPrevio'])) ? $result['skSolicitudPrevio'] : '' ; ?>">
@@ -38,21 +30,6 @@
                 <input type="text" name="sReferencia" id="sReferencia" <?php echo (isset($result['skSolicitudPrevio'])) ? 'disabled': '' ; ?> class="form-control" onChange="obtenerDatos();" placeholder="Referencia" value="<?php echo (isset($result['sReferencia'])) ? htmlentities(utf8_encode($result['sReferencia'])) : '' ; ?>" >
               </div>
             </div>
-            <label class="control-label col-md-2">Ejecutivo <span aria-required="true" class="required"> * </span> </label>
-            <div class="col-md-4">
-                <select name="skUsuarioEjecutivo" id="skUsuarioEjecutivo" class="form-control form-filter input-sm">
-                    <option value="">- Ejecutivo -</option>
-                    <?php
-                    if ($data['ejecutivos']) {
-                        while ($rEjecutivo = $data['ejecutivos']->fetch_assoc()) {
-                            ?>
-                            <option value="<?php echo $rEjecutivo['skUsers']; ?>" <?php echo (isset($result['skUsuarioEjecutivo'])) ? ($result['skUsuarioEjecutivo'] == $rEjecutivo['skUsers'] ? 'selected' : '' ) : ''; ?> > <?php echo utf8_encode($rEjecutivo['sName']); ?> </option>
-                            <?php
-                        }//ENDIF
-                    }//ENDWHILE
-                    ?>
-                </select>
-            </div>
         </div>
         <hr>
         <div id="dvDatos">
@@ -63,14 +40,14 @@
           <label class="control-label col-md-2">Fecha de Programaci&oacute;n</label>
           <div class="col-md-4">
             <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
-              <input type="text" id="dFechaProgramacion" name="dFechaProgramacion" class="form-control" value="<?php echo (isset($result['dFechaSolicitud'])) ?  utf8_encode(date('d-m-Y', strtotime($result['dFechaSolicitud']))) : date('d-m-Y') ; ?>" >
+              <input type="text" id="dFechaProgramacion" name="dFechaProgramacion" class="form-control" value="<?php echo (isset($result['dFechaProgramacion']) ?  utf8_encode(date('d-m-Y', strtotime($result['dFechaProgramacion']))) : ''); ?>" >
               <span class="input-group-btn">
               <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
               </span>
             </div>
           </div>
-          <label class="control-label col-md-2">Cliente <span aria-required="true" class="required"> * </span> </label>
-          <div class="col-md-4">
+        <!--  <label class="control-label col-md-2">Cliente <span aria-required="true" class="required"> * </span> </label>
+        <div class="col-md-4">
               <select name="skSocioImportador" id="skSocioImportador" class="form-control form-filter input-sm">
                   <option value="">- Cliente -</option>
                   <?php
@@ -79,11 +56,13 @@
                           ?>
                           <option value="<?php echo $rImportador['skSocioEmpresa']; ?>" <?php echo (isset($result['skSocioImportador'])) ? ($result['skSocioImportador'] == $rImportador['skSocioEmpresa'] ? 'selected' : '' ) : ''; ?> > <?php echo utf8_encode($rImportador['sNombre']); ?> </option>
                           <?php
-                      }//ENDIF
-                  }//ENDWHILE
+                      }
+                  }
                   ?>
               </select>
-          </div>
+          </div>-->
+          <input type="hidden" name="skSocioImportador" id="skSocioImportador" value="">
+          <input type="hidden" name="sBlMaster" id="sBlMaster" value="">
         </div>
         <div class="form-group">
           <label class="control-label col-md-2">Recinto<span aria-required="true" class="required"> * </span> </label>
@@ -101,7 +80,7 @@
                 ?>
             </select>
           </div>
-          <label class="control-label col-md-2">Tramitador <span aria-required="true" class="required"> * </span> </label>
+          <label class="control-label col-md-2">Tramitador</label>
           <div class="col-md-4">
               <select name="skUsuarioTramitador" id="skUsuarioTramitador" class="form-control form-filter input-sm">
                   <option value="">- Tramitador -</option>
@@ -145,8 +124,25 @@
             </div>
           </div>
         </div>
-        <div class="clearfix"><hr></div>
+        <div class="form-group">
+          <label class="control-label col-md-2">Tipo de Previo</label>
+          <div class="col-md-4">
+              <select name="skTipoPrevio" id="skTipoPrevio" class="form-control form-filter input-sm">
+                  <option value="">- Tipo de Previo -</option>
+                  <?php
+                  if ($data['tiposPrevios']) {
+                      while ($rTipoPrevio = $data['tiposPrevios']->fetch_assoc()) {
+                          ?>
+                          <option value="<?php echo $rTipoPrevio['skTipoPrevio']; ?>" <?php echo (isset($result['skTipoPrevio'])) ? ($result['skTipoPrevio'] == $rTipoPrevio['skTipoPrevio'] ? 'selected' : '' ) : ''; ?> > <?php echo utf8_encode($rTipoPrevio['sNombre']); ?> </option>
+                          <?php
+                      }//ENDIF
+                  }//ENDWHILE
+                  ?>
+              </select>
+          </div>
 
+        </div>
+        <div class="clearfix"><hr></div>
         <div class="form-group">
             <label class="control-label col-md-2">Autoridades <span aria-required="true" class="required">  </span>
             </label>
@@ -175,46 +171,10 @@
             </div>
 
         </div>
-        <div class="clearfix"><hr></div>
-        <div class="form-group">
-            <label class="control-label col-md-2">Tipo de Previo <span aria-required="true" class="required">  </span>
-            </label>
-            <div class="col-md-10">
-                <div class="row">
-                    <div class="checkbox-list">
-
-                            <?php
-                            if($data['tiposPrevios'])
-                            {
-                                foreach ($data['tiposPrevios'] as $tiposPrevios)
-                                {
-                                ?>
-                                    <div class="col-md-4">
-                                           <label> <input type="checkbox" name="skTipoPrevio[]" value="<?php echo $tiposPrevios['skTipoPrevio']; ?>" <?php echo (in_array($tiposPrevios['skTipoPrevio'], $arrayTiposPrevios) ? 'checked' : '')?>   />
-                                            <?php echo $tiposPrevios['sNombre']; ?>    <br/>&nbsp;</label>
-
-                                    </div>
-                                <?php
-                                }
-                            }
-                            ?>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-        <div class="clearfix"><hr></div>
-        <div class="form-group">
-          <label class="control-label col-md-2">Motivo de Solicitud <span aria-required="true" class="required"> * </span> </label>
-          <div class="col-md-10">
-          <textarea name="sObservacionesSolicitud"placeholder="Motivo por el cual solicita el previo"class="form-control" rows="3"><?php echo (isset($result['sObservacionesSolicitud'])) ? $result['sObservacionesSolicitud'] : '' ; ?></textarea>
-          </div>
-        </div>
 
 
-        <div class="clearfix"></div>
-        <hr>
+
+
 
 
     </div>
@@ -222,17 +182,28 @@
 <div class="clearfix"></div>
 <script type="text/javascript">
     function obtenerDatos(){
-        //$("#dvDatos").empty();
+        if($("#sReferencia").val().trim() != ''){
+    	           $('.page-title-loading').css('display','inline');
+                 $('.filter-submit').click();
+    	           $.post("",{ axn : "obtenerDatos" , sReferencia : $("#sReferencia").val() }, function(data){
+                    $("#dvDatos").html(data);
+                  //POST para traer cliente, BL y Contenedor
+                  if($("#skSolicitudPrevio").val().trim() == ''){
+                    $.post("",{ axn : "obtenerCliente" , sReferencia : $("#sReferencia").val() }, function(data){
+                      $("#skSocioImportador").val(data);
+                    });
+                    $.post("",{ axn : "obtenerBl" , sReferencia : $("#sReferencia").val() }, function(data){
+                     $("#sBlMaster").val(data);
+                    });
+                  }
 
-    	  $('.page-title-loading').css('display','inline');
-    	 $.post("",{ axn : "obtenerDatos" , sReferencia : $("#sReferencia").val() }, function(data){
-            //    $("#dvDatos").empty();
-                $("#dvDatos").html(data);
+
                 $('.page-title-loading').css('display','none');
                 });
+          }
     			}
     $(document).ready(function(){
-
+      obtenerDatos();
         // VALIDADOR PARA OBTENER DATOS POR REFERENCIA //
         $.validator.addMethod(
             "obtenerDatos",
@@ -262,11 +233,11 @@
                       data: {
                         sReferencia: function (){return $( "#sReferencia" ).val();},
                         axn: "validarReferencia",
-                        skSolicitudRevalidacion:  function (){return $( "#skSolicitudRevalidacion" ).val();}
+                        skSolicitudPrevio:  function (){return $( "#skSolicitudPrevio" ).val();}
                       }
                     }
 
-                },skUsuarioEjecutivo:{
+                },skSocioImportador:{
                     required: true
                 },
 
@@ -310,11 +281,11 @@
               sReferencia:{
                   required:"Ingresa una Referencia",
                   remote: function(){
-                      return 'La referencia "'+$("#sReferencia").val()+'" no Existe.';
+                      return 'La referencia "'+$("#sReferencia").val()+'" no existe,no contiene una primera clasificacion o ya cuenta con un previo.';
                   }
               },
-              skUsuarioEjecutivo:{
-                  required: "Agregar Ejecutivo"
+              skSocioImportador:{
+                  required: "Agregar Cliente"
               },
             }
         });
