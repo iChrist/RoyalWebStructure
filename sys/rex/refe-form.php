@@ -80,6 +80,15 @@
                     <input type="text" maxlength="50" name="sPedimento" id="sPedimento" class="form-control" placeholder="Numero de pedimento" value="<?php echo (isset($result["sPedimento"])) ? $result["sPedimento"] : '' ;?>" >
                 </div>
             </div>
+            
+            <label class="control-label col-md-2">Bultos<span aria-required="true" class="required"> * </span>
+            </label>
+            <div class="col-md-4">
+                <div class="input-icon right">
+                    <i class="fa"></i>
+                    <input type="number" min="0" name="iBultos" id="iBultos" class="form-control" placeholder="0" value="<?php echo (isset($result["iBultos"])) ? $result["iBultos"] : '' ;?>" >
+                </div>
+            </div>
         </div>
 
         <div class="form-group">
@@ -108,15 +117,6 @@
                 <div class="input-icon right">
                     <i class="fa"></i>
                     <input type="text" maxlength="100" name="sGuiaHouse" id="sGuiaHouse" class="form-control" placeholder="Guia House" value="<?php echo (isset($result["sGuiaHouse"])) ? $result["sGuiaHouse"] : '' ;?>" >
-                </div>
-            </div>
-
-            <label class="control-label col-md-1">Bultos<span aria-required="true" class="required"> * </span>
-            </label>
-            <div class="col-md-2">
-                <div class="input-icon right">
-                    <i class="fa"></i>
-                    <input type="number" min="0" name="iBultos" id="iBultos" class="form-control" placeholder="0" value="<?php echo (isset($result["iBultos"])) ? $result["iBultos"] : '' ;?>" >
                 </div>
             </div>
         </div>
@@ -284,7 +284,7 @@
             <div class="col-md-4">
                 <div class="input-icon right">
                     <i class="fa"></i>
-                    <input type="number" maxlength="400" name="iDeposito" id="iDeposito" class="form-control" placeholder="0" value="<?php echo (isset($result["iBultos"])) ? $result["iBultos"] : '' ;?>" >
+                    <input type="number" maxlength="400" name="iDeposito" id="iDeposito" class="form-control" placeholder="0" value="<?php echo (isset($result["iDeposito"])) ? $result["iDeposito"] : '' ;?>" >
                 </div>
             </div>
             <label class="control-label col-md-2">Tipo de cambio <span aria-required="true" class="required"> * </span>
@@ -315,17 +315,31 @@
                 <tbody id="ConceptosReferenciasTabla">
 
                     <?php
+                    /**/
                     $totalConceptos = 0;
-                        if (isset($data["conceptosRef"])) {
-                           /*$data["conceptosTotales"]
+                        if (isset($data["conceptosTotales"]) ) {
+                          /* $data["conceptosTotales"]
                             $data["conceptosRef"]*/
+                            //exit('<pre>' . print_r($data["conceptosRef"]->fetch_array(),true).'</pre>');
 
                             while ($row = $data["conceptosTotales"]->fetch_assoc()) {
                                 $conceptoRecord = false;
-                                while($cr = $data["conceptosRef"]->fetch_assoc()){
-                                    $conceptoRecord = ( ($cr["skConcepto"] ===  $row["skConcepto"]) ) ? $cr : false;
+                                
+                                if ($data["conceptosRef"]) {
+                                    while($cr = $data["conceptosRef"]->fetch_assoc()){
+
+                                        if ($cr["skConcepto"] ===  $row["skConcepto"]) {
+                                            $conceptoRecord = $cr;
+                                           // 
+                                        }
+
+                                    }
                                 }
-                                echo "<pre>".print_r($conceptoRecord ,true)."</pre>";
+                                
+                                //echo ( "<pre>".print_r($conceptoRecord ,true)."</pre>");
+                                
+                               
+                              
 
 
 
@@ -335,11 +349,11 @@
                         <td>
                             <input onchange="cotizar();" value="<?php
                                 echo $row['skConcepto'];
-                            ?>" name="conceptos[]" type="checkbox" <?php echo ($conceptoRecord)? 'checked' : '';?> >
+                            ?>" name="conceptos[]" type="checkbox" <?php echo ($conceptoRecord != false)? 'checked' : '';?> >
                         </td>
                         <td>
                             <input name="iCantidad[]" onchange="cotizar();" class="form-control input-sm iCantidad" placeholder="Cant" value="<?php
-                                echo ($conceptoRecord)? $conceptoRecord["iCantidad"]:"0" ;
+                                echo ($conceptoRecord["iCantidad"] !== false) ? $conceptoRecord["iCantidad"] : 0;
                             ?>" type="text">
                         </td>
                         <td>
@@ -363,6 +377,7 @@
                         </td>
                     </tr>
                     <?php
+                    $data["conceptosRef"]->data_seek(0);
                             }
                         }
                     ?>
@@ -384,7 +399,7 @@
         <div class="col-md-4">
             <div class="input-icon right">
                 <i class="fa"></i>
-                <input type="number" maxlength="400" name="iSaldo" id="iSaldo" class="form-control" placeholder="0" value="<?php echo (isset($result["iBultos"])) ? $result["iBultos"] : '' ;?>" >
+                <input readonly type="number" maxlength="400" name="iSaldo" id="iSaldo" class="form-control" placeholder="0" value="<?php echo (isset($result["iSaldo"])) ? $result["iSaldo"] : '' ;?>" >
             </div>
         </div>
     </div>
@@ -419,9 +434,14 @@
               total += resultado;
           });
       $("#total").html("$ "+total.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+      $("#iSaldo").val(total - $("#iDeposito").val());
     }
     $(document).ready(function(){
-
+        
+        
+        $("#iDeposito").change(function(){
+            cotizar();
+        });
         cotizar();
 
         $.ajax({

@@ -1,5 +1,5 @@
 <?php
-    error_reporting(E_ALL | E_STRICT);
+    error_reporting(E_ALL);
     ini_set('display_errors', TRUE);
     ini_set('display_startup_errors', TRUE);
     ini_set('memory_limit', '-1');
@@ -8,21 +8,17 @@
     session_start();
 // SYSTEM CONFIGURATION //
     $_GET['sysProject'] = isset($_GET['sysProject']) ? $_GET['sysProject'] : '';
-<<<<<<< HEAD
     define('DIR_PATH', 'RoyalWebStructure/');
-=======
-    define('DIR_PATH', '');
->>>>>>> aa40f84686347cdc39a880edc0c4e0355c0ad762
     define('CORE_PATH', __DIR__.'/');
     define('SYS_PROJECT', $_GET['sysProject']);
     define('SYS_PATH', $_SERVER['DOCUMENT_ROOT'].'/'.DIR_PATH.SYS_PROJECT.'/');
-    define('SYS_URL', 'http://'.$_SERVER['SERVER_NAME'].':81/'.DIR_PATH);
+    define('SYS_URL', 'http://'.$_SERVER['SERVER_NAME'].'/'.DIR_PATH);
     if(!is_dir(SYS_PATH)){
         session_destroy();
         die();
     }
 // DATABASE CONFIGURATION //
-    $_db_idx = 'samuel';
+    $_db_idx = 'test';
     $_db = array(
         'sys' => array(
             'HOST_DB' => 'royalweb.com.mx',

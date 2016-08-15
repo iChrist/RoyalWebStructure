@@ -98,13 +98,17 @@
                                         }
 
                                         while ($row = $this->data['data']->fetch_assoc()) {
-                                            $actions = $this->printModulesButtons(2, array($row['skSolicitudPrevio']));
+                                          $editado = 'block';
+                                          if($row['Estatus']=='Finalizado'){
+                                              $editado = 'none';
+                                          }
+                                            $actions = $this->printModulesButtons(2, array($row['skSolicitudPrevio'],$editado));
                                             array_push($records['data'], array(
                                                     !empty($actions['sHtml']) ? '<div class="dropdown"><button aria-expanded="true" aria-haspopup="true" data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default btn-xs dropdown-toggle">Acciones<span class="caret"></span></button><ul aria-labelledby="dropdownMenu1" class="dropdown-menu">'.utf8_encode($actions['sHtml']).'</ul></div>' : '',
-                                                    utf8_encode($row['iconoEstatus']), str_pad($row['codigo'], 7, '0', STR_PAD_LEFT),
+                                                    utf8_encode($row['Estatus']),
+                                                    ($row['sReferencia'] ? utf8_encode($row['sReferencia']) : 'N/D'),
                                                     ($row['fechaSolicitud'] ? date('d/m/Y H:i:s ', strtotime($row['fechaSolicitud'])) : 'N/D'),
                                                     ($row['fechaProgramacion'] ? date('d/m/Y ', strtotime($row['fechaProgramacion'])) : 'N/D'),
-                                                    ($row['sReferencia'] ? utf8_encode($row['sReferencia']) : 'N/D'),
                                                     ($row['importador'] ? utf8_encode($row['importador']) : 'N/D'),
                                                     ($row['recinto'] ? utf8_encode($row['recinto']) : ''),
                                                     ($row['usuarioEjecutivo'] ? utf8_encode($row['usuarioEjecutivo']) : 'N/D'),
@@ -154,7 +158,8 @@
             if (isset($_POST['axn'])) {
                 switch ($_POST['axn']) {
                             case 'validarReferencia':
-                                    $this->solreva['sReferencia'] = htmlentities(($_POST['sReferencia']));
+                            $this->previos['sReferencia'] = htmlentities(($_POST['sReferencia']));
+                            $this->previos['skSolicitudPrevio'] = htmlentities(($_POST['skSolicitudPrevio']));
                                     $this->data['revalidaciones'] = parent::read_referencia();
                                     if (parent::read_referencia()) {
                                         echo 'true';
@@ -164,9 +169,26 @@
 
                                     return true;
                             break;
-                             case 'obtenerDatos':
+                            case 'obtenerDatos':
                                     $this->load_controller('doc', 'obtenerDatos');
-
+                                    return true;
+                            break;
+                            case 'obtenerCliente':
+                                  $this->previos['sReferencia'] = htmlentities(($_POST['sReferencia']));
+                                    $this->data['data'] = $this->obtenerCliente();
+                                    while ($row = $this->data['data']->fetch_assoc()){
+                                    $skSocioImportador =$row['skSocioEmpresa'];
+                                    }
+                                    echo $skSocioImportador;
+                                    return true;
+                            break;
+                            case 'obtenerBl':
+                                    $this->previos['sReferencia'] = htmlentities(($_POST['sReferencia']));
+                                    $this->data['data'] = $this->obtenerBl();
+                                    while ($row = $this->data['data']->fetch_assoc()){
+                                    $sBlMaster =$row['sBlMaster'];
+                                    }
+                                    echo $sBlMaster;
                                     return true;
                             break;
                     }
@@ -180,13 +202,12 @@
 
                 $this->previos['skSocioRecinto'] = utf8_decode(!empty($_POST['skSocioRecinto']) ? $_POST['skSocioRecinto'] : '');
                 $this->previos['skUsuarioTramitador'] = utf8_decode(!empty($_POST['skUsuarioTramitador']) ? $_POST['skUsuarioTramitador'] : '');
-                $this->previos['dFechaProgramacion'] = utf8_decode(!empty($_POST['dFechaProgramacion']) ? date('Y-m-d', strtotime($_POST['dFechaProgramacion'])) : '');
-                //$this->previos['dFechaSolicitud'] = utf8_decode(!empty($_POST['dFechaSolicitud']) ? date('Y-m-d', strtotime($_POST['dFechaSolicitud'])) : date('Y-m-d'));
+                $this->previos['dFechaProgramacion'] = (!empty($_POST['dFechaProgramacion']) ? date('Y-m-d', strtotime($_POST['dFechaProgramacion'])) : '');
+                $this->previos['sBlMaster'] = addslashes(utf8_decode($_POST['sBlMaster']));
                 $this->previos['sSelloOrigen'] = addslashes(utf8_decode($_POST['sSelloOrigen']));
                 $this->previos['sSelloFinal'] = addslashes(utf8_decode($_POST['sSelloFinal']));
                 $this->previos['sNumeroFactura'] = addslashes(utf8_decode($_POST['sNumeroFactura']));
                 $this->previos['sPais'] = addslashes(utf8_decode($_POST['sPais']));
-                $this->previos['sObservacionesSolicitud'] = addslashes(utf8_decode($_POST['sObservacionesSolicitud']));
                 if (!$_POST['skSolicitudPrevio']) {
                     $skSolicitudPrevio = parent::create_previos();
                     if ($skSolicitudPrevio) {
@@ -438,4 +459,40 @@
 
             return true;
         }
+        public function prevfi_form()
+        {
+            $this->data['message'] = '';
+            $this->data['response'] = true;
+            $this->data['datos'] = false;
+            if($_POST){
+              $this->previos['skSolicitudPrevio'] = (!empty($_POST['skSolicitudPrevio']) ? $_POST['skSolicitudPrevio'] : '');
+              $this->previos['skEstatus'] = utf8_decode(!empty($_POST['skEstatus']) ? $_POST['skEstatus'] : '');
+              if ($_POST['skSolicitudPrevio']) {
+                $skSolicitudPrevio = parent::finalizar_previo();
+                if($skSolicitudPrevio){
+                  $this->data['response'] = true;
+                  $this->data['message'] = 'Registro actualizado con &eacute;xito.';
+                  header('Content-Type: application/json');
+                  echo json_encode($this->data);
+                  return true;
+                }else{
+                  $this->data['response'] = false;
+                  $this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
+                  header('Content-Type: application/json');
+                  echo json_encode($this->data);
+                  return false;
+                }
+
+              }
+            }
+            // skEstatus
+            if (isset($_GET['p1'])) {
+                $this->previos['skSolicitudPrevio'] = $_GET['p1'];
+                $this->data['datos'] = parent::detail_previo();
+            }
+            $this->load_view('prevfi-form', $this->data);
+
+            return true;
+        }
+
     }

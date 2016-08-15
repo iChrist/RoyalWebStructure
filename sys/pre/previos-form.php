@@ -40,14 +40,14 @@
           <label class="control-label col-md-2">Fecha de Programaci&oacute;n</label>
           <div class="col-md-4">
             <div data-date-format="dd-mm-yyyy" class="input-group input-medium date date-picker">
-              <input type="text" id="dFechaProgramacion" name="dFechaProgramacion" class="form-control" value="<?php echo (isset($result['dFechaSolicitud'])) ?  utf8_encode(date('d-m-Y', strtotime($result['dFechaSolicitud']))) : date('d-m-Y') ; ?>" >
+              <input type="text" id="dFechaProgramacion" name="dFechaProgramacion" class="form-control" value="<?php echo (isset($result['dFechaProgramacion']) ?  utf8_encode(date('d-m-Y', strtotime($result['dFechaProgramacion']))) : ''); ?>" >
               <span class="input-group-btn">
               <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
               </span>
             </div>
           </div>
-          <label class="control-label col-md-2">Cliente <span aria-required="true" class="required"> * </span> </label>
-          <div class="col-md-4">
+        <!--  <label class="control-label col-md-2">Cliente <span aria-required="true" class="required"> * </span> </label>
+        <div class="col-md-4">
               <select name="skSocioImportador" id="skSocioImportador" class="form-control form-filter input-sm">
                   <option value="">- Cliente -</option>
                   <?php
@@ -56,11 +56,13 @@
                           ?>
                           <option value="<?php echo $rImportador['skSocioEmpresa']; ?>" <?php echo (isset($result['skSocioImportador'])) ? ($result['skSocioImportador'] == $rImportador['skSocioEmpresa'] ? 'selected' : '' ) : ''; ?> > <?php echo utf8_encode($rImportador['sNombre']); ?> </option>
                           <?php
-                      }//ENDIF
-                  }//ENDWHILE
+                      }
+                  }
                   ?>
               </select>
-          </div>
+          </div>-->
+          <input type="hidden" name="skSocioImportador" id="skSocioImportador" value="">
+          <input type="hidden" name="sBlMaster" id="sBlMaster" value="">
         </div>
         <div class="form-group">
           <label class="control-label col-md-2">Recinto<span aria-required="true" class="required"> * </span> </label>
@@ -169,17 +171,10 @@
             </div>
 
         </div>
-        <div class="clearfix"><hr></div>
-        <div class="form-group">
-          <label class="control-label col-md-2">Motivo de Solicitud <span aria-required="true" class="required"> * </span> </label>
-          <div class="col-md-10">
-          <textarea name="sObservacionesSolicitud"placeholder="Motivo por el cual solicita el previo"class="form-control" rows="3"><?php echo (isset($result['sObservacionesSolicitud'])) ? $result['sObservacionesSolicitud'] : '' ; ?></textarea>
-          </div>
-        </div>
 
 
-        <div class="clearfix"></div>
-        <hr>
+
+
 
 
     </div>
@@ -187,17 +182,28 @@
 <div class="clearfix"></div>
 <script type="text/javascript">
     function obtenerDatos(){
-        //$("#dvDatos").empty();
+        if($("#sReferencia").val().trim() != ''){
+    	           $('.page-title-loading').css('display','inline');
+                 $('.filter-submit').click();
+    	           $.post("",{ axn : "obtenerDatos" , sReferencia : $("#sReferencia").val() }, function(data){
+                    $("#dvDatos").html(data);
+                  //POST para traer cliente, BL y Contenedor
+                  if($("#skSolicitudPrevio").val().trim() == ''){
+                    $.post("",{ axn : "obtenerCliente" , sReferencia : $("#sReferencia").val() }, function(data){
+                      $("#skSocioImportador").val(data);
+                    });
+                    $.post("",{ axn : "obtenerBl" , sReferencia : $("#sReferencia").val() }, function(data){
+                     $("#sBlMaster").val(data);
+                    });
+                  }
 
-    	  $('.page-title-loading').css('display','inline');
-    	 $.post("",{ axn : "obtenerDatos" , sReferencia : $("#sReferencia").val() }, function(data){
-            //    $("#dvDatos").empty();
-                $("#dvDatos").html(data);
+
                 $('.page-title-loading').css('display','none');
                 });
+          }
     			}
     $(document).ready(function(){
-
+      obtenerDatos();
         // VALIDADOR PARA OBTENER DATOS POR REFERENCIA //
         $.validator.addMethod(
             "obtenerDatos",
@@ -227,7 +233,7 @@
                       data: {
                         sReferencia: function (){return $( "#sReferencia" ).val();},
                         axn: "validarReferencia",
-                        skSolicitudRevalidacion:  function (){return $( "#skSolicitudRevalidacion" ).val();}
+                        skSolicitudPrevio:  function (){return $( "#skSolicitudPrevio" ).val();}
                       }
                     }
 
@@ -275,7 +281,7 @@
               sReferencia:{
                   required:"Ingresa una Referencia",
                   remote: function(){
-                      return 'La referencia "'+$("#sReferencia").val()+'" no Existe.';
+                      return 'La referencia "'+$("#sReferencia").val()+'" no existe,no contiene una primera clasificacion o ya cuenta con un previo.';
                   }
               },
               skSocioImportador:{
