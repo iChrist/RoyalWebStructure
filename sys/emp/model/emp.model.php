@@ -827,8 +827,14 @@ Class Emp_Model Extends Core_Model {
     }
 
     public function update_empresas() {
+        $this->db->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
         $sql = "UPDATE rel_cat_empresas_cat_tipos_empresas SET skTipoEmpresa = '" . $this->tipoempresas['skTipoEmpresa'] . "' WHERE skEmpresa = '" . $this->empresas['skEmpresa'] . "' ";
-        $this->db->query($sql);
+        //exit('<pre>'.print_r($sql,1).'</pre>');
+        $result = $this->db->query($sql);
+        if(!$result) {
+            $this->db->rollback();
+            return FALSE;
+        }
         $sql = "UPDATE cat_empresas  SET ";
         if (!is_null($this->empresas['sNombre'])) {
             $sql .=" sNombre = '" . $this->empresas['sNombre'] . "' ,";
@@ -852,13 +858,14 @@ Class Emp_Model Extends Core_Model {
             $sql .=" skStatus = '" . $this->empresas['skStatus'] . "' ,";
         }
         $sql .= " skEmpresa = '" . $this->empresas['skEmpresa'] . "' WHERE skEmpresa = '" . $this->empresas['skEmpresa'] . "' LIMIT 1";
-        //echo $sql;
+        exit('<pre>'.print_r($sql,1).'</pre>');
         $result = $this->db->query($sql);
-        if ($result) {
-            return $this->empresas['skEmpresa'];
-        } else {
-            return false;
+        if(!$result) {
+            $this->db->rollback();
+            return FALSE;
         }
+        $this->db->commit();
+        return $this->empresas['skEmpresa'];
     }
 
     public function read_empresa() {

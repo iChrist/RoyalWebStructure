@@ -1281,21 +1281,23 @@ Class Emp_Controller Extends Emp_Model {
                     return true;
                     break;
                 case "insert":
+                    //exit('<pre>'.print_r($_POST,1).'</pre>');
                     $this->data['response'] = true;
                     $this->data['message'] = 'Registro creado con &eacute;xito.';
                     $datos = array();
                     $datos['skEmpresa'] = !empty($_POST['skEmpresa']) ? $_POST['skEmpresa'] : substr(md5(microtime()), 1, 32);
+                    $datos['skEmpresa'] = 'EMPRESA-aaaaaaaaaaaaaaaaaaaaaaa';
                     $datos['sRFC'] = !empty($_POST['sRFC']) ? addslashes(trim(utf8_decode($_POST['sRFC']))) : "";
                     $datos['sNombre'] = !empty($_POST['sNombre']) ? addslashes(trim(utf8_decode($_POST['sNombre']))) : "";
                     $datos['sNombreCorto'] = !empty($_POST['sNombreCorto']) ? addslashes(trim(utf8_decode($_POST['sNombreCorto']))) : "";
                     $datos['skStatus'] = addslashes(trim(utf8_decode($_POST['skStatus'])));
+                    $datos['skTipoEmpresa'] = addslashes(trim(utf8_decode($_POST['skTipoEmpresa'])));
                     
                     if (empty($_POST['skEmpresa'])) {
                         if (parent::create_empresas($datos)) {
                             
                             $datos['skSocioEmpresa'] = !empty($_POST['skSocioEmpresa']) ? $_POST['skSocioEmpresa'] : substr(md5(microtime()), 1, 32);
-                            $datos['skSocioEmpresa'] = 'f9e430596c8e72b2238e524c6a69d59';
-                            $datos['skTipoEmpresa'] = addslashes(trim(utf8_decode($_POST['skTipoEmpresa'])));
+                            $datos['skSocioEmpresa'] = 'SOCIO-EMPRESA-bbbbbbbbbbbbbbbbb';
                             
                             if (!parent::create_empresas_socios($datos)) {
                                 $this->data['response'] = false;
@@ -1370,6 +1372,7 @@ Class Emp_Controller Extends Emp_Model {
                             echo json_encode($this->data);
                             return true;
                         } else {
+                            exit('FALSE => parent::update_empresas()');
                             $this->data['response'] = true;
                             $this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
                             header('Content-Type: application/json');
@@ -1418,6 +1421,7 @@ Class Emp_Controller Extends Emp_Model {
                     // CORRESPONSALIAS
                     $sociosEmpresasRelacionCorresponsalias = parent::get_empresas_socios_relacion($this->data['socioEmpresa']['skSocioEmpresa'],'CORR');
                     $this->data['sociosEmpresasRelacionCorresponsalias'] = ($sociosEmpresasRelacionCorresponsalias) ? Core_Functions::result_array($sociosEmpresasRelacionCorresponsalias) : false;
+                    
                     // PROMOTORES
                     $sociosEmpresasRelacionPromotores = parent::get_empresas_socios_relacion($this->data['socioEmpresa']['skSocioEmpresa'],'PROM');
                     $this->data['sociosEmpresasRelacionPromotores'] = ($sociosEmpresasRelacionPromotores) ? Core_Functions::result_array($sociosEmpresasRelacionPromotores) : false;
