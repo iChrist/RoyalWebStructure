@@ -405,11 +405,11 @@
         }
         private function solicitudprevio_pdf()
         {
-            if (isset($_GET['p1'])) {
+            if(isset($_GET['p1'])) {
                 $this->previos['skSolicitudPrevio'] = $_GET['p1'];
                 $datos = parent::read_like_previos();
                 if ($datos) {
-                    $this->data['datos'] = $datos->fetch_assoc();
+                    $this->data['datos'] = $datos;
                     $result = $this->data['datos'] = $datos->fetch_assoc();
                                 //echo $result['sReferencia'];
                                 $this->previos['sReferencia'] = $result['sReferencia'];

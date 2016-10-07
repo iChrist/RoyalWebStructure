@@ -1,8 +1,12 @@
 <?php
+//exit('<pre>'.print_r($data['conceptosEmpresa'],1).'</pre>');
+echo('<pre>'.print_r($data['sociosEmpresasRelacionCorresponsalias'],1).'</pre>');
+exit('<pre>'.print_r($data['sociosEmpresasRelacionPromotores'],1).'</pre>');
 $result = array();
-if ($data['datos']) {
-    $result = $data['datos']->fetch_assoc();
+if(isset($data['socioEmpresa'])){
+    $result = $data['socioEmpresa'];
 }
+
 $arrayTiposEmpresas = array();
 if (isset($data['tiposEmpresas'])) {
     if ($data['tiposEmpresas']->num_rows > 0) {
@@ -38,9 +42,9 @@ if (isset($data['status'])) {
                 <!-- FORMULARIO DE DATOS GENERALES DE EMPRESAS !-->
 
                 <div class="form-body"> 
-                    <input type="hidden" name="axn" value="insert">
-                    <input type="hidden" name="skSocioEmpresa"  id="skSocioEmpresa" value="<?php echo (isset($result['skSocioEmpresa'])) ? $result['skSocioEmpresa'] : '' ; ?>">
-                    <input type="hidden" name="skEmpresa"  id="skEmpresa" value="<?php echo (isset($result['skEmpresa'])) ? $result['skEmpresa'] : ''; ?>">
+                    <input type="text" name="axn" value="insert">
+                    <input type="text" name="skSocioEmpresa"  id="skSocioEmpresa" value="<?php echo (isset($result['skSocioEmpresa'])) ? $result['skSocioEmpresa'] : ''; ?>">
+                    <input type="text" name="skEmpresa"  id="skEmpresa" value="<?php echo (isset($result['skEmpresa'])) ? $result['skEmpresa'] : ''; ?>">
                     <div class="form-group">
                         <label class="control-label col-md-2">RFC
                         </label>
@@ -75,140 +79,158 @@ if (isset($data['status'])) {
 
                     <div class="form-group">
                         <label class="control-label col-md-2">Tipo de Empresa <span aria-required="true" class="required"> * </span>  </label>
-<?php
-if ($data['tiposEmpresas']) {
-    ?>
+                        <?php
+                        if ($data['tiposEmpresas']) {
+                            ?>
                             <div class="col-md-4">
                                 <select class="form-control"id="skTipoEmpresa" name="skTipoEmpresa">
                                     <option value="">- Seleccione -</option>
-    <?php foreach ($data['tiposEmpresas'] as $profile) { ?>
+                                    <?php foreach ($data['tiposEmpresas'] as $profile) { ?>
                                         <option value="<?php echo $profile['skTipoEmpresa']; ?>"
                                         <?php
                                         if (isset($result['skTipoEmpresa'])) {
                                             echo ($result['skTipoEmpresa'] == $profile['skTipoEmpresa'] ? 'selected="selected"' : '');
                                         }
                                         ?>>
-                                        <?php echo $profile['sNombre']; ?></option>
+                                            <?php echo $profile['sNombre']; ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
-                                        <?php }
-                                    ?>
+                        <?php }
+                        ?>
 
 
                     </div>
 
                     <!-- CORRESPONSALES !-->
-                    <div class="form-group skCorresponsalia" <?php if (isset($result['skTipoEmpresa']) && $result['skTipoEmpresa'] == 'CLIE') {
-                                        echo 'style="display:block;"';
-                                    } else {
-                                        echo 'style="display:none;"';
-                                    }//ENDIF  ?>>
+                    <div class="form-group corresponsalias" <?php
+                    if (isset($result['skTipoEmpresa']) && $result['skTipoEmpresa'] == 'CLIE') {
+                        echo 'style="display:block;"';
+                    } else {
+                        echo 'style="display:none;"';
+                    }//ENDIF  
+                    ?>>
                         <label class="control-label col-md-2">Corresponsalia <span aria-required="true" class="required"> * </span> </label>
                         <?php
                         if ($data['corresponsalias']) {
                             ?>
                             <div class="col-md-4">
-                                <select class="form-control skCorresponsalia" id="skCorresponsalia" name="skCorresponsalia">
+                                <select class="form-control corresponsalias" id="corresponsalias" name="corresponsalia">
                                     <option value="">- Seleccione Corresponsalia -</option>
                                     <?php foreach ($data['corresponsalias'] as $corresponsalia) { ?>
-                                        <option value="<?php echo $corresponsalia['skEmpresa']; ?>"
+                                        <option value="<?php echo $corresponsalia['skSocioEmpresa']; ?>"
                                         <?php
-                                        if (isset($result['skCorresponsalia'])) {
-                                            echo ($result['skCorresponsalia'] == $corresponsalia['skEmpresa'] ? 'selected="selected"' : '');
-                                        }
+                                            if(isset($data['sociosEmpresasRelacion']) && ($data['sociosEmpresasRelacion'])) {
+                                                foreach($data['sociosEmpresasRelacion'] AS $k=>&$v){
+                                                    if($v['skSocioEmpresaRelacion']==$corresponsalia['skSocioEmpresa']){
+                                                        echo 'selected="selected"';
+                                                        $v['skSocioEmpresaRelacion'] = NULL;
+                                                    }
+                                                    //echo ($v['skSocioEmpresaRelacion']==$corresponsalia['skSocioEmpresa']) ? 'selected="selected"' : '';
+                                                }
+                                            }
+                                        /*if (isset($result['corresponsalias'])) {
+                                            echo ($result['corresponsalias'] == $corresponsalia['skSocioEmpresa'] ? 'selected="selected"' : '');
+                                        }*/
                                         ?>
                                                 ><?php echo $corresponsalia['sNombre']; ?></option>
-                                            <?php }//ENDFOREACH  ?>
+                                            <?php }//ENDFOREACH   ?>
                                 </select>
                             </div>
                             <?php
                         }//ENDIF
                         ?>
                     </div>
+
                     <!-- PROMOTORES !-->
-                    <div class="form-group skPromotor" <?php if (isset($result['skTipoEmpresa']) && $result['skTipoEmpresa'] == 'CLIE') {
+                    <div class="form-group" id="promotores" <?php
+                        if (isset($result['skTipoEmpresa']) && $result['skTipoEmpresa'] == 'CLIE') {
                             echo 'style="display:block;"';
                         } else {
                             echo 'style="display:none;"';
-                        }//ENDIF ?>>
-                        <label class="control-label col-md-2">Promotor 1 </label>
-<?php
-if ($data['promotores']) {
-    ?>
-                            <div class="col-md-4">
-                                <select class="form-control"id="skPromotor1" name="skPromotor1">
-                                    <option value="">- Seleccione Promotor -</option>
-                                    <?php foreach ($data['promotores'] as $promotor) { ?>
-                                        <option value="<?php echo $promotor['skPromotores']; ?>"
-                                        <?php
-                                        if (isset($result['skPromotor1'])) {
-                                            echo ($result['skPromotor1'] == $promotor['skPromotores'] ? 'selected="selected"' : '');
-                                        }
-                                        ?>
-                                                ><?php echo $promotor['sNombre']; ?></option>
-                            <?php }//ENDFOREACH ?>
-                                </select>
-                            </div>
-    <?php
-}//ENDIF
-?>
-                    </div>
-                    <div class="form-group skPromotor" <?php if (isset($result['skTipoEmpresa']) && $result['skTipoEmpresa'] === 'CLIE') {
-    echo 'style="display:block;"';
-} else {
-    echo 'style="display:none;"';
-}//ENDIF  ?>>
-                        <label class="control-label col-md-2">Promotor 2 </label>
-                                <?php
-                                if ($data['promotores']) {
-                                    ?>
-                            <div class="col-md-4">
-                                <select class="form-control"id="skPromotor2" name="skPromotor2">
-                                    <option value="">- Seleccione Promotor -</option>
-                                            <?php foreach ($data['promotores'] as $promotor) { ?>
-                                        <option value="<?php echo $promotor['skPromotores']; ?>"
-        <?php
-        if (isset($result['skPromotor2'])) {
-            echo ($result['skPromotor2'] == $promotor['skPromotores'] ? 'selected="selected"' : '');
-        }
-        ?>
-                                                ><?php echo $promotor['sNombre']; ?></option>
-    <?php }//ENDFOREACH  ?>
-                                </select>
-                            </div>
-    <?php
-}//ENDIF
-?>
-                    </div>
-
-
-                    <!--
+                        }//ENDIF  
+                        ?>>
                         <div class="form-group">
-                           <label class="control-label col-md-2">Estatus <span aria-required="true" class="required"> * </span></label>
-                    <?php
-                    if ($data['status']) {
-                        ?>
-                                               <div class="col-md-4">
-                                               <select class="form-control"id="skStatus" name="skStatus">
-                                                               <option value=""> Seleccionar...</option>
-                        <?php foreach ($data['status'] as $status) { ?>
-                                                                   <option value="<?php echo $status['skStatus']; ?>"
+                            <label class="control-label col-md-2">Promotor </label>
                             <?php
-                            if (isset($result['skStatus'])) {
-                                echo ($result['skStatus'] == $status['skStatus'] ? 'selected="selected"' : '');
-                            }
-                            ?>>
-                            <?php echo $status['sName']; ?></option>
-    <?php } ?>
-                                               </select>
-                                              </div>
-    <?php }
-?>
-           
-           
-                       </div>
-                    !-->
+                            if ($data['promotores']) {
+                                ?>
+                                <div class="col-md-4">
+                                    <select class="form-control " name="promotores[]">
+                                        <option value="">- Seleccione Promotor -</option>
+                                        <?php foreach ($data['promotores'] as $promotor) { ?>
+                                            <option value="<?php echo $promotor['skSocioEmpresa']; ?>"
+                                            <?php
+                                            if(isset($data['sociosEmpresasRelacion']) && ($data['sociosEmpresasRelacion'])) {
+                                                foreach($data['sociosEmpresasRelacion'] AS $k=>&$v){
+                                                    if($v['skSocioEmpresaRelacion']==$promotor['skSocioEmpresa']){
+                                                        echo 'selected="selected"';
+                                                        $v['skSocioEmpresaRelacion'] = NULL;
+                                                    }
+                                                    //echo ($v['skSocioEmpresaRelacion']==$promotor['skSocioEmpresa']) ? 'selected="selected"' : '';
+                                                }
+                                            }
+                                            ?>
+                                                    ><?php echo $promotor['sNombre']; ?></option>
+                                                <?php }//ENDFOREACH  
+                                                    $data['promotores']->data_seek(0);
+                                                ?>
+                                    </select>
+                                </div>
+                                <?php
+                            }//ENDIF
+                            ?>
+                        </div>
+                        <!-- PROMOTOR 2 (BEGIN)!-->
+                        <div class="form-group">
+                            <label class="control-label col-md-2">Promotor </label>
+                            <?php
+                            if ($data['promotores']) {
+                                ?>
+                                <div class="col-md-4">
+                                    <select class="form-control " name="promotores[]">
+                                        <option value="">- Seleccione Promotor -</option>
+                                        <?php foreach ($data['promotores'] as $promotor) { ?>
+                                            <option value="<?php echo $promotor['skSocioEmpresa']; ?>"
+                                            <?php
+                                            if(isset($data['sociosEmpresasRelacion']) && ($data['sociosEmpresasRelacion'])) {
+                                                foreach($data['sociosEmpresasRelacion'] AS $k=>&$v){
+                                                    if($v['skSocioEmpresaRelacion']==$promotor['skSocioEmpresa']){
+                                                        echo 'selected="selected"';
+                                                        $v['skSocioEmpresaRelacion'] = NULL;
+                                                    }
+                                                    //echo ($v['skSocioEmpresaRelacion']==$promotor['skSocioEmpresa']) ? 'selected="selected"' : '';
+                                                }
+                                            }
+                                            ?>
+                                                    ><?php echo $promotor['sNombre']; ?></option>
+                                                <?php }//ENDFOREACH  
+                                                    $data['promotores']->data_seek(0);
+                                                ?>
+                                    </select>
+                                </div>
+                                <?php
+                            }//ENDIF
+                            //exit('<pre>'.print_r($data['sociosEmpresasRelacion'],1).'</pre>');
+                            ?>
+                        </div>
+                        <!-- PROMOTOR 2 (END) !-->
+                    </div>
+                    
+                    
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Promotor </label>
+                        <div class="col-md-4">
+                            <select class="form-control select_promotores" name="promotores[]" multiple="multiple">
+                                <option value="1">UNO</option>
+                                <option value="2">DOS</option>
+                                <option value="3" selected="selected">TRES</option>
+                                <option value="4">CUATRO</option>
+                                <option value="5" selected="selected">CINCO</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <!-- STATUS -->
                     <div class="form-group">
                         <label class="control-label col-md-2">Estatus <span aria-required="true" class="required"> * </span>
@@ -280,15 +302,15 @@ if ($data['promotores']) {
                                                                     <div class="radio">
                                                                         <label>
                                                                             <input type="radio" name="skTipoTramite[<?php echo $i; ?>]"  class="skTipoTramite" value="<?php echo utf8_encode($rTipoTramite['skTipoTramite']); ?>" <?php echo ($rTipoTramite['skTipoTramite'] == $row['skTipoTramite']) ? 'checked="checked"' : ''; ?> >
-                                                                    <?php echo utf8_encode($rTipoTramite['sNombre']); ?>
+                                                                            <?php echo utf8_encode($rTipoTramite['sNombre']); ?>
                                                                         </label>
 
                                                                     </div>
                                                                     <br><br>
-                <?php
-            }//ENDFOREACH
-        }//ENDIF
-        ?>
+                                                                    <?php
+                                                                }//ENDFOREACH
+                                                            }//ENDIF
+                                                            ?>
 
                                                         </div>
                                                     </div>
@@ -360,6 +382,31 @@ if ($data['promotores']) {
 <div class="clearfix"></div>
 
 <script type="text/javascript">
+    function getEmpresa() {
+        var response = true;
+        $.ajax({
+            method: "POST",
+            url: "",
+            cache: false,
+            async: false,
+            data: {
+                axn: "getEmpresa",
+                sRFC: $("#sRFC").val(),
+                skEmpresa: $("#skEmpresa").val()
+            }
+        }).done(function (data) {
+            if (data.length == 0) {
+                response = true;
+                return true;
+            }
+            console.warn(data);
+            $("#sNombre").val(data.sNombre);
+            $("#sNombreCorto").val(data.sNombreCorto);
+            $("#skEmpresa").val(data.skEmpresa);
+            response = true;
+        });
+        return response;
+    }
     var serviciosExpo = null;
     var serviciosImpo = null;
     var serviciosTipoEmpresa = null;
@@ -494,13 +541,16 @@ if ($data['promotores']) {
          */
         $("#skTipoEmpresa").change(function () {
             if ($(this).val() == "CLIE") {
-                $(".skCorresponsalia").css("display", "block");
-                $(".skPromotor").css("display", "block");
+                $(".corresponsalias").css("display", "block");
+                $("#promotores").css("display", "block");
+                
+                /*$(".corresponsalias").css("display", "block");
+                $(".skPromotor").css("display", "block");*/
             } else {
-                $("#skCorresponsalia").val("");
+                $("#corresponsalias").val("");
                 $("#skPromotor1").val("");
                 $("#skPromotor2").val("");
-                $(".skCorresponsalia").css("display", "none");
+                $(".corresponsalias").css("display", "none");
                 $(".skPromotor").css("display", "none");
             }
         });
@@ -536,6 +586,18 @@ if ($data['promotores']) {
          }
          }*/
 
+
+
+        // VALIDADOR PARA OBTENER DATOS POR REFERENCIA //
+        $.validator.addMethod(
+                "getEmpresa",
+                function (value, element) {
+                    getEmpresa();
+                    return true;
+                },
+                ""
+                );
+
         /*
          * Aquí se valida el formulario.
          */
@@ -545,27 +607,30 @@ if ($data['promotores']) {
             focusInvalid: true, // do not focus the last invalid input
             ignore: "",
             rules: {
-                /*sRFC:{
-                 required: true,
-                 remote: {
-                 url: "",
-                 type: "post",
-                 data: {
-                 sRFC: function (){return $( "#sRFC" ).val();},
-                 axn: "validarRFC",
-                 skEmpresa:  function (){return $( "#skEmpresa" ).val();}
-                 }
-                 }
-                 
-                 },*/
-
+                sRFC: {
+                    required: true,
+                    remote: {
+                        url: "",
+                        type: "post",
+                        data: {
+                            sRFC: function () {
+                                return $("#sRFC").val();
+                            },
+                            axn: "validarRFC",
+                            skEmpresa: function () {
+                                return $("#skEmpresa").val();
+                            }
+                        }
+                    },
+                    getEmpresa: true
+                },
                 skTipoEmpresa: {
                     required: true
                 },
                 sNombre: {
                     required: true
                 },
-                skCorresponsalia: {
+                corresponsalias: {
                     required: function () {
                         if ($("#skTipoEmpresa").val() != "CLIE") {
                             return false;
@@ -623,17 +688,17 @@ if ($data['promotores']) {
                 icon.removeClass("fa-warning").addClass("fa-check");
             },
             messages: {
-                /*sRFC:{
-                 required: "Campo obligatorio.",
-                 remote: "El RFC Ingresado ya Existe."
-                 },*/
+                sRFC: {
+                    required: "Campo obligatorio.",
+                    remote: "El RFC ingresado ya existe."
+                },
                 skTipoEmpresa: {
                     required: "Campo obligatorio."
                 },
                 sNombre: {
                     required: "Campo obligatorio."
                 },
-                skCorresponsalia: {
+                corresponsalias: {
                     required: "Campo obligatorio."
                 },
                 /*"skTipoTramite[]":{
@@ -674,5 +739,11 @@ if ($data['promotores']) {
         $('body').delegate('._add_multiple_rows_delete_row', 'click', function () {
             _add_multiple_rows_delete_row(this);
         });
+        
+        $(".select_promotores").select2({
+            tags: true
+        });
+
+        
     });
 </script>

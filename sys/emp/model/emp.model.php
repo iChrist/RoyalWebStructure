@@ -813,10 +813,10 @@ Class Emp_Model Extends Core_Model {
                 'AC',
                 CURRENT_TIMESTAMP(), 
                 '" . $_SESSION['session']['skUsers'] . "')";
-            exit('<pre>' . print_r($sql, 1) . '</pre>');
+            //exit('<pre>' . print_r($sql, 1) . '</pre>');
             $result = $this->db->query($sql);
-            $sql = "INSERT INTO rel_cat_empresas_cat_tipos_empresas(skEmpresa,skTipoEmpresa) VALUES('" . $this->empresas['skEmpresa'] . "','" . $this->tipoempresas['skTipoEmpresa'] . "')";
-            $result = $this->db->query($sql);
+            //$sql = "INSERT INTO rel_cat_empresas_cat_tipos_empresas(skEmpresa,skTipoEmpresa) VALUES('" . $this->empresas['skEmpresa'] . "','" . $this->tipoempresas['skTipoEmpresa'] . "')";
+            //$result = $this->db->query($sql);
             if ($result) {
                 return TRUE;
             } else {
@@ -914,9 +914,9 @@ Class Emp_Model Extends Core_Model {
 
     public function count_socios() {
         $sql = "SELECT COUNT(*) AS total FROM
-								rel_empresas_socios res
-								INNER JOIN cat_empresas ce ON ce.skEmpresa = res.skEmpresa
-								WHERE 1=1 ";
+            rel_empresas_socios res
+            INNER JOIN cat_empresas ce ON ce.skEmpresa = res.skEmpresa
+            WHERE 1=1 ";
         if (!empty($_SESSION['session']['skSocioEmpresaPropietario'])) {
             $sql .=" AND res.skSocioEmpresaP = '" . $_SESSION['session']['skSocioEmpresaPropietario'] . "'";
         }
@@ -1016,6 +1016,54 @@ Class Emp_Model Extends Core_Model {
             }
         }
     }
+    
+    public function create_empresas_socios($datos = array()){
+        if ($datos) {
+            $sql = "INSERT INTO rel_empresas_socios
+            (skSocioEmpresa,skEmpresa,skSocioEmpresaP,skTipoEmpresa,skEstatus,skUsuarioCreacion,dFechaCreacion) VALUES(
+            '".$datos['skSocioEmpresa']."',
+            '".$datos['skEmpresa']."',
+            '".$_SESSION['session']['skSocioEmpresaPropietario']."',
+            '".$datos['skTipoEmpresa']."',
+            '".$datos['skStatus']."',
+            '".$_SESSION['session']['skUsers']."',
+            CURRENT_TIMESTAMP()
+            )";
+            //exit('<pre>' . print_r($sql, 1) . '</pre>');
+            $result = $this->db->query($sql);
+            if ($result) {
+                return TRUE;
+            } else {
+                return FALSE;
+            }
+        }
+        return FALSE;
+    }
+    
+    public function create_empresas_socios_relacion($datos = array()){
+        if($datos){
+            if(isset($datos['corresponsalia']) && !empty($datos['corresponsalia'])){
+                $sql = "INSERT INTO rel_empresas_socios_relacion (skSocioEmpresa,skSocioEmpresaRelacion) VALUES (
+                '".$datos['skSocioEmpresa']."',
+                '".$datos['corresponsalia']."'
+                )";
+                $result = $this->db->query($sql);
+                if(!$result){ FALSE; }
+            }
+            if(isset($datos['promotores']) && is_array($datos['promotores'])){
+                foreach($datos['promotores'] AS $k=>&$v){
+                    $sql = "INSERT INTO rel_empresas_socios_relacion (skSocioEmpresa,skSocioEmpresaRelacion) VALUES (
+                    '".$datos['skSocioEmpresa']."',
+                    '".$v."'
+                    )";
+                    $result = $this->db->query($sql);
+                    if(!$result){ FALSE; }
+                }
+                return True;
+            }
+        }
+        return TRUE;
+    }
 
     /* TERMINA MODULO DE SOCIOS DE EMPRESAS */
 
@@ -1033,9 +1081,8 @@ Class Emp_Model Extends Core_Model {
         }
     }
 
-    public function getConceptosEmpresa() {
-        $sql = "SELECT empTarCon.* FROM rel_cat_empresas_tarifas_conceptos AS empTarCon WHERE empTarCon.skEmpresa = '" . $this->empresas['skEmpresa'] . "' ";
-
+    public function getConceptosEmpresa($skSocioEmpresa) {
+        $sql = "SELECT empTarCon.* FROM rel_cat_empresas_tarifas_conceptos AS empTarCon WHERE empTarCon.skSocioEmpresa = '" . $skSocioEmpresa. "' ";
         //exit($sql);
         $result = $this->db->query($sql);
         if ($result) {
@@ -1108,11 +1155,12 @@ Class Emp_Model Extends Core_Model {
     }
 
     // CREATE rel_cat_empresas_tarifas_conceptos (empTarCon) //
-    public function create_empTarCon() {
+    public function create_empTarCon($datos) {
         $sql = "INSERT INTO rel_cat_empresas_tarifas_conceptos
                     (
                         skEmpresaTarifaConcepto
-                        ,skEmpresa
+                        ,skSocioEmpresa
+                        ,skSocioEmpresaPropietario
                         ,skTipoTramite
                         ,skConcepto
                         ,skDivisa
@@ -1120,12 +1168,13 @@ Class Emp_Model Extends Core_Model {
                         ,skUserCreacion
                         ,dFechaCreacion
                     ) VALUES(
-                        '" . $this->empTarCon['skEmpresaTarifaConcepto'] . "',
-                        '" . $this->empTarCon['skEmpresa'] . "',
-                        '" . $this->empTarCon['skTipoTramite'] . "',
-                        '" . $this->empTarCon['skConcepto'] . "',
-                        '" . $this->empTarCon['skDivisa'] . "',
-                        '" . $this->empTarCon['fPrecioUnitario'] . "',
+                        '" . $datos['skEmpresaTarifaConcepto'] . "',
+                        '" . $datos['skSocioEmpresa'] . "',
+                        '" . $_SESSION['session']['skSocioEmpresaPropietario'] . "',
+                        '" . $datos['skTipoTramite'] . "',
+                        '" . $datos['skConcepto'] . "',
+                        '" . $datos['skDivisa'] . "',
+                        '" . $datos['fPrecioUnitario'] . "',
                         '" . $_SESSION['session']['skUsers'] . "',
                         CURRENT_TIMESTAMP()
 
@@ -1139,8 +1188,9 @@ Class Emp_Model Extends Core_Model {
         }
     }
 
-    public function delete_empTarCon() {
-        $sql = "DELETE FROM rel_cat_empresas_tarifas_conceptos WHERE skEmpresa = '" . $this->empTarCon['skEmpresa'] . "' ";
+    public function delete_empTarCon($datos) {
+        //$sql = "DELETE FROM rel_cat_empresas_tarifas_conceptos WHERE skEmpresa = '" . $this->empTarCon['skEmpresa'] . "' ";
+        $sql = "DELETE FROM rel_cat_empresas_tarifas_conceptos WHERE skSocioEmpresa = '" . $datos['skSocioEmpresa'] . "' ";
         //exit($sql);
         $result = $this->db->query($sql);
         if ($result) {
@@ -1359,6 +1409,86 @@ Class Emp_Model Extends Core_Model {
         } else {
             return false;
         }
+    }
+    
+    public function getEmpresa(&$sRFC, &$skEmpresa) {
+        $sql = "SELECT * FROM cat_empresas WHERE sRFC = '" . $sRFC . "'";
+        if (!is_null($skEmpresa)) {
+            $sql .= " AND skEmpresa = '" . $skEmpresa . "'";
+        }
+        //exit($sql);
+        $result = $this->db->query($sql);
+        if ($result) {
+            if ($result->num_rows > 0) {
+                return $result;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+    
+    public function get_empresa_socio($skEmpresa){
+        $sql = "SELECT e.skEmpresa,e.sNombre,e.sRFC,e.sNombreCorto,es.skSocioEmpresa,es.skSocioEmpresaP,es.skTipoEmpresa,es.skEstatus,es.skUsuarioCreacion FROM cat_empresas e
+            INNER JOIN rel_empresas_socios es ON es.skEmpresa = e.skEmpresa WHERE es.skEmpresa = '".$skEmpresa."' AND es.skSocioEmpresaP = '".$_SESSION['session']['skSocioEmpresaPropietario']."'";
+        //exit($sql);
+        $result = $this->db->query($sql);
+        if ($result) {
+            if ($result->num_rows > 0) {
+                return $result;
+            } else {
+                return false;
+            }
+        }
+    }
+    
+    public function get_empresas_socios_relacion($skSocioEmpresa, $skTipoEmpresa){
+    $sql = "SELECT esr.skSocioEmpresaRelacion, es.skTipoEmpresa FROM rel_empresas_socios_relacion esr "
+            . " INNER JOIN rel_empresas_socios es ON es.skSocioEmpresa = esr.skSocioEmpresaRelacion WHERE esr.skSocioEmpresa = '".$skSocioEmpresa."' AND es.skTipoEmpresa = '".$skTipoEmpresa."' ";
+        //exit($sql);
+        $result = $this->db->query($sql);
+        if ($result) {
+            if ($result->num_rows > 0) {
+                return $result;
+            } else {
+                return false;
+            }
+        } 
+    }
+    
+    public function get_empresas_byType($type){
+        $sql = "SELECT es.skSocioEmpresa, es.skEmpresa, e.sNombre, e.sNombreCorto, e.sRFC FROM rel_empresas_socios es
+        INNER JOIN cat_empresas e ON e.skEmpresa = es.skEmpresa
+        INNER JOIN cat_tipos_empresas te ON te.skTipoEmpresa = es.skTipoEmpresa
+        WHERE e.skStatus = 'AC' AND es.skSocioEmpresaP = '".$_SESSION['session']['skSocioEmpresaPropietario']."'
+        AND te.skTipoEmpresa = '".$type."'";
+        //exit($sql);
+        $result = $this->db->query($sql);
+        if ($result) {
+            if ($result->num_rows > 0) {
+                return $result;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+    
+    public function validarRFC(&$sRFC, &$skEmpresa) {
+        $sql = "SELECT * FROM cat_empresas WHERE sRFC = '" . $sRFC . "'";
+        if (!is_null($skEmpresa)) {
+            $sql .= " AND skEmpresa != '" . $skEmpresa . "'";
+        }
+        //exit($sql);
+        $result = $this->db->query($sql);
+        if ($result) {
+            if ($result->num_rows > 0) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

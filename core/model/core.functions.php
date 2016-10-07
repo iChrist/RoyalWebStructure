@@ -174,5 +174,23 @@ Class Core_Functions {
         }
         echo $html;
     }
+    
+    /**
+    * result_array
+    *
+    * @param	object		database query object
+    * @return	array
+    */
+    function result_array(&$result, $utf8 = FALSE){
+        $rows = array();
+        while($row = $result->fetch_assoc()) {
+            if($utf8){
+                array_push($rows, array_map(function(&$val){return utf8_encode($val);},$row));
+            }else{
+                array_push($rows, $row);
+            }
+        }
+        return $rows;
+    }
 }
 ?>

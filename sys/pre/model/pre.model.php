@@ -50,6 +50,10 @@
 						LEFT JOIN _users usj ON usj.skUsers = osp.skUsuarioEjecutivo
 						LEFT JOIN _users ust ON ust.skUsers = osp.skUsuarioTramitador
 						WHERE 1=1";
+
+            if (!empty($this->previos['skSolicitudPrevio'])) {
+                $sql .= " AND osp.skSolicitudPrevio = '".$this->previos['skSolicitudPrevio']."'";
+            }
             $sql .= ' ORDER BY osp.ikSolicitudPrevio DESC ';
 
             $result = $this->db->query($sql);
