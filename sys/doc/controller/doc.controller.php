@@ -329,9 +329,15 @@ class Doc_Controller extends Doc_Model
                     if (!empty($_POST['dRecepcion'])) {
                         $this->recepciondocumentos['dRecepcion'] = date('Y-m-d', strtotime($_POST['dRecepcion']));
                     }
+                    if (!empty($_POST['dRecepcionFin'])) {
+                        $this->recepciondocumentos['dRecepcionFin'] = date('Y-m-d', strtotime($_POST['dRecepcionFin']));
+                    }
 
                     if (!empty($_POST['dFechaCreacion'])) {
                         $this->recepciondocumentos['dFechaCreacion'] = date('Y-m-d', strtotime($_POST['dFechaCreacion']));
+                    }
+                    if (!empty($_POST['dFechaCreacionFin'])) {
+                        $this->recepciondocumentos['dFechaCreacionFin'] = date('Y-m-d', strtotime($_POST['dFechaCreacionFin']));
                     }
 
                     if (isset($_POST['skUsers'])) {

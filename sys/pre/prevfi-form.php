@@ -9,7 +9,8 @@
       echo "</PRE>";*/
 ?>
 <form id="_save" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
-    <input type="hidden" name="skSolicitudPrevio"  id="skSolicitudPrevio" value="<?php echo (isset($result['skSolicitudPrevio'])) ? $result['skSolicitudPrevio'] : '' ; ?>">
+  <input type="hidden" name="skSolicitudPrevio"  id="skSolicitudPrevio" value="<?php echo (isset($result['skSolicitudPrevio'])) ? $result['skSolicitudPrevio'] : '' ; ?>">
+  <input type="hidden" name="skEstatus"  id="skEstatus" value="FI">
     <div class="form-body">
       <div class="row">
         <div class="col-md-6">
@@ -188,17 +189,9 @@
 
 
 
-        <div class="clearfix"><hr></div>
-        <div class="form-group">
-          <label class="control-label col-md-2">Rechazo de Solicitud</label>
-          <div class="col-md-10">
-          <textarea name="sObservacionesRechazo"placeholder="Motivo por el cual Rechaza la solicitud"class="form-control" rows="3"></textarea>
-          </div>
-        </div>
 
 
-        <div class="clearfix"></div>
-        <hr>
+
 
 
     </div>

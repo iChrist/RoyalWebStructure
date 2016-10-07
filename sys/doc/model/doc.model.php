@@ -421,12 +421,20 @@ Class Doc_Model Extends Core_Model {
         if (!empty($this->recepciondocumentos['skClaveDocumento'])) {
             $sql .=" AND rd.skClaveDocumento like '%" . $this->recepciondocumentos['skClaveDocumento'] . "%'";
         }
-        if (!empty($this->recepciondocumentos['dFechaCreacion'])) {
-            $sql .=" AND DATE_FORMAT(rd.dFechaCreacion,'%Y-%m-%d') = '" . $this->recepciondocumentos['dFechaCreacion'] . "'";
-        }
-        if (!empty($this->recepciondocumentos['dRecepcion'])) {
+        
+        if (!empty($this->recepciondocumentos['dRecepcion']) && !empty($this->recepciondocumentos['dRecepcionFin'])) {
+            $sql .= " AND (DATE_FORMAT(rd.dRecepcion,'%Y-%m-%d') >= '" . date('Y-m-d', strtotime($this->recepciondocumentos['dRecepcion'])) . "' AND DATE_FORMAT(rd.dRecepcion,'%Y-%m-%d') <= '" . date('Y-m-d', strtotime($this->recepciondocumentos['dRecepcionFin'])) . "')";
+        }elseif(!empty($this->recepciondocumentos['dRecepcion'])){
             $sql .=" AND DATE_FORMAT(rd.dRecepcion,'%Y-%m-%d') = '" . $this->recepciondocumentos['dRecepcion'] . "'";
         }
+
+        if (!empty($this->recepciondocumentos['dFechaCreacion']) && !empty($this->recepciondocumentos['dFechaCreacionFin'])) {
+            $sql .= " AND (DATE_FORMAT(rd.dFechaCreacion,'%Y-%m-%d') >= '" . date('Y-m-d', strtotime($this->recepciondocumentos['dFechaCreacion'])) . "' AND DATE_FORMAT(rd.dFechaCreacion,'%Y-%m-%d') <= '" . date('Y-m-d', strtotime($this->recepciondocumentos['dFechaCreacionFin'])) . "')";
+        }elseif(!empty($this->recepciondocumentos['dFechaCreacion'])){
+            $sql .=" AND DATE_FORMAT(rd.dFechaCreacion,'%Y-%m-%d') = '" . $this->recepciondocumentos['dFechaCreacion'] . "'";
+        }
+
+
         if (!empty($this->recepciondocumentos['skCorresponsalia'])) {
             $sql .=" AND ce.skCorresponsalia = '" . $this->recepciondocumentos['skCorresponsalia'] . "'";
         }

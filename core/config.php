@@ -1,5 +1,5 @@
 <?php
-    error_reporting(E_ALL | E_STRICT);
+    error_reporting(E_ALL);
     ini_set('display_errors', TRUE);
     ini_set('display_startup_errors', TRUE);
     ini_set('memory_limit', '-1');

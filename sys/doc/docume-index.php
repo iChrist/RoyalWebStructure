@@ -46,8 +46,8 @@
                             <!--<th width="10%"> Corresponsalía </th>!-->
                             <th width="10%"> Mercancía </th>
                             <th width="10%"> Observaciones </th>
-                            <th width="10%"> Fecha/Hora Receci&oacute;n </th>
-                            <th width="10%"> Fecha/Hora Creaci&oacute;n </th>
+                            <th width="10%"> Fecha</th>
+                            <th width="10%"> Fecha</th>
                             <th width="25%"> Autor </th>
                             <!--<th width="10%"> Estatus </th>!-->
                         </tr>
@@ -154,7 +154,13 @@
 
                             <td>
                                 <div class="input-group input-group-sm date date-picker margin-bottom-5" data-date-format="dd-mm-yyyy">
-                                    <input type="text" class="form-control form-filter" id="dRecepcion" name="dRecepcion" placeholder="Fecha Recepci&oacute;n">
+                                    <input type="text" class="form-control form-filter" id="dRecepcion" name="dRecepcion" placeholder="De">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+                                    </span>
+                                </div>
+                                <div class="input-group input-group-sm date date-picker margin-bottom-5" data-date-format="dd-mm-yyyy">
+                                    <input type="text" class="form-control form-filter" id="dRecepcionFin" name="dRecepcionFin" placeholder="Hasta">
                                     <span class="input-group-btn">
                                         <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
                                     </span>
@@ -163,7 +169,13 @@
 
                             <td>
                                 <div class="input-group input-group-sm date date-picker margin-bottom-5" data-date-format="dd-mm-yyyy">
-                                    <input type="text" class="form-control form-filter" id="dFechaCreacion" name="dFechaCreacion" placeholder="Fecha Creaci&oacute;n">
+                                    <input type="text" class="form-control form-filter" id="dFechaCreacion" name="dFechaCreacion" placeholder="De">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+                                    </span>
+                                </div>
+                                <div class="input-group input-group-sm date date-picker margin-bottom-5" data-date-format="dd-mm-yyyy">
+                                    <input type="text" class="form-control form-filter" id="dFechaCreacionFin" name="dFechaCreacionFin" placeholder="Hasta">
                                     <span class="input-group-btn">
                                         <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
                                     </span>

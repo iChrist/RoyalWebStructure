@@ -12,10 +12,10 @@
     <input type="hidden" name="skSolicitudPrevio"  id="skSolicitudPrevio" value="<?php echo (isset($result['skSolicitudPrevio'])) ? $result['skSolicitudPrevio'] : '' ; ?>">
     <div class="form-body">
       <div class="row">
-            <label class="text-right col-md-2"><b>C&oacute;digo</b></label>
+            <label class="text-right col-md-2"><b>Referencia</b></label>
             <div class="col-md-4">
               <p class="text-left">
-                 <?php echo ($result['codigo'] ? utf8_encode($result['codigo']) : ' N/D') ; ?>
+                 <?php echo ($result['sReferencia'] ? utf8_encode($result['sReferencia']) : ' N/D') ; ?>
               </p>
             </div>
             <label class="text-right col-md-2"><b>Estatus</b></label>
@@ -34,10 +34,10 @@
                  <?php echo ($result['propietario'] ? utf8_encode($result['propietario']) : 'N/D') ; ?>
               </p>
             </div>
-            <label class="text-right col-md-2"><b>Fecha Solicitud</b></label>
+            <label class="text-right col-md-2"><b>Fecha Programacion</b></label>
             <div class="col-md-4">
               <p class="text-left">
-                 <?php echo ($result['fechaSolicitud'] ? date('d/m/Y H:i:s', strtotime($result['fechaSolicitud'])) : 'N/D') ; ?>
+                 <?php echo ($result['fechaProgramacion'] ? date('d/m/Y ', strtotime($result['fechaProgramacion'])) : 'N/D') ; ?>
               </p>
             </div>
 
@@ -150,6 +150,7 @@
           <hr>
         </div>
       </div>
+      <?php if ($data['myFotos']) { ?>
       <div class="row">
             <label class="text-right col-md-2"><b>Fotos del Previo</b></label>
             <div class="col-md-8">
@@ -177,6 +178,13 @@
               											</div>
                                     <?php
                                 }//ENDIF
+                            }else{
+                            ?>
+                            <label>No hay Fotos Cargadas para este previo</label>
+
+                            <?php
+
+
                             }//ENDWHILE
                             ?>
       											<!--<div class="col-md-3 col-sm-4 mix category_1">
@@ -199,6 +207,9 @@
 
             </div>
       </div>
+      <div class="clearfix"></div>
+      <hr>
+      <?php }?>
 
 
 
@@ -206,8 +217,7 @@
 
 
 
-        <div class="clearfix"></div>
-        <hr>
+
 </div>
 
     </div>
