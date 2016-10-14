@@ -1288,10 +1288,10 @@ Class Emp_Controller Extends Emp_Model {
                     
                     // EMPRESA //
                     $datos['skEmpresa'] = !empty($_POST['skEmpresa']) ? $_POST['skEmpresa'] : substr(md5(microtime()), 1, 32);
-                    $datos['skEmpresa'] = 'EMPRESA-aaaaaaaaaaaaaaaaaaaaaaa';
+                    //$datos['skEmpresa'] = 'EMPRESA-aaaaaaaaaaaaaaaaaaaaaaa';
                     // SOCIO EMPRESA //
                     $datos['skSocioEmpresa'] = !empty($_POST['skSocioEmpresa']) ? $_POST['skSocioEmpresa'] : substr(md5(microtime()), 1, 32);
-                    $datos['skSocioEmpresa'] = 'SOCIO-EMPRESA-bbbbbbbbbbbbbbbbb';
+                    //$datos['skSocioEmpresa'] = 'SOCIO-EMPRESA-bbbbbbbbbbbbbbbbb';
                     // DATOS EMPRESA //
                     $datos['sRFC'] = !empty($_POST['sRFC']) ? addslashes(trim(utf8_decode($_POST['sRFC']))) : NULL;
                     $datos['sNombre'] = !empty($_POST['sNombre']) ? addslashes(trim(utf8_decode($_POST['sNombre']))) : NULL;
