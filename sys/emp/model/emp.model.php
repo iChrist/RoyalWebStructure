@@ -826,26 +826,19 @@ Class Emp_Model Extends Core_Model {
         return FALSE;
     }
 
-    public function update_empresas() {
-        $this->db->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
-        $sql = "UPDATE rel_cat_empresas_cat_tipos_empresas SET skTipoEmpresa = '" . $this->tipoempresas['skTipoEmpresa'] . "' WHERE skEmpresa = '" . $this->empresas['skEmpresa'] . "' ";
-        //exit('<pre>'.print_r($sql,1).'</pre>');
-        $result = $this->db->query($sql);
-        if(!$result) {
-            $this->db->rollback();
-            return FALSE;
-        }
+    public function update_empresas($datos) {
+        //$this->db->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
         $sql = "UPDATE cat_empresas  SET ";
-        if (!is_null($this->empresas['sNombre'])) {
-            $sql .=" sNombre = '" . $this->empresas['sNombre'] . "' ,";
+        if (!is_null($datos['sNombre'])) {
+            $sql .=" sNombre = '" . $datos['sNombre'] . "' ,";
         }
-        if (!is_null($this->empresas['sNombreCorto'])) {
-            $sql .=" sNombreCorto = '" . $this->empresas['sNombreCorto'] . "' ,";
+        if (!is_null($datos['sNombreCorto'])) {
+            $sql .=" sNombreCorto = '" . $datos['sNombreCorto'] . "' ,";
         }
-        if (!is_null($this->empresas['sRFC'])) {
-            $sql .=" sRFC = '" . $this->empresas['sRFC'] . "' ,";
+        if (!is_null($datos['sRFC'])) {
+            $sql .=" sRFC = '" . $datos['sRFC'] . "' ,";
         }
-        if (!is_null($this->empresas['skCorresponsalia'])) {
+        /*if (!is_null($this->empresas['skCorresponsalia'])) {
             $sql .=" skCorresponsalia = '" . $this->empresas['skCorresponsalia'] . "' ,";
         }
         if (!is_null($this->empresas['skPromotor1'])) {
@@ -853,19 +846,19 @@ Class Emp_Model Extends Core_Model {
         }
         if (!is_null($this->empresas['skPromotor2'])) {
             $sql .=" skPromotor2 = '" . $this->empresas['skPromotor2'] . "' ,";
+        }*/
+        if (!is_null($datos['skStatus'])) {
+            $sql .=" skStatus = '" . $datos['skStatus'] . "' ,";
         }
-        if (!is_null($this->empresas['skStatus'])) {
-            $sql .=" skStatus = '" . $this->empresas['skStatus'] . "' ,";
-        }
-        $sql .= " skEmpresa = '" . $this->empresas['skEmpresa'] . "' WHERE skEmpresa = '" . $this->empresas['skEmpresa'] . "' LIMIT 1";
-        exit('<pre>'.print_r($sql,1).'</pre>');
+        $sql .= " dFechaModificacion = CURRENT_TIMESTAMP() , skUserModificacion ='" . $_SESSION['session']['skUsers'] . "' WHERE skEmpresa = '" . $datos['skEmpresa'] . "' LIMIT 1";
+        //exit('<pre>'.print_r($sql,1).'</pre>');
         $result = $this->db->query($sql);
         if(!$result) {
-            $this->db->rollback();
+            //$this->db->rollback();
             return FALSE;
         }
-        $this->db->commit();
-        return $this->empresas['skEmpresa'];
+        //$this->db->commit();
+        return $datos['skEmpresa'];
     }
 
     public function read_empresa() {
@@ -1189,7 +1182,7 @@ Class Emp_Model Extends Core_Model {
         //exit($sql);
         $result = $this->db->query($sql);
         if ($result) {
-            return $this->empTarCon['skEmpresaTarifaConcepto'];
+            return true;
         } else {
             return false;
         }

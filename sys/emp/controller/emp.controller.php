@@ -1283,33 +1283,43 @@ Class Emp_Controller Extends Emp_Model {
                 case "insert":
                     //exit('<pre>'.print_r($_POST,1).'</pre>');
                     $this->data['response'] = true;
-                    $this->data['message'] = 'Registro creado con &eacute;xito.';
+                    $this->data['message'] = 'Registro guardado con &eacute;xito.';
                     $datos = array();
+                    
+                    // EMPRESA //
                     $datos['skEmpresa'] = !empty($_POST['skEmpresa']) ? $_POST['skEmpresa'] : substr(md5(microtime()), 1, 32);
                     $datos['skEmpresa'] = 'EMPRESA-aaaaaaaaaaaaaaaaaaaaaaa';
-                    $datos['sRFC'] = !empty($_POST['sRFC']) ? addslashes(trim(utf8_decode($_POST['sRFC']))) : "";
-                    $datos['sNombre'] = !empty($_POST['sNombre']) ? addslashes(trim(utf8_decode($_POST['sNombre']))) : "";
-                    $datos['sNombreCorto'] = !empty($_POST['sNombreCorto']) ? addslashes(trim(utf8_decode($_POST['sNombreCorto']))) : "";
-                    $datos['skStatus'] = addslashes(trim(utf8_decode($_POST['skStatus'])));
-                    $datos['skTipoEmpresa'] = addslashes(trim(utf8_decode($_POST['skTipoEmpresa'])));
+                    // SOCIO EMPRESA //
+                    $datos['skSocioEmpresa'] = !empty($_POST['skSocioEmpresa']) ? $_POST['skSocioEmpresa'] : substr(md5(microtime()), 1, 32);
+                    $datos['skSocioEmpresa'] = 'SOCIO-EMPRESA-bbbbbbbbbbbbbbbbb';
+                    // DATOS EMPRESA //
+                    $datos['sRFC'] = !empty($_POST['sRFC']) ? addslashes(trim(utf8_decode($_POST['sRFC']))) : NULL;
+                    $datos['sNombre'] = !empty($_POST['sNombre']) ? addslashes(trim(utf8_decode($_POST['sNombre']))) : NULL;
+                    $datos['sNombreCorto'] = !empty($_POST['sNombreCorto']) ? addslashes(trim(utf8_decode($_POST['sNombreCorto']))) : NULL;
+                    $datos['skStatus'] = !empty($_POST['skStatus']) ? addslashes(trim(utf8_decode($_POST['skStatus']))) : NULL;
+                    $datos['skTipoEmpresa'] = !empty($_POST['skTipoEmpresa']) ? addslashes(trim(utf8_decode($_POST['skTipoEmpresa']))) : NULL;
+                    // CORRESPONSALIA //
+                    $datos['corresponsalia'] = !empty($_POST['corresponsalia']) ? $_POST['corresponsalia'] : NULL;
+                    // PROMOTORES //
+                    $datos['promotores'] = !empty($_POST['promotores']) ? $_POST['promotores'] : NULL;
                     
-                    if (empty($_POST['skEmpresa'])) {
+                    // NUEVA EMPRESA Y SOCIO EMPRESA //
+                    if (empty($_POST['skEmpresa']) && empty($_POST['skSocioEmpresa'])) {
                         if (parent::create_empresas($datos)) {
                             
-                            $datos['skSocioEmpresa'] = !empty($_POST['skSocioEmpresa']) ? $_POST['skSocioEmpresa'] : substr(md5(microtime()), 1, 32);
-                            $datos['skSocioEmpresa'] = 'SOCIO-EMPRESA-bbbbbbbbbbbbbbbbb';
-                            
+                            // CREAR SOCIO //
                             if (!parent::create_empresas_socios($datos)) {
                                 $this->data['response'] = false;
                                 $this->data['message'] = 'Hubo un error al crear el registro.';
                             }
                             
-                            $datos['corresponsalia'] = !empty($_POST['corresponsalia']) ? $_POST['corresponsalia'] : NULL;
-                            $datos['promotores'] = !empty($_POST['promotores']) ? $_POST['promotores'] : NULL;
-                            if (!parent::create_empresas_socios_relacion($datos)) { // CORRESPONSALIAS Y PROMOTORES
+                            // CREAR CORRESPONSALIA Y PROMOTORES //
+                            if (!parent::create_empresas_socios_relacion($datos)) {
                                 $this->data['response'] = false;
                                 $this->data['message'] = 'Hubo un error al crear el registro.';
                             }
+                            
+                            // CREAR CONCEPTOS DE SOCIO EMPRESA //
                             if (isset($_POST['skTipoTramite'])) {
                                 if (is_array($_POST['skTipoTramite'])) {
                                     $skTipoTramite = array_keys($_POST['skTipoTramite']);
@@ -1324,61 +1334,43 @@ Class Emp_Controller Extends Emp_Model {
                                     }
                                 }
                             }
-                            /*if (isset($_POST['skTipoTramite'])) {
-                                if (is_array($_POST['skTipoTramite'])) {
-                                    $skTipoTramite = array_keys($_POST['skTipoTramite']);
-                                    $this->empTarCon['skEmpresa'] = $this->empresas['skEmpresa'];
-                                    parent::delete_empTarCon();
-                                    for ($i = 0; $i < count($_POST['skConcepto']); $i++) {
-                                        $this->empTarCon['skEmpresaTarifaConcepto'] = substr(md5(microtime()), 1, 32);
-                                        $this->empTarCon['skTipoTramite'] = $_POST['skTipoTramite'][$skTipoTramite[$i]];
-                                        $this->empTarCon['skConcepto'] = $_POST['skConcepto'][$i];
-                                        $this->empTarCon['skDivisa'] = $_POST['skDivisa'][$i];
-                                        $this->empTarCon['fPrecioUnitario'] = $_POST['fPrecioUnitario'][$i];
-                                        parent::create_empTarCon();
-                                    }
-                                }
-                            }*/
                             header('Content-Type: application/json');
                             echo json_encode($this->data);
                             return true;
                         } else {
-                            $this->data['response'] = true;
-                            $this->data['message'] = 'Hubo un error al intentar insertar el registro, intenta de nuevo.';
+                            $this->data['response'] = false;
+                            $this->data['message'] = 'Hubo un error al intentar guardar el registro, intenta de nuevo.';
                             header('Content-Type: application/json');
                             echo json_encode($this->data);
                             return false;
                         }
                     } else {
-                        if (parent::update_empresas()) {
-                            if (isset($_POST['skTipoTramite'])) {
-                                if (is_array($_POST['skTipoTramite'])) {
-                                    $skTipoTramite = array_keys($_POST['skTipoTramite']);
-                                    $this->empTarCon['skEmpresa'] = $this->empresas['skEmpresa'];
-                                    parent::delete_empTarCon();
-                                    for ($i = 0; $i < count($_POST['skConcepto']); $i++) {
-                                        $this->empTarCon['skEmpresaTarifaConcepto'] = substr(md5(microtime()), 1, 32);
-                                        $this->empTarCon['skTipoTramite'] = $_POST['skTipoTramite'][$skTipoTramite[$i]];
-                                        $this->empTarCon['skConcepto'] = $_POST['skConcepto'][$i];
-                                        $this->empTarCon['skDivisa'] = $_POST['skDivisa'][$i];
-                                        $this->empTarCon['fPrecioUnitario'] = $_POST['fPrecioUnitario'][$i];
-                                        parent::create_empTarCon();
+                        // EDIATAR SOCIO EMPRESA //
+                        // CREAR CONCEPTOS DE SOCIO EMPRESA //
+                        if (isset($_POST['skTipoTramite'])) {
+                            if (is_array($_POST['skTipoTramite'])) {
+                                $skTipoTramite = array_keys($_POST['skTipoTramite']);
+                                parent::delete_empTarCon($datos);
+                                for ($i = 0; $i < count($_POST['skConcepto']); $i++) {
+                                    $datos['skEmpresaTarifaConcepto'] = substr(md5(microtime()), 1, 32);
+                                    $datos['skTipoTramite'] = $_POST['skTipoTramite'][$skTipoTramite[$i]];
+                                    $datos['skConcepto'] = $_POST['skConcepto'][$i];
+                                    $datos['skDivisa'] = $_POST['skDivisa'][$i];
+                                    $datos['fPrecioUnitario'] = $_POST['fPrecioUnitario'][$i];
+                                    if(!parent::create_empTarCon($datos)){
+                                        parent::delete_empTarCon($datos);
+                                        $this->data['response'] = false;
+                                        $this->data['message'] = 'Hubo un error al intentar guardar el registro, intenta de nuevo.';
+                                        header('Content-Type: application/json');
+                                        echo json_encode($this->data);
+                                        return false;
                                     }
                                 }
                             }
-                            $this->data['response'] = true;
-                            $this->data['message'] = 'Registro actualizado con &eacute;xito.';
-                            header('Content-Type: application/json');
-                            echo json_encode($this->data);
-                            return true;
-                        } else {
-                            exit('FALSE => parent::update_empresas()');
-                            $this->data['response'] = true;
-                            $this->data['message'] = 'Hubo un error al intentar actualizar el registro, intenta de nuevo.';
-                            header('Content-Type: application/json');
-                            echo json_encode($this->data);
-                            return false;
                         }
+                        header('Content-Type: application/json');
+                        echo json_encode($this->data);
+                        return true;
                     }
                     break;
             }
@@ -1399,6 +1391,9 @@ Class Emp_Controller Extends Emp_Model {
         $tiposTramites = parent::read_tipos_tramites();
         $this->data['tiposTramites'] = ($tiposTramites) ? Core_Functions::result_array($tiposTramites) : false;
         //exit('<pre>'.print_r($this->data['tiposTramites'],1).'</pre>');
+        
+        // CONCEPTOS DE EMPRESA //
+        $this->data['conceptosEmpresa'] = FALSE;
         
         $this->data['tiposTramites'] = parent::read_tipos_tramites();
         if ($this->data['tiposTramites']) {

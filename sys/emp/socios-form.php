@@ -38,21 +38,22 @@ if (isset($data['status'])) {
         </ul>
         <!--<form id="_save" method="post" class="form-horizontal" role="form">!-->
         <div class="tab-content">
+          
             <div class="tab-pane fade active in" id="tab_datosGenerales">
 
                 <!-- FORMULARIO DE DATOS GENERALES DE EMPRESAS !-->
 
                 <div class="form-body"> 
-                    <input type="text" name="axn" value="insert">
-                    <input type="text" name="skSocioEmpresa"  id="skSocioEmpresa" value="<?php echo (isset($result['skSocioEmpresa'])) ? $result['skSocioEmpresa'] : ''; ?>">
-                    <input type="text" name="skEmpresa"  id="skEmpresa" value="<?php echo (isset($result['skEmpresa'])) ? $result['skEmpresa'] : ''; ?>">
+                    <input type="hidden" name="axn" value="insert">
+                    <input type="hidden" name="skSocioEmpresa"  id="skSocioEmpresa" value="<?php echo (isset($result['skSocioEmpresa'])) ? $result['skSocioEmpresa'] : ''; ?>">
+                    <input type="hidden" name="skEmpresa"  id="skEmpresa" value="<?php echo (isset($result['skEmpresa'])) ? $result['skEmpresa'] : ''; ?>">
                     
                     <div class="form-group">
                         <label class="control-label col-md-2">RFC <span aria-required="true" class="required"> * </span></label>
                         <div class="col-md-4">
                             <div class="input-icon right">
                                 <i class="fa"></i>
-                                <input type="text" name="sRFC" id="sRFC" class="form-control" placeholder="RFC" value="<?php echo (isset($result['sRFC'])) ? utf8_encode($result['sRFC']) : ''; ?>" >
+                                <input type="text" name="sRFC" id="sRFC" class="form-control" placeholder="RFC" value="<?php echo (isset($result['sRFC'])) ? utf8_encode($result['sRFC']) : ''; ?>" <?php echo (isset($result['skEmpresa'])) ? 'disabled': ''; ?>>
                             </div>
                         </div>
                     </div>
@@ -63,7 +64,7 @@ if (isset($data['status'])) {
                         <div class="col-md-4">
                             <div class="input-icon right">
                                 <i class="fa"></i>
-                                <input type="text" name="sNombre" id="sNombre" class="form-control" placeholder="Nombre" value="<?php echo (isset($result['sNombre'])) ? utf8_encode($result['sNombre']) : ''; ?>" >
+                                <input type="text" name="sNombre" id="sNombre" class="form-control" placeholder="Nombre" value="<?php echo (isset($result['sNombre'])) ? utf8_encode($result['sNombre']) : ''; ?>" <?php echo (isset($result['skEmpresa'])) ? 'disabled': ''; ?>>
                             </div>
                         </div>
                     </div>
@@ -72,7 +73,7 @@ if (isset($data['status'])) {
                         <div class="col-md-4">
                             <div class="input-icon right">
                                 <i class="fa"></i>
-                                <input type="text" name="sNombreCorto" id="sNombreCorto" class="form-control" placeholder="Nombre Corto" value="<?php echo (isset($result['sNombreCorto'])) ? utf8_encode($result['sNombreCorto']) : ''; ?>" >
+                                <input type="text" name="sNombreCorto" id="sNombreCorto" class="form-control" placeholder="Nombre Corto" value="<?php echo (isset($result['sNombreCorto'])) ? utf8_encode($result['sNombreCorto']) : ''; ?>" <?php echo (isset($result['skEmpresa'])) ? 'disabled': ''; ?>>
                             </div>
                         </div>
                     </div>
@@ -84,7 +85,7 @@ if (isset($data['status'])) {
                         if ($data['tiposEmpresas']) {
                             ?>
                             <div class="col-md-4">
-                                <select class="form-control"id="skTipoEmpresa" name="skTipoEmpresa">
+                                <select class="form-control"id="skTipoEmpresa" name="skTipoEmpresa" <?php echo (isset($result['skEmpresa'])) ? 'disabled': ''; ?>>
                                     <option value="">- Seleccione -</option>
                                     <?php foreach ($data['tiposEmpresas'] as $profile) { ?>
                                         <option value="<?php echo $profile['skTipoEmpresa']; ?>"
@@ -116,7 +117,7 @@ if (isset($data['status'])) {
                         if ($data['corresponsalias']) {
                             ?>
                             <div class="col-md-4">
-                                <select class="form-control corresponsalias" id="corresponsalias" name="corresponsalia">
+                                <select class="form-control corresponsalias" id="corresponsalias" name="corresponsalia" <?php echo (isset($result['skEmpresa'])) ? 'disabled': ''; ?>>
                                     <option value="">- Seleccione Corresponsalia -</option>
                                     <?php foreach ($data['corresponsalias'] as $corresponsalia) { ?>
                                         <option value="<?php echo $corresponsalia['skSocioEmpresa']; ?>"
@@ -155,7 +156,7 @@ if (isset($data['status'])) {
                         <div class="form-group">
                             <label class="control-label col-md-2">Promotores </label>
                             <div class="col-md-6">
-                                <select class="form-control select_promotores" name="promotores[]" multiple="multiple">
+                                <select class="form-control select_promotores" name="promotores[]" multiple="multiple" <?php echo (isset($result['skEmpresa'])) ? 'disabled': ''; ?>>
                                     <?php foreach ($data['promotores'] as $promotor) { ?>
                                         <option value="<?php echo $promotor['skSocioEmpresa']; ?>"
                                             <?php
@@ -211,6 +212,10 @@ if (isset($data['status'])) {
 
 
             </div>
+            
+            <?php 
+            //echo('<pre>'.print_r($data['conceptosEmpresa'],1).'</pre>');
+            ?>
             <div class="tab-pane fade" id="tab_servicios">
                 <div class="form-body">
                     <div class="form-group">
@@ -232,7 +237,7 @@ if (isset($data['status'])) {
                                     if ($data['conceptosEmpresa']) {
                                         $i = 0;
                                         $divisas = $this->read_cat_divisas();
-                                        while ($row = $data['conceptosEmpresa']->fetch_assoc()) {
+                                        foreach($data['conceptosEmpresa'] AS $k=>&$row) {
                                             $i++;
                                             ?>
                                             <tr>
