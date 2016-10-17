@@ -163,7 +163,7 @@ td    { vertical-align: top; }
     </tr>
     <!-- NORMAS DEL PDF-->
     <tr>
-        <td colspan="8" style="border: solid 1px #000000;font-size: 6pt;text-align:left;height: auto;"><b>NORMA Oficial Mexicana NOM-004-SCFI-2006, Información comercial-Etiquetado de productos textiles, prendas de vestir, sus accesorios y ropa de casa.</b><br>
+        <td colspan="8" style="border: solid 1px #000000;font-size: 6pt;text-align:left;height: auto;">NORMA Oficial Mexicana NOM-004-SCFI-2006, Información comercial-Etiquetado de productos textiles, prendas de vestir, sus accesorios y ropa de casa.<br>
     <b>a)</b>   Marca comercial.           (cuando el cliente utilice su nombre como marca ese se deberá de considerar <br>
     <b>b)</b> Descripción de insumos   (porcentaje en masa en orden de predominio) <br>
     <b>c)</b> Talla para prendas de vestir, o medidas para ropa de casa y textiles. <br>
@@ -173,7 +173,7 @@ td    { vertical-align: top; }
 </td>
     </tr>
     <tr>
-        <td colspan="8" style="border: solid 1px #000000;font-size: 6pt;text-align:left;height: auto;"><b>Para las siguientes mercancías solo requieren lo señalado en el punto 4.1.2</b><br>
+        <td colspan="8" style="border: solid 1px #000000;font-size: 6pt;text-align:left;height: auto;">Para las siguientes mercancías solo requieren lo señalado en el punto 4.1.2<br>
             a) Cortes de tela acondicionados para la venta al por menor, que contengan 45% o más de lana peinada, que no excedan de cinco metros (Casimires)<br>
         b) Bolsos de mano. c) Maletas. d) Monederos. e) Billeteras.  f) Estuches.  g) Mochilas.  h) Paraguas y parasoles.  i) Cubreasientos.  j) Artículos para cubrir electrodomésticos y domésticos.  k) Cubiertas para planchadores.  l) Cubiertas para muebles de baño.  <br>
         m) Cubiertas para muebles.  n) Cojines.  ñ) Artículos de limpieza.  o) Pañales.  p) Lienzos para pintores.  q) Canguro para bebé.   r) Pañaleras.  s) Baberos.  t) Cambiadores.  u ) Cinturones textiles<br>
@@ -187,7 +187,7 @@ td    { vertical-align: top; }
         f) Artículos destinados a ser utilizados en una sola ocasión (desechables). En este caso, la información a que se refiere el inciso 4.1.2 puede presentarse en el envase.</td>
     </tr>
     <tr>
-        <td colspan="8" style="border: solid 1px #000000;font-size: 6pt;text-align:left;height: auto;"><b>NORMA OFICIAL MEXICANA NOM-020-SCFI-1997, INFORMACION COMERCIAL-ETIQUETADO DE CUEROS Y PIELES CURTIDAS NATURALES Y MATERIALES SINTETICOS O ARTIFICIALES CON ESA APARIENCIA, CALZADO, MARROQUINERIA, ASI COMO LOS PRODUCTOS ELABORADOS CON DICHOS MATERIALES.</b><br>
+        <td colspan="8" style="border: solid 1px #000000;font-size: 6pt;text-align:left;height: auto;">NORMA OFICIAL MEXICANA NOM-020-SCFI-1997, INFORMACION COMERCIAL-ETIQUETADO DE CUEROS Y PIELES CURTIDAS NATURALES Y MATERIALES SINTETICOS O ARTIFICIALES CON ESA APARIENCIA, CALZADO, MARROQUINERIA, ASI COMO LOS PRODUCTOS ELABORADOS CON DICHOS MATERIALES.<br>
             a) Nombre, denominación o razón social completo o abreviado del fabricante nacional o importador o su marca registrada.<br>
 b) La leyenda "Hecho (u otros análogos) en México" o bien, el nombre del país de origen.<br>
 c) Definición genérica o específica de los materiales y opcionalmente su acabado. (Esta información puede ser ostentada en una etiqueta).<br>
@@ -206,7 +206,7 @@ e) Cuando los artículos a que se refiere esta Norma se comercialicen como pares
         </td>
         </tr>
         <tr>
-            <td colspan="8" style="border: solid 1px #000000;font-size: 6pt;text-align:left;height: auto;"><b>NORMA OFICIAL MEXICANA NOM-024-SCFI-2013, INFORMACIÓN COMERCIAL PARA EMPAQUES, INSTRUCTIVOS Y GARANTÍAS DE LOS PRODUCTOS ELECTRÓNICOS, ELÉCTRICOS Y ELECTRODOMÉSTICOS.</b><br>
+            <td colspan="8" style="border: solid 1px #000000;font-size: 6pt;text-align:left;height: auto;">NORMA OFICIAL MEXICANA NOM-024-SCFI-2013, INFORMACIÓN COMERCIAL PARA EMPAQUES, INSTRUCTIVOS Y GARANTÍAS DE LOS PRODUCTOS ELECTRÓNICOS, ELÉCTRICOS Y ELECTRODOMÉSTICOS.<br>
                 a) La representación gráfica o el nombre del producto, salvo que éste sea obvio, <br>
 b) Nombre, denominación o razón social y domicilio del fabricante nacional o importador, <br>
 c) La leyenda que identifique al país de origen del mismo (ejemplo: “Hecho en...”, “Manufacturado en...”, u otros análogos), <br>
@@ -220,7 +220,7 @@ e) Para el caso de productos reconstruidos, usados o de segunda mano, el tamaño
             </td>
         </tr>
         <tr>
-            <td colspan="8" style="border: solid 1px #000000;font-size: 6pt;text-align:left;height: auto;"><b>NORMA OFICIAL MEXICANA NOM-055-SCFI-1994, INFORMACION COMERCIAL - MATERIALES RETARDANTES Y/O INHIBIDORES DE FLAMA Y/O IGNIFUGOS - ETIQUETADO.</b><br>
+            <td colspan="8" style="border: solid 1px #000000;font-size: 6pt;text-align:left;height: auto;">NORMA OFICIAL MEXICANA NOM-055-SCFI-1994, INFORMACION COMERCIAL - MATERIALES RETARDANTES Y/O INHIBIDORES DE FLAMA Y/O IGNIFUGOS - ETIQUETADO.<br>
             <br>    Los productos nacionales y/o importados deben ostentar en forma clara, legible e indeleble, la información siguiente: <br>
 - Nombre o razón social del fabricante <br>
 - Marca comercial del producto <br>
@@ -237,7 +237,7 @@ e) Para el caso de productos reconstruidos, usados o de segunda mano, el tamaño
             </td>
         </tr>
         <tr>
-            <td colspan="8" style="border: solid 1px #000000;font-size: 6pt;text-align:left;height: auto;"><b>NORMA OFICIAL MEXICANA NOM-051-SCFI/SSA1-2010, ESPECIFICACIONES GENERALES DE ETIQUETADO PARA ALIMENTOS Y BEBIDAS NO ALCOHOLICAS PREENVASADOS-INFORMACION COMERCIAL Y SANITARIA.</b><br>
+            <td colspan="8" style="border: solid 1px #000000;font-size: 6pt;text-align:left;height: auto;">NORMA OFICIAL MEXICANA NOM-051-SCFI/SSA1-2010, ESPECIFICACIONES GENERALES DE ETIQUETADO PARA ALIMENTOS Y BEBIDAS NO ALCOHOLICAS PREENVASADOS-INFORMACION COMERCIAL Y SANITARIA.<br>
                         <br>       4.2.1 Nombre o denominación del alimento o bebida no alcohólica preenvasado<br>
                                4.2.2 Lista de ingredientes <br>
                                4.2.3 Contenido neto y masa drenada <br>
@@ -251,8 +251,7 @@ e) Para el caso de productos reconstruidos, usados o de segunda mano, el tamaño
             </td>
         </tr>
         <tr>
-            <td colspan="8" style="border: solid 1px #000000;font-size: 6pt;text-align:left;height: auto;"><b>NORMA Oficial Mexicana NOM-050-SCFI-2004, Información comercial-Etiquetado general de productos.
-</b><br>
+            <td colspan="8" style="border: solid 1px #000000;font-size: 6pt;text-align:left;height: auto;">NORMA Oficial Mexicana NOM-050-SCFI-2004, Información comercial-Etiquetado general de productos.<br>
 Nombre o denominación genérica del producto, cuando no sea identificable a simple vista por el consumidor.Un producto es identificable a simple vista si éste está contenido en un empaque que permite ver su contenido; o bien, si el empaque presenta el gráfico del producto, siempre y cuando en este gráfico no aparezcan otros productos no incluidos en el empaque. <br>
 b) Indicación de cantidad conforme a la NOM-030-SCFI, en el entendido de que si el contenido o número de piezas de un producto puede identificarse a simple vista, no será necesario indicar la declaración de cantidad. En ese sentido, resultará irrelevante que se indique o no en dichos productos la declaración de cantidad y también la forma en que se haga (en idioma distinto al español, en un sitio distinto a la superficie principal de exhibición, en un tamaño menor al requerido, etc.), siempre y cuando dicha declaración corresponda al producto que la ostente. <br>
 En caso de envase múltiple o colectivo, cuyo contenido no sea inidentificable a simple vista, éste debe ostentar la declaración de cantidad (solamente la que corresponde al envase múltiple o colectivo, no la que corresponde a cada uno de los envases de los productos en lo individual), de conformidad con la Norma Oficial Mexicana NOM-030-SCFI-1993 (ver referencias). La descripción de los componentes puede aparecer en la superficie de información y debe incluir el nombre o denominación genérica de los productos, así como su contenido o contenido neto. <br>
@@ -261,11 +260,10 @@ d) La leyenda que identifique al país de origen del producto, por ejemplo Produ
 e) Las advertencias de riesgos por medio de leyendas, gráficas o símbolos precautorios en el caso de productos peligrosos. <br>
 f) Cuando el uso, manejo o conservación del producto requiera de instrucciones, debe presentarse esa información. En caso de que dicha información se encuentre en un instructivo o manual de operación anexo, se debe indicar en la respectiva etiqueta: VEASE INSTRUCTIVO ANEXO O MANUAL DE OPERACION, u otras leyendas análogas, las cuales podrán presentarse indistintamente en mayúsculas, minúsculas o en una combinación de ambas. <br>
 g) Cuando corresponda, la fecha de caducidad o de consumo preferente.
-
             </td>
         </tr>
         <tr>
-            <td colspan="8" style="border: solid 1px #000000;font-size: 6pt;text-align:left;height: auto;"><b>NORMA Oficial Mexicana NOM-015-SCFI-2007, Información comercial-Etiquetado para juguetes.</b><br>
+            <td colspan="8" style="border: solid 1px #000000;font-size: 6pt;text-align:left;height: auto;">NORMA Oficial Mexicana NOM-015-SCFI-2007, Información comercial-Etiquetado para juguetes.<br>
                 a) Nombre genérico del producto, cuando éste no sea plenamente identificable a simple vista por el consumidor; <br>
 b) Indicación de cantidad en forma escrita o gráfica; <br>
 b.1 Los juguetes que se comercialicen por cuenta numérica en empaques que permitan ver su contenido, no requieren presentar declaración de cantidad. <br>
@@ -286,8 +284,7 @@ h) En su caso, las características eléctricas nominales de alimentación del j
             </td>
         </tr>
         <tr>
-            <td colspan="8" style="border: solid 1px #000000;font-size: 5pt;text-align:left;height: auto;"><b>NORMA Oficial Mexicana NOM-141-SSA1/SCFI-2012, Etiquetado para productos cosméticos preenvasados. Etiquetado sanitario y comercial.
- </b><br>
+            <td colspan="8" style="border: solid 1px #000000;font-size: 6pt;text-align:left;height: auto;">NORMA Oficial Mexicana NOM-141-SSA1/SCFI-2012, Etiquetado para productos cosméticos preenvasados. Etiquetado sanitario y comercial.<br>
  5. Requisitos de etiquetado <br>
    5.1 Requisitos generales. <br>
 5.1.1 Presentación de la información. D.O.F. 14/02/2014 <br>
@@ -345,6 +342,10 @@ Los productos destinados a ser comercializados en el mercado nacional, deben ost
  <br>5.3.7.1 En desodorantes o antitranspirantes:
  <br>5.3.7.1.1 Que no se aplique sobre piel irritada o lastimada
  <br>5.3.7.1.2 Que descontinúe su uso en caso de presentarse irritación, enrojecimiento o alguna molestia
+ </td>
+ </tr>
+    <tr>
+        <td colspan="8" style="font-size: 6pt;text-align:left;height: auto;">
  <br>5.3.7.1.3 Que no se deje al alcance de los niños
  <br>5.3.7.1.4 En caso de contener Fenolsulfonato de zinc mencionar que se evite el contacto con los ojos
  <br>5.3.7.2 En tintes, colorantes, coloración y otros relacionados:
@@ -416,6 +417,10 @@ Los productos destinados a ser comercializados en el mercado nacional, deben ost
  <br>5.3.8.8.4 Que no se deje al alcance de los niños
  <br>5.3.7.9 En sistemas de uñas profesionales que contengan peróxido de benzoílo y/o hidroquinona:
  <br>5.3.7.9.1 Que está reservado a los profesionales
+ </td>
+ </tr>
+ <tr>
+     <td colspan="8" style="font-size: 6pt;text-align:left;height: auto;">
  <br>5.3.7.9.2 Que se evite el contacto con la piel
  <br>5.3.7.9.3 Que se lean las instrucciones de uso
  <br>5.3.7.10 En los productos para la piel cuya función primaria sea la de ofrecer protección solar:
@@ -463,6 +468,10 @@ Los productos destinados a ser comercializados en el mercado nacional, deben ost
  <br>5.3.7.19 En los productos que contengan diclorofeno, clorobutanol, cloroacetamida, timerosal compuestos fenilmercúricos (ya sea ácido o sales) u oxibenzona:
  <br>5.3.7.19.1 Indicar que lo contiene mediante la leyenda correspondiente
  <br>5.3.7.20 Si el producto contiene más de 0,05% de glutaraldehído en el producto final:
+ </td>
+ </tr>
+ <tr>
+     <td colspan="8" style="font-size: 6pt;text-align:left;height: auto;">
  <br>5.3.7.20.1 Indicar que lo contiene mediante la leyenda correspondiente
  <br>5.3.7.21 En productos que permanezcan en la piel, si la concentración de yodopropinil butil carbamato es superior a 0.02%:
  <br>5.3.7.21.1 Indicar que contiene yodo
